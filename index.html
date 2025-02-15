@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Catalogo @camisetazo._</title>
+    <title>Camisetazo - Tienda Deportiva Premium</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
     <style>
@@ -15,17 +15,21 @@
             --degradado-fondo: linear-gradient(135deg, var(--negro-mate) 30%, var(--azul-primario) 100%);
         }
 
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
         body {
             font-family: 'Segoe UI', system-ui, sans-serif;
             background: var(--degradado-fondo);
             color: white;
-            margin: 0;
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
         }
 
-        /* Fondo dinámico relacionado con el fútbol */
         body::before {
             content: '';
             position: fixed;
@@ -46,7 +50,7 @@
         }
 
         .contenedor-principal {
-            max-width: 800px;
+            max-width: 1200px;
             margin: 0 auto;
             padding: 2rem;
         }
@@ -56,52 +60,84 @@
             margin-bottom: 3rem;
             position: relative;
             padding: 20px 0;
-            overflow: visible;
         }
 
         .logo {
-            width: 180px;
+            width: 200px;
             filter: drop-shadow(0 0 15px rgba(42, 91, 168, 0.4));
-            animation: flotar 3s ease-in-out infinite;
+            animation: pulse 3s 1;
             border-radius: 50%;
-            margin: 30px auto;
+            margin: 20px auto;
+        }
+
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
         h1 {
             font-size: 2.5em;
             margin: 1rem 0 0.5rem;
             color: #e0e0e0;
-            animation: neon-pulse 1.5s ease-in-out 1; /* Animación solo una vez */
             position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
         }
 
         h1::after {
             content: '';
             position: absolute;
             left: 0;
-            bottom: -5px;
+            bottom: 0;
             width: 100%;
-            height: 2px;
+            height: 3px;
             background: var(--azul-acento);
             transform: scaleX(0);
-            transform-origin: left;
-            animation: subrayar 1s ease-in-out 1s forwards; /* Subrayado después de la animación */
+            animation: subrayar-titulo 1.5s ease-in-out 1s forwards;
+            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
         }
 
-        @keyframes neon-pulse {
-            0% { text-shadow: 0 0 5px var(--azul-acento); }
-            50% { text-shadow: 0 0 20px var(--azul-acento), 0 0 30px var(--azul-acento); }
-            100% { text-shadow: 0 0 5px var(--azul-acento); }
-        }
-
-        @keyframes subrayar {
+        @keyframes subrayar-titulo {
+            from { transform: scaleX(0); }
             to { transform: scaleX(1); }
         }
 
-        p {
-            font-size: 1.2em;
-            opacity: 0.8;
-            font-weight: 300;
+        .navegacion {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin: 2rem 0;
+        }
+
+        .boton-seccion {
+            background: transparent;
+            border: 2px solid var(--azul-acento);
+            color: white;
+            font-size: 1.1rem;
+            padding: 12px 35px;
+            border-radius: 30px;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .boton-seccion.activo {
+            background: var(--azul-acento);
+            box-shadow: 0 0 25px rgba(42, 91, 168, 0.5);
+        }
+
+        .boton-seccion:hover {
+            transform: translateY(-3px);
+        }
+
+        .seccion {
+            display: none;
+            animation: aparecer 0.6s ease forwards;
+        }
+
+        .seccion.activa {
+            display: block;
         }
 
         .grid-enlaces {
@@ -116,35 +152,32 @@
             border: 1px solid rgba(42, 91, 168, 0.3);
             border-radius: 15px;
             padding: 1.5rem;
-            transition: all 0.3s ease; /* Animación más rápida */
-            transform-style: preserve-3d;
-            position: relative;
-            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             display: flex;
             align-items: center;
+            opacity: 0;
+            animation: aparecer 0.5s ease forwards;
         }
 
-        .card-enlace::before {
-            content: '';
-            position: absolute;
-            top: -50%;
-            left: -50%;
-            width: 200%;
-            height: 200%;
-            background: linear-gradient(45deg, transparent, rgba(42, 91, 168, 0.1), transparent);
-            transform: rotate(45deg);
-            transition: 0.5s;
+        .card-enlace:nth-child(1) { animation-delay: 0.2s; }
+        .card-enlace:nth-child(2) { animation-delay: 0.4s; }
+        .card-enlace:nth-child(3) { animation-delay: 0.6s; }
+        .card-enlace:nth-child(4) { animation-delay: 0.8s; }
+        .card-enlace:nth-child(5) { animation-delay: 1.0s; }
+        .card-enlace:nth-child(6) { animation-delay: 1.2s; }
+        .card-enlace:nth-child(7) { animation-delay: 1.4s; }
+        .card-enlace:nth-child(8) { animation-delay: 1.6s; }
+        .card-enlace:nth-child(9) { animation-delay: 1.8s; }
+        .card-enlace:nth-child(10) { animation-delay: 2.0s; }
+
+        @keyframes aparecer {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
         .card-enlace:hover {
-            transform: translateY(-10px) scale(1.05);
-            background: rgba(10, 31, 61, 0.9);
+            transform: translateY(-10px) scale(1.02);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-            border: 2px solid rgba(255, 255, 255, 0.5);
-        }
-
-        .card-enlace:hover::before {
-            animation: brillo 1.5s;
         }
 
         .enlace-btn {
@@ -154,164 +187,316 @@
             color: white;
             text-decoration: none;
             font-size: 1.1rem;
-            font-weight: 500;
-            padding: 1rem;
             width: 100%;
         }
 
-        .enlace-btn i {
-            font-size: 1.4rem;
+        .imagen-previa {
+            width: 70px;
+            height: 70px;
+            border-radius: 10px;
+            margin-right: 1.5rem;
+            object-fit: cover;
             transition: transform 0.3s;
         }
 
-        .card-enlace:hover .enlace-btn i {
-            transform: translateX(5px);
+        .card-enlace:hover .imagen-previa {
+            transform: scale(1.1);
         }
 
-        .imagen-previa {
-            width: 60px;
-            height: 60px;
-            border-radius: 10px;
-            margin-right: 1rem;
-            object-fit: cover;
+        .quienes-somos {
+            max-width: 800px;
+            margin: 0 auto;
+            background: rgba(10, 31, 61, 0.7);
+            backdrop-filter: blur(12px);
+            border-radius: 20px;
+            padding: 2.5rem;
+            border: 1px solid rgba(42, 91, 168, 0.3);
+        }
+
+        .quienes-somos h2 {
+            font-size: 2.3em;
+            margin-bottom: 2rem;
+            color: var(--azul-acento);
+            text-align: center;
+        }
+
+        .quienes-somos p {
+            line-height: 1.7;
+            margin-bottom: 1.5rem;
+            font-size: 1.1rem;
+        }
+
+        .garantias {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .garantia-card {
+            background: rgba(255, 255, 255, 0.05);
+            padding: 2rem;
+            border-radius: 15px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .garantia-card:hover {
+            background: rgba(42, 91, 168, 0.2);
+            transform: translateY(-5px);
+        }
+
+        .marcas-colaboradoras {
+            display: flex;
+            justify-content: center;
+            gap: 3rem;
+            flex-wrap: wrap;
+            margin: 3rem 0;
+            opacity: 0.8;
+        }
+
+        .marca-item {
+            width: 120px;
+            filter: grayscale(1);
+            transition: all 0.3s ease;
+        }
+
+        .marca-item:hover {
+            filter: grayscale(0);
+            transform: scale(1.1);
+        }
+
+        .badge-premium {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: var(--azul-acento);
+            padding: 15px 25px;
+            border-radius: 30px;
+            font-weight: bold;
+            box-shadow: 0 0 25px rgba(42, 91, 168, 0.4);
+            animation: flotar 3s ease-in-out infinite;
+            z-index: 1000;
         }
 
         footer {
             margin-top: 4rem;
             text-align: center;
-            padding: 2rem 0;
-            border-top: 1px solid rgba(42, 91, 168, 0.2);
+            padding: 3rem 0;
+            border-top: 1px solid rgba(42, 91, 168, 0.3);
+        }
+
+        .redes-sociales {
+            display: flex;
+            justify-content: center;
+            gap: 2rem;
+            margin-bottom: 1.5rem;
         }
 
         .redes-sociales a {
-            color: rgba(255, 255, 255, 0.7);
-            font-size: 1.4rem;
-            margin: 0 1rem;
+            color: rgba(255, 255, 255, 0.8);
+            font-size: 1.8rem;
             transition: all 0.3s;
-            display: inline-block;
         }
 
         .redes-sociales a:hover {
             color: var(--azul-acento);
-            transform: translateY(-3px);
+            transform: translateY(-5px);
         }
-
-        @keyframes flotar {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-10px); }
-        }
-
-        @keyframes brillo {
-            0% { transform: translate(-50%, -50%) rotate(45deg); }
-            100% { transform: translate(150%, 150%) rotate(45deg); }
-        }
-
-        .animate-delay-1 { animation-delay: 0.2s !important; }
-        .animate-delay-2 { animation-delay: 0.4s !important; }
-        .animate-delay-3 { animation-delay: 0.6s !important; }
-        .animate-delay-4 { animation-delay: 0.8s !important; }
     </style>
 </head>
 <body>
     <div class="contenedor-principal">
-        <header class="animate__animated animate__fadeIn">
-            <img src="logo.png" alt="Logo" class="logo">
-            <h1 class="animate__animated animate__fadeInUp">CAMISETAZO</h1>
-            <p class="animate__animated animate__fadeInUp">Tu tienda premium de camisetas de fútbol</p>
-        </header>
-
-        <div class="grid-enlaces">
-            <!-- Secciones con imágenes de previsualización -->
-            <div class="card-enlace animate__animated animate__fadeInUp animate-delay-1">
-                <img src="camfut.png" alt="Camisetas Fútbol" class="imagen-previa">
-                <a href="https://2020soccer.x.yupoo.com/albums" class="enlace-btn">
-                    <span>Camisetas Fútbol ⚽</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="card-enlace animate__animated animate__fadeInUp animate-delay-2">
-                <img src="zap.png" alt="Zapatillas" class="imagen-previa">
-                <a href="https://eu1688.x.yupoo.com/albums" class="enlace-btn">
-                    <span>Zapatillas 👟</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="card-enlace animate__animated animate__fadeInUp animate-delay-3">
-                <img src="nba.png" alt="NBA" class="imagen-previa">
-                <a href="https://x.yupoo.com/photos/05941188/albums" class="enlace-btn">
-                    <span>NBA 🏀</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="card-enlace animate__animated animate__fadeInUp animate-delay-4">
-                <img src="airpods.png" alt="AirPods" class="imagen-previa">
-                <a href="https://docs.google.com/document/d/1IXUCHDWRw8osfQltnWGwz2bUFpD_J85-0_Nnq0p55NI/edit?usp=drivesdk" class="enlace-btn">
-                    <span>AirPods 🎧</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="card-enlace animate__animated animate__fadeInUp">
-                <img src="botfut.png" alt="Botas Fútbol" class="imagen-previa">
-                <a href="https://zuqiuliu.x.yupoo.com" class="enlace-btn">
-                    <span>Botas Fútbol ⚽</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="card-enlace animate__animated animate__fadeInUp">
-                <img src="f1.png" alt="F1" class="imagen-previa">
-                <a href="https://x.yupoo.com/photos/yiyisports2016/collections/3551571" class="enlace-btn">
-                    <span>F1 🏎️</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="card-enlace animate__animated animate__fadeInUp">
-                <img src="ps4.png" alt="Mandos PS4" class="imagen-previa">
-                <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?usp=sharing" class="enlace-btn">
-                    <span>Mandos PS4 🎮</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="card-enlace animate__animated animate__fadeInUp">
-                <img src="nfl.png" alt="NFL" class="imagen-previa">
-                <a href="https://nfl-world.x.yupoo.com/" class="enlace-btn">
-                    <span>NFL 🏈</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="card-enlace animate__animated animate__fadeInUp">
-                <img src="mlb.png" alt="MLB" class="imagen-previa">
-                <a href="https://chenzhefuzhuang.x.yupoo.com/collections/3230017" class="enlace-btn">
-                    <span>MLB ⚾</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
-
-            <div class="card-enlace animate__animated animate__fadeInUp">
-                <img src="nhl.png" alt="NHL" class="imagen-previa">
-                <a href="https://nhl-world.x.yupoo.com/" class="enlace-btn">
-                    <span>NHL 🏑</span>
-                    <i class="fas fa-arrow-right"></i>
-                </a>
-            </div>
+        <div class="badge-premium" style="background: var(--azul-acento); padding: 15px 25px; border-radius: 30px; font-weight: bold; box-shadow: 0 0 25px rgba(42, 91, 168, 0.4); animation: flotar 3s ease-in-out infinite;">
+            <a href="https://www.instagram.com/direct/t/17846283129150996" 
+               target="_blank" 
+               style="color: white; text-decoration: none; display: flex; align-items: center; gap: 10px;">
+            <i class="fas fa-shopping-cart" style="margin-right: 10px;"></i>
+            Compra ahora
+        </a>
         </div>
 
-        <footer class="animate__animated animate__fadeIn">
+        <header>
+            <img src="logo.png" alt="Logo Camisetazo" class="logo ">
+            <h1 class="animate__animated animate__fadeIn">CAMISETAZO</h1>
+            
+            <nav class="navegacion">
+                <button class="boton-seccion activo" data-seccion="tienda">Tienda</button>
+                <button class="boton-seccion" data-seccion="quienes-somos">¿Quiénes Somos?</button>
+            </nav>
+        </header>
+
+        <!-- Sección Tienda -->
+        <section id="tienda" class="seccion activa">
+            <div class="grid-enlaces">
+                <div class="card-enlace">
+                    <img src="camfut.png" alt="Camisetas" class="imagen-previa">
+                    <a href="#" class="enlace-btn">
+                        <span>Camisetas Fútbol ⚽</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="zap.png" alt="Zapatillas" class="imagen-previa">
+                    <a href="#" class="enlace-btn">
+                        <span>Zapatillas 👟</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="nba.png" alt="NBA" class="imagen-previa">
+                    <a href="#" class="enlace-btn">
+                        <span>NBA 🏀</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="airpods.png" alt="AirPods" class="imagen-previa">
+                    <a href="#" class="enlace-btn">
+                        <span>AirPods 🎧</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="botfut.png" alt="Botas Fútbol" class="imagen-previa">
+                    <a href="#" class="enlace-btn">
+                        <span>Botas Fútbol ⚽</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="f1.png" alt="F1" class="imagen-previa">
+                    <a href="#" class="enlace-btn">
+                        <span>F1 🏎️</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="ps4.png" alt="Mandos PS4" class="imagen-previa">
+                    <a href="#" class="enlace-btn">
+                        <span>Mandos PS4 🎮</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="nfl.png" alt="NFL" class="imagen-previa">
+                    <a href="#" class="enlace-btn">
+                        <span>NFL 🏈</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="mlb.png" alt="MLB" class="imagen-previa">
+                    <a href="#" class="enlace-btn">
+                        <span>MLB ⚾</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="nhl.png" alt="NHL" class="imagen-previa">
+                    <a href="#" class="enlace-btn">
+                        <span>NHL 🏑</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+            </div>
+        </section>
+
+<!-- Sección Quiénes Somos -->
+<section id="quienes-somos" class="seccion">
+    <div class="quienes-somos animate__animated animate__fadeIn" style="text-align: center;">
+        <h2>Nuestra Historia</h2>
+        
+        <p style="max-width: 800px; margin: 0 auto 2rem; line-height: 1.7;">
+            En Camisetazo nos apasiona conectar a los verdaderos amantes del deporte con artículos premium de las mejores marcas. Nos especializamos en ofrecer productos de alta calidad y artículos exclusivos que permiten vivir la emoción del deporte al mejor precio. Combinamos nuestro conocimiento experto con un servicio personalizado para garantizar que cada compra supere tus expectativas:
+        </p>
+
+        <!-- Casilla Instagram -->
+        <div class="garantia-card" style="max-width: 500px; margin: 2rem auto;">
+            <i class="fab fa-instagram" style="font-size: 2.5rem; color: #E1306C; margin-bottom: 1rem;"></i>
+            <h3>Síguenos en Instagram</h3>
+            <a href="https://www.instagram.com/camisetazo._/" target="_blank" 
+               style="color: var(--azul-acento); text-decoration: none; font-weight: 600;
+                      display: inline-block; margin: 0.5rem 0;">
+                @camisetazo._ ➔
+            </a>
+            <p style="margin-top: 0.5rem; opacity: 0.9;">Novedades diarias | Ofertas exclusivas</p>
+        </div>
+
+        <!-- Grid 2x2 -->
+        <div class="garantias" style="grid-template-columns: repeat(2, 1fr); max-width: 1000px; margin: 0 auto;">
+            <!-- Casilla 1 -->
+            <div class="garantia-card">
+                <i class="fas fa-shield-alt" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3>Garantía de Pago</h3>
+                <p>Transacciones seguras con protección al comprador</p>
+            </div>
+            
+            <!-- Casilla 2 -->
+            <div class="garantia-card">
+                <i class="fas fa-shipping-fast" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3>Envío Gratuito Express</h3>
+                <p>Entrega en 7-14 días con seguimiento del paquete</p>
+            </div>
+            
+            <!-- Casilla 3 -->
+            <div class="garantia-card">
+                <i class="fas fa-users" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h3>Comunidad</h3>
+                <p>+100 clientes satisfechos</p>
+                <div style="color: #ffd700; margin-top: 0.5rem;">
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                    <i class="fas fa-star"></i>
+                </div>
+            </div>
+            
+            <!-- Casilla 4 -->
+            <div class="garantia-card">
+                <i class="fas fa-headset" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+                <h4>Atención al cliente</h4>
+                <p>Obtén respuestas rápidas con nuestro servicio de atención al cliente</p>
+            </div>
+        </div>
+</section>
+
+        <footer>
             <div class="redes-sociales">
                 <a href="https://www.instagram.com/camisetazo._/"><i class="fab fa-instagram"></i></a>
                 <a href="https://www.tiktok.com/@camisetazo"><i class="fab fa-tiktok"></i></a>
             </div>
-            <p style="margin-top: 1rem; opacity: 0.6; font-size: 0.9rem;">
+            <p style="margin-top: 2rem; opacity: 0.8; font-size: 0.9rem;">
                 © 2025 Camisetazo. Todos los derechos reservados
             </p>
         </footer>
     </div>
+
+    <script>
+        document.querySelectorAll('.boton-seccion').forEach(boton => {
+            boton.addEventListener('click', function() {
+                document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
+                document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
+                
+                const seccionId = this.dataset.seccion;
+                this.classList.add('activo');
+                document.getElementById(seccionId).classList.add('activa');
+            });
+        });
+
+        window.addEventListener('load', () => {
+            document.querySelector('h1').classList.add('animate__fadeIn');
+        });
+    </script>
 </body>
 </html>
