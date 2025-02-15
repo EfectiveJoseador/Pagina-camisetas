@@ -25,6 +25,7 @@
             position: relative;
         }
 
+        /* Fondo dinámico relacionado con el fútbol */
         body::before {
             content: '';
             position: fixed;
@@ -32,9 +33,16 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
-            opacity: 0.08;
+            background: url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
+            opacity: 0.1;
             z-index: -1;
+            animation: moverFondo 20s linear infinite;
+        }
+
+        @keyframes moverFondo {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+            100% { transform: scale(1); }
         }
 
         .contenedor-principal {
@@ -47,7 +55,8 @@
             text-align: center;
             margin-bottom: 3rem;
             position: relative;
-            overflow: hidden;
+            padding: 20px 0;
+            overflow: visible;
         }
 
         .logo {
@@ -55,6 +64,44 @@
             filter: drop-shadow(0 0 15px rgba(42, 91, 168, 0.4));
             animation: flotar 3s ease-in-out infinite;
             border-radius: 50%;
+            margin: 30px auto;
+        }
+
+        h1 {
+            font-size: 2.5em;
+            margin: 1rem 0 0.5rem;
+            color: #e0e0e0;
+            animation: neon-pulse 1.5s ease-in-out 1; /* Animación solo una vez */
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            position: absolute;
+            left: 0;
+            bottom: -5px;
+            width: 100%;
+            height: 2px;
+            background: var(--azul-acento);
+            transform: scaleX(0);
+            transform-origin: left;
+            animation: subrayar 1s ease-in-out 1s forwards; /* Subrayado después de la animación */
+        }
+
+        @keyframes neon-pulse {
+            0% { text-shadow: 0 0 5px var(--azul-acento); }
+            50% { text-shadow: 0 0 20px var(--azul-acento), 0 0 30px var(--azul-acento); }
+            100% { text-shadow: 0 0 5px var(--azul-acento); }
+        }
+
+        @keyframes subrayar {
+            to { transform: scaleX(1); }
+        }
+
+        p {
+            font-size: 1.2em;
+            opacity: 0.8;
+            font-weight: 300;
         }
 
         .grid-enlaces {
@@ -69,7 +116,7 @@
             border: 1px solid rgba(42, 91, 168, 0.3);
             border-radius: 15px;
             padding: 1.5rem;
-            transition: all 0.4s cubic-bezier(0.23, 1, 0.32, 1);
+            transition: all 0.3s ease; /* Animación más rápida */
             transform-style: preserve-3d;
             position: relative;
             overflow: hidden;
@@ -90,9 +137,10 @@
         }
 
         .card-enlace:hover {
-            transform: translateY(-5px) rotateX(5deg) rotateY(5deg);
+            transform: translateY(-10px) scale(1.05);
             background: rgba(10, 31, 61, 0.9);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(255, 255, 255, 0.5);
         }
 
         .card-enlace:hover::before {
@@ -168,8 +216,8 @@
     <div class="contenedor-principal">
         <header class="animate__animated animate__fadeIn">
             <img src="logo.png" alt="Logo" class="logo">
-            <h1 class="animate__animated animate__fadeInUp" style="margin: 1rem 0 0.5rem; color: #e0e0e0;">CAMISETAZO</h1>
-            <p class="animate__animated animate__fadeInUp" style="opacity: 0.8; font-weight: 300;">Tu tienda premium de camisetas de fútbol</p>
+            <h1 class="animate__animated animate__fadeInUp">CAMISETAZO</h1>
+            <p class="animate__animated animate__fadeInUp">Tu tienda premium de camisetas de fútbol</p>
         </header>
 
         <div class="grid-enlaces">
