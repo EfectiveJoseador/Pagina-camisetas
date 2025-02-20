@@ -972,7 +972,7 @@
         id="usuario" 
         name="usuario" 
         required 
-        placeholder="Ej: roberto_carlos03"
+        placeholder="Ej: @roberto_carlos03"
         pattern="^[A-Za-z0-9_.]{1,30}$"
         title="Por favor, ingresa un nombre de usuario válido de Instagram (debe tener entre 1 y 30 caracteres)."
     >
@@ -1220,7 +1220,7 @@ Phone Number:</textarea>
         const intervalo = setInterval(() => {
             if (ventanaPayPal.closed) {
                 clearInterval(intervalo);
-                mostrarExito('Pago completado. Te contactaremos por Instagram para confirmar tu pedido.');
+                mostrarExito('Solicitud completada. Espere');
                 enviarFormulario();
             }
         }, 500);
