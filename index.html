@@ -838,8 +838,8 @@
 <section id="pedidos" class="seccion">
     <div class="formulario-pedido">
         <h2>Realizar Pedido</h2>
-        <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST">
-            <input type="hidden" name="_next" value="exito.html">
+        <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" onsubmit="return prepararRedireccion(event)">
+            <input type="hidden" name="_next" value="https://efectivejoseador.github.io/Pagina-Prueba/exito.html">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
             <input type="hidden" name="precio_total" id="precioTotal">
@@ -957,7 +957,7 @@ Phone Number:</textarea>
     });
 
     // Variables y configuración
-    let unidades = 1;
+    let unidades = 0;
     const PRECIOS_BASE = {1: 19.90, 2: 37.80, 3: 54.90, 5: 84.90};
     const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 3};
 
@@ -1016,7 +1016,7 @@ Phone Number:</textarea>
 
             // Actualizar precios
             actualizarPrecio();
-            configurarEventosUnidades();
+            configurarEventosUnidades(); // Configurar eventos después de generar las unidades
         });
     });
 
@@ -1065,7 +1065,23 @@ Phone Number:</textarea>
 
         return total;
     }
-
+    function prepararRedireccion(event) {
+    // Obtener datos necesarios
+    const total = document.getElementById('precioDisplay').textContent;
+    const direccion = document.getElementById('direccion').value;
+    
+    // Codificar parámetros
+    const params = new URLSearchParams({
+        total: total,
+        direccion: encodeURIComponent(direccion)
+    });
+    
+    // Construir URL de redirección
+    const baseUrl = window.location.href.replace('index.html', 'exito.html');
+    document.getElementById('nextUrl').value = `${baseUrl}?${params.toString()}`;
+    
+    return true; // Continuar con el envío normal del formulario
+    }
     // Configurar eventos para las unidades
     function configurarEventosUnidades() {
         // Manejar versión jugador
@@ -1165,6 +1181,7 @@ Phone Number:</textarea>
 
     // Inicialización
     document.querySelector('.boton-unidad.activo').click();
+    document.querySelector('.boton-unidad[data-unidades="0"]').click();
     configurarEventosUnidades();
 
     // Actualizar precio al cambiar cualquier input
