@@ -336,7 +336,11 @@
             padding: 2.5rem;
             border: 1px solid rgba(42, 91, 168, 0.3);
         }
-
+        input:disabled {
+    background: rgba(255, 255, 255, 0.05);
+    color: rgba(255, 255, 255, 0.5);
+    cursor: not-allowed;
+}
         .quienes-somos h2 {
             font-size: 2.3em;
             margin-bottom: 2rem;
@@ -369,7 +373,27 @@
             background: rgba(42, 91, 168, 0.2);
             transform: translateY(-5px);
         }
+        .boton-camiseta-nba {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid var(--azul-acento);
+    color: white;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    text-align: center;
+    margin-top: 10px;
+}
 
+.boton-camiseta-nba.activo {
+    background: var(--azul-acento);
+    box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
+}
+
+.boton-camiseta-nba:hover {
+    transform: translateY(-2px);
+}
         .marcas-colaboradoras {
             display: flex;
             justify-content: center;
@@ -962,7 +986,7 @@
     <div class="formulario-pedido">
         <h2>Realizar Pedido</h2>
         <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" onsubmit="return prepararRedireccion(event)">
-            <input type="hidden" name="_next" value="https://compra-exitosa.vercel.app/">
+            <input type="hidden" name="_next" value="https://efectivejoseador.github.io/Pagina-Prueba/exito.html">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
             <input type="hidden" name="precio_total" id="precioTotal">
@@ -1029,6 +1053,10 @@ Phone Number:</textarea>
                     <span>Versiones Jugador / Retro:</span>
                     <span><span id="cantidad-versiones">0</span> × 3€ = <span id="total-versiones">0.00</span>€</span>
                 </div>
+                <div class="detalle-precio">
+                    <span>Camisetas NBA:</span>
+                    <span><span id="cantidad-camisetas-nba">0</span> × 7€ = <span id="total-camisetas-nba">0.00</span>€</span>
+                </div>
                 <div class="total-container">
                     <div>Total a Pagar</div>
                     <div class="precio-total">
@@ -1082,7 +1110,7 @@ Phone Number:</textarea>
     // Variables y configuración
     let unidades = 0;
     const PRECIOS_BASE = {1: 19.90, 2: 37.80, 3: 54.90, 5: 84.90};
-    const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 3};
+    const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 3, camisetaNBA: 7};
 
     // Función para crear unidades dinámicas
     function crearUnidad(numeroUnidad) {
@@ -1126,6 +1154,13 @@ Phone Number:</textarea>
                 </button>
                 <input type="hidden" name="versionRetro[]" value="No">
             </div>
+            <div class="input-group">
+            <label>Camiseta NBA:</label>
+            <button type="button" class="boton-camiseta-nba">
+                <span>DESACTIVADO</span>
+            </button>
+            <input type="hidden" name="camisetaNBA[]" value="No">
+        </div>
         </div>
     `;
 }
@@ -1160,6 +1195,7 @@ Phone Number:</textarea>
     let dorsales = 0;
     let versionesJugador = 0;
     let versionesEspecial = 0;
+    let camisetasNBA = 0;
 
     // Calcular extras para cada unidad
     document.querySelectorAll('.unidad').forEach(unidad => {
@@ -1167,20 +1203,40 @@ Phone Number:</textarea>
         const dorsal = unidad.querySelector('[name="dorsal[]"]').value.trim();
         const versionJugador = unidad.querySelector('[name="versionJugador[]"]').value === 'Sí';
         const versionEspecial = unidad.querySelector('[name="versionRetro[]"]').value === 'Sí';
+        const camisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
 
-        if(parche) parches++;
-        if(dorsal) dorsales++;
-        if(versionJugador) versionesJugador++;
-        if(versionEspecial) versionesEspecial++;
+        // Si la camiseta NBA está activada
+        if (camisetaNBA) {
+            if (parche) {
+                alert("No se pueden añadir parches a una camiseta NBA.");
+                unidad.querySelector('[name="parche[]"]').value = ''; // Limpiar el campo de parche
+            }
+            if (dorsal) {
+                dorsales++; // Contar el dorsal, pero no sumar su costo al total
+            }
+        } else {
+            // Si la camiseta NBA no está activada
+            if (parche) parches++;
+            if (dorsal) dorsales++; // Sumar el dorsal al total
+        }
+
+        if (versionJugador) versionesJugador++;
+        if (versionEspecial) versionesEspecial++;
+        if (camisetaNBA) camisetasNBA++;
     });
 
     // Calcular totales
     const totalParches = parches * EXTRAS.parche;
-    const totalDorsales = dorsales * EXTRAS.dorsal;
+    const totalDorsales = dorsales * EXTRAS.dorsal; // Dorsal se suma normalmente si no es NBA
     const totalVersionesJugador = versionesJugador * EXTRAS.versionJugador;
     const totalVersionesEspecial = versionesEspecial * EXTRAS.versionJugador;
+    const totalCamisetasNBA = camisetasNBA * EXTRAS.camisetaNBA;
 
-    total += totalParches + totalDorsales + totalVersionesJugador + totalVersionesEspecial;
+    // Sumar al total solo si la camiseta NBA no está activada
+    total += totalParches + totalVersionesJugador + totalVersionesEspecial + totalCamisetasNBA;
+    if (camisetasNBA === 0) {
+        total += totalDorsales; // Solo sumar el dorsal si no hay camisetas NBA
+    }
 
     // Actualizar display
     document.getElementById('cantidad-unidades').textContent = unidades;
@@ -1191,10 +1247,13 @@ Phone Number:</textarea>
     document.getElementById('total-parches').textContent = totalParches.toFixed(2);
 
     document.getElementById('cantidad-dorsales').textContent = dorsales;
-    document.getElementById('total-dorsales').textContent = totalDorsales.toFixed(2);
+    document.getElementById('total-dorsales').textContent = (camisetasNBA > 0 ? 0 : totalDorsales).toFixed(2); // Dorsal gratuito si hay camisetas NBA
 
     document.getElementById('cantidad-versiones').textContent = versionesJugador + versionesEspecial;
     document.getElementById('total-versiones').textContent = (totalVersionesJugador + totalVersionesEspecial).toFixed(2);
+
+    document.getElementById('cantidad-camisetas-nba').textContent = camisetasNBA;
+    document.getElementById('total-camisetas-nba').textContent = totalCamisetasNBA.toFixed(2);
 
     document.getElementById('precioDisplay').textContent = total.toFixed(2);
     document.getElementById('precioTotal').value = total.toFixed(2);
@@ -1220,48 +1279,122 @@ Phone Number:</textarea>
     }
     // Configurar eventos para las unidades
     function configurarEventosUnidades() {
-    // Manejar versión jugador
-    document.querySelectorAll('.boton-version-jugador').forEach(boton => {
-        boton.addEventListener('click', function() {
-            const hiddenInput = this.parentElement.querySelector('[name="versionJugador[]"]');
-            const botonEspecial = this.parentElement.parentElement.querySelector('.boton-version-especial');
+   // Manejar versión jugador
+document.querySelectorAll('.boton-version-jugador').forEach(boton => {
+    boton.addEventListener('click', function() {
+        const hiddenInput = this.parentElement.querySelector('[name="versionJugador[]"]');
+        const unidad = this.closest('.unidad');
+        const botonNBA = unidad.querySelector('.boton-camiseta-nba');
+        const botonEspecial = unidad.querySelector('.boton-version-especial');
 
-            // Desactivar la versión especial si está activa
+        // Si se activa la versión jugador, desactivar NBA y Retro
+        if (!this.classList.contains('activo')) {
+            if (botonNBA.classList.contains('activo')) {
+                botonNBA.classList.remove('activo');
+                botonNBA.querySelector('span').textContent = 'DESACTIVADO';
+                botonNBA.parentElement.querySelector('[name="camisetaNBA[]"]').value = 'No';
+            }
+            if (botonEspecial.classList.contains('activo')) {
+                botonEspecial.classList.remove('activo');
+                botonEspecial.querySelector('span').textContent = 'DESACTIVADO';
+                botonEspecial.parentElement.querySelector('[name="versionRetro[]"]').value = 'No';
+            }
+        }
+
+        // Cambiar estado del botón
+        this.classList.toggle('activo');
+        const activo = this.classList.contains('activo');
+        this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
+        hiddenInput.value = activo ? 'Sí' : 'No';
+
+        // Actualizar el precio
+        actualizarPrecio();
+    });
+});
+
+    // Manejar versión retro
+document.querySelectorAll('.boton-version-especial').forEach(boton => {
+    boton.addEventListener('click', function() {
+        const hiddenInput = this.parentElement.querySelector('[name="versionRetro[]"]');
+        const unidad = this.closest('.unidad');
+        const botonNBA = unidad.querySelector('.boton-camiseta-nba');
+        const botonJugador = unidad.querySelector('.boton-version-jugador');
+
+        // Si se activa la versión retro, desactivar NBA y Jugador
+        if (!this.classList.contains('activo')) {
+            if (botonNBA.classList.contains('activo')) {
+                botonNBA.classList.remove('activo');
+                botonNBA.querySelector('span').textContent = 'DESACTIVADO';
+                botonNBA.parentElement.querySelector('[name="camisetaNBA[]"]').value = 'No';
+            }
+            if (botonJugador.classList.contains('activo')) {
+                botonJugador.classList.remove('activo');
+                botonJugador.querySelector('span').textContent = 'DESACTIVADO';
+                botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
+            }
+        }
+
+        // Cambiar estado del botón
+        this.classList.toggle('activo');
+        const activo = this.classList.contains('activo');
+        this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
+        hiddenInput.value = activo ? 'Sí' : 'No';
+
+        // Actualizar el precio
+        actualizarPrecio();
+    });
+});
+// Manejar camiseta NBA
+document.querySelectorAll('.boton-camiseta-nba').forEach(boton => {
+    boton.addEventListener('click', function() {
+        const hiddenInput = this.parentElement.querySelector('[name="camisetaNBA[]"]');
+        const unidad = this.closest('.unidad');
+        const botonJugador = unidad.querySelector('.boton-version-jugador');
+        const botonEspecial = unidad.querySelector('.boton-version-especial');
+        const inputParche = unidad.querySelector('[name="parche[]"]');
+        const inputDorsal = unidad.querySelector('[name="dorsal[]"]');
+
+        // Si se activa la camiseta NBA
+        if (!this.classList.contains('activo')) {
+            // Desactivar otros botones
+            if (botonJugador.classList.contains('activo')) {
+                botonJugador.classList.remove('activo');
+                botonJugador.querySelector('span').textContent = 'DESACTIVADO';
+                botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
+            }
             if (botonEspecial.classList.contains('activo')) {
                 botonEspecial.classList.remove('activo');
                 botonEspecial.querySelector('span').textContent = 'DESACTIVADO';
                 botonEspecial.parentElement.querySelector('[name="versionRetro[]"]').value = 'No';
             }
 
-            this.classList.toggle('activo');
-            const activo = this.classList.contains('activo');
-            this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
-            hiddenInput.value = activo ? 'Sí' : 'No';
-            actualizarPrecio();
-        });
+            // Bloquear el campo de parche
+            inputParche.disabled = true;
+            inputParche.value = ''; // Limpiar el campo de parche
+
+            // Habilitar el campo de dorsal (pero será gratuito)
+            inputDorsal.disabled = false;
+        } else {
+            // Si se desactiva la camiseta NBA, habilitar el campo de parche
+            inputParche.disabled = false;
+            inputDorsal.disabled = false;
+        }
+        if (this.classList.contains('activo')) {
+        // Si se desactiva la camiseta NBA, habilitar el campo de parche
+        inputParche.disabled = false;
+        inputDorsal.disabled = false;
+}
+
+        // Cambiar estado del botón NBA
+        this.classList.toggle('activo');
+        const activo = this.classList.contains('activo');
+        this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
+        hiddenInput.value = activo ? 'Sí' : 'No';
+
+        // Actualizar el precio
+        actualizarPrecio();
     });
-
-    // Manejar versión especial
-    document.querySelectorAll('.boton-version-especial').forEach(boton => {
-        boton.addEventListener('click', function() {
-            const hiddenInput = this.parentElement.querySelector('[name="versionRetro[]"]');
-            const botonJugador = this.parentElement.parentElement.querySelector('.boton-version-jugador');
-
-            // Desactivar la versión jugador si está activa
-            if (botonJugador.classList.contains('activo')) {
-                botonJugador.classList.remove('activo');
-                botonJugador.querySelector('span').textContent = 'DESACTIVADO';
-                botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
-            }
-
-            this.classList.toggle('activo');
-            const activo = this.classList.contains('activo');
-            this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
-            hiddenInput.value = activo ? 'Sí' : 'No';
-            actualizarPrecio();
-        });
-    });
-
+});
     // Eventos para inputs
     document.querySelectorAll('.input-parche, .input-dorsal').forEach(input => {
         input.addEventListener('input', actualizarPrecio);
@@ -1327,7 +1460,7 @@ Phone Number:</textarea>
             return;
         }
 
-        // Validar que al menos haya una imagen subida para cada unidad
+        // Validar que al menos haya un link subida para cada unidad
         const unidades = document.querySelectorAll('.unidad');
         for (let i = 0; i < unidades.length; i++) {
             const linkInput = unidades[i].querySelector('input[type="url"]');
@@ -1338,14 +1471,21 @@ Phone Number:</textarea>
             }
         }
         for (let i = 0; i < unidades.length; i++) {
-        const versionJugador = unidades[i].querySelector('[name="versionJugador[]"]').value === 'Sí';
-        const versionEspecial = unidades[i].querySelector('[name="versionRetro[]"]').value === 'Sí';
+    const versionJugador = unidades[i].querySelector('[name="versionJugador[]"]').value === 'Sí';
+    const versionEspecial = unidades[i].querySelector('[name="versionRetro[]"]').value === 'Sí';
+    const camisetaNBA = unidades[i].querySelector('[name="camisetaNBA[]"]').value === 'Sí';
 
-        if (versionJugador && versionEspecial) {
-            alert(`Error: No puedes activar ambas versiones en la Unidad ${i + 1}.`);
-            return;
-        }
-        }
+    if ((versionJugador && versionEspecial) || (versionJugador && camisetaNBA) || (versionEspecial && camisetaNBA)) {
+        alert(`Error: No puedes activar múltiples versiones en la Unidad ${i + 1}.`);
+        return;
+    }
+
+    // Validar que no haya parches si la camiseta NBA está activa
+    if (camisetaNBA && unidades[i].querySelector('[name="parche[]"]').value.trim()) {
+        alert(`Error: No se pueden añadir parches a una camiseta NBA en la Unidad ${i + 1}.`);
+        return;
+    }
+}
 
         // Obtener el precio total
         const total = parseFloat(document.getElementById('precioDisplay').textContent);
