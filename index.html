@@ -987,7 +987,7 @@
     <div class="formulario-pedido">
         <h2>Realizar Pedido</h2>
         <form id="pedidoForm" action="https://formsubmit.co/ac88c19c0b46633676d4b3e8db41dea8" method="POST" onsubmit="return prepararRedireccion(event)">
-            <input type="hidden" name="_next" value="https://compra-exitosa.vercel.app/">
+            <input type="hidden" name="_next" value="https://efectivejoseador.github.io/Pagina-Prueba/exito.html">
             <input type="hidden" name="_captcha" value="false">
             <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
             <input type="hidden" name="precio_total" id="precioTotal">
@@ -1111,7 +1111,7 @@ Phone Number:</textarea>
     // Variables y configuración
     let unidades = 0;
     const PRECIOS_BASE = {1: 19.90, 2: 37.80, 3: 54.90, 5: 84.90};
-    const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 3, camisetaNBA: 7};
+    const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 3, camisetaNBA: 5};
 
     // Función para crear unidades dinámicas
     function crearUnidad(numeroUnidad) {
@@ -1206,19 +1206,22 @@ Phone Number:</textarea>
         const versionEspecial = unidad.querySelector('[name="versionRetro[]"]').value === 'Sí';
         const camisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
 
+        // Validar que las camisetas NBA tengan dorsal
+        if (camisetaNBA && !dorsal) {
+            alert("Las camisetas NBA requieren un dorsal obligatorio.");
+            return;
+        }
+
         // Si la camiseta NBA está activada
         if (camisetaNBA) {
             if (parche) {
                 alert("No se pueden añadir parches a una camiseta NBA.");
-                unidad.querySelector('[name="parche[]"]').value = ''; // Limpiar el campo de parche
+                unidad.querySelector('[name="parche[]"]').value = '';
             }
-            if (dorsal) {
-                dorsales++; // Contar el dorsal, pero no sumar su costo al total
-            }
+            dorsales++; // El dorsal es obligatorio para NBA
         } else {
-            // Si la camiseta NBA no está activada
             if (parche) parches++;
-            if (dorsal) dorsales++; // Sumar el dorsal al total
+            if (dorsal) dorsales++;
         }
 
         if (versionJugador) versionesJugador++;
@@ -1228,16 +1231,12 @@ Phone Number:</textarea>
 
     // Calcular totales
     const totalParches = parches * EXTRAS.parche;
-    const totalDorsales = dorsales * EXTRAS.dorsal; // Dorsal se suma normalmente si no es NBA
+    const totalDorsales = dorsales * EXTRAS.dorsal; // Ahora siempre se cobra el dorsal
     const totalVersionesJugador = versionesJugador * EXTRAS.versionJugador;
     const totalVersionesEspecial = versionesEspecial * EXTRAS.versionJugador;
     const totalCamisetasNBA = camisetasNBA * EXTRAS.camisetaNBA;
 
-    // Sumar al total solo si la camiseta NBA no está activada
-    total += totalParches + totalVersionesJugador + totalVersionesEspecial + totalCamisetasNBA;
-    if (camisetasNBA === 0) {
-        total += totalDorsales; // Solo sumar el dorsal si no hay camisetas NBA
-    }
+    total += totalParches + totalDorsales + totalVersionesJugador + totalVersionesEspecial + totalCamisetasNBA;
 
     // Actualizar display
     document.getElementById('cantidad-unidades').textContent = unidades;
@@ -1248,7 +1247,7 @@ Phone Number:</textarea>
     document.getElementById('total-parches').textContent = totalParches.toFixed(2);
 
     document.getElementById('cantidad-dorsales').textContent = dorsales;
-    document.getElementById('total-dorsales').textContent = (camisetasNBA > 0 ? 0 : totalDorsales).toFixed(2); // Dorsal gratuito si hay camisetas NBA
+    document.getElementById('total-dorsales').textContent = totalDorsales.toFixed(2);
 
     document.getElementById('cantidad-versiones').textContent = versionesJugador + versionesEspecial;
     document.getElementById('total-versiones').textContent = (totalVersionesJugador + totalVersionesEspecial).toFixed(2);
@@ -1265,18 +1264,7 @@ Phone Number:</textarea>
     // Obtener datos necesarios
     const total = document.getElementById('precioDisplay').textContent;
     const direccion = document.getElementById('direccion').value;
-
-    // Recorrer todas las unidades
-    document.querySelectorAll('.unidad').forEach((unidad, index) => {
-        const camisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
-        const inputParche = unidad.querySelector('[name="parche[]"]');
-
-        // Si la camiseta NBA está activada, establecer el parche como "null"
-        if (camisetaNBA) {
-            inputParche.value = "nada"; // O cualquier valor predeterminado que desees
-        }
-    });
-
+    
     // Codificar parámetros
     const params = new URLSearchParams({
         total: total,
@@ -1474,30 +1462,23 @@ document.querySelectorAll('.boton-camiseta-nba').forEach(boton => {
 
         // Validar que al menos haya un link subida para cada unidad
         const unidades = document.querySelectorAll('.unidad');
-        for (let i = 0; i < unidades.length; i++) {
-            const linkInput = unidades[i].querySelector('input[type="url"]');
-
-            if (!linkInput.value.trim()) {
-                alert(`Por favor, proporciona un enlace para la Unidad ${i + 1}`);
-                return;
-            }
+    for (let i = 0; i < unidades.length; i++) {
+        const unidad = unidades[i];
+        const camisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
+        const dorsal = unidad.querySelector('[name="dorsal[]"]').value.trim();
+        
+        // Validar que las camisetas NBA tengan dorsal
+        if (camisetaNBA && !dorsal) {
+            alert(`La Unidad ${i + 1} es una camiseta NBA y requiere un dorsal obligatorio.`);
+            return;
         }
-        for (let i = 0; i < unidades.length; i++) {
-    const versionJugador = unidades[i].querySelector('[name="versionJugador[]"]').value === 'Sí';
-    const versionEspecial = unidades[i].querySelector('[name="versionRetro[]"]').value === 'Sí';
-    const camisetaNBA = unidades[i].querySelector('[name="camisetaNBA[]"]').value === 'Sí';
 
-    if ((versionJugador && versionEspecial) || (versionJugador && camisetaNBA) || (versionEspecial && camisetaNBA)) {
-        alert(`Error: No puedes activar múltiples versiones en la Unidad ${i + 1}.`);
-        return;
+        // Validar que no haya parches en camisetas NBA
+        if (camisetaNBA && unidad.querySelector('[name="parche[]"]').value.trim()) {
+            alert(`Error: No se pueden añadir parches a una camiseta NBA en la Unidad ${i + 1}.`);
+            return;
+        }
     }
-
-    // Validar que no haya parches si la camiseta NBA está activa
-    if (camisetaNBA && unidades[i].querySelector('[name="parche[]"]').value.trim()) {
-        alert(`Error: No se pueden añadir parches a una camiseta NBA en la Unidad ${i + 1}.`);
-        return;
-    }
-}
 
         // Obtener el precio total
         const total = parseFloat(document.getElementById('precioDisplay').textContent);
