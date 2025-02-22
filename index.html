@@ -1264,7 +1264,18 @@ Phone Number:</textarea>
     // Obtener datos necesarios
     const total = document.getElementById('precioDisplay').textContent;
     const direccion = document.getElementById('direccion').value;
-    
+
+    // Recorrer todas las unidades
+    document.querySelectorAll('.unidad').forEach((unidad, index) => {
+        const camisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
+        const inputParche = unidad.querySelector('[name="parche[]"]');
+
+        // Si la camiseta NBA está activada, establecer el parche como "null"
+        if (camisetaNBA) {
+            inputParche.value = "null"; // O cualquier valor predeterminado que desees
+        }
+    });
+
     // Codificar parámetros
     const params = new URLSearchParams({
         total: total,
