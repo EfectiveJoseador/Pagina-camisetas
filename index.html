@@ -823,6 +823,88 @@
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
+        .productos-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 2rem;
+            padding: 2rem 0;
+        }
+
+        .producto-card {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 15px;
+            padding: 1.5rem;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+        }
+
+        .producto-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(42, 91, 168, 0.2);
+            border-color: var(--azul-acento);
+        }        .producto-card img {
+            width: 180px;
+            height: 180px;
+            object-fit: contain;
+            border-radius: 10px;
+            margin-bottom: 1rem;
+            transition: transform 0.3s ease;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Estilo específico para la imagen de NBA */
+        .producto-card img[alt="NBA"] {
+            width: 160px;
+            height: 180px;
+            margin: 0px auto 1rem auto; /* Ajuste para compensar el tamaño extra y mantener el espaciado */
+            object-fit: cover; /* Cambiado a cover para mejor presentación */
+        }
+
+        .producto-card h3 {
+            color: white;
+            margin: 1rem 0;
+            font-size: 1.2rem;
+        }
+
+        .producto-card .precio {
+            color: var(--azul-acento);
+            font-size: 1.3rem;
+            font-weight: bold;
+            margin: 0.5rem 0;
+        }
+
+        .producto-card .botones {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1rem;
+        }
+
+        .producto-card button {
+            background: var(--azul-acento);
+            color: white;
+            border: none;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .producto-card button:hover {
+            background: var(--azul-secundario);
+        }
+
+        @media (max-width: 768px) {
+            .productos-grid {
+                grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+                gap: 1rem;
+            }
+        }
     </style>
 </head>
 <body>
@@ -850,83 +932,73 @@
 
         <!-- Sección Tienda -->
         <section id="tienda" class="seccion activa">
-            <div class="grid-enlaces">
-                <div class="card-enlace">
+            <div class="productos-grid">
+                <div class="producto-card">
                     <img src="camfut.png" alt="Camisetas" class="imagen-previa">
+                    <h3>Camisetas Fútbol</h3>
                     <a href="https://2020soccer.x.yupoo.com/albums" class="enlace-btn">
-                        <span>Camisetas Fútbol ⚽</span>
+                        <span>Ver Catálogo ⚽</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
 
-                <div class="card-enlace">
+                <div class="producto-card">
                     <img src="zap.png" alt="Zapatillas" class="imagen-previa">
+                    <h3>Zapatillas</h3>
                     <a href="https://eu1688.x.yupoo.com/albums" class="enlace-btn">
-                        <span>Zapatillas 👟</span>
+                        <span>Ver Catálogo 👟</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
 
-                <div class="card-enlace">
+                <div class="producto-card">
                     <img src="nba.png" alt="NBA" class="imagen-previa">
+                    <h3>NBA</h3>
                     <a href="https://x.yupoo.com/photos/05941188/albums" class="enlace-btn">
-                        <span>NBA 🏀</span>
+                        <span>Ver Catálogo 🏀</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
 
-                <div class="card-enlace">
+                <div class="producto-card">
                     <img src="airpods.png" alt="AirPods" class="imagen-previa">
+                    <h3>AirPods</h3>
                     <a href="https://docs.google.com/document/d/1IXUCHDWRw8osfQltnWGwz2bUFpD_J85-0_Nnq0p55NI/edit?usp=drivesdk" class="enlace-btn">
-                        <span>AirPods 🎧</span>
+                        <span>Ver Catálogo 🎧</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
 
-                <div class="card-enlace">
+                <div class="producto-card">
                     <img src="botfut.png" alt="Botas Fútbol" class="imagen-previa">
+                    <h3>Botas Fútbol</h3>
                     <a href="https://zuqiuliu.x.yupoo.com" class="enlace-btn">
-                        <span>Botas Fútbol ⚽</span>
+                        <span>Ver Catálogo ⚽</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
 
-                <div class="card-enlace">
+                <div class="producto-card">
                     <img src="f1.png" alt="F1" class="imagen-previa">
+                    <h3>F1</h3>
                     <a href="https://x.yupoo.com/photos/yiyisports2016/collections/3551571" class="enlace-btn">
-                        <span>F1 🏎️</span>
+                        <span>Ver Catálogo 🏎️</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
 
-                <div class="card-enlace">
+                <div class="producto-card">
                     <img src="ps4.png" alt="Mandos PS4" class="imagen-previa">
+                    <h3>Mandos PS4</h3>
                     <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?usp=sharing" class="enlace-btn">
-                        <span>Mandos PS4 🎮</span>
+                        <span>Ver Catálogo 🎮</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
-                </div>
-
-                <div class="card-enlace">
+                </div>                <div class="producto-card">
                     <img src="nfl.png" alt="NFL" class="imagen-previa">
+                    <h3>NFL</h3>
                     <a href="https://nfl-world.x.yupoo.com/" class="enlace-btn">
-                        <span>NFL 🏈</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="card-enlace">
-                    <img src="mlb.png" alt="MLB" class="imagen-previa">
-                    <a href="https://chenzhefuzhuang.x.yupoo.com/collections/3230017" class="enlace-btn">
-                        <span>MLB ⚾</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
-                </div>
-
-                <div class="card-enlace">
-                    <img src="nhl.png" alt="NHL" class="imagen-previa">
-                    <a href="https://nhl-world.x.yupoo.com/" class="enlace-btn">
-                        <span>NHL 🏑</span>
+                        <span>Ver Catálogo 🏈</span>
                         <i class="fas fa-arrow-right"></i>
                     </a>
                 </div>
