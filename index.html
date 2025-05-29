@@ -107,101 +107,44 @@
         }
 
         .logo {
-            width: 150px;
-            height: 150px;
-            filter: drop-shadow(0 0 20px rgba(42, 91, 168, 0.6));
-            animation: logoAnimation 5s infinite;
+            width: 200px;
+            filter: drop-shadow(0 0 15px rgba(42, 91, 168, 0.4));
+            animation: pulse 3s 1;
             border-radius: 50%;
             margin: 20px auto;
-            border: 3px solid var(--azul-acento);
-            padding: 5px;
-            background: rgba(255, 255, 255, 0.1);
-            transition: transform 0.3s ease;
         }
 
-        .logo:hover {
-            transform: scale(1.1);
-        }
-
-        @keyframes logoAnimation {
-            0% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(42, 91, 168, 0.6)); }
-            50% { transform: scale(1.05); filter: drop-shadow(0 0 30px rgba(42, 91, 168, 0.8)); }
-            100% { transform: scale(1); filter: drop-shadow(0 0 20px rgba(42, 91, 168, 0.6)); }
+        @keyframes flotar {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-15px); }
         }
 
         h1 {
-            font-size: 3.5em;
+            font-size: 2.5em;
             margin: 1rem 0 0.5rem;
-            color: #ffffff;
+            color: #e0e0e0;
             position: relative;
             display: inline-block;
-            padding: 0 20px 15px;
-            text-transform: uppercase;
-            letter-spacing: 4px;
-            font-weight: 800;
-            background: linear-gradient(45deg, #ffffff 10%, var(--azul-acento) 90%);
-            background-clip: text;
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            text-shadow: 3px 3px 6px rgba(0,0,0,0.2);
-        }
-
-        .header-subtitle {
-            font-size: 1.2rem;
-            color: var(--azul-acento);
-            margin-bottom: 2rem;
-            letter-spacing: 3px;
-            text-transform: uppercase;
-            opacity: 0.9;
-            animation: fadeIn 1s ease-out 0.5s both;
-        }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-10px); }
-            to { opacity: 0.9; transform: translateY(0); }
-        }
-
-        h1::before {
-            content: '';
-            position: absolute;
-            left: -10px;
-            top: 50%;
-            width: 20px;
-            height: 3px;
-            background: var(--azul-acento);
-            transform: rotate(45deg);
+            padding-bottom: 10px;
         }
 
         h1::after {
             content: '';
             position: absolute;
-            right: -10px;
-            top: 50%;
-            width: 20px;
+            left: 0;
+            bottom: 0;
+            width: 100%;
             height: 3px;
             background: var(--azul-acento);
-            transform: rotate(-45deg);
+            transform: scaleX(0);
+            animation: subrayar-titulo 1.5s ease-in-out 1s forwards;
+            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
         }
 
-        .header-container {
-            position: relative;
-            padding: 2rem 0;
-            background: rgba(10, 31, 61, 0.3);
-            border-radius: 20px;
-            margin-bottom: 3rem;
-            backdrop-filter: blur(10px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        @keyframes subrayar-titulo {
+            from { transform: scaleX(0); }
+            to { transform: scaleX(1); }
         }
-
-        .header-decoration {
-            position: absolute;
-            width: 100%;
-            height: 2px;
-            background: linear-gradient(90deg, transparent, var(--azul-acento), transparent);
-            bottom: 0;
-        }
-
         /* Nuevos estilos para el selector de unidades */
         .selector-unidades {
             display: flex;
@@ -360,16 +303,16 @@
         .card-enlace:hover {
             transform: translateY(-10px) scale(1.02);
             box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }        .enlace-btn {
+        }
+
+        .enlace-btn {
             display: flex;
             align-items: center;
-            justify-content: center;
-            gap: 10px;
-            color: var(--azul-acento);
+            justify-content: space-between;
+            color: white;
+            text-decoration: none;
             font-size: 1.1rem;
             width: 100%;
-            margin-top: auto;
-            padding-top: 1rem;
         }
 
         .imagen-previa {
@@ -880,111 +823,6 @@
 @keyframes spin {
     to { transform: rotate(360deg); }
 }
-        .productos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 2rem;
-            padding: 2rem 0;
-        }        .producto-card {
-            background: rgba(255, 255, 255, 0.05);
-            border-radius: 15px;
-            padding: 1.5rem;
-            transition: transform 0.3s ease, box-shadow 0.3s ease;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            text-align: center;
-            text-decoration: none;
-            color: white;
-        }
-
-        .producto-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(42, 91, 168, 0.2);
-            border-color: var(--azul-acento);
-            color: white;
-        }.producto-card img {
-            width: 180px;
-            height: 180px;
-            object-fit: contain;
-            border-radius: 10px;
-            margin-bottom: 1rem;
-            transition: transform 0.3s ease;
-            display: block;
-            margin-left: auto;
-            margin-right: auto;
-        }
-
-        /* Estilo específico para la imagen de NBA */
-        .producto-card img[alt="NBA"] {
-            width: 160px;
-            height: 180px;
-            margin: 0px auto 1rem auto; /* Ajuste para compensar el tamaño extra y mantener el espaciado */
-            object-fit: cover; /* Cambiado a cover para mejor presentación */
-        }
-
-        .producto-card h3 {
-            color: white;
-            margin: 1rem 0;
-            font-size: 1.2rem;
-        }
-
-        .producto-card .precio {
-            color: var(--azul-acento);
-            font-size: 1.3rem;
-            font-weight: bold;
-            margin: 0.5rem 0;
-        }
-
-        .producto-card .botones {
-            display: flex;
-            gap: 1rem;
-            margin-top: 1rem;
-        }
-
-        .producto-card button {
-            background: var(--azul-acento);
-            color: white;
-            border: none;
-            padding: 0.5rem 1rem;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: background-color 0.3s ease;
-        }
-
-        .producto-card button:hover {
-            background: var(--azul-secundario);
-        }
-
-        /* Estilos para la calculadora de precio */
-        .detalle-precio.ahorro {
-            background: rgba(46, 204, 113, 0.1);
-            border: 1px solid rgba(46, 204, 113, 0.3);
-            color: #2ecc71;
-        }
-
-        .detalle-precio.ahorro strong {
-            color: #2ecc71;
-        }
-
-        .ahorro-total {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 10px;
-            margin-top: 1rem;
-            color: #2ecc71;
-            font-size: 1.1rem;
-        }
-
-        .badge-ahorro {
-            background: rgba(46, 204, 113, 0.2);
-            color: #2ecc71;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 0.9em;
-        }
     </style>
 </head>
 <body>
@@ -997,91 +835,101 @@
                 <i class="fas fa-thumbs-up"></i>
                 Compra con confianza
             </a>
-        </div>        <header class="header-container">
-            <div class="header-decoration"></div>            <img src="logo.jpg" alt="Logo Camisetazo" class="logo">
+        </div>
+
+        <header>
+            <img src="logo.jpg" alt="Logo Camisetazo" class="logo">
             <h1 class="animate__animated animate__fadeIn">CAMISETAZO</h1>
-            <div class="header-subtitle">TU TIENDA DEPORTIVA DE CONFIANZA</div>
+
             <nav class="navegacion">
                 <button class="boton-seccion activo" data-seccion="tienda">Tienda</button>
                 <button class="boton-seccion" data-seccion="quienes-somos">¿Quiénes Somos?</button>
                 <button class="boton-seccion" data-seccion="pedidos">Pedidos</button>
             </nav>
-            <div class="header-decoration"></div>
         </header>
 
         <!-- Sección Tienda -->
         <section id="tienda" class="seccion activa">
-            <div class="productos-grid">                <a href="https://2020soccer.x.yupoo.com/albums" class="producto-card">
+            <div class="grid-enlaces">
+                <div class="card-enlace">
                     <img src="camfut.png" alt="Camisetas" class="imagen-previa">
-                    <h3>Camisetas Fútbol</h3>
-                    <div class="enlace-btn">
-                        <span>Ver Catálogo ⚽</span>
+                    <a href="https://2020soccer.x.yupoo.com/albums" class="enlace-btn">
+                        <span>Camisetas Fútbol ⚽</span>
                         <i class="fas fa-arrow-right"></i>
-                    </div>
-                </a>
+                    </a>
+                </div>
 
-                <a href="https://eu1688.x.yupoo.com/albums" class="producto-card">
+                <div class="card-enlace">
                     <img src="zap.png" alt="Zapatillas" class="imagen-previa">
-                    <h3>Zapatillas</h3>
-                    <div class="enlace-btn">
-                        <span>Ver Catálogo 👟</span>
+                    <a href="https://eu1688.x.yupoo.com/albums" class="enlace-btn">
+                        <span>Zapatillas 👟</span>
                         <i class="fas fa-arrow-right"></i>
-                    </div>
-                </a>
+                    </a>
+                </div>
 
-                <a href="https://x.yupoo.com/photos/05941188/albums" class="producto-card">
+                <div class="card-enlace">
                     <img src="nba.png" alt="NBA" class="imagen-previa">
-                    <h3>NBA</h3>
-                    <div class="enlace-btn">
-                        <span>Ver Catálogo 🏀</span>
+                    <a href="https://x.yupoo.com/photos/05941188/albums" class="enlace-btn">
+                        <span>NBA 🏀</span>
                         <i class="fas fa-arrow-right"></i>
-                    </div>
-                </a>
+                    </a>
+                </div>
 
-                <a href="https://docs.google.com/document/d/1IXUCHDWRw8osfQltnWGwz2bUFpD_J85-0_Nnq0p55NI/edit?usp=drivesdk" class="producto-card">
+                <div class="card-enlace">
                     <img src="airpods.png" alt="AirPods" class="imagen-previa">
-                    <h3>AirPods</h3>
-                    <div class="enlace-btn">
-                        <span>Ver Catálogo 🎧</span>
+                    <a href="https://docs.google.com/document/d/1IXUCHDWRw8osfQltnWGwz2bUFpD_J85-0_Nnq0p55NI/edit?usp=drivesdk" class="enlace-btn">
+                        <span>AirPods 🎧</span>
                         <i class="fas fa-arrow-right"></i>
-                    </div>
-                </a>
+                    </a>
+                </div>
 
-                <a href="https://zuqiuliu.x.yupoo.com" class="producto-card">
+                <div class="card-enlace">
                     <img src="botfut.png" alt="Botas Fútbol" class="imagen-previa">
-                    <h3>Botas Fútbol</h3>
-                    <div class="enlace-btn">
-                        <span>Ver Catálogo ⚽</span>
+                    <a href="https://zuqiuliu.x.yupoo.com" class="enlace-btn">
+                        <span>Botas Fútbol ⚽</span>
                         <i class="fas fa-arrow-right"></i>
-                    </div>
-                </a>
+                    </a>
+                </div>
 
-                <a href="https://x.yupoo.com/photos/yiyisports2016/collections/3551571" class="producto-card">
+                <div class="card-enlace">
                     <img src="f1.png" alt="F1" class="imagen-previa">
-                    <h3>F1</h3>
-                    <div class="enlace-btn">
-                        <span>Ver Catálogo 🏎️</span>
+                    <a href="https://x.yupoo.com/photos/yiyisports2016/collections/3551571" class="enlace-btn">
+                        <span>F1 🏎️</span>
                         <i class="fas fa-arrow-right"></i>
-                    </div>
-                </a>
+                    </a>
+                </div>
 
-                <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?usp=sharing" class="producto-card">
+                <div class="card-enlace">
                     <img src="ps4.png" alt="Mandos PS4" class="imagen-previa">
-                    <h3>Mandos PS4</h3>
-                    <div class="enlace-btn">
-                        <span>Ver Catálogo 🎮</span>
+                    <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?usp=sharing" class="enlace-btn">
+                        <span>Mandos PS4 🎮</span>
                         <i class="fas fa-arrow-right"></i>
-                    </div>
-                </a>
+                    </a>
+                </div>
 
-                <a href="https://nfl-world.x.yupoo.com/" class="producto-card">
+                <div class="card-enlace">
                     <img src="nfl.png" alt="NFL" class="imagen-previa">
-                    <h3>NFL</h3>
-                    <div class="enlace-btn">
-                        <span>Ver Catálogo 🏈</span>
+                    <a href="https://nfl-world.x.yupoo.com/" class="enlace-btn">
+                        <span>NFL 🏈</span>
                         <i class="fas fa-arrow-right"></i>
-                    </div>
-                </a>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="mlb.png" alt="MLB" class="imagen-previa">
+                    <a href="https://chenzhefuzhuang.x.yupoo.com/collections/3230017" class="enlace-btn">
+                        <span>MLB ⚾</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
+
+                <div class="card-enlace">
+                    <img src="nhl.png" alt="NHL" class="imagen-previa">
+                    <a href="https://nhl-world.x.yupoo.com/" class="enlace-btn">
+                        <span>NHL 🏑</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
             </div>
         </section>
 
@@ -1197,19 +1045,12 @@ Phone Number:</textarea>
                 </div>
             </div>
 
-            <!-- Sección de cálculo de precio -->            <div class="calculadora-precio">
+            <!-- Sección de cálculo de precio -->
+            <div class="calculadora-precio">
                 <h3>Desglose del Precio</h3>
                 <div class="detalle-precio">
-                    <span>Precio regular (<span id="cantidad-unidades">1</span> unidad<span id="plural-unidades"></span>):</span>
-                    <span><span id="precio-sin-descuento">19.90</span>€</span>
-                </div>
-                <div class="detalle-precio ahorro">
-                    <span><i class="fas fa-tags"></i> Ahorro por pack:</span>
-                    <span>-<span id="ahorro-pack">0.00</span>€</span>
-                </div>
-                <div class="detalle-precio">
-                    <span>Precio base con descuento:</span>
-                    <span><strong><span id="precio-base-detalle">19.90</span>€</strong></span>
+                    <span>Precio Base (<span id="cantidad-unidades">1</span> unidad<span id="plural-unidades"></span>):</span>
+                    <span><span id="precio-base-detalle">19.90</span>€</span>
                 </div>
                 <div class="detalle-precio">
                     <span>Parches personalizados:</span>
@@ -1232,10 +1073,6 @@ Phone Number:</textarea>
                     <div class="precio-total">
                         <span class="moneda">€</span>
                         <span id="precioDisplay">19.90</span>
-                    </div>
-                    <div class="ahorro-total">
-                        <i class="fas fa-piggy-bank"></i>
-                        <span>Ahorro total: <span class="badge-ahorro"><span id="ahorro-total">0.00</span>€</span></span>
                     </div>
                 </div>
             </div>
@@ -1363,90 +1200,76 @@ Phone Number:</textarea>
 
     // Función de cálculo de precio
     function actualizarPrecio() {
-        let precioBase = PRECIOS_BASE[unidades];
-        let precioSinDescuento = unidades * 19.90; // Precio regular por unidad
-        let ahorroPack = precioSinDescuento - precioBase;
-        let total = precioBase;
-        let parches = 0;
-        let dorsales = 0;
-        let versionesJugador = 0;
-        let versionesEspecial = 0;
-        let camisetasNBA = 0;
+    let precioBase = PRECIOS_BASE[unidades];
+    let total = precioBase;
+    let parches = 0;
+    let dorsales = 0;
+    let versionesJugador = 0;
+    let versionesEspecial = 0;
+    let camisetasNBA = 0;
 
-        // Cálculos de extras (mantener código existente)
-        document.querySelectorAll('.unidad').forEach(unidad => {
-            const parche = unidad.querySelector('[name="parche[]"]').value.trim();
-            const dorsal = unidad.querySelector('[name="dorsal[]"]').value.trim();
-            const versionJugador = unidad.querySelector('[name="versionJugador[]"]').value === 'Sí';
-            const versionEspecial = unidad.querySelector('[name="versionRetro[]"]').value === 'Sí';
-            const camisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
+    // Calcular extras para cada unidad
+    document.querySelectorAll('.unidad').forEach(unidad => {
+        const parche = unidad.querySelector('[name="parche[]"]').value.trim();
+        const dorsal = unidad.querySelector('[name="dorsal[]"]').value.trim();
+        const versionJugador = unidad.querySelector('[name="versionJugador[]"]').value === 'Sí';
+        const versionEspecial = unidad.querySelector('[name="versionRetro[]"]').value === 'Sí';
+        const camisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
 
-            if (camisetaNBA && !dorsal) {
-                alert("Las camisetas NBA requieren un dorsal obligatorio.");
-                return;
-            }
-
-            if (camisetaNBA) {
-                if (parche) {
-                    alert("No se pueden añadir parches a una camiseta NBA.");
-                    unidad.querySelector('[name="parche[]"]').value = '';
-                }
-                dorsales++;
-            } else {
-                if (parche) parches++;
-                if (dorsal) dorsales++;
-            }
-
-            if (versionJugador) versionesJugador++;
-            if (versionEspecial) versionesEspecial++;
-            if (camisetaNBA) camisetasNBA++;
-        });
-
-        // Calcular extras
-        const totalParches = parches * EXTRAS.parche;
-        const totalDorsales = dorsales * EXTRAS.dorsal;
-        const totalVersionesJugador = versionesJugador * EXTRAS.versionJugador;
-        const totalVersionesEspecial = versionesEspecial * EXTRAS.versionJugador;
-        const totalCamisetasNBA = camisetasNBA * EXTRAS.camisetaNBA;
-        const totalExtras = totalParches + totalDorsales + totalVersionesJugador + totalVersionesEspecial + totalCamisetasNBA;
-
-        total += totalExtras;
-
-        // Actualizar displays de cantidades
-        document.getElementById('cantidad-unidades').textContent = unidades;
-        document.getElementById('plural-unidades').textContent = unidades > 1 ? 'es' : '';
-        
-        // Mostrar precios y ahorros
-        document.getElementById('precio-sin-descuento').textContent = precioSinDescuento.toFixed(2);
-        document.getElementById('ahorro-pack').textContent = ahorroPack.toFixed(2);
-        document.getElementById('precio-base-detalle').textContent = precioBase.toFixed(2);
-        document.getElementById('precio-extras').textContent = totalExtras.toFixed(2);
-        
-        // Extras individuales
-        document.getElementById('cantidad-parches').textContent = parches;
-        document.getElementById('total-parches').textContent = totalParches.toFixed(2);
-        document.getElementById('cantidad-dorsales').textContent = dorsales;
-        document.getElementById('total-dorsales').textContent = totalDorsales.toFixed(2);
-        document.getElementById('cantidad-versiones').textContent = versionesJugador + versionesEspecial;
-        document.getElementById('total-versiones').textContent = (totalVersionesJugador + totalVersionesEspecial).toFixed(2);
-        document.getElementById('cantidad-camisetas-nba').textContent = camisetasNBA;
-        document.getElementById('total-camisetas-nba').textContent = totalCamisetasNBA.toFixed(2);
-
-        // Actualizar precio total y ahorro
-        document.getElementById('precioDisplay').textContent = total.toFixed(2);
-        document.getElementById('precioTotal').value = total.toFixed(2);
-        document.getElementById('ahorro-total').textContent = ahorroPack.toFixed(2);
-
-        // Mostrar u ocultar sección de ahorro
-        const seccionAhorro = document.querySelector('.detalle-precio.ahorro');
-        if (ahorroPack > 0) {
-            seccionAhorro.style.display = 'flex';
-        } else {
-            seccionAhorro.style.display = 'none';
+        // Validar que las camisetas NBA tengan dorsal
+        if (camisetaNBA && !dorsal) {
+            alert("Las camisetas NBA requieren un dorsal obligatorio.");
+            return;
         }
 
-        return total;
-    }
+        // Si la camiseta NBA está activada
+        if (camisetaNBA) {
+            if (parche) {
+                alert("No se pueden añadir parches a una camiseta NBA.");
+                unidad.querySelector('[name="parche[]"]').value = '';
+            }
+            dorsales++; // El dorsal es obligatorio para NBA
+        } else {
+            if (parche) parches++;
+            if (dorsal) dorsales++;
+        }
+
+        if (versionJugador) versionesJugador++;
+        if (versionEspecial) versionesEspecial++;
+        if (camisetaNBA) camisetasNBA++;
+    });
+
+    // Calcular totales
+    const totalParches = parches * EXTRAS.parche;
+    const totalDorsales = dorsales * EXTRAS.dorsal; // Ahora siempre se cobra el dorsal
+    const totalVersionesJugador = versionesJugador * EXTRAS.versionJugador;
+    const totalVersionesEspecial = versionesEspecial * EXTRAS.versionJugador;
+    const totalCamisetasNBA = camisetasNBA * EXTRAS.camisetaNBA;
+
+    total += totalParches + totalDorsales + totalVersionesJugador + totalVersionesEspecial + totalCamisetasNBA;
+
+    // Actualizar display
+    document.getElementById('cantidad-unidades').textContent = unidades;
+    document.getElementById('plural-unidades').textContent = unidades > 1 ? 'es' : '';
+    document.getElementById('precio-base-detalle').textContent = PRECIOS_BASE[unidades].toFixed(2);
+
+    document.getElementById('cantidad-parches').textContent = parches;
+    document.getElementById('total-parches').textContent = totalParches.toFixed(2);
+
+    document.getElementById('cantidad-dorsales').textContent = dorsales;
+    document.getElementById('total-dorsales').textContent = totalDorsales.toFixed(2);
+
+    document.getElementById('cantidad-versiones').textContent = versionesJugador + versionesEspecial;
+    document.getElementById('total-versiones').textContent = (totalVersionesJugador + totalVersionesEspecial).toFixed(2);
+
+    document.getElementById('cantidad-camisetas-nba').textContent = camisetasNBA;
+    document.getElementById('total-camisetas-nba').textContent = totalCamisetasNBA.toFixed(2);
+
+    document.getElementById('precioDisplay').textContent = total.toFixed(2);
+    document.getElementById('precioTotal').value = total.toFixed(2);
+
+    return total;
+}
     function prepararRedireccion(event) {
     // Obtener datos necesarios
     const total = document.getElementById('precioDisplay').textContent;
