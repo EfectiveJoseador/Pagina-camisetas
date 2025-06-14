@@ -951,11 +951,13 @@ Phone Number:</textarea>
     document.getElementById('plural-unidades').textContent = unidades > 1 ? 'es' : '';
     document.getElementById('precio-base-detalle').textContent = PRECIOS_BASE[unidades].toFixed(2);
 
-    // NUEVO: Actualizar precio sin descuento por cantidad
+    // NUEVO: Actualizar precio sin descuento por cantidad (ahora incluye extras)
     document.getElementById('cantidad-unidades-sin-desc').textContent = unidades;
     document.getElementById('plural-unidades-sin-desc').textContent = unidades > 1 ? 'es' : '';
     const precioSinDescuentoUnidad = 25.00;
-    const totalSinDescuento = (precioSinDescuentoUnidad * unidades).toFixed(2);
+    // Calcular extras también para el precio sin descuento
+    const totalSinDescuentoExtras = (parches * EXTRAS.parche) + (dorsales * EXTRAS.dorsal) + ((versionesJugador + versionesEspecial) * EXTRAS.versionJugador) + (camisetasNBA * EXTRAS.camisetaNBA);
+    const totalSinDescuento = (precioSinDescuentoUnidad * unidades + totalSinDescuentoExtras).toFixed(2);
     document.getElementById('precio-sin-descuento').textContent = totalSinDescuento;
     document.getElementById('precioSinDescuentoTotal').textContent = totalSinDescuento;
 
