@@ -1,1859 +1,20 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-    <link rel="icon" type="image/x-icon" href="logo.jpg">
+    <link rel="icon" type="image/x-icon" href="assets/logos/logo.jpg">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Camisetazo - Tienda Deportiva Premium</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
-    <style>
-        :root {
-            --azul-primario: #0a1f3d;
-            --azul-secundario: #1a3b6d;
-            --azul-acento: #2a5ba8;
-            --negro-mate: #0d0d0d;
-            --degradado-fondo: linear-gradient(135deg, var(--negro-mate) 30%, var(--azul-primario) 100%);
-        }
-
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: 'Segoe UI', system-ui, sans-serif;
-            background: var(--degradado-fondo);
-            color: white;
-            min-height: 100vh;
-            overflow-x: hidden;
-            position: relative;
-        }
-
-        body::before {
-            content: '';
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: url('https://images.unsplash.com/photo-1579952363873-27f3bade9f55?ixlib=rb-1.2.1&auto=format&fit=crop&w=1920&q=80') center/cover;
-            opacity: 0.1;
-            z-index: -1;
-            animation: moverFondo 20s linear infinite;
-        }
-
-        @keyframes moverFondo {
-            0% { transform: scale(1); }
-            50% { transform: scale(1.1); }
-            100% { transform: scale(1); }
-        }
-        /* Calculadora profesional */
-        .calculadora-precio {
-            background: rgba(255, 255, 255, 0.13);
-            border-radius: 16px;
-            padding: 2.2rem 1.5rem 1.5rem 1.5rem;
-            margin: 2.2rem 0 1.2rem 0;
-            box-shadow: 0 4px 16px rgba(42, 91, 168, 0.10);
-            border: 1.5px solid var(--azul-acento);
-        }
-
-        .calculadora-precio h3 {
-            color: var(--azul-acento);
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin-bottom: 1.2rem;
-            letter-spacing: 1px;
-        }
-
-        .detalle-precio {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 1rem 0;
-            padding: 1.1rem 1.2rem;
-            background: rgba(255, 255, 255, 0.09);
-            border-radius: 10px;
-            font-size: 1.08rem;
-            border: 1px solid rgba(42,91,168,0.10);
-            box-shadow: 0 1px 4px rgba(42,91,168,0.06);
-        }
-
-        .detalle-precio span:first-child:before {
-            content: '\f02b';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            color: var(--azul-acento);
-            margin-right: 0.7em;
-            font-size: 1.1em;
-            vertical-align: middle;
-        }
-
-        .total-container {
-            background: var(--azul-acento);
-            padding: 1.7rem;
-            border-radius: 12px;
-            margin: 2.2rem 0 0.5rem 0;
-            text-align: center;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.13);
-        }
-
-        .precio-total {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin: 0.5rem 0;
-            color: #fff;
-            text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-        }
-
-        .moneda {
-            font-size: 1.2rem;
-            vertical-align: super;
-        }
-
-        .badge-extra {
-            background: #28a745;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            margin-left: 1rem;
-        }
-        .contenedor-principal {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* NUEVO: Mejorar presentación de la marca */
-.brand-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: rgba(20,40,80,0.25);
-    border-radius: 24px;
-    box-shadow: 0 6px 32px rgba(42,91,168,0.10), 0 1.5px 8px rgba(0,0,0,0.10);
-    padding: 2.5rem 1.5rem 2rem 1.5rem;
-    margin-bottom: 2rem;
-    position: relative;
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.brand-header .logo {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 1.2rem;
-    box-shadow: 0 4px 24px rgba(42,91,168,0.15);
-    background: #fff;
-    border: 4px solid var(--azul-acento);
-    transition: transform 0.3s;
-}
-.brand-header .logo:hover {
-    transform: scale(1.07) rotate(-2deg);
-}
-
-.brand-header .brand-title {
-    font-size: 2.7em;
-    font-weight: 900;
-    color: var(--azul-acento);
-    letter-spacing: 2px;
-    text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-    margin-bottom: 0.2em;
-    line-height: 1.1;
-    background: linear-gradient(90deg, #fff 60%, var(--azul-acento) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.brand-header .brand-subtitle {
-    color: #e0e0e0;
-    font-size: 1.1em;
-    font-weight: 400;
-    opacity: 0.85;
-    margin-bottom: 0;
-    text-align: center;
-    letter-spacing: 0.5px;
-}
-
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-            padding: 20px 0;
-        }
-
-        .logo {
-            width: 200px;
-            filter: drop-shadow(0 0 15px rgba(42, 91, 168, 0.4));
-            animation: pulse 3s 1;
-            border-radius: 50%;
-            margin: 20px auto;
-        }
-
-        @keyframes flotar {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        h1 {
-            font-size: 2.5em;
-            margin: 1rem 0 0.5rem;
-            color: #e0e0e0;
-            position: relative;
-            display: inline-block;
-            padding-bottom: 10px;
-        }
-
-        h1::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--azul-acento);
-            transform: scaleX(0);
-            animation: subrayar-titulo 1.5s ease-in-out 1s forwards;
-            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
-        }
-
-        @keyframes subrayar-titulo {
-            from { transform: scaleX(0); }
-            to { transform: scaleX(1); }
-        }
-        /* Nuevos estilos para el selector de unidades */
-        .selector-unidades {
-            display: flex;
-            justify-content: center;
-            gap: 1.2rem;
-            margin-bottom: 2.2rem;
-        }
-
-        .boton-unidad {
-            background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 0.9rem 2.1rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-
-        .boton-unidad.activo, .boton-unidad:hover {
-            background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
-            color: var(--azul-acento);
-            transform: translateY(-3px) scale(1.04);
-            box-shadow: 0 6px 24px rgba(42,91,168,0.13);
-        }
-
-        /* Contenedor de unidades */
-        .contenedor-unidades {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .unidad {
-            background: rgba(10, 31, 61, 0.7);
-            padding: 1.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(42, 91, 168, 0.3);
-        }
-
-        .unidad h4 {
-            margin-bottom: 1rem;
-            color: var(--azul-acento);
-        }
-
-        .navegacion {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .boton-seccion {
-            background: transparent;
-            border: 2px solid var(--azul-acento);
-            color: white;
-            font-size: 1.1rem;
-            padding: 12px 35px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .boton-seccion.activo {
-            background: var(--azul-acento);
-            box-shadow: 0 0 25px rgba(42, 91, 168, 0.5);
-        }
-
-        .boton-seccion:hover {
-            transform: translateY(-3px);
-        }
-
-        .seccion {
-            display: none;
-            animation: aparecer 0.6s ease forwards;
-        }
-
-        .seccion.activa {
-            display: block;
-        }
-
-        /* --- INICIO: Catálogo Premium --- */
-        .catalogo-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-        .catalogo-titulo {
-            font-size: 2.7em;
-            color: var(--azul-acento);
-            margin-bottom: 0.5rem;
-            letter-spacing: 1px;
-            font-weight: 800;
-            text-shadow: 0 2px 12px rgba(42,91,168,0.15);
-        }
-        .catalogo-descripcion {
-            color: #e0e0e0;
-            font-size: 1.15em;
-            margin-bottom: 1.5rem;
-            opacity: 0.85;
-        }
-        .grid-catalogo {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-            gap: 2.2rem;
-            max-width: 1200px;
-            margin: 0 auto 2rem auto;
-        }
-        .catalogo-card {
-            background: rgba(20, 40, 80, 0.92);
-            border-radius: 18px;
-            box-shadow: 0 8px 32px rgba(42,91,168,0.18), 0 1.5px 8px rgba(0,0,0,0.10);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s;
-            border: 1.5px solid rgba(42,91,168,0.18);
-            min-height: 420px;
-            position: relative;
-        }
-        .catalogo-card:hover {
-            transform: translateY(-10px) scale(1.035);
-            box-shadow: 0 16px 40px rgba(42,91,168,0.25), 0 3px 16px rgba(0,0,0,0.13);
-            z-index: 2;
-        }
-        .catalogo-img-wrap {
-            width: 100%;
-            height: 180px;
-            background: linear-gradient(120deg, #2a5ba8 0%, #0a1f3d 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        .catalogo-img {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            transition: transform 0.3s;
-        }
-
-        /* Tamaño especial para el logo de NBA */
-        [src="nba.png"].catalogo-img {
-            width: 250px;
-            height: 160px;
-        }
-        .catalogo-card:hover .catalogo-img {
-            transform: scale(1.13) rotate(-3deg);
-        }
-        .catalogo-info {
-            padding: 1.5rem 1.2rem 1.2rem 1.2rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .catalogo-info h3 {
-            color: #fff;
-            font-size: 1.25em;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-        .catalogo-info p {
-            color: #b8c6e0;
-            font-size: 1em;
-            margin-bottom: 1.2rem;
-            min-height: 48px;
-        }
-        .catalogo-btn {
-            background: var(--azul-acento);
-            color: #fff;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 30px;
-            font-size: 1.08em;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 10px rgba(42,91,168,0.13);
-            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
-        }
-        .catalogo-btn:hover {
-            background: #1a3e6e;
-            box-shadow: 0 4px 18px rgba(42,91,168,0.18);
-            transform: translateY(-2px) scale(1.04);
-        }
-        @media (max-width: 900px) {
-            .grid-catalogo {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        @media (max-width: 600px) {
-            .grid-catalogo {
-                grid-template-columns: 1fr;
-            }
-            .catalogo-header {
-                margin-bottom: 1.2rem;
-            }
-            .catalogo-titulo {
-                font-size: 2em;
-            }
-        }
-        /* --- FIN: Catálogo Premium --- */
-
-        /* Eliminar estilos antiguos del catálogo */
-        .grid-enlaces, .card-enlace, .imagen-previa, .enlace-btn { display: none !important; }
-
-        footer {
-            margin-top: 4rem;
-            text-align: center;
-            padding: 3rem 0;
-            border-top: 1px solid rgba(42, 91, 168, 0.3);
-        }
-
-        .redes-sociales,
-        .redes_sociales {
-            display: flex;
-            justify-content: center;
-            gap: 3.5rem; /* Más separación entre iconos */
-            margin-bottom: 1.5rem;
-        }
-.redes-sociales a,
-.redes_sociales a {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 3rem;
-    transition: all 0.3s;
-}
-
-        /* Estilos para la sección de pedidos */
-        .formulario-pedido {
-            max-width: 900px;
-            margin: 2.5rem auto;
-            background: linear-gradient(135deg, rgba(10,31,61,0.92) 70%, rgba(42,91,168,0.13) 100%);
-            backdrop-filter: blur(16px);
-            border-radius: 28px;
-            padding: 2.7rem 2.2rem 2.2rem 2.2rem;
-            border: 2.5px solid var(--azul-acento);
-            box-shadow: 0 8px 40px rgba(42,91,168,0.13), 0 2px 12px rgba(0,0,0,0.10);
-            position: relative;
-            animation: aparecer 0.7s;
-        }
-
-        .formulario-pedido h2 {
-            text-align: center;
-            color: var(--azul-acento);
-            margin-bottom: 2.2rem;
-            font-size: 2.3rem;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-        }
-
-        .selector-unidades {
-            display: flex;
-            justify-content: center;
-            gap: 1.2rem;
-            margin-bottom: 2.2rem;
-        }
-
-        .boton-unidad {
-            background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 0.9rem 2.1rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-
-        .boton-unidad.activo, .boton-unidad:hover {
-            background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
-            color: var(--azul-acento);
-            transform: translateY(-3px) scale(1.04);
-            box-shadow: 0 6px 24px rgba(42,91,168,0.13);
-        }
-
-        /* Campos del formulario */
-        .input-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2.2rem;
-            margin: 2.2rem 0 1.5rem 0;
-        }
-
-        .input-group {
-            margin-bottom: 1.2rem;
-            background: rgba(255,255,255,0.04);
-            border-radius: 10px;
-            padding: 1.1rem 1rem 0.7rem 1rem;
-            box-shadow: 0 1px 6px rgba(42,91,168,0.07);
-            border: 1.5px solid rgba(42,91,168,0.10);
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #e0e0e0;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .input-group input,
-        .input-group textarea {
-            width: 100%;
-            padding: 13px;
-            border: 2px solid var(--azul-acento);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.13);
-            color: white;
-            font-size: 1.08rem;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus,
-        .input-group textarea:focus {
-            outline: none;
-            border-color: #4a90e2;
-            box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
-            background: rgba(255,255,255,0.18);
-        }
-
-        .formulario-pedido button[type="submit"], .formulario-pedido .boton-pago {
-            background: linear-gradient(90deg, #28a745 60%, #2a5ba8 100%);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 1.1rem 2.5rem;
-            font-size: 1.2rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            margin: 1.2rem auto 0 auto;
-            display: block;
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-
-        .formulario-pedido button[type="submit"]:hover, .formulario-pedido .boton-pago:hover {
-            background: linear-gradient(90deg, #fff 10%, #28a745 100%);
-            color: #28a745;
-            transform: translateY(-3px) scale(1.04);
-            box-shadow: 0 6px 24px rgba(42,91,168,0.13);
-        }
-
-        @media (max-width: 900px) {
-            .formulario-pedido {
-                padding: 1.2rem 0.5rem;
-            }
-            .input-grid {
-                grid-template-columns: 1fr;
-                gap: 1.2rem;
-            }
-        }
-        /* --- FIN: Pedidos --- */
-
-        /* --- INICIO: Quiénes Somos --- */
-        .quienes-somos-ui {
-            max-width: 900px;
-            margin: 0 auto 2.5rem auto;
-            background: rgba(20,40,80,0.18);
-            border-radius: 22px;
-            box-shadow: 0 4px 32px rgba(42,91,168,0.10), 0 1.5px 8px rgba(0,0,0,0.08);
-            padding: 2.5rem 2rem 2rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            border: 1.5px solid rgba(42,91,168,0.13);
-            animation: aparecer 0.8s;
-        }
-        .quienes-somos-ui h2 {
-            color: var(--azul-acento);
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-bottom: 1.2rem;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-        }
-        .quienes-somos-ui p {
-            color: #e0e0e0;
-            font-size: 1.15rem;
-            line-height: 1.7;
-            margin-bottom: 2rem;
-            opacity: 0.92;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .quienes-somos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 2rem;
-            margin-top: 2.5rem;
-        }
-        .quienes-somos-card {
-            background: rgba(42,91,168,0.13);
-            border-radius: 16px;
-            padding: 2rem 1.2rem 1.5rem 1.2rem;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.08);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 1px solid rgba(42,91,168,0.10);
-        }
-        .quienes-somos-card:hover {
-            transform: translateY(-6px) scale(1.03);
-            box-shadow: 0 8px 32px rgba(42,91,168,0.13);
-            background: rgba(42,91,168,0.18);
-        }
-        .quienes-somos-card i {
-            font-size: 2.7rem;
-            margin-bottom: 1rem;
-            color: var(--azul-acento);
-            background: #fff;
-            border-radius: 50%;
-            padding: 0.7rem;
-            box-shadow: 0 2px 8px rgba(42,91,168,0.08);
-            transition: background 0.2s;
-        }
-        .quienes-somos-card h3 {
-            font-size: 1.25rem;
-            color: #fff;
-            margin-bottom: 0.7rem;
-            font-weight: 700;
-        }
-        .quienes-somos-card p {
-            color: #b8c6e0;
-            font-size: 1rem;
-            margin-bottom: 0;
-            min-height: 40px;
-        }
-        .quienes-somos-card .stars {
-            color: #ffd700;
-            margin-top: 0.5rem;
-            font-size: 1.1rem;
-        }
-        .quienes-somos-card .stars i {
-            color: #FFD700 !important; /* dorado */
-            font-size: 1rem !important; /* más pequeñas */
-            background: none !important; /* sin círculo */
-            border-radius: 0 !important;
-            padding: 0 !important;
-            box-shadow: none !important;
-            margin: 0 1px;
-            vertical-align: middle;
-        }
-        .quienes-somos-instagram {
-            background: linear-gradient(90deg, #e1306c 0%, #fdc468 100%);
-            color: #fff;
-            border-radius: 16px;
-            padding: 1.5rem 1rem 1.2rem 1rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 12px rgba(225,48,108,0.10);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: aparecer 1s;
-        }
-        .quienes-somos-instagram i {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #fff;
-            background: #e1306c;
-            border-radius: 50%;
-            padding: 0.7rem;
-            box-shadow: 0 2px 8px rgba(225,48,108,0.10);
-        }
-        .quienes-somos-instagram a {
-            color: #fff;
-            font-weight: 600;
-            text-decoration: underline;
-            margin: 0.5rem 0;
-            font-size: 1.1rem;
-        }
-        .quienes-somos-instagram p {
-            margin-top: 0.5rem;
-            opacity: 0.95;
-            font-size: 1rem;
-        }
-        @media (max-width: 700px) {
-            .quienes-somos-ui {
-                padding: 1.2rem 0.5rem;
-            }
-            .quienes-somos-grid {
-                grid-template-columns: 1fr;
-                gap: 1.2rem;
-            }
-        }
-        /* --- FIN: Quiénes Somos --- */
-
-        /* --- INICIO: Pedidos --- */
-        .formulario-pedido {
-            max-width: 900px;
-            margin: 2.5rem auto;
-            background: linear-gradient(135deg, rgba(10,31,61,0.92) 70%, rgba(42,91,168,0.13) 100%);
-            backdrop-filter: blur(16px);
-            border-radius: 28px;
-            padding: 2.7rem 2.2rem 2.2rem 2.2rem;
-            border: 2.5px solid var(--azul-acento);
-            box-shadow: 0 8px 40px rgba(42,91,168,0.13), 0 2px 12px rgba(0,0,0,0.10);
-            position: relative;
-            animation: aparecer 0.7s;
-        }
-
-        .formulario-pedido h2 {
-            text-align: center;
-            color: var(--azul-acento);
-            margin-bottom: 2.2rem;
-            font-size: 2.3rem;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-        }
-
-        .selector-unidades {
-            display: flex;
-            justify-content: center;
-            gap: 1.2rem;
-            margin-bottom: 2.2rem;
-        }
-
-        .boton-unidad {
-            background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 0.9rem 2.1rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-
-        .boton-unidad.activo, .boton-unidad:hover {
-            background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
-            color: var(--azul-acento);
-            transform: translateY(-3px) scale(1.04);
-            box-shadow: 0 6px 24px rgba(42,91,168,0.13);
-        }
-
-        /* Campos del formulario */
-        .input-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2.2rem;
-            margin: 2.2rem 0 1.5rem 0;
-        }
-
-        .input-group {
-            margin-bottom: 1.2rem;
-            background: rgba(255,255,255,0.04);
-            border-radius: 10px;
-            padding: 1.1rem 1rem 0.7rem 1rem;
-            box-shadow: 0 1px 6px rgba(42,91,168,0.07);
-            border: 1.5px solid rgba(42,91,168,0.10);
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #e0e0e0;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .input-group input,
-        .input-group textarea {
-            width: 100%;
-            padding: 13px;
-            border: 2px solid var(--azul-acento);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.13);
-            color: white;
-            font-size: 1.08rem;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus,
-        .input-group textarea:focus {
-            outline: none;
-            border-color: #4a90e2;
-            box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
-            background: rgba(255,255,255,0.18);
-        }
-
-        .formulario-pedido button[type="submit"], .formulario-pedido .boton-pago {
-            background: linear-gradient(90deg, #28a745 60%, #2a5ba8 100%);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 1.1rem 2.5rem;
-            font-size: 1.2rem;
-            font-weight: 800;
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            margin: 1.2rem auto 0 auto;
-            display: block;
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-
-        .formulario-pedido button[type="submit"]:hover, .formulario-pedido .boton-pago:hover {
-            background: linear-gradient(90deg, #fff 10%, #28a745 100%);
-            color: #28a745;
-            transform: translateY(-3px) scale(1.04);
-            box-shadow: 0 6px 24px rgba(42,91,168,0.13);
-        }
-
-        @media (max-width: 900px) {
-            .formulario-pedido {
-                padding: 1.2rem 0.5rem;
-            }
-            .input-grid {
-                grid-template-columns: 1fr;
-                gap: 1.2rem;
-            }
-        }
-        /* --- FIN: Pedidos --- */
-
-        /* --- INICIO: Quiénes Somos --- */
-        .quienes-somos-ui {
-            max-width: 900px;
-            margin: 0 auto 2.5rem auto;
-            background: rgba(20,40,80,0.18);
-            border-radius: 22px;
-            box-shadow: 0 4px 32px rgba(42,91,168,0.10), 0 1.5px 8px rgba(0,0,0,0.08);
-            padding: 2.5rem 2rem 2rem 2rem;
-            text-align: center;
-            position: relative;
-            overflow: hidden;
-            border: 1.5px solid rgba(42,91,168,0.13);
-            animation: aparecer 0.8s;
-        }
-        .quienes-somos-ui h2 {
-            color: var(--azul-acento);
-            font-size: 2.2rem;
-            font-weight: 800;
-            margin-bottom: 1.2rem;
-            letter-spacing: 1px;
-            text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-        }
-        .quienes-somos-ui p {
-            color: #e0e0e0;
-            font-size: 1.15rem;
-            line-height: 1.7;
-            margin-bottom: 2rem;
-            opacity: 0.92;
-            max-width: 700px;
-            margin-left: auto;
-            margin-right: auto;
-        }
-        .quienes-somos-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-            gap: 2rem;
-            margin-top: 2.5rem;
-        }
-        .quienes-somos-card {
-            background: rgba(42,91,168,0.13);
-            border-radius: 16px;
-            padding: 2rem 1.2rem 1.5rem 1.2rem;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.08);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border: 1px solid rgba(42,91,168,0.10);
-        }
-        .quienes-somos-card:hover {
-            transform: translateY(-6px) scale(1.03);
-            box-shadow: 0 8px 32px rgba(42,91,168,0.13);
-            background: rgba(42,91,168,0.18);
-        }
-        .quienes-somos-card i {
-            font-size: 2.7rem;
-            margin-bottom: 1rem;
-            color: var(--azul-acento);
-            background: #fff;
-            border-radius: 50%;
-            padding: 0.7rem;
-            box-shadow: 0 2px 8px rgba(42,91,168,0.08);
-            transition: background 0.2s;
-        }
-        .quienes-somos-card h3 {
-            font-size: 1.25rem;
-            color: #fff;
-            margin-bottom: 0.7rem;
-            font-weight: 700;
-        }
-        .quienes-somos-card p {
-            color: #b8c6e0;
-            font-size: 1rem;
-            margin-bottom: 0;
-            min-height: 40px;
-        }
-        .quienes-somos-card .stars {
-            color: #ffd700;
-            margin-top: 0.5rem;
-            font-size: 1.1rem;
-        }
-        .quienes-somos-card .stars i {
-            color: #FFD700 !important; /* dorado */
-            font-size: 1rem !important; /* más pequeñas */
-            background: none !important; /* sin círculo */
-            border-radius: 0 !important;
-            padding: 0 !important;
-            box-shadow: none !important;
-            margin: 0 1px;
-            vertical-align: middle;
-        }
-        .quienes-somos-instagram {
-            background: linear-gradient(90deg, #e1306c 0%, #fdc468 100%);
-            color: #fff;
-            border-radius: 16px;
-            padding: 1.5rem 1rem 1.2rem 1rem;
-            margin-bottom: 2rem;
-            box-shadow: 0 2px 12px rgba(225,48,108,0.10);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            animation: aparecer 1s;
-        }
-        .quienes-somos-instagram i {
-            font-size: 2.5rem;
-            margin-bottom: 1rem;
-            color: #fff;
-            background: #e1306c;
-            border-radius: 50%;
-            padding: 0.7rem;
-            box-shadow: 0 2px 8px rgba(225,48,108,0.10);
-        }
-        .quienes-somos-instagram a {
-            color: #fff;
-            font-weight: 600;
-            text-decoration: underline;
-            margin: 0.5rem 0;
-            font-size: 1.1rem;
-        }
-        .quienes-somos-instagram p {
-            margin-top: 0.5rem;
-            opacity: 0.95;
-            font-size: 1rem;
-        }
-        @media (max-width: 700px) {
-            .quienes-somos-ui {
-                padding: 1.2rem 0.5rem;
-            }
-            .quienes-somos-grid {
-                grid-template-columns: 1fr;
-                gap: 1.2rem;
-            }
-        }
-        /* --- FIN: Quiénes Somos --- */
-
-        /* --- INICIO: Pedidos --- */
-        .formulario-pedido {
-            max-width: 900px;
-            margin: 2.5rem auto;
-            background: linear-gradient(135deg, rgba(10,31,61,0.92) 70%, rgba(42,91,168,0.13) 100%);
-            backdrop-filter: blur(16px);
-            border-radius: 28px;
-            padding: 2.7rem 2.2rem 2.2rem 2.2rem;
-            border: 2.5px solid var(--azul-acento);
-            box-shadow: 0 8px 40px rgba(42,91,168,0.13), 0 2px 12px rgba(0,0,0,0.10);
-            position: relative;
-            animation: aparecer 0.7s;
-        }
-
-        .formulario-pedido h2 {
-            text-align: center;
-            color: var(--azul-acento);
-            margin-bottom: 2.2rem;
-            font-size: 2.3rem;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-        }
-
-        .selector-unidades {
-            display: flex;
-            justify-content: center;
-            gap: 1.2rem;
-            margin-bottom: 2.2rem;
-        }
-
-        .boton-unidad {
-            background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 0.9rem 2.1rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-
-        .boton-unidad.activo, .boton-unidad:hover {
-            background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
-            color: var(--azul-acento);
-            transform: translateY(-3px) scale(1.04);
-            box-shadow: 0 6px 24px rgba(42,91,168,0.13);
-        }
-
-        /* Campos del formulario */
-        .input-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2.2rem;
-            margin: 2.2rem 0 1.5rem 0;
-        }
-
-        .input-group {
-            margin-bottom: 1.2rem;
-            background: rgba(255,255,255,0.04);
-            border-radius: 10px;
-            padding: 1.1rem 1rem 0.7rem 1rem;
-            box-shadow: 0 1px 6px rgba(42,91,168,0.07);
-            border: 1.5px solid rgba(42,91,168,0.10);
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #e0e0e0;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .input-group input,
-        .input-group textarea {
-            width: 100%;
-            padding: 13px;
-            border: 2px solid var(--azul-acento);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.13);
-            color: white;
-            font-size: 1.08rem;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus,
-        .input-group textarea:focus {
-            outline: none;
-            border-color: #4a90e2;
-            box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
-            background: rgba(255,255,255,0.18);
-        }
-
-        .calculadora-precio {
-            background: rgba(255, 255, 255, 0.13);
-            border-radius: 16px;
-            padding: 2.2rem 1.5rem 1.5rem 1.5rem;
-            margin: 2.2rem 0 1.2rem 0;
-            box-shadow: 0 4px 16px rgba(42, 91, 168, 0.10);
-            border: 1.5px solid var(--azul-acento);
-        }
-
-        .calculadora-precio h3 {
-            color: var(--azul-acento);
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin-bottom: 1.2rem;
-            letter-spacing: 1px;
-        }
-
-        .detalle-precio {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 1rem 0;
-            padding: 1.1rem 1.2rem;
-            background: rgba(255, 255, 255, 0.09);
-            border-radius: 10px;
-            font-size: 1.08rem;
-            border: 1px solid rgba(42,91,168,0.10);
-            box-shadow: 0 1px 4px rgba(42,91,168,0.06);
-        }
-
-        .detalle-precio span:first-child:before {
-            content: '\f02b';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            color: var(--azul-acento);
-            margin-right: 0.7em;
-            font-size: 1.1em;
-            vertical-align: middle;
-        }
-
-        .total-container {
-            background: var(--azul-acento);
-            padding: 1.7rem;
-            border-radius: 12px;
-            margin: 2.2rem 0 0.5rem 0;
-            text-align: center;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.13);
-        }
-
-        .precio-total {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin: 0.5rem 0;
-            color: #fff;
-            text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-        }
-
-        .moneda {
-            font-size: 1.2rem;
-            vertical-align: super;
-        }
-
-        .badge-extra {
-            background: #28a745;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            margin-left: 1rem;
-        }
-        .contenedor-principal {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* NUEVO: Mejorar presentación de la marca */
-.brand-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: rgba(20,40,80,0.25);
-    border-radius: 24px;
-    box-shadow: 0 6px 32px rgba(42,91,168,0.10), 0 1.5px 8px rgba(0,0,0,0.10);
-    padding: 2.5rem 1.5rem 2rem 1.5rem;
-    margin-bottom: 2rem;
-    position: relative;
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.brand-header .logo {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 1.2rem;
-    box-shadow: 0 4px 24px rgba(42,91,168,0.15);
-    background: #fff;
-    border: 4px solid var(--azul-acento);
-    transition: transform 0.3s;
-}
-.brand-header .logo:hover {
-    transform: scale(1.07) rotate(-2deg);
-}
-
-.brand-header .brand-title {
-    font-size: 2.7em;
-    font-weight: 900;
-    color: var(--azul-acento);
-    letter-spacing: 2px;
-    text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-    margin-bottom: 0.2em;
-    line-height: 1.1;
-    background: linear-gradient(90deg, #fff 60%, var(--azul-acento) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.brand-header .brand-subtitle {
-    color: #e0e0e0;
-    font-size: 1.1em;
-    font-weight: 400;
-    opacity: 0.85;
-    margin-bottom: 0;
-    text-align: center;
-    letter-spacing: 0.5px;
-}
-
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-            padding: 20px 0;
-        }
-
-        .logo {
-            width: 200px;
-            filter: drop-shadow(0 0 15px rgba(42, 91, 168, 0.4));
-            animation: pulse 3s 1;
-            border-radius: 50%;
-            margin: 20px auto;
-        }
-
-        @keyframes flotar {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        h1 {
-            font-size: 2.5em;
-            margin: 1rem 0 0.5rem;
-            color: #e0e0e0;
-            position: relative;
-            display: inline-block;
-            padding-bottom: 10px;
-        }
-
-        h1::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--azul-acento);
-            transform: scaleX(0);
-            animation: subrayar-titulo 1.5s ease-in-out 1s forwards;
-            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
-        }
-
-        @keyframes subrayar-titulo {
-            from { transform: scaleX(0); }
-            to { transform: scaleX(1); }
-        }
-        /* Nuevos estilos para el selector de unidades */
-        .selector-unidades {
-            display: flex;
-            justify-content: center;
-            gap: 1.2rem;
-            margin-bottom: 2.2rem;
-        }
-
-        .boton-unidad {
-            background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 0.9rem 2.1rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-
-        .boton-unidad.activo, .boton-unidad:hover {
-            background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
-            color: var(--azul-acento);
-            transform: translateY(-3px) scale(1.04);
-            box-shadow: 0 6px 24px rgba(42,91,168,0.13);
-        }
-
-        /* Contenedor de unidades */
-        .contenedor-unidades {
-            display: grid;
-            gap: 2rem;
-        }
-
-        .unidad {
-            background: rgba(10, 31, 61, 0.7);
-            padding: 1.5rem;
-            border-radius: 15px;
-            border: 1px solid rgba(42, 91, 168, 0.3);
-        }
-
-        .unidad h4 {
-            margin-bottom: 1rem;
-            color: var(--azul-acento);
-        }
-
-        .navegacion {
-            display: flex;
-            justify-content: center;
-            gap: 2rem;
-            margin: 2rem 0;
-        }
-
-        .boton-seccion {
-            background: transparent;
-            border: 2px solid var(--azul-acento);
-            color: white;
-            font-size: 1.1rem;
-            padding: 12px 35px;
-            border-radius: 30px;
-            cursor: pointer;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            position: relative;
-            overflow: hidden;
-        }
-
-        .boton-seccion.activo {
-            background: var(--azul-acento);
-            box-shadow: 0 0 25px rgba(42, 91, 168, 0.5);
-        }
-
-        .boton-seccion:hover {
-            transform: translateY(-3px);
-        }
-
-        .seccion {
-            display: none;
-            animation: aparecer 0.6s ease forwards;
-        }
-
-        .seccion.activa {
-            display: block;
-        }
-
-        /* --- INICIO: Catálogo Premium --- */
-        .catalogo-header {
-            text-align: center;
-            margin-bottom: 2.5rem;
-        }
-        .catalogo-titulo {
-            font-size: 2.7em;
-            color: var(--azul-acento);
-            margin-bottom: 0.5rem;
-            letter-spacing: 1px;
-            font-weight: 800;
-            text-shadow: 0 2px 12px rgba(42,91,168,0.15);
-        }
-        .catalogo-descripcion {
-            color: #e0e0e0;
-            font-size: 1.15em;
-            margin-bottom: 1.5rem;
-            opacity: 0.85;
-        }
-        .grid-catalogo {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
-            gap: 2.2rem;
-            max-width: 1200px;
-            margin: 0 auto 2rem auto;
-        }
-        .catalogo-card {
-            background: rgba(20, 40, 80, 0.92);
-            border-radius: 18px;
-            box-shadow: 0 8px 32px rgba(42,91,168,0.18), 0 1.5px 8px rgba(0,0,0,0.10);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s;
-            border: 1.5px solid rgba(42,91,168,0.18);
-            min-height: 420px;
-            position: relative;
-        }
-        .catalogo-card:hover {
-            transform: translateY(-10px) scale(1.035);
-            box-shadow: 0 16px 40px rgba(42,91,168,0.25), 0 3px 16px rgba(0,0,0,0.13);
-            z-index: 2;
-        }
-        .catalogo-img-wrap {
-            width: 100%;
-            height: 180px;
-            background: linear-gradient(120deg, #2a5ba8 0%, #0a1f3d 100%);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-        .catalogo-img {
-            width: 120px;
-            height: 120px;
-            object-fit: contain;
-            border-radius: 12px;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            transition: transform 0.3s;
-        }
-
-        /* Tamaño especial para el logo de NBA */
-        [src="nba.png"].catalogo-img {
-            width: 250px;
-            height: 160px;
-        }
-        .catalogo-card:hover .catalogo-img {
-            transform: scale(1.13) rotate(-3deg);
-        }
-        .catalogo-info {
-            padding: 1.5rem 1.2rem 1.2rem 1.2rem;
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between;
-        }
-        .catalogo-info h3 {
-            color: #fff;
-            font-size: 1.25em;
-            margin-bottom: 0.5rem;
-            font-weight: 700;
-            letter-spacing: 0.5px;
-        }
-        .catalogo-info p {
-            color: #b8c6e0;
-            font-size: 1em;
-            margin-bottom: 1.2rem;
-            min-height: 48px;
-        }
-        .catalogo-btn {
-            background: var(--azul-acento);
-            color: #fff;
-            border: none;
-            padding: 12px 28px;
-            border-radius: 30px;
-            font-size: 1.08em;
-            font-weight: 600;
-            text-decoration: none;
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 2px 10px rgba(42,91,168,0.13);
-            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
-        }
-        .catalogo-btn:hover {
-            background: #1a3e6e;
-            box-shadow: 0 4px 18px rgba(42,91,168,0.18);
-            transform: translateY(-2px) scale(1.04);
-        }
-        @media (max-width: 900px) {
-            .grid-catalogo {
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-        @media (max-width: 600px) {
-            .grid-catalogo {
-                grid-template-columns: 1fr;
-            }
-            .catalogo-header {
-                margin-bottom: 1.2rem;
-            }
-            .catalogo-titulo {
-                font-size: 2em;
-            }
-        }
-        /* --- FIN: Catálogo Premium --- */
-
-        /* Eliminar estilos antiguos del catálogo */
-        .grid-enlaces, .card-enlace, .imagen-previa, .enlace-btn { display: none !important; }
-
-        footer {
-            margin-top: 4rem;
-            text-align: center;
-            padding: 3rem 0;
-            border-top: 1px solid rgba(42, 91, 168, 0.3);
-        }
-
-        .redes-sociales,
-        .redes_sociales {
-            display: flex;
-            justify-content: center;
-            gap: 3.5rem; /* Más separación entre iconos */
-            margin-bottom: 1.5rem;
-        }
-.redes-sociales a,
-.redes_sociales a {
-    color: rgba(255, 255, 255, 0.8);
-    font-size: 3rem;
-    transition: all 0.3s;
-}
-
-        /* Estilos para la sección de pedidos */
-        .formulario-pedido {
-            max-width: 900px;
-            margin: 2.5rem auto;
-            background: linear-gradient(135deg, rgba(10,31,61,0.92) 70%, rgba(42,91,168,0.13) 100%);
-            backdrop-filter: blur(16px);
-            border-radius: 28px;
-            padding: 2.7rem 2.2rem 2.2rem 2.2rem;
-            border: 2.5px solid var(--azul-acento);
-            box-shadow: 0 8px 40px rgba(42,91,168,0.13), 0 2px 12px rgba(0,0,0,0.10);
-            position: relative;
-            animation: aparecer 0.7s;
-        }
-
-        .formulario-pedido h2 {
-            text-align: center;
-            color: var(--azul-acento);
-            margin-bottom: 2.2rem;
-            font-size: 2.3rem;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-        }
-
-        .selector-unidades {
-            display: flex;
-            justify-content: center;
-            gap: 1.2rem;
-            margin-bottom: 2.2rem;
-        }
-
-        .boton-unidad {
-            background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 0.9rem 2.1rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-
-        .boton-unidad.activo, .boton-unidad:hover {
-            background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
-            color: var(--azul-acento);
-            transform: translateY(-3px) scale(1.04);
-            box-shadow: 0 6px 24px rgba(42,91,168,0.13);
-        }
-
-        /* Campos del formulario */
-        .input-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2.2rem;
-            margin: 2.2rem 0 1.5rem 0;
-        }
-
-        .input-group {
-            margin-bottom: 1.2rem;
-            background: rgba(255,255,255,0.04);
-            border-radius: 10px;
-            padding: 1.1rem 1rem 0.7rem 1rem;
-            box-shadow: 0 1px 6px rgba(42,91,168,0.07);
-            border: 1.5px solid rgba(42,91,168,0.10);
-        }
-
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #e0e0e0;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .input-group input,
-        .input-group textarea {
-            width: 100%;
-            padding: 13px;
-            border: 2px solid var(--azul-acento);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.13);
-            color: white;
-            font-size: 1.08rem;
-            transition: all 0.3s ease;
-        }
-
-        .input-group input:focus,
-        .input-group textarea:focus {
-            outline: none;
-            border-color: #4a90e2;
-            box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
-            background: rgba(255,255,255,0.18);
-        }
-
-        .calculadora-precio {
-            background: rgba(255, 255, 255, 0.13);
-            border-radius: 16px;
-            padding: 2.2rem 1.5rem 1.5rem 1.5rem;
-            margin: 2.2rem 0 1.2rem 0;
-            box-shadow: 0 4px 16px rgba(42, 91, 168, 0.10);
-            border: 1.5px solid var(--azul-acento);
-        }
-
-        .calculadora-precio h3 {
-            color: var(--azul-acento);
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin-bottom: 1.2rem;
-            letter-spacing: 1px;
-        }
-
-        .detalle-precio {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 1rem 0;
-            padding: 1.1rem 1.2rem;
-            background: rgba(255, 255, 255, 0.09);
-            border-radius: 10px;
-            font-size: 1.08rem;
-            border: 1px solid rgba(42,91,168,0.10);
-            box-shadow: 0 1px 4px rgba(42,91,168,0.06);
-        }
-
-        .detalle-precio span:first-child:before {
-            content: '\f02b';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            color: var(--azul-acento);
-            margin-right: 0.7em;
-            font-size: 1.1em;
-            vertical-align: middle;
-        }
-
-        .total-container {
-            background: var(--azul-acento);
-            padding: 1.7rem;
-            border-radius: 12px;
-            margin: 2.2rem 0 0.5rem 0;
-            text-align: center;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.13);
-        }
-
-        .precio-total {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin: 0.5rem 0;
-            color: #fff;
-            text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-        }
-
-        .moneda {
-            font-size: 1.2rem;
-            vertical-align: super;
-        }
-
-        .badge-extra {
-            background: #28a745;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            margin-left: 1rem;
-        }
-        .contenedor-principal {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
-
-        /* NUEVO: Mejorar presentación de la marca */
-.brand-header {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    background: rgba(20,40,80,0.25);
-    border-radius: 24px;
-    box-shadow: 0 6px 32px rgba(42,91,168,0.10), 0 1.5px 8px rgba(0,0,0,0.10);
-    padding: 2.5rem 1.5rem 2rem 1.5rem;
-    margin-bottom: 2rem;
-    position: relative;
-    max-width: 480px;
-    margin-left: auto;
-    margin-right: auto;
-}
-
-.brand-header .logo {
-    width: 120px;
-    height: 120px;
-    border-radius: 50%;
-    object-fit: cover;
-    margin-bottom: 1.2rem;
-    box-shadow: 0 4px 24px rgba(42,91,168,0.15);
-    background: #fff;
-    border: 4px solid var(--azul-acento);
-    transition: transform 0.3s;
-}
-.brand-header .logo:hover {
-    transform: scale(1.07) rotate(-2deg);
-}
-
-.brand-header .brand-title {
-    font-size: 2.7em;
-    font-weight: 900;
-    color: var(--azul-acento);
-    letter-spacing: 2px;
-    text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-    margin-bottom: 0.2em;
-    line-height: 1.1;
-    background: linear-gradient(90deg, #fff 60%, var(--azul-acento) 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.brand-header .brand-subtitle {
-    color: #e0e0e0;
-    font-size: 1.1em;
-    font-weight: 400;
-    opacity: 0.85;
-    margin-bottom: 0;
-    text-align: center;
-    letter-spacing: 0.5px;
-}
-
-        header {
-            text-align: center;
-            margin-bottom: 3rem;
-            position: relative;
-            padding: 20px 0;
-        }
-
-        .logo {
-            width: 200px;
-            filter: drop-shadow(0 0 15px rgba(42, 91, 168, 0.4));
-            animation: pulse 3s 1;
-            border-radius: 50%;
-            margin: 20px auto;
-        }
-
-        @keyframes flotar {
-            0%, 100% { transform: translateY(0); }
-            50% { transform: translateY(-15px); }
-        }
-
-        h1 {
-            font-size: 2.5em;
-            margin: 1rem 0 0.5rem;
-            color: #e0e0e0;
-            position: relative;
-            display: inline-block;
-            padding-bottom: 10px;
-        }
-
-        h1::after {
-            content: '';
-            position: absolute;
-            left: 0;
-            bottom: 0;
-            width: 100%;
-            height: 3px;
-            background: var(--azul-acento);
-            transform: scaleX(0);
-            animation: subrayar-titulo 1.5s ease-in-out 1s forwards;
-            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
-        }
-
-        @keyframes subrayar-titulo {
-            from { transform: scaleX(0); }
-            to { transform: scaleX(1); }
-        }
-        /* Nuevos estilos para el selector de unidades */
-        .selector-unidades {
-            display: flex;
-            justify-content: center;
-            gap: 1.2rem;
-            margin-bottom: 2.2rem;
-        }
-
-        .boton-unidad {
-            background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 0.9rem 2.1rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
-
-        .boton-unidad.activo, .boton-unidad:hover {
-            background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
-            color: var(--azul-acento);
-            transform: translateY(-3px) scale(1.04);
-            box-shadow: 0 6px 24px rgba(42,91,168,0.13);
-        }
-
-        /* Botones de versión */
-        .boton-version-especial, .boton-version-jugador, .boton-camiseta-nba {
-            width: 100%;
-            padding: 0.85rem 0;
-            font-size: 1.08rem;
-            font-weight: 700;
-            border: none;
-            border-radius: 12px;
-            background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
-            color: #fff;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            margin-bottom: 0.5rem;
-            cursor: pointer;
-            transition: background 0.2s, color 0.2s, transform 0.18s, box-shadow 0.2s;
-            letter-spacing: 0.5px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 0.7em;
-            position: relative;
-            outline: none;
-        }
-        .boton-version-especial span, .boton-version-jugador span, .boton-camiseta-nba span {
-            font-size: 0.98em;
-            font-weight: 600;
-            margin-left: 0.5em;
-            letter-spacing: 0.2px;
-        }
-        .boton-version-especial.activo, .boton-version-jugador.activo, .boton-camiseta-nba.activo {
-            background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
-            color: var(--azul-acento);
-            transform: translateY(-2px) scale(1.04);
-            box-shadow: 0 6px 24px rgba(42,91,168,0.13);
-            border: 2px solid var(--azul-acento);
-        }
-        .boton-version-especial:not(.activo):hover, .boton-version-jugador:not(.activo):hover, .boton-camiseta-nba:not(.activo):hover {
-            background: linear-gradient(90deg, #2a5ba8 60%, #1a3b6d 100%);
-            color: #fff;
-            transform: translateY(-1px) scale(1.02);
-            box-shadow: 0 4px 16px rgba(42,91,168,0.13);
-        }
-        .boton-version-jugador::before,
-    .boton-version-especial:not(.boton-version-jugador):not(.boton-camiseta-nba)::before,
-    .boton-camiseta-nba::before {
-        content: none !important;
-        display: none !important;
-    }
-    </style>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">        
+    <link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
     <div id="formStatus"></div>
     <div class="contenedor-principal">
         <header>
     <div class="brand-header">
-        <img src="logo.jpg" alt="Logo Camisetazo" class="logo">
+        <img src="assets/logos/logo.jpg" alt="Logo Camisetazo" class="logo">
         <div class="brand-title">CAMISETAZO</div>
         <div class="brand-subtitle">Tienda Deportiva Premium</div>
     </div>
@@ -1873,7 +34,7 @@
             <div class="grid-catalogo">
                 <div class="catalogo-card animate__animated animate__fadeInUp">
                     <div class="catalogo-img-wrap">
-                        <img src="camfut.png" alt="Camisetas" class="catalogo-img">
+                        <img src="assets/images/camfut.png" alt="Camisetas" class="catalogo-img">
                     </div>
                     <div class="catalogo-info">
                         <h3>Camisetas Fútbol</h3>
@@ -1885,7 +46,7 @@
                 </div>
                 <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
                     <div class="catalogo-img-wrap">
-                        <img src="zap.png" alt="Zapatillas" class="catalogo-img">
+                        <img src="assets/images/zap.png" alt="Zapatillas" class="catalogo-img">
                     </div>
                     <div class="catalogo-info">
                         <h3>Zapatillas</h3>
@@ -1897,7 +58,7 @@
                 </div>
                 <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
                     <div class="catalogo-img-wrap">
-                        <img src="nba.png" alt="NBA" class="catalogo-img">
+                        <img src="assets/images/nba.png" alt="NBA" class="catalogo-img nba-img">
                     </div>
                     <div class="catalogo-info">
                         <h3>NBA</h3>
@@ -1909,7 +70,7 @@
                 </div>
                 <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
                     <div class="catalogo-img-wrap">
-                        <img src="airpods.png" alt="AirPods" class="catalogo-img">
+                        <img src="assets/images/airpods.png" alt="AirPods" class="catalogo-img">
                     </div>
                     <div class="catalogo-info">
                         <h3>AirPods</h3>
@@ -1921,7 +82,7 @@
                 </div>
                 <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
                     <div class="catalogo-img-wrap">
-                        <img src="botfut.png" alt="Botas Fútbol" class="catalogo-img">
+                        <img src="assets/images/botfut.png" alt="Botas Fútbol" class="catalogo-img">
                     </div>
                     <div class="catalogo-info">
                         <h3>Botas Fútbol</h3>
@@ -1933,7 +94,7 @@
                 </div>
                 <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
                     <div class="catalogo-img-wrap">
-                        <img src="f1.png" alt="F1" class="catalogo-img">
+                        <img src="assets/images/f1.png" alt="F1" class="catalogo-img">
                     </div>
                     <div class="catalogo-info">
                         <h3>F1</h3>
@@ -1945,7 +106,7 @@
                 </div>
                 <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
                     <div class="catalogo-img-wrap">
-                        <img src="ps4.png" alt="Mandos PS4" class="catalogo-img">
+                        <img src="assets/images/ps4.png" alt="Mandos PS4" class="catalogo-img">
                     </div>
                     <div class="catalogo-info">
                         <h3>Mandos PS4</h3>
@@ -1957,7 +118,7 @@
                 </div>
                 <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.7s;">
                     <div class="catalogo-img-wrap">
-                        <img src="nfl.png" alt="NFL" class="catalogo-img">
+                        <img src="assets/images/nfl.png" alt="NFL" class="catalogo-img">
                     </div>
                     <div class="catalogo-info">
                         <h3>NFL</h3>
@@ -1969,7 +130,7 @@
                 </div>
                 <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.8s;">
                     <div class="catalogo-img-wrap">
-                        <img src="mlb.png" alt="MLB" class="catalogo-img">
+                        <img src="assets/images/mlb.png" alt="MLB" class="catalogo-img">
                     </div>
                     <div class="catalogo-info">
                         <h3>MLB</h3>
@@ -2120,178 +281,178 @@
     }
     /* --- FIN: Quiénes Somos --- */
 
-        /* --- INICIO: Pedidos --- */
-        .formulario-pedido {
-            max-width: 900px;
-            margin: 2.5rem auto;
-            background: linear-gradient(135deg, rgba(10,31,61,0.92) 70%, rgba(42,91,168,0.13) 100%);
-            backdrop-filter: blur(16px);
-            border-radius: 28px;
-            padding: 2.7rem 2.2rem 2.2rem 2.2rem;
-            border: 2.5px solid var(--azul-acento);
-            box-shadow: 0 8px 40px rgba(42,91,168,0.13), 0 2px 12px rgba(0,0,0,0.10);
-            position: relative;
-            animation: aparecer 0.7s;
-        }
+    /* --- INICIO: Pedidos --- */
+    .formulario-pedido {
+        max-width: 900px;
+        margin: 2.5rem auto;
+        background: linear-gradient(135deg, rgba(10,31,61,0.92) 70%, rgba(42,91,168,0.13) 100%);
+        backdrop-filter: blur(16px);
+        border-radius: 28px;
+        padding: 2.7rem 2.2rem 2.2rem 2.2rem;
+        border: 2.5px solid var(--azul-acento);
+        box-shadow: 0 8px 40px rgba(42,91,168,0.13), 0 2px 12px rgba(0,0,0,0.10);
+        position: relative;
+        animation: aparecer 0.7s;
+    }
 
-        .formulario-pedido h2 {
-            text-align: center;
-            color: var(--azul-acento);
-            margin-bottom: 2.2rem;
-            font-size: 2.3rem;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-        }
+    .formulario-pedido h2 {
+        text-align: center;
+        color: var(--azul-acento);
+        margin-bottom: 2.2rem;
+        font-size: 2.3rem;
+        font-weight: 900;
+        letter-spacing: 1.5px;
+        text-shadow: 0 2px 12px rgba(42,91,168,0.10);
+    }
 
-        .selector-unidades {
-            display: flex;
-            justify-content: center;
-            gap: 1.2rem;
-            margin-bottom: 2.2rem;
-        }
+    .selector-unidades {
+        display: flex;
+        justify-content: center;
+        gap: 1.2rem;
+        margin-bottom: 2.2rem;
+    }
 
-        .boton-unidad {
-            background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
-            color: #fff;
-            border: none;
-            border-radius: 12px;
-            padding: 0.9rem 2.1rem;
-            font-size: 1.1rem;
-            font-weight: 700;
-            cursor: pointer;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
-        }
+    .boton-unidad {
+        background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
+        color: #fff;
+        border: none;
+        border-radius: 12px;
+        padding: 0.9rem 2.1rem;
+        font-size: 1.1rem;
+        font-weight: 700;
+        cursor: pointer;
+        box-shadow: 0 2px 12px rgba(42,91,168,0.10);
+        transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+    }
 
-        .boton-unidad.activo, .boton-unidad:hover {
-            background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
-            color: var(--azul-acento);
-            transform: translateY(-3px) scale(1.04);
-            box-shadow: 0 6px 24px rgba(42,91,168,0.13);
-        }
+    .boton-unidad.activo, .boton-unidad:hover {
+        background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
+        color: var(--azul-acento);
+        transform: translateY(-3px) scale(1.04);
+        box-shadow: 0 6px 24px rgba(42,91,168,0.13);
+    }
 
-        /* Campos del formulario */
-        .input-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 2.2rem;
-            margin: 2.2rem 0 1.5rem 0;
-        }
+    /* Campos del formulario */
+    .input-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 2.2rem;
+        margin: 2.2rem 0 1.5rem 0;
+    }
 
-        .input-group {
-            margin-bottom: 1.2rem;
-            background: rgba(255,255,255,0.04);
-            border-radius: 10px;
-            padding: 1.1rem 1rem 0.7rem 1rem;
-            box-shadow: 0 1px 6px rgba(42,91,168,0.07);
-            border: 1.5px solid rgba(42,91,168,0.10);
-        }
+    .input-group {
+        margin-bottom: 1.2rem;
+        background: rgba(255,255,255,0.04);
+        border-radius: 10px;
+        padding: 1.1rem 1rem 0.7rem 1rem;
+        box-shadow: 0 1px 6px rgba(42,91,168,0.07);
+        border: 1.5px solid rgba(42,91,168,0.10);
+    }
 
-        .input-group label {
-            display: block;
-            margin-bottom: 0.5rem;
-            color: #e0e0e0;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
+    .input-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #e0e0e0;
+        font-weight: 600;
+        letter-spacing: 0.5px;
+    }
 
-        .input-group input,
-        .input-group textarea {
-            width: 100%;
-            padding: 13px;
-            border: 2px solid var(--azul-acento);
-            border-radius: 8px;
-            background: rgba(255, 255, 255, 0.13);
-            color: white;
-            font-size: 1.08rem;
-            transition: all 0.3s ease;
-        }
+    .input-group input,
+    .input-group textarea {
+        width: 100%;
+        padding: 13px;
+        border: 2px solid var(--azul-acento);
+        border-radius: 8px;
+        background: rgba(255, 255, 255, 0.13);
+        color: white;
+        font-size: 1.08rem;
+        transition: all 0.3s ease;
+    }
 
-        .input-group input:focus,
-        .input-group textarea:focus {
-            outline: none;
-            border-color: #4a90e2;
-            box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
-            background: rgba(255,255,255,0.18);
-        }
+    .input-group input:focus,
+    .input-group textarea:focus {
+        outline: none;
+        border-color: #4a90e2;
+        box-shadow: 0 0 10px rgba(74, 144, 226, 0.3);
+        background: rgba(255,255,255,0.18);
+    }
 
-        .calculadora-precio {
-            background: rgba(255, 255, 255, 0.13);
-            border-radius: 16px;
-            padding: 2.2rem 1.5rem 1.5rem 1.5rem;
-            margin: 2.2rem 0 1.2rem 0;
-            box-shadow: 0 4px 16px rgba(42, 91, 168, 0.10);
-            border: 1.5px solid var(--azul-acento);
-        }
+    .calculadora-precio {
+        background: rgba(255, 255, 255, 0.13);
+        border-radius: 16px;
+        padding: 2.2rem 1.5rem 1.5rem 1.5rem;
+        margin: 2.2rem 0 1.2rem 0;
+        box-shadow: 0 4px 16px rgba(42, 91, 168, 0.10);
+        border: 1.5px solid var(--azul-acento);
+    }
 
-        .calculadora-precio h3 {
-            color: var(--azul-acento);
-            font-size: 1.4rem;
-            font-weight: 800;
-            margin-bottom: 1.2rem;
-            letter-spacing: 1px;
-        }
+    .calculadora-precio h3 {
+        color: var(--azul-acento);
+        font-size: 1.4rem;
+        font-weight: 800;
+        margin-bottom: 1.2rem;
+        letter-spacing: 1px;
+    }
 
-        .detalle-precio {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin: 1rem 0;
-            padding: 1.1rem 1.2rem;
-            background: rgba(255, 255, 255, 0.09);
-            border-radius: 10px;
-            font-size: 1.08rem;
-            border: 1px solid rgba(42,91,168,0.10);
-            box-shadow: 0 1px 4px rgba(42,91,168,0.06);
-        }
+    .detalle-precio {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 1rem 0;
+        padding: 1.1rem 1.2rem;
+        background: rgba(255, 255, 255, 0.09);
+        border-radius: 10px;
+        font-size: 1.08rem;
+        border: 1px solid rgba(42,91,168,0.10);
+        box-shadow: 0 1px 4px rgba(42,91,168,0.06);
+    }
 
-        .detalle-precio span:first-child:before {
-            content: '\f02b';
-            font-family: 'Font Awesome 5 Free';
-            font-weight: 900;
-            color: var(--azul-acento);
-            margin-right: 0.7em;
-            font-size: 1.1em;
-            vertical-align: middle;
-        }
+    .detalle-precio span:first-child:before {
+        content: '\f02b';
+        font-family: 'Font Awesome 5 Free';
+        font-weight: 900;
+        color: var(--azul-acento);
+        margin-right: 0.7em;
+        font-size: 1.1em;
+        vertical-align: middle;
+    }
 
-        .total-container {
-            background: var(--azul-acento);
-            padding: 1.7rem;
-            border-radius: 12px;
-            margin: 2.2rem 0 0.5rem 0;
-            text-align: center;
-            box-shadow: 0 2px 12px rgba(42,91,168,0.13);
-        }
+    .total-container {
+        background: var(--azul-acento);
+        padding: 1.7rem;
+        border-radius: 12px;
+        margin: 2.2rem 0 0.5rem 0;
+        text-align: center;
+        box-shadow: 0 2px 12px rgba(42,91,168,0.13);
+    }
 
-        .precio-total {
-            font-size: 2.5rem;
-            font-weight: bold;
-            margin: 0.5rem 0;
-            color: #fff;
-            text-shadow: 0 2px 12px rgba(42,91,168,0.10);
-        }
+    .precio-total {
+        font-size: 2.5rem;
+        font-weight: bold;
+        margin: 0.5rem 0;
+        color: #fff;
+        text-shadow: 0 2px 12px rgba(42,91,168,0.10);
+    }
 
-        .moneda {
-            font-size: 1.2rem;
-            vertical-align: super;
-        }
+    .moneda {
+        font-size: 1.2rem;
+        vertical-align: super;
+    }
 
-        .badge-extra {
-            background: #28a745;
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            margin-left: 1rem;
-        }
-        .contenedor-principal {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 2rem;
-        }
+    .badge-extra {
+        background: #28a745;
+        padding: 0.3rem 0.8rem;
+        border-radius: 15px;
+        font-size: 0.9rem;
+        margin-left: 1rem;
+    }
+    .contenedor-principal {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
 
-        /* NUEVO: Mejorar presentación de la marca */
+    /* NUEVO: Mejorar presentación de la marca */
 .brand-header {
     display: flex;
     flex-direction: column;
@@ -2575,33 +736,41 @@ Phone Number:</textarea>
             </div>
 
             <!-- Sección de cálculo de precio -->
-            <div class="calculadora-precio">
-                <h3>Desglose del Precio</h3>
-                <div class="detalle-precio">
-                    <span>Precio Base (<span id="cantidad-unidades">1</span> unidad<span id="plural-unidades"></span>):</span>
-                    <span><span id="precio-base-detalle">19.90</span>€</span>
+            <div class="calculadora-precio animate__animated animate__fadeInUp">
+                <h3><i class="fas fa-receipt"></i> Desglose del Precio</h3>
+                <div class="detalle-precio" style="background:rgba(255,255,255,0.13);border-left:5px solid #e74c3c;">
+                    <span><i class="fas fa-tag"></i> Precio sin descuento <span class="badge-extra" style="background:#e74c3c;">Normal</span> (<span id="cantidad-unidades-sin-desc">1</span> unidad<span id="plural-unidades-sin-desc"></span>):</span>
+                    <span style="color:#e74c3c;text-decoration:line-through;font-weight:bold;"><span id="precio-sin-descuento">25.00</span>€</span>
+                </div>
+                <div class="detalle-precio" style="background:rgba(40,167,69,0.13);border-left:5px solid #28a745;">
+                    <span><i class="fas fa-bolt"></i> Precio con descuento <span class="badge-extra" style="background:#28a745;">Oferta</span> (<span id="cantidad-unidades">1</span> unidad<span id="plural-unidades"></span>):</span>
+                    <span style="color:#28a745;font-weight:bold;"><span id="precio-base-detalle">19.90</span>€</span>
                 </div>
                 <div class="detalle-precio">
-                    <span>Parches personalizados:</span>
-                    <span><span id="cantidad-parches">0</span> × 1€ = <span id="total-parches">0.00</span>€</span>
+                    <span><i class="fas fa-patch"></i> Parches personalizados:</span>
+                    <span><span id="cantidad-parches" class="badge-extra" style="background:#2a5ba8;">0</span> × 1€ = <span id="total-parches">0.00</span>€</span>
                 </div>
                 <div class="detalle-precio">
-                    <span>Dorsales personalizados:</span>
-                    <span><span id="cantidad-dorsales">0</span> × 2€ = <span id="total-dorsales">0.00</span>€</span>
+                    <span><i class="fas fa-tshirt"></i> Dorsales personalizados:</span>
+                    <span><span id="cantidad-dorsales" class="badge-extra" style="background:#2a5ba8;">0</span> × 2€ = <span id="total-dorsales">0.00</span>€</span>
                 </div>
                 <div class="detalle-precio">
-                    <span>Versiones Jugador / Retro:</span>
-                    <span><span id="cantidad-versiones">0</span> × 5€ = <span id="total-versiones">0.00</span>€</span>
+                    <span><i class="fas fa-star"></i> Versiones Jugador / Retro:</span>
+                    <span><span id="cantidad-versiones" class="badge-extra" style="background:#2a5ba8;">0</span> × 5€ = <span id="total-versiones">0.00</span>€</span>
                 </div>
                 <div class="detalle-precio">
-                    <span>Camisetas NBA:</span>
-                    <span><span id="cantidad-camisetas-nba">0</span> × 5€ = <span id="total-camisetas-nba">0.00</span>€</span>
+                    <span><i class="fas fa-basketball-ball"></i> Camisetas NBA:</span>
+                    <span><span id="cantidad-camisetas-nba" class="badge-extra" style="background:#2a5ba8;">0</span> × 5€ = <span id="total-camisetas-nba">0.00</span>€</span>
                 </div>
-                <div class="total-container">
-                    <div>Total a Pagar</div>
-                    <div class="precio-total">
+                <div class="total-container animate__animated animate__pulse animate__delay-1s">
+                    <div style="font-size:1.3rem;font-weight:700;letter-spacing:1px;">Total a Pagar</div>
+                    <div class="precio-total" style="background:linear-gradient(90deg,#28a745 60%,#2a5ba8 100%);border-radius:10px;padding:0.7rem 1.2rem;box-shadow:0 2px 12px rgba(42,91,168,0.13);">
+                        <span id="precioSinDescuentoTotal" style="color: #fff; text-decoration: line-through; font-size: 1.2rem; margin-right: 10px; vertical-align: middle; opacity:0.7;">25.00</span>
                         <span class="moneda">€</span>
-                        <span id="precioDisplay">19.90</span>
+                        <span id="precioDisplay" style="color:#fff;font-size:2.2rem;font-weight:900;text-shadow:0 2px 12px rgba(42,91,168,0.20);margin-left:10px;">19.90</span>
+                    </div>
+                    <div style="margin-top:0.5rem;font-size:1rem;color:#fff;opacity:0.85;">
+                        ¡Aprovecha el <b>descuento especial</b> por tiempo limitado!
                     </div>
                 </div>
             </div>
@@ -2615,8 +784,8 @@ Phone Number:</textarea>
                 </p>
                 <br>
                 <button type="button" id="paypalButton" class="boton-pago" style="margin-top: 10px;">
-                    <i class="fab fa-paypal"></i> Pagar con PayPal
-                </button>
+    <i class="fab fa-paypal"></i> Pagar con PayPal
+</button>
             </div>         
         </form>
     </div>
@@ -2782,6 +951,14 @@ Phone Number:</textarea>
     document.getElementById('plural-unidades').textContent = unidades > 1 ? 'es' : '';
     document.getElementById('precio-base-detalle').textContent = PRECIOS_BASE[unidades].toFixed(2);
 
+    // NUEVO: Actualizar precio sin descuento por cantidad
+    document.getElementById('cantidad-unidades-sin-desc').textContent = unidades;
+    document.getElementById('plural-unidades-sin-desc').textContent = unidades > 1 ? 'es' : '';
+    const precioSinDescuentoUnidad = 25.00;
+    const totalSinDescuento = (precioSinDescuentoUnidad * unidades).toFixed(2);
+    document.getElementById('precio-sin-descuento').textContent = totalSinDescuento;
+    document.getElementById('precioSinDescuentoTotal').textContent = totalSinDescuento;
+
     document.getElementById('cantidad-parches').textContent = parches;
     document.getElementById('total-parches').textContent = totalParches.toFixed(2);
 
@@ -2796,6 +973,26 @@ Phone Number:</textarea>
 
     document.getElementById('precioDisplay').textContent = total.toFixed(2);
     document.getElementById('precioTotal').value = total.toFixed(2);
+
+    // Visualización sutil y compacta del ahorro (siempre visible)
+    const precioConDescuento = total.toFixed(2);
+    const diferencia = (totalSinDescuento - precioConDescuento).toFixed(2);
+    let ahorroHtml = '';
+    if (unidades > 0) {
+        ahorroHtml = `
+        <div class="ahorro-visual animate__animated animate__fadeIn" style="display:flex;justify-content:flex-end;margin:0.5rem 0 0.2rem 0;">
+            <span style="background:rgba(40,167,69,0.08);color:#28a745;font-weight:600;font-size:1rem;padding:0.25em 0.9em;border-radius:16px;box-shadow:0 1px 4px #2a5ba81a;display:inline-flex;align-items:center;gap:0.5em;">
+                <i class="fas fa-arrow-down" style="color:#28a745;font-size:1em;"></i>
+                Ahorro: <span style="font-weight:700;">-${diferencia}€</span>
+            </span>
+        </div>`;
+    }
+    const totalContainer = document.querySelector('.total-container');
+    if (totalContainer) {
+        let oldAhorro = totalContainer.parentElement.querySelector('.ahorro-visual');
+        if (oldAhorro) oldAhorro.remove();
+        totalContainer.insertAdjacentHTML('beforebegin', ahorroHtml);
+    }
 
     return total;
 }
@@ -2998,6 +1195,7 @@ Phone Number:</textarea>
         const ventanaPayPal = window.open(
             `https://www.paypal.com/paypalme/camisetazo/${total}EUR`,
             'PagoPayPal',
+           
             `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
         );
 
@@ -3048,59 +1246,20 @@ Phone Number:</textarea>
             return;
         }
 
-        // Validar que al menos haya un link subida para cada unidad
-        const unidades = document.querySelectorAll('.unidad');
-    for (let i = 0; i < unidades.length; i++) {
-        const unidad = unidades[i];
-        const camisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
-        const dorsal = unidad.querySelector('[name="dorsal[]"]').value.trim();
-        
-        // Validar que las camisetas NBA tengan dorsal
-        if (camisetaNBA && !dorsal) {
-            alert(`La Unidad ${i + 1} es una camiseta NBA y requiere un dorsal obligatorio.`);
+        // Validar que al menos haya una unidad seleccionada
+        const cantidadUnidades = document.getElementById('cantidad-unidades').textContent;
+        if (parseInt(cantidadUnidades) === 0) {
+            alert("Debes seleccionar al menos una unidad.");
             return;
         }
 
-        // Validar que no haya parches en camisetas NBA
-        if (camisetaNBA && unidad.querySelector('[name="parche[]"]').value.trim()) {
-            alert(`Error: No se pueden añadir parches a una camiseta NBA en la Unidad ${i + 1}.`);
-            return;
-        }
-    }
-
-        // Obtener el precio total
-        const total = parseFloat(document.getElementById('precioDisplay').textContent);
-
-        // Abrir la ventana de PayPal
+        // Abrir PayPal
         abrirPayPal(total);
     });
 
-    // --- HACER TODA LA TARJETA DEL CATÁLOGO CLICABLE ---
-    document.querySelectorAll('.catalogo-card').forEach(function(card) {
-        const btn = card.querySelector('.catalogo-btn');
-        if (btn) {
-            const url = btn.getAttribute('href');
-            card.style.cursor = 'pointer';
-            card.addEventListener('click', function(e) {
-                // Si el click fue en el botón, no hacer nada (el botón ya tiene su propio enlace)
-                if (e.target.closest('.catalogo-btn')) return;
-                window.open(url, '_blank');
-            });
-        }
+    // Inicializar
+    actualizarPrecio();
     });
-
-    // Inicialización
-    document.querySelector('.boton-unidad.activo').click();
-    document.querySelector('.boton-unidad[data-unidades="0"]').click();
-    configurarEventosUnidades();
-
-    // Actualizar precio al cambiar cualquier input
-    document.addEventListener('input', function(e) {
-        if(e.target.matches('[name="parche[]"], [name="dorsal[]"]')) {
-            actualizarPrecio();
-        }
-    });
-});
-</script>
+    </script>
 </body>
 </html>
