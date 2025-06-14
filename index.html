@@ -703,7 +703,6 @@
         padding: 1rem 0;
     }
 
-    .redes-sociales,
     .redes_sociales {
         gap: 2rem; /* Más separación también en móvil */
     }
@@ -934,64 +933,174 @@
                         </a>
                     </div>
                 </div>
-                <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.9s;">
-                    <div class="catalogo-img-wrap">
-                        <img src="nhl.png" alt="NHL" class="catalogo-img">
-                    </div>
-                    <div class="catalogo-info">
-                        <h3>NHL</h3>
-                        <p>Jerseys y productos oficiales de la National Hockey League.</p>
-                        <a href="https://nhl-world.x.yupoo.com/" class="catalogo-btn" target="_blank">
-                            Ver catálogo <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
             </div>
         </section>
 
         <!-- Sección Quiénes Somos -->
 <section id="quienes-somos" class="seccion">
-    <div class="quienes-somos animate__animated animate__fadeIn" style="text-align: center;">
+    <style>
+    /* ...existing code... */
+    .quienes-somos-ui {
+        max-width: 900px;
+        margin: 0 auto 2.5rem auto;
+        background: rgba(20,40,80,0.18);
+        border-radius: 22px;
+        box-shadow: 0 4px 32px rgba(42,91,168,0.10), 0 1.5px 8px rgba(0,0,0,0.08);
+        padding: 2.5rem 2rem 2rem 2rem;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+        border: 1.5px solid rgba(42,91,168,0.13);
+        animation: aparecer 0.8s;
+    }
+    .quienes-somos-ui h2 {
+        color: var(--azul-acento);
+        font-size: 2.2rem;
+        font-weight: 800;
+        margin-bottom: 1.2rem;
+        letter-spacing: 1px;
+        text-shadow: 0 2px 12px rgba(42,91,168,0.10);
+    }
+    .quienes-somos-ui p {
+        color: #e0e0e0;
+        font-size: 1.15rem;
+        line-height: 1.7;
+        margin-bottom: 2rem;
+        opacity: 0.92;
+        max-width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    .quienes-somos-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 2rem;
+        margin-top: 2.5rem;
+    }
+    .quienes-somos-card {
+        background: rgba(42,91,168,0.13);
+        border-radius: 16px;
+        padding: 2rem 1.2rem 1.5rem 1.2rem;
+        box-shadow: 0 2px 12px rgba(42,91,168,0.08);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        transition: transform 0.2s, box-shadow 0.2s;
+        border: 1px solid rgba(42,91,168,0.10);
+    }
+    .quienes-somos-card:hover {
+        transform: translateY(-6px) scale(1.03);
+        box-shadow: 0 8px 32px rgba(42,91,168,0.13);
+        background: rgba(42,91,168,0.18);
+    }
+    .quienes-somos-card i {
+        font-size: 2.7rem;
+        margin-bottom: 1rem;
+        color: var(--azul-acento);
+        background: #fff;
+        border-radius: 50%;
+        padding: 0.7rem;
+        box-shadow: 0 2px 8px rgba(42,91,168,0.08);
+        transition: background 0.2s;
+    }
+    .quienes-somos-card h3 {
+        font-size: 1.25rem;
+        color: #fff;
+        margin-bottom: 0.7rem;
+        font-weight: 700;
+    }
+    .quienes-somos-card p {
+        color: #b8c6e0;
+        font-size: 1rem;
+        margin-bottom: 0;
+        min-height: 40px;
+    }
+    .quienes-somos-card .stars {
+        color: #ffd700;
+        margin-top: 0.5rem;
+        font-size: 1.1rem;
+    }
+    .quienes-somos-card .stars i {
+        color: #FFD700 !important; /* dorado */
+        font-size: 1rem !important; /* más pequeñas */
+        background: none !important; /* sin círculo */
+        border-radius: 0 !important;
+        padding: 0 !important;
+        box-shadow: none !important;
+        margin: 0 1px;
+        vertical-align: middle;
+    }
+    .quienes-somos-instagram {
+        background: linear-gradient(90deg, #e1306c 0%, #fdc468 100%);
+        color: #fff;
+        border-radius: 16px;
+        padding: 1.5rem 1rem 1.2rem 1rem;
+        margin-bottom: 2rem;
+        box-shadow: 0 2px 12px rgba(225,48,108,0.10);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        animation: aparecer 1s;
+    }
+    .quienes-somos-instagram i {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+        color: #fff;
+        background: #e1306c;
+        border-radius: 50%;
+        padding: 0.7rem;
+        box-shadow: 0 2px 8px rgba(225,48,108,0.10);
+    }
+    .quienes-somos-instagram a {
+        color: #fff;
+        font-weight: 600;
+        text-decoration: underline;
+        margin: 0.5rem 0;
+        font-size: 1.1rem;
+    }
+    .quienes-somos-instagram p {
+        margin-top: 0.5rem;
+        opacity: 0.95;
+        font-size: 1rem;
+    }
+    @media (max-width: 700px) {
+        .quienes-somos-ui {
+            padding: 1.2rem 0.5rem;
+        }
+        .quienes-somos-grid {
+            grid-template-columns: 1fr;
+            gap: 1.2rem;
+        }
+    }
+    /* ...existing code... */
+    </style>
+    <div class="quienes-somos-ui animate__animated animate__fadeIn">
         <h2>Nuestra Historia</h2>
-
-        <p style="max-width: 800px; margin: 0 auto 2rem; line-height: 1.7;">
-            En Camisetazo nos apasiona conectar a los verdaderos amantes del deporte con artículos premium de las mejores marcas. Nos especializamos en ofrecer productos de alta calidad y artículos exclusivos que permiten vivir la emoción del deporte al mejor precio. Combinamos nuestro conocimiento experto con un servicio personalizado para garantizar que cada compra supere tus expectativas:
+        <p>
+            En Camisetazo nos apasiona conectar a los verdaderos amantes del deporte con artículos premium de las mejores marcas. Nos especializamos en ofrecer productos de alta calidad y artículos exclusivos que permiten vivir la emoción del deporte al mejor precio. Combinamos nuestro conocimiento experto con un servicio personalizado para garantizar que cada compra supere tus expectativas.
         </p>
-
-        <!-- Casilla Instagram -->
-        <div class="garantia-card" style="max-width: 500px; margin: 2rem auto;">
-            <i class="fab fa-instagram" style="font-size: 2.5rem; color: #E1306C; margin-bottom: 1rem;"></i>
+        <div class="quienes-somos-instagram">
+            <i class="fab fa-instagram"></i>
             <h3>Síguenos en Instagram</h3>
-            <a href="https://www.instagram.com/camisetazo._/" target="_blank" 
-               style="color: var(--azul-acento); text-decoration: none; font-weight: 600;
-                      display: inline-block; margin: 0.5rem 0;">
-                @camisetazo._ ➔
-            </a>
-            <p style="margin-top: 0.5rem; opacity: 0.9;">Novedades diarias | Ofertas exclusivas</p>
+            <a href="https://www.instagram.com/camisetazo._/" target="_blank">@camisetazo._ ➔</a>
+            <p>Novedades diarias | Ofertas exclusivas</p>
         </div>
-
-        <!-- Grid 2x2 -->
-        <div class="garantias" style="grid-template-columns: repeat(2, 1fr); max-width: 1000px; margin: 0 auto;">
-            <!-- Casilla 1 -->
-            <div class="garantia-card">
-                <i class="fas fa-shield-alt" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+        <div class="quienes-somos-grid">
+            <div class="quienes-somos-card">
+                <i class="fas fa-shield-alt"></i>
                 <h3>Garantía de Pago</h3>
                 <p>Transacciones seguras con protección al comprador</p>
             </div>
-
-            <!-- Casilla 2 -->
-            <div class="garantia-card">
-                <i class="fas fa-shipping-fast" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+            <div class="quienes-somos-card">
+                <i class="fas fa-shipping-fast"></i>
                 <h3>Envío Express</h3>
                 <p>Entrega en 5-10 días con seguimiento del paquete</p>
             </div>
-
-            <!-- Casilla 3 -->
-            <div class="garantia-card">
-                <i class="fas fa-users" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
+            <div class="quienes-somos-card">
+                <i class="fas fa-users"></i>
                 <h3>Comunidad</h3>
                 <p>+100 clientes satisfechos</p>
-                <div style="color: #ffd700; margin-top: 0.5rem;">
+                <div class="stars">
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
                     <i class="fas fa-star"></i>
@@ -999,14 +1108,13 @@
                     <i class="fas fa-star"></i>
                 </div>
             </div>
-
-            <!-- Casilla 4 -->
-            <div class="garantia-card">
-                <i class="fas fa-headset" style="font-size: 2.5rem; margin-bottom: 1rem;"></i>
-                <h4>Atención al cliente</h4>
+            <div class="quienes-somos-card">
+                <i class="fas fa-headset"></i>
+                <h3>Atención al cliente</h3>
                 <p>Obtén respuestas rápidas con nuestro servicio de atención al cliente</p>
             </div>
         </div>
+    </div>
 </section>
 <!-- Nueva sección de Pedidos -->
 <section id="pedidos" class="seccion">
