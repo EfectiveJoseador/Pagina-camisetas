@@ -1,0 +1,50 @@
+/* ...existing code... */
+
+/* Botones base */
+.btn {
+    padding: 12px 24px;
+    font-size: 1.1rem;
+    border-radius: 8px;
+    margin: 8px 0;
+    width: 100%;
+    max-width: 320px;
+    box-sizing: border-box;
+}
+
+/* Contenedor principal */
+.main-container {
+    padding: 16px;
+}
+
+/* Responsive: para pantallas menores a 600px */
+@media (max-width: 600px) {
+    body {
+        font-size: 1.05rem;
+        padding: 0;
+        margin: 0;
+    }
+    .main-container {
+        padding: 8px;
+    }
+    .btn {
+        font-size: 1.2rem;
+        padding: 16px 0;
+        margin: 12px 0;
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+    }
+    /* Si tienes contenedores de botones en fila, hazlos columna */
+    .button-row {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    /* Si hay tablas o listas anchas, permite scroll horizontal */
+    .table-responsive, .horizontal-scroll {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+}
+
+/* ...existing code... */
