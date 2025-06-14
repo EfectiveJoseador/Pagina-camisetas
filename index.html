@@ -1275,7 +1275,7 @@ Phone Number:</textarea>
             
             <div class="input-group">
                 <label>Versión Jugador:</label>
-                <button type="button" class="boton-version-jugador">
+                <button type="button" class="boton-version-especial boton-version-jugador">
                     <span>DESACTIVADO</span>
                 </button>
                 <input type="hidden" name="versionJugador[]" value="No">
@@ -1290,12 +1290,12 @@ Phone Number:</textarea>
                 <input type="hidden" name="versionRetro[]" value="No">
             </div>
             <div class="input-group">
-            <label>Camiseta NBA:</label>
-            <button type="button" class="boton-camiseta-nba">
-                <span>DESACTIVADO</span>
-            </button>
-            <input type="hidden" name="camisetaNBA[]" value="No">
-        </div>
+                <label>Camiseta NBA:</label>
+                <button type="button" class="boton-version-especial boton-camiseta-nba">
+                    <span>DESACTIVADO</span>
+                </button>
+                <input type="hidden" name="camisetaNBA[]" value="No">
+            </div>
         </div>
     `;
 }
@@ -1413,123 +1413,172 @@ Phone Number:</textarea>
     }
     // Configurar eventos para las unidades
     function configurarEventosUnidades() {
-   // Manejar versión jugador
-document.querySelectorAll('.boton-version-jugador').forEach(boton => {
-    boton.addEventListener('click', function() {
-        const hiddenInput = this.parentElement.querySelector('[name="versionJugador[]"]');
-        const unidad = this.closest('.unidad');
-        const botonNBA = unidad.querySelector('.boton-camiseta-nba');
-        const botonEspecial = unidad.querySelector('.boton-version-especial');
+        // Manejar versión jugador
+        document.querySelectorAll('.boton-version-jugador').forEach(boton => {
+            boton.addEventListener('click', function() {
+                const hiddenInput = this.parentElement.querySelector('[name="versionJugador[]"]');
+                const unidad = this.closest('.unidad');
+                const botonNBA = unidad.querySelector('.boton-camiseta-nba');
+                const botonRetro = unidad.querySelector('.boton-version-especial:not(.boton-version-jugador):not(.boton-camiseta-nba)');
 
-        // Si se activa la versión jugador, desactivar NBA y Retro
-        if (!this.classList.contains('activo')) {
-            if (botonNBA.classList.contains('activo')) {
-                botonNBA.classList.remove('activo');
-                botonNBA.querySelector('span').textContent = 'DESACTIVADO';
-                botonNBA.parentElement.querySelector('[name="camisetaNBA[]"]').value = 'No';
+                // Si se activa la versión jugador, desactivar NBA y Retro
+                if (!this.classList.contains('activo')) {
+                    if (botonNBA.classList.contains('activo')) {
+                        botonNBA.classList.remove('activo');
+                        botonNBA.querySelector('span').textContent = 'DESACTIVADO';
+                        botonNBA.parentElement.querySelector('[name="camisetaNBA[]"]').value = 'No';
+                    }
+                    if (botonRetro && botonRetro.classList.contains('activo')) {
+                        botonRetro.classList.remove('activo');
+                        botonRetro.querySelector('span').textContent = 'DESACTIVADO';
+                        botonRetro.parentElement.querySelector('[name="versionRetro[]"]').value = 'No';
+                    }
+                }
+
+                // Cambiar estado del botón
+                this.classList.toggle('activo');
+                const activo = this.classList.contains('activo');
+                this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
+                hiddenInput.value = activo ? 'Sí' : 'No';
+
+                // Si se activa, desactivar los otros dos SIEMPRE
+                if (activo) {
+                    if (botonNBA.classList.contains('activo')) {
+                        botonNBA.classList.remove('activo');
+                        botonNBA.querySelector('span').textContent = 'DESACTIVADO';
+                        botonNBA.parentElement.querySelector('[name="camisetaNBA[]"]').value = 'No';
+                    }
+                    if (botonRetro && botonRetro.classList.contains('activo')) {
+                        botonRetro.classList.remove('activo');
+                        botonRetro.querySelector('span').textContent = 'DESACTIVADO';
+                        botonRetro.parentElement.querySelector('[name="versionRetro[]"]').value = 'No';
+                    }
+                }
+
+                // Actualizar el precio
+                actualizarPrecio();
+            });
+        });
+
+        // Manejar versión retro
+        document.querySelectorAll('.boton-version-especial').forEach(boton => {
+            // Solo para los que no sean .boton-version-jugador ni .boton-camiseta-nba
+            if (
+                !boton.classList.contains('boton-version-jugador') &&
+                !boton.classList.contains('boton-camiseta-nba')
+            ) {
+                boton.addEventListener('click', function() {
+                    const hiddenInput = this.parentElement.querySelector('[name="versionRetro[]"]');
+                    const unidad = this.closest('.unidad');
+                    const botonNBA = unidad.querySelector('.boton-camiseta-nba');
+                    const botonJugador = unidad.querySelector('.boton-version-jugador');
+
+                    // Si se activa la versión retro, desactivar NBA y Jugador
+                    if (!this.classList.contains('activo')) {
+                        if (botonNBA.classList.contains('activo')) {
+                            botonNBA.classList.remove('activo');
+                            botonNBA.querySelector('span').textContent = 'DESACTIVADO';
+                            botonNBA.parentElement.querySelector('[name="camisetaNBA[]"]').value = 'No';
+                        }
+                        if (botonJugador.classList.contains('activo')) {
+                            botonJugador.classList.remove('activo');
+                            botonJugador.querySelector('span').textContent = 'DESACTIVADO';
+                            botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
+                        }
+                    }
+
+                    // Cambiar estado del botón
+                    this.classList.toggle('activo');
+                    const activo = this.classList.contains('activo');
+                    this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
+                    hiddenInput.value = activo ? 'Sí' : 'No';
+
+                    // Si se activa, desactivar los otros dos SIEMPRE
+                    if (activo) {
+                        if (botonNBA.classList.contains('activo')) {
+                            botonNBA.classList.remove('activo');
+                            botonNBA.querySelector('span').textContent = 'DESACTIVADO';
+                            botonNBA.parentElement.querySelector('[name="camisetaNBA[]"]').value = 'No';
+                        }
+                        if (botonJugador.classList.contains('activo')) {
+                            botonJugador.classList.remove('activo');
+                            botonJugador.querySelector('span').textContent = 'DESACTIVADO';
+                            botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
+                        }
+                    }
+
+                    // Actualizar el precio
+                    actualizarPrecio();
+                });
             }
-            if (botonEspecial.classList.contains('activo')) {
-                botonEspecial.classList.remove('activo');
-                botonEspecial.querySelector('span').textContent = 'DESACTIVADO';
-                botonEspecial.parentElement.querySelector('[name="versionRetro[]"]').value = 'No';
-            }
-        }
+        });
 
-        // Cambiar estado del botón
-        this.classList.toggle('activo');
-        const activo = this.classList.contains('activo');
-        this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
-        hiddenInput.value = activo ? 'Sí' : 'No';
+        // Manejar camiseta NBA
+        document.querySelectorAll('.boton-camiseta-nba').forEach(boton => {
+            boton.addEventListener('click', function() {
+                const hiddenInput = this.parentElement.querySelector('[name="camisetaNBA[]"]');
+                const unidad = this.closest('.unidad');
+                const botonJugador = unidad.querySelector('.boton-version-jugador');
+                const botonRetro = unidad.querySelector('.boton-version-especial:not(.boton-version-jugador):not(.boton-camiseta-nba)');
+                const inputParche = unidad.querySelector('[name="parche[]"]');
+                const inputDorsal = unidad.querySelector('[name="dorsal[]"]');
 
-        // Actualizar el precio
-        actualizarPrecio();
-    });
-});
+                // Si se va a activar la camiseta NBA, el dorsal es obligatorio
+                if (!this.classList.contains('activo')) {
+                    if (!inputDorsal.value.trim()) {
+                        alert('Debes introducir un dorsal para activar la camiseta NBA.');
+                        inputDorsal.focus();
+                        return;
+                    }
+                }
 
-    // Manejar versión retro
-document.querySelectorAll('.boton-version-especial').forEach(boton => {
-    boton.addEventListener('click', function() {
-        const hiddenInput = this.parentElement.querySelector('[name="versionRetro[]"]');
-        const unidad = this.closest('.unidad');
-        const botonNBA = unidad.querySelector('.boton-camiseta-nba');
-        const botonJugador = unidad.querySelector('.boton-version-jugador');
+                // Si se activa la camiseta NBA
+                if (!this.classList.contains('activo')) {
+                    // Desactivar otros botones
+                    if (botonJugador.classList.contains('activo')) {
+                        botonJugador.classList.remove('activo');
+                        botonJugador.querySelector('span').textContent = 'DESACTIVADO';
+                        botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
+                    }
+                    if (botonRetro && botonRetro.classList.contains('activo')) {
+                        botonRetro.classList.remove('activo');
+                        botonRetro.querySelector('span').textContent = 'DESACTIVADO';
+                        botonRetro.parentElement.querySelector('[name="versionRetro[]"]').value = 'No';
+                    }
+                }
 
-        // Si se activa la versión retro, desactivar NBA y Jugador
-        if (!this.classList.contains('activo')) {
-            if (botonNBA.classList.contains('activo')) {
-                botonNBA.classList.remove('activo');
-                botonNBA.querySelector('span').textContent = 'DESACTIVADO';
-                botonNBA.parentElement.querySelector('[name="camisetaNBA[]"]').value = 'No';
-            }
-            if (botonJugador.classList.contains('activo')) {
-                botonJugador.classList.remove('activo');
-                botonJugador.querySelector('span').textContent = 'DESACTIVADO';
-                botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
-            }
-        }
+                // Cambiar estado del botón
+                this.classList.toggle('activo');
+                const activo = this.classList.contains('activo');
+                this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
+                hiddenInput.value = activo ? 'Sí' : 'No';
 
-        // Cambiar estado del botón
-        this.classList.toggle('activo');
-        const activo = this.classList.contains('activo');
-        this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
-        hiddenInput.value = activo ? 'Sí' : 'No';
+                // Si se activa, desactivar los otros dos SIEMPRE
+                if (activo) {
+                    if (botonJugador.classList.contains('activo')) {
+                        botonJugador.classList.remove('activo');
+                        botonJugador.querySelector('span').textContent = 'DESACTIVADO';
+                        botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
+                    }
+                    if (botonRetro && botonRetro.classList.contains('activo')) {
+                        botonRetro.classList.remove('activo');
+                        botonRetro.querySelector('span').textContent = 'DESACTIVADO';
+                        botonRetro.parentElement.querySelector('[name="versionRetro[]"]').value = 'No';
+                    }
+                }
 
-        // Actualizar el precio
-        actualizarPrecio();
-    });
-});
-// Manejar camiseta NBA
-document.querySelectorAll('.boton-camiseta-nba').forEach(boton => {
-    boton.addEventListener('click', function() {
-        const hiddenInput = this.parentElement.querySelector('[name="camisetaNBA[]"]');
-        const unidad = this.closest('.unidad');
-        const botonJugador = unidad.querySelector('.boton-version-jugador');
-        const botonEspecial = unidad.querySelector('.boton-version-especial');
-        const inputParche = unidad.querySelector('[name="parche[]"]');
-        const inputDorsal = unidad.querySelector('[name="dorsal[]"]');
+                // Bloquear el campo de parche
+                inputParche.disabled = activo;
+                if (activo) inputParche.value = '';
 
-        // Si se activa la camiseta NBA
-        if (!this.classList.contains('activo')) {
-            // Desactivar otros botones
-            if (botonJugador.classList.contains('activo')) {
-                botonJugador.classList.remove('activo');
-                botonJugador.querySelector('span').textContent = 'DESACTIVADO';
-                botonJugador.parentElement.querySelector('[name="versionJugador[]"]').value = 'No';
-            }
-            if (botonEspecial.classList.contains('activo')) {
-                botonEspecial.classList.remove('activo');
-                botonEspecial.querySelector('span').textContent = 'DESACTIVADO';
-                botonEspecial.parentElement.querySelector('[name="versionRetro[]"]').value = 'No';
-            }
+                // Habilitar el campo de dorsal (pero será gratuito)
+                inputDorsal.disabled = false;
 
-            // Bloquear el campo de parche
-            inputParche.disabled = true;
-            inputParche.value = ''; // Limpiar el campo de parche
-
-            // Habilitar el campo de dorsal (pero será gratuito)
-            inputDorsal.disabled = false;
-        } else {
-            // Si se desactiva la camiseta NBA, habilitar el campo de parche
-            inputParche.disabled = false;
-            inputDorsal.disabled = false;
-        }
-        if (this.classList.contains('activo')) {
-        // Si se desactiva la camiseta NBA, habilitar el campo de parche
-        inputParche.disabled = false;
-        inputDorsal.disabled = false;
-}
-
-        // Cambiar estado del botón NBA
-        this.classList.toggle('activo');
-        const activo = this.classList.contains('activo');
-        this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
-        hiddenInput.value = activo ? 'Sí' : 'No';
-
-        // Actualizar el precio
-        actualizarPrecio();
-    });
-});
-    // Eventos para inputs
+                // Actualizar el precio
+                actualizarPrecio();
+            });
+        });
+        // Configurar eventos para inputs
     document.querySelectorAll('.input-parche, .input-dorsal').forEach(input => {
         input.addEventListener('input', actualizarPrecio);
     });
