@@ -224,209 +224,135 @@
             display: block;
         }
 
-        .grid-enlaces {
-            display: grid;
-            gap: 1.5rem;
-            perspective: 1000px;
-        }
-        .boton-extra {
-        background: rgba(255, 255, 255, 0.1);
-        border: 2px solid var(--azul-acento);
-        color: white;
-        padding: 10px 20px;
-        border-radius: 8px;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        display: block;
-        width: 100%;
-        text-align: center;
-        }
-
-        .boton-extra.activo {
-            background: var(--azul-acento);
-            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
-        }
-                .boton-version-jugador {
-            background: rgba(255, 255, 255, 0.1);
-            border: 2px solid var(--azul-acento);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 8px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
+        /* --- INICIO: Catálogo Premium --- */
+        .catalogo-header {
             text-align: center;
-            margin-top: 10px;
+            margin-bottom: 2.5rem;
         }
-
-        .boton-version-jugador.activo {
-            background: var(--azul-acento);
-            box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
+        .catalogo-titulo {
+            font-size: 2.7em;
+            color: var(--azul-acento);
+            margin-bottom: 0.5rem;
+            letter-spacing: 1px;
+            font-weight: 800;
+            text-shadow: 0 2px 12px rgba(42,91,168,0.15);
         }
-
-        .boton-version-jugador:hover {
-            transform: translateY(-2px);
+        .catalogo-descripcion {
+            color: #e0e0e0;
+            font-size: 1.15em;
+            margin-bottom: 1.5rem;
+            opacity: 0.85;
         }
-        .boton-extra:hover {
-            transform: translateY(-2px);
+        .grid-catalogo {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(290px, 1fr));
+            gap: 2.2rem;
+            max-width: 1200px;
+            margin: 0 auto 2rem auto;
         }
-
-        .card-enlace {
-            background: rgba(10, 31, 61, 0.7);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(42, 91, 168, 0.3);
-            border-radius: 15px;
-            padding: 1.5rem;
-            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        .catalogo-card {
+            background: rgba(20, 40, 80, 0.92);
+            border-radius: 18px;
+            box-shadow: 0 8px 32px rgba(42,91,168,0.18), 0 1.5px 8px rgba(0,0,0,0.10);
+            overflow: hidden;
             display: flex;
-            align-items: center;
-            opacity: 0;
-            animation: aparecer 0.5s ease forwards;
+            flex-direction: column;
+            transition: transform 0.25s cubic-bezier(.4,0,.2,1), box-shadow 0.25s;
+            border: 1.5px solid rgba(42,91,168,0.18);
+            min-height: 420px;
+            position: relative;
         }
-
-        .card-enlace:nth-child(1) { animation-delay: 0.2s; }
-        .card-enlace:nth-child(2) { animation-delay: 0.4s; }
-        .card-enlace:nth-child(3) { animation-delay: 0.6s; }
-        .card-enlace:nth-child(4) { animation-delay: 0.8s; }
-        .card-enlace:nth-child(5) { animation-delay: 1.0s; }
-        .card-enlace:nth-child(6) { animation-delay: 1.2s; }
-        .card-enlace:nth-child(7) { animation-delay: 1.4s; }
-        .card-enlace:nth-child(8) { animation-delay: 1.6s; }
-        .card-enlace:nth-child(9) { animation-delay: 1.8s; }
-        .card-enlace:nth-child(10) { animation-delay: 2.0s; }
-
-        @keyframes aparecer {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
+        .catalogo-card:hover {
+            transform: translateY(-10px) scale(1.035);
+            box-shadow: 0 16px 40px rgba(42,91,168,0.25), 0 3px 16px rgba(0,0,0,0.13);
+            z-index: 2;
         }
-
-        .card-enlace:hover {
-            transform: translateY(-10px) scale(1.02);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
-        }
-
-        .enlace-btn {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            color: white;
-            text-decoration: none;
-            font-size: 1.1rem;
+        .catalogo-img-wrap {
             width: 100%;
+            height: 180px;
+            background: linear-gradient(120deg, #2a5ba8 0%, #0a1f3d 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
         }
-
-        .imagen-previa {
-            width: 70px;
-            height: 70px;
-            border-radius: 10px;
-            margin-right: 1.5rem;
-            object-fit: cover;
+        .catalogo-img {
+            width: 120px;
+            height: 120px;
+            object-fit: contain;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(42,91,168,0.10);
             transition: transform 0.3s;
         }
 
-        .card-enlace:hover .imagen-previa {
-            transform: scale(1.1);
+        /* Tamaño especial para el logo de NBA */
+        [src="nba.png"].catalogo-img {
+            width: 250px;
+            height: 160px;
         }
-
-        .quienes-somos {
-            max-width: 800px;
-            margin: 0 auto;
-            background: rgba(10, 31, 61, 0.7);
-            backdrop-filter: blur(12px);
-            border-radius: 20px;
-            padding: 2.5rem;
-            border: 1px solid rgba(42, 91, 168, 0.3);
+        .catalogo-card:hover .catalogo-img {
+            transform: scale(1.13) rotate(-3deg);
         }
-        input:disabled {
-    background: rgba(255, 255, 255, 0.05);
-    color: rgba(255, 255, 255, 0.5);
-    cursor: not-allowed;
-}
-        .quienes-somos h2 {
-            font-size: 2.3em;
-            margin-bottom: 2rem;
-            color: var(--azul-acento);
-            text-align: center;
-        }
-
-        .quienes-somos p {
-            line-height: 1.7;
-            margin-bottom: 1.5rem;
-            font-size: 1.1rem;
-        }
-
-        .garantias {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin: 3rem 0;
-        }
-
-        .garantia-card {
-            background: rgba(255, 255, 255, 0.05);
-            padding: 2rem;
-            border-radius: 15px;
-            text-align: center;
-            transition: all 0.3s ease;
-        }
-
-        .garantia-card:hover {
-            background: rgba(42, 91, 168, 0.2);
-            transform: translateY(-5px);
-        }
-        .boton-camiseta-nba {
-    background: rgba(255, 255, 255, 0.1);
-    border: 2px solid var(--azul-acento);
-    color: white;
-    padding: 10px 20px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    width: 100%;
-    text-align: center;
-    margin-top: 10px;
-}
-
-.boton-camiseta-nba.activo {
-    background: var(--azul-acento);
-    box-shadow: 0 0 15px rgba(42, 91, 168, 0.5);
-}
-
-.boton-camiseta-nba:hover {
-    transform: translateY(-2px);
-}
-        .marcas-colaboradoras {
+        .catalogo-info {
+            padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+            flex: 1;
             display: flex;
-            justify-content: center;
-            gap: 3rem;
-            flex-wrap: wrap;
-            margin: 3rem 0;
-            opacity: 0.8;
+            flex-direction: column;
+            justify-content: space-between;
         }
-
-        .marca-item {
-            width: 120px;
-            filter: grayscale(1);
-            transition: all 0.3s ease;
+        .catalogo-info h3 {
+            color: #fff;
+            font-size: 1.25em;
+            margin-bottom: 0.5rem;
+            font-weight: 700;
+            letter-spacing: 0.5px;
         }
-
-        .marca-item:hover {
-            filter: grayscale(0);
-            transform: scale(1.1);
+        .catalogo-info p {
+            color: #b8c6e0;
+            font-size: 1em;
+            margin-bottom: 1.2rem;
+            min-height: 48px;
         }
-
-        .badge-premium {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
+        .catalogo-btn {
             background: var(--azul-acento);
-            padding: 15px 25px;
+            color: #fff;
+            border: none;
+            padding: 12px 28px;
             border-radius: 30px;
-            font-weight: bold;
-            box-shadow: 0 0 25px rgba(42, 91, 168, 0.4);
-            animation: flotar 3s ease-in-out infinite;
-            z-index: 1000;
+            font-size: 1.08em;
+            font-weight: 600;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 2px 10px rgba(42,91,168,0.13);
+            transition: background 0.2s, box-shadow 0.2s, transform 0.2s;
         }
+        .catalogo-btn:hover {
+            background: #1a3e6e;
+            box-shadow: 0 4px 18px rgba(42,91,168,0.18);
+            transform: translateY(-2px) scale(1.04);
+        }
+        @media (max-width: 900px) {
+            .grid-catalogo {
+                grid-template-columns: 1fr 1fr;
+            }
+        }
+        @media (max-width: 600px) {
+            .grid-catalogo {
+                grid-template-columns: 1fr;
+            }
+            .catalogo-header {
+                margin-bottom: 1.2rem;
+            }
+            .catalogo-titulo {
+                font-size: 2em;
+            }
+        }
+        /* --- FIN: Catálogo Premium --- */
+
+        /* Eliminar estilos antiguos del catálogo */
+        .grid-enlaces, .card-enlace, .imagen-previa, .enlace-btn { display: none !important; }
 
         footer {
             margin-top: 4rem;
@@ -850,90 +776,135 @@
 
         <!-- Sección Tienda -->
         <section id="tienda" class="seccion activa">
-            <div class="grid-enlaces">
-                <div class="card-enlace">
-                    <img src="camfut.png" alt="Camisetas" class="imagen-previa">
-                    <a href="https://2020soccer.x.yupoo.com/albums" class="enlace-btn">
-                        <span>Camisetas Fútbol ⚽</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+            <div class="catalogo-header animate__animated animate__fadeInDown">
+                <h2 class="catalogo-titulo">Catálogo Premium</h2>
+                <p class="catalogo-descripcion">Explora nuestra selección exclusiva de productos deportivos de alta calidad. Haz clic en cada categoría para ver el catálogo completo.</p>
+            </div>
+            <div class="grid-catalogo">
+                <div class="catalogo-card animate__animated animate__fadeInUp">
+                    <div class="catalogo-img-wrap">
+                        <img src="camfut.png" alt="Camisetas" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>Camisetas Fútbol</h3>
+                        <p>Las mejores camisetas de clubes y selecciones, calidad premium.</p>
+                        <a href="https://2020soccer.x.yupoo.com/albums" class="catalogo-btn" target="_blank">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-
-                <div class="card-enlace">
-                    <img src="zap.png" alt="Zapatillas" class="imagen-previa">
-                    <a href="https://eu1688.x.yupoo.com/albums" class="enlace-btn">
-                        <span>Zapatillas 👟</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.1s;">
+                    <div class="catalogo-img-wrap">
+                        <img src="zap.png" alt="Zapatillas" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>Zapatillas</h3>
+                        <p>Modelos exclusivos y últimas tendencias en sneakers deportivas.</p>
+                        <a href="https://eu1688.x.yupoo.com/albums" class="catalogo-btn" target="_blank">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-
-                <div class="card-enlace">
-                    <img src="nba.png" alt="NBA" class="imagen-previa">
-                    <a href="https://x.yupoo.com/photos/05941188/albums" class="enlace-btn">
-                        <span>NBA 🏀</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+                    <div class="catalogo-img-wrap">
+                        <img src="nba.png" alt="NBA" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>NBA</h3>
+                        <p>Camisetas y productos oficiales de la mejor liga de baloncesto.</p>
+                        <a href="https://x.yupoo.com/photos/05941188/albums" class="catalogo-btn" target="_blank">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-
-                <div class="card-enlace">
-                    <img src="airpods.png" alt="AirPods" class="imagen-previa">
-                    <a href="https://docs.google.com/document/d/1IXUCHDWRw8osfQltnWGwz2bUFpD_J85-0_Nnq0p55NI/edit?usp=drivesdk" class="enlace-btn">
-                        <span>AirPods 🎧</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.3s;">
+                    <div class="catalogo-img-wrap">
+                        <img src="airpods.png" alt="AirPods" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>AirPods</h3>
+                        <p>Audio inalámbrico de alta calidad, compatibles con todos tus dispositivos.</p>
+                        <a href="https://docs.google.com/document/d/1IXUCHDWRw8osfQltnWGwz2bUFpD_J85-0_Nnq0p55NI/edit?usp=drivesdk" class="catalogo-btn" target="_blank">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-
-                <div class="card-enlace">
-                    <img src="botfut.png" alt="Botas Fútbol" class="imagen-previa">
-                    <a href="https://zuqiuliu.x.yupoo.com" class="enlace-btn">
-                        <span>Botas Fútbol ⚽</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.4s;">
+                    <div class="catalogo-img-wrap">
+                        <img src="botfut.png" alt="Botas Fútbol" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>Botas Fútbol</h3>
+                        <p>Botas de fútbol profesionales para todos los terrenos y estilos.</p>
+                        <a href="https://zuqiuliu.x.yupoo.com" class="catalogo-btn" target="_blank">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-
-                <div class="card-enlace">
-                    <img src="f1.png" alt="F1" class="imagen-previa">
-                    <a href="https://x.yupoo.com/photos/yiyisports2016/collections/3551571" class="enlace-btn">
-                        <span>F1 🏎️</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.5s;">
+                    <div class="catalogo-img-wrap">
+                        <img src="f1.png" alt="F1" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>F1</h3>
+                        <p>Merchandising y ropa oficial de Fórmula 1 para verdaderos fans.</p>
+                        <a href="https://x.yupoo.com/photos/yiyisports2016/collections/3551571" class="catalogo-btn" target="_blank">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-
-                <div class="card-enlace">
-                    <img src="ps4.png" alt="Mandos PS4" class="imagen-previa">
-                    <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?usp=sharing" class="enlace-btn">
-                        <span>Mandos PS4 🎮</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.6s;">
+                    <div class="catalogo-img-wrap">
+                        <img src="ps4.png" alt="Mandos PS4" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>Mandos PS4</h3>
+                        <p>Mandos y accesorios para PlayStation 4, máxima precisión y calidad.</p>
+                        <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?usp=sharing" class="catalogo-btn" target="_blank">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-
-                <div class="card-enlace">
-                    <img src="nfl.png" alt="NFL" class="imagen-previa">
-                    <a href="https://nfl-world.x.yupoo.com/" class="enlace-btn">
-                        <span>NFL 🏈</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.7s;">
+                    <div class="catalogo-img-wrap">
+                        <img src="nfl.png" alt="NFL" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>NFL</h3>
+                        <p>Jerseys y artículos oficiales de la National Football League.</p>
+                        <a href="https://nfl-world.x.yupoo.com/" class="catalogo-btn" target="_blank">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-
-                <div class="card-enlace">
-                    <img src="mlb.png" alt="MLB" class="imagen-previa">
-                    <a href="https://chenzhefuzhuang.x.yupoo.com/collections/3230017" class="enlace-btn">
-                        <span>MLB ⚾</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.8s;">
+                    <div class="catalogo-img-wrap">
+                        <img src="mlb.png" alt="MLB" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>MLB</h3>
+                        <p>Equipación y gorras oficiales de la Major League Baseball.</p>
+                        <a href="https://chenzhefuzhuang.x.yupoo.com/collections/3230017" class="catalogo-btn" target="_blank">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
-
-                <div class="card-enlace">
-                    <img src="nhl.png" alt="NHL" class="imagen-previa">
-                    <a href="https://nhl-world.x.yupoo.com/" class="enlace-btn">
-                        <span>NHL 🏑</span>
-                        <i class="fas fa-arrow-right"></i>
-                    </a>
+                <div class="catalogo-card animate__animated animate__fadeInUp" style="animation-delay: 0.9s;">
+                    <div class="catalogo-img-wrap">
+                        <img src="nhl.png" alt="NHL" class="catalogo-img">
+                    </div>
+                    <div class="catalogo-info">
+                        <h3>NHL</h3>
+                        <p>Jerseys y productos oficiales de la National Hockey League.</p>
+                        <a href="https://nhl-world.x.yupoo.com/" class="catalogo-btn" target="_blank">
+                            Ver catálogo <i class="fas fa-arrow-right"></i>
+                        </a>
+                    </div>
                 </div>
             </div>
         </section>
 
-<!-- Sección Quiénes Somos -->
+        <!-- Sección Quiénes Somos -->
 <section id="quienes-somos" class="seccion">
     <div class="quienes-somos animate__animated animate__fadeIn" style="text-align: center;">
         <h2>Nuestra Historia</h2>
@@ -1093,7 +1064,7 @@ Phone Number:</textarea>
     </div>
 </section>
 <footer>
-    <div class="redes-sociales">
+    <div class="redes_sociales">
         <a href="https://www.instagram.com/camisetazo._/"><i class="fab fa-instagram"></i></a>
         <a href="https://www.tiktok.com/@camisetazo"><i class="fab fa-tiktok"></i></a>
     </div>
@@ -1495,6 +1466,20 @@ document.querySelectorAll('.boton-camiseta-nba').forEach(boton => {
 
         // Abrir la ventana de PayPal
         abrirPayPal(total);
+    });
+
+    // --- HACER TODA LA TARJETA DEL CATÁLOGO CLICABLE ---
+    document.querySelectorAll('.catalogo-card').forEach(function(card) {
+        const btn = card.querySelector('.catalogo-btn');
+        if (btn) {
+            const url = btn.getAttribute('href');
+            card.style.cursor = 'pointer';
+            card.addEventListener('click', function(e) {
+                // Si el click fue en el botón, no hacer nada (el botón ya tiene su propio enlace)
+                if (e.target.closest('.catalogo-btn')) return;
+                window.open(url, '_blank');
+            });
+        }
     });
 
     // Inicialización
