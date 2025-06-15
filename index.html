@@ -701,33 +701,50 @@
             <input type="hidden" name="_subject" value="Nuevo pedido con pago confirmado">
             <input type="hidden" name="precio_total" id="precioTotal">
 
-            <!-- DATOS GENERALES -->
-            emailPaypal: <input type="email" id="emailPaypal" name="emailPaypal" required placeholder="Ej: tucorreo@example.com"><br>
-            usuarioInstagram: <input type="text" id="usuario" name="usuario" required placeholder="Ej: @roberto_carlos03" pattern="^[A-Za-z0-9_.]{1,30}$"><br>
-            
-            <!-- DIRECCIÓN EN FORMATO LISTA -->
-            <textarea id="direccion" name="direccion" required rows="7" style="width:100%;margin-bottom:10px;">
-Contact Name:
+            <div class="selector-unidades">
+                <button type="button" class="boton-unidad activo" data-unidades="1">1 Unidad</button>
+                <button type="button" class="boton-unidad" data-unidades="2">2 Unidades</button>
+                <button type="button" class="boton-unidad" data-unidades="3">3 Unidades</button>
+                <button type="button" class="boton-unidad" data-unidades="5">5 Unidades</button>
+            </div>
+
+            <!-- Campos requeridos por Formspree -->
+            <input type="hidden" name="_language" value="es">
+            <input type="hidden" name="_subject" value="Nuevo pedido de Camisetazo">
+            <input type="hidden" name="_template" value="list">
+        <div class="contenedor-unidades" id="contenedorUnidades"></div>
+            <!-- Campos del formulario -->
+            <!-- Campos de información -->
+            <div class="input-grid">
+                <div class="input-group">
+                    <label for="emailPaypal">Correo de PayPal: ¡IMPORTANTE!</label>
+                    <input type="email" id="emailPaypal" name="emailPaypal" required placeholder="Ej: tucorreo@example.com">
+                </div>
+                <div class="input-group">
+    <label for="usuario">Usuario Instagram: ¡IMPORTANTE!</label>
+    <input 
+        type="text" 
+        id="usuario" 
+        name="usuario" 
+        required 
+        placeholder="Ej: @roberto_carlos03"
+        pattern="^[A-Za-z0-9_.]{1,30}$"
+        title="Por favor, ingresa un nombre de usuario válido de Instagram (debe tener entre 1 y 30 caracteres)."
+    >
+</div>
+                <div class="input-group">
+                    <label for="direccion">Dirección completa:</label>
+                    <textarea id="direccion" name="direccion" required rows="7">Contact Name:
 Address Line:
 City:
 State:
 Country:
 Postal Code:
-Phone Number:
-</textarea>
-
-            <!-- UNIDADES (rellenadas dinámicamente, ejemplo de estructura) -->
-            <div id="unidades-lista">
-                <!-- Ejemplo de unidad:
-                Unidad 1:
-                Producto: Camiseta Fútbol
-                Talla: M
-                Nombre: Messi
-                Extras: Parche, Dorsal
-                -->
+Phone Number:</textarea>
+                </div>
             </div>
 
-            <!-- DESGLOSE PRECIO (igual que antes) -->
+            <!-- Sección de cálculo de precio -->
             <div class="calculadora-precio animate__animated animate__fadeInUp">
                 <h3><i class="fas fa-receipt"></i> Desglose del Precio</h3>
                 <div class="detalle-precio" style="background:rgba(255,255,255,0.13);border-left:5px solid #e74c3c;">
