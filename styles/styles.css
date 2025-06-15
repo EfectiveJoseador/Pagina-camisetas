@@ -847,3 +847,67 @@
     z-index: 2;
     position: relative;
 }
+
+@media (max-width: 600px) {
+    /* Navegación y pestañas en columna */
+    .navegacion {
+        flex-direction: column;
+        gap: 10px;
+        align-items: stretch;
+    }
+    .boton-seccion {
+        width: 100%;
+        font-size: 1.12rem;
+        padding: 15px 0;
+        margin-bottom: 8px;
+        border-radius: 16px;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+    }
+    /* Selector de unidades en columna */
+    .selector-unidades {
+        flex-direction: column;
+        gap: 8px;
+        align-items: center;
+    }
+    .boton-unidad {
+        width: 100%;
+        max-width: 320px;
+        font-size: 1.12rem;
+        padding: 14px 0;
+        margin-bottom: 6px;
+        border-radius: 14px;
+        min-width: 0;
+        box-sizing: border-box;
+        margin-left: auto;
+        margin-right: auto;
+    }
+    /* Botones de versión ocupan todo el ancho */
+    .boton-version-especial, .boton-version-jugador, .boton-camiseta-nba {
+        width: 100%;
+        font-size: 1.08rem;
+        padding: 13px 0;
+        margin-bottom: 6px;
+        border-radius: 14px;
+    }
+    /* Contenedor de unidades: una sola columna */
+    .contenedor-unidades {
+        grid-template-columns: 1fr !important;
+        gap: 1rem;
+    }
+    /* Tarjetas y formularios: padding reducido y sin desbordes */
+    .catalogo-card, .formulario-pedido, .tarjeta-pedido {
+        padding: 10px 4px !important;
+        min-width: 0;
+        box-sizing: border-box;
+    }
+    /* Ajuste para evitar desbordes horizontales */
+    html, body {
+        overflow-x: hidden;
+    }
+    /* Ajuste de fuentes para mejor legibilidad */
+    body, input, button, select, textarea {
+        font-size: 1.07rem;
+    }
+}
