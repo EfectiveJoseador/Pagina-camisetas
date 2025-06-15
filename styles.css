@@ -16,6 +16,17 @@
     padding: 16px;
 }
 
+/* Contenedor de unidades */
+.unidades-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    width: 100%;
+    box-sizing: border-box;
+}
+
 /* Responsive: para pantallas menores a 600px */
 @media (max-width: 600px) {
     body {
@@ -44,6 +55,27 @@
     .table-responsive, .horizontal-scroll {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
+    }
+    .tarjeta-pedido {
+        padding: 8px;
+        box-sizing: border-box;
+        width: 100%;
+        max-width: 100%;
+    }
+    .unidades-container {
+        flex-direction: column;
+        gap: 10px;
+        width: 100%;
+        overflow-x: auto;
+    }
+    .unidades-container button,
+    .unidades-container .btn {
+        width: 100%;
+        min-width: 0;
+        max-width: 100%;
+        box-sizing: border-box;
+        font-size: 1.1rem;
+        margin: 0;
     }
 }
 

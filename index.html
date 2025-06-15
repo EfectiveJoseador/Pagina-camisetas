@@ -1264,6 +1264,13 @@ Phone Number:</textarea>
             return;
         }
 
+        // Obtener el total correctamente
+        const total = parseFloat(document.getElementById('precioDisplay').textContent);
+        if (isNaN(total) || total <= 0) {
+            alert("El total a pagar no es válido.");
+            return;
+        }
+
         // Abrir PayPal
         abrirPayPal(total);
     });
