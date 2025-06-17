@@ -194,6 +194,27 @@ document.addEventListener('DOMContentLoaded', function() {
             tempImg.src = imgUrl;
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
+            // 1. Animación de transición suave al abrir/cerrar el modal
+            if (modal) {
+                modal.style.opacity = '0';
+                modal.style.transition = 'opacity 0.25s';
+                setTimeout(() => { modal.style.opacity = '1'; }, 10);
+            }
+            // 2. Cerrar modal con tecla Escape
+            function onKeyDownModal(e) {
+                if (e.key === 'Escape') cerrarModal();
+            }
+            document.addEventListener('keydown', onKeyDownModal);
+            // Limpiar listener al cerrar
+            const oldCerrarModal = cerrarModal;
+            cerrarModal = function() {
+                if (modal) {
+                    modal.style.opacity = '0';
+                    setTimeout(() => { modal.style.display = 'none'; }, 250);
+                }
+                document.body.style.overflow = '';
+                document.removeEventListener('keydown', onKeyDownModal);
+            }
         }
         // Soporte táctil para deslizar en el modal ampliado
         let modalStartX = null;
@@ -238,13 +259,84 @@ document.addEventListener('DOMContentLoaded', function() {
         // Ocultar el watermark HTML (solo canvas)
         modal.querySelector('#watermark-text').style.display = 'none';
         mostrarEnModal(actual);
+        // Soporte de zoom tipo lupa en el modal
+        let zoomActivo = false;
+        let zoomScale = 2;
+        let zoomX = 0, zoomY = 0;
+        const canvas = modal.querySelector('#modal-canvas-clientes');
+        if (canvas) {
+            // Eliminar icono de lupa si existe
+            const lupaIcon = canvas.parentElement.querySelector('#lupa-zoom-icon');
+            if (lupaIcon) lupaIcon.remove();
+            let zoomActivo = false;
+            let zoomX = 0, zoomY = 0;
+            canvas.style.cursor = 'zoom-in';
+            canvas.addEventListener('click', function(e) {
+                zoomActivo = !zoomActivo;
+                if (zoomActivo) {
+                    canvas.style.cursor = 'zoom-out';
+                    const rect = canvas.getBoundingClientRect();
+                    zoomX = (e.clientX - rect.left) / rect.width;
+                    zoomY = (e.clientY - rect.top) / rect.height;
+                    dibujarZoomDinamico(zoomX, zoomY);
+                } else {
+                    canvas.style.cursor = 'zoom-in';
+                    mostrarEnModal(actual);
+                }
+            });
+            canvas.addEventListener('mousemove', function(e) {
+                if (!zoomActivo) return;
+                const rect = canvas.getBoundingClientRect();
+                zoomX = (e.clientX - rect.left) / rect.width;
+                zoomY = (e.clientY - rect.top) / rect.height;
+                dibujarZoomDinamico(zoomX, zoomY);
+            });
+            function dibujarZoomDinamico(x, y) {
+                const div = existentes[actual];
+                if (!div) return;
+                const imgUrl = div.getAttribute('data-img');
+                const tempImg = new window.Image();
+                tempImg.onload = function() {
+                    canvas.width = tempImg.width;
+                    canvas.height = tempImg.height;
+                    const ctx = canvas.getContext('2d');
+                    ctx.clearRect(0, 0, canvas.width, canvas.height);
+                    // Zoom x2 centrado en el punto
+                    const zoomScale = 2;
+                    const zoomW = canvas.width / zoomScale;
+                    const zoomH = canvas.height / zoomScale;
+                    let sx = canvas.width * x - zoomW / 2;
+                    let sy = canvas.height * y - zoomH / 2;
+                    sx = Math.max(0, Math.min(sx, canvas.width - zoomW));
+                    sy = Math.max(0, Math.min(sy, canvas.height - zoomH));
+                    ctx.drawImage(tempImg, sx, sy, zoomW, zoomH, 0, 0, canvas.width, canvas.height);
+                    // Marca de agua
+                    const watermark = '@CAMISETAZO._';
+                    const fontSize = Math.floor(canvas.height/18);
+                    ctx.font = `bold ${fontSize}px Arial, sans-serif`;
+                    ctx.textAlign = 'center';
+                    ctx.textBaseline = 'bottom';
+                    const yText = canvas.height - 2 * fontSize;
+                    ctx.globalAlpha = 0.48;
+                    ctx.lineWidth = 3;
+                    ctx.strokeStyle = '#000';
+                    ctx.strokeText(watermark, canvas.width/2, yText);
+                    ctx.fillStyle = '#fff';
+                    ctx.globalAlpha = 0.62;
+                    ctx.fillText(watermark, canvas.width/2, yText);
+                    ctx.globalAlpha = 1;
+                };
+                tempImg.src = imgUrl;
+            }
+        }
     }
     function cerrarModal() {
         const modal = document.getElementById('modal-imagen-clientes');
         if (modal) {
-            modal.style.display = 'none';
-            document.body.style.overflow = '';
+            modal.style.opacity = '0';
+            setTimeout(() => { modal.style.display = 'none'; }, 250);
         }
+        document.body.style.overflow = '';
     }
     inicializarCarruselClientes();
     document.querySelectorAll('.boton-seccion').forEach(btn => {
