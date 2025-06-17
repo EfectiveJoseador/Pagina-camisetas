@@ -1327,7 +1327,13 @@ Phone Number:</textarea>
     // Hacer toda la tarjeta clickeable excepto el botón
 document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
     card.addEventListener('click', function(e) {
-        // Si el click fue en el botón, no hacer nada (ya lo gestiona el botón)
+        // Si el click fue en el botón, o en un enlace del menú desplegable de fútbol, no hacer nada
+        if (
+            e.target.closest('.futbol-dropdown-menu a') ||
+            e.target.closest('.futbol-dropdown-btn')
+        ) {
+            return;
+        }
         const link = card.getAttribute('data-link');
         if (link) {
             window.open(link, '_blank');
