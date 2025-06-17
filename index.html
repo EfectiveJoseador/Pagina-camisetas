@@ -33,16 +33,22 @@
             </div>
             <div class="grid-catalogo">
                 <!-- Tarjeta 1 -->
-                <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable" data-link="https://2020soccer.x.yupoo.com/albums">
+                <div class="catalogo-card animate__animated animate__fadeInUp catalogo-card-clickable futbol-dropdown" data-link="https://2020soccer.x.yupoo.com/albums">
                     <div class="catalogo-img-wrap">
                         <img src="assets/images/camfut.png" alt="Camisetas" class="catalogo-img">
                     </div>
                     <div class="catalogo-info">
                         <h3>Camisetas Fútbol</h3>
                         <p>Las mejores camisetas de clubes y selecciones, calidad premium.</p>
-                        <a href="https://2020soccer.x.yupoo.com/albums" class="catalogo-btn" target="_blank" onclick="event.stopPropagation();">
-                            Ver catálogo <i class="fas fa-arrow-right"></i>
-                        </a>
+                        <button class="catalogo-btn futbol-dropdown-btn" type="button">
+                            Ver opciones <i class="fas fa-chevron-down"></i>
+                        </button>
+                        <div class="futbol-dropdown-menu" style="display:none;">
+                            <a href="https://2020soccer.x.yupoo.com/albums" target="_blank">GENERAL</a>
+                            <a href="https://classic-football-fhirts052.x.yupoo.com/" target="_blank">RETRO</a>
+                            <a href="https://yongfa1688.x.yupoo.com/" target="_blank">NUEVA TEMPORADA</a>
+                            <a href="https://aosendi.x.yupoo.com/albums" target="_blank">CONJUNTO ENTRENAMIENTO</a>
+                        </div>
                     </div>
                 </div>
                 <!-- Tarjeta 2 -->
@@ -1288,7 +1294,8 @@ document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
 
     // Inicializar
     actualizarPrecio();
-    });
-    </script>
+}); // <-- Cierra el addEventListener('DOMContentLoaded', ...)
+</script>
+<script src="scripts/scripts.js"></script>
 </body>
 </html>
