@@ -777,6 +777,10 @@ Phone Number:</textarea>
                     <span><i class="fas fa-basketball-ball"></i> Camisetas NBA:</span>
                     <span><span id="cantidad-camisetas-nba" class="badge-extra" style="background:#2a5ba8;">0</span> × 5€ = <span id="total-camisetas-nba">0.00</span>€</span>
                 </div>
+                <div class="detalle-precio">
+                    <span><i class="fas fa-ruler-combined"></i> Tallas con recargo:</span>
+                    <span><span id="cantidad-tallas-extra" class="badge-extra" style="background:#2a5ba8;">0</span> = <span id="total-tallas-extra">0.00</span>€</span>
+                </div>
                 <div class="total-container animate__animated animate__pulse animate__delay-1s">
                     <div style="font-size:1.3rem;font-weight:700;letter-spacing:1px;">Total a Pagar</div>
                     <div class="precio-total" style="background:linear-gradient(90deg,#28a745 60%,#2a5ba8 100%);border-radius:10px;padding:0.7rem 1.2rem;box-shadow:0 2px 12px rgba(42,91,168,0.13);">
@@ -859,7 +863,15 @@ Phone Number:</textarea>
 
             <div class="input-group">
                 <label>Talla:</label>
-                <input type="text" name="talla[]" required placeholder="Ej: M, 42, etc.">
+                <select name="talla[]" class="input-talla" required>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL (+1€)</option>
+                    <option value="3XL">3XL (+2€)</option>
+                    <option value="4XL">4XL (+3€)</option>
+                </select>
             </div>
             
             <div class="input-group">
@@ -920,6 +932,8 @@ Phone Number:</textarea>
     let versionesJugador = 0;
     let versionesEspecial = 0;
     let camisetasNBA = 0;
+    let recargoTallas = 0;
+    let totalRecargoTallas = 0;
 
     // Calcular extras para cada unidad
     document.querySelectorAll('.unidad').forEach(unidad => {
@@ -928,6 +942,7 @@ Phone Number:</textarea>
         const versionJugador = unidad.querySelector('[name="versionJugador[]"]').value === 'Sí';
         const versionEspecial = unidad.querySelector('[name="versionRetro[]"]').value === 'Sí';
         const camisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
+        const talla = unidad.querySelector('[name="talla[]"]').value;
 
         // Validar que las camisetas NBA tengan dorsal
         if (camisetaNBA && !dorsal) {
@@ -950,6 +965,18 @@ Phone Number:</textarea>
         if (versionJugador) versionesJugador++;
         if (versionEspecial) versionesEspecial++;
         if (camisetasNBA) camisetasNBA++;
+
+        // Calcular recargo por tallas XXL y 3XL
+        if (talla === 'XXL') {
+            recargoTallas++;
+            totalRecargoTallas += 1;
+        } else if (talla === '3XL') {
+            recargoTallas++;
+            totalRecargoTallas += 2;
+        } else if (talla === '4XL') {
+            recargoTallas++;
+            totalRecargoTallas += 3;
+        }
     });
 
     // Calcular totales
@@ -959,7 +986,7 @@ Phone Number:</textarea>
     const totalVersionesEspecial = versionesEspecial * EXTRAS.versionJugador;
     const totalCamisetasNBA = camisetasNBA * EXTRAS.camisetaNBA;
 
-    total += totalParches + totalDorsales + totalVersionesJugador + totalVersionesEspecial + totalCamisetasNBA;
+    total += totalParches + totalDorsales + totalVersionesJugador + totalVersionesEspecial + totalCamisetasNBA + totalRecargoTallas;
 
     // Actualizar display
     document.getElementById('cantidad-unidades').textContent = unidades;
@@ -971,7 +998,7 @@ Phone Number:</textarea>
     document.getElementById('plural-unidades-sin-desc').textContent = unidades > 1 ? 'es' : '';
     const precioSinDescuentoUnidad = 25.00;
     // Calcular extras también para el precio sin descuento
-    const totalSinDescuentoExtras = (parches * EXTRAS.parche) + (dorsales * EXTRAS.dorsal) + ((versionesJugador + versionesEspecial) * EXTRAS.versionJugador) + (camisetasNBA * EXTRAS.camisetaNBA);
+    const totalSinDescuentoExtras = (parches * EXTRAS.parche) + (dorsales * EXTRAS.dorsal) + ((versionesJugador + versionesEspecial) * EXTRAS.versionJugador) + (camisetasNBA * EXTRAS.camisetaNBA) + totalRecargoTallas;
     const totalSinDescuento = (precioSinDescuentoUnidad * unidades + totalSinDescuentoExtras).toFixed(2);
     document.getElementById('precio-sin-descuento').textContent = totalSinDescuento;
     document.getElementById('precioSinDescuentoTotal').textContent = totalSinDescuento;
@@ -987,6 +1014,9 @@ Phone Number:</textarea>
 
     document.getElementById('cantidad-camisetas-nba').textContent = camisetasNBA;
     document.getElementById('total-camisetas-nba').textContent = totalCamisetasNBA.toFixed(2);
+
+    document.getElementById('cantidad-tallas-extra').textContent = recargoTallas;
+    document.getElementById('total-tallas-extra').textContent = totalRecargoTallas.toFixed(2);
 
     document.getElementById('precioDisplay').textContent = total.toFixed(2);
     document.getElementById('precioTotal').value = total.toFixed(2);
@@ -1201,6 +1231,11 @@ Phone Number:</textarea>
     document.querySelectorAll('.input-parche, .input-dorsal').forEach(input => {
         input.addEventListener('input', actualizarPrecio);
     });
+
+    // También actualizar precio al cambiar la talla
+        document.querySelectorAll('.input-talla').forEach(input => {
+            input.addEventListener('change', actualizarPrecio);
+        });
 }
 
     // Función para abrir la ventana de PayPal
