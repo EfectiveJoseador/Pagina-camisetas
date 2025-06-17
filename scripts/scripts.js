@@ -175,10 +175,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 canvas.height = tempImg.height;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(tempImg, 0, 0, canvas.width, canvas.height);
-                // Marca de agua en blanco, trazo negro fino, parte inferior central, opacidad media y más arriba
-                const watermark = '@CAMISETAZO._';
+                // Marca de agua universal
+                const watermark = '@camisetazo._';
                 const fontSize = Math.floor(canvas.height/18);
-                ctx.font = `bold ${fontSize}px Impact, Arial Black, Arial, sans-serif`;
+                ctx.font = `bold ${fontSize}px Arial, sans-serif`;
                 ctx.textAlign = 'center';
                 ctx.textBaseline = 'bottom';
                 const y = canvas.height - 2 * fontSize;
@@ -194,6 +194,35 @@ document.addEventListener('DOMContentLoaded', function() {
             tempImg.src = imgUrl;
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
+        }
+        // Soporte táctil para deslizar en el modal ampliado
+        let modalStartX = null;
+        let modalActual = actual;
+        const modalCanvas = () => modal.querySelector('#modal-canvas-clientes');
+        const modalContenido = modal.querySelector('.modal-contenido');
+        if (modalContenido) {
+            modalContenido.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 1) {
+                    modalStartX = e.touches[0].clientX;
+                }
+            });
+            modalContenido.addEventListener('touchmove', function(e) {
+                if (modalStartX !== null && e.touches.length === 1) {
+                    const deltaX = e.touches[0].clientX - modalStartX;
+                    if (Math.abs(deltaX) > 30) {
+                        if (deltaX > 0) {
+                            actual = (actual - 1 + existentes.length) % existentes.length;
+                        } else {
+                            actual = (actual + 1) % existentes.length;
+                        }
+                        mostrarEnModal(actual);
+                        modalStartX = null;
+                    }
+                }
+            });
+            modalContenido.addEventListener('touchend', function() {
+                modalStartX = null;
+            });
         }
         // Asignar eventos a las flechas
         modal.querySelector('.modal-arrow-left').onclick = function(e) {
