@@ -656,6 +656,36 @@
             <a href="https://www.instagram.com/camisetazo._/" target="_blank">@camisetazo._ ➔</a>
             <p>Novedades diarias | Ofertas exclusivas</p>
         </div>
+        <!-- Carrusel de clientes satisfechos -->
+        <div class="clientes-carrusel-section">
+            <h3 style="color:var(--azul-acento);margin-bottom:1rem;">Clientes Satisfechos</h3>
+            <div class="clientes-carrusel">
+                <button class="carrusel-btn" id="carrusel-prev" aria-label="Anterior">&#8592;</button>
+                <div class="carrusel-imagenes">
+                    <img src="assets/clientes/cliente1.jpg" alt="Cliente satisfecho 1" class="carrusel-img activa">
+                    <img src="assets/clientes/cliente2.jpg" alt="Cliente satisfecho 2" class="carrusel-img">
+                    <img src="assets/clientes/cliente3.jpg" alt="Cliente satisfecho 3" class="carrusel-img">
+                    <img src="assets/clientes/cliente4.jpg" alt="Cliente satisfecho 4" class="carrusel-img">
+                    <img src="assets/clientes/cliente5.jpg" alt="Cliente satisfecho 5" class="carrusel-img">
+                    <img src="assets/clientes/cliente6.jpg" alt="Cliente satisfecho 6" class="carrusel-img">
+                    <img src="assets/clientes/cliente7.jpg" alt="Cliente satisfecho 7" class="carrusel-img">
+                    <img src="assets/clientes/cliente8.jpg" alt="Cliente satisfecho 8" class="carrusel-img">
+                    <img src="assets/clientes/cliente9.jpg" alt="Cliente satisfecho 9" class="carrusel-img">
+                    <img src="assets/clientes/cliente10.jpg" alt="Cliente satisfecho 10" class="carrusel-img">
+                    <img src="assets/clientes/cliente11.jpg" alt="Cliente satisfecho 11" class="carrusel-img">
+                    <img src="assets/clientes/cliente12.jpg" alt="Cliente satisfecho 12" class="carrusel-img">
+                    <img src="assets/clientes/cliente13.jpg" alt="Cliente satisfecho 13" class="carrusel-img">
+                    <img src="assets/clientes/cliente14.jpg" alt="Cliente satisfecho 14" class="carrusel-img">
+                    <img src="assets/clientes/cliente15.jpg" alt="Cliente satisfecho 15" class="carrusel-img">
+                    <img src="assets/clientes/cliente16.jpg" alt="Cliente satisfecho 16" class="carrusel-img">
+                    <img src="assets/clientes/cliente17.jpg" alt="Cliente satisfecho 17" class="carrusel-img">
+                    <img src="assets/clientes/cliente18.jpg" alt="Cliente satisfecho 18" class="carrusel-img" onerror="this.style.display='none'">
+                </div>
+                <button class="carrusel-btn" id="carrusel-next" aria-label="Siguiente">&#8594;</button>
+            </div>
+            <p style="margin-top:0.7rem;color:#b8c6e0;font-size:1rem;">Desliza para ver más capturas de clientes reales. ¡Gracias por confiar en nosotros!</p>
+        </div>
+        <!-- Fin carrusel -->
         <div class="quienes-somos-grid">
             <div class="quienes-somos-card">
                 <i class="fas fa-shield-alt"></i>
@@ -1343,6 +1373,8 @@ document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
 
     // Inicializar
     actualizarPrecio();
+
+    // Carrusel de clientes satisfechos y modal ahora están en scripts/scripts.js
 }); // <-- Cierra el addEventListener('DOMContentLoaded', ...)
 </script>
 <script src="scripts/scripts.js"></script>

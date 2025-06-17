@@ -1023,3 +1023,128 @@
         font-size: 1.07rem;
     }
 }
+
+/* Estilos para el carrusel de imágenes de clientes satisfechos */
+.clientes-carrusel-section {
+    margin: 2.5rem auto 2rem auto;
+    max-width: 520px;
+    background: rgba(42,91,168,0.10);
+    border-radius: 18px;
+    box-shadow: 0 2px 16px rgba(42,91,168,0.10);
+    padding: 1.5rem 1.2rem 1.2rem 1.2rem;
+    text-align: center;
+}
+.clientes-carrusel {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1.2rem;
+}
+.carrusel-btn {
+    background: var(--azul-acento, #1a3b6d);
+    color: #fff;
+    border: none;
+    border-radius: 50%;
+    width: 38px;
+    height: 38px;
+    font-size: 1.5rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(42,91,168,0.10);
+    transition: background 0.2s, transform 0.2s;
+}
+.carrusel-btn:hover {
+    background: #254b8a;
+    transform: scale(1.08);
+}
+.carrusel-imagenes {
+    width: 220px;
+    height: 220px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 14px;
+    background: #fff;
+    box-shadow: 0 2px 12px rgba(42,91,168,0.10);
+    position: relative;
+}
+.carrusel-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 14px;
+    position: absolute;
+    left: 0; top: 0;
+    transition: opacity 0.4s;
+    opacity: 0;
+    z-index: 1;
+}
+.carrusel-img.activa {
+    opacity: 1;
+    position: relative;
+    z-index: 2;
+}
+
+/* Estilos para el modal de imagen ampliada */
+#modal-imagen-clientes {
+    display: none;
+    position: fixed;
+    z-index: 9999;
+    left: 0; top: 0; right: 0; bottom: 0;
+    width: 100vw;
+    height: 100vh;
+    align-items: center;
+    justify-content: center;
+    background: rgba(10,20,40,0.85);
+    animation: aparecer 0.2s;
+}
+#modal-imagen-clientes .modal-fondo {
+    position: absolute;
+    left: 0; top: 0; right: 0; bottom: 0;
+    width: 100%;
+    height: 100%;
+    background: transparent;
+    cursor: zoom-out;
+}
+#modal-imagen-clientes .modal-contenido {
+    position: relative;
+    z-index: 2;
+    background: none;
+    border-radius: 16px;
+    box-shadow: 0 4px 32px rgba(42,91,168,0.18);
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    max-width: 90vw;
+    max-height: 90vh;
+}
+#modal-img-clientes {
+    max-width: 80vw;
+    max-height: 80vh;
+    border-radius: 12px;
+    box-shadow: 0 2px 16px rgba(42,91,168,0.13);
+    background: #fff;
+    transition: transform 0.3s;
+    cursor: zoom-in;
+}
+.modal-cerrar {
+    position: absolute;
+    top: 10px;
+    right: 18px;
+    background: #fff;
+    color: #1a3b6d;
+    border: none;
+    border-radius: 50%;
+    width: 36px;
+    height: 36px;
+    font-size: 2rem;
+    cursor: pointer;
+    box-shadow: 0 2px 8px rgba(42,91,168,0.10);
+    z-index: 3;
+    transition: background 0.2s, color 0.2s;
+}
+.modal-cerrar:hover {
+    background: #1a3b6d;
+    color: #fff;
+}
