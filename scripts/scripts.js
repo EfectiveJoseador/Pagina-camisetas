@@ -41,14 +41,52 @@ document.addEventListener('DOMContentLoaded', function() {
     function inicializarCarruselClientes() {
         // Solo incluir los divs que tengan imagen realmente existente
         const imagenes = Array.from(document.querySelectorAll('.carrusel-img-bg'));
-        const existentes = imagenes.filter(div => {
+        // Filtrar solo los divs cuya imagen realmente existe usando una petición HEAD
+        const existentes = [];
+        let pendientes = imagenes.length;
+        if (!imagenes.length) return;
+        imagenes.forEach(div => {
             const imgUrl = div.getAttribute('data-img');
-            return [
-                'assets/clientes/cliente1.jpg',
-                'assets/clientes/cliente2.jpg',
-                'assets/clientes/cliente3.jpg'
-            ].includes(imgUrl);
+            fetch(imgUrl, { method: 'HEAD' })
+                .then(resp => {
+                    if (resp.ok) existentes.push(div);
+                })
+                .catch(() => {})
+                .finally(() => {
+                    pendientes--;
+                    if (pendientes === 0) inicializarCarruselConExistentes(existentes);
+                });
         });
+        function inicializarCarruselConExistentes(existentes) {
+            existentes.forEach(div => {
+                const imgUrl = div.getAttribute('data-img');
+                div.style.backgroundImage = `url('${imgUrl}')`;
+            });
+            const prevBtn = document.getElementById('carrusel-prev');
+            const nextBtn = document.getElementById('carrusel-next');
+            if (!existentes.length || !prevBtn || !nextBtn) return;
+            let actual = 0;
+            function mostrarImagen(idx) {
+                existentes.forEach((div, i) => {
+                    div.classList.toggle('activa', i === idx);
+                });
+            }
+            prevBtn.onclick = function() {
+                actual = (actual - 1 + existentes.length) % existentes.length;
+                mostrarImagen(actual);
+            };
+            nextBtn.onclick = function() {
+                actual = (actual + 1) % existentes.length;
+                mostrarImagen(actual);
+            };
+            existentes.forEach(div => {
+                div.onclick = function() {
+                    mostrarModalImagen(div.getAttribute('data-img'), div.getAttribute('aria-label'));
+                };
+            });
+            mostrarImagen(actual);
+        }
+        return;
         existentes.forEach(div => {
             const imgUrl = div.getAttribute('data-img');
             div.style.backgroundImage = `url('${imgUrl}')`;
@@ -110,7 +148,16 @@ document.addEventListener('DOMContentLoaded', function() {
             return [
                 'assets/clientes/cliente1.jpg',
                 'assets/clientes/cliente2.jpg',
-                'assets/clientes/cliente3.jpg'
+                'assets/clientes/cliente3.jpg',
+                'assets/clientes/cliente4.jpg',
+                'assets/clientes/cliente5.jpg',
+                'assets/clientes/cliente6.jpg',
+                'assets/clientes/cliente7.jpg',
+                'assets/clientes/cliente8.jpg',
+                'assets/clientes/cliente9.jpg',
+                'assets/clientes/cliente10.jpg',
+                'assets/clientes/cliente11.jpg',
+                'assets/clientes/cliente12.jpg'
             ].includes(imgUrl);
         });
         let actual = existentes.findIndex(div => div.getAttribute('data-img') === src);
@@ -197,5 +244,36 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.style.pointerEvents = 'none'; // Permite clicks en imágenes
         carruselImagenes.style.position = 'relative';
         carruselImagenes.appendChild(overlay);
+    }
+    // Soporte táctil para deslizar en móvil
+    let startX = null;
+    let moved = false;
+    const imagenesContainer = document.querySelector('.carrusel-imagenes');
+    if (imagenesContainer) {
+        imagenesContainer.addEventListener('touchstart', function(e) {
+            if (e.touches.length === 1) {
+                startX = e.touches[0].clientX;
+                moved = false;
+            }
+        });
+        imagenesContainer.addEventListener('touchmove', function(e) {
+            if (startX !== null && e.touches.length === 1) {
+                const deltaX = e.touches[0].clientX - startX;
+                if (Math.abs(deltaX) > 30) {
+                    moved = true;
+                    if (deltaX > 0) {
+                        actual = (actual - 1 + existentes.length) % existentes.length;
+                        mostrarImagen(actual);
+                    } else {
+                        actual = (actual + 1) % existentes.length;
+                        mostrarImagen(actual);
+                    }
+                    startX = null;
+                }
+            }
+        });
+        imagenesContainer.addEventListener('touchend', function() {
+            startX = null;
+        });
     }
 });

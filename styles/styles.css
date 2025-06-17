@@ -1191,3 +1191,48 @@
     -ms-user-select: none;
     user-select: none;
 }
+
+@media (max-width: 600px) {
+  .clientes-carrusel-section {
+    max-width: 98vw;
+    padding: 0.7rem 0.2rem 1rem 0.2rem;
+  }
+  .clientes-carrusel {
+    gap: 0.3rem;
+  }
+  .carrusel-imagenes {
+    width: 90vw;
+    height: 55vw;
+    min-height: 180px;
+    max-width: 98vw;
+    max-height: 60vw;
+  }
+  .carrusel-img-bg {
+    border-radius: 10px;
+    box-shadow: 0 1px 6px rgba(42,91,168,0.10);
+  }
+  .carrusel-btn {
+    width: 32px;
+    height: 32px;
+    font-size: 1.3rem;
+    border-radius: 12px;
+    background: rgba(42,91,168,0.85);
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 20;
+    opacity: 0.92;
+    box-shadow: 0 1px 6px rgba(42,91,168,0.13);
+  }
+  #carrusel-prev {
+    left: 2px;
+    right: auto;
+  }
+  #carrusel-next {
+    right: 2px;
+    left: auto;
+  }
+  .carrusel-imagenes {
+    position: relative;
+  }
+}
