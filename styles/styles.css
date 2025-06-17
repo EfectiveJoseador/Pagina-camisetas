@@ -19,6 +19,10 @@
             min-height: 100vh;
             overflow-x: hidden;
             position: relative;
+            -webkit-user-select: none;
+            -moz-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
         }
 
         body::before {
@@ -1078,14 +1082,42 @@
     transition: opacity 0.4s;
     opacity: 0;
     z-index: 1;
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
 }
 .carrusel-img.activa {
     opacity: 1;
     position: relative;
     z-index: 2;
 }
+.carrusel-img-bg {
+    width: 100%;
+    height: 100%;
+    border-radius: 14px;
+    position: absolute;
+    left: 0; top: 0;
+    transition: opacity 0.4s;
+    opacity: 0;
+    z-index: 1;
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    cursor: pointer;
+    box-shadow: 0 2px 12px rgba(42,91,168,0.10);
+    -webkit-user-drag: none;
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    user-select: none;
+}
+.carrusel-img-bg.activa {
+    opacity: 1;
+    position: relative;
+    z-index: 2;
+}
 
-/* Estilos para el modal de imagen ampliada */
+        /* Estilos para el modal de imagen ampliada */
 #modal-imagen-clientes {
     display: none;
     position: fixed;
@@ -1147,4 +1179,15 @@
 .modal-cerrar:hover {
     background: #1a3b6d;
     color: #fff;
+}
+
+.carrusel-img {
+    pointer-events: auto;
+}
+
+.clientes-carrusel-section, .clientes-carrusel, .carrusel-imagenes {
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }

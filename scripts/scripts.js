@@ -37,33 +37,42 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
     // Eliminamos el cierre automático al hacer clic fuera
-    // Carrusel de clientes satisfechos
+    // Carrusel de clientes satisfechos con imágenes como fondo
     function inicializarCarruselClientes() {
-        const imagenes = Array.from(document.querySelectorAll('.carrusel-img'));
-        // Filtrar imágenes que realmente existen (no están ocultas por error de carga)
-        const imagenesValidas = imagenes.filter(img => img.complete && img.naturalWidth !== 0);
+        // Solo incluir los divs que tengan imagen realmente existente
+        const imagenes = Array.from(document.querySelectorAll('.carrusel-img-bg'));
+        const existentes = imagenes.filter(div => {
+            const imgUrl = div.getAttribute('data-img');
+            return [
+                'assets/clientes/cliente1.jpg',
+                'assets/clientes/cliente2.jpg',
+                'assets/clientes/cliente3.jpg'
+            ].includes(imgUrl);
+        });
+        existentes.forEach(div => {
+            const imgUrl = div.getAttribute('data-img');
+            div.style.backgroundImage = `url('${imgUrl}')`;
+        });
         const prevBtn = document.getElementById('carrusel-prev');
         const nextBtn = document.getElementById('carrusel-next');
-        if (!imagenesValidas.length || !prevBtn || !nextBtn) return;
+        if (!existentes.length || !prevBtn || !nextBtn) return;
         let actual = 0;
         function mostrarImagen(idx) {
-            imagenesValidas.forEach((img, i) => {
-                img.classList.toggle('activa', i === idx);
-                img.style.display = i === idx ? 'block' : 'none';
+            existentes.forEach((div, i) => {
+                div.classList.toggle('activa', i === idx);
             });
         }
         prevBtn.onclick = function() {
-            actual = (actual - 1 + imagenesValidas.length) % imagenesValidas.length;
+            actual = (actual - 1 + existentes.length) % existentes.length;
             mostrarImagen(actual);
         };
         nextBtn.onclick = function() {
-            actual = (actual + 1) % imagenesValidas.length;
+            actual = (actual + 1) % existentes.length;
             mostrarImagen(actual);
         };
-        // Ampliar imagen al hacer click
-        imagenesValidas.forEach(img => {
-            img.onclick = function() {
-                mostrarModalImagen(this.src, this.alt);
+        existentes.forEach(div => {
+            div.onclick = function() {
+                mostrarModalImagen(div.getAttribute('data-img'), div.getAttribute('aria-label'));
             };
         });
         mostrarImagen(actual);
@@ -94,14 +103,23 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.querySelector('.modal-fondo').onclick = cerrarModal;
             modal.querySelector('.modal-cerrar').onclick = cerrarModal;
         }
-        // Obtener imágenes válidas y el índice actual
-        const imagenes = Array.from(document.querySelectorAll('.carrusel-img')).filter(img => img.complete && img.naturalWidth !== 0);
-        let actual = imagenes.findIndex(img => img.src === src || img.currentSrc === src);
+        // Obtener solo los divs de imágenes existentes
+        const imagenes = Array.from(document.querySelectorAll('.carrusel-img-bg'));
+        const existentes = imagenes.filter(div => {
+            const imgUrl = div.getAttribute('data-img');
+            return [
+                'assets/clientes/cliente1.jpg',
+                'assets/clientes/cliente2.jpg',
+                'assets/clientes/cliente3.jpg'
+            ].includes(imgUrl);
+        });
+        let actual = existentes.findIndex(div => div.getAttribute('data-img') === src);
         if (actual === -1) actual = 0;
         // Función para mostrar imagen en el modal
         function mostrarEnModal(idx) {
-            const img = imagenes[idx];
-            if (!img) return;
+            const div = existentes[idx];
+            if (!div) return;
+            const imgUrl = div.getAttribute('data-img');
             const canvas = modal.querySelector('#modal-canvas-clientes');
             const ctx = canvas.getContext('2d');
             const tempImg = new window.Image();
@@ -126,19 +144,19 @@ document.addEventListener('DOMContentLoaded', function() {
                 ctx.fillText(watermark, canvas.width/2, y);
                 ctx.globalAlpha = 1;
             };
-            tempImg.src = img.src;
+            tempImg.src = imgUrl;
             modal.style.display = 'flex';
             document.body.style.overflow = 'hidden';
         }
         // Asignar eventos a las flechas
         modal.querySelector('.modal-arrow-left').onclick = function(e) {
             e.stopPropagation();
-            actual = (actual - 1 + imagenes.length) % imagenes.length;
+            actual = (actual - 1 + existentes.length) % existentes.length;
             mostrarEnModal(actual);
         };
         modal.querySelector('.modal-arrow-right').onclick = function(e) {
             e.stopPropagation();
-            actual = (actual + 1) % imagenes.length;
+            actual = (actual + 1) % existentes.length;
             mostrarEnModal(actual);
         };
         // Ocultar el watermark HTML (solo canvas)
@@ -160,9 +178,24 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-    // Proteger imágenes del carrusel de clientes satisfechos sin afectar el click
-    document.querySelectorAll('.carrusel-img').forEach(function(img) {
-        img.addEventListener('contextmenu', function(e) { e.preventDefault(); });
-        img.addEventListener('dragstart', function(e) { e.preventDefault(); });
+    // Protección máxima: bloquear clic derecho y arrastre en los divs de fondo
+    document.querySelectorAll('.carrusel-img-bg').forEach(function(div) {
+        div.addEventListener('contextmenu', function(e) { e.preventDefault(); });
+        div.addEventListener('dragstart', function(e) { e.preventDefault(); });
     });
+    // Protección adicional: superponer capa invisible sobre imágenes del carrusel
+    const carruselImagenes = document.querySelector('.carrusel-imagenes');
+    if (carruselImagenes) {
+        const overlay = document.createElement('div');
+        overlay.style.position = 'absolute';
+        overlay.style.top = 0;
+        overlay.style.left = 0;
+        overlay.style.width = '100%';
+        overlay.style.height = '100%';
+        overlay.style.zIndex = 10;
+        overlay.style.background = 'transparent';
+        overlay.style.pointerEvents = 'none'; // Permite clicks en imágenes
+        carruselImagenes.style.position = 'relative';
+        carruselImagenes.appendChild(overlay);
+    }
 });
