@@ -175,8 +175,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 canvas.height = tempImg.height;
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(tempImg, 0, 0, canvas.width, canvas.height);
-                // Marca de agua universal
-                const watermark = '@camisetazo._';
+                // Marca de agua universal en mayúsculas
+                const watermark = '@CAMISETAZO._';
                 const fontSize = Math.floor(canvas.height/18);
                 ctx.font = `bold ${fontSize}px Arial, sans-serif`;
                 ctx.textAlign = 'center';
