@@ -335,6 +335,36 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 2500);
             }
         }
+        // Soporte táctil para deslizar en móvil dentro del modal
+        let modalStartX = null;
+        let modalMoved = false;
+        if (canvas) {
+            canvas.addEventListener('touchstart', function(e) {
+                if (e.touches.length === 1) {
+                    modalStartX = e.touches[0].clientX;
+                    modalMoved = false;
+                }
+            });
+            canvas.addEventListener('touchmove', function(e) {
+                if (modalStartX !== null && e.touches.length === 1) {
+                    const deltaX = e.touches[0].clientX - modalStartX;
+                    if (Math.abs(deltaX) > 30) {
+                        modalMoved = true;
+                        if (deltaX > 0) {
+                            actual = (actual - 1 + existentes.length) % existentes.length;
+                            dibujarImagen(actual);
+                        } else {
+                            actual = (actual + 1) % existentes.length;
+                            dibujarImagen(actual);
+                        }
+                        modalStartX = null;
+                    }
+                }
+            });
+            canvas.addEventListener('touchend', function() {
+                modalStartX = null;
+            });
+        }
     }
     inicializarCarruselClientes();
     document.querySelectorAll('.boton-seccion').forEach(btn => {
