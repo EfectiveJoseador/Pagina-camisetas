@@ -68,6 +68,14 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             const prevBtn = document.getElementById('carrusel-prev');
             const nextBtn = document.getElementById('carrusel-next');
+            // Ocultar flechas solo en móvil
+            if (window.innerWidth <= 600) {
+                if (prevBtn) prevBtn.style.display = 'none';
+                if (nextBtn) nextBtn.style.display = 'none';
+            } else {
+                if (prevBtn) prevBtn.style.display = '';
+                if (nextBtn) nextBtn.style.display = '';
+            }
             if (!existentes.length || !prevBtn || !nextBtn) return;
             carruselExistentes = existentes;
             carruselActual = 0;
