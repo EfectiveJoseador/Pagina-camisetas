@@ -38,6 +38,10 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     // Eliminamos el cierre automático al hacer clic fuera
     // Carrusel de clientes satisfechos con imágenes como fondo
+    // Variables globales para el carrusel
+    let carruselActual = 0;
+    let carruselExistentes = [];
+    let carruselMostrarImagen = function(idx) {};
     function inicializarCarruselClientes() {
         // Solo incluir los divs que tengan imagen realmente existente
         const imagenes = Array.from(document.querySelectorAll('.carrusel-img-bg'));
@@ -65,26 +69,27 @@ document.addEventListener('DOMContentLoaded', function() {
             const prevBtn = document.getElementById('carrusel-prev');
             const nextBtn = document.getElementById('carrusel-next');
             if (!existentes.length || !prevBtn || !nextBtn) return;
-            let actual = 0;
-            function mostrarImagen(idx) {
-                existentes.forEach((div, i) => {
+            carruselExistentes = existentes;
+            carruselActual = 0;
+            carruselMostrarImagen = function(idx) {
+                carruselExistentes.forEach((div, i) => {
                     div.classList.toggle('activa', i === idx);
                 });
-            }
+            };
             prevBtn.onclick = function() {
-                actual = (actual - 1 + existentes.length) % existentes.length;
-                mostrarImagen(actual);
+                carruselActual = (carruselActual - 1 + carruselExistentes.length) % carruselExistentes.length;
+                carruselMostrarImagen(carruselActual);
             };
             nextBtn.onclick = function() {
-                actual = (actual + 1) % existentes.length;
-                mostrarImagen(actual);
+                carruselActual = (carruselActual + 1) % carruselExistentes.length;
+                carruselMostrarImagen(carruselActual);
             };
             existentes.forEach(div => {
                 div.onclick = function() {
                     mostrarModalImagen(div.getAttribute('data-img'), div.getAttribute('aria-label'));
                 };
             });
-            mostrarImagen(actual);
+            carruselMostrarImagen(carruselActual);
         }
         return;
         existentes.forEach(div => {
@@ -376,11 +381,11 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (Math.abs(deltaX) > 30) {
                     moved = true;
                     if (deltaX > 0) {
-                        actual = (actual - 1 + existentes.length) % existentes.length;
-                        mostrarImagen(actual);
+                        carruselActual = (carruselActual - 1 + carruselExistentes.length) % carruselExistentes.length;
+                        carruselMostrarImagen(carruselActual);
                     } else {
-                        actual = (actual + 1) % existentes.length;
-                        mostrarImagen(actual);
+                        carruselActual = (carruselActual + 1) % carruselExistentes.length;
+                        carruselMostrarImagen(carruselActual);
                     }
                     startX = null;
                 }
