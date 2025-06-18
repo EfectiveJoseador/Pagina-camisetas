@@ -433,73 +433,26 @@ document.addEventListener('DOMContentLoaded', function() {
             startX = null;
         });
     }
-            // Añadir overlay de lupa y texto a cada imagen del carrusel
-            existentes.forEach(div => {
-                // Evitar duplicados
-                if (!div.querySelector('.carrusel-overlay-ampliar')) {
-                    const overlay = document.createElement('div');
-                    overlay.className = 'carrusel-overlay-ampliar';
-                    overlay.innerHTML = '<span style="font-size:1.6em;vertical-align:middle;">🔍</span> <span class="carrusel-overlay-text">Haz click para ampliar</span>';
-                    overlay.style.position = 'absolute';
-                    overlay.style.top = '0';
-                    overlay.style.left = '0';
-                    overlay.style.width = '100%';
-                    overlay.style.height = '100%';
-                    overlay.style.display = 'flex';
-                    overlay.style.alignItems = 'center';
-                    overlay.style.justifyContent = 'center';
-                    overlay.style.background = 'rgba(20,40,80,0.13)';
-                    overlay.style.color = '#fff';
-                    overlay.style.fontWeight = 'bold';
-                    overlay.style.opacity = '0';
-                    overlay.style.transition = 'opacity 0.3s';
-                    overlay.style.pointerEvents = 'none';
-                    overlay.style.borderRadius = '14px';
-                    div.appendChild(overlay);
-                    div.style.position = 'relative';
-                    // Efecto visual al pasar el mouse o tocar
-                    div.addEventListener('mouseenter', function() {
-                        overlay.style.opacity = '1';
-                        div.style.filter = 'brightness(1.13) scale(1.04)';
-                    });
-                    div.addEventListener('mouseleave', function() {
-                        overlay.style.opacity = '0';
-                        div.style.filter = '';
-                    });
-                    // Para móvil: mostrar overlay al tocar brevemente
-                    div.addEventListener('touchstart', function() {
-                        overlay.style.opacity = '1';
-                        div.style.filter = 'brightness(1.13) scale(1.04)';
-                        setTimeout(() => {
-                            overlay.style.opacity = '0';
-                            div.style.filter = '';
-                        }, 1200);
-                    });
-                }
-            });
-            // Mensaje temporal al cargar la sección (solo una vez por sesión)
-            if (!window._carruselMensajeMostrado) {
-                window._carruselMensajeMostrado = true;
-                const carrusel = document.querySelector('.carrusel-imagenes');
-                if (carrusel) {
-                    const msg = document.createElement('div');
-                    msg.textContent = 'Toca o haz click en la imagen para verla en grande';
-                    msg.style.position = 'absolute';
-                    msg.style.top = '50%';
-                    msg.style.left = '50%';
-                    msg.style.transform = 'translate(-50%,-50%)';
-                    msg.style.background = 'rgba(42,91,168,0.92)';
-                    msg.style.color = '#fff';
-                    msg.style.padding = '0.7em 1.5em';
-                    msg.style.borderRadius = '14px';
-                    msg.style.fontSize = '1.1em';
-                    msg.style.zIndex = '30';
-                    msg.style.boxShadow = '0 2px 12px rgba(42,91,168,0.13)';
-                    msg.style.textAlign = 'center';
-                    msg.style.pointerEvents = 'none';
-                    carrusel.appendChild(msg);
-                    setTimeout(() => { msg.style.opacity = '0'; }, 2200);
-                    setTimeout(() => { msg.remove(); }, 2700);
-                }
-            }
+    // --- INDICADOR DE CLICK EN IMAGEN DEL CARRUSEL ---
+    function mostrarIndicadorClickCarrusel() {
+        const primeraImg = document.querySelector('.carrusel-img-bg');
+        if (!primeraImg) return;
+        if (!localStorage.getItem('carruselClickHintShown')) {
+            primeraImg.classList.add('clickable-hint');
+            setTimeout(() => {
+                primeraImg.classList.remove('clickable-hint');
+                localStorage.setItem('carruselClickHintShown', '1');
+            }, 2400);
+        }
+        // Añadir icono de lupa si no existe
+        if (!primeraImg.querySelector('.zoom-icon')) {
+            const icon = document.createElement('span');
+            icon.className = 'zoom-icon';
+            icon.innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="7" stroke="#ffd700" stroke-width="2"/><line x1="14.2" y1="14.2" x2="18" y2="18" stroke="#ffd700" stroke-width="2" stroke-linecap="round"/></svg>`;
+            primeraImg.appendChild(icon);
+        }
+        // Añadir tooltip
+        primeraImg.setAttribute('data-tooltip', 'Haz clic para ampliar');
+    }
+    mostrarIndicadorClickCarrusel();
 });

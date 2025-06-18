@@ -1117,6 +1117,58 @@
     z-index: 2;
 }
 
+/* --- INDICADOR DE CLICK EN IMAGEN DEL CARRUSEL --- */
+.carrusel-imagenes {
+  position: relative;
+}
+.carrusel-img-bg {
+  cursor: pointer;
+  transition: box-shadow 0.3s, filter 0.3s;
+}
+.carrusel-img-bg.clickable-hint {
+  animation: parpadeo-clickeable 1.2s 2;
+  box-shadow: 0 0 0 4px #ffd70099, 0 0 18px #ffd70055;
+  z-index: 2;
+}
+@keyframes parpadeo-clickeable {
+  0%, 100% { filter: brightness(1); }
+  20%, 60% { filter: brightness(1.25) drop-shadow(0 0 8px #ffd700cc); }
+  40%, 80% { filter: brightness(0.7); }
+}
+.carrusel-img-bg .zoom-icon {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 32px;
+  height: 32px;
+  background: rgba(10,31,61,0.82);
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  pointer-events: none;
+  opacity: 0.92;
+  box-shadow: 0 2px 8px #0002;
+}
+/* Eliminado el overlay azul, solo queda el tooltip negro */
+.carrusel-img-bg[data-tooltip]:hover::before {
+  content: attr(data-tooltip);
+  position: absolute;
+  bottom: 12px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #222b;
+  color: #fff;
+  padding: 0.3em 0.9em;
+  border-radius: 10px;
+  font-size: 0.98em;
+  z-index: 10;
+  pointer-events: none;
+  opacity: 0.92;
+  white-space: nowrap;
+}
+
         /* Estilos para el modal de imagen ampliada */
 #modal-imagen-clientes {
     display: none;
