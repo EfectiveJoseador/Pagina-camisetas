@@ -1199,6 +1199,9 @@
   }
   .clientes-carrusel {
     gap: 0.3rem;
+    min-height: 60vw; /* Asegura altura mínima para las flechas */
+    align-items: center;
+    position: relative;
   }
   .carrusel-imagenes {
     width: 90vw;
@@ -1206,10 +1209,10 @@
     min-height: 180px;
     max-width: 98vw;
     max-height: 60vw;
-  }
-  .carrusel-img-bg {
-    border-radius: 10px;
-    box-shadow: 0 1px 6px rgba(42,91,168,0.10);
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
   }
   .carrusel-btn {
     width: 32px;
@@ -1218,7 +1221,7 @@
     border-radius: 12px;
     background: rgba(42,91,168,0.85);
     position: absolute;
-    top: 50%;
+    top: 50% !important;
     transform: translateY(-50%);
     z-index: 20;
     opacity: 0.92;
@@ -1232,7 +1235,30 @@
     right: 2px;
     left: auto;
   }
-  .carrusel-imagenes {
-    position: relative;
-  }
+}
+
+/* Estilos para el mensaje deslizante en el modal (móvil) */
+#modal-mensaje-desliza {
+  display: none;
+  position: absolute;
+  bottom: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: linear-gradient(90deg, #2a5ba8 60%, #1a3b6d 100%);
+  color: #fff;
+  padding: 0.55em 1.3em;
+  border-radius: 16px;
+  font-size: 1.08rem;
+  font-weight: 600;
+  z-index: 30;
+  box-shadow: 0 4px 18px rgba(42,91,168,0.18);
+  letter-spacing: 0.02em;
+  opacity: 0;
+  transition: opacity 0.7s;
+  pointer-events: none;
+  text-shadow: 0 2px 8px #1a3b6d44;
+  border: 1.5px solid #fff2;
+}
+#modal-mensaje-desliza.visible {
+  opacity: 1;
 }

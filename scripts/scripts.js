@@ -115,7 +115,7 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         mostrarImagen(actual);
     }
-    // Modal para zoom
+    // Modal para zoom mejorado y robusto
     function mostrarModalImagen(src, alt) {
         let modal = document.getElementById('modal-imagen-clientes');
         if (!modal) {
@@ -130,6 +130,7 @@ document.addEventListener('DOMContentLoaded', function() {
                     <div style="position:relative;display:inline-block;">
                         <canvas id="modal-canvas-clientes" width="500" height="500" style="max-width:90vw;max-height:70vh;border-radius:14px;"></canvas>
                         <div id="watermark-text" style="position:absolute;bottom:18px;right:18px;color:#fff;font-size:1.5rem;font-weight:bold;opacity:0.7;text-shadow:1px 1px 4px #000;pointer-events:none;user-select:none;">@camisetazo._</div>
+                        <div id="modal-mensaje-desliza" style="display:none;position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(42,91,168,0.92);color:#fff;padding:0.4em 1em;border-radius:10px;font-size:1rem;z-index:30;">Desliza para ver más imágenes</div>
                     </div>
                     <button class="modal-arrow modal-arrow-right" aria-label="Siguiente" style="position:absolute;right:-60px;top:50%;transform:translateY(-50%);width:48px;height:48px;background:var(--azul-acento,#2a5ba8);border:none;border-radius:50%;color:#fff;font-size:2rem;box-shadow:0 2px 8px rgba(42,91,168,0.10);display:flex;align-items:center;justify-content:center;z-index:10;cursor:pointer;transition:background 0.2s;outline:none;">
                         <span style="display:inline-block;transform:translateX(2px);">&#8594;</span>
@@ -138,45 +139,45 @@ document.addEventListener('DOMContentLoaded', function() {
                 </div>
             `;
             document.body.appendChild(modal);
-            modal.querySelector('.modal-fondo').onclick = cerrarModal;
-            modal.querySelector('.modal-cerrar').onclick = cerrarModal;
         }
-        // Obtener solo los divs de imágenes existentes
+        // --- Lógica robusta de modal y zoom ---
         const imagenes = Array.from(document.querySelectorAll('.carrusel-img-bg'));
         const existentes = imagenes.filter(div => {
             const imgUrl = div.getAttribute('data-img');
             return [
-                'assets/clientes/cliente1.jpg',
-                'assets/clientes/cliente2.jpg',
-                'assets/clientes/cliente3.jpg',
-                'assets/clientes/cliente4.jpg',
-                'assets/clientes/cliente5.jpg',
-                'assets/clientes/cliente6.jpg',
-                'assets/clientes/cliente7.jpg',
-                'assets/clientes/cliente8.jpg',
-                'assets/clientes/cliente9.jpg',
-                'assets/clientes/cliente10.jpg',
-                'assets/clientes/cliente11.jpg',
-                'assets/clientes/cliente12.jpg'
+                'assets/clientes/cliente1.jpg','assets/clientes/cliente2.jpg','assets/clientes/cliente3.jpg','assets/clientes/cliente4.jpg',
+                'assets/clientes/cliente5.jpg','assets/clientes/cliente6.jpg','assets/clientes/cliente7.jpg','assets/clientes/cliente8.jpg',
+                'assets/clientes/cliente9.jpg','assets/clientes/cliente10.jpg','assets/clientes/cliente11.jpg','assets/clientes/cliente12.jpg'
             ].includes(imgUrl);
         });
         let actual = existentes.findIndex(div => div.getAttribute('data-img') === src);
         if (actual === -1) actual = 0;
-        // Función para mostrar imagen en el modal
-        function mostrarEnModal(idx) {
+        const canvas = modal.querySelector('#modal-canvas-clientes');
+        let zoomActivo = false;
+        let imgOriginal = null;
+        let zoomHandlers = [];
+        function limpiarZoomHandlers() {
+            if (!canvas) return;
+            zoomHandlers.forEach(({event, handler}) => {
+                canvas.removeEventListener(event, handler);
+            });
+            zoomHandlers = [];
+        }
+        function dibujarImagen(idx) {
+            limpiarZoomHandlers();
+            zoomActivo = false;
+            if (!canvas) return;
             const div = existentes[idx];
             if (!div) return;
             const imgUrl = div.getAttribute('data-img');
-            const canvas = modal.querySelector('#modal-canvas-clientes');
-            const ctx = canvas.getContext('2d');
-            const tempImg = new window.Image();
-            tempImg.onload = function() {
-                canvas.width = tempImg.width;
-                canvas.height = tempImg.height;
+            imgOriginal = new window.Image();
+            imgOriginal.onload = function() {
+                canvas.width = imgOriginal.width;
+                canvas.height = imgOriginal.height;
+                const ctx = canvas.getContext('2d');
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
-                ctx.drawImage(tempImg, 0, 0, canvas.width, canvas.height);
-                // Marca de agua universal en mayúsculas
-                const watermark = '@CAMISETAZO._';
+                ctx.drawImage(imgOriginal, 0, 0, canvas.width, canvas.height);
+                // Marca de agua SOLO en mayúsculas (ya no hay HTML)
                 const fontSize = Math.floor(canvas.height/18);
                 ctx.font = `bold ${fontSize}px Arial, sans-serif`;
                 ctx.textAlign = 'center';
@@ -185,158 +186,150 @@ document.addEventListener('DOMContentLoaded', function() {
                 ctx.globalAlpha = 0.48;
                 ctx.lineWidth = 3;
                 ctx.strokeStyle = '#000';
-                ctx.strokeText(watermark, canvas.width/2, y);
+                ctx.strokeText('@CAMISETAZO._', canvas.width/2, y);
                 ctx.fillStyle = '#fff';
                 ctx.globalAlpha = 0.62;
-                ctx.fillText(watermark, canvas.width/2, y);
+                ctx.fillText('@CAMISETAZO._', canvas.width/2, y);
                 ctx.globalAlpha = 1;
             };
-            tempImg.src = imgUrl;
-            modal.style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            // 1. Animación de transición suave al abrir/cerrar el modal
+            imgOriginal.src = imgUrl;
+            canvas.style.cursor = (!esMovil() && !("ontouchstart" in window && navigator.maxTouchPoints > 0)) ? 'zoom-in' : 'default';
+            // Zoom solo en escritorio
+            function esMovil() {
+                return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|webOS|BlackBerry/i.test(navigator.userAgent);
+            }
+            if (!esMovil() && !("ontouchstart" in window && navigator.maxTouchPoints > 0)) {
+                const clickHandler = function(e) {
+                    zoomActivo = !zoomActivo;
+                    if (zoomActivo) {
+                        canvas.style.cursor = 'zoom-out';
+                        const rect = canvas.getBoundingClientRect();
+                        const x = (e.clientX - rect.left) / rect.width;
+                        const y = (e.clientY - rect.top) / rect.height;
+                        dibujarZoom(x, y);
+                    } else {
+                        canvas.style.cursor = 'zoom-in';
+                        dibujarImagen(actual);
+                    }
+                };
+                const moveHandler = function(e) {
+                    if (!zoomActivo) return;
+                    const rect = canvas.getBoundingClientRect();
+                    const x = (e.clientX - rect.left) / rect.width;
+                    const y = (e.clientY - rect.top) / rect.height;
+                    dibujarZoom(x, y);
+                };
+                canvas.addEventListener('click', clickHandler);
+                canvas.addEventListener('mousemove', moveHandler);
+                zoomHandlers.push({event:'click', handler:clickHandler});
+                zoomHandlers.push({event:'mousemove', handler:moveHandler});
+            } else {
+                // En móvil, bloquear cualquier intento de zoom por tap/click
+                const blockZoom = function(e) { e.stopPropagation(); e.preventDefault(); };
+                canvas.addEventListener('click', blockZoom);
+                zoomHandlers.push({event:'click', handler:blockZoom});
+            }
+        }
+        function dibujarZoom(x, y) {
+            if (!imgOriginal || !imgOriginal.complete) return;
+            const ctx = canvas.getContext('2d');
+            const w = canvas.width, h = canvas.height;
+            const zoomScale = 2;
+            ctx.clearRect(0, 0, w, h);
+            const zoomW = w / zoomScale;
+            const zoomH = h / zoomScale;
+            let sx = x * w - zoomW / 2;
+            let sy = y * h - zoomH / 2;
+            sx = Math.max(0, Math.min(sx, w - zoomW));
+            sy = Math.max(0, Math.min(sy, h - zoomH));
+            ctx.drawImage(imgOriginal, sx, sy, zoomW, zoomH, 0, 0, w, h);
+            // Marca de agua
+            const fontSize = Math.floor(h/18);
+            ctx.font = `bold ${fontSize}px Arial, sans-serif`;
+            ctx.textAlign = 'center';
+            ctx.textBaseline = 'bottom';
+            const yText = h - 2 * fontSize;
+            ctx.globalAlpha = 0.48;
+            ctx.lineWidth = 3;
+            ctx.strokeStyle = '#000';
+            ctx.strokeText('@CAMISETAZO._', w/2, yText);
+            ctx.fillStyle = '#fff';
+            ctx.globalAlpha = 0.62;
+            ctx.fillText('@CAMISETAZO._', w/2, yText);
+            ctx.globalAlpha = 1;
+        }
+        // Flechas
+        const leftArrow = modal.querySelector('.modal-arrow-left');
+        const rightArrow = modal.querySelector('.modal-arrow-right');
+        if (window.innerWidth > 600) {
+            if (leftArrow) leftArrow.onclick = function(e) {
+                e.stopPropagation();
+                actual = (actual - 1 + existentes.length) % existentes.length;
+                dibujarImagen(actual);
+            };
+            if (rightArrow) rightArrow.onclick = function(e) {
+                e.stopPropagation();
+                actual = (actual + 1) % existentes.length;
+                dibujarImagen(actual);
+            };
+        }
+        // Quitar marca de agua HTML y flechas en móvil, y bloquear zoom en móvil
+        const watermarkDiv = modal.querySelector('#watermark-text');
+        if (watermarkDiv) watermarkDiv.style.display = 'none';
+        // Ocultar flechas en móvil
+        if (window.innerWidth <= 600) {
+            if (leftArrow) leftArrow.style.display = 'none';
+            if (rightArrow) rightArrow.style.display = 'none';
+        } else {
+            if (leftArrow) leftArrow.style.display = '';
+            if (rightArrow) rightArrow.style.display = '';
+        }
+        // Bloquear zoom en móvil (solo permite deslizar)
+        function esMovil() {
+            return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|webOS|BlackBerry/i.test(navigator.userAgent);
+        }
+        // Cerrar modal
+        function cerrarModalSeguro() {
+            limpiarZoomHandlers();
+            zoomActivo = false;
             if (modal) {
                 modal.style.opacity = '0';
-                modal.style.transition = 'opacity 0.25s';
-                setTimeout(() => { modal.style.opacity = '1'; }, 10);
+                setTimeout(() => { modal.style.display = 'none'; }, 250);
             }
-            // 2. Cerrar modal con tecla Escape
-            function onKeyDownModal(e) {
-                if (e.key === 'Escape') cerrarModal();
-            }
-            document.addEventListener('keydown', onKeyDownModal);
-            // Limpiar listener al cerrar
-            const oldCerrarModal = cerrarModal;
-            cerrarModal = function() {
-                if (modal) {
-                    modal.style.opacity = '0';
-                    setTimeout(() => { modal.style.display = 'none'; }, 250);
-                }
-                document.body.style.overflow = '';
-                document.removeEventListener('keydown', onKeyDownModal);
-            }
+            document.body.style.overflow = '';
+            document.removeEventListener('keydown', onKeyDownModal);
         }
-        // Soporte táctil para deslizar en el modal ampliado
-        let modalStartX = null;
-        let modalActual = actual;
-        const modalCanvas = () => modal.querySelector('#modal-canvas-clientes');
-        const modalContenido = modal.querySelector('.modal-contenido');
-        if (modalContenido) {
-            modalContenido.addEventListener('touchstart', function(e) {
-                if (e.touches.length === 1) {
-                    modalStartX = e.touches[0].clientX;
-                }
-            });
-            modalContenido.addEventListener('touchmove', function(e) {
-                if (modalStartX !== null && e.touches.length === 1) {
-                    const deltaX = e.touches[0].clientX - modalStartX;
-                    if (Math.abs(deltaX) > 30) {
-                        if (deltaX > 0) {
-                            actual = (actual - 1 + existentes.length) % existentes.length;
-                        } else {
-                            actual = (actual + 1) % existentes.length;
-                        }
-                        mostrarEnModal(actual);
-                        modalStartX = null;
-                    }
-                }
-            });
-            modalContenido.addEventListener('touchend', function() {
-                modalStartX = null;
-            });
+        modal.querySelector('.modal-fondo').onclick = cerrarModalSeguro;
+        modal.querySelector('.modal-cerrar').onclick = cerrarModalSeguro;
+        function onKeyDownModal(e) {
+            if (e.key === 'Escape') cerrarModalSeguro();
         }
-        // Asignar eventos a las flechas
-        modal.querySelector('.modal-arrow-left').onclick = function(e) {
-            e.stopPropagation();
-            actual = (actual - 1 + existentes.length) % existentes.length;
-            mostrarEnModal(actual);
-        };
-        modal.querySelector('.modal-arrow-right').onclick = function(e) {
-            e.stopPropagation();
-            actual = (actual + 1) % existentes.length;
-            mostrarEnModal(actual);
-        };
-        // Ocultar el watermark HTML (solo canvas)
-        modal.querySelector('#watermark-text').style.display = 'none';
-        mostrarEnModal(actual);
-        // Soporte de zoom tipo lupa en el modal
-        let zoomActivo = false;
-        let zoomScale = 2;
-        let zoomX = 0, zoomY = 0;
-        const canvas = modal.querySelector('#modal-canvas-clientes');
-        if (canvas) {
-            // Eliminar icono de lupa si existe
-            const lupaIcon = canvas.parentElement.querySelector('#lupa-zoom-icon');
-            if (lupaIcon) lupaIcon.remove();
-            let zoomActivo = false;
-            let zoomX = 0, zoomY = 0;
-            canvas.style.cursor = 'zoom-in';
-            canvas.addEventListener('click', function(e) {
-                zoomActivo = !zoomActivo;
-                if (zoomActivo) {
-                    canvas.style.cursor = 'zoom-out';
-                    const rect = canvas.getBoundingClientRect();
-                    zoomX = (e.clientX - rect.left) / rect.width;
-                    zoomY = (e.clientY - rect.top) / rect.height;
-                    dibujarZoomDinamico(zoomX, zoomY);
-                } else {
-                    canvas.style.cursor = 'zoom-in';
-                    mostrarEnModal(actual);
-                }
-            });
-            canvas.addEventListener('mousemove', function(e) {
-                if (!zoomActivo) return;
-                const rect = canvas.getBoundingClientRect();
-                zoomX = (e.clientX - rect.left) / rect.width;
-                zoomY = (e.clientY - rect.top) / rect.height;
-                dibujarZoomDinamico(zoomX, zoomY);
-            });
-            function dibujarZoomDinamico(x, y) {
-                const div = existentes[actual];
-                if (!div) return;
-                const imgUrl = div.getAttribute('data-img');
-                const tempImg = new window.Image();
-                tempImg.onload = function() {
-                    canvas.width = tempImg.width;
-                    canvas.height = tempImg.height;
-                    const ctx = canvas.getContext('2d');
-                    ctx.clearRect(0, 0, canvas.width, canvas.height);
-                    // Zoom x2 centrado en el punto
-                    const zoomScale = 2;
-                    const zoomW = canvas.width / zoomScale;
-                    const zoomH = canvas.height / zoomScale;
-                    let sx = canvas.width * x - zoomW / 2;
-                    let sy = canvas.height * y - zoomH / 2;
-                    sx = Math.max(0, Math.min(sx, canvas.width - zoomW));
-                    sy = Math.max(0, Math.min(sy, canvas.height - zoomH));
-                    ctx.drawImage(tempImg, sx, sy, zoomW, zoomH, 0, 0, canvas.width, canvas.height);
-                    // Marca de agua
-                    const watermark = '@CAMISETAZO._';
-                    const fontSize = Math.floor(canvas.height/18);
-                    ctx.font = `bold ${fontSize}px Arial, sans-serif`;
-                    ctx.textAlign = 'center';
-                    ctx.textBaseline = 'bottom';
-                    const yText = canvas.height - 2 * fontSize;
-                    ctx.globalAlpha = 0.48;
-                    ctx.lineWidth = 3;
-                    ctx.strokeStyle = '#000';
-                    ctx.strokeText(watermark, canvas.width/2, yText);
-                    ctx.fillStyle = '#fff';
-                    ctx.globalAlpha = 0.62;
-                    ctx.fillText(watermark, canvas.width/2, yText);
-                    ctx.globalAlpha = 1;
-                };
-                tempImg.src = imgUrl;
-            }
-        }
-    }
-    function cerrarModal() {
-        const modal = document.getElementById('modal-imagen-clientes');
+        document.addEventListener('keydown', onKeyDownModal);
+        // Inicializar imagen y mostrar modal
+        modal.style.display = 'flex';
+        document.body.style.overflow = 'hidden';
         if (modal) {
             modal.style.opacity = '0';
-            setTimeout(() => { modal.style.display = 'none'; }, 250);
+            modal.style.transition = 'opacity 0.25s';
+            setTimeout(() => { modal.style.opacity = '1'; }, 10);
         }
-        document.body.style.overflow = '';
+        dibujarImagen(actual);
+        // Mostrar mensaje temporal en móvil al abrir el modal
+        if (window.innerWidth <= 600) {
+            const mensajeDesliza = modal.querySelector('#modal-mensaje-desliza');
+            if (mensajeDesliza) {
+                mensajeDesliza.textContent = 'Desliza para ver más imágenes';
+                mensajeDesliza.style.display = 'block';
+                mensajeDesliza.style.opacity = '1';
+                mensajeDesliza.style.transition = 'opacity 0.7s';
+                setTimeout(() => {
+                    mensajeDesliza.style.opacity = '0';
+                }, 1800);
+                setTimeout(() => {
+                    mensajeDesliza.style.display = 'none';
+                }, 2500);
+            }
+        }
     }
     inicializarCarruselClientes();
     document.querySelectorAll('.boton-seccion').forEach(btn => {
