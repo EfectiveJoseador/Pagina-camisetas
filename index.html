@@ -336,23 +336,33 @@
     }
 
     .boton-unidad {
-        background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
+        background: var(--azul-acento);
         color: #fff;
-        border: none;
+        border: 2px solid transparent;
         border-radius: 12px;
         padding: 0.9rem 2.1rem;
         font-size: 1.1rem;
         font-weight: 700;
         cursor: pointer;
         box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-        transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+        transition: background 0.2s, color 0.2s, border 0.2s, transform 0.2s, box-shadow 0.2s;
     }
 
-    .boton-unidad.activo, .boton-unidad:hover {
-        background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
+    .boton-unidad.activo, .boton-unidad:focus {
+        background: #163a6b;
         color: var(--azul-acento);
-        transform: translateY(-3px) scale(1.04);
+        border: 2.5px solid var(--azul-acento);
+        outline: none;
         box-shadow: 0 6px 24px rgba(42,91,168,0.13);
+        transform: translateY(-3px) scale(1.04);
+    }
+
+    .boton-unidad:not(.activo):hover {
+        background: #2456a8;
+        color: #fff;
+        border: 2px solid #2456a8;
+        transform: translateY(-1px) scale(1.02);
+        box-shadow: 0 4px 16px rgba(42,91,168,0.13);
     }
 
     /* Campos del formulario */
@@ -586,23 +596,33 @@
         }
 
         .boton-unidad {
-            background: linear-gradient(90deg, var(--azul-acento) 60%, #1a3b6d 100%);
+            background: var(--azul-acento);
             color: #fff;
-            border: none;
+            border: 2px solid transparent;
             border-radius: 12px;
             padding: 0.9rem 2.1rem;
             font-size: 1.1rem;
             font-weight: 700;
             cursor: pointer;
             box-shadow: 0 2px 12px rgba(42,91,168,0.10);
-            transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+            transition: background 0.2s, color 0.2s, border 0.2s, transform 0.2s, box-shadow 0.2s;
         }
 
-        .boton-unidad.activo, .boton-unidad:hover {
-            background: linear-gradient(90deg, #fff 10%, var(--azul-acento) 100%);
+        .boton-unidad.activo, .boton-unidad:focus {
+            background: #163a6b;
             color: var(--azul-acento);
-            transform: translateY(-3px) scale(1.04);
+            border: 2.5px solid var(--azul-acento);
+            outline: none;
             box-shadow: 0 6px 24px rgba(42,91,168,0.13);
+            transform: translateY(-3px) scale(1.04);
+        }
+
+        .boton-unidad:not(.activo):hover {
+            background: #2456a8;
+            color: #fff;
+            border: 2px solid #2456a8;
+            transform: translateY(-1px) scale(1.02);
+            box-shadow: 0 4px 16px rgba(42,91,168,0.13);
         }
 
         /* Botones de versión */
@@ -746,7 +766,7 @@
             <input type="hidden" name="precio_total" id="precioTotal">
 
             <div class="selector-unidades">
-                <button type="button" class="boton-unidad activo" data-unidades="1">1 Unidad</button>
+                <button type="button" class="boton-unidad" data-unidades="1">1 Unidad</button>
                 <button type="button" class="boton-unidad" data-unidades="2">2 Unidades</button>
                 <button type="button" class="boton-unidad" data-unidades="3">3 Unidades</button>
                 <button type="button" class="boton-unidad" data-unidades="5">5 Unidades</button>
@@ -959,6 +979,19 @@ Phone Number:</textarea>
             // Actualizar precios
             actualizarPrecio();
             configurarEventosUnidades(); // Configurar eventos después de generar las unidades
+        });
+    });
+
+    // Al cambiar a la sección de pedidos, deseleccionar todos los botones de unidad
+    document.querySelectorAll('.boton-seccion').forEach(boton => {
+        boton.addEventListener('click', function() {
+            const seccionId = this.dataset.seccion;
+            if (seccionId === 'pedidos') {
+                document.querySelectorAll('.boton-unidad').forEach(b => b.classList.remove('activo'));
+                unidades = 0;
+                document.getElementById('contenedorUnidades').innerHTML = '';
+                actualizarPrecio();
+            }
         });
     });
 
