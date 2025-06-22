@@ -365,6 +365,8 @@
             align-items: center;
             justify-content: center;
             overflow: hidden;
+            border-top-left-radius: 18px;
+            border-top-right-radius: 18px;
         }
         .catalogo-img {
             width: 120px;
