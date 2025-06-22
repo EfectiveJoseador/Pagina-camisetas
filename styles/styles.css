@@ -274,6 +274,17 @@
             color: var(--azul-acento);
         }
 
+        /* Hace que la última tarjeta de unidad ocupe dos columnas si es impar */
+.unidad-fullwidth {
+    grid-column: span 2;
+}
+
+@media (max-width: 800px) {
+    .unidad-fullwidth {
+        grid-column: span 1;
+    }
+}
+
         .navegacion {
             display: flex;
             justify-content: center;

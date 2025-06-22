@@ -900,9 +900,9 @@ Phone Number:</textarea>
     const GASTOS_ENVIO = 2.00;
 
     // Función para crear unidades dinámicas
-    function crearUnidad(numeroUnidad) {
-    return `
-        <div class="unidad">
+    function crearUnidad(numeroUnidad, isFullWidth = false) {
+        return `
+        <div class="unidad${isFullWidth ? ' unidad-fullwidth' : ''}">
             <h4>Unidad ${numeroUnidad}</h4>
           
             <div class="input-group">
@@ -973,7 +973,9 @@ Phone Number:</textarea>
             const contenedor = document.getElementById('contenedorUnidades');
             contenedor.innerHTML = '';
             for(let i = 1; i <= unidades; i++) {
-                contenedor.innerHTML += crearUnidad(i);
+                // Si es la última y el número de unidades es impar, agregar clase fullwidth
+                const isFullWidth = (unidades % 2 === 1) && (i === unidades);
+                contenedor.innerHTML += crearUnidad(i, isFullWidth);
             }
 
             // Actualizar precios
