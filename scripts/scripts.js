@@ -1,15 +1,12 @@
-// Archivo de scripts para la página
 console.log('Página cargada correctamente');
 
 document.addEventListener('DOMContentLoaded', function() {
-    // Soporte para múltiples menús desplegables si se agregan más en el futuro
     document.querySelectorAll('.futbol-dropdown').forEach(function(card) {
         const btn = card.querySelector('.futbol-dropdown-btn');
         const menu = card.querySelector('.futbol-dropdown-menu');
         if (btn && menu) {
             btn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                // Cerrar otros menús abiertos y quitar estilos activos
                 document.querySelectorAll('.futbol-dropdown-menu').forEach(function(m) {
                     if (m !== menu) m.style.display = 'none';
                 });
@@ -19,7 +16,6 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (icon) icon.classList.remove('fa-chevron-up');
                     if (icon) icon.classList.add('fa-chevron-down');
                 });
-                // Toggle menú y estilos activos
                 if (menu.style.display === 'block') {
                     menu.style.display = 'none';
                     btn.classList.remove('activo');
@@ -36,16 +32,12 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
     });
-    // Eliminamos el cierre automático al hacer clic fuera
-    // Carrusel de clientes satisfechos con imágenes como fondo
-    // Variables globales para el carrusel
+
     let carruselActual = 0;
     let carruselExistentes = [];
     let carruselMostrarImagen = function(idx) {};
     function inicializarCarruselClientes() {
-        // Solo incluir los divs que tengan imagen realmente existente
         const imagenes = Array.from(document.querySelectorAll('.carrusel-img-bg'));
-        // Filtrar solo los divs cuya imagen realmente existe usando una petición HEAD
         const existentes = [];
         let pendientes = imagenes.length;
         if (!imagenes.length) return;
@@ -68,7 +60,6 @@ document.addEventListener('DOMContentLoaded', function() {
             });
             const prevBtn = document.getElementById('carrusel-prev');
             const nextBtn = document.getElementById('carrusel-next');
-            // Ocultar flechas solo en móvil
             if (window.innerWidth <= 600) {
                 if (prevBtn) prevBtn.style.display = 'none';
                 if (nextBtn) nextBtn.style.display = 'none';
@@ -128,7 +119,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
         mostrarImagen(actual);
     }
-    // Modal para zoom mejorado y robusto
     function mostrarModalImagen(src, alt) {
         let modal = document.getElementById('modal-imagen-clientes');
         if (!modal) {
@@ -153,7 +143,6 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
             document.body.appendChild(modal);
         }
-        // --- Lógica robusta de modal y zoom ---
         const imagenes = Array.from(document.querySelectorAll('.carrusel-img-bg'));
         const existentes = imagenes.filter(div => {
             const imgUrl = div.getAttribute('data-img');
@@ -190,7 +179,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 const ctx = canvas.getContext('2d');
                 ctx.clearRect(0, 0, canvas.width, canvas.height);
                 ctx.drawImage(imgOriginal, 0, 0, canvas.width, canvas.height);
-                // Marca de agua SOLO en mayúsculas (ya no hay HTML)
                 const fontSize = Math.floor(canvas.height/18);
                 ctx.font = `bold ${fontSize}px Arial, sans-serif`;
                 ctx.textAlign = 'center';
@@ -207,7 +195,6 @@ document.addEventListener('DOMContentLoaded', function() {
             };
             imgOriginal.src = imgUrl;
             canvas.style.cursor = (!esMovil() && !("ontouchstart" in window && navigator.maxTouchPoints > 0)) ? 'zoom-in' : 'default';
-            // Zoom solo en escritorio
             function esMovil() {
                 return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|webOS|BlackBerry/i.test(navigator.userAgent);
             }
@@ -237,7 +224,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 zoomHandlers.push({event:'click', handler:clickHandler});
                 zoomHandlers.push({event:'mousemove', handler:moveHandler});
             } else {
-                // En móvil, bloquear cualquier intento de zoom por tap/click
                 const blockZoom = function(e) { e.stopPropagation(); e.preventDefault(); };
                 canvas.addEventListener('click', blockZoom);
                 zoomHandlers.push({event:'click', handler:blockZoom});
@@ -256,7 +242,6 @@ document.addEventListener('DOMContentLoaded', function() {
             sx = Math.max(0, Math.min(sx, w - zoomW));
             sy = Math.max(0, Math.min(sy, h - zoomH));
             ctx.drawImage(imgOriginal, sx, sy, zoomW, zoomH, 0, 0, w, h);
-            // Marca de agua
             const fontSize = Math.floor(h/18);
             ctx.font = `bold ${fontSize}px Arial, sans-serif`;
             ctx.textAlign = 'center';
@@ -271,7 +256,6 @@ document.addEventListener('DOMContentLoaded', function() {
             ctx.fillText('@CAMISETAZO._', w/2, yText);
             ctx.globalAlpha = 1;
         }
-        // Flechas
         const leftArrow = modal.querySelector('.modal-arrow-left');
         const rightArrow = modal.querySelector('.modal-arrow-right');
         if (window.innerWidth > 600) {
@@ -286,10 +270,8 @@ document.addEventListener('DOMContentLoaded', function() {
                 dibujarImagen(actual);
             };
         }
-        // Quitar marca de agua HTML y flechas en móvil, y bloquear zoom en móvil
         const watermarkDiv = modal.querySelector('#watermark-text');
         if (watermarkDiv) watermarkDiv.style.display = 'none';
-        // Ocultar flechas en móvil
         if (window.innerWidth <= 600) {
             if (leftArrow) leftArrow.style.display = 'none';
             if (rightArrow) rightArrow.style.display = 'none';
@@ -297,11 +279,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (leftArrow) leftArrow.style.display = '';
             if (rightArrow) rightArrow.style.display = '';
         }
-        // Bloquear zoom en móvil (solo permite deslizar)
         function esMovil() {
             return /Android|iPhone|iPad|iPod|Opera Mini|IEMobile|WPDesktop|webOS|BlackBerry/i.test(navigator.userAgent);
         }
-        // Cerrar modal
         function cerrarModalSeguro() {
             limpiarZoomHandlers();
             zoomActivo = false;
@@ -318,7 +298,6 @@ document.addEventListener('DOMContentLoaded', function() {
             if (e.key === 'Escape') cerrarModalSeguro();
         }
         document.addEventListener('keydown', onKeyDownModal);
-        // Inicializar imagen y mostrar modal
         modal.style.display = 'flex';
         document.body.style.overflow = 'hidden';
         if (modal) {
@@ -327,7 +306,6 @@ document.addEventListener('DOMContentLoaded', function() {
             setTimeout(() => { modal.style.opacity = '1'; }, 10);
         }
         dibujarImagen(actual);
-        // Mostrar mensaje temporal en móvil al abrir el modal
         if (window.innerWidth <= 600) {
             const mensajeDesliza = modal.querySelector('#modal-mensaje-desliza');
             if (mensajeDesliza) {
@@ -343,7 +321,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 }, 2500);
             }
         }
-        // Soporte táctil para deslizar en móvil dentro del modal
         let modalStartX = null;
         let modalMoved = false;
         if (canvas) {
@@ -378,16 +355,14 @@ document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.boton-seccion').forEach(btn => {
         btn.addEventListener('click', function() {
             if (this.dataset.seccion === 'quienes-somos') {
-                setTimeout(inicializarCarruselClientes, 100); // Espera a que se muestre
+                setTimeout(inicializarCarruselClientes, 100);
             }
         });
     });
-    // Protección máxima: bloquear clic derecho y arrastre en los divs de fondo
     document.querySelectorAll('.carrusel-img-bg').forEach(function(div) {
         div.addEventListener('contextmenu', function(e) { e.preventDefault(); });
         div.addEventListener('dragstart', function(e) { e.preventDefault(); });
     });
-    // Protección adicional: superponer capa invisible sobre imágenes del carrusel
     const carruselImagenes = document.querySelector('.carrusel-imagenes');
     if (carruselImagenes) {
         const overlay = document.createElement('div');
@@ -398,11 +373,10 @@ document.addEventListener('DOMContentLoaded', function() {
         overlay.style.height = '100%';
         overlay.style.zIndex = 10;
         overlay.style.background = 'transparent';
-        overlay.style.pointerEvents = 'none'; // Permite clicks en imágenes
+        overlay.style.pointerEvents = 'none';
         carruselImagenes.style.position = 'relative';
         carruselImagenes.appendChild(overlay);
     }
-    // Soporte táctil para deslizar en móvil
     let startX = null;
     let moved = false;
     const imagenesContainer = document.querySelector('.carrusel-imagenes');
@@ -433,7 +407,6 @@ document.addEventListener('DOMContentLoaded', function() {
             startX = null;
         });
     }
-    // --- INDICADOR DE CLICK EN IMAGEN DEL CARRUSEL ---
     function mostrarIndicadorClickCarrusel() {
         const primeraImg = document.querySelector('.carrusel-img-bg');
         if (!primeraImg) return;
@@ -444,14 +417,12 @@ document.addEventListener('DOMContentLoaded', function() {
                 localStorage.setItem('carruselClickHintShown', '1');
             }, 2400);
         }
-        // Añadir icono de lupa si no existe
         if (!primeraImg.querySelector('.zoom-icon')) {
             const icon = document.createElement('span');
             icon.className = 'zoom-icon';
             icon.innerHTML = `<svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg"><circle cx="9" cy="9" r="7" stroke="#ffd700" stroke-width="2"/><line x1="14.2" y1="14.2" x2="18" y2="18" stroke="#ffd700" stroke-width="2" stroke-linecap="round"/></svg>`;
             primeraImg.appendChild(icon);
         }
-        // Añadir tooltip
         primeraImg.setAttribute('data-tooltip', 'Haz clic para ampliar');
     }
     mostrarIndicadorClickCarrusel();

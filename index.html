@@ -8,7 +8,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">        
     <link rel="stylesheet" href="styles/styles.css">
-    <!-- Google tag (gtag.js) -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
@@ -32,7 +31,6 @@
         <button class="boton-seccion" data-seccion="quienes-somos">¿Quiénes Somos?</button>
     </nav>
 </header>
-
         <!-- Sección Tienda -->
         <section id="tienda" class="seccion activa">
             <div class="catalogo-header animate__animated animate__fadeInDown">
@@ -169,7 +167,6 @@
         <!-- Sección Quiénes Somos -->
         <section id="quienes-somos" class="seccion">
     <style>
-    /* ...existing code... */
     .quienes-somos-ui {
         max-width: 900px;
         margin: 0 auto 2.5rem auto;
@@ -251,9 +248,9 @@
         font-size: 1.1rem;
     }
     .quienes-somos-card .stars i {
-        color: #FFD700 !important; /* dorado */
-        font-size: 1rem !important; /* más pequeñas */
-        background: none !important; /* sin círculo */
+        color: #FFD700 !important;
+        font-size: 1rem !important;
+        background: none !important;
         border-radius: 0 !important;
         padding: 0 !important;
         box-shadow: none !important;
@@ -302,9 +299,6 @@
             gap: 1.2rem;
         }
     }
-    /* --- FIN: Quiénes Somos --- */
-
-    /* --- INICIO: Pedidos --- */
     .formulario-pedido {
         max-width: 900px;
         margin: 2.5rem auto;
@@ -365,7 +359,6 @@
         box-shadow: 0 4px 16px rgba(42,91,168,0.13);
     }
 
-    /* Campos del formulario */
     .input-grid {
         display: grid;
         grid-template-columns: repeat(2, 1fr);
@@ -485,7 +478,6 @@
         padding: 2rem;
     }
 
-    /* NUEVO: Mejorar presentación de la marca */
 .brand-header {
     display: flex;
     flex-direction: column;
@@ -587,7 +579,6 @@
             from { transform: scaleX(0); }
             to { transform: scaleX(1); }
         }
-        /* Nuevos estilos para el selector de unidades */
         .selector-unidades {
             display: flex;
             justify-content: center;
@@ -625,7 +616,6 @@
             box-shadow: 0 4px 16px rgba(42,91,168,0.13);
         }
 
-        /* Botones de versión */
         .boton-version-especial, .boton-version-jugador, .boton-camiseta-nba {
             width: 100%;
             padding: 0.85rem 0;
@@ -684,7 +674,6 @@
             <a href="https://www.instagram.com/camisetazo._/" target="_blank">@camisetazo._ ➔</a>
             <p>Novedades diarias | Ofertas exclusivas</p>
         </div>
-        <!-- Carrusel de clientes satisfechos -->
         <div class="clientes-carrusel-section">
             <h3 style="color:var(--azul-acento);margin-bottom:1rem;">Clientes Satisfechos</h3>
             <div class="clientes-carrusel">
@@ -713,7 +702,6 @@
             </div>
             <p style="margin-top:0.7rem;color:#b8c6e0;font-size:1rem;">Desliza para ver más capturas de clientes reales. ¡Gracias por confiar en nosotros!</p>
         </div>
-        <!-- Fin carrusel -->
         <div class="quienes-somos-grid">
             <div class="quienes-somos-card">
                 <i class="fas fa-shield-alt"></i>
@@ -772,13 +760,10 @@
                 <button type="button" class="boton-unidad" data-unidades="5">5 Unidades</button>
             </div>
 
-            <!-- Campos requeridos por Formspree -->
             <input type="hidden" name="_language" value="es">
             <input type="hidden" name="_subject" value="Nuevo pedido de Camisetazo">
             <input type="hidden" name="_template" value="table">
         <div class="contenedor-unidades" id="contenedorUnidades"></div>
-            <!-- Campos del formulario -->
-            <!-- Campos de información -->
             <div class="input-grid">
                 <div class="input-group">
                     <label for="emailPaypal">Correo de PayPal: ¡IMPORTANTE!</label>
@@ -808,7 +793,6 @@ Phone Number:</textarea>
                 </div>
             </div>
 
-            <!-- Sección de cálculo de precio -->
             <div class="calculadora-precio animate__animated animate__fadeInUp">
                 <h3><i class="fas fa-receipt"></i> Desglose del Precio</h3>
                 <div class="detalle-precio" style="background:rgba(255,255,255,0.13);border-left:5px solid #e74c3c;">
@@ -852,7 +836,6 @@ Phone Number:</textarea>
                 </div>
             </div>
 
-            <!-- Botón de pago -->
             <div id="paso1">
                 <p class="nota-pago">
                     * Por favor selecciona la opción 'Enviar a amigos y familiares.' <br>
@@ -879,27 +862,21 @@ Phone Number:</textarea>
     </div>
     <script>
     document.addEventListener('DOMContentLoaded', function() {
-    // Manejo de pestañas
     document.querySelectorAll('.boton-seccion').forEach(boton => {
         boton.addEventListener('click', function() {
-            // Remover clases activas
             document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
             document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
-
-            // Activar la sección correspondiente
             const seccionId = this.dataset.seccion;
             this.classList.add('activo');
             document.getElementById(seccionId).classList.add('activa');
         });
     });
 
-    // Variables y configuración
     let unidades = 0;
     const PRECIOS_BASE = {1: 19.90, 2: 39.80, 3: 54.90, 5: 84.90};
     const EXTRAS = {parche: 1, dorsal: 2, versionJugador: 5, camisetaNBA: 5};
     const GASTOS_ENVIO = 2.00;
 
-    // Función para crear unidades dinámicas
     function crearUnidad(numeroUnidad, isFullWidth = false) {
         return `
         <div class="unidad${isFullWidth ? ' unidad-fullwidth' : ''}">
@@ -941,7 +918,6 @@ Phone Number:</textarea>
                 <input type="hidden" name="versionJugador[]" value="No">
             </div>
 
-            <!-- Nuevo extra: Versión Especial -->
             <div class="input-group">
                 <label>Versión Retro:</label>
                 <button type="button" class="boton-version-especial">
@@ -960,31 +936,22 @@ Phone Number:</textarea>
     `;
 }
 
-    // Manejar cambio de unidades
     document.querySelectorAll('.boton-unidad').forEach(boton => {
         boton.addEventListener('click', function() {
             unidades = parseInt(this.dataset.unidades);
-
-            // Actualizar botones
             document.querySelectorAll('.boton-unidad').forEach(b => b.classList.remove('activo'));
             this.classList.add('activo');
-
-            // Generar unidades
             const contenedor = document.getElementById('contenedorUnidades');
             contenedor.innerHTML = '';
             for(let i = 1; i <= unidades; i++) {
-                // Si es la última y el número de unidades es impar, agregar clase fullwidth
                 const isFullWidth = (unidades % 2 === 1) && (i === unidades);
                 contenedor.innerHTML += crearUnidad(i, isFullWidth);
             }
-
-            // Actualizar precios
             actualizarPrecio();
-            configurarEventosUnidades(); // Configurar eventos después de generar las unidades
+            configurarEventosUnidades();
         });
     });
 
-    // Al cambiar a la sección de pedidos, deseleccionar todos los botones de unidad
     document.querySelectorAll('.boton-seccion').forEach(boton => {
         boton.addEventListener('click', function() {
             const seccionId = this.dataset.seccion;
@@ -997,9 +964,8 @@ Phone Number:</textarea>
         });
     });
 
-    // Función de cálculo de precio
     function actualizarPrecio() {
-    let precioBase = PRECIOS_BASE[unidades];
+    let precioBase = PRECIOS_BASE[unidades] || 0;
     let total = precioBase;
     let parches = 0;
     let dorsales = 0;
@@ -1009,7 +975,6 @@ Phone Number:</textarea>
     let recargoTallas = 0;
     let totalRecargoTallas = 0;
 
-    // Calcular extras para cada unidad
     document.querySelectorAll('.unidad').forEach(unidad => {
         const parche = unidad.querySelector('[name="parche[]"]').value.trim();
         const dorsal = unidad.querySelector('[name="dorsal[]"]').value.trim();
@@ -1018,25 +983,22 @@ Phone Number:</textarea>
         const esCamisetaNBA = unidad.querySelector('[name="camisetaNBA[]"]').value === 'Sí';
         const talla = unidad.querySelector('[name="talla[]"]').value;
 
-        // Validar que las camisetas NBA tengan dorsal
         if (esCamisetaNBA && !dorsal) {
-            alert("Las camisetas NBA requieren un dorsal obligatorio.");
-            return;
         }
 
-        // Si la camiseta NBA está activada
         if (esCamisetaNBA) {
             if (parche) {
-                alert("No se pueden añadir parches a una camiseta NBA.");
                 unidad.querySelector('[name="parche[]"]').value = '';
             }
-            dorsales++; // El dorsal es obligatorio para NBA
             camisetasNBA++;
+            if (dorsal) dorsales++;
+        } else {
+            if (parche) parches++;
+            if (dorsal) dorsales++;
         }
         if (versionJugador) versionesJugador++;
         if (versionEspecial) versionesEspecial++;
 
-        // Calcular recargo por tallas XXL y 3XL
         if (talla === 'XXL') {
             recargoTallas++;
             totalRecargoTallas += 1;
@@ -1049,40 +1011,33 @@ Phone Number:</textarea>
         }
     });
 
-    // Calcular totales
     const totalParches = parches * EXTRAS.parche;
-    const totalDorsales = dorsales * EXTRAS.dorsal; // Ahora siempre se cobra el dorsal
-    // Unificar el total de versiones jugador, retro y NBA
+    const totalDorsales = dorsales * EXTRAS.dorsal;
     const totalVersionesCombinadas = (versionesJugador + versionesEspecial + camisetasNBA);
     const totalVersionesJugador = totalVersionesCombinadas * EXTRAS.versionJugador;
 
     total += totalParches + totalDorsales + totalVersionesJugador + totalRecargoTallas;
 
-    // Añadir gastos de envío si solo hay 1 unidad
     let gastosEnvio = 0;
     if (unidades === 1) {
         gastosEnvio = GASTOS_ENVIO;
         total += gastosEnvio;
     }
 
-    // Mostrar gastos de envío en el desglose
     if (gastosEnvio === 0) {
         document.getElementById('gastos-envio').innerHTML = '<i class="fas fa-gift" style="color:#28a745;margin-right:0.4em;"></i><strong style="color:#28a745;font-size:1.1em;letter-spacing:1px;">GRATIS</strong>';
     } else {
         document.getElementById('gastos-envio').innerHTML = gastosEnvio.toFixed(2) + '€';
     }
 
-    // Actualizar display
     document.getElementById('cantidad-unidades').textContent = unidades;
     document.getElementById('plural-unidades').textContent = unidades > 1 ? 'es' : '';
-    document.getElementById('precio-base-detalle').textContent = PRECIOS_BASE[unidades].toFixed(2);
+    document.getElementById('precio-base-detalle').textContent = (PRECIOS_BASE[unidades] || 0).toFixed(2);
 
-    // NUEVO: Actualizar precio sin descuento por cantidad (ahora incluye extras)
     document.getElementById('cantidad-unidades-sin-desc').textContent = unidades;
     document.getElementById('plural-unidades-sin-desc').textContent = unidades > 1 ? 'es' : '';
     const precioSinDescuentoUnidad = 25.00;
-    // Calcular extras también para el precio sin descuento
-    const totalSinDescuentoExtras = (parches * EXTRAS.parche) + (dorsales * EXTRAS.dorsal) + ((versionesJugador + versionesEspecial) * EXTRAS.versionJugador) + (camisetasNBA * EXTRAS.camisetaNBA) + totalRecargoTallas;
+    const totalSinDescuentoExtras = (parches * EXTRAS.parche) + (dorsales * EXTRAS.dorsal) + ((versionesJugador + versionesEspecial + camisetasNBA) * EXTRAS.versionJugador) + totalRecargoTallas;
     const totalSinDescuento = (precioSinDescuentoUnidad * unidades + totalSinDescuentoExtras).toFixed(2);
     document.getElementById('precio-sin-descuento').textContent = totalSinDescuento;
     document.getElementById('precioSinDescuentoTotal').textContent = totalSinDescuento;
@@ -1102,7 +1057,6 @@ Phone Number:</textarea>
     document.getElementById('precioDisplay').textContent = total.toFixed(2);
     document.getElementById('precioTotal').value = total.toFixed(2);
 
-    // Visualización sutil y compacta del ahorro (siempre visible)
     const precioConDescuento = total.toFixed(2);
     const diferencia = (totalSinDescuento - precioConDescuento).toFixed(2);
     let ahorroHtml = '';
@@ -1125,25 +1079,17 @@ Phone Number:</textarea>
     return total;
 }
     function prepararRedireccion(event) {
-    // Obtener datos necesarios
     const total = document.getElementById('precioDisplay').textContent;
     const direccion = document.getElementById('direccion').value;
-    
-    // Codificar parámetros
     const params = new URLSearchParams({
         total: total,
         direccion: encodeURIComponent(direccion)
     });
-    
-    // Construir URL de redirección
     const baseUrl = window.location.href.replace('index.html', 'exito.html');
     document.getElementById('nextUrl').value = `${baseUrl}?${params.toString()}`;
-    
-    return true; // Continuar con el envío normal del formulario
+    return true;
     }
-    // Configurar eventos para las unidades
     function configurarEventosUnidades() {
-        // Manejar versión jugador
         document.querySelectorAll('.boton-version-jugador').forEach(boton => {
             boton.addEventListener('click', function() {
                 const hiddenInput = this.parentElement.querySelector('[name="versionJugador[]"]');
@@ -1151,7 +1097,6 @@ Phone Number:</textarea>
                 const botonNBA = unidad.querySelector('.boton-camiseta-nba');
                 const botonRetro = unidad.querySelector('.boton-version-especial:not(.boton-version-jugador):not(.boton-camiseta-nba)');
 
-                // Si se activa la versión jugador, desactivar NBA y Retro
                 if (!this.classList.contains('activo')) {
                     if (botonNBA.classList.contains('activo')) {
                         botonNBA.classList.remove('activo');
@@ -1165,13 +1110,11 @@ Phone Number:</textarea>
                     }
                 }
 
-                // Cambiar estado del botón
                 this.classList.toggle('activo');
                 const activo = this.classList.contains('activo');
                 this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
                 hiddenInput.value = activo ? 'Sí' : 'No';
 
-                // Si se activa, desactivar los otros dos SIEMPRE
                 if (activo) {
                     if (botonNBA.classList.contains('activo')) {
                         botonNBA.classList.remove('activo');
@@ -1185,14 +1128,11 @@ Phone Number:</textarea>
                     }
                 }
 
-                // Actualizar el precio
                 actualizarPrecio();
             });
         });
 
-        // Manejar versión retro
         document.querySelectorAll('.boton-version-especial').forEach(boton => {
-            // Solo para los que no sean .boton-version-jugador ni .boton-camiseta-nba
             if (
                 !boton.classList.contains('boton-version-jugador') &&
                 !boton.classList.contains('boton-camiseta-nba')
@@ -1203,7 +1143,6 @@ Phone Number:</textarea>
                     const botonNBA = unidad.querySelector('.boton-camiseta-nba');
                     const botonJugador = unidad.querySelector('.boton-version-jugador');
 
-                    // Si se activa la versión retro, desactivar NBA y Jugador
                     if (!this.classList.contains('activo')) {
                         if (botonNBA.classList.contains('activo')) {
                             botonNBA.classList.remove('activo');
@@ -1217,13 +1156,11 @@ Phone Number:</textarea>
                         }
                     }
 
-                    // Cambiar estado del botón
                     this.classList.toggle('activo');
                     const activo = this.classList.contains('activo');
                     this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
                     hiddenInput.value = activo ? 'Sí' : 'No';
 
-                    // Si se activa, desactivar los otros dos SIEMPRE
                     if (activo) {
                         if (botonNBA.classList.contains('activo')) {
                             botonNBA.classList.remove('activo');
@@ -1237,13 +1174,11 @@ Phone Number:</textarea>
                         }
                     }
 
-                    // Actualizar el precio
                     actualizarPrecio();
                 });
             }
         });
 
-        // Manejar camiseta NBA
         document.querySelectorAll('.boton-camiseta-nba').forEach(boton => {
             boton.addEventListener('click', function() {
                 const hiddenInput = this.parentElement.querySelector('[name="camisetaNBA[]"]');
@@ -1253,7 +1188,6 @@ Phone Number:</textarea>
                 const inputParche = unidad.querySelector('[name="parche[]"]');
                 const inputDorsal = unidad.querySelector('[name="dorsal[]"]');
 
-                // Si se va a activar la camiseta NBA, el dorsal es obligatorio
                 if (!this.classList.contains('activo')) {
                     if (!inputDorsal.value.trim()) {
                         alert('Debes introducir un dorsal para activar la camiseta NBA.');
@@ -1262,9 +1196,7 @@ Phone Number:</textarea>
                     }
                 }
 
-                // Si se activa la camiseta NBA
                 if (!this.classList.contains('activo')) {
-                    // Desactivar otros botones
                     if (botonJugador.classList.contains('activo')) {
                         botonJugador.classList.remove('activo');
                         botonJugador.querySelector('span').textContent = 'DESACTIVADO';
@@ -1277,13 +1209,11 @@ Phone Number:</textarea>
                     }
                 }
 
-                // Cambiar estado del botón
                 this.classList.toggle('activo');
                 const activo = this.classList.contains('activo');
                 this.querySelector('span').textContent = activo ? 'ACTIVADO' : 'DESACTIVADO';
                 hiddenInput.value = activo ? 'Sí' : 'No';
 
-                // Si se activa, desactivar los otros dos SIEMPRE
                 if (activo) {
                     if (botonJugador.classList.contains('activo')) {
                         botonJugador.classList.remove('activo');
@@ -1297,29 +1227,23 @@ Phone Number:</textarea>
                     }
                 }
 
-                // Bloquear el campo de parche
                 inputParche.disabled = activo;
                 if (activo) inputParche.value = '';
 
-                // Habilitar el campo de dorsal (pero será gratuito)
                 inputDorsal.disabled = false;
 
-                // Actualizar el precio
                 actualizarPrecio();
             });
         });
-        // Configurar eventos para inputs
     document.querySelectorAll('.input-parche, .input-dorsal').forEach(input => {
         input.addEventListener('input', actualizarPrecio);
     });
 
-    // También actualizar precio al cambiar la talla
         document.querySelectorAll('.input-talla').forEach(input => {
             input.addEventListener('change', actualizarPrecio);
         });
 }
 
-    // Función para abrir la ventana de PayPal
     function abrirPayPal(total) {
         const width = 600;
         const height = 800;
@@ -1332,7 +1256,6 @@ Phone Number:</textarea>
             `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes`
         );
 
-        // Verificar si la ventana de PayPal se ha cerrado
         const intervalo = setInterval(() => {
             if (ventanaPayPal.closed) {
                 clearInterval(intervalo);
@@ -1344,7 +1267,6 @@ Phone Number:</textarea>
         return ventanaPayPal;
     }
 
-    // Función para mostrar notificaciones de éxito
     function mostrarExito(mensaje) {
         const notificacion = document.getElementById('formStatus');
         notificacion.className = 'success animate__animated animate__fadeIn';
@@ -1353,54 +1275,44 @@ Phone Number:</textarea>
         setTimeout(() => notificacion.style.display = 'none', 5000);
     }
 
-    // Función para enviar el formulario
     function enviarFormulario() {
         document.getElementById('precioTotal').value = document.getElementById('precioDisplay').textContent;
         document.getElementById('pedidoForm').submit();
     }
 
-    // Evento del botón de PayPal
     document.getElementById('paypalButton').addEventListener('click', function(event) {
         event.preventDefault();
 
-        // Obtener el email de PayPal
         const emailPaypal = document.getElementById('emailPaypal').value.trim();
 
-        // Validar el email
         if (!emailPaypal || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailPaypal)) {
             alert("Por favor, ingresa un correo válido de PayPal.");
             return;
         }
         const usuarioInstagram = document.getElementById('usuario').value.trim();
     
-        // Validar el usuario de Instagram
         if (!usuarioInstagram || !/^@[A-Za-z0-9_.]{1,30}$/.test(usuarioInstagram)) {
             alert("Por favor, ingresa un nombre de usuario válido de Instagram (debe comenzar con @ y tener entre 1 y 30 caracteres).");
             return;
         }
 
-        // Validar que al menos haya una unidad seleccionada
         const cantidadUnidades = document.getElementById('cantidad-unidades').textContent;
         if (parseInt(cantidadUnidades) === 0) {
             alert("Debes seleccionar al menos una unidad.");
             return;
         }
 
-        // Obtener el total correctamente
         const total = parseFloat(document.getElementById('precioDisplay').textContent);
         if (isNaN(total) || total <= 0) {
             alert("El total a pagar no es válido.");
             return;
         }
 
-        // Abrir PayPal
         abrirPayPal(total);
     });
 
-    // Hacer toda la tarjeta clickeable excepto el botón
 document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
     card.addEventListener('click', function(e) {
-        // Si el click fue en el botón, o en un enlace del menú desplegable de fútbol, no hacer nada
         if (
             e.target.closest('.futbol-dropdown-menu a') ||
             e.target.closest('.futbol-dropdown-btn')
@@ -1414,10 +1326,8 @@ document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
     });
 });
 
-    // Inicializar
     actualizarPrecio();
 
-    // Carrusel de clientes satisfechos y modal ahora están en scripts/scripts.js
 });
 </script>
 <script src="scripts/scripts.js"></script>
