@@ -368,6 +368,15 @@
             box-shadow: 0 16px 40px rgba(42,91,168,0.25), 0 3px 16px rgba(0,0,0,0.13);
             z-index: 2;
         }
+        /* Cuando un dropdown está abierto le damos prioridad visual */
+        .catalogo-card.dropdown-open {
+            z-index: 9999; /* muy alto para que esté por encima de otras tarjetas */
+        }
+
+        /* Asegurarnos de que el menú desplegable tenga z-index alto dentro de la tarjeta abierta */
+        .catalogo-card.dropdown-open .futbol-dropdown-menu {
+            z-index: 10000;
+        }
         .catalogo-img-wrap {
             width: 100%;
             height: 180px;

@@ -7,27 +7,51 @@ document.addEventListener('DOMContentLoaded', function() {
         if (btn && menu) {
             btn.addEventListener('click', function(e) {
                 e.stopPropagation();
-                document.querySelectorAll('.futbol-dropdown-menu').forEach(function(m) {
-                    if (m !== menu) m.style.display = 'none';
+                // Close other dropdowns and remove their open class on their cards
+                document.querySelectorAll('.futbol-dropdown').forEach(function(otherCard) {
+                    // skip the current card; only close other cards
+                    if (otherCard === card) return;
+                    const otherMenu = otherCard.querySelector('.futbol-dropdown-menu');
+                    const otherBtn = otherCard.querySelector('.futbol-dropdown-btn');
+                    if (otherMenu) {
+                        otherMenu.style.display = 'none';
+                    }
+                    if (otherBtn) {
+                        otherBtn.classList.remove('activo');
+                        const iconOther = otherBtn.querySelector('i.fas');
+                        if (iconOther) iconOther.classList.remove('fa-chevron-up');
+                        if (iconOther) iconOther.classList.add('fa-chevron-down');
+                        // Reset label text for other buttons
+                        const textNodeOther = Array.from(otherBtn.childNodes).find(n => n.nodeType === 3);
+                        if (textNodeOther) textNodeOther.nodeValue = 'Ver opciones ';
+                    }
+                    // remove open class from other cards
+                    otherCard.classList.remove('dropdown-open');
                 });
-                document.querySelectorAll('.futbol-dropdown-btn').forEach(function(b) {
-                    b.classList.remove('activo');
-                    const icon = b.querySelector('i.fas');
-                    if (icon) icon.classList.remove('fa-chevron-up');
-                    if (icon) icon.classList.add('fa-chevron-down');
-                });
-                if (menu.style.display === 'block') {
+
+                const isOpen = card.classList.contains('dropdown-open') && menu.style.display === 'block';
+                if (isOpen) {
+                    // close current
                     menu.style.display = 'none';
                     btn.classList.remove('activo');
+                    card.classList.remove('dropdown-open');
                     const icon = btn.querySelector('i.fas');
                     if (icon) icon.classList.remove('fa-chevron-up');
                     if (icon) icon.classList.add('fa-chevron-down');
+                    // Cambiar texto a 'Ver opciones'
+                    const textNode = Array.from(btn.childNodes).find(n => n.nodeType === 3);
+                    if (textNode) textNode.nodeValue = 'Ver opciones ';
                 } else {
+                    // open current
                     menu.style.display = 'block';
                     btn.classList.add('activo');
+                    card.classList.add('dropdown-open');
                     const icon = btn.querySelector('i.fas');
                     if (icon) icon.classList.remove('fa-chevron-down');
                     if (icon) icon.classList.add('fa-chevron-up');
+                    // Cambiar texto a 'Ocultar opciones'
+                    const textNode = Array.from(btn.childNodes).find(n => n.nodeType === 3);
+                    if (textNode) textNode.nodeValue = 'Ocultar opciones ';
                 }
             });
         }
@@ -127,7 +151,7 @@ document.addEventListener('DOMContentLoaded', function() {
             modal.innerHTML = `
                 <div class="modal-fondo"></div>
                 <div class="modal-contenido" style="position:relative;display:flex;align-items:center;justify-content:center;gap:0;">
-                    <button class="modal-arrow modal-arrow-left" aria-label="Anterior" style="position:absolute;left:-60px;top:50%;transform:translateY(-50%);width:48px;height:48px;background:var(--azul-acento,#2a5ba8);border:none;border-radius:50%;color:#fff;font-size:2rem;box-shadow:0 2px 8px rgba(42,91,168,0.10);display:flex;align-items:center;justify-content:center;z-index:10;cursor:pointer;transition:background 0.2s;outline:none;">
+                    <button class="modal-arrow modal-arrow-left" aria-label="Anterior" style="width:48px;height:48px;background:var(--azul-acento,#2a5ba8);border:none;border-radius:50%;color:#fff;font-size:2rem;box-shadow:0 2px 8px rgba(42,91,168,0.10);display:flex;align-items:center;justify-content:center;z-index:110;cursor:pointer;transition:background 0.2s;outline:none;">
                         <span style="display:inline-block;transform:translateX(-2px);">&#8592;</span>
                     </button>
                     <div style="position:relative;display:inline-block;">
@@ -135,7 +159,7 @@ document.addEventListener('DOMContentLoaded', function() {
                         <div id="watermark-text" style="position:absolute;bottom:18px;right:18px;color:#fff;font-size:1.5rem;font-weight:bold;opacity:0.7;text-shadow:1px 1px 4px #000;pointer-events:none;user-select:none;">@camisetazo._</div>
                         <div id="modal-mensaje-desliza" style="display:none;position:absolute;bottom:18px;left:50%;transform:translateX(-50%);background:rgba(42,91,168,0.92);color:#fff;padding:0.4em 1em;border-radius:10px;font-size:1rem;z-index:30;">Desliza para ver más imágenes</div>
                     </div>
-                    <button class="modal-arrow modal-arrow-right" aria-label="Siguiente" style="position:absolute;right:-60px;top:50%;transform:translateY(-50%);width:48px;height:48px;background:var(--azul-acento,#2a5ba8);border:none;border-radius:50%;color:#fff;font-size:2rem;box-shadow:0 2px 8px rgba(42,91,168,0.10);display:flex;align-items:center;justify-content:center;z-index:10;cursor:pointer;transition:background 0.2s;outline:none;">
+                    <button class="modal-arrow modal-arrow-right" aria-label="Siguiente" style="width:48px;height:48px;background:var(--azul-acento,#2a5ba8);border:none;border-radius:50%;color:#fff;font-size:2rem;box-shadow:0 2px 8px rgba(42,91,168,0.10);display:flex;align-items:center;justify-content:center;z-index:110;cursor:pointer;transition:background 0.2s;outline:none;">
                         <span style="display:inline-block;transform:translateX(2px);">&#8594;</span>
                     </button>
                     <button class="modal-cerrar" aria-label="Cerrar">&times;</button>
@@ -146,11 +170,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const imagenes = Array.from(document.querySelectorAll('.carrusel-img-bg'));
         const existentes = imagenes.filter(div => {
             const imgUrl = div.getAttribute('data-img');
-            return [
-                'assets/clientes/cliente1.jpg','assets/clientes/cliente2.jpg','assets/clientes/cliente3.jpg','assets/clientes/cliente4.jpg',
-                'assets/clientes/cliente5.jpg','assets/clientes/cliente6.jpg','assets/clientes/cliente7.jpg','assets/clientes/cliente8.jpg',
-                'assets/clientes/cliente9.jpg','assets/clientes/cliente10.jpg','assets/clientes/cliente11.jpg','assets/clientes/cliente12.jpg'
-            ].includes(imgUrl);
+            // Genera lista de cliente1.jpg a cliente26.jpg
+            const clientesValidos = Array.from({length: 26}, (_, i) => `assets/clientes/cliente${i+1}.jpg`);
+            return clientesValidos.includes(imgUrl);
         });
         let actual = existentes.findIndex(div => div.getAttribute('data-img') === src);
         if (actual === -1) actual = 0;
@@ -258,18 +280,62 @@ document.addEventListener('DOMContentLoaded', function() {
         }
         const leftArrow = modal.querySelector('.modal-arrow-left');
         const rightArrow = modal.querySelector('.modal-arrow-right');
-        if (window.innerWidth > 600) {
-            if (leftArrow) leftArrow.onclick = function(e) {
-                e.stopPropagation();
-                actual = (actual - 1 + existentes.length) % existentes.length;
-                dibujarImagen(actual);
-            };
-            if (rightArrow) rightArrow.onclick = function(e) {
-                e.stopPropagation();
-                actual = (actual + 1) % existentes.length;
-                dibujarImagen(actual);
-            };
+
+        // Posicionar flechas en una ubicación agradable y constante del viewport.
+        // Mantendremos las flechas a la mitad vertical del viewport pero ligeramente
+        // por encima del centro del canvas para una mejor visibilidad.
+        let flechasHandler = null;
+        function colocarFlechasFixed() {
+            if (!leftArrow || !rightArrow) return;
+            if (window.innerWidth <= 600) {
+                leftArrow.style.display = 'none';
+                rightArrow.style.display = 'none';
+                return;
+            }
+            leftArrow.style.display = '';
+            rightArrow.style.display = '';
+            // Valores ajustables
+            const verticalPct = 0.48; // 48% del viewport height (ligeramente arriba del centro)
+            const horizontalGap = 28; // px desde el centro del canvas hacia las flechas
+            const arrowSize = 48; // px
+
+            const viewportH = window.innerHeight;
+            const top = Math.max(12, Math.round(viewportH * verticalPct) - Math.round(arrowSize/2));
+
+            // Colocar las flechas casi al borde horizontal del viewport (edge gap pequeño)
+            const edgeGap = 12; // px desde el borde de la pantalla
+            leftArrow.style.position = 'fixed';
+            leftArrow.style.top = top + 'px';
+            leftArrow.style.left = edgeGap + 'px';
+            leftArrow.style.right = 'auto';
+
+            rightArrow.style.position = 'fixed';
+            rightArrow.style.top = top + 'px';
+            rightArrow.style.right = edgeGap + 'px';
+            rightArrow.style.left = 'auto';
+            // Asegurar transform neutro
+            leftArrow.style.transform = 'none';
+            rightArrow.style.transform = 'none';
         }
+
+        // Registrar clicks en flechas
+        if (leftArrow) leftArrow.onclick = function(e) {
+            e.stopPropagation();
+            actual = (actual - 1 + existentes.length) % existentes.length;
+            dibujarImagen(actual);
+        };
+        if (rightArrow) rightArrow.onclick = function(e) {
+            e.stopPropagation();
+            actual = (actual + 1) % existentes.length;
+            dibujarImagen(actual);
+        };
+
+        // Handler para recalcular la posición en resize/scroll
+        flechasHandler = function() { colocarFlechasFixed(); };
+        window.addEventListener('resize', flechasHandler);
+        window.addEventListener('scroll', flechasHandler, {passive:true});
+        // Posicionar inicialmente
+        setTimeout(colocarFlechasFixed, 25);
         const watermarkDiv = modal.querySelector('#watermark-text');
         if (watermarkDiv) watermarkDiv.style.display = 'none';
         if (window.innerWidth <= 600) {
@@ -289,6 +355,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 modal.style.opacity = '0';
                 setTimeout(() => { modal.style.display = 'none'; }, 250);
             }
+            // limpiar listeners de posicionamiento de flechas
+            try {
+                if (flechasHandler) {
+                    window.removeEventListener('resize', flechasHandler);
+                    window.removeEventListener('scroll', flechasHandler);
+                    flechasHandler = null;
+                }
+            } catch(e) {}
             document.body.style.overflow = '';
             document.removeEventListener('keydown', onKeyDownModal);
         }
