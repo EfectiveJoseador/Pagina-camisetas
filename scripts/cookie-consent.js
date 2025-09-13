@@ -7,9 +7,6 @@
     
     function saveConsent() {
         localStorage.setItem(COOKIE_CONSENT_KEY, 'true');
-        
-        // Google Analytics ya está inicializado en el head, no es necesario volver a configurarlo
-        console.log('Consentimiento de cookies guardado');
     }
     
     function showCookieBanner() {
@@ -139,11 +136,6 @@
         });
     }
     
-    
-    // Google Analytics ya está inicializado en el head, solo registramos si hay consentimiento previo
-    if (hasConsent()) {
-        console.log('Consentimiento de cookies ya existente');
-    }
     
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', showCookieBanner);
