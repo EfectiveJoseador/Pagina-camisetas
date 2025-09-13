@@ -7,6 +7,12 @@
     
     function saveConsent() {
         localStorage.setItem(COOKIE_CONSENT_KEY, 'true');
+        
+        // Inicializar Google Analytics después de obtener consentimiento
+        if (typeof gtag === 'function') {
+            gtag('config', 'G-GS53GWE2Z0');
+            console.log('Google Analytics inicializado después del consentimiento');
+        }
     }
     
     function showCookieBanner() {
@@ -136,6 +142,12 @@
         });
     }
     
+    
+    // Inicializar GA si ya tenemos consentimiento previo
+    if (hasConsent() && typeof gtag === 'function') {
+        gtag('config', 'G-GS53GWE2Z0');
+        console.log('Google Analytics inicializado con consentimiento previo');
+    }
     
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', showCookieBanner);
