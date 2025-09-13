@@ -1,6 +1,15 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <!-- Google tag (gtag.js) --> 
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script> 
+    <script> 
+      window.dataLayer = window.dataLayer || []; 
+      function gtag(){dataLayer.push(arguments);} 
+      gtag('js', new Date()); 
+     
+      gtag('config', 'G-GS53GWE2Z0'); 
+    </script>
     <link rel="icon" type="image/x-icon" href="assets/logos/logo.jpg">
 <link rel="manifest" href="manifest.json">
 <link rel="apple-touch-icon" href="assets/logos/logo.jpg">
@@ -150,12 +159,11 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
 </noscript>
 
-<script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-GS53GWE2Z0');
+
+  window.gtag = function(){  };
+
 </script>
 </head>
 <body>
