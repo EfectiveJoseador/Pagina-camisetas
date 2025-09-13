@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es">
 <head>
     <link rel="icon" type="image/x-icon" href="assets/logos/logo.jpg">
@@ -10,7 +10,7 @@
 <link rel="dns-prefetch" href="https://analytics.vercel.com">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://analytics.vercel.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self' https://analytics.vercel.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
+    <meta http-equiv="Content-Security-Policy" content="default-src 'self'; script-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://analytics.vercel.com https://www.googletagmanager.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; font-src 'self' https://cdnjs.cloudflare.com; connect-src 'self' https://analytics.vercel.com https://www.google-analytics.com; frame-ancestors 'none'; base-uri 'self'; form-action 'self';">
     <meta http-equiv="X-Content-Type-Options" content="nosniff">
     <meta http-equiv="X-Frame-Options" content="DENY">
     <meta http-equiv="X-XSS-Protection" content="1; mode=block">
@@ -153,7 +153,10 @@
 <script>
   window.dataLayer = window.dataLayer || [];
 
-  window.gtag = function(){  };
+  window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', 'G-GS53GWE2Z0');
 
 </script>
 </head>
@@ -5243,6 +5246,7 @@ document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
 <script defer src="scripts/advanced-minification.js"></script>
 <script defer src="scripts/sitemap-generator.js"></script>
 <script defer src="https://analytics.vercel.com/script.js"></script>
+<script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
 </body>
 </html>
 

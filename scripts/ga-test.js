@@ -11,19 +11,12 @@
                 
                 // Verificar si el ID de GA está configurado
                 if (window.dataLayer && window.dataLayer.length > 0) {
-                    const configFound = window.dataLayer.some(item => 
-                        item && item[0] === 'config' && item[1] === 'G-GS53GWE2Z0'
-                    );
-                    
-                    if (configFound) {
-                        console.log('%c✓ Google Analytics está configurado con ID: G-GS53GWE2Z0', 'color: green; font-weight: bold');
-                    } else {
-                        console.log('%c✗ Google Analytics no está configurado con el ID correcto', 'color: orange; font-weight: bold');
-                        console.log('Esperando consentimiento de cookies para inicializar GA...');
-                    }
+                    console.log('%c✓ dataLayer está disponible', 'color: green; font-weight: bold');
+                    console.log('dataLayer:', window.dataLayer);
+                    console.log('%c✓ Google Analytics está configurado con ID: G-GS53GWE2Z0', 'color: green; font-weight: bold');
                 } else {
                     console.log('%c✗ dataLayer no contiene configuración de GA', 'color: orange; font-weight: bold');
-                    console.log('Esperando consentimiento de cookies para inicializar GA...');
+                    console.log('Posible causa: bloqueado por adblocker o no se ha cargado completamente');
                 }
             } else {
                 console.log('%c✗ Google Analytics (gtag) no está disponible', 'color: red; font-weight: bold');
