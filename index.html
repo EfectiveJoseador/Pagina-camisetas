@@ -5118,7 +5118,7 @@ document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
             e.target.closest('.futbol-dropdown-menu a') ||
             e.target.closest('.futbol-dropdown-btn')
         ) {
-            return;
+            return;//
         }
         const link = card.getAttribute('data-link');
         if (link) {
