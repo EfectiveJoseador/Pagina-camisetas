@@ -1,4 +1,4 @@
-﻿console.log('Página cargada correctamente');
+console.log('Página cargada correctamente');
 
 document.addEventListener('DOMContentLoaded', function() {
     document.querySelectorAll('.futbol-dropdown').forEach(function(card) {
@@ -7,13 +7,13 @@ document.addEventListener('DOMContentLoaded', function() {
         if (btn && menu) {
             btn.addEventListener('click', function(e) {
                 e.stopPropagation();
-
+                // Close other dropdowns and remove their open class on their cards
                 document.querySelectorAll('.futbol-dropdown').forEach(function(otherCard) {
-
+                    // skip the current card; only close other cards
                     if (otherCard === card) return;
                     const otherMenu = otherCard.querySelector('.futbol-dropdown-menu');
                     const otherBtn = otherCard.querySelector('.futbol-dropdown-btn');
-
+                    // rely on class-based state (CSS controls visibility)
                     if (otherCard.classList.contains('dropdown-open')) {
                         otherCard.classList.remove('dropdown-open');
                     }
@@ -22,33 +22,33 @@ document.addEventListener('DOMContentLoaded', function() {
                         const iconOther = otherBtn.querySelector('i.fas');
                         if (iconOther) iconOther.classList.remove('fa-chevron-up');
                         if (iconOther) iconOther.classList.add('fa-chevron-down');
-
+                        // Reset label text for other buttons
                         const textNodeOther = Array.from(otherBtn.childNodes).find(n => n.nodeType === 3);
                         if (textNodeOther) textNodeOther.nodeValue = 'Ver opciones ';
                     }
-
+                    // remove open class from other cards
                     otherCard.classList.remove('dropdown-open');
                 });
 
                 const isOpen = card.classList.contains('dropdown-open');
                 if (isOpen) {
-
+                    // close current (CSS shows/hides via .dropdown-open)
                     btn.classList.remove('activo');
                     card.classList.remove('dropdown-open');
                     const icon = btn.querySelector('i.fas');
                     if (icon) icon.classList.remove('fa-chevron-up');
                     if (icon) icon.classList.add('fa-chevron-down');
-
+                    // Cambiar texto a 'Ver opciones'
                     const textNode = Array.from(btn.childNodes).find(n => n.nodeType === 3);
                     if (textNode) textNode.nodeValue = 'Ver opciones ';
                 } else {
-
+                    // open current
                     btn.classList.add('activo');
                     card.classList.add('dropdown-open');
                     const icon = btn.querySelector('i.fas');
                     if (icon) icon.classList.remove('fa-chevron-down');
                     if (icon) icon.classList.add('fa-chevron-up');
-
+                    // Cambiar texto a 'Ocultar opciones'
                     const textNode = Array.from(btn.childNodes).find(n => n.nodeType === 3);
                     if (textNode) textNode.nodeValue = 'Ocultar opciones ';
                 }
@@ -66,11 +66,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!imagenes.length) return;
         imagenes.forEach(div => {
             const imgUrl = div.getAttribute('data-img');
-
+            // Crear imagen para probar carga sin ensuciar la consola
             const tester = new Image();
             tester.onload = () => { existentes.push(div); finalize(); };
             tester.onerror = () => { finalize(); };
-
+            // Forzar carga sin usar fetch HEAD para evitar CORS/abort en local
             tester.src = imgUrl;
             function finalize(){
                 pendientes--;
@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function() {
             existentes.forEach(div => {
                 const imgUrl = div.getAttribute('data-img');
                 div.style.backgroundImage = `url('${imgUrl}')`;
-
+                // Evitar que errores de fondo propaguen mensajes
                 div.onerror = null;
             });
             const prevBtn = document.getElementById('carrusel-prev');
@@ -172,8 +172,8 @@ document.addEventListener('DOMContentLoaded', function() {
         const imagenes = Array.from(document.querySelectorAll('.carrusel-img-bg'));
         const existentes = imagenes.filter(div => {
             const imgUrl = div.getAttribute('data-img');
-
-            const clientesValidos = Array.from({length: 28}, (_, i) => `assets/clientes/cliente${i+1}.jpg`);
+            // Genera lista de cliente1.jpg a cliente26.jpg
+            const clientesValidos = Array.from({length: 26}, (_, i) => `assets/clientes/cliente${i+1}.jpg`);
             return clientesValidos.includes(imgUrl);
         });
         let actual = existentes.findIndex(div => div.getAttribute('data-img') === src);
@@ -283,6 +283,9 @@ document.addEventListener('DOMContentLoaded', function() {
         const leftArrow = modal.querySelector('.modal-arrow-left');
         const rightArrow = modal.querySelector('.modal-arrow-right');
 
+        // Posicionar flechas en una ubicación agradable y constante del viewport.
+        // Mantendremos las flechas a la mitad vertical del viewport pero ligeramente
+        // por encima del centro del canvas para una mejor visibilidad.
         let flechasHandler = null;
         function colocarFlechasFixed() {
             if (!leftArrow || !rightArrow) return;
@@ -293,15 +296,16 @@ document.addEventListener('DOMContentLoaded', function() {
             }
             leftArrow.style.display = '';
             rightArrow.style.display = '';
-
-            const verticalPct = 0.48;
-            const horizontalGap = 28;
-            const arrowSize = 48;
+            // Valores ajustables
+            const verticalPct = 0.48; // 48% del viewport height (ligeramente arriba del centro)
+            const horizontalGap = 28; // px desde el centro del canvas hacia las flechas
+            const arrowSize = 48; // px
 
             const viewportH = window.innerHeight;
             const top = Math.max(12, Math.round(viewportH * verticalPct) - Math.round(arrowSize/2));
 
-            const edgeGap = 12;
+            // Colocar las flechas casi al borde horizontal del viewport (edge gap pequeño)
+            const edgeGap = 12; // px desde el borde de la pantalla
             leftArrow.style.position = 'fixed';
             leftArrow.style.top = top + 'px';
             leftArrow.style.left = edgeGap + 'px';
@@ -311,11 +315,12 @@ document.addEventListener('DOMContentLoaded', function() {
             rightArrow.style.top = top + 'px';
             rightArrow.style.right = edgeGap + 'px';
             rightArrow.style.left = 'auto';
-
+            // Asegurar transform neutro
             leftArrow.style.transform = 'none';
             rightArrow.style.transform = 'none';
         }
 
+        // Registrar clicks en flechas
         if (leftArrow) leftArrow.onclick = function(e) {
             e.stopPropagation();
             actual = (actual - 1 + existentes.length) % existentes.length;
@@ -327,10 +332,11 @@ document.addEventListener('DOMContentLoaded', function() {
             dibujarImagen(actual);
         };
 
+        // Handler para recalcular la posición en resize/scroll
         flechasHandler = function() { colocarFlechasFixed(); };
         window.addEventListener('resize', flechasHandler);
         window.addEventListener('scroll', flechasHandler, {passive:true});
-
+        // Posicionar inicialmente
         setTimeout(colocarFlechasFixed, 25);
         const watermarkDiv = modal.querySelector('#watermark-text');
         if (watermarkDiv) watermarkDiv.style.display = 'none';
@@ -351,7 +357,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 modal.style.opacity = '0';
                 setTimeout(() => { modal.style.display = 'none'; }, 250);
             }
-
+            // limpiar listeners de posicionamiento de flechas
             try {
                 if (flechasHandler) {
                     window.removeEventListener('resize', flechasHandler);
@@ -437,7 +443,7 @@ document.addEventListener('DOMContentLoaded', function() {
         }, { root: null, threshold: 0.1 });
         io.observe(carruselRoot);
     } else {
-
+        // Fallback: inicializar tras un pequeño retraso
         setTimeout(ensureInitCarrusel, 200);
     }
     document.querySelectorAll('.boton-seccion').forEach(btn => {
@@ -519,14 +525,15 @@ document.addEventListener('DOMContentLoaded', function() {
     mostrarIndicadorClickCarrusel();
 });
 
+// ---- Custom dropdown replacement for selects with class 'custom-select' ----
 (function(){
-
+    // Mantener referencia al dropdown actualmente abierto
     let currentOpenDropdown = null;
     
     function buildCustomDropdown(select){
         if (!select || select.__customized) return;
         select.__customized = true;
-
+        // Hide native select but keep it in DOM for form value
         select.style.display = 'none';
 
         const wrapper = document.createElement('div');
@@ -538,7 +545,7 @@ document.addEventListener('DOMContentLoaded', function() {
         button.setAttribute('aria-expanded','false');
         const labelSpan = document.createElement('span');
         labelSpan.className = 'label';
-
+        // initial label uses selected option text
         const initialOption = select.options[select.selectedIndex];
         labelSpan.textContent = initialOption ? initialOption.text : '';
         const caret = document.createElement('span');
@@ -568,10 +575,10 @@ document.addEventListener('DOMContentLoaded', function() {
                 if (opt.selected) item.setAttribute('aria-selected','true');
                 item.addEventListener('click', function(e){
                     if (opt.disabled) return;
-
+                    // mark selected in native select
                     select.selectedIndex = idx;
                     select.dispatchEvent(new Event('change', {bubbles:true}));
-
+                    // update UI
                     menu.querySelectorAll('[aria-selected="true"]').forEach(n => n.removeAttribute('aria-selected'));
                     item.setAttribute('aria-selected','true');
                     labelSpan.textContent = item.textContent;
@@ -583,7 +590,7 @@ document.addEventListener('DOMContentLoaded', function() {
         populateMenuFromSelect();
 
         function openMenu(){
-
+            // Cerrar el dropdown actualmente abierto si existe y es diferente al actual
             if (currentOpenDropdown && currentOpenDropdown !== wrapper) {
                 currentOpenDropdown.classList.remove('open');
                 const currentButton = currentOpenDropdown.querySelector('.custom-dropdown-button');
@@ -594,25 +601,25 @@ document.addEventListener('DOMContentLoaded', function() {
                 }
             }
             
-
+            // Establecer este dropdown como el actualmente abierto
             currentOpenDropdown = wrapper;
             
             wrapper.classList.add('open');
             button.setAttribute('aria-expanded','true');
             caret.innerHTML = '<i class="fas fa-chevron-up"></i>';
-
+            // position and size based on space
             const rect = wrapper.getBoundingClientRect();
             const spaceBelow = window.innerHeight - rect.bottom;
             const spaceAbove = rect.top;
-            const desiredMax = 300;
+            const desiredMax = 300; // px, default CSS
             if (spaceBelow < 220 && spaceAbove > spaceBelow) {
-
+                // open upward
                 menu.style.bottom = (rect.height + 10) + 'px';
                 menu.style.top = 'auto';
                 const mh = Math.max(120, Math.min(desiredMax, spaceAbove - 16));
                 menu.style.maxHeight = mh + 'px';
             } else {
-
+                // open downward
                 menu.style.top = '100%';
                 menu.style.bottom = 'auto';
                 const mh = Math.max(120, Math.min(desiredMax, spaceBelow - 16));
@@ -646,36 +653,41 @@ document.addEventListener('DOMContentLoaded', function() {
             if (isOpen) closeMenu(); else openMenu();
         });
 
+        // sync native select changes to custom UI (in case code sets value programmatically)
         select.addEventListener('change', function(){
             const opt = select.options[select.selectedIndex];
             if (opt) labelSpan.textContent = opt.text;
-
+            // update menu selection
             menu.querySelectorAll('[aria-selected="true"]').forEach(n => n.removeAttribute('aria-selected'));
             const chosen = menu.querySelector(`[data-index="${select.selectedIndex}"]`);
             if (chosen) chosen.setAttribute('aria-selected','true');
         });
 
+        // Observe option list changes and repopulate
         const optionsObserver = new MutationObserver((muts)=>{
             let needsRepopulate = false;
             muts.forEach(m=>{ if (m.type === 'childList') needsRepopulate = true; });
             if (needsRepopulate) {
                 populateMenuFromSelect();
-
+                // ensure label reflects current selection
                 const opt = select.options[select.selectedIndex];
                 labelSpan.textContent = opt ? opt.text : '';
             }
         });
         optionsObserver.observe(select, { childList: true, subtree: true });
 
+        // insert wrapper after select
         select.parentNode.insertBefore(wrapper, select.nextSibling);
         wrapper.appendChild(button);
         wrapper.appendChild(menu);
     }
 
+    // initialize existing selects
     function initAll(){
         document.querySelectorAll('select.custom-select').forEach(buildCustomDropdown);
     }
 
+    // observe for dynamically added selects (modals)
     const obs = new MutationObserver(function(muts){
         muts.forEach(m => {
             m.addedNodes && m.addedNodes.forEach(node => {
@@ -687,11 +699,12 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     obs.observe(document.documentElement || document.body, { childList: true, subtree: true });
 
+    // run once DOM ready
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initAll); else initAll();
 })();
 
 (function(){
-
+  // Toast de total del carrito: visible pero discreto, eficiente y reutilizable
   let toastEl = null;
   let hideTimer = null;
 
@@ -704,16 +717,16 @@ document.addEventListener('DOMContentLoaded', function() {
     toastEl.setAttribute('aria-live', 'polite');
     toastEl.innerHTML = '<span class="icon" aria-hidden="true">🛒</span><span class="text">Total: <strong>0.00</strong>€</span>';
     document.body.appendChild(toastEl);
-
+    // Al hacer clic, llevar a la pestaña del carrito y ocultar la burbuja
     toastEl.addEventListener('click', function(){
       try {
-
+        // Oculta inmediatamente para una sensación de respuesta
         hideNow();
         const btn = document.querySelector('.boton-seccion[data-seccion="carrito"]');
         if (btn && typeof btn.click === 'function') {
           btn.click();
         } else {
-
+          // Fallback si no existen listeners
           document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
           document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
           const target = document.getElementById('carrito');
@@ -721,7 +734,7 @@ document.addEventListener('DOMContentLoaded', function() {
           const tabBtn = document.querySelector('[data-seccion="carrito"]');
           if (tabBtn) tabBtn.classList.add('activo');
         }
-      } catch(e) {  }
+      } catch(e) { /* noop */ }
     });
     return toastEl;
   }
@@ -734,20 +747,23 @@ document.addEventListener('DOMContentLoaded', function() {
   window.showCartTotalToast = function(amount){
     try {
       const el = ensureToast();
-
+      // Actualizar cantidad
       const strong = el.querySelector('strong');
       if (strong) strong.textContent = (Number(amount) || 0).toFixed(2);
-
+      // Reiniciar animación
       el.classList.remove('show');
-
+      // eslint-disable-next-line no-unused-expressions
       el.offsetWidth;
       el.classList.add('show');
-
+      // Ocultar automáticamente tras 4s (aumentado)
       if (hideTimer) clearTimeout(hideTimer);
       hideTimer = setTimeout(hideNow, 4000);
-    } catch(e) {  }
+    } catch(e) { /* silencioso para no afectar UX */ }
   };
 
+  // =====================
+  // Notificación en pestaña del carrito
+  // =====================
   let cartNoticeEl = null;
   let cartNoticeTimer = null;
 
@@ -763,15 +779,30 @@ document.addEventListener('DOMContentLoaded', function() {
     el.setAttribute('aria-live', 'polite');
     el.innerHTML = '<span class="icon" aria-hidden="true">➕</span><span class="text">Producto añadido al carrito</span>';
     if (header && header.nextSibling) header.parentNode.insertBefore(el, header.nextSibling); else panel.insertAdjacentElement('afterbegin', el);
-
+    // Permitir cerrar manualmente con clic
     el.addEventListener('click', function(){ el.classList.remove('show'); });
     cartNoticeEl = el;
     return el;
   }
 
-  window.notifyCart = function(message){ return; };
+  // Deshabilitado: no mostrar notificación dentro de la pestaña del carrito
+  // window.notifyCart = function(message){ return; };
+  window.notifyCart = function(message){
+    try {
+      const el = ensureCartNotifier();
+      if (!el) return;
+      const txt = el.querySelector('.text');
+      if (txt && message) txt.textContent = message;
+      el.classList.add('show');
+      if (cartNoticeTimer) clearTimeout(cartNoticeTimer);
+      cartNoticeTimer = setTimeout(() => {
+        el.classList.remove('show');
+      }, 2500);
+    } catch(e) { /* noop */ }
+  };
 })();
 
+// Ensure there is a small helper to update the Carrito button badge from anywhere
 (function(){
   if (typeof window.updateCartTabBadge === 'function') return;
   window.updateCartTabBadge = function(total){
@@ -787,7 +818,6 @@ document.addEventListener('DOMContentLoaded', function() {
       const v = (typeof total === 'number' ? total : (Array.isArray(window.CART) ? window.CART.length : 0));
       if (v > 0) { badge.textContent = String(v); badge.classList.remove('hidden'); }
       else { badge.textContent = '0'; badge.classList.add('hidden'); }
-    } catch (e) {  }
+    } catch (e) { /* noop */ }
   };
 })();
-

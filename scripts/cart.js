@@ -1,12 +1,12 @@
-﻿
+// Lógica de flujo de tienda SOLO para la pestaña Pedidos
 
 document.addEventListener('DOMContentLoaded', function() {
-
+    // Mostrar solo un paso del flujo
     function mostrarPedidoStep(id) {
         document.querySelectorAll('.pedido-flujo-step').forEach(s => s.style.display = 'none');
         document.getElementById(id).style.display = '';
     }
-
+    // Carrusel de imágenes en detalle
     document.querySelectorAll('#pedido-detalle .thumb-img').forEach(img => {
         img.addEventListener('click', function() {
             document.getElementById('pedido-detalle-img').src = this.dataset.img;
@@ -14,14 +14,14 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
         });
     });
-
+    // Ir a detalle producto
     document.getElementById('pedido-ver-detalle-btn').addEventListener('click', function() {
         mostrarPedidoStep('pedido-detalle');
     });
     document.getElementById('pedido-volver-catalogo').addEventListener('click', function() {
         mostrarPedidoStep('pedido-catalogo');
     });
-
+    // Carrito
     let pedidoCarrito = [];
     function renderPedidoCarrito() {
         const items = document.getElementById('pedido-carrito-items');
@@ -51,7 +51,7 @@ document.addEventListener('DOMContentLoaded', function() {
             `;
         });
         const totalQtyPedido = pedidoCarrito.reduce((a, p) => a + p.cantidad, 0);
-
+        // Precios unitarios / packs
         const PACKS = [
             { size: 5, price: 86.90 },
             { size: 4, price: 74.90 },
@@ -59,7 +59,7 @@ document.addEventListener('DOMContentLoaded', function() {
             { size: 2, price: 39.80 },
             { size: 1, price: 19.90 }
         ];
-
+        // Strategy: descomponer la cantidad total de camisetas en packs óptimos (DP) y sumar extras por otras cosas
         function bestPackTotal(count){
             if (count <= 0) return 0;
             const dp = Array(count+1).fill(Infinity);
@@ -73,25 +73,26 @@ document.addEventListener('DOMContentLoaded', function() {
             return dp[count];
         }
 
-        const camisetasCosteBase = pedidoCarrito.reduce((s,p) => s + (p.cantidad * 29.90), 0);
+        // calcular coste base de camisetas en pedidoCarrito (sin extras como parches)
+        const camisetasCosteBase = pedidoCarrito.reduce((s,p) => s + (p.cantidad * 29.90), 0); // 29.90 usado como base por unidad
         let total = camisetasCosteBase;
         let extraHtml = '';
         if (totalQtyPedido > 1) {
-
+            // envío gratis si hay más de 1 camiseta
             extraHtml = `<div class="badge-envio">Envío gratis</div>`;
         }
         if (totalQtyPedido >= 2) {
-
+            // Recalcular usando packs para las camisetas solamente
             const costByPacks = bestPackTotal(totalQtyPedido);
             if (isFinite(costByPacks)) {
-
+                // mantenemos extras/per-item no contemplados aquí (por simplicidad asumimos sin extras)
                 total = costByPacks;
             }
         }
-
+        // Si hay packs aplicados que incluyen 5 y hay resto, el DP ya descompone (ej. 6 -> 5+1)
         document.getElementById('pedido-carrito-total').innerHTML = `<h3>Total: ${total.toFixed(2)}€</h3>${extraHtml}`;
     }
-
+    // Botón agregar al carrito
     document.getElementById('pedido-agregar-carrito-btn').addEventListener('click', function() {
         const talla = document.getElementById('pedido-talla-select').value;
         const cantidad = parseInt(document.getElementById('pedido-cantidad-select').value);
@@ -105,7 +106,7 @@ document.addEventListener('DOMContentLoaded', function() {
         if (!found) pedidoCarrito.push({ talla, cantidad });
         mostrarPedidoStep('pedido-carrito');
         renderPedidoCarrito();
-
+        // Animación: mostrar total actualizado sin cambiar de pestaña global
         try {
             const totalQtyPedido = pedidoCarrito.reduce((a, p) => a + p.cantidad, 0);
             let totalPedido = pedidoCarrito.reduce((s, p) => s + (p.cantidad * 29.90), 0);
@@ -128,14 +129,14 @@ document.addEventListener('DOMContentLoaded', function() {
                 totalPedido = dp[totalQtyPedido];
             }
             if (window.showCartTotalToast) window.showCartTotalToast(totalPedido);
-
-        } catch (err) {  }
+            // Notificación en pestaña del carrito deshabilitada
+        } catch (err) { /* noop */ }
     });
-
+    // Volver a detalle desde carrito
     document.getElementById('pedido-volver-detalle').addEventListener('click', function() {
         mostrarPedidoStep('pedido-detalle');
     });
-
+    // Cambiar cantidad/eliminar en carrito
     document.getElementById('pedido-carrito-items').addEventListener('input', function(e) {
         if (e.target.classList.contains('carrito-cantidad-input')) {
             const idx = e.target.dataset.idx;
@@ -163,18 +164,18 @@ document.addEventListener('DOMContentLoaded', function() {
             return;
         }
     });
-
+    // Ir a checkout
     document.getElementById('pedido-ir-checkout-btn').addEventListener('click', function() {
         if (pedidoCarrito.length === 0) return;
         mostrarPedidoStep('pedido-checkout');
         renderPedidoResumenCheckout();
     });
-
+    // Volver a carrito desde checkout
     document.getElementById('pedido-volver-carrito').addEventListener('click', function() {
         mostrarPedidoStep('pedido-carrito');
         renderPedidoCarrito();
     });
-
+    // Checkout resumen
     function renderPedidoResumenCheckout() {
         const resumen = document.getElementById('pedido-checkout-resumen');
         if (pedidoCarrito.length === 0) {
@@ -190,23 +191,25 @@ document.addEventListener('DOMContentLoaded', function() {
         html += `<div style="margin-top:1em;font-weight:bold;">Total: ${total.toFixed(2)}€</div>`;
         resumen.innerHTML = html;
     }
-
+    // Enviar checkout
     document.getElementById('pedido-checkout-form').addEventListener('submit', function(e) {
         e.preventDefault();
-
+        // Simulación de pago
         pedidoCarrito = [];
         mostrarPedidoStep('pedido-confirmacion');
     });
-
+    // Volver a inicio desde confirmación
     document.getElementById('pedido-volver-inicio').addEventListener('click', function() {
         mostrarPedidoStep('pedido-catalogo');
     });
-
+    // Inicial
     mostrarPedidoStep('pedido-catalogo');
 });
 
-document.addEventListener('DOMContentLoaded', function() {
+// Carrusel y detalle para la sección Pedidos mejorado
 
+document.addEventListener('DOMContentLoaded', function() {
+    // --- Mini carrusel en cada tarjeta (soporta varios productos con data-images) ---
     document.querySelectorAll('.pedido-mini-card').forEach(card => {
         const imagesData = card.dataset.images;
         let imgs = [];
@@ -218,27 +221,27 @@ document.addEventListener('DOMContentLoaded', function() {
             idx = (i + imgs.length) % imgs.length;
             if (imgEl) imgEl.src = imgs[idx];
         }
-
+        // initialize with first image; no arrow controls in desktop layout
         setImg(0);
     });
-
+    // --- Ir a detalle ---
     function mostrarDetallePedido(images){
         document.getElementById('pedido-catalogo-mini').style.display = 'none';
         document.getElementById('pedido-detalle-page').style.display = '';
-
+        // Reset imagen principal y thumbs
         if (images && images.length) {
             document.getElementById('pedido-detalle-img').src = images[0];
-
+            // populate thumbs if present (assume existing thumbs in DOM match count or just set active class)
             document.querySelectorAll('#pedido-detalle-page .thumb-img').forEach((img, i) => {
                 img.classList.toggle('active', i === 0);
                 if (images[i]) img.dataset.img = images[i];
             });
         }
     }
-
+    // Attach click handlers to each mini card so the detail view knows which images to show
     document.querySelectorAll('.pedido-mini-card').forEach(card => {
         card.addEventListener('click', function(e) {
-
+            // ignore clicks on the detail button
             if (e.target.closest('#pedido-ver-detalle-btn')) return;
             const imagesData = card.dataset.images;
             let imgs = [];
@@ -248,19 +251,19 @@ document.addEventListener('DOMContentLoaded', function() {
     });
     document.getElementById('pedido-ver-detalle-btn').addEventListener('click', function(e) {
         e.stopPropagation();
-
+        // if there is a visible mini card, use its images; fallback to first card
         const visibleCard = document.querySelector('.pedido-mini-card');
         const imagesData = visibleCard ? visibleCard.dataset.images : null;
         let imgs = [];
         try { imgs = imagesData ? JSON.parse(imagesData) : []; } catch(err){ imgs = []; }
         mostrarDetallePedido(imgs);
     });
-
+    // --- Volver a catálogo ---
     document.getElementById('pedido-volver-catalogo').addEventListener('click', function() {
         document.getElementById('pedido-catalogo-mini').style.display = '';
         document.getElementById('pedido-detalle-page').style.display = 'none';
     });
-
+    // --- Carrusel de thumbs en detalle ---
     document.querySelectorAll('#pedido-detalle-page .thumb-img').forEach((img, idx) => {
         img.addEventListener('click', function() {
             document.getElementById('pedido-detalle-img').src = this.dataset.img;
@@ -268,15 +271,19 @@ document.addEventListener('DOMContentLoaded', function() {
             this.classList.add('active');
         });
     });
-
+    // --- Comprar (puedes expandir aquí el flujo de compra si lo deseas) ---
     document.getElementById('pedido-comprar-btn').addEventListener('click', function() {
         alert('¡Producto añadido al carrito! (Aquí puedes implementar el flujo de compra completo)');
     });
 });
 
+// --- Carrito global funcional ---
 (function() {
     let carrito = [];
-
+    // Cargar carrito de localStorage si se desea persistencia entre recargas
+    // if (window.localStorage) {
+    //     try { carrito = JSON.parse(localStorage.getItem('carrito-camisetazo') || '[]'); } catch {}
+    // }
     function renderCarrito() {
         const lista = document.getElementById('carrito-lista-productos');
         const vacio = document.getElementById('carrito-lista-vacia');
@@ -312,7 +319,7 @@ document.addEventListener('DOMContentLoaded', function() {
         totalDiv.textContent = `Total: ${total.toFixed(2)}€`;
         btnComprar.style.display = '';
     }
-
+    // Añadir producto al carrito desde el detalle
     const btnAdd = document.getElementById('pedido-comprar-btn');
     if (btnAdd) {
         btnAdd.addEventListener('click', function(e) {
@@ -322,7 +329,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const nombre = 'Camiseta Barcelona 25-26 Local';
             const precio = 29.90;
             const img = document.getElementById('pedido-detalle-img').src;
-
+            // Si ya existe mismo producto y talla, suma cantidad
             let found = false;
             for (let item of carrito) {
                 if (item.nombre === nombre && item.talla === talla) {
@@ -334,27 +341,27 @@ document.addEventListener('DOMContentLoaded', function() {
             if (!found) {
                 carrito.push({ nombre, talla, cantidad, precio, img });
             }
-
+            // if (window.localStorage) localStorage.setItem('carrito-camisetazo', JSON.stringify(carrito));
             renderCarrito();
-
+            // Mostrar toast con el total actualizado sin cambiar de pestaña
             try {
                 const totalActual = carrito.reduce((s, i) => s + i.cantidad * i.precio, 0);
                 if (window.showCartTotalToast) window.showCartTotalToast(totalActual);
-
-            } catch (e) {  }
-
+                // Notificación en pestaña del carrito deshabilitada
+            } catch (e) { /* noop */ }
+            // Cambiar a la pestaña carrito
             document.querySelectorAll('.boton-seccion').forEach(b => b.classList.remove('activo'));
             document.querySelectorAll('.seccion').forEach(s => s.classList.remove('activa'));
             document.querySelector('[data-seccion="carrito"]').classList.add('activo');
             document.getElementById('carrito').classList.add('activa');
         });
     }
-
+    // Cambiar cantidad o eliminar
     document.addEventListener('input', function(e) {
         if (e.target.classList.contains('carrito-cantidad-input')) {
             const idx = e.target.dataset.idx;
             carrito[idx].cantidad = Math.max(1, parseInt(e.target.value));
-
+            // if (window.localStorage) localStorage.setItem('carrito-camisetazo', JSON.stringify(carrito));
             renderCarrito();
         }
     });
@@ -362,11 +369,11 @@ document.addEventListener('DOMContentLoaded', function() {
         if (e.target.closest('.eliminar-item-btn')) {
             const idx = e.target.closest('.eliminar-item-btn').dataset.idx;
             carrito.splice(idx, 1);
-
+            // if (window.localStorage) localStorage.setItem('carrito-camisetazo', JSON.stringify(carrito));
             renderCarrito();
         }
     });
-
+    // Cambiar de pestaña: renderiza carrito si corresponde
     document.querySelectorAll('.boton-seccion').forEach(btn => {
         btn.addEventListener('click', function() {
             if (this.dataset.seccion === 'carrito') {
@@ -374,20 +381,19 @@ document.addEventListener('DOMContentLoaded', function() {
             }
         });
     });
-
+    // Botón comprar del carrito (puedes expandir para pago real)
     const btnComprar = document.getElementById('carrito-comprar-btn');
     if (btnComprar) {
         btnComprar.addEventListener('click', function() {
             if (carrito.length === 0) return;
             alert('¡Gracias por tu compra! (Aquí puedes implementar el pago real)');
             carrito = [];
-
+            // if (window.localStorage) localStorage.setItem('carrito-camisetazo', JSON.stringify(carrito));
             renderCarrito();
         });
     }
-
+    // Inicializa si ya está en la pestaña carrito
     if (document.getElementById('carrito').classList.contains('activa')) {
         renderCarrito();
     }
 })();
-

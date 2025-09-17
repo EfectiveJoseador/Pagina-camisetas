@@ -1,18 +1,10 @@
 :root {
-            
-            --azul-primario: #0f2b4c; 
-            --azul-secundario: #144a85; 
-            --azul-acento: #2e7bed; 
+            /* Tonalidad actualizada: azul moderno, menos oscuro */
+            --azul-primario: #0f2b4c; /* fondo principal más vivo */
+            --azul-secundario: #144a85; /* degradado secundario */
+            --azul-acento: #2e7bed; /* acento brillante moderno */
             --negro-mate: #070912;
             --degradado-fondo: linear-gradient(135deg, var(--negro-mate) 20%, var(--azul-primario) 100%);
-            
-            /* Colores WCAG 2.1 AA compliant */
-            --texto-primario: #ffffff;
-            --texto-secundario: #f0f4f8;
-            --texto-terciario: #d1dce5;
-            --texto-muted: #b8c8d4;
-            --contraste-alto: #ffffff;
-            --contraste-medio: #e8f0f5;
         }
 
         * {
@@ -52,7 +44,7 @@
             50% { transform: scale(1.1); }
             100% { transform: scale(1); }
         }
-        
+        /* Calculadora profesional */
         .calculadora-precio {
             background: rgba(255, 255, 255, 0.13);
             border-radius: 16px;
@@ -122,7 +114,7 @@
             font-size: 0.9rem;
             margin-left: 1rem;
         }
-                
+                /* Estilos para controles de cantidad en el carrito */
                 .carrito-item .cantidad-controls {
                     display: inline-flex;
                     align-items: center;
@@ -156,7 +148,7 @@
                     font-weight: 600;
                     letter-spacing: 0.5px;
                 }
-                
+                /* Badges especiales */
                 .badge-envio {
                     display: inline-block;
                     background: #17a2b8;
@@ -182,7 +174,7 @@
             padding: 2rem;
         }
 
-        
+        /* NUEVO: Mejorar presentación de la marca */
 .brand-header {
     display: flex;
     flex-direction: column;
@@ -229,14 +221,16 @@
 }
 
 .brand-header .brand-subtitle {
-    color: var(--texto-secundario);
+    color: #e0e0e0;
     font-size: 1.1em;
     font-weight: 400;
+    opacity: 0.85;
     margin-bottom: 0;
     text-align: center;
     letter-spacing: 0.5px;
 }
 
+/* Estilos para la sección de reseñas de clientes */
 .reseñas-clientes {
     background: rgba(20,40,80,0.18);
     border-radius: 16px;
@@ -260,16 +254,17 @@
 
 .reseña p {
     font-style: italic;
-    color: var(--texto-secundario);
+    color: #e0e0e0;
     margin-bottom: 0.5rem;
 }
 
 .autor {
     text-align: right;
-    color: var(--texto-terciario);
+    color: #b8c6e0;
     font-size: 0.9rem;
 }
 
+/* Scrollbar personalizada */
 .lista-reseñas::-webkit-scrollbar {
     width: 6px;
 }
@@ -307,7 +302,7 @@
         h1 {
             font-size: 2.5em;
             margin: 1rem 0 0.5rem;
-            color: var(--contraste-alto);
+            color: #e0e0e0;
             position: relative;
             display: inline-block;
             padding-bottom: 10px;
@@ -330,7 +325,7 @@
             from { transform: scaleX(0); }
             to { transform: scaleX(1); }
         }
-        
+        /* Nuevos estilos para el selector de unidades */
         .selector-unidades {
             display: flex;
             justify-content: center;
@@ -358,7 +353,7 @@
             box-shadow: 0 6px 24px rgba(42,91,168,0.13);
         }
 
-        
+        /* Contenedor de unidades */
         .contenedor-unidades {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -383,7 +378,7 @@
             color: var(--azul-acento);
         }
 
-        
+        /* Hace que la última tarjeta de unidad ocupe dos columnas si es impar */
 .unidad-fullwidth {
     grid-column: span 2;
 }
@@ -423,8 +418,8 @@
             transform: translateY(-3px);
         }
 
-        
-        
+        /* Badge for Carrito tab button */
+        /* Avoid clipping only for the Carrito tab button */
         .boton-seccion[data-seccion="carrito"] { overflow: visible; }
 
         .boton-seccion .cart-tab-badge {
@@ -434,7 +429,7 @@
             transform: translate(50%, -50%);
             min-width: 18px;
             height: 18px;
-            padding: 0 5px; 
+            padding: 0 5px; /* allow 2+ digits gracefully */
             border-radius: 999px;
             background: #ff9800;
             color: #fff;
@@ -444,7 +439,7 @@
             text-align: center;
             box-shadow: 0 4px 10px rgba(0,0,0,0.25), 0 0 0 2px rgba(10,31,61,0.95);
             z-index: 5;
-            pointer-events: none; 
+            pointer-events: none; /* purely informational */
         }
         .boton-seccion .cart-tab-badge.hidden {
             display: none;
@@ -459,7 +454,7 @@
             display: block;
         }
 
-        
+        /* --- INICIO: Catálogo Premium --- */
         .catalogo-header {
             text-align: center;
             margin-bottom: 2.5rem;
@@ -473,9 +468,10 @@
             text-shadow: 0 2px 12px rgba(42,91,168,0.15);
         }
         .catalogo-descripcion {
-            color: var(--texto-secundario);
+            color: #e0e0e0;
             font-size: 1.15em;
             margin-bottom: 1.5rem;
+            opacity: 0.85;
         }
         .grid-catalogo {
             display: grid;
@@ -495,7 +491,7 @@
             border: 1.5px solid rgba(42,91,168,0.18);
             min-height: 420px;
             position: relative;
-            overflow: visible; 
+            overflow: visible; /* Permite que el menú desplegable se muestre fuera de la tarjeta */
             z-index: 1;
         }
         .catalogo-card:hover {
@@ -503,14 +499,14 @@
             box-shadow: 0 16px 40px rgba(42,91,168,0.25), 0 3px 16px rgba(0,0,0,0.13);
             z-index: 2;
         }
-        
+        /* Cuando un dropdown está abierto le damos prioridad visual */
         .catalogo-card.dropdown-open {
-            z-index: 9999; 
+            z-index: 9999; /* muy alto para que esté por encima de otras tarjetas */
         }
 
         .catalogo-card.dropdown-open .futbol-dropdown-menu {
             z-index: 10000;
-            display: flex; 
+            display: flex; /* visible cuando la tarjeta tiene la clase .dropdown-open */
         }
         .catalogo-img-wrap {
             width: 100%;
@@ -524,24 +520,7 @@
             border-top-right-radius: 18px;
         }
 
-.skip-link {
-    position: absolute;
-    top: -40px;
-    left: 0;
-    background: var(--azul-acento);
-    color: white;
-    padding: 8px;
-    z-index: 9999;
-    transition: top 0.3s;
-    border-radius: 0 0 4px 0;
-    font-weight: bold;
-    text-decoration: none;
-}
-
-.skip-link:focus {
-    top: 0;
-}
-
+/* Barra inferior móvil minimalista */
 .bottom-nav{ display:none; }
 @media (max-width: 800px){
   .navegacion { display: none; }
@@ -554,7 +533,7 @@
   .bottom-nav .cart-tab-badge.hidden{ display:none; }
   body{ padding-bottom: calc(72px + env(safe-area-inset-bottom, 0)); }
 }
-
+/* Ajustes fin barra inferior móvil */
         .catalogo-img {
             width: 120px;
             height: 120px;
@@ -564,7 +543,7 @@
             transition: transform 0.3s;
         }
 
-        
+        /* Tamaño especial para el logo de NBA */
         .catalogo-img.nba-img {
             width: 250px;
             height: 160px;
@@ -578,7 +557,7 @@
             display: flex;
             flex-direction: column;
             justify-content: space-between;
-            position: relative; 
+            position: relative; /* Para que el menú se posicione respecto a este contenedor */
         }
         .catalogo-info h3 {
             color: #fff;
@@ -588,14 +567,14 @@
             letter-spacing: 0.5px;
         }
         .catalogo-info p {
-            color: var(--texto-terciario);
+            color: #b8c6e0;
             font-size: 1em;
             margin-bottom: 1.2rem;
             min-height: 48px;
         }
         .catalogo-btn {
             background: var(--azul-acento);
-            color: #fff !important; /* Forzar color blanco para el texto */
+            color: #fff;
             border: none;
             padding: 12px 28px;
             border-radius: 30px;
@@ -629,9 +608,9 @@
                 font-size: 2em;
             }
         }
-        
+        /* --- FIN: Catálogo Premium --- */
 
-        
+        /* Eliminar estilos antiguos del catálogo */
         .grid-enlaces, .card-enlace, .imagen-previa, .enlace-btn { display: none !important; }
 
         footer {
@@ -645,20 +624,20 @@
         .redes_sociales {
             display: flex;
             justify-content: center;
-            gap: 3.5rem; 
+            gap: 3.5rem; /* Más separación entre iconos */
             margin-bottom: 1.5rem;
         }
 
-        
+        /* Estilos para modales de personalización en escritorio */
         @media (min-width: 801px) {
-            
+            /* Modal de personalización simple */
             .modal-personalizacion {
                 max-width: calc(100vw - 300px) !important;
                 width: 100% !important;
                 margin: 0 auto;
             }
             
-            
+            /* Modal de carrusel/tienda */
             #modal-tienda-carrusel .tienda-panel {
                 max-width: calc(100vw - 300px) !important;
                 width: 100% !important;
@@ -676,30 +655,30 @@
                 width: 100% !important;
             }
             
-            
+            /* Ajustes para la modal de personalización simple */
             .modal-personalizacion > div {
                 max-width: none !important;
                 width: 100% !important;
             }
             
-            
+            /* Aumentar tamaño de imagen en modal */
             .modal-personalizacion img {
                 width: 350px !important;
                 height: 350px !important;
             }
             
-            
+            /* Mejorar espaciado interno */
             .modal-personalizacion > div > div {
                 gap: 20px !important;
             }
             
-            
+            /* Ajustar formulario para aprovechar espacio */
             #_personalizeForm {
                 grid-template-columns: 1fr 1fr !important;
                 gap: 15px !important;
             }
             
-            
+            /* Modal específica de carrusel - ajustes adicionales */
             #modal-tienda-carrusel {
                 padding: 24px !important;
             }
@@ -716,7 +695,7 @@
     transition: all 0.3s;
 }
 
-        
+        /* Estilos para la sección de pedidos */
         .formulario-pedido {
             max-width: 1200px;
             margin: 2.5rem auto;
@@ -767,7 +746,7 @@
             box-shadow: 0 6px 24px rgba(42,91,168,0.13);
         }
 
-        
+        /* Campos del formulario */
         .input-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -812,7 +791,7 @@
             background: rgba(255,255,255,0.18);
         }
 
-        
+        /* Modernizar selector de talla */
         .input-talla {
             width: 100%;
             padding: 0.72em 2.2em 0.72em 1.05em;
@@ -842,7 +821,7 @@
             font-weight: 600;
         }
 
-        
+        /* Más espacio entre etiqueta y desplegable para una apariencia más moderna */
         form#_personalizeForm label,
         #modalTiendaForm label,
         .input-group label {
@@ -858,6 +837,7 @@
             margin-top: 10px;
         }
 
+/* Estilos reutilizables para selects personalizados (parche, talla, versión) */
 .custom-select {
     width: 100%;
     padding: 0.6em 2.5em 0.6em 1em;
@@ -891,8 +871,10 @@
     color: #cfe6ff;
 }
 
+/* For Windows/Edge/IE dropdown arrow styling fallback */
 select.custom-select::-ms-expand { display: none; }
 
+/* Custom dropdown UI — modern look */
 .custom-dropdown {
     position: relative;
     width: 100%;
@@ -930,7 +912,7 @@ select.custom-select::-ms-expand { display: none; }
     overflow: auto;
     box-shadow: 0 12px 36px rgba(2,8,24,0.6);
     border: 1px solid rgba(255,255,255,0.04);
-    
+    /* start hidden, animate with opacity/transform for smoother UX */
     opacity: 0;
     transform: translateY(-8px);
     transition: opacity 220ms cubic-bezier(.2,.9,.2,1), transform 180ms ease;
@@ -1036,7 +1018,7 @@ select.custom-select::-ms-expand { display: none; }
             padding: 2rem;
         }
 
-        
+        /* NUEVO: Mejorar presentación de la marca */
 .brand-header {
     display: flex;
     flex-direction: column;
@@ -1092,6 +1074,7 @@ select.custom-select::-ms-expand { display: none; }
     letter-spacing: 0.5px;
 }
 
+/* Estilos para la sección de reseñas de clientes */
 .reseñas-clientes {
     background: rgba(20,40,80,0.18);
     border-radius: 16px;
@@ -1125,6 +1108,7 @@ select.custom-select::-ms-expand { display: none; }
     font-size: 0.9rem;
 }
 
+/* Scrollbar personalizada */
 .lista-reseñas::-webkit-scrollbar {
     width: 6px;
 }
@@ -1185,7 +1169,7 @@ select.custom-select::-ms-expand { display: none; }
             from { transform: scaleX(0); }
             to { transform: scaleX(1); }
         }
-        
+        /* Nuevos estilos para el selector de unidades */
         .selector-unidades {
             display: flex;
             justify-content: center;
@@ -1213,7 +1197,7 @@ select.custom-select::-ms-expand { display: none; }
             box-shadow: 0 6px 24px rgba(42,91,168,0.13);
         }
 
-        
+        /* Botones de versión */
         .boton-version-especial, .boton-version-jugador, .boton-camiseta-nba {
             width: 100%;
             padding: 0.85rem 0;
@@ -1291,6 +1275,7 @@ select.custom-select::-ms-expand { display: none; }
     color: #003087;
 }
 
+/* Nueva clase para tarjetas clickeables */
 .catalogo-card-clickable {
     cursor: pointer;
 }
@@ -1300,6 +1285,7 @@ select.custom-select::-ms-expand { display: none; }
     position: relative;
 }
 
+/* Estilos para el menú desplegable de opciones de fútbol en la tarjeta */
 .futbol-dropdown-menu {
     position: absolute;
     left: 0;
@@ -1309,7 +1295,7 @@ select.custom-select::-ms-expand { display: none; }
     background: #1a3b6d;
     border-radius: 10px;
     box-shadow: 0 4px 16px rgba(42,91,168,0.18);
-    margin-top: 0; 
+    margin-top: 0; /* Antes: 10px */
     z-index: 1002;
     min-width: 200px;
     display: none;
@@ -1379,7 +1365,7 @@ select.custom-select::-ms-expand { display: none; }
 }
 
 @media (max-width: 600px) {
-    
+    /* Navegación y pestañas en columna */
     .navegacion {
         flex-direction: column;
         gap: 10px;
@@ -1395,7 +1381,7 @@ select.custom-select::-ms-expand { display: none; }
         max-width: 100%;
         box-sizing: border-box;
     }
-    
+    /* Selector de unidades en columna */
     .selector-unidades {
         flex-direction: column;
         gap: 8px;
@@ -1413,7 +1399,7 @@ select.custom-select::-ms-expand { display: none; }
         margin-left: auto;
         margin-right: auto;
     }
-    
+    /* Botones de versión ocupan todo el ancho */
     .boton-version-especial, .boton-version-jugador, .boton-camiseta-nba {
         width: 100%;
         font-size: 1.08rem;
@@ -1421,27 +1407,28 @@ select.custom-select::-ms-expand { display: none; }
         margin-bottom: 6px;
         border-radius: 14px;
     }
-    
+    /* Contenedor de unidades: una sola columna */
     .contenedor-unidades {
         grid-template-columns: 1fr !important;
         gap: 1rem;
     }
-    
+    /* Tarjetas y formularios: padding reducido y sin desbordes */
     .catalogo-card, .formulario-pedido, .tarjeta-pedido {
         padding: 10px 4px !important;
         min-width: 0;
         box-sizing: border-box;
     }
-    
+    /* Ajuste para evitar desbordes horizontales */
     html, body {
         overflow-x: hidden;
     }
-    
+    /* Ajuste de fuentes para mejor legibilidad */
     body, input, button, select, textarea {
         font-size: 1.07rem;
     }
 }
 
+/* Estilos para el carrusel de imágenes de clientes satisfechos */
 .clientes-carrusel-section {
     margin: 2.5rem auto 2rem auto;
     max-width: 520px;
@@ -1530,6 +1517,7 @@ select.custom-select::-ms-expand { display: none; }
     z-index: 2;
 }
 
+/* --- INDICADOR DE CLICK EN IMAGEN DEL CARRUSEL --- */
 .carrusel-imagenes {
   position: relative;
 }
@@ -1563,7 +1551,7 @@ select.custom-select::-ms-expand { display: none; }
   opacity: 0.92;
   box-shadow: 0 2px 8px #0002;
 }
-
+/* Eliminado el overlay azul, solo queda el tooltip negro */
 .carrusel-img-bg[data-tooltip]:hover::before {
   content: attr(data-tooltip);
   position: absolute;
@@ -1581,7 +1569,7 @@ select.custom-select::-ms-expand { display: none; }
   white-space: nowrap;
 }
 
-        
+        /* Estilos para el modal de imagen ampliada */
 #modal-imagen-clientes {
     display: none;
     position: fixed;
@@ -1663,7 +1651,7 @@ select.custom-select::-ms-expand { display: none; }
   }
   .clientes-carrusel {
     gap: 0.3rem;
-    min-height: 60vw; 
+    min-height: 60vw; /* Asegura altura mínima para las flechas */
     align-items: center;
     position: relative;
   }
@@ -1712,6 +1700,7 @@ select.custom-select::-ms-expand { display: none; }
   }
 }
 
+/* Estilos para el mensaje deslizante en el modal (móvil) */
 #modal-mensaje-desliza {
   display: none;
   position: absolute;
@@ -1737,6 +1726,7 @@ select.custom-select::-ms-expand { display: none; }
   opacity: 1;
 }
 
+/* Toast total carrito */
 #cartTotalToast.cart-total-toast {
   position: fixed;
   left: 50%;
@@ -1772,6 +1762,7 @@ select.custom-select::-ms-expand { display: none; }
   #cartTotalToast.cart-total-toast { bottom: 28px; }
 }
 
+/* Estilos para notificación dentro de la pestaña del carrito */
 #cartPanel .cart-tab-notice{
   position: sticky;
   top: 0;
@@ -1791,4 +1782,3 @@ select.custom-select::-ms-expand { display: none; }
 }
 #cartPanel .cart-tab-notice .icon{ filter: saturate(1.1); }
 #cartPanel .cart-tab-notice.show{ opacity: 1; transform: translateY(0); }
-
