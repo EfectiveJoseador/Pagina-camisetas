@@ -48,6 +48,170 @@
             border-radius: 15px;
             border: 1px solid rgba(42, 91, 168, 0.2);
             transition: transform 0.3s ease;
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            gap: 1.5rem;
+            align-items: center;
+        }
+
+        .item-detalle img {
+            width: 80px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 10px;
+        }
+
+        .item-info {
+            display: grid;
+            gap: 0.5rem;
+        }
+
+        .item-nombre {
+            font-size: 1.2rem;
+            font-weight: 600;
+        }
+
+        .item-descripcion {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+
+        .item-precio {
+            font-size: 1.1rem;
+            font-weight: 600;
+            color: var(--azul-acento);
+        }
+
+        .resumen-pedido {
+            background: rgba(42, 91, 168, 0.1);
+            border-radius: 15px;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+
+        .resumen-fila {
+            display: flex;
+            justify-content: space-between;
+            padding: 1rem 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .resumen-fila:last-child {
+            border-bottom: none;
+            padding-bottom: 0;
+        }
+
+        .resumen-total {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--azul-acento);
+        }
+
+        .seccion-puntos {
+            background: linear-gradient(135deg, rgba(76, 175, 80, 0.1) 0%, rgba(42, 91, 168, 0.1) 100%);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+            text-align: center;
+            animation: brilloPuntos 2s ease-in-out infinite;
+        }
+
+        .puntos-ganados {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #4CAF50;
+            margin: 1rem 0;
+            text-shadow: 0 0 10px rgba(76, 175, 80, 0.3);
+        }
+
+        .puntos-descripcion {
+            color: rgba(255,255,255,0.9);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+        }
+
+        .puntos-beneficios {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-top: 2rem;
+        }
+
+        .beneficio-item {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .beneficio-item i {
+            font-size: 2rem;
+            color: var(--azul-acento);
+            margin-bottom: 1rem;
+        }
+
+        @keyframes brilloPuntos {
+            0%, 100% { box-shadow: 0 0 20px rgba(76, 175, 80, 0.2); }
+            50% { box-shadow: 0 0 30px rgba(76, 175, 80, 0.4); }
+        }
+
+        .datos-envio {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+
+        .datos-envio h3 {
+            color: var(--azul-acento);
+            margin-bottom: 1.5rem;
+        }
+
+        .datos-envio-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .dato-campo {
+            margin-bottom: 1rem;
+        }
+
+        .dato-etiqueta {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+            margin-bottom: 0.3rem;
+        }
+
+        .dato-valor {
+            font-size: 1.1rem;
+            font-weight: 500;
+        }
+
+        @media (max-width: 768px) {
+            .item-detalle {
+                grid-template-columns: 1fr;
+                text-align: center;
+            }
+
+            .item-detalle img {
+                margin: 0 auto;
+            }
+
+            .puntos-beneficios {
+                grid-template-columns: 1fr;
+            }
+
+            .datos-envio-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .item-detalle {
+            background: rgba(255,255,255,0.05);
+            padding: 1.5rem;
+            border-radius: 15px;
+            border: 1px solid rgba(42, 91, 168, 0.2);
+            transition: transform 0.3s ease;
         }
 
         .item-detalle:hover {
@@ -103,6 +267,49 @@
             box-shadow: 0 5px 15px rgba(42, 91, 168, 0.3);
         }
 
+        /* Estilos para los botones de navegación */
+        .boton-principal {
+            background: var(--azul-acento);
+            color: white;
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--azul-acento);
+            font-weight: 600;
+        }
+
+        .boton-principal:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(42, 91, 168, 0.4);
+            background: transparent;
+            color: var(--azul-acento);
+        }
+
+        .boton-secundario {
+            background: transparent;
+            color: var(--azul-acento);
+            padding: 1rem 2rem;
+            border-radius: 30px;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            transition: all 0.3s ease;
+            border: 2px solid var(--azul-acento);
+            font-weight: 600;
+        }
+
+        .boton-secundario:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(42, 91, 168, 0.4);
+            background: var(--azul-acento);
+            color: white;
+        }
+
         .reseñas-clientes {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
@@ -134,6 +341,18 @@
             
             .linea-tiempo {
                 padding: 2rem 0;
+            }
+            
+            /* Estilos responsivos para botones de navegación */
+            .boton-principal, .boton-secundario {
+                padding: 0.8rem 1.5rem;
+                font-size: 0.9rem;
+                min-width: 200px;
+                justify-content: center;
+            }
+            
+            .boton-principal i, .boton-secundario i {
+                font-size: 1rem;
             }
         }
         :root {
@@ -785,6 +1004,62 @@
 
         }
 
+        /* Estilos para el modal de detalles del pedido */
+        .order-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 20px;
+        }
+
+        .order-modal-content {
+            max-width: 600px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .order-modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background: rgba(255,255,255,0.2);
+            border: none;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .order-modal-close:hover {
+            background: rgba(255,255,255,0.3);
+            transform: scale(1.1);
+        }
+
+        @media (max-width: 768px) {
+            .order-modal {
+                padding: 10px;
+            }
+            
+            .order-modal-content {
+                max-height: 95vh;
+            }
+        }
+
 /* Añade animación de icono */
 @keyframes iconPop {
     0% { transform: scale(0); }
@@ -910,7 +1185,7 @@ h1 small {
         </header>
 
         <div class="confirmacion-container">
-            <div class="tarjeta-confirmacion animate__animated animate__fadeInUp">
+            <div class="tarjeta-confirmacion animate__animated animate__fadeIn">
                 <div class="icono-exito">
                     <i class="fas fa-check-circle"></i>
                 </div>
@@ -948,12 +1223,26 @@ h1 small {
                         <div class="numero-paso">3</div>
                         <h4>Entrega completada</h4>
                         <p>Tu pedido llegará a la dirección proporcionada</p>
+                        <div class="puntos-container" style="margin-top: 15px; background: rgba(42, 91, 168, 0.1); padding: 10px; border-radius: 8px;">
+                            <div style="font-size: 20px; font-weight: bold; color: #2a5ba8;"><span id="puntos-pendientes">0</span> puntos</div>
+                            <div style="font-size: 12px; opacity: 0.8;">Recibirás estos puntos cuando tu pedido sea entregado</div>
+                        </div>
                     </div>
                 </div>
 
                 <div style="text-align: center; margin-top: 3rem;">
                     <a href="https://www.instagram.com/camisetazo._/" class="boton-seguimiento">
                         <i class="fab fa-instagram"></i> Seguir el pedido
+                    </a>
+                </div>
+
+                <!-- Botones de navegación -->
+                <div style="text-align: center; margin-top: 2rem; display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap;">
+                    <a href="index.html" class="boton-principal">
+                        <i class="fas fa-shopping-cart"></i> Continuar Comprando
+                    </a>
+                    <a href="#" class="boton-secundario" onclick="mostrarDetallesPedido()">
+                        <i class="fas fa-receipt"></i> Ver Detalles del Pedido
                     </a>
                 </div>
             </div>
@@ -994,13 +1283,82 @@ h1 small {
     </div>
 
     <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        // Calcular fecha estimada de entrega (15 días a partir de hoy)
-        const fechaEntrega = new Date();
-        fechaEntrega.setDate(fechaEntrega.getDate() + 15);
-        const options = { year: 'numeric', month: 'long', day: 'numeric' };
-        document.getElementById('fechaEntrega').textContent = fechaEntrega.toLocaleDateString('es-ES', options);
-    });
+        document.addEventListener('DOMContentLoaded', function() {
+            // Cargar datos del pedido desde localStorage
+            const orderData = JSON.parse(localStorage.getItem('lastOrder') || '{}');
+            const shippingData = JSON.parse(localStorage.getItem('shippingData') || '{}');
+            
+            // Mostrar datos de envío
+            document.getElementById('nombre-envio').textContent = shippingData.nombre || '';
+            document.getElementById('direccion-envio').textContent = shippingData.direccion || '';
+            document.getElementById('ciudad-envio').textContent = shippingData.ciudad || '';
+            document.getElementById('cp-envio').textContent = shippingData.codigoPostal || '';
+            document.getElementById('email-envio').textContent = shippingData.email || '';
+            document.getElementById('telefono-envio').textContent = shippingData.telefono || '';
+
+            // Mostrar items del pedido
+            const itemsContainer = document.getElementById('items-pedido');
+            if (orderData.items && Array.isArray(orderData.items)) {
+                orderData.items.forEach(item => {
+                    const itemElement = document.createElement('div');
+                    itemElement.className = 'item-detalle';
+                    itemElement.innerHTML = `
+                        <img src="${item.imagen || 'placeholder.jpg'}" alt="${item.nombre}">
+                        <div class="item-info">
+                            <div class="item-nombre">${item.nombre}</div>
+                            <div class="item-descripcion">
+                                Talla: ${item.talla || 'N/A'}<br>
+                                Cantidad: ${item.cantidad}
+                            </div>
+                        </div>
+                        <div class="item-precio">€${(item.precio * item.cantidad).toFixed(2)}</div>
+                    `;
+                    itemsContainer.appendChild(itemElement);
+                });
+            }
+
+            // Mostrar resumen del pedido
+            document.getElementById('subtotal-pedido').textContent = `€${orderData.subtotal?.toFixed(2) || '0.00'}`;
+            document.getElementById('envio-pedido').textContent = `€${orderData.envio?.toFixed(2) || '0.00'}`;
+            document.getElementById('descuento-pedido').textContent = `-€${orderData.descuento?.toFixed(2) || '0.00'}`;
+            document.getElementById('total-pedido').textContent = `€${orderData.total?.toFixed(2) || '0.00'}`;
+
+            // Mostrar puntos ganados con animación
+            const puntosGanados = orderData.puntosGanados || Math.floor(orderData.total * 10);
+            const puntosElement = document.getElementById('puntos-ganados');
+            let currentPoints = 0;
+            const duration = 2000; // 2 segundos para la animación
+            const interval = 50; // Actualizar cada 50ms
+            const steps = duration / interval;
+            const increment = puntosGanados / steps;
+
+            const animatePuntos = setInterval(() => {
+                currentPoints += increment;
+                if (currentPoints >= puntosGanados) {
+                    currentPoints = puntosGanados;
+                    clearInterval(animatePuntos);
+                }
+                puntosElement.textContent = Math.floor(currentPoints);
+            }, interval);
+
+            // Manejar la descarga del comprobante
+            document.getElementById('descargar-comprobante').addEventListener('click', function(e) {
+                e.preventDefault();
+                generarComprobantePDF(orderData, shippingData);
+            });
+
+            function generarComprobantePDF(orderData, shippingData) {
+                // Aquí se implementará la generación del PDF
+                console.log('Generando PDF...', {orderData, shippingData});
+                alert('La función de descarga de comprobante estará disponible próximamente.');
+            }
+
+            // Limpiar datos del pedido después de mostrarlos
+            setTimeout(() => {
+                localStorage.removeItem('lastOrder');
+                localStorage.removeItem('shippingData');
+            }, 1000);
+        });
     </script>
 </body>
 </html>
