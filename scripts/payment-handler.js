@@ -91,7 +91,7 @@ window.PaymentHandler = {
         // Por ahora, simularemos un pago exitoso después de un breve retraso
         console.log('Iniciando pago con PayPal...', orderData);
         
-        // Simular ventana de PayPal (manejar bloqueos de popup)
+        // Simular ventana de PayPal
         const paypalWindow = window.open('', 'paypal', 'width=600,height=400');
         if (paypalWindow) {
             paypalWindow.document.write(`
@@ -137,10 +137,6 @@ window.PaymentHandler = {
                 paypalWindow.close();
                 this.handlePaymentCompletion(orderData);
             }, 3000);
-        } else {
-            // Si el popup está bloqueado, continuar el flujo directamente
-            console.warn('La ventana de PayPal fue bloqueada por el navegador. Continuando sin popup.');
-            this.handlePaymentCompletion(orderData);
         }
     },
 

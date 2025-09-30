@@ -194,58 +194,33 @@ document.addEventListener('DOMContentLoaded', function() {
     // Enviar checkout
     document.getElementById('pedido-checkout-form').addEventListener('submit', function(e) {
         e.preventDefault();
-
-        // Recopilar datos del pedido (usar claves en español que espera compraExitosa)
+        
+        // Recopilar datos del pedido
         const formData = new FormData(e.target);
         const shippingData = {
-            nombre: formData.get('nombre'),
+            name: formData.get('nombre'),
             email: formData.get('email'),
-            telefono: formData.get('telefono'),
-            direccion: formData.get('direccion'),
-            ciudad: formData.get('ciudad'),
-            codigoPostal: formData.get('codigo_postal'),
-            pais: formData.get('pais'),
+            phone: formData.get('telefono'),
+            address: formData.get('direccion'),
+            city: formData.get('ciudad'),
+            postal: formData.get('codigo_postal'),
+            country: formData.get('pais'),
             instagram: formData.get('instagram')
         };
-        // Sanitizar datos de envío
-        try {
-            const sanitized = (window.SecurityUtils && window.SecurityUtils.sanitizeObject)
-              ? window.SecurityUtils.sanitizeObject(shippingData)
-              : shippingData;
-            Object.assign(shippingData, sanitized);
-        } catch(_){ }
-
+        
         // Guardar datos de envío
         localStorage.setItem('shippingData', JSON.stringify(shippingData));
-
-        // Preparar items en el formato esperado por compraExitosa
-        const items = pedidoCarrito.map(item => ({
-            nombre: 'Camiseta Barcelona 25-26',
-            talla: item.talla,
-            cantidad: item.cantidad,
-            precio: 29.90,
-            imagen: 'placeholder.jpg'
-        }));
-        const subtotal = items.reduce((sum, it) => sum + (it.precio * it.cantidad), 0);
-        const envio = 0;
-        const descuento = 0;
-        const total = subtotal + envio - descuento;
-
-        // Preparar datos del pedido con claves esperadas
+        
+        // Preparar datos del pedido
         const orderData = {
-            items,
-            subtotal,
-            envio,
-            descuento,
-            total,
-            shippingData
+            items: pedidoCarrito.map(item => ({
+                ...item,
+                price: item.cantidad * 29.90
+            })),
+            shipping: shippingData,
+            total: pedidoCarrito.reduce((sum, item) => sum + (item.cantidad * 29.90), 0)
         };
-        // Adjuntar CSRF token si está disponible
-        try {
-            const token = window.SecurityUtils && window.SecurityUtils.ensureCSRFToken ? window.SecurityUtils.ensureCSRFToken() : null;
-            if (token) orderData._csrf = token;
-        } catch(_){ }
-
+        
         // Iniciar proceso de pago con PayPal
         window.PaymentHandler.initializePayPalPayment(orderData);
     });
