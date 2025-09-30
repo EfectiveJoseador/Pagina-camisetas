@@ -12,7 +12,10 @@ function handlePaymentSuccess(orderData) {
     }));
 
     // Guardar los datos de envío en localStorage
-    localStorage.setItem('shippingData', JSON.stringify(orderData.shippingData));
+    try {
+        const datosEnvio = orderData.shippingData || orderData.shipping || JSON.parse(localStorage.getItem('shippingData') || '{}');
+        localStorage.setItem('shippingData', JSON.stringify(datosEnvio));
+    } catch(_){ /* noop */ }
 
     // Limpiar el carrito
     localStorage.removeItem('cart');
