@@ -1461,6 +1461,8 @@
             pointer-events: none; /* no obstruye interacciones */
             z-index: 1195; /* por debajo de modales y del carrito fijo (1200) */
             border: 1px solid rgba(255,255,255,0.12);
+            will-change: transform, opacity, top, left;
+            backface-visibility: hidden;
         }
         /* Animaciones (300-500ms) */
         .cart-promo-banner.fast { transition: opacity 0.3s ease, transform 0.3s ease; }
@@ -2232,10 +2234,9 @@
                 window.__APPLIED_REWARD = CURRENT_DISCOUNT;
                 
                 // Aplicar el descuento según su tipo
-                if (CURRENT_DISCOUNT.type === 'free_item' && shirtCount > 0) {
-                  // Descuento de camiseta gratis
-                  const baseOffer = (OFFERS && OFFERS.find(o=>o.size===1) && OFFERS.find(o=>o.size===1).price) ? OFFERS.find(o=>o.size===1).price : 19.90;
-                  const value = baseOffer;
+                if (CURRENT_DISCOUNT.type === 'free_item' && shirtCount >= 2) {
+                  // Descuento de camiseta gratis: requiere 2 camisetas y descuenta 19,90€
+                  const value = 19.90;
                   adjustedSubtotal = Math.max(0, adjustedSubtotal - value);
                   loyaltyApplied = { 
                     type: 'reward', 
@@ -2397,7 +2398,21 @@
             } catch(e) {}
         }
         window.addEventListener('resize', debounce(positionPromoBanner, 60));
-        window.addEventListener('scroll', debounce(positionPromoBanner, 60));
+        // Scroll suave con requestAnimationFrame para evitar congelamientos al desplazarse rápido
+        (function initPromoScrollHandler(){
+            let ticking = false;
+            function onScroll(){
+                if (!__PROMO.visible) return;
+                if (!ticking){
+                    ticking = true;
+                    requestAnimationFrame(function(){
+                        try { positionPromoBanner(); } catch(e){}
+                        ticking = false;
+                    });
+                }
+            }
+            window.addEventListener('scroll', onScroll, { passive: true });
+        })();
         document.addEventListener('DOMContentLoaded', ()=> setTimeout(positionPromoBanner, 140));
         // Ajustar tras cambiar sección
         document.querySelectorAll('.boton-seccion').forEach(b => b.addEventListener('click', ()=> setTimeout(()=> { updateCartPromoBanner(); positionPromoBanner(); }, 240)));
@@ -4212,8 +4227,22 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                             }
                             break;
                         case 'free_item':
-                            // Para artículos gratis, se aplicará al final del proceso de pago
-                            discountDescription = `${CURRENT_DISCOUNT.value} artículo(s) gratis`;
+                            // Camiseta gratis: si hay 2 o más camisetas, descontar 19,90€
+                            {
+                              const shirtsInCart = (typeof appliedOffer !== 'undefined' && appliedOffer && appliedOffer.count !== undefined)
+                                ? appliedOffer.count
+                                : CART.filter(ci => {
+                                    const name = (ci.name || '').toLowerCase();
+                                    return (ci.productId === 'barca1') || name.includes('camiseta') || name.includes('camisetas');
+                                  }).length;
+                              if (shirtsInCart >= 2) {
+                                discountAmount = 19.90;
+                                discountDescription = 'Camiseta gratis';
+                              } else {
+                                discountAmount = 0;
+                                discountDescription = 'Camiseta gratis (requiere 2 camisetas)';
+                              }
+                            }
                             break;
                     }
                 }
@@ -4955,19 +4984,15 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
                     break;
                     
                 case 'free_item':
-                    // Para items gratis, calculamos el valor de la camiseta más barata
-                    const shirtItems = CART.filter(item => {
+                    // Camiseta gratis: requiere 2 camisetas en el carrito y descuenta 19,90€
+                    {
+                      const shirtItems = CART.filter(item => {
                         const name = (item.name || '').toLowerCase();
                         return item.productId === 'barca1' || name.includes('camiseta') || name.includes('camisetas');
-                    });
-                    
-                    if (shirtItems.length > 0) {
-                        // Aplicar descuento igual al precio de la camiseta más barata
-                        const cheapestShirt = Math.min(...shirtItems.map(item => item.price || 0));
-                        discount = cheapestShirt * CURRENT_DISCOUNT.value;
-                        if (CURRENT_DISCOUNT.maxDiscount > 0) {
-                            discount = Math.min(discount, CURRENT_DISCOUNT.maxDiscount);
-                        }
+                      });
+                      if (shirtItems.length >= 2) {
+                        discount = 19.90;
+                      }
                     }
                     break;
             }
