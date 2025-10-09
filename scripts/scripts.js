@@ -706,7 +706,7 @@ document.addEventListener('DOMContentLoaded', function() {
 (function(){
   // Toast de total del carrito: visible pero discreto, eficiente y reutilizable
   let toastEl = null;
-  let hideTimer = null; // ya no se usa para ocultar automáticamente
+  let hideTimer = null; // temporizador para ocultar automáticamente a los 3s
 
   function ensureToast(){
     if (toastEl && document.body.contains(toastEl)) return toastEl;
@@ -717,12 +717,11 @@ document.addEventListener('DOMContentLoaded', function() {
     toastEl.setAttribute('aria-live', 'polite');
     toastEl.innerHTML = '<span class="icon" aria-hidden="true">🛒</span><span class="text">Total: <strong>0.00</strong>€</span>';
     document.body.appendChild(toastEl);
-    // Mantener el botón visible permanentemente
-    toastEl.classList.add('show');
+    // La visibilidad se controlará desde showCartTotalToast
     // Al hacer clic, llevar a la pestaña del carrito y ocultar la burbuja
     toastEl.addEventListener('click', function(){
       try {
-        // No ocultar el botón; solo navegar al carrito
+        // No ocultar permanentemente el botón; solo navegar al carrito
         const btn = document.querySelector('.boton-seccion[data-seccion="carrito"]');
         if (btn && typeof btn.click === 'function') {
           btn.click();
@@ -755,8 +754,9 @@ document.addEventListener('DOMContentLoaded', function() {
       el.classList.remove('suppressed');
       // Asegurar que se mantenga visible
       el.classList.add('show');
-      // Ya no se oculta automáticamente
-      if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+      // Ocultar automáticamente tras 3s, independientemente de modales
+      if (hideTimer) { clearTimeout(hideTimer); }
+      hideTimer = setTimeout(hideNow, 3000);
     } catch(e) { /* silencioso para no afectar UX */ }
   };
 
