@@ -6271,7 +6271,7 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
       padding: 14px 18px;
       border-radius: 12px;
       border: 2px solid rgba(255,255,255,0.2);
-      background: rgba(255,255,255,0.1);
+      background: rgba(0,0,0,0.3);
       color: #fff;
       font-size: 14px;
       transition: all 0.3s ease;
@@ -6281,7 +6281,7 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
     #profile-section #address-form input:focus {
       outline: none;
       border-color: rgba(99, 102, 241, 0.7);
-      background: rgba(255,255,255,0.15);
+      background: rgba(0,0,0,0.4);
       box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
       transform: translateY(-2px);
     }
@@ -6293,7 +6293,7 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
 
     #profile-section #address-form input:hover {
       border-color: rgba(255,255,255,0.3);
-      background: rgba(255,255,255,0.12);
+      background: rgba(0,0,0,0.35);
     }
 
     #profile-section #address-form .form-actions {
@@ -6616,8 +6616,8 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
           </div>
           
           <!-- Gestión de Direcciones -->
-          <div style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:20px;margin-bottom:20px;">
-            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+          <div class="addresses-section" style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:20px;margin-bottom:20px;">
+            <div class="addresses-header" style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
               <h4 style="color:#fff;margin:0;font-size:18px;font-weight:700;display:flex;align-items:center;gap:8px;">
                 <span>📍</span> Mis Direcciones
               </h4>
@@ -6639,7 +6639,7 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
           <!-- Formulario de Nueva Dirección (oculto por defecto) -->
           <div id="address-form" class="hidden" style="background:rgba(255,255,255,0.1);backdrop-filter:blur(10px);border-radius:12px;padding:20px;">
             <h4 style="color:#fff;margin:0 0 16px 0;font-size:18px;font-weight:700;">Nueva Dirección</h4>
-            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
+            <div class="form-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:16px;">
               <input id="address-name" class="checkout-input" placeholder="Nombre de la dirección (ej: Casa, Trabajo)" />
               <input id="address-contact-name" class="checkout-input" placeholder="Nombre completo" />
               <input id="address-line" class="checkout-input" placeholder="Dirección" style="grid-column:1/-1;" />
@@ -9107,7 +9107,7 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
           addressCard.innerHTML = `
             <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:8px;">
               <h5 style="color:#fff;margin:0;font-size:16px;font-weight:600;">${address.name}</h5>
-              <div style="display:flex;gap:8px;">
+              <div class="address-actions" style="display:flex;gap:8px;">
                 <button class="edit-address" data-index="${index}" style="background:rgba(255,255,255,0.1);color:#fff;border:1px solid rgba(255,255,255,0.2);border-radius:6px;padding:4px 8px;cursor:pointer;font-size:12px;">Editar</button>
                 <button class="delete-address" data-index="${index}" style="background:rgba(255,0,0,0.2);color:#ff6b6b;border:1px solid rgba(255,0,0,0.3);border-radius:6px;padding:4px 8px;cursor:pointer;font-size:12px;">Eliminar</button>
               </div>

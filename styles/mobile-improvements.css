@@ -6,6 +6,397 @@
 /* ===== MEJORAS PARA LA SECCIÓN TIENDA EN MÓVIL ===== */
 /* Eliminados estilos móviles de #pedidos para evitar conflictos; la nueva maquetación móvil se define en index.html */
 
+/* ===== MEJORAS PARA LA SECCIÓN DE CUENTA EN MÓVIL ===== */
+
+/* Animaciones suaves para la sección de cuenta */
+@keyframes slideInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+/* Transiciones suaves para elementos interactivos */
+#profile-section .addresses-section,
+#profile-section .address-card,
+#profile-section #address-form {
+  animation: slideInUp 0.4s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+}
+
+/* Rediseño completo de la sección de cuenta */
+@media (max-width: 768px) {
+  /* Contenedor principal de la sección cuenta */
+  #profile-section #profile-account > div {
+    padding: 20px !important;
+    margin: 0 !important;
+  }
+  
+  /* Header de la sección con mejor espaciado */
+  #profile-section #profile-account > div > div:first-child {
+    margin-bottom: 24px !important;
+    padding-bottom: 16px !important;
+    border-bottom: 1px solid rgba(255,255,255,0.1) !important;
+  }
+  
+  /* Título de la sección */
+  #profile-section #profile-account h3 {
+    font-size: 22px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  /* Grid de estadísticas */
+  #profile-section .points-stats {
+    grid-template-columns: 1fr !important;
+    gap: 12px !important;
+    margin-bottom: 20px !important;
+  }
+  
+  /* Sección de direcciones */
+  #profile-section .addresses-section {
+    margin-top: 24px !important;
+    padding: 20px !important;
+    background: rgba(255,255,255,0.08) !important;
+    border-radius: 12px !important;
+    backdrop-filter: blur(10px) !important;
+  }
+  
+  /* Header de direcciones con mejor layout */
+  #profile-section .addresses-header {
+    display: flex !important;
+    flex-direction: column !important;
+    gap: 16px !important;
+    margin-bottom: 20px !important;
+    align-items: stretch !important;
+  }
+  
+  /* Título de direcciones */
+  #profile-section .addresses-header h4 {
+    font-size: 18px !important;
+    margin: 0 !important;
+    text-align: center !important;
+  }
+  
+  /* Botón Nueva Dirección - REDISEÑADO */
+  #profile-section #btn-add-address {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    color: #fff !important;
+    border: none !important;
+    border-radius: 12px !important;
+    padding: 16px 24px !important;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1) !important;
+    box-shadow: 0 4px 20px rgba(102, 126, 234, 0.3) !important;
+    width: 100% !important;
+    min-height: 56px !important; /* Área táctil óptima */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    gap: 12px !important;
+    position: relative !important;
+    overflow: hidden !important;
+    transform: translateY(0) !important;
+  }
+  
+  /* Efecto de onda al hacer clic */
+  #profile-section #btn-add-address::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 50% !important;
+    left: 50% !important;
+    width: 0 !important;
+    height: 0 !important;
+    border-radius: 50% !important;
+    background: rgba(255,255,255,0.3) !important;
+    transform: translate(-50%, -50%) !important;
+    transition: width 0.6s, height 0.6s !important;
+  }
+  
+  #profile-section #btn-add-address:active::before {
+    width: 300px !important;
+    height: 300px !important;
+  }
+  
+  /* Icono del botón */
+  #profile-section #btn-add-address span:first-child {
+    font-size: 20px !important;
+    margin: 0 !important;
+    transition: transform 0.3s ease !important;
+  }
+  
+  /* Hover mejorado */
+  #profile-section #btn-add-address:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.4) !important;
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%) !important;
+  }
+  
+  #profile-section #btn-add-address:hover span:first-child {
+    transform: scale(1.2) !important;
+  }
+  
+  /* Estado activo mejorado */
+  #profile-section #btn-add-address:active {
+    transform: translateY(0) !important;
+    box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3) !important;
+  }
+  
+  /* Lista de direcciones */
+  #profile-section #addresses-list {
+    gap: 16px !important;
+  }
+  
+  /* Tarjetas de dirección */
+  #profile-section .address-card {
+    background: linear-gradient(135deg, rgba(255, 255, 255, 0.1) 0%, rgba(255, 255, 255, 0.05) 100%);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 16px;
+    padding: 20px;
+    margin-bottom: 16px;
+    backdrop-filter: blur(10px);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  #profile-section .address-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+    transition: left 0.6s ease;
+  }
+
+  #profile-section .address-card:hover::before {
+    left: 100%;
+  }
+
+  #profile-section .address-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+    border-color: rgba(255, 255, 255, 0.3);
+  }
+  
+  /* Acciones de dirección */
+  #profile-section .address-card .address-actions {
+    flex-direction: row !important;
+    gap: 8px !important;
+    margin-top: 12px !important;
+  }
+  
+  /* Botones de acción de dirección */
+  #profile-section .address-card .edit-address,
+  #profile-section .address-card .delete-address {
+    flex: 1 !important;
+    padding: 10px 16px !important;
+    font-size: 14px !important;
+    border-radius: 8px !important;
+    min-height: 44px !important; /* Área táctil adecuada */
+  }
+  
+  /* Formulario de nueva dirección */
+  #profile-section #address-form {
+    background: rgba(255,255,255,0.12) !important;
+    border-radius: 16px !important;
+    padding: 24px !important;
+    margin-top: 20px !important;
+    backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255,255,255,0.15) !important;
+  }
+  
+  /* Grid del formulario */
+  #profile-section #address-form .form-grid {
+    grid-template-columns: 1fr !important;
+    gap: 16px !important;
+  }
+  
+  /* Inputs del formulario */
+  #profile-section #address-form input {
+    padding: 10px 12px !important;
+    font-size: 14px !important;
+    border-radius: 8px !important;
+    min-height: 44px !important; /* Área táctil óptima */
+    background: rgba(0,0,0,0.3) !important;
+    border: 2px solid rgba(255,255,255,0.15) !important;
+    color: #ffffff !important;
+    transition: all 0.3s ease !important;
+  }
+  
+  #profile-section #address-form input:focus {
+    border-color: #667eea !important;
+    box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.2) !important;
+    outline: none !important;
+  }
+  
+  /* Botones del formulario */
+  #profile-section #address-form button {
+    padding: 14px 24px !important;
+    font-size: 16px !important;
+    border-radius: 10px !important;
+    min-height: 48px !important; /* Área táctil óptima */
+    font-weight: 600 !important;
+  }
+  
+  /* Panel administrativo */
+  #profile-section #admin-panel {
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%) !important;
+    border-radius: 16px !important;
+    padding: 24px !important;
+    margin-bottom: 32px !important;
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3) !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+
+  #profile-section #admin-panel::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    bottom: 0 !important;
+    background: linear-gradient(45deg, rgba(255,255,255,0.1) 0%, transparent 100%) !important;
+    pointer-events: none !important;
+  }
+
+  #profile-section #admin-panel h4 {
+    color: #ffffff !important;
+    font-size: 18px !important;
+    font-weight: 600 !important;
+    margin-bottom: 20px !important;
+    text-align: center !important;
+    text-shadow: 0 2px 4px rgba(0,0,0,0.2) !important;
+  }
+
+  /* Inputs del panel admin */
+  #profile-section #admin-panel input {
+    background: rgba(255, 255, 255, 0.1) !important;
+    border: 1px solid rgba(255, 255, 255, 0.2) !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    padding: 12px 16px !important;
+    margin-bottom: 16px !important;
+    font-size: 14px !important;
+    backdrop-filter: blur(10px) !important;
+    min-height: 44px !important;
+    transition: all 0.3s ease !important;
+  }
+
+  #profile-section #admin-panel input:focus {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border-color: rgba(255, 255, 255, 0.4) !important;
+    outline: none !important;
+    box-shadow: 0 0 0 3px rgba(255, 255, 255, 0.1) !important;
+  }
+
+  #profile-section #admin-panel input::placeholder {
+    color: rgba(255, 255, 255, 0.6) !important;
+  }
+
+  /* Botones del panel admin */
+  #profile-section #admin-panel button {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 1px solid rgba(255, 255, 255, 0.25) !important;
+    color: #ffffff !important;
+    border-radius: 12px !important;
+    padding: 12px 18px !important;
+    font-weight: 600 !important;
+    font-size: 14px !important;
+    cursor: pointer !important;
+    transition: all 0.3s ease !important;
+    backdrop-filter: blur(10px) !important;
+    min-height: 44px !important;
+    position: relative !important;
+    overflow: hidden !important;
+  }
+
+  #profile-section #admin-panel button::before {
+    content: '' !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: -100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent) !important;
+    transition: left 0.6s ease !important;
+  }
+
+  #profile-section #admin-panel button:hover::before {
+    left: 100% !important;
+  }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  /* Botón Nueva Dirección - versión ultra-móvil */
+  #profile-section #btn-add-address {
+    font-size: 15px !important;
+    padding: 14px 20px !important;
+    min-height: 52px !important;
+    border-radius: 10px !important;
+  }
+  
+  #profile-section #btn-add-address span:first-child {
+    font-size: 18px !important;
+  }
+  
+  /* Header de direcciones más compacto */
+  #profile-section .addresses-header {
+    gap: 12px !important;
+  }
+  
+  #profile-section .addresses-header h4 {
+    font-size: 16px !important;
+  }
+  
+  /* Tarjetas de dirección más compactas */
+  #profile-section .address-card {
+    padding: 14px !important;
+  }
+  
+  /* Botones de acción más pequeños */
+  #profile-section .address-card .edit-address,
+  #profile-section .address-card .delete-address {
+    font-size: 13px !important;
+    padding: 8px 12px !important;
+    min-height: 40px !important;
+  }
+  
+  /* Formulario más compacto */
+  #profile-section #address-form {
+    padding: 20px !important;
+  }
+  
+  #profile-section #address-form input {
+    padding: 12px 14px !important;
+    font-size: 15px !important;
+    min-height: 44px !important;
+  }
+  
+  #profile-section #address-form button {
+    padding: 12px 20px !important;
+    font-size: 15px !important;
+    min-height: 44px !important;
+  }
+}
+
 /* ===== MEJORAS PARA LA MODAL DE PERSONALIZACIÓN EN MÓVIL ===== */
 
 /* Ajustes generales para la modal de personalización */
