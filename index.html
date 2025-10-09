@@ -1328,6 +1328,28 @@
                 }
             }
         </style>
+
+    <style>
+    /* Pequeño: corrige centrado y maximiza área sin overflow */
+    @media (max-width: 480px) {
+        #pedidos.activa .product-gallery-ui {
+            max-width: 100%;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 6px;
+        }
+        #pedidos .product-gallery {
+            gap: 6px;
+            justify-items: center;
+            align-items: stretch;
+        }
+        #pedidos .product-item { padding: 6px; }
+    }
+    @media (max-width: 360px) {
+        #pedidos .product-gallery { gap: 4px; }
+        #pedidos .product-item { padding: 4px; }
+    }
+    </style>
         <script>
             (function(){
                 const scroller = document.getElementById('recoScroller');
@@ -1579,6 +1601,7 @@
         font-weight: 500;
         white-space: nowrap;
     }
+
     </style>
 
     <style>
@@ -1595,9 +1618,9 @@
             grid-template-rows: auto 1fr;
             grid-template-areas: "header" "gallery";
             gap: 16px;
-            max-width: 680px;
+            max-width: 720px;
             margin: 0 auto;
-            padding: 0 12px;
+            padding: 0 8px;
             justify-items: center;
         }
 
@@ -1637,16 +1660,17 @@
         #pedidos .product-gallery {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 12px;
+            gap: 8px;
             width: 100%;
-            justify-items: center;
+            justify-items: stretch;
+            align-items: stretch;
         }
 
         /* Tarjeta de producto: visual pulido y consistente */
         #pedidos .product-item {
             width: 100%;
-            max-width: 320px;
-            padding: 10px;
+            max-width: 360px;
+            padding: 8px;
             border-radius: 14px;
             background: rgba(255,255,255,0.04);
             border: 1px solid rgba(42,91,168,0.10);
@@ -1691,6 +1715,29 @@
         /* Ajustes tipográficos y de espacios */
         #pedidos .product-item p { margin: 6px 0 0; }
         #pedidos .product-item .actions { margin-top: 8px; }
+    }
+    </style>
+
+    <style>
+    /* Ajustes finales para pantallas muy estrechas: centrar última tarjeta impar y evitar clamp */
+    @media (max-width: 480px) {
+        /* Evita que las tarjetas queden más estrechas que su celda */
+        #pedidos .product-item { max-width: none; }
+        /* Centrar elementos dentro de sus celdas */
+        #pedidos .product-gallery { justify-items: center; align-items: start; }
+        /* Si el número total de productos es impar, la última tarjeta ocupa las 2 columnas y queda centrada */
+        #pedidos .product-gallery > .product-item:last-child:nth-child(odd) {
+            grid-column: 1 / -1;
+            justify-self: center;
+            width: calc(50% - 3px); /* mitad de la fila menos la mitad del gap (6px) */
+            max-width: 360px;
+        }
+    }
+    @media (max-width: 360px) {
+        #pedidos .product-gallery > .product-item:last-child:nth-child(odd) {
+            width: calc(50% - 2px); /* gap 4px => mitad 2px */
+            max-width: 340px;
+        }
     }
     </style>
 

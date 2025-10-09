@@ -301,3 +301,57 @@
   #profile-section .order-card-header, #profile-section .order-card-body{ padding:12px 10px !important; }
   #profile-section .order-status-badge{ font-size:10px; padding:5px 10px; }
 }
+
+/* ===== AJUSTES RESPONSIVOS PARA CAMISETAZO EN UNA SOLA LÍNEA ===== */
+
+/* Ajustes para que CAMISETAZO siempre se mantenga en una línea */
+@media (max-width: 768px) {
+  /* CAMISETAZO - Máximo tamaño en una sola línea */
+  .brand-header .brand-title {
+    font-size: clamp(1.8rem, 10vw, 2.8rem) !important;
+    letter-spacing: -0.5px !important;
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+    text-align: center !important;
+    width: 100% !important;
+    display: block !important;
+    margin: 0 auto !important;
+    transform: scaleX(0.95) !important;
+    transform-origin: center !important;
+  }
+}
+
+/* Ajustes para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  .brand-header .brand-title {
+    font-size: clamp(1.6rem, 9vw, 2.2rem) !important;
+    letter-spacing: -0.3px !important;
+    transform: scaleX(0.97) !important;
+  }
+}
+
+/* Ajustes para tablets y pantallas medianas */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .brand-header .brand-title {
+    font-size: clamp(2.2rem, 7vw, 3.2rem) !important;
+    letter-spacing: 0px !important;
+    white-space: nowrap !important;
+    transform: scaleX(0.98) !important;
+  }
+}
+
+/* Asegurar que el texto siempre sea visible y legible en una línea */
+.brand-header .brand-title {
+  word-break: keep-all !important;
+  overflow-wrap: normal !important;
+  hyphens: none !important;
+  text-align: center !important;
+  width: 100% !important;
+  display: block !important;
+  margin: 0 auto !important;
+  white-space: nowrap !important;
+  overflow: hidden !important;
+  text-overflow: clip !important;
+}
