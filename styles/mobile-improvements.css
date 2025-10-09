@@ -857,8 +857,8 @@
 @media (max-width: 768px) {
   /* CAMISETAZO - Máximo tamaño en una sola línea */
   .brand-header .brand-title {
-    font-size: clamp(1.8rem, 9vw, 3rem) !important;
-    letter-spacing: -1.5px !important;
+    font-size: clamp(2.2rem, 11vw, 3.5rem) !important;
+    letter-spacing: -1.3px !important;
     line-height: 1 !important;
     white-space: nowrap !important;
     overflow: hidden !important;
@@ -867,9 +867,9 @@
     width: 100% !important;
     display: block !important;
     margin: 0 auto !important;
-    transform: scaleX(0.75) !important;
+    transform: scaleX(0.82) !important;
     transform-origin: center !important;
-    max-width: 90vw !important;
+    max-width: 95vw !important;
     padding: 0 5px !important;
   }
 }
@@ -877,30 +877,30 @@
 /* Ajustes para pantallas ultra pequeñas (menos de 375px) */
 @media (max-width: 375px) {
   .brand-header .brand-title {
-    font-size: clamp(1.6rem, 8vw, 2.4rem) !important;
-    letter-spacing: -1.8px !important;
-    transform: scaleX(0.72) !important;
-    max-width: 88vw !important;
+    font-size: clamp(2rem, 10vw, 3rem) !important;
+    letter-spacing: -1.5px !important;
+    transform: scaleX(0.88) !important;
+    max-width: 94vw !important;
   }
 }
 
 /* Ajustes para pantallas muy muy pequeñas (menos de 320px) - iPhone SE, etc */
 @media (max-width: 320px) {
   .brand-header .brand-title {
-    font-size: clamp(1.4rem, 7vw, 2rem) !important;
-    letter-spacing: -1.5px !important;
-    transform: scaleX(0.75) !important;
-    max-width: 90vw !important;
+    font-size: clamp(1.8rem, 9vw, 2.5rem) !important;
+    letter-spacing: -1.2px !important;
+    transform: scaleX(0.85) !important;
+    max-width: 92vw !important;
   }
 }
 
 /* Ajustes para tablets y pantallas medianas */
 @media (min-width: 769px) and (max-width: 1024px) {
   .brand-header .brand-title {
-    font-size: clamp(2rem, 5.5vw, 3rem) !important;
-    letter-spacing: -1.2px !important;
-    transform: scaleX(0.85) !important;
-    max-width: 90vw !important;
+    font-size: clamp(2.4rem, 6.5vw, 3.8rem) !important;
+    letter-spacing: -1px !important;
+    transform: scaleX(0.9) !important;
+    max-width: 96vw !important;
   }
 }
 
