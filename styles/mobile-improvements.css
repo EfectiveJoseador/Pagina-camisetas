@@ -294,12 +294,170 @@
 
   /* Caja de productos: compacta y sin desbordes */
   #profile-section .order-products-box{ padding:12px; font-size:12px; white-space:pre-wrap; word-break:break-word; }
+  
+  /* Apilar tarjeta y detalles verticalmente en móvil */
+  #profile-section .order-card{ display:flex; flex-direction:column; align-items:stretch; gap:0; }
+  #profile-section .order-card-header,
+  #profile-section .order-card-body,
+  #profile-section .order-details{ width:100%; max-width:100%; }
+  
+  /* Botón de ver detalles a lo ancho, amigable al tacto */
+  #profile-section .order-expand-btn{ width:100%; justify-content:space-between; min-height:44px; padding:12px; }
+  
+  /* Asegurar caja interior sin cortes laterales */
+  #profile-section .order-details-inner{ box-sizing:border-box; padding:16px 12px !important; }
+  
+  /* Mejoras para despliegue vertical de detalles en móvil */
+  #profile-section .order-details {
+    background: rgba(15, 23, 42, 0.9) !important;
+    border-top: 1px solid rgba(99, 102, 241, 0.2) !important;
+    border-radius: 0 0 12px 12px !important;
+    margin-top: 0 !important;
+  }
+  
+  /* Secciones de detalles con mejor espaciado vertical */
+  #profile-section .order-details > div > div {
+    margin-bottom: 16px !important;
+  }
+  
+  #profile-section .order-details > div > div:last-child {
+    margin-bottom: 0 !important;
+  }
+  
+  /* Información del cliente y dirección con mejor separación */
+  #profile-section .order-details > div > div[style*="margin-bottom:20px"] {
+    margin-bottom: 20px !important;
+    padding: 12px !important;
+  }
+  
+  /* Títulos de secciones más prominentes en móvil */
+  #profile-section .order-details h4 {
+    font-size: 15px !important;
+    margin-bottom: 10px !important;
+  }
+  
+  /* Grid de estadísticas (camisetas, precio por unidad) en columna única */
+  #profile-section .order-card-body > div[style*="display:grid"] {
+    grid-template-columns: 1fr !important;
+    gap: 8px !important;
+  }
+  
+  /* Ajustar el contenedor de puntos para que ocupe el ancho completo */
+  #profile-section .order-card-body > div:first-child > div:last-child {
+    width: 100% !important;
+    margin-top: 12px !important;
+  }
+  
+  /* Mensaje de puntos más compacto */
+  #profile-section .order-card-body > div[style*="background:linear-gradient"] {
+    padding: 16px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  #profile-section .order-card-body > div[style*="background:linear-gradient"] h3 {
+    font-size: 16px !important;
+    margin-bottom: 8px !important;
+  }
+  
+  #profile-section .order-card-body > div[style*="background:linear-gradient"] p {
+    font-size: 13px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  #profile-section .order-card-body > div[style*="background:linear-gradient"] > div[style*="background"] {
+    padding: 10px !important;
+    margin-bottom: 12px !important;
+  }
+  
+  #profile-section .order-card-body > div[style*="background:linear-gradient"] > div:last-child > div {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 6px !important;
+  }
+  
+  #profile-section .order-card-body > div[style*="background:linear-gradient"] > div:last-child > div > div {
+    padding: 6px !important;
+  }
+  
+  #profile-section .order-card-body > div[style*="background:linear-gradient"] > div:last-child > div > div > div:first-child {
+    font-size: 12px !important;
+  }
+  
+  #profile-section .order-card-body > div[style*="background:linear-gradient"] > div:last-child > div > div > div:last-child {
+    font-size: 10px !important;
+  }
 }
 
 /* Extra para pantallas muy pequeñas */
 @media (max-width: 420px){
   #profile-section .order-card-header, #profile-section .order-card-body{ padding:12px 10px !important; }
   #profile-section .order-status-badge{ font-size:10px; padding:5px 10px; }
+  
+  /* Ajustes adicionales para pantallas muy pequeñas */
+  #profile-section .order-details-inner{ padding:12px 8px !important; }
+  
+  #profile-section .order-detail-row {
+    padding: 10px 0 !important;
+    font-size: 13px !important;
+  }
+  
+  #profile-section .order-detail-label {
+    font-size: 12px !important;
+  }
+  
+  #profile-section .order-detail-value {
+    font-size: 13px !important;
+  }
+  
+  #profile-section .order-products-box {
+    padding: 10px !important;
+    font-size: 11px !important;
+  }
+  
+  #profile-section .order-details h4 {
+    font-size: 14px !important;
+  }
+  
+  /* Reducir aún más el tamaño de fuente en los grids de premios */
+  #profile-section .order-card-body > div[style*="background:linear-gradient"] > div:last-child > div > div > div:first-child {
+    font-size: 11px !important;
+  }
+  
+  #profile-section .order-card-body > div[style*="background:linear-gradient"] > div:last-child > div > div > div:last-child {
+    font-size: 9px !important;
+  }
+  
+  /* Ajustar el botón de expandir */
+  #profile-section .order-expand-btn {
+    padding: 10px !important;
+    font-size: 14px !important;
+  }
+  
+  /* Reducir espaciado en secciones de información */
+  #profile-section .order-details > div > div[style*="margin-bottom:20px"] {
+    margin-bottom: 16px !important;
+    padding: 10px !important;
+  }
+  
+  /* Ajustar el total del pedido */
+  #profile-section .order-card-body > div:first-child > div:first-child > div:last-child {
+    font-size: 28px !important;
+  }
+  
+  /* Reducir el tamaño de los iconos en el header */
+  #profile-section .order-card-header > div:first-child > div:first-child > div:first-child {
+    width: 36px !important;
+    height: 36px !important;
+    font-size: 18px !important;
+  }
+  
+  /* Ajustar el número de pedido */
+  #profile-section .order-card-header > div:first-child > div:last-child > div:first-child {
+    font-size: 16px !important;
+  }
+  
+  #profile-section .order-card-header > div:first-child > div:last-child > div:last-child {
+    font-size: 12px !important;
+  }
 }
 
 /* ===== AJUSTES RESPONSIVOS PARA CAMISETAZO EN UNA SOLA LÍNEA ===== */

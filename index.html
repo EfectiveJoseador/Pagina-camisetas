@@ -8097,6 +8097,8 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
             document.querySelectorAll('.order-details.expanded').forEach(d => {
               if (d.id !== `details-${orderId}`) {
                 d.classList.remove('expanded');
+                // Cerrar con altura animada
+                d.style.maxHeight = '0px';
                 const otherId = d.id.replace('details-', '');
                 const otherArrow = document.getElementById(`arrow-${otherId}`);
                 if (otherArrow) otherArrow.style.transform = '';
@@ -8107,24 +8109,29 @@ const guideAlt2 = isKids2 ? 'Guía de tallas Niños' : (isNBA2 ? 'Guía de talla
             if (!isExpanded) {
               details.classList.add('expanded');
               if (arrow) arrow.style.transform = 'rotate(180deg)';
-              
-              // Scroll suave al elemento expandido
+
+              // Altura dinámica para desplegar hacia abajo (especialmente en móvil)
+              // Medimos el contenido y establecemos max-height para animación suave
+              // Ejecutar tras un frame para asegurar cálculo correcto
+              requestAnimationFrame(() => {
+                const contentHeight = details.scrollHeight;
+                details.style.maxHeight = contentHeight + 'px';
+              });
+
+              // Scroll suave: en móvil enfocamos el bloque de detalles
               setTimeout(() => {
-                const card = details.closest('.order-card');
-                if (card) {
-                  const rect = card.getBoundingClientRect();
-                  const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
-                  const targetTop = rect.top + scrollTop - 100;
-                  
-                  window.scrollTo({
-                    top: targetTop,
-                    behavior: 'smooth'
-                  });
-                }
-              }, 100);
+                const isMobile = window.matchMedia('(max-width: 768px)').matches;
+                const targetEl = isMobile ? details : (details.closest('.order-card') || details);
+                const rect = targetEl.getBoundingClientRect();
+                const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
+                const targetTop = rect.top + scrollTop - 80;
+                window.scrollTo({ top: targetTop, behavior: 'smooth' });
+              }, 120);
             } else {
               details.classList.remove('expanded');
               if (arrow) arrow.style.transform = '';
+              // Contraer con altura animada
+              details.style.maxHeight = '0px';
             }
           }
         };
