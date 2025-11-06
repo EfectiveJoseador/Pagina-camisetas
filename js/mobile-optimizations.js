@@ -143,79 +143,10 @@ function optimizePersonalizationModal() {
                             }, 300);
                         });
                     });
-                    
-                    // Mejorar la navegación del carrusel de imágenes
-                    const carousel = modal.querySelector('#modalTiendaCarousel');
-                    
-                    if (carousel) {
-                        enableTouchSwipe(carousel);
-                    }
                 }
             }, 300);
         }
     });
-}
-
-/**
- * Habilita el deslizamiento táctil para carruseles de imágenes
- * @param {HTMLElement} carousel - El elemento del carrusel
- */
-function enableTouchSwipe(carousel) {
-    let startX, endX;
-    const track = carousel.querySelector('.carousel-track');
-    
-    if (!track) return;
-    
-    // Obtener el número de slides
-    const slides = track.querySelectorAll('div[style*="flex:0 0 100%"]');
-    let currentIndex = 0;
-    
-    carousel.addEventListener('touchstart', function(e) {
-        startX = e.touches[0].clientX;
-    }, { passive: true });
-    
-    carousel.addEventListener('touchmove', function(e) {
-        endX = e.touches[0].clientX;
-    }, { passive: true });
-    
-    carousel.addEventListener('touchend', function() {
-        if (!startX || !endX) return;
-        
-        const diff = startX - endX;
-        const threshold = 50; // Umbral mínimo para considerar un swipe
-        
-        if (Math.abs(diff) > threshold) {
-            if (diff > 0) {
-                // Swipe izquierda - siguiente slide
-                currentIndex = Math.min(currentIndex + 1, slides.length - 1);
-            } else {
-                // Swipe derecha - slide anterior
-                currentIndex = Math.max(currentIndex - 1, 0);
-            }
-            
-            // Actualizar la posición del carrusel
-            track.style.transform = `translateX(-${currentIndex * 100}%)`;
-            
-            // Actualizar miniaturas activas
-            const thumbs = carousel.closest('#modal-tienda-carrusel')?.querySelector('#modalTiendaThumbs');
-            
-            if (thumbs) {
-                const thumbImages = thumbs.querySelectorAll('img');
-                
-                thumbImages.forEach((img, i) => {
-                    if (i === currentIndex) {
-                        img.classList.add('active-thumb');
-                    } else {
-                        img.classList.remove('active-thumb');
-                    }
-                });
-            }
-        }
-        
-        // Resetear valores
-        startX = null;
-        endX = null;
-    }, { passive: true });
 }
 
 /**

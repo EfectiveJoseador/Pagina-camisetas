@@ -34,7 +34,7 @@ document.addEventListener('DOMContentLoaded', function() {
         pedidoCarrito.forEach((prod, idx) => {
             items.innerHTML += `
                 <div class="carrito-item">
-                    <img src="assets/productos/Barcelona2526L/1.jpg" class="carrito-img" alt="Camiseta Barcelona 25-26 Local" loading="lazy" width="1512" height="1512" style="width:100%;height:100%;object-fit:cover;border-radius:8px;display:block;">
+                    <img src="assets/productos/Barcelona2526L/1_resultado.webp" class="carrito-img" alt="Camiseta Barcelona 25-26 Local" loading="lazy" width="1512" height="1512" style="width:100%;height:100%;object-fit:cover;border-radius:8px;display:block;">
                     <div>
                         <b>Camiseta Barcelona 25-26 Local</b><br>
                         Talla: ${prod.talla}<br>

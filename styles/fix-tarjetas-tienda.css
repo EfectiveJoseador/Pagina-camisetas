@@ -1,0 +1,739 @@
+/**
+ * FIX: Corrección de diseño para tarjetas de productos en tienda
+ * 
+ * Este archivo corrige los siguientes problemas:
+ * 1. Primera tarjeta aparece más grande que las demás
+ * 2. Asegura simetría perfecta entre todas las tarjetas
+ * 3. Corrige visualización de imágenes en modales
+ * 4. Mantiene consistencia responsiva
+ */
+
+/* ========================================
+   GRID DE PRODUCTOS - CONSISTENCIA ABSOLUTA
+   ======================================== */
+
+/* OVERRIDE TOTAL: Estos estilos tienen máxima prioridad */
+#pedidos #productGallery,
+#pedidos.activa #productGallery,
+#pedidos .product-gallery,
+#pedidos.activa .product-gallery {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+    gap: 20px !important;
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    align-items: stretch !important;
+    justify-items: stretch !important;
+    grid-auto-flow: row !important;
+    grid-auto-rows: minmax(300px, auto) !important;
+    padding: 0 !important;
+}
+
+/* OVERRIDE ULTRA-MÁXIMO para móvil: Forzar 2 columnas en dispositivos pequeños */
+@media (max-width: 900px) {
+    html body #pedidos #productGallery,
+    html body #pedidos.activa #productGallery,
+    html body #pedidos .product-gallery,
+    html body #pedidos.activa .product-gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 16px !important;
+        max-width: 100% !important;
+    }
+}
+
+/* Forzar grid de 4 columnas exactas con tamaños fijos */
+#pedidos.activa .product-gallery,
+#pedidos .product-gallery {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important; /* minmax para evitar overflow */
+    gap: 20px !important;
+    width: 100% !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+    align-items: stretch !important; /* Todas las tarjetas igual altura */
+    justify-items: stretch !important; /* Cada item ocupa su celda completa */
+    grid-auto-flow: row !important; /* Flujo por filas sin dense */
+    grid-auto-rows: minmax(300px, auto) !important;
+}
+
+/* Asegurar que el grid no cambie su comportamiento */
+.product-gallery {
+    display: grid !important;
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important;
+}
+
+/* CRÍTICO: Eliminar comportamiento especial de la primera tarjeta */
+#pedidos #productGallery > .product-item:first-child,
+#pedidos #productGallery > .product-item:only-child,
+#pedidos.activa #productGallery > .product-item:first-child,
+#pedidos.activa #productGallery > .product-item:only-child,
+#pedidos .product-gallery > .product-item:first-child,
+#pedidos .product-gallery > .product-item:only-child,
+#pedidos.activa .product-gallery > .product-item:first-child,
+#pedidos.activa .product-gallery > .product-item:only-child,
+.product-gallery > .product-item:first-child,
+.product-gallery > .product-item:only-child {
+    justify-self: stretch !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    min-width: 0 !important;
+    grid-column: auto / span 1 !important; /* Ocupar exactamente 1 columna */
+    display: flex !important; /* Asegurar que siempre sea visible */
+    visibility: visible !important;
+    opacity: 1 !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+/* Cuando hay múltiples productos, forzar tamaño uniforme para TODOS */
+#pedidos .product-gallery > .product-item,
+#pedidos.activa .product-gallery > .product-item {
+    grid-column: auto !important; /* Cada tarjeta en su columna */
+    justify-self: stretch !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+    display: flex !important; /* Todas visibles */
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Contrarresta cualquier regla :only-child del HTML inline */
+#pedidos .product-gallery > .product-item:only-child {
+    grid-column: auto !important;
+    justify-self: stretch !important;
+    max-width: 100% !important;
+}
+
+/* CRÍTICO: Todas las tarjetas deben tener exactamente el mismo tamaño */
+#pedidos .product-gallery > .product-item:nth-child(n),
+#pedidos.activa .product-gallery > .product-item:nth-child(n) {
+    min-height: 300px !important;
+    max-height: 340px !important;
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important; /* CRÍTICO: Permitir que el grid controle el ancho */
+    grid-column: auto / span 1 !important; /* Auto-colocación, una columna */
+    grid-row: auto / span 1 !important; /* Auto-colocación, una fila */
+}
+
+/* Asegurar que NINGÚN elemento ocupe más de una columna */
+#pedidos .product-gallery > *,
+#pedidos.activa .product-gallery > * {
+    grid-column: auto / span 1 !important;
+    grid-row: auto / span 1 !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* OVERRIDE CRÍTICO: Contrarrestar reglas inline del HTML */
+/* TODAS las tarjetas deben ocupar exactamente 1 columna y estirarse */
+#pedidos .product-gallery > .product-item,
+#pedidos.activa .product-gallery > .product-item {
+    grid-column: auto / span 1 !important; /* Auto-colocación, ocupar 1 columna */
+    justify-self: stretch !important;
+    align-self: stretch !important;
+    min-width: 0 !important; /* Evitar overflow */
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+/* Contrarrestar TODAS las reglas especiales del HTML inline */
+#pedidos .product-gallery > .product-item:only-child,
+#pedidos .product-gallery > .product-item:first-child,
+#pedidos .product-gallery > .product-item:last-child,
+#pedidos.activa .product-gallery > .product-item:only-child,
+#pedidos.activa .product-gallery > .product-item:first-child,
+#pedidos.activa .product-gallery > .product-item:last-child {
+    grid-column: auto / span 1 !important; /* Forzar 1 columna */
+    justify-self: stretch !important;
+    max-width: 100% !important;
+    width: 100% !important;
+}
+
+/* ========================================
+   TARJETAS DE PRODUCTO - DIMENSIONES FIJAS
+   ======================================== */
+
+.product-item {
+    min-height: 300px !important; /* Reducido: solo imagen + título + precio */
+    max-height: 340px !important; /* Altura máxima reducida */
+    height: auto !important; /* Permitir crecimiento controlado */
+    display: flex !important;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
+    align-items: stretch !important;
+    width: 100% !important;
+    min-width: 0 !important; /* CRÍTICO: Evitar que el contenido expanda la tarjeta */
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    overflow: hidden !important;
+    padding: 12px !important;
+}
+
+/* Asegurar que TODAS las tarjetas en pedidos tengan el mismo ancho */
+#pedidos .product-item,
+#pedidos.activa .product-item,
+#pedidos .product-gallery .product-item,
+#pedidos.activa .product-gallery .product-item {
+    width: 100% !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+}
+
+/* Contenedor de imagen padre - asegurar 100% de ancho */
+#pedidos .product-img-container,
+#pedidos .product-item .product-img-container,
+.product-img-container {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    display: block !important;
+    box-sizing: border-box !important;
+}
+
+/* Contenedor de imagen con aspect ratio fijo */
+#pedidos .product-img-wrapper,
+#pedidos .product-item .product-img-wrapper,
+.product-img-wrapper {
+    aspect-ratio: 1 / 1 !important; /* Cuadrado perfecto */
+    width: 100% !important;
+    max-width: 100% !important; /* CRÍTICO: eliminar límite de 800px */
+    min-width: 0 !important;
+    height: auto !important; /* Mantener proporción */
+    max-height: 200px !important; /* Límite máximo */
+    min-height: 180px !important; /* Límite mínimo */
+    overflow: hidden !important;
+    border-radius: 8px !important;
+    background: linear-gradient(110deg, rgba(46,123,237,0.03) 8%, rgba(46,123,237,0.08) 18%, rgba(46,123,237,0.03) 33%) !important;
+    background-size: 200% 100% !important;
+    animation: shimmer 1.5s ease-in-out infinite;
+    flex-shrink: 0 !important; /* No encoger */
+    box-sizing: border-box !important;
+}
+
+/* Asegurar que TODAS las imágenes de tarjetas sean del mismo tamaño */
+#pedidos .product-gallery > .product-item:nth-child(n) .product-img-wrapper {
+    max-height: 200px !important;
+    min-height: 180px !important;
+    width: 100% !important;
+}
+
+/* Imágenes dentro del contenedor */
+#pedidos .product-item img,
+.product-item img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+    object-position: center !important;
+    display: block !important;
+    border-radius: 8px !important;
+}
+
+/* Asegurar uniformidad en TODAS las imágenes */
+#pedidos .product-gallery > .product-item:nth-child(n) img {
+    width: 100% !important;
+    height: 100% !important;
+    object-fit: cover !important;
+}
+
+/* ========================================
+   CONTENIDO DE TARJETAS - ALTURA UNIFORME
+   ======================================== */
+
+/* Título del producto - UNIFORME para todas las tarjetas */
+#pedidos .product-item h4,
+.product-item h4 {
+    min-height: 2.6rem !important;
+    max-height: 3.2rem !important;
+    line-height: 1.3 !important;
+    font-size: 1.02rem !important;
+    margin: 12px 0 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    text-align: center !important;
+    word-break: break-word !important;
+    overflow-wrap: break-word !important;
+}
+
+/* Asegurar que TODOS los títulos sean del mismo tamaño */
+#pedidos .product-gallery > .product-item:nth-child(n) h4 {
+    min-height: 2.6rem !important;
+    max-height: 3.2rem !important;
+    font-size: 1.02rem !important;
+}
+
+/* Precio - elemento final de la tarjeta - UNIFORME */
+#pedidos .product-item .price,
+.product-item .price {
+    margin: 8px 0 0 0 !important;
+    font-size: 1.1rem !important;
+    font-weight: 900 !important;
+    display: inline-block !important;
+    background: var(--color-secundario) !important;
+    padding: 8px 14px !important;
+    border-radius: 8px !important;
+    box-shadow: 0 2px 8px rgba(46, 123, 237, 0.15) !important;
+    flex-shrink: 0 !important; /* No encoger */
+    margin-bottom: 0 !important; /* Sin margen inferior */
+}
+
+/* Asegurar que TODOS los precios sean del mismo tamaño */
+#pedidos .product-gallery > .product-item:nth-child(n) .price {
+    font-size: 1.1rem !important;
+    padding: 8px 14px !important;
+}
+
+/* Descripción - OCULTA para reducir altura */
+#pedidos .product-item .excerpt,
+.product-item .excerpt,
+#pedidos .product-gallery .product-item .excerpt {
+    display: none !important; /* Ocultamos la descripción completamente */
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Botones de acción - Ocultamos para reducir altura */
+#pedidos .product-item .actions,
+.product-item .actions,
+#pedidos .product-gallery .product-item .actions {
+    display: none !important; /* Ocultamos los botones de acción */
+    visibility: hidden !important;
+    height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+/* Si necesitas mantener los botones, usa esto en su lugar:
+.product-item .actions {
+    display: flex !important;
+    gap: 6px !important;
+    justify-content: center !important;
+    margin-top: 8px !important;
+    padding-top: 0 !important;
+    flex-shrink: 0 !important;
+}
+*/
+
+/* ========================================
+   MODALES - IMÁGENES VISIBLES
+   ======================================== */
+
+/* Modal de personalización simple */
+.modal-personalizacion img {
+    width: 350px !important;
+    height: 350px !important;
+    object-fit: contain !important;
+    max-width: 100% !important;
+    max-height: 80vh !important;
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+/* Modal de carrusel/tienda */
+#modal-tienda-carrusel img {
+    display: block !important;
+    object-fit: contain !important;
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: auto !important;
+    height: auto !important;
+}
+
+/* Carrusel principal */
+#modalTiendaCarousel img {
+    max-height: 450px !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+/* Miniaturas */
+#modalTiendaThumbs img {
+    display: block !important;
+    width: 64px !important;
+    height: 64px !important;
+    object-fit: cover !important;
+    border-radius: 6px !important;
+    margin: 4px !important;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2) !important;
+    transition: transform 0.2s ease, box-shadow 0.2s ease !important;
+}
+
+#modalTiendaThumbs img:hover {
+    transform: translateY(-2px) !important;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3) !important;
+}
+
+#modalTiendaThumbs img.active-thumb {
+    outline: 3px solid var(--azul-acento) !important;
+    transform: scale(1.05) !important;
+}
+
+/* ========================================
+   RESPONSIVE - MANTENER CONSISTENCIA
+   ======================================== */
+
+/* Tablet grande (901px - 1200px) - 3 columnas */
+@media (max-width: 1200px) and (min-width: 901px) {
+    #pedidos.activa .product-gallery,
+    #pedidos .product-gallery {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 18px !important;
+    }
+    
+    .product-item {
+        min-height: 280px !important;
+        max-height: 320px !important;
+    }
+    
+    /* Asegurar que cada tarjeta ocupe exactamente 1 columna */
+    #pedidos .product-gallery > .product-item,
+    #pedidos.activa .product-gallery > .product-item {
+        grid-column: auto / span 1 !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+/* Tablet pequeño (601px - 900px) - 2 columnas */
+@media (max-width: 900px) and (min-width: 601px) {
+    /* OVERRIDE ULTRA-MÁXIMO: Forzar 2 columnas en tablet pequeño */
+    html body #pedidos.activa .product-gallery,
+    html body #pedidos .product-gallery,
+    html body #pedidos #productGallery,
+    html body #pedidos.activa #productGallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 16px !important;
+        max-width: 600px !important;
+        margin: 0 auto !important;
+    }
+    
+    .product-item {
+        min-height: 260px !important;
+        max-height: 300px !important;
+    }
+    
+    /* Asegurar que cada tarjeta ocupe exactamente 1 columna */
+    #pedidos .product-gallery > .product-item,
+    #pedidos.activa .product-gallery > .product-item {
+        grid-column: auto / span 1 !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+/* Móvil (≤ 600px) - 2 columnas */
+@media (max-width: 600px) {
+    /* OVERRIDE ULTRA-MÁXIMO: Forzar 2 columnas en móvil */
+    html body #pedidos.activa .product-gallery,
+    html body #pedidos .product-gallery,
+    html body #pedidos #productGallery,
+    html body #pedidos.activa #productGallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 12px !important;
+    }
+    
+    .product-item {
+        min-height: 240px !important;
+        max-height: 280px !important;
+        padding: 8px !important;
+    }
+    
+    .product-img-wrapper {
+        max-height: 140px !important;
+        min-height: 110px !important;
+    }
+    
+    .product-item h4 {
+        font-size: 0.9rem !important;
+        min-height: 2.4rem !important;
+        max-height: 2.8rem !important;
+    }
+    
+    .product-item .price {
+        font-size: 1rem !important;
+        padding: 6px 10px !important;
+    }
+    
+    /* Asegurar que cada tarjeta ocupe exactamente 1 columna */
+    #pedidos .product-gallery > .product-item,
+    #pedidos.activa .product-gallery > .product-item {
+        grid-column: auto / span 1 !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+/* Móvil pequeño (≤ 480px) */
+@media (max-width: 480px) {
+    #pedidos.activa .product-gallery {
+        gap: 10px !important;
+    }
+    
+    .product-item {
+        min-height: 220px !important;
+        max-height: 260px !important;
+    }
+    
+    .product-img-wrapper {
+        max-height: 120px !important;
+        min-height: 90px !important;
+    }
+    
+    .product-item h4 {
+        font-size: 0.85rem !important;
+    }
+}
+
+/* Móvil muy pequeño (≤ 360px) */
+@media (max-width: 360px) {
+    #pedidos.activa .product-gallery {
+        gap: 8px !important;
+    }
+    
+    .product-item {
+        min-height: 200px !important;
+        max-height: 240px !important;
+        padding: 6px !important;
+    }
+    
+    .product-img-wrapper {
+        max-height: 100px !important;
+        min-height: 80px !important;
+    }
+    
+    .product-item h4 {
+        font-size: 0.8rem !important;
+        min-height: 2.2rem !important;
+    }
+}
+
+/* ========================================
+   FIXES ESPECÍFICOS PARA PROBLEMAS COMUNES
+   ======================================== */
+
+/* Evitar que el contenido se desborde */
+.product-item > * {
+    max-width: 100% !important;
+    box-sizing: border-box !important;
+}
+
+/* Asegurar que las imágenes no rompan el layout */
+.product-item img {
+    max-width: 100% !important;
+    height: auto !important;
+    display: block !important;
+}
+
+/* Prevenir saltos de línea incontrolados */
+.product-item h4,
+.product-item .excerpt {
+    word-wrap: break-word !important;
+    overflow-wrap: break-word !important;
+    hyphens: auto !important;
+}
+
+/* Asegurar que el grid se mantenga estable - DESHABILITADO porque interfiere con grid */
+.product-gallery::before,
+.product-gallery::after {
+    content: none !important;
+    display: none !important;
+}
+
+/* Fix para animaciones que puedan afectar el tamaño */
+.product-item {
+    animation-fill-mode: forwards !important;
+    transform-origin: center !important;
+}
+
+/* Asegurar que el hover no cambie el tamaño base */
+.product-item:hover {
+    transform: translateY(-8px) !important; /* Solo traslación, no escalado */
+    z-index: 10 !important;
+}
+
+/* Fix para modales en dispositivos táctiles */
+@media (hover: none) and (pointer: coarse) {
+    .product-item:hover {
+        transform: none !important;
+    }
+    
+    .product-item:active {
+        transform: translateY(-4px) !important;
+    }
+}
+
+/* Asegurar visibilidad de imágenes en modales */
+.modal-personalizacion,
+#modal-tienda-carrusel {
+    z-index: 9999 !important;
+}
+
+.modal-personalizacion img,
+#modal-tienda-carrusel img {
+    visibility: visible !important;
+    opacity: 1 !important;
+    display: block !important;
+}
+
+/* Fix para el carrusel de imágenes */
+#modalTiendaCarousel {
+    position: relative !important;
+    overflow: hidden !important;
+    width: 100% !important;
+    height: auto !important;
+    max-height: 450px !important;
+}
+
+#modalTiendaCarousel .carousel-track {
+    display: flex !important;
+    transition: transform 0.3s ease !important;
+    width: 100% !important;
+    height: 100% !important;
+}
+
+#modalTiendaCarousel .carousel-slide {
+    flex: 0 0 100% !important;
+    width: 100% !important;
+    height: 100% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
+
+#modalTiendaCarousel .carousel-slide img {
+    max-width: 100% !important;
+    max-height: 100% !important;
+    width: auto !important;
+    height: auto !important;
+    object-fit: contain !important;
+    display: block !important;
+    margin: 0 auto !important;
+}
+
+/* Fix para miniaturas del carrusel */
+#modalTiendaThumbs {
+    display: flex !important;
+    flex-wrap: wrap !important;
+    justify-content: center !important;
+    gap: 8px !important;
+    margin-top: 12px !important;
+    padding: 6px !important;
+    max-width: 100% !important;
+}
+
+#modalTiendaThumbs img {
+    cursor: pointer !important;
+    transition: all 0.2s ease !important;
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Asegurar que el modal de personalización simple muestre imágenes */
+.modal-personalizacion .modal-content img {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-width: 100% !important;
+    height: auto !important;
+    margin: 0 auto !important;
+}
+
+/* Fix para el contenedor de imagen en modales */
+.modal-personalizacion .modal-content > div:first-child,
+#modal-tienda-carrusel .tienda-panel > div:first-child {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    min-height: 200px !important; /* Altura mínima para asegurar visibilidad */
+    background: var(--color-secundario) !important;
+    border-radius: 8px !important;
+    overflow: hidden !important;
+}
+
+/* Fix específico para cuando las imágenes no cargan */
+img[src=""],
+img:not([src]),
+img[src="#"] {
+    display: none !important;
+}
+
+/* Mostrar placeholder cuando la imagen falla */
+img[data-fallback-stage] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+}
+
+/* Asegurar que el logo de fallback sea visible */
+img[src*="logo.webp"] {
+    display: block !important;
+    visibility: visible !important;
+    opacity: 1 !important;
+    max-width: 100px !important;
+    max-height: 100px !important;
+    margin: 0 auto !important;
+    padding: 20px !important;
+    background: var(--color-secundario) !important;
+    border-radius: 8px !important;
+}
+
+/* ========================================
+   PEDIDO-MINI-CARD - CORRECCIÓN DE TAMAÑO
+   ======================================== */
+
+/* Asegurar que pedido-mini-card no tenga limitaciones de ancho */
+.pedido-mini-card,
+#pedidos .pedido-mini-card,
+#pedidos.activa .pedido-mini-card,
+.product-item .pedido-mini-card {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    padding: 0 !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    box-sizing: border-box !important;
+}
+
+/* Contenedores internos de pedido-mini-card */
+.pedido-mini-card .product-img-container,
+.pedido-mini-card > div {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    box-sizing: border-box !important;
+}
+
+/* Wrapper de imagen dentro de pedido-mini-card */
+.pedido-mini-card .product-img-wrapper {
+    width: 100% !important;
+    max-width: 100% !important;
+    min-width: 0 !important;
+    aspect-ratio: 1 / 1 !important;
+    box-sizing: border-box !important;
+}
+
+/* Imágenes dentro de pedido-mini-card */
+.pedido-mini-card img,
+.pedido-mini-card img.pedido-carrusel-img {
+    width: 100% !important;
+    height: 100% !important;
+    max-width: 100% !important;
+    object-fit: cover !important;
+}

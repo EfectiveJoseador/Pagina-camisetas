@@ -1,0 +1,189 @@
+/*
+  Responsive móvil-first para Camisetazo
+  - Tipografía legible y escalable
+  - Targets táctiles adecuados
+  - Navegación y layout optimizados para pantallas pequeñas
+  - Buenas prácticas de accesibilidad y compatibilidad móvil
+*/
+
+/* Base y ajustes de compatibilidad */
+html { -webkit-text-size-adjust: 100%; }
+*, *::before, *::after { box-sizing: border-box; }
+body {
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+  line-height: 1.6;
+  text-rendering: optimizeLegibility;
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* Sistema de tipografía móvil-first */
+:root {
+  --font-size-base: clamp(15px, 1.8vw, 17px);
+  --font-size-sm: clamp(14px, 1.6vw, 16px);
+  --font-size-lg: clamp(18px, 2.4vw, 22px);
+  --font-size-xl: clamp(22px, 3vw, 28px);
+  --tap-target: 44px;
+}
+
+body { font-size: var(--font-size-base); }
+h1, .catalogo-titulo { font-size: var(--font-size-xl); }
+h2 { font-size: var(--font-size-lg); }
+h3 { font-size: clamp(18px, 2.2vw, 20px); }
+p, label { font-size: var(--font-size-base); }
+
+/* Contenedor principal: respiración y límites */
+.contenedor-principal {
+  padding: 16px;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+/* Navegación táctil: tamaños y estados accesibles */
+.boton-seccion, .catalogo-btn, .btn, button {
+  min-height: var(--tap-target);
+  min-width: var(--tap-target);
+  padding: 12px 16px;
+  font-size: var(--font-size-sm);
+}
+.boton-seccion:focus-visible, .catalogo-btn:focus-visible, .btn:focus-visible, button:focus-visible {
+  outline: 2px solid rgba(92,106,196,0.6);
+  outline-offset: 2px;
+}
+
+/* Sidebar móvil: se oculta por defecto y se muestra con toggle existente */
+@media (max-width: 768px) {
+  :root { --sidebar-width: 0px; }
+  .main-content { margin-left: 0 !important; }
+}
+
+/* Grid catálogo: ajustes solo en móviles para no alterar escritorio */
+@media (max-width: 768px) {
+  .grid-catalogo { gap: 14px; }
+}
+
+/* Tienda: asegurar 2 columnas en la galería de productos en móvil */
+@media (max-width: 900px) {
+  #pedidos .product-gallery { grid-template-columns: repeat(2, 1fr) !important; }
+}
+
+/* Asegurar 2 columnas específicamente para móviles pequeños */
+@media (max-width: 768px) {
+  /* OVERRIDE MÁXIMO: Forzar 2 columnas en todos los contextos */
+  html body #pedidos .product-gallery,
+  html body #pedidos.activa .product-gallery,
+  html body .product-gallery,
+  html body.fullwidth-view #pedidos .product-gallery,
+  html body.fullwidth-view #pedidos.activa .product-gallery {
+    grid-template-columns: repeat(2, 1fr) !important;
+    gap: 12px !important;
+    max-width: 100% !important;
+    display: grid !important;
+  }
+  
+  /* Forzar que cada producto ocupe solo 1 columna */
+  html body #pedidos .product-gallery > .product-item,
+  html body #pedidos.activa .product-gallery > .product-item,
+  html body.fullwidth-view #pedidos .product-gallery > .product-item,
+  html body.fullwidth-view #pedidos.activa .product-gallery > .product-item {
+    grid-column: auto / span 1 !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+  }
+}
+
+/* Tarjetas: mejorar legibilidad en móvil */
+.catalogo-card { border-radius: 14px; }
+.catalogo-info { gap: 10px; }
+.catalogo-info h3 { font-size: clamp(16px, 2.1vw, 18px); }
+.catalogo-info p { font-size: var(--font-size-sm); opacity: .95; }
+
+/* Imágenes: reglas responsivas y rendimiento */
+img { max-width: 100%; height: auto; }
+img[loading="lazy"] { content-visibility: auto; }
+.catalogo-img-wrap { height: 168px; }
+.catalogo-img { width: 120px; height: 120px; object-fit: contain; }
+@media (max-width: 520px) {
+  .catalogo-img-wrap { height: 140px; }
+}
+
+/* Bottom nav: visibilidad y safe-area */
+.bottom-nav { padding-bottom: env(safe-area-inset-bottom, 0); }
+.bottom-nav__btn { font-size: 12px; }
+.bottom-nav__btn:focus-visible { outline: none; }
+@media (max-width: 1024px) {
+  .bottom-nav {
+    display: flex !important;
+    position: fixed;
+    left: 0; right: 0; bottom: 0;
+    height: 64px;
+    background: rgba(10,20,40,0.95);
+    border-top: 1px solid rgba(255,255,255,0.08);
+    justify-content: space-around;
+    align-items: center;
+    z-index: 2000;
+    backdrop-filter: saturate(140%) blur(10px);
+  }
+  .bottom-nav__btn{
+    flex: 1;
+    height: 100%;
+    background: transparent;
+    color: #e8eef7;
+    border: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: .3px;
+    position: relative;
+  }
+  .bottom-nav__btn .icon{ display: inline-flex; width: 24px; height: 24px; }
+  /* Estado activo morado accesible en móvil */
+  :root { --morado-activo: #800080; }
+  .bottom-nav__btn{
+    transition: background-color 300ms ease, color 300ms ease, border-color 300ms ease, box-shadow 300ms ease, transform 150ms ease;
+    border-top: 2px solid transparent;
+    border-bottom: 2px solid transparent;
+  }
+  .bottom-nav__btn.activo{
+    color: #ffffff !important;
+    background: var(--morado-activo) !important;
+    border-top-color: rgba(255,255,255,0.2) !important;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,0.12), 0 -2px 10px rgba(0,0,0,0.12);
+  }
+  /* Estados interactivos y accesibilidad */
+  .bottom-nav__btn:focus-visible{
+    outline: 2px solid rgba(128,0,128,0.6) !important;
+    outline-offset: 2px !important;
+  }
+  .bottom-nav__btn:hover{ filter: brightness(1.05); }
+  .bottom-nav__btn:active{ transform: translateY(1px); }
+  .bottom-nav .cart-tab-badge{ position: absolute; top: 8px; right: calc(50% - 6px); transform: translateX(50%); min-width: 18px; height: 18px; padding: 0 5px; border-radius: 999px; background: #ff9800; color: #fff; font-size: 11px; font-weight: 800; line-height: 18px; text-align: center; box-shadow: 0 4px 10px rgba(0,0,0,0.25); }
+  .bottom-nav .cart-tab-badge.hidden{ display:none; }
+  body { padding-bottom: calc(72px + env(safe-area-inset-bottom, 0)); }
+
+  /* Ocultar botón blanco superior izquierdo en móvil */
+  .mobile-menu-toggle { display: none !important; }
+
+  /* Ocultar botón inferior derecho (vista expandida) en móvil */
+  .view-expand-toggle { display: none !important; }
+}
+
+/* Preferencias de movimiento reducidas */
+@media (prefers-reduced-motion: reduce) {
+  * { animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+}
+
+/* Formularios en móvil: hit areas y tipografía */
+input, select, textarea {
+  min-height: var(--tap-target);
+  font-size: var(--font-size-base);
+}
+
+/* Enlaces: área táctil incrementada en móvil */
+@media (max-width: 768px) {
+  a { padding: 4px; margin: -4px; }
+}

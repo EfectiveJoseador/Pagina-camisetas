@@ -1,0 +1,364 @@
+/**
+ * Sistema de Vista Expandida
+ * Botón flotante para ocultar sidebar y expandir productos
+ */
+
+/* ========================================
+   BOTÓN DE TOGGLE - INFERIOR DERECHA
+   ======================================== */
+
+.view-expand-toggle {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    z-index: 2000;
+    
+    /* Estilos visuales */
+    background: linear-gradient(135deg, var(--azul-acento, #2a5ba8) 0%, #1a3b6d 100%);
+    color: white;
+    border: none;
+    border-radius: 50px;
+    padding: 14px 24px;
+    
+    /* Tipografía */
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: 0.5px;
+    
+    /* Flexbox para icono + texto */
+    display: none; /* Oculto por defecto, se muestra solo en sección pedidos */
+    align-items: center;
+    gap: 10px;
+    
+    /* Sombra y efectos */
+    box-shadow: 0 4px 20px rgba(42, 91, 168, 0.3),
+                0 2px 8px rgba(0, 0, 0, 0.2);
+    
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    
+    /* Sin bordes de enfoque por defecto, se añade uno personalizado */
+    outline: none;
+}
+
+/* Icono dentro del botón */
+.view-expand-toggle i {
+    font-size: 1.1rem;
+    transition: transform 0.3s ease;
+}
+
+/* Texto dentro del botón */
+.view-expand-toggle .toggle-text {
+    font-size: 0.95rem;
+    white-space: nowrap;
+}
+
+/* Hover */
+.view-expand-toggle:hover {
+    background: linear-gradient(135deg, #1a3b6d 0%, var(--azul-acento, #2a5ba8) 100%);
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 28px rgba(42, 91, 168, 0.4),
+                0 3px 12px rgba(0, 0, 0, 0.25);
+}
+
+/* Active/pressed */
+.view-expand-toggle:active {
+    transform: translateY(-1px) scale(1.02);
+}
+
+/* Focus (accesibilidad) */
+.view-expand-toggle:focus {
+    outline: 3px solid rgba(42, 91, 168, 0.5);
+    outline-offset: 3px;
+}
+
+/* Animación del icono al hacer hover */
+.view-expand-toggle:hover i {
+    transform: rotate(90deg);
+}
+
+/* ========================================
+   MODO VISTA EXPANDIDA
+   ======================================== */
+
+/* Cuando el body tiene la clase fullwidth-view */
+body.fullwidth-view .sidebar {
+    transform: translateX(-100%);
+    opacity: 0;
+    pointer-events: none;
+}
+
+body.fullwidth-view .main-content {
+    margin-left: 0 !important;
+    width: 100% !important;
+}
+
+/* Centrar el contenido GENERAL de todas las secciones */
+body.fullwidth-view .contenedor-principal {
+    max-width: 1400px !important;
+    margin: 0 auto !important;
+    padding: 2rem 40px !important;
+}
+
+/* Centrar el contenido de pedidos específicamente */
+body.fullwidth-view #pedidos .product-gallery-ui {
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 40px;
+}
+
+/* Mantener 4 productos por fila y aumentar tamaño */
+body.fullwidth-view #pedidos.activa .product-gallery,
+body.fullwidth-view #pedidos .product-gallery {
+    grid-template-columns: repeat(4, minmax(0, 1fr)) !important; /* minmax para simetría perfecta */
+    gap: 28px !important;
+    align-items: stretch !important;
+    justify-items: stretch !important;
+    grid-auto-flow: row dense !important;
+}
+
+/* Asegurar que TODAS las tarjetas en fullwidth ocupen exactamente 1 columna */
+body.fullwidth-view #pedidos .product-gallery > .product-item,
+body.fullwidth-view #pedidos.activa .product-gallery > .product-item {
+    grid-column: auto / span 1 !important;
+    grid-row: auto / span 1 !important;
+    min-width: 0 !important;
+    max-width: 100% !important;
+    width: 100% !important;
+    justify-self: stretch !important;
+    align-self: stretch !important;
+}
+
+/* Aumentar tamaño de tarjetas simétricamente (sin descripción) */
+body.fullwidth-view .product-item {
+    min-height: 350px !important;
+    max-height: 390px !important;
+}
+
+body.fullwidth-view .product-img-wrapper {
+    max-height: 240px !important;
+    min-height: 220px !important;
+}
+
+body.fullwidth-view .product-item h4 {
+    font-size: 1.15rem !important;
+    min-height: 3rem !important;
+}
+
+body.fullwidth-view .product-item .price {
+    font-size: 1.2rem !important;
+    padding: 10px 18px !important;
+}
+
+/* La descripción permanece oculta en vista expandida */
+body.fullwidth-view .product-item .excerpt {
+    display: none !important;
+}
+
+/* Los botones de acción permanecen ocultos en vista expandida */
+body.fullwidth-view .product-item .actions {
+    display: none !important;
+}
+
+/* ========================================
+   RESPONSIVE - MANTENER FUNCIONALIDAD
+   ======================================== */
+
+/* Tablet */
+@media (max-width: 1200px) {
+    body.fullwidth-view #pedidos.activa .product-gallery,
+    body.fullwidth-view #pedidos .product-gallery {
+        grid-template-columns: repeat(3, minmax(0, 1fr)) !important;
+        gap: 24px !important;
+    }
+    
+    body.fullwidth-view .product-item {
+        min-height: 320px !important;
+        max-height: 360px !important;
+    }
+    
+    /* Asegurar simetría en tablet */
+    body.fullwidth-view #pedidos .product-gallery > .product-item,
+    body.fullwidth-view #pedidos.activa .product-gallery > .product-item {
+        grid-column: auto / span 1 !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+@media (max-width: 900px) {
+    body.fullwidth-view #pedidos.activa .product-gallery,
+    body.fullwidth-view #pedidos .product-gallery {
+        grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+        gap: 20px !important;
+    }
+    
+    body.fullwidth-view .product-item {
+        min-height: 290px !important;
+        max-height: 330px !important;
+    }
+    
+    /* Asegurar simetría en móvil */
+    body.fullwidth-view #pedidos .product-gallery > .product-item,
+    body.fullwidth-view #pedidos.activa .product-gallery > .product-item {
+        grid-column: auto / span 1 !important;
+        min-width: 0 !important;
+        max-width: 100% !important;
+        width: 100% !important;
+    }
+}
+
+/* Móvil - ocultar botón en pantallas pequeñas */
+@media (max-width: 768px) {
+    .view-expand-toggle {
+        bottom: 90px; /* Evitar conflicto con barra de navegación inferior */
+        right: 20px;
+        padding: 12px 18px;
+        font-size: 0.9rem;
+    }
+    
+    /* Ocultar texto, solo mostrar icono */
+    .view-expand-toggle .toggle-text {
+        display: none;
+    }
+    
+    .view-expand-toggle {
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        padding: 0;
+        justify-content: center;
+    }
+}
+
+@media (max-width: 600px) {
+    /* En móvil muy pequeño, el botón puede ser opcional o más discreto */
+    .view-expand-toggle {
+        bottom: 80px;
+        right: 15px;
+        width: 46px;
+        height: 46px;
+    }
+    
+    .view-expand-toggle i {
+        font-size: 1rem;
+    }
+}
+
+/* ========================================
+   ANIMACIONES Y TRANSICIONES
+   ======================================== */
+
+/* Sidebar con transición suave */
+.sidebar {
+    transition: transform 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                opacity 0.4s ease;
+}
+
+/* Main content con transición suave */
+.main-content {
+    transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+                width 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Product gallery con transición */
+#pedidos .product-gallery {
+    transition: grid-template-columns 0.3s ease,
+                gap 0.3s ease;
+}
+
+/* Tarjetas con transición en tamaño */
+.product-item {
+    transition: min-height 0.3s ease,
+                max-height 0.3s ease,
+                transform 0.2s ease;
+}
+
+/* ========================================
+   CORRECCIONES ESPECÍFICAS PARA TIENDA
+   ======================================== */
+
+/* Asegurar que todas las tarjetas tengan el mismo tamaño en vista normal */
+#pedidos.activa .product-gallery {
+    display: grid !important;
+    grid-template-columns: repeat(4, 1fr) !important;
+    gap: 20px !important;
+    width: 100% !important;
+    align-items: stretch !important;
+    justify-content: center !important;
+    max-width: 1200px !important;
+    margin: 0 auto !important;
+}
+
+/* Centrar el grid simétricamente */
+#pedidos .product-gallery-ui {
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+}
+
+/* Todas las tarjetas igual tamaño */
+.product-item {
+    width: 100% !important;
+    height: auto !important;
+    display: flex !important;
+    flex-direction: column !important;
+}
+
+/* ========================================
+   MODO OSCURO / ACCESIBILIDAD
+   ======================================== */
+
+/* Asegurar contraste en botón */
+@media (prefers-contrast: high) {
+    .view-expand-toggle {
+        border: 2px solid white;
+    }
+}
+
+/* Reducir animaciones si el usuario lo prefiere */
+@media (prefers-reduced-motion: reduce) {
+    .view-expand-toggle,
+    .sidebar,
+    .main-content,
+    #pedidos .product-gallery,
+    .product-item {
+        transition: none !important;
+        animation: none !important;
+    }
+    
+    .view-expand-toggle:hover i {
+        transform: none;
+    }
+}
+
+/* ========================================
+   RESPONSIVE ADICIONAL PARA VISTA NORMAL
+   ======================================== */
+
+/* Tablet grande */
+@media (max-width: 1200px) and (min-width: 901px) {
+    #pedidos.activa .product-gallery {
+        grid-template-columns: repeat(3, 1fr) !important;
+        gap: 18px !important;
+    }
+}
+
+/* Tablet pequeño */
+@media (max-width: 900px) and (min-width: 601px) {
+    #pedidos.activa .product-gallery {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 16px !important;
+        max-width: 600px !important;
+    }
+}
+
+/* Móvil */
+@media (max-width: 600px) {
+    #pedidos.activa .product-gallery {
+        grid-template-columns: repeat(2, 1fr) !important;
+        gap: 12px !important;
+    }
+}
+

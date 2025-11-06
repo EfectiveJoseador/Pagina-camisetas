@@ -29,19 +29,20 @@
 /* Ajustar el tamaño del carrusel para que la imagen principal sea más pequeña */
 #modalTiendaCarousel {
     max-width: 100% !important;
-    max-height: calc(450px * var(--modal-scale)) !important;
+    /* Ajustamos el alto para dejar espacio al formulario y evitar scroll */
+    max-height: calc(520px * var(--modal-scale)) !important;
 }
 
 /* Imágenes dentro del carrusel */
 #modalTiendaCarousel img {
-    max-height: calc(450px * var(--modal-scale)) !important;
+    max-height: calc(520px * var(--modal-scale)) !important;
     object-fit: contain !important; /* Asegura que la imagen se muestre completa */
 }
 
 /* Aumentar el tamaño de las imágenes en miniatura */
 #modalTiendaThumbs img {
-    width: calc(34px * var(--modal-scale)) !important;
-    height: calc(34px * var(--modal-scale)) !important;
+    width: calc(40px * var(--modal-scale)) !important;
+    height: calc(40px * var(--modal-scale)) !important;
     margin: calc(4px * var(--modal-scale)) !important;
     border-radius: calc(6px * var(--modal-scale)) !important;
     transition: transform 0.2s ease, box-shadow 0.2s ease !important;
@@ -79,7 +80,8 @@
 /* Título del producto */
 #modal-tienda-carrusel .tienda-panel > div:last-child h3 {
     font-size: calc(1.3rem * var(--modal-scale)) !important;
-    margin-bottom: calc(12px * var(--modal-scale)) !important;
+    /* Reducimos el espacio bajo el título para acercarlo al precio/extras */
+    margin-bottom: calc(0px * var(--modal-scale)) !important;
     color: var(--azul-acento) !important;
 }
 
@@ -87,12 +89,14 @@
 #modal-tienda-carrusel .tienda-panel > div:last-child p {
     font-size: calc(0.9rem * var(--modal-scale)) !important;
     line-height: 1.4 !important;
-    margin-bottom: calc(12px * var(--modal-scale)) !important;
+    /* Ajuste fino para reducir separación general antes del precio */
+    margin-bottom: calc(0px * var(--modal-scale)) !important;
 }
 
 /* Precio del producto */
 #modal-tienda-carrusel .tienda-panel > div:last-child div[style*="font-weight:800"] {
     font-size: calc(1.4rem * var(--modal-scale)) !important;
+    /* Reducimos márgenes verticales del precio */
     margin: calc(12px * var(--modal-scale)) 0 !important;
 }
 
@@ -106,13 +110,21 @@
 
 /* Botón de cerrar */
 #modalTiendaClose {
+    position: fixed !important; /* Ubicar fuera del contenido de la modal */
     top: calc(20px * var(--modal-scale)) !important;
     right: calc(20px * var(--modal-scale)) !important;
-    padding: calc(8px * var(--modal-scale)) calc(14px * var(--modal-scale)) !important;
-    font-size: calc(0.9rem * var(--modal-scale)) !important;
-    border-radius: calc(8px * var(--modal-scale)) !important;
+    /* Reducimos tamaño visual y hacemos botón circular */
+    width: 32px !important;
+    height: 32px !important;
+    padding: 0 !important;
+    font-size: 18px !important;
+    border-radius: 50% !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
     background: rgba(10, 20, 40, 0.7) !important;
     backdrop-filter: blur(4px) !important;
+    z-index: 9999 !important; /* Asegura visibilidad por encima de la modal */
 }
 
 /* Ajustes para pantallas más pequeñas */
@@ -123,8 +135,8 @@
     }
     
     #modalTiendaThumbs img {
-        width: calc(28px * var(--modal-scale)) !important;
-        height: calc(28px * var(--modal-scale)) !important;
+        width: calc(32px * var(--modal-scale)) !important;
+        height: calc(32px * var(--modal-scale)) !important;
     }
 }
 
@@ -136,8 +148,41 @@
     }
     
     #modalTiendaThumbs img {
-        width: calc(38px * var(--modal-scale)) !important;
-        height: calc(38px * var(--modal-scale)) !important;
+        width: calc(42px * var(--modal-scale)) !important;
+        height: calc(42px * var(--modal-scale)) !important;
+    }
+}
+
+/* Aumentar altura disponible de la modal en escritorio para evitar scroll */
+@media (min-width: 801px) {
+    #modal-tienda-carrusel {
+        align-items: center !important; /* Centrar el panel verticalmente */
+        overflow: hidden !important; /* Evitar scroll del overlay */
+    }
+    #modal-tienda-carrusel .tienda-panel {
+        height: 92vh !important; /* Aprovechar casi toda la altura de la ventana */
+        max-height: 92vh !important;
+    }
+    /* Contener contenido interno con scroll para que no se salga del panel */
+    #modal-tienda-carrusel .tienda-panel > div {
+        max-height: calc(92vh - 32px) !important;
+        overflow-y: auto !important;
+        box-sizing: border-box !important;
+    }
+    /* Limitar el alto del carrusel relativo a la ventana para que todo quepa */
+    #modalTiendaCarousel,
+    #modalTiendaCarousel img {
+        max-height: 55vh !important;
+    }
+}
+
+/* Modal de personalización simple: aumentar altura en escritorio */
+@media (min-width: 801px) {
+    .modal-personalizacion > div {
+        height: 92vh !important;
+        max-height: 92vh !important;
+        overflow-y: auto !important; /* Permitir scroll interno para evitar desbordes */
+        box-sizing: border-box !important;
     }
 }
 
@@ -155,33 +200,178 @@
 }
 /* Escalado adicional equitativo para controles del formulario en la modal de personalización */
 .modal-personalizacion .input-group {
-    padding: calc(1.1rem * var(--modal-scale)) calc(1rem * var(--modal-scale)) calc(0.7rem * var(--modal-scale)) calc(1rem * var(--modal-scale)) !important;
-    border-radius: calc(10px * var(--modal-scale)) !important;
+    padding: calc(0.8rem * var(--modal-scale)) calc(0.8rem * var(--modal-scale)) calc(0.5rem * var(--modal-scale)) calc(0.8rem * var(--modal-scale)) !important;
+    border-radius: calc(8px * var(--modal-scale)) !important;
+    margin-bottom: calc(8px * var(--modal-scale)) !important;
 }
 .modal-personalizacion .input-group label {
-    margin-bottom: calc(12px * var(--modal-scale)) !important;
+    margin-bottom: calc(6px * var(--modal-scale)) !important;
+    font-size: calc(0.9rem * var(--modal-scale)) !important;
 }
 .modal-personalizacion .custom-dropdown-button {
-    padding: calc(0.78em * var(--modal-scale)) calc(1.05em * var(--modal-scale)) !important;
-    border-radius: calc(12px * var(--modal-scale)) !important;
-    font-size: calc(1rem * var(--modal-scale)) !important;
+    padding: calc(0.6em * var(--modal-scale)) calc(0.8em * var(--modal-scale)) !important;
+    border-radius: calc(8px * var(--modal-scale)) !important;
+    font-size: calc(0.9rem * var(--modal-scale)) !important;
+    min-height: calc(36px * var(--modal-scale)) !important;
 }
 .modal-personalizacion .input-talla {
-    padding: calc(0.72em * var(--modal-scale)) calc(2.2em * var(--modal-scale)) calc(0.72em * var(--modal-scale)) calc(1.05em * var(--modal-scale)) !important;
-    border-radius: calc(10px * var(--modal-scale)) !important;
-    font-size: calc(1.03em * var(--modal-scale)) !important;
+    padding: calc(0.6em * var(--modal-scale)) calc(1.8em * var(--modal-scale)) calc(0.6em * var(--modal-scale)) calc(0.8em * var(--modal-scale)) !important;
+    border-radius: calc(8px * var(--modal-scale)) !important;
+    font-size: calc(0.9em * var(--modal-scale)) !important;
+    min-height: calc(36px * var(--modal-scale)) !important;
 }
 /* Asegurar que el grid del formulario también escale el gap */
 .modal-personalizacion #_personalizeForm {
-    grid-template-columns: 1fr 1fr !important; /* respetar 2 columnas en desktop */
-    gap: calc(15px * var(--modal-scale)) !important;
+    grid-template-columns: 1fr 1fr 1fr !important; /* 3 columnas para aprovechar mejor el espacio */
+    gap: calc(10px * var(--modal-scale)) !important;
+    margin-top: calc(8px * var(--modal-scale)) !important;
 }
 .modal-personalizacion label {
-    font-size: calc(1rem * var(--modal-scale)) !important;
+    font-size: calc(0.9rem * var(--modal-scale)) !important;
 }
 .modal-personalizacion .custom-select,
 .modal-personalizacion input,
 .modal-personalizacion textarea {
-    font-size: calc(1.05rem * var(--modal-scale)) !important;
-    padding: calc(13px * var(--modal-scale)) !important;
+    font-size: calc(0.9rem * var(--modal-scale)) !important;
+    padding: calc(10px * var(--modal-scale)) !important;
+    min-height: calc(36px * var(--modal-scale)) !important;
+}
+
+/* Reorganizar botones para aprovechar espacio horizontal */
+.modal-personalizacion .button-container {
+    display: grid !important;
+    grid-template-columns: 1fr 1fr !important;
+    gap: calc(10px * var(--modal-scale)) !important;
+    margin-top: calc(12px * var(--modal-scale)) !important;
+}
+
+.modal-personalizacion .button-container button {
+    padding: calc(8px * var(--modal-scale)) calc(12px * var(--modal-scale)) !important;
+    font-size: calc(0.9rem * var(--modal-scale)) !important;
+    min-height: calc(36px * var(--modal-scale)) !important;
+}
+
+/* Ajustes específicos para elementos que ocupan mucho espacio */
+.modal-personalizacion select[multiple] {
+    max-height: calc(80px * var(--modal-scale)) !important;
+}
+
+.modal-personalizacion textarea {
+    max-height: calc(60px * var(--modal-scale)) !important;
+    resize: vertical !important;
+}
+
+/* =============================
+   Rediseño proporcional UI (desktop)
+   - Reducir tipografías y controles
+   - Enfatizar y distribuir botones
+   ============================= */
+
+/* Escala específica para la columna derecha del carrusel */
+#modal-tienda-carrusel .tienda-panel > div:last-child {
+    --ui-scale: 0.9; /* Reduce proporcionalmente tipografía y controles */
+}
+
+/* Título del producto (más compacto) */
+#modal-tienda-carrusel .tienda-panel > div:last-child h3 {
+    font-size: calc(2rem * var(--ui-scale)) !important;
+    margin-bottom: calc(6px * var(--ui-scale)) !important;
+}
+
+/* Texto de características/extras (excerpt) */
+#modal-tienda-carrusel .tienda-panel > div:last-child p {
+    font-size: calc(0.95rem * var(--ui-scale)) !important;
+    line-height: 1.35 !important;
+    margin-bottom: calc(8px * var(--ui-scale)) !important;
+}
+
+/* Formularios: labels e inputs/selects/textarea */
+#modalTiendaForm label {
+    font-size: calc(0.95rem * var(--ui-scale)) !important;
+    margin-bottom: calc(4px * var(--ui-scale)) !important;
+}
+
+#modalTiendaForm input,
+#modalTiendaForm select,
+#modalTiendaForm textarea {
+    font-size: calc(0.9rem * var(--ui-scale)) !important;
+    padding: calc(8px * var(--ui-scale)) !important;
+    min-height: calc(32px * var(--ui-scale)) !important;
+    border-radius: calc(6px * var(--ui-scale)) !important;
+}
+
+/* Casillas de verificación más compactas */
+#modalTiendaForm input[type="checkbox"] {
+    width: calc(16px * var(--ui-scale)) !important;
+    height: calc(16px * var(--ui-scale)) !important;
+}
+
+/* Botonera principal: colocar guía a la izquierda y carrito al extremo derecho */
+#modal-tienda-carrusel .button-container {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important; /* Extremos */
+    gap: calc(12px * var(--ui-scale)) !important;
+    margin-top: calc(14px * var(--ui-scale)) !important;
+}
+
+/* Botón Guía de tallas: mantener alineación izquierda y aumentar presencia */
+#_sizeGuideCarousel {
+    padding: calc(10px * var(--ui-scale)) calc(16px * var(--ui-scale)) !important;
+    font-size: calc(1.05rem * var(--ui-scale)) !important;
+    border-width: 2px !important;
+    flex: 0 0 auto !important; /* Evitar expandirse */
+}
+
+/* Botón Agregar al carrito: enfatizar y empujar a la derecha */
+#modalTiendaAdd {
+    padding: calc(12px * var(--ui-scale)) calc(18px * var(--ui-scale)) !important;
+    font-size: calc(1.1rem * var(--ui-scale)) !important;
+    font-weight: 700 !important;
+    border-radius: calc(8px * var(--ui-scale)) !important;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.25) !important;
+    margin-left: auto !important; /* Empuja al extremo derecho */
+    flex: 0 0 auto !important;
+}
+
+/* Asegurar que los botones sean visualmente dominantes respecto al formulario */
+#modalTiendaForm {
+    gap: calc(8px * var(--ui-scale)) !important;
+}
+
+/* Título del producto: aumentar tamaño y en negrita */
+.product-title-desktop {
+    font-size: 1.5rem !important;
+    font-weight: 700 !important;
+}
+/* Ocultar barras de desplazamiento en paneles del modal (desktop) */
+@media (min-width: 801px) {
+    #modal-tienda-carrusel .tienda-panel > div {
+        scrollbar-width: none !important; /* Firefox */
+        -ms-overflow-style: none !important; /* IE/Edge legacy */
+    }
+    #modal-tienda-carrusel .tienda-panel > div::-webkit-scrollbar {
+        display: none !important; /* WebKit */
+        width: 0 !important;
+        height: 0 !important;
+    }
+
+    .modal-personalizacion > div {
+        scrollbar-width: none !important; /* Firefox */
+        -ms-overflow-style: none !important; /* IE/Edge legacy */
+    }
+    .modal-personalizacion > div::-webkit-scrollbar {
+        display: none !important; /* WebKit */
+        width: 0 !important;
+        height: 0 !important;
+    }
+
+    /* Permitir desplazamiento vertical en desktop con mejor control */
+    #modal-tienda-carrusel .tienda-panel > div,
+    .modal-personalizacion > div {
+        overflow-y: auto !important;
+        overscroll-behavior: contain !important; /* Contiene el scroll dentro del elemento */
+        touch-action: pan-y !important; /* Permite scroll vertical táctil */
+        max-height: 92vh !important; /* Limitar altura máxima */
+    }
 }
