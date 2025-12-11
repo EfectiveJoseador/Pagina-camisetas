@@ -1,0 +1,147 @@
+{
+  "rewrites": [
+    {
+      "source": "/tienda",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/catalogo",
+      "destination": "/pages/catalogo.html"
+    },
+    {
+      "source": "/retro",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/sobre-nosotros",
+      "destination": "/pages/quienes-somos.html"
+    },
+    {
+      "source": "/contacto",
+      "destination": "/pages/contacto.html"
+    },
+    {
+      "source": "/carrito",
+      "destination": "/pages/carrito.html"
+    },
+    {
+      "source": "/pago",
+      "destination": "/pages/checkout.html"
+    },
+    {
+      "source": "/mi-cuenta",
+      "destination": "/pages/perfil.html"
+    },
+    {
+      "source": "/iniciar-sesion",
+      "destination": "/pages/login.html"
+    },
+    {
+      "source": "/soporte",
+      "destination": "/pages/soporte.html"
+    },
+    {
+      "source": "/privacidad",
+      "destination": "/pages/privacidad.html"
+    },
+    {
+      "source": "/cookies",
+      "destination": "/pages/cookies.html"
+    },
+    {
+      "source": "/terminos",
+      "destination": "/pages/terminos.html"
+    },
+    {
+      "source": "/seleccion/brasil",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/seleccion/alemania",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/seleccion/espana",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/seleccion/argentina",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/seleccion/francia",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/seleccion/italia",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/seleccion/portugal",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/equipo/real-madrid",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/equipo/barcelona",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/equipo/atletico-madrid",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/liga/la-liga",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/liga/bundesliga",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/liga/serie-a",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/liga/ligue-1",
+      "destination": "/pages/tienda.html"
+    },
+    {
+      "source": "/camiseta/:path*",
+      "destination": "/pages/producto.html"
+    }
+  ],
+  "headers": [
+    {
+      "source": "/(.*)",
+      "headers": [
+        {
+          "key": "X-Content-Type-Options",
+          "value": "nosniff"
+        },
+        {
+          "key": "X-Frame-Options",
+          "value": "SAMEORIGIN"
+        },
+        {
+          "key": "X-XSS-Protection",
+          "value": "1; mode=block"
+        },
+        {
+          "key": "Referrer-Policy",
+          "value": "strict-origin-when-cross-origin"
+        },
+        {
+          "key": "Permissions-Policy",
+          "value": "geolocation=(), microphone=(), camera=()"
+        },
+        {
+          "key": "Content-Security-Policy",
+          "value": "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.gstatic.com https://apis.google.com https://www.google.com https://cdn.jsdelivr.net https://cdnjs.cloudflare.com https://*.firebaseio.com https://*.googleapis.com https://www.googletagmanager.com https://plausible.io https://t.contentsquare.net https://*.contentsquare.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com https://cdnjs.cloudflare.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: blob: https:; connect-src 'self' https://*.firebaseio.com https://*.googleapis.com https://*.firebasedatabase.app https://www.gstatic.com wss://*.firebaseio.com wss://*.firebasedatabase.app https://api.web3forms.com https://www.paypal.com https://www.google-analytics.com https://*.google-analytics.com https://*.analytics.google.com https://www.googletagmanager.com https://plausible.io https://*.contentsquare.net; frame-src https://www.google.com https://www.paypal.com https://camisetazo-puntos.firebaseapp.com; object-src 'none'; base-uri 'self';"
+        }
+      ]
+    }
+  ]
+}

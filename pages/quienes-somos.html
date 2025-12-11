@@ -1,0 +1,1072 @@
+﻿<!DOCTYPE html>
+<html lang="es" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- SEO Meta Tags -->
+    <title>Sobre Camisetazo | Tu Tienda de Camisetas de Fútbol</title>
+    <meta name="description"
+        content="🏆 Conoce Camisetazo: tu tienda de camisetas de fútbol desde 2020. +300 clientes satisfechos, envíos rápidos y calidad garantizada. ¡Descubre nuestra historia!">
+    <meta name="keywords"
+        content="camisetazo, tienda camisetas fútbol, quiénes somos camisetazo, camisetas fútbol confianza">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://camisetazo.com/sobre-nosotros">
+
+    <!-- Open Graph -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://camisetazo.com/sobre-nosotros">
+    <meta property="og:title" content="Sobre Camisetazo | Tu Tienda de Camisetas de Fútbol">
+    <meta property="og:description"
+        content="Conoce Camisetazo: +300 clientes satisfechos, envíos rápidos, calidad garantizada. Tu tienda de camisetas de fútbol desde 2020.">
+    <meta property="og:image" content="https://camisetazo.com/assets/og-about.jpg">
+    <meta property="og:locale" content="es_ES">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+        gtag('config', 'G-GS53GWE2Z0');
+    </script>
+
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
+        rel="stylesheet">
+
+    <!-- Icons & Stylesheets -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="/css/variables.css">
+    <link rel="stylesheet" href="/css/reset.css">
+    <link rel="stylesheet" href="/css/styles.css">
+    <link rel="stylesheet" href="/css/producto.css">
+
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Store",
+        "name": "Camisetazo",
+        "description": "Tienda de camisetas de fútbol baratas a buen precio. Calidad garantizada desde 2020.",
+        "url": "https://camisetazo.com",
+        "logo": "https://camisetazo.com/assets/logo.png",
+        "foundingDate": "2020",
+        "priceRange": "€€",
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "300",
+            "bestRating": "5",
+            "worstRating": "1"
+        },
+        "sameAs": [
+            "https://www.instagram.com/camisetazo._/"
+        ]
+    }
+    </script>
+
+    <style>
+        .about-hero {
+            text-align: center;
+            padding: 5rem 2rem;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-body) 100%);
+            border-radius: var(--radius-lg);
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--border);
+        }
+
+        .about-hero::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: radial-gradient(circle at 50% 0%, rgba(99, 102, 241, 0.1) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .about-hero h1 {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            margin-bottom: 2rem;
+            background: linear-gradient(135deg, var(--text-main) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .about-hero p {
+            font-size: 1.15rem;
+            color: var(--text-muted);
+            max-width: 800px;
+            margin: 0 auto 1.5rem auto;
+            line-height: 1.8;
+        }
+
+
+
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 2rem;
+            margin: 3rem 0;
+        }
+
+        .stat-card {
+            text-align: center;
+            padding: 2rem;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            color: var(--primary);
+            margin-bottom: 1rem;
+        }
+
+        .stat-card .stat-number {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            font-weight: 800;
+            color: var(--text-main);
+            display: block;
+        }
+
+        .stat-card .stat-label {
+            color: var(--text-muted);
+            font-size: 0.95rem;
+        }
+
+
+
+
+        .gallery-section {
+            margin-top: 4rem;
+        }
+
+        .gallery-section h2 {
+            font-family: var(--font-heading);
+            font-size: 2.2rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            background: linear-gradient(135deg, var(--text-main) 0%, var(--primary) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .gallery-subtitle {
+            text-align: center;
+            color: var(--text-muted);
+            margin-bottom: 2rem;
+            font-size: 1.1rem;
+        }
+
+
+
+
+        .clients-carousel {
+            position: relative;
+            margin-top: 2rem;
+            width: 100%;
+            max-width: 100%;
+        }
+
+        #clients-grid {
+            position: relative;
+            width: 100%;
+            display: block;
+        }
+
+        .carousel-container {
+            position: relative;
+            overflow: hidden;
+            padding: 0 3.5rem;
+            width: 100%;
+        }
+
+        .carousel-track {
+            display: flex;
+            gap: 1.5rem;
+            transition: transform 0.15s ease-out;
+        }
+
+
+        /* Las flechas usan los estilos de producto.css */
+
+
+
+        .client-card {
+            min-width: 220px;
+            max-width: 220px;
+            width: 220px;
+            flex-shrink: 0;
+            display: flex;
+            flex-direction: column;
+            background: var(--bg-card);
+            border-radius: var(--radius-lg);
+            overflow: hidden;
+            box-shadow: var(--shadow-sm);
+            cursor: pointer;
+            transition: box-shadow 0.3s ease, transform 0.3s ease;
+            border: 1px solid var(--border);
+        }
+
+        .client-card:hover {
+            box-shadow: var(--shadow-lg);
+            transform: translateY(-5px);
+        }
+
+        .client-image {
+            position: relative;
+            width: 100%;
+            padding-top: 100%;
+            overflow: hidden;
+            background: var(--bg-body);
+        }
+
+        .client-image img {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            object-position: center;
+            transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+        }
+
+        .client-card:hover .client-image img {
+            transform: scale(1.1);
+        }
+
+
+        .watermark {
+            position: absolute;
+            bottom: 12px;
+            left: 0;
+            right: 0;
+            text-align: center;
+            pointer-events: none;
+            z-index: 5;
+        }
+
+        .watermark span {
+            font-family: 'Bebas Neue', 'Impact', 'Arial Black', sans-serif;
+            color: rgba(255, 255, 255, 0.85);
+            font-size: 1rem;
+            font-weight: 400;
+            letter-spacing: -0.5px;
+            text-transform: uppercase;
+            text-shadow:
+                2px 2px 4px rgba(0, 0, 0, 0.9),
+                -1px -1px 2px rgba(0, 0, 0, 0.7),
+                1px -1px 2px rgba(0, 0, 0, 0.7),
+                -1px 1px 2px rgba(0, 0, 0, 0.7);
+        }
+
+
+
+
+        @media (max-width: 768px) {
+
+
+            .carousel-container {
+                padding: 0 1rem;
+                overflow-x: auto;
+                overflow-y: hidden;
+                scroll-behavior: smooth;
+                -webkit-overflow-scrolling: touch;
+                scroll-snap-type: x mandatory;
+                scrollbar-width: none;
+            }
+
+            .carousel-container::-webkit-scrollbar {
+                display: none;
+            }
+
+            .carousel-track {
+                transform: none !important;
+                scroll-snap-align: start;
+            }
+
+            .carousel-track .client-card {
+                scroll-snap-align: start;
+            }
+
+
+            .carousel-arrow {
+                display: none;
+            }
+
+            .client-card {
+                min-width: 180px;
+                max-width: 180px;
+                width: 180px;
+            }
+
+
+            .clients-carousel {
+                position: relative;
+            }
+
+            .clients-carousel::after {
+                content: '';
+                position: absolute;
+                top: 60px;
+                right: 0;
+                width: 40px;
+                height: calc(100% - 60px);
+                background: linear-gradient(to left, var(--bg-body) 0%, transparent 100%);
+                pointer-events: none;
+                z-index: 5;
+            }
+
+
+            .carousel-container::after {
+                content: '';
+                position: absolute;
+                right: 8px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 24px;
+                height: 24px;
+                background: var(--bg-card);
+                border: 1px solid var(--border);
+                border-radius: 50%;
+                z-index: 10;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+                animation: pulseHint 2s ease-in-out infinite;
+            }
+
+            .carousel-container::before {
+                content: '›';
+                position: absolute;
+                right: 8px;
+                top: 50%;
+                transform: translateY(-50%);
+                width: 24px;
+                height: 24px;
+                z-index: 11;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                font-size: 1.2rem;
+                font-weight: bold;
+                color: var(--primary);
+                animation: slideHint 1.5s ease-in-out infinite;
+                pointer-events: none;
+            }
+
+            @keyframes pulseHint {
+
+                0%,
+                100% {
+                    opacity: 1;
+                    transform: translateY(-50%) scale(1);
+                }
+
+                50% {
+                    opacity: 0.8;
+                    transform: translateY(-50%) scale(0.95);
+                }
+            }
+
+            @keyframes slideHint {
+
+                0%,
+                100% {
+                    transform: translateY(-50%) translateX(0);
+                }
+
+                50% {
+                    transform: translateY(-50%) translateX(3px);
+                }
+            }
+
+            .carousel-container.scrolled::after,
+            .carousel-container.scrolled::before {
+                display: none;
+            }
+
+            .clients-carousel .carousel-container {
+                padding-right: 0;
+            }
+
+            .clients-carousel .client-card {
+                min-width: 42vw;
+                max-width: 42vw;
+                width: 42vw;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .carousel-container {
+                padding: 0 0.75rem;
+            }
+
+            .clients-carousel .client-card {
+                min-width: 45vw;
+                max-width: 45vw;
+                width: 45vw;
+            }
+        }
+
+
+
+        .lightbox-watermark-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            pointer-events: none;
+            z-index: 10;
+            overflow: visible;
+            border-radius: var(--radius-md);
+            transform-origin: center center;
+
+
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='280' height='120'%3E%3Ctext x='50%25' y='50%25' font-family='Arial, sans-serif' font-size='16' font-weight='bold' fill='rgba(255,255,255,0.25)' text-anchor='middle' dominant-baseline='middle' transform='rotate(-30, 140, 60)'%3E@CAMISETAZO.__%3C/text%3E%3C/svg%3E");
+            background-repeat: repeat;
+            background-size: 280px 120px;
+        }
+
+
+
+
+        @media (max-width: 768px) {
+            .about-hero {
+                padding: 3rem 1.5rem;
+            }
+
+            .about-hero h1 {
+                font-size: 2rem;
+            }
+
+            .about-hero p {
+                font-size: 1rem;
+            }
+
+            .stat-card .stat-number {
+                font-size: 2rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="container" style="padding: 4rem 2rem; max-width: 1400px; margin: 0 auto;">
+
+
+        <section class="about-hero">
+            <h1>Quiénes Somos</h1>
+            <p>
+                En <strong>Camisetazo</strong> nos apasiona conectar a los verdaderos amantes del deporte con artículos
+                premium de las mejores marcas. Nos especializamos en ofrecer productos de alta calidad y artículos
+                exclusivos que permiten vivir la emoción del deporte al mejor precio.
+            </p>
+            <p>
+                Creada en 2020, hemos crecido gracias a la confianza de cientos de clientes satisfechos. Nuestro
+                compromiso es la calidad, la rapidez en los envíos y una atención al cliente excepcional.
+            </p>
+        </section>
+
+
+        <section class="stats-grid">
+            <div class="stat-card">
+                <i class="fas fa-users"></i>
+                <span class="stat-number">300+</span>
+                <span class="stat-label">Clientes Satisfechos</span>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-shipping-fast"></i>
+                <span class="stat-number">600+</span>
+                <span class="stat-label">Envíos Realizados</span>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-star"></i>
+                <span class="stat-number">4.9</span>
+                <span class="stat-label">Valoración Media</span>
+            </div>
+            <div class="stat-card">
+                <i class="fas fa-calendar-check"></i>
+                <span class="stat-number">5</span>
+                <span class="stat-label">Años de Experiencia</span>
+            </div>
+        </section>
+
+
+        <section class="gallery-section clients-carousel">
+            <h2>Nuestros Clientes</h2>
+            <p class="gallery-subtitle">Fotos reales de nuestros proveedores</p>
+
+            <div id="clients-grid">
+                <div class="carousel-container">
+                    <div class="carousel-track" id="carousel-track">
+
+                    </div>
+                </div>
+                <div class="carousel-arrows">
+                    <button class="carousel-arrow carousel-arrow-left" id="clients-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-arrow carousel-arrow-right" id="clients-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+
+    <div class="image-lightbox" id="image-lightbox">
+        <div class="lightbox-overlay" id="lightbox-overlay"></div>
+        <button class="lightbox-close" id="lightbox-close">&times;</button>
+        <button class="lightbox-nav lightbox-prev" id="lightbox-prev">
+            <i class="fas fa-chevron-left"></i>
+        </button>
+        <div class="lightbox-content">
+            <div class="lightbox-image-wrapper" id="lightbox-wrapper">
+                <img id="lightbox-image" src="" alt="Imagen ampliada">
+
+                <div class="lightbox-watermark-overlay" id="lightbox-watermark-overlay"></div>
+            </div>
+        </div>
+        <button class="lightbox-nav lightbox-next" id="lightbox-next">
+            <i class="fas fa-chevron-right"></i>
+        </button>
+
+
+        <div class="zoom-control" id="zoom-control">
+            <button class="zoom-btn zoom-in" id="zoom-in-btn">
+                <i class="fas fa-plus"></i>
+            </button>
+            <div class="zoom-slider-container">
+                <input type="range" id="zoom-slider" class="zoom-slider" min="100" max="200" value="100"
+                    orient="vertical">
+            </div>
+            <button class="zoom-btn zoom-out" id="zoom-out-btn">
+                <i class="fas fa-minus"></i>
+            </button>
+            <span class="zoom-level" id="zoom-level-display">100%</span>
+        </div>
+
+        <div class="lightbox-thumbnails" id="lightbox-thumbnails">
+
+        </div>
+    </div>
+
+    <div id="footer-placeholder"></div>
+
+
+    <script src="/js/theme.js"></script>
+    <script src="/js/components.js"></script>
+    <script type="module" src="/js/firebase-global.js"></script>
+    <script type="module" src="/js/carrito.js"></script>
+    <script src="/js/image-protection.js"></script>
+
+    <script>
+        // ============================================
+        // CONFIGURATION
+        // ============================================
+        // Las imágenes se cargan dinámicamente desde clientes.json
+        // Para actualizar: ejecutar "node scripts/update-clients.js"
+        let CLIENT_IMAGES = [];
+        const WATERMARK_TEXT = '@camisetazo._';
+
+        // ============================================
+        // CAROUSEL STATE - Same as producto.js
+        // ============================================
+        let lightboxImages = [];
+        let currentLightboxIndex = 0;
+
+        // ============================================
+        // LIGHTBOX STATE (same as producto.js)
+        // ============================================
+        let zoomLevel = 1;
+        let isDragging = false;
+        let startX = 0, startY = 0;
+        let translateX = 0, translateY = 0;
+        let lastTouchDistance = 0;
+
+        // ============================================
+        // INITIALIZATION - Load images from JSON
+        // ============================================
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Cargar imágenes desde el JSON generado por el script
+            try {
+                const response = await fetch('/assets/clientes/clientes.json');
+                const data = await response.json();
+                CLIENT_IMAGES = data.images || [];
+                console.log(`✅ Cargadas ${CLIENT_IMAGES.length} imágenes de clientes`);
+            } catch (error) {
+                console.warn('⚠️ No se pudo cargar clientes.json, usando fallback');
+                // Fallback: intentar cargar imágenes numeradas
+                CLIENT_IMAGES = Array.from({ length: 50 }, (_, i) => `cliente${i + 1}.webp`);
+            }
+
+            renderCarousel();
+            initClientsCarousel();
+            initLightbox();
+        });
+
+        // ============================================
+        // CAROUSEL RENDERING - Same structure as producto.js
+        // ============================================
+        function renderCarousel() {
+            const track = document.getElementById('carousel-track');
+
+            // Shuffle images
+            const shuffled = [...CLIENT_IMAGES].sort(() => Math.random() - 0.5);
+            lightboxImages = shuffled.map(img => `/assets/clientes/${img}`);
+
+            // Render slides - Same card structure as producto.html related products
+            track.innerHTML = shuffled.map((img, index) => `
+                <article class="client-card" data-index="${index}">
+                    <div class="client-image">
+                        <img 
+                            src="/assets/clientes/${img}" 
+                            alt="Cliente Satisfecho de Camisetazo"
+                            loading="${index < 6 ? 'eager' : 'lazy'}"
+                        >
+                        <div class="watermark">
+                            <span>${WATERMARK_TEXT}</span>
+                        </div>
+                    </div>
+                </article>
+            `).join('');
+
+            // Add click handlers to cards for lightbox
+            document.querySelectorAll('.client-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const index = parseInt(card.dataset.index);
+                    openLightbox(index);
+                });
+            });
+        }
+
+        // ============================================
+        // CAROUSEL CONTROLS - Same as producto.js (initRelatedCarousel)
+        // ============================================
+        function initClientsCarousel() {
+            const grid = document.getElementById('clients-grid');
+            const track = grid?.querySelector('.carousel-track');
+            const prevBtn = document.getElementById('clients-prev');
+            const nextBtn = document.getElementById('clients-next');
+
+            if (!track || !prevBtn || !nextBtn) return;
+
+            const originalCards = Array.from(track.querySelectorAll('.client-card'));
+            if (originalCards.length === 0) return;
+
+            const cardWidth = 220 + 24; // card width (220px) + gap (1.5rem = 24px)
+            const totalCards = originalCards.length;
+
+            // Clone all cards and append/prepend for seamless loop
+            originalCards.forEach(card => {
+                const cloneEnd = card.cloneNode(true);
+                const cloneStart = card.cloneNode(true);
+                cloneEnd.classList.add('carousel-clone');
+                cloneStart.classList.add('carousel-clone');
+                track.appendChild(cloneEnd);
+                track.insertBefore(cloneStart, track.firstChild);
+            });
+
+            // Re-attach click handlers to cloned cards
+            track.querySelectorAll('.client-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    const index = parseInt(card.dataset.index);
+                    openLightbox(index);
+                });
+            });
+
+            // Start at the first "real" card (after the prepended clones)
+            let currentIndex = totalCards;
+            let isJumping = false;
+            let autoPlayInterval = null;
+            let isPaused = false;
+
+            // Configuración de auto-play
+            const AUTO_PLAY_DELAY = 4000;
+            const TRANSITION_DURATION = 600;
+
+            function setPosition(index, animate = true, slow = false) {
+                if (animate) {
+                    const duration = slow ? TRANSITION_DURATION : 150;
+                    track.style.transition = `transform ${duration}ms ease-out`;
+                } else {
+                    track.style.transition = 'none';
+                }
+                track.style.transform = `translateX(${-(index * cardWidth)}px)`;
+            }
+
+            function handleTransitionEnd() {
+                if (isJumping) return;
+
+                if (currentIndex >= totalCards * 2) {
+                    isJumping = true;
+                    currentIndex = totalCards;
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            setPosition(currentIndex, false);
+                            isJumping = false;
+                        });
+                    });
+                } else if (currentIndex < totalCards) {
+                    isJumping = true;
+                    currentIndex = totalCards + currentIndex;
+                    requestAnimationFrame(() => {
+                        requestAnimationFrame(() => {
+                            setPosition(currentIndex, false);
+                            isJumping = false;
+                        });
+                    });
+                }
+            }
+
+            track.addEventListener('transitionend', handleTransitionEnd);
+
+            // Función de auto-play
+            function autoAdvance() {
+                if (isJumping || isPaused) return;
+                currentIndex++;
+                setPosition(currentIndex, true, true);
+            }
+
+            function startAutoPlay() {
+                if (autoPlayInterval) return;
+                autoPlayInterval = setInterval(autoAdvance, AUTO_PLAY_DELAY);
+            }
+
+            function stopAutoPlay() {
+                if (autoPlayInterval) {
+                    clearInterval(autoPlayInterval);
+                    autoPlayInterval = null;
+                }
+            }
+
+            function pauseAutoPlay() {
+                isPaused = true;
+                stopAutoPlay();
+            }
+
+            function resumeAutoPlay() {
+                isPaused = false;
+                startAutoPlay();
+            }
+
+            let resumeTimeout = null;
+            function handleUserInteraction() {
+                pauseAutoPlay();
+                if (resumeTimeout) clearTimeout(resumeTimeout);
+                resumeTimeout = setTimeout(resumeAutoPlay, 5000);
+            }
+
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (isJumping) return;
+                handleUserInteraction();
+                currentIndex--;
+                setPosition(currentIndex, true, false);
+            });
+
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                e.preventDefault();
+                if (isJumping) return;
+                handleUserInteraction();
+                currentIndex++;
+                setPosition(currentIndex, true, false);
+            });
+
+            // Pausar al hacer hover
+            grid.addEventListener('mouseenter', pauseAutoPlay);
+            grid.addEventListener('mouseleave', () => {
+                if (resumeTimeout) clearTimeout(resumeTimeout);
+                resumeAutoPlay();
+            });
+
+            // Posición inicial sin animación
+            setPosition(currentIndex, false);
+            track.offsetHeight;
+
+            // Iniciar auto-play
+            startAutoPlay();
+
+            // Mobile: Hide swipe hint after user scrolls
+            const carouselContainer = grid?.querySelector('.carousel-container');
+            if (carouselContainer) {
+                carouselContainer.addEventListener('scroll', () => {
+                    carouselContainer.classList.add('scrolled');
+                    handleUserInteraction();
+                }, { passive: true });
+            }
+        }
+
+        // ============================================
+        // LIGHTBOX SYSTEM (same as producto.js)
+        // ============================================
+        function initLightbox() {
+            const lightbox = document.getElementById('image-lightbox');
+            const wrapper = document.getElementById('lightbox-wrapper');
+            const zoomSlider = document.getElementById('zoom-slider');
+
+            // Close handlers
+            document.getElementById('lightbox-close')?.addEventListener('click', closeLightbox);
+            document.getElementById('lightbox-overlay')?.addEventListener('click', closeLightbox);
+
+            // Keyboard navigation
+            document.addEventListener('keydown', (e) => {
+                if (!lightbox.classList.contains('active')) return;
+                if (e.key === 'Escape') closeLightbox();
+                if (e.key === 'ArrowLeft') navigateLightbox(-1);
+                if (e.key === 'ArrowRight') navigateLightbox(1);
+            });
+
+            // Arrow navigation
+            document.getElementById('lightbox-prev')?.addEventListener('click', () => navigateLightbox(-1));
+            document.getElementById('lightbox-next')?.addEventListener('click', () => navigateLightbox(1));
+
+            // Zoom slider control
+            if (zoomSlider) {
+                zoomSlider.addEventListener('input', (e) => {
+                    zoomLevel = parseInt(e.target.value) / 100;
+                    updateZoomDisplay();
+                    clampTranslation();
+                    applyTransform();
+                });
+            }
+
+            // Zoom buttons - very small step for smooth progressive zoom
+            document.getElementById('zoom-in-btn')?.addEventListener('click', () => {
+                setZoomLevel(Math.min(2, zoomLevel + 0.05));
+            });
+
+            document.getElementById('zoom-out-btn')?.addEventListener('click', () => {
+                setZoomLevel(Math.max(1, zoomLevel - 0.05));
+            });
+
+            // Mouse wheel zoom - smooth increments
+            if (wrapper) {
+                wrapper.addEventListener('wheel', (e) => {
+                    e.preventDefault();
+                    const delta = e.deltaY > 0 ? -0.08 : 0.08;
+                    setZoomLevel(Math.min(2, Math.max(1, zoomLevel + delta)));
+                }, { passive: false });
+
+                // Double click to toggle zoom
+                wrapper.addEventListener('dblclick', () => {
+                    setZoomLevel(zoomLevel > 1 ? 1 : 1.5);
+                });
+
+                // Mouse drag for panning
+                wrapper.addEventListener('mousedown', (e) => {
+                    e.preventDefault();
+                    isDragging = true;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    wrapper.classList.add('dragging');
+                });
+
+                wrapper.addEventListener('mousemove', (e) => {
+                    if (!isDragging) return;
+                    e.preventDefault();
+                    translateX += e.clientX - startX;
+                    translateY += e.clientY - startY;
+                    startX = e.clientX;
+                    startY = e.clientY;
+                    clampTranslation();
+                    applyTransform();
+                });
+
+                wrapper.addEventListener('mouseleave', () => {
+                    isDragging = false;
+                    wrapper.classList.remove('dragging');
+                });
+
+                // Touch support
+                wrapper.addEventListener('touchstart', handleTouchStart, { passive: false });
+                wrapper.addEventListener('touchmove', handleTouchMove, { passive: false });
+                wrapper.addEventListener('touchend', () => { isDragging = false; lastTouchDistance = 0; });
+            }
+
+            document.addEventListener('mouseup', () => {
+                isDragging = false;
+                const w = document.getElementById('lightbox-wrapper');
+                if (w) w.classList.remove('dragging');
+            });
+        }
+
+        function handleTouchStart(e) {
+            if (e.touches.length === 2) {
+                lastTouchDistance = getTouchDistance(e.touches);
+            } else if (e.touches.length === 1) {
+                isDragging = true;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+            }
+        }
+
+        function handleTouchMove(e) {
+            e.preventDefault();
+            if (e.touches.length === 2) {
+                const currentDistance = getTouchDistance(e.touches);
+                const delta = (currentDistance - lastTouchDistance) * 0.01;
+                lastTouchDistance = currentDistance;
+                setZoomLevel(Math.min(3, Math.max(1, zoomLevel + delta)));
+            } else if (e.touches.length === 1 && isDragging) {
+                translateX += e.touches[0].clientX - startX;
+                translateY += e.touches[0].clientY - startY;
+                startX = e.touches[0].clientX;
+                startY = e.touches[0].clientY;
+                clampTranslation();
+                applyTransform();
+            }
+        }
+
+        function getTouchDistance(touches) {
+            return Math.hypot(
+                touches[0].clientX - touches[1].clientX,
+                touches[0].clientY - touches[1].clientY
+            );
+        }
+
+        function setZoomLevel(level) {
+            zoomLevel = level;
+            const slider = document.getElementById('zoom-slider');
+            if (slider) slider.value = Math.round(zoomLevel * 100);
+            updateZoomDisplay();
+            if (zoomLevel === 1) { translateX = 0; translateY = 0; }
+            clampTranslation();
+            const wrapper = document.getElementById('lightbox-wrapper');
+            if (wrapper) wrapper.classList.toggle('zoomed', zoomLevel > 1);
+            applyTransform();
+        }
+
+        function updateZoomDisplay() {
+            const display = document.getElementById('zoom-level-display');
+            if (display) display.textContent = Math.round(zoomLevel * 100) + '%';
+        }
+
+        function clampTranslation() {
+            const image = document.getElementById('lightbox-image');
+            if (!image || zoomLevel <= 1) { translateX = 0; translateY = 0; return; }
+
+            // Get the displayed image dimensions
+            const displayedWidth = image.offsetWidth;
+            const displayedHeight = image.offsetHeight;
+
+            // Calculate how much we can pan based on zoom level
+            // At zoomLevel 2, the image is 2x bigger, so we can pan by half the original size
+            const maxPanX = (displayedWidth * (zoomLevel - 1)) / 2;
+            const maxPanY = (displayedHeight * (zoomLevel - 1)) / 2;
+
+            translateX = Math.max(-maxPanX, Math.min(maxPanX, translateX));
+            translateY = Math.max(-maxPanY, Math.min(maxPanY, translateY));
+        }
+
+        function resetZoom() {
+            zoomLevel = 1;
+            translateX = 0;
+            translateY = 0;
+            const slider = document.getElementById('zoom-slider');
+            if (slider) slider.value = 100;
+            updateZoomDisplay();
+            const wrapper = document.getElementById('lightbox-wrapper');
+            if (wrapper) wrapper.classList.remove('zoomed');
+            applyTransform();
+        }
+
+        function applyTransform() {
+            const image = document.getElementById('lightbox-image');
+            const watermark = document.getElementById('lightbox-watermark-overlay');
+            if (image) {
+                // Direct transform without factor adjustment for smoother feel
+                const transformValue = `scale(${zoomLevel}) translate(${translateX / zoomLevel}px, ${translateY / zoomLevel}px)`;
+                image.style.transform = transformValue;
+                // Apply same transform to watermark so it scales and moves with the image
+                if (watermark) {
+                    watermark.style.transform = transformValue;
+                }
+            }
+        }
+
+        function openLightbox(index) {
+            const lightbox = document.getElementById('image-lightbox');
+            const lightboxImage = document.getElementById('lightbox-image');
+            const thumbsContainer = document.getElementById('lightbox-thumbnails');
+
+            currentLightboxIndex = index;
+
+            // Render thumbnails
+            if (thumbsContainer) {
+                thumbsContainer.innerHTML = lightboxImages.map((src, i) => `
+                    <div class="lightbox-thumb ${i === currentLightboxIndex ? 'active' : ''}" data-index="${i}">
+                        <img src="${src}" alt="Miniatura ${i + 1}">
+                    </div>
+                `).join('');
+
+                thumbsContainer.querySelectorAll('.lightbox-thumb').forEach(thumb => {
+                    thumb.addEventListener('click', () => {
+                        currentLightboxIndex = parseInt(thumb.dataset.index);
+                        updateLightboxImage();
+                    });
+                });
+            }
+
+            resetZoom();
+            lightboxImage.src = lightboxImages[currentLightboxIndex];
+            lightbox.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeLightbox() {
+            const lightbox = document.getElementById('image-lightbox');
+            if (lightbox) {
+                lightbox.classList.remove('active');
+                document.body.style.overflow = '';
+                resetZoom();
+            }
+        }
+
+        function navigateLightbox(direction) {
+            currentLightboxIndex = (currentLightboxIndex + direction + lightboxImages.length) % lightboxImages.length;
+            updateLightboxImage();
+            resetZoom();
+        }
+
+        function updateLightboxImage() {
+            const lightboxImage = document.getElementById('lightbox-image');
+            if (lightboxImage) lightboxImage.src = lightboxImages[currentLightboxIndex];
+            document.querySelectorAll('.lightbox-thumb').forEach((thumb, i) => {
+                thumb.classList.toggle('active', i === currentLightboxIndex);
+            });
+            resetZoom();
+        }
+    </script>
+</body>
+
+</html>

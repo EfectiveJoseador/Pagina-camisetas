@@ -1,4 +1,5 @@
-const CACHE_NAME = 'camisetazo-cache-v1';
+const CACHE_NAME = 'camisetazo-cache-v2';
+
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
@@ -11,7 +12,6 @@ const ASSETS_TO_CACHE = [
   './assets/logos/logo.jpg'
 ];
 
-
 self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
@@ -23,53 +23,61 @@ self.addEventListener('install', (event) => {
   );
 });
 
-
 self.addEventListener('activate', (event) => {
   const cacheWhitelist = [CACHE_NAME];
-  
+
   event.waitUntil(
     caches.keys().then((cacheNames) => {
       return Promise.all(
         cacheNames.map((cacheName) => {
-          if (cacheWhitelist.indexOf(cacheName) === -1) {
+          if (!cacheWhitelist.includes(cacheName)) {
             return caches.delete(cacheName);
           }
         })
       );
-    })
-    .then(() => self.clients.claim())
+    }).then(() => self.clients.claim())
   );
 });
 
-
 self.addEventListener('fetch', (event) => {
-  
+
+  const url = event.request.url;
+
   if (event.request.method !== 'GET') return;
-  
-  // Permitir requests de Vercel Analytics y Google Analytics sin interferencia
   if (
-    event.request.url.includes('analytics.vercel.com') ||
-    event.request.url.includes('www.googletagmanager.com') ||
-    event.request.url.includes('formsubmit.co')
+    url.startsWith('chrome-extension://') ||
+    url.includes('.map')
   ) {
-    return; // fall back to network without caching intercept
+    return;
   }
-  
+  if (
+    url.includes('analytics.vercel.com') ||
+    url.includes('www.googletagmanager.com') ||
+    url.includes('google-analytics.com') ||
+    url.includes('analytics.google.com') ||
+    url.includes('plausible.io') ||
+    url.includes('contentsquare.net') ||
+    url.includes('api.web3forms.com')
+  ) {
+    event.respondWith(fetch(event.request));
+    return;
+  }
+
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-        
+
         if (response && response.status === 200) {
           const responseToCache = response.clone();
-          caches.open(CACHE_NAME)
-            .then((cache) => {
-              cache.put(event.request, responseToCache);
-            });
+
+          caches.open(CACHE_NAME).then((cache) => {
+            cache.put(event.request, responseToCache);
+          });
         }
+
         return response;
       })
       .catch(() => {
-        
         return caches.match(event.request);
       })
   );
