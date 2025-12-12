@@ -9,7 +9,7 @@ const ASSETS_TO_CACHE = [
   './scripts/schema-org.js',
   './scripts/performance-optimizations.js',
   './manifest.json',
-  './assets/logos/logo.jpg'
+  './assets/logos/logo.png'
 ];
 
 self.addEventListener('install', (event) => {
