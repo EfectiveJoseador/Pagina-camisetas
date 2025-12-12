@@ -57,46 +57,87 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const mainImg = document.getElementById('main-img');
     mainImg.src = product.image;
-    mainImg.alt = product.name;
+    mainImg.alt = product.imageAlt || product.name;
+
+    // Add error handling for external images (e.g., Yupoo)
+    mainImg.onerror = function () {
+        this.onerror = null;
+        this.src = '/assets/images/placeholder-jersey.webp';
+        console.warn('Failed to load product image:', product.image);
+    };
+
     const thumbnailsContainer = document.querySelector('.thumbnails');
-    const basePath = product.image.replace('/1.webp', '');
-    const imagePromises = [];
-    for (let i = 1; i <= 4; i++) {
-        const imagePath = `${basePath}/${i}.webp`;
-        imagePromises.push(
-            new Promise((resolve) => {
-                const img = new Image();
-                img.onload = () => resolve({ index: i, path: imagePath, exists: true });
-                img.onerror = () => resolve({ index: i, path: imagePath, exists: false });
-                img.src = imagePath;
-            })
-        );
-    }
     let availableImages = [];
     let currentImageIndex = 0;
 
-    Promise.all(imagePromises).then(results => {
-        availableImages = results.filter(r => r.exists);
+    /**
+     * Loads images for the gallery
+     * Supports both:
+     * - New format: product.images[] array (from Yupoo imports)
+     * - Legacy format: probing /1.webp, /2.webp, etc paths
+     */
+    async function loadProductImages() {
+        // Check if product has explicit images array (Yupoo imports)
+        if (product.images && Array.isArray(product.images) && product.images.length > 0) {
+            // Use explicit images array
+            const allImages = [product.image, ...product.images];
 
+            // Validate each image
+            const imagePromises = allImages.map((imgUrl, index) => {
+                return new Promise((resolve) => {
+                    const img = new Image();
+                    img.onload = () => resolve({ index: index + 1, path: imgUrl, exists: true });
+                    img.onerror = () => resolve({ index: index + 1, path: imgUrl, exists: false });
+                    img.src = imgUrl;
+                    // Timeout for slow external images
+                    setTimeout(() => resolve({ index: index + 1, path: imgUrl, exists: false }), 5000);
+                });
+            });
+
+            const results = await Promise.all(imagePromises);
+            availableImages = results.filter(r => r.exists);
+
+        } else {
+            // Legacy: probe for local images by path pattern
+            const basePath = product.image.replace('/1.webp', '');
+            const imagePromises = [];
+
+            for (let i = 1; i <= 4; i++) {
+                const imagePath = `${basePath}/${i}.webp`;
+                imagePromises.push(
+                    new Promise((resolve) => {
+                        const img = new Image();
+                        img.onload = () => resolve({ index: i, path: imagePath, exists: true });
+                        img.onerror = () => resolve({ index: i, path: imagePath, exists: false });
+                        img.src = imagePath;
+                    })
+                );
+            }
+
+            const results = await Promise.all(imagePromises);
+            availableImages = results.filter(r => r.exists);
+        }
+
+        // Fallback: ensure at least the main image is shown
+        if (availableImages.length === 0 && product.image) {
+            availableImages = [{ index: 1, path: product.image, exists: true }];
+        }
+
+        // Render thumbnails
         availableImages.forEach((img, idx) => {
             const thumb = document.createElement('div');
             thumb.className = `thumb ${idx === 0 ? 'active' : ''}`;
-            thumb.innerHTML = `<img src="${img.path}" alt="View ${img.index}">`;
+            thumb.innerHTML = `<img src="${img.path}" alt="Vista ${img.index}" onerror="this.style.display='none'">`;
             thumb.addEventListener('click', () => {
                 currentImageIndex = idx;
                 updateMainImage();
             });
             thumbnailsContainer.appendChild(thumb);
         });
+
+        // Setup navigation
         const prevBtn = document.getElementById('prev-image');
         const nextBtn = document.getElementById('next-image');
-
-        function updateMainImage() {
-            mainImg.src = availableImages[currentImageIndex].path;
-            document.querySelectorAll('.thumb').forEach((t, i) => {
-                t.classList.toggle('active', i === currentImageIndex);
-            });
-        }
 
         prevBtn.addEventListener('click', () => {
             currentImageIndex = (currentImageIndex - 1 + availableImages.length) % availableImages.length;
@@ -107,7 +148,20 @@ document.addEventListener('DOMContentLoaded', () => {
             currentImageIndex = (currentImageIndex + 1) % availableImages.length;
             updateMainImage();
         });
-    });
+    }
+
+    function updateMainImage() {
+        if (availableImages[currentImageIndex]) {
+            mainImg.src = availableImages[currentImageIndex].path;
+            document.querySelectorAll('.thumb').forEach((t, i) => {
+                t.classList.toggle('active', i === currentImageIndex);
+            });
+        }
+    }
+
+    // Load images
+    loadProductImages();
+
     document.querySelectorAll('.size-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));

@@ -12,6 +12,7 @@ let currentProduct = null;
 let selectedLeague = '';
 let selectedTeam = '';
 let selectedKids = '';
+let selectedRetro = false;
 let currentPage = 1;
 let totalPages = 1;
 let imageObserver = null;
@@ -127,6 +128,21 @@ function renderPagination() {
         });
     });
 }
+// Helper function to convert image path to mini version
+function getMiniImagePath(imagePath) {
+    // Convert /path/to/1.webp to /path/to/1_mini.webp
+    return imagePath.replace(/\/(\d+)\.(webp|jpg|png|jpeg)$/i, '/$1_mini.$2');
+}
+
+// Helper function to get secondary image path (mini version)
+function getSecondaryMiniImagePath(product) {
+    if (product.images && product.images.length > 0) {
+        return getMiniImagePath(product.images[0]);
+    }
+    // Fallback: replace 1 with 2 and add _mini
+    return product.image.replace(/\/1\.(webp|jpg|png|jpeg)$/i, '/2_mini.$1');
+}
+
 function renderProducts() {
     const grid = document.getElementById('product-grid');
     const noResults = document.getElementById('no-results');
@@ -153,7 +169,7 @@ function renderProducts() {
                 <a href="/pages/producto.html?id=${product.id}">
                     <img 
                         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect fill='%23e5e7eb' width='1' height='1'/%3E%3C/svg%3E"
-                        data-src="${product.image.replace('/1.webp', '/1_mini.webp')}"
+                        data-src="${getMiniImagePath(product.image)}"
                         alt="${product.name}"
                         class="primary-image lazy-image"
                         width="300"
@@ -162,8 +178,8 @@ function renderProducts() {
                     >
                     <img 
                         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect fill='%23e5e7eb' width='1' height='1'/%3E%3C/svg%3E"
-                        data-src="${product.image.replace('/1.webp', '/2_mini.webp')}"
-                        alt="${product.name}"
+                        data-src="${getSecondaryMiniImagePath(product)}"
+                        alt="${product.name} - Vista 2"
                         class="secondary-image lazy-image"
                         width="300"
                         height="300"
@@ -267,13 +283,106 @@ function populateTeamFilter(league) {
 
     const leagueProducts = allProducts.filter(p => p.league === league);
 
-    const teams = [...new Set(leagueProducts.map(p => {
+    // Lista de variantes a limpiar (más completa)
+    const variants = [
+        'Local', 'Visitante', 'Tercera', 'Cuarta', 'Fourth', 'Home', 'Away', 'Third',
+        'Portero', 'Goalkeeper', 'GK',
+        'Retro', 'Icon', 'Classic', 'Vintage',
+        'Especial', 'Special', 'Edici[oó]n.*', 'Limited', 'Commemorative', 'Conmemorativ[ao]',
+        'Black', 'Gold', 'Golden', 'White', 'Pink', 'Blue', 'Red', 'Green', 'Golde', 'cyan',
+        'Training', 'Entrenamiento', 'Pre-match', 'Warm-up',
+        'Anniversary', 'Aniversario', 'Centemary', 'Centenario',
+        'Player', 'Fan', 'Vapor', 'Authentic',
+        'Stadium', 'Women', 'Edition'
+    ];
+    const variantRegex = new RegExp(`\\b(${variants.join('|')})\\b`, 'gi');
+
+    // Patrón para eliminar tallas como "S-XXL", "S-4XL", etc.
+    const sizePattern = /\bS-[X\d]+L?\b/gi;
+
+    // Mapeo de nombres canónicos (clave normalizada -> nombre correcto a mostrar)
+    // Y mapeo de alias a clave canónica para unificar variantes
+    const canonicalNames = {
+        'mexico': 'México',
+        'newcastle': 'Newcastle United',
+        'newcastle united': 'Newcastle United',
+        'barcelona': 'FC Barcelona',
+        'fc barcelona': 'FC Barcelona',
+        'sporting lisboa': 'Sporting de Lisboa',
+        'sporting de lisboa': 'Sporting de Lisboa',
+        'sporting lisbon': 'Sporting de Lisboa',
+        'boca juniors': 'Boca Juniors',
+        'boca juniors stadium': 'Boca Juniors',
+        'flamengo': 'Flamengo',
+        'inter miami': 'Inter Miami',
+        'miami': 'Inter Miami',
+        'man utd': 'Manchester United',
+        'man united': 'Manchester United',
+        'manchester united': 'Manchester United',
+        'alaves': 'Alavés',
+        'atletico madrid': 'Atlético Madrid',
+        'atletico mineiro': 'Atlético Mineiro',
+        'sao paulo': 'São Paulo',
+        'celta': 'Celta de Vigo',
+        'celta de vigo': 'Celta de Vigo',
+        'athletic': 'Athletic Club',
+        'athletic club': 'Athletic Club',
+        'athletic bilbao': 'Athletic Club',
+        'real sociedad': 'Real Sociedad',
+        'brasil': 'Brasil',
+        'brazil': 'Brasil'
+    };
+
+    // Mapeo de alias a clave canónica (para agrupar variantes en la misma entrada)
+    const canonicalKeys = {
+        'barcelona': 'fc barcelona',
+        'newcastle': 'newcastle united',
+        'sporting lisboa': 'sporting de lisboa',
+        'sporting lisbon': 'sporting de lisboa',
+        'miami': 'inter miami',
+        'mexico': 'mexico',
+        'man utd': 'manchester united',
+        'man united': 'manchester united',
+        'boca juniors stadium': 'boca juniors',
+        'alaves': 'alaves',
+        'celta': 'celta de vigo',
+        'athletic': 'athletic club',
+        'athletic bilbao': 'athletic club',
+        'brazil': 'brasil'
+    };
+
+    // Usar Map para deduplicar normalizando claves
+    const teamMap = new Map();
+
+    leagueProducts.forEach(p => {
         let name = p.name;
+        // Limpiar entidades HTML escapadas
+        name = name.replace(/&amp;/g, '&').replace(/&[a-z]+;/gi, ' ');
         name = name.replace(/\d{2}\/\d{2}/, '');
-        name = name.replace(/(Local|Visitante|Tercera|Retro|Icon)/, '');
-        name = name.replace('(Kids)', '');
-        return name.trim();
-    }))].sort();
+        name = name.replace(/\b20\d{2}\b/, ''); // Eliminar años
+        name = name.replace(/\(.*\)/g, ''); // Eliminar paréntesis completos
+        name = name.replace(variantRegex, '');
+        name = name.replace(sizePattern, ''); // Eliminar tallas
+        name = name.replace(/\s+/g, ' ').trim();
+
+        if (name) {
+            // Clave normalizada (sin tildes, minúsculas)
+            let key = normalizeString(name);
+
+            // Usar clave canónica si existe (para agrupar variantes)
+            key = canonicalKeys[key] || key;
+
+            // Buscar nombre canónico para mostrar
+            const displayName = canonicalNames[key] || canonicalNames[normalizeString(name)] || name;
+
+            // Si no existe, guardar. Siempre preferir el nombre canónico.
+            if (!teamMap.has(key)) {
+                teamMap.set(key, displayName);
+            }
+        }
+    });
+
+    const teams = [...teamMap.values()].sort();
 
     if (teamSelect) {
         teamSelect.innerHTML = '<option value="">Todos los Equipos</option>';
@@ -395,6 +504,14 @@ function attachEventListeners() {
         selectedKids = e.target.value;
         applyFilters();
     });
+    // Event listener para filtro Retro
+    const retroCheckbox = document.getElementById('filter-retro');
+    if (retroCheckbox) {
+        retroCheckbox.addEventListener('change', (e) => {
+            selectedRetro = e.target.checked;
+            applyFilters();
+        });
+    }
     document.getElementById('sort-select').addEventListener('change', applyFilters);
     document.getElementById('close-filters').addEventListener('click', () => {
         const container = document.querySelector('.catalog-container');
@@ -419,24 +536,57 @@ function attachEventListeners() {
         selectedLeague = '';
         selectedTeam = '';
         selectedKids = '';
+        selectedRetro = false;
         document.getElementById('team-step').classList.add('hidden');
         document.getElementById('filter-kids').value = '';
+        // Reset retro checkbox
+        const retroCb = document.getElementById('filter-retro');
+        if (retroCb) retroCb.checked = false;
 
         document.getElementById('search-input').value = '';
         document.getElementById('sort-select').value = 'default';
         applyFilters();
     });
 }
+// Helper para normalizar strings (quitar tildes y lowerCase)
+function normalizeString(str) {
+    return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
+}
+
 function applyFilters(updateURL = true) {
-    const searchTerm = document.getElementById('search-input').value.toLowerCase();
+    const searchInput = document.getElementById('search-input');
+    const searchTerm = searchInput ? normalizeString(searchInput.value) : '';
     const sortBy = document.getElementById('sort-select').value;
     currentPage = 1;
+
+    // Mapeo de nombres canónicos a patrones de búsqueda alternativos
+    const teamSearchAliases = {
+        'sporting de lisboa': ['sporting lisboa', 'sporting lisbon', 'sporting de lisboa'],
+        'fc barcelona': ['fc barcelona', 'barcelona'],
+        'newcastle united': ['newcastle united', 'newcastle'],
+        'méxico': ['mexico', 'méxico'],
+        'inter miami': ['inter miami', 'miami'],
+        'boca juniors': ['boca juniors', 'boca juniors stadium', 'boca'],
+        'manchester united': ['manchester united', 'man utd', 'man united'],
+        'alavés': ['alaves', 'alavés'],
+        'atlético madrid': ['atletico madrid', 'atlético madrid'],
+        'atlético mineiro': ['atletico mineiro', 'atlético mineiro'],
+        'são paulo': ['sao paulo', 'são paulo'],
+        'celta de vigo': ['celta', 'celta de vigo'],
+        'athletic club': ['athletic', 'athletic club', 'athletic bilbao'],
+        'brasil': ['brasil', 'brazil']
+    };
+
     filteredProducts = allProducts.filter(product => {
-        const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+        const productName = normalizeString(product.name);
+        const matchesSearch = productName.includes(searchTerm);
         const matchesLeague = selectedLeague === '' || product.league === selectedLeague;
         let matchesTeam = true;
         if (selectedTeam !== '') {
-            matchesTeam = product.name.toLowerCase().includes(selectedTeam.toLowerCase());
+            const teamKey = normalizeString(selectedTeam);
+            const aliases = teamSearchAliases[teamKey] || [teamKey];
+            // Verificar si el producto coincide con alguno de los alias
+            matchesTeam = aliases.some(alias => productName.includes(normalizeString(alias)));
         }
         let matchesKids = true;
         const nameLower = product.name.toLowerCase();
@@ -448,7 +598,13 @@ function applyFilters(updateURL = true) {
             matchesKids = !isKidsProduct;
         }
 
-        return matchesSearch && matchesLeague && matchesTeam && matchesKids;
+        // Filtro retro
+        let matchesRetro = true;
+        if (selectedRetro) {
+            matchesRetro = nameLower.includes('retro');
+        }
+
+        return matchesSearch && matchesLeague && matchesTeam && matchesKids && matchesRetro;
     });
     function getProductTypeOrder(name) {
         const nameLower = name.toLowerCase();

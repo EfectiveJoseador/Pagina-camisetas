@@ -317,6 +317,19 @@ function applySpecialPricing() {
         product.sale = true;
     });
 }
+// Helper function to convert image path to mini version
+function getMiniImagePath(imagePath) {
+    return imagePath.replace(/\/(\d+)\.(webp|jpg|png|jpeg)$/i, '/$1_mini.$2');
+}
+
+// Helper function to get secondary image path (mini version)
+function getSecondaryMiniImage(product) {
+    if (product.images && product.images.length > 0) {
+        return getMiniImagePath(product.images[0]);
+    }
+    return null;
+}
+
 async function renderBestSellers() {
     const grid = document.querySelector('.products-grid');
     if (!grid) return;
@@ -332,11 +345,13 @@ async function renderBestSellers() {
         }
 
         grid.innerHTML = bestSellers.map((product, index) => {
+            const secondaryImg = getSecondaryMiniImage(product);
             return `
             <article class="product-card">
                 <div class="product-image">
                     <a href="/pages/producto.html?id=${product.id}">
-                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                        <img src="${getMiniImagePath(product.image)}" alt="${product.name}" class="primary-image" loading="lazy">
+                        ${secondaryImg ? `<img src="${secondaryImg}" alt="${product.name} - Vista 2" class="secondary-image" loading="lazy">` : ''}
                     </a>
                     <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
                 </div>
@@ -355,11 +370,13 @@ async function renderBestSellers() {
         console.error('Error loading featured products:', error);
         const fallbackProducts = products.slice(0, FEATURED_CONFIG.PRODUCT_COUNT);
         grid.innerHTML = fallbackProducts.map((product, index) => {
+            const secondaryImg = getSecondaryMiniImage(product);
             return `
             <article class="product-card">
                 <div class="product-image">
                     <a href="/pages/producto.html?id=${product.id}">
-                        <img src="${product.image}" alt="${product.name}" loading="lazy">
+                        <img src="${getMiniImagePath(product.image)}" alt="${product.name}" class="primary-image" loading="lazy">
+                        ${secondaryImg ? `<img src="${secondaryImg}" alt="${product.name} - Vista 2" class="secondary-image" loading="lazy">` : ''}
                     </a>
                     <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
                 </div>
