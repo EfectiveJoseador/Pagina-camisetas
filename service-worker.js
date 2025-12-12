@@ -16,7 +16,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        console.log('Cache abierto');
+
         return cache.addAll(ASSETS_TO_CACHE);
       })
       .then(() => self.skipWaiting())

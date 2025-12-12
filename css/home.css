@@ -597,7 +597,6 @@ a.catalogo-btn:hover,
     transform: rotate(180deg);
 }
 
-/* Hacer que la tarjeta tenga posición relativa y permita overflow cuando dropdown está abierto */
 .catalogo-card {
     position: relative;
 }
@@ -616,8 +615,6 @@ a.catalogo-btn:hover,
     border: 1px solid var(--border);
     border-radius: 8px;
     animation: slideDown 0.3s ease;
-
-    /* Posición absoluta para superponerse */
     position: absolute;
     top: 100%;
     left: 0;
@@ -1113,7 +1110,6 @@ a.catalogo-btn:hover,
     transition: transform 0.15s ease-out;
 }
 
-/* Contenedor de flechas debajo del carrusel */
 .catalogo-carousel .carousel-arrows {
     display: flex;
     justify-content: center;
@@ -1121,7 +1117,6 @@ a.catalogo-btn:hover,
     margin-top: 1.5rem;
 }
 
-/* Flechas debajo del carrusel */
 .catalogo-carousel .carousel-arrow {
     position: relative;
     top: auto;
@@ -1165,7 +1160,6 @@ a.catalogo-btn:hover,
     flex-shrink: 0;
 }
 
-/* Mobile: Scroll horizontal nativo con indicador visual */
 @media (max-width: 768px) {
     .catalogo-carousel .carousel-container {
         position: relative;
@@ -1198,7 +1192,6 @@ a.catalogo-btn:hover,
         display: none;
     }
 
-    /* Indicador de scroll (gradiente derecho) */
     .catalogo-carousel::after {
         content: '';
         position: absolute;
@@ -1211,7 +1204,6 @@ a.catalogo-btn:hover,
         z-index: 5;
     }
 
-    /* Indicador visual de deslizar - circulo */
     .catalogo-carousel .carousel-container::after {
         content: '';
         position: absolute;
@@ -1231,7 +1223,6 @@ a.catalogo-btn:hover,
         animation: pulseHintCatalogo 2s ease-in-out infinite;
     }
 
-    /* Indicador visual de deslizar - flecha */
     .catalogo-carousel .carousel-container::before {
         content: '›';
         position: absolute;
@@ -1277,7 +1268,6 @@ a.catalogo-btn:hover,
         }
     }
 
-    /* Ocultar indicador después del primer scroll */
     .catalogo-carousel .carousel-container.scrolled::after,
     .catalogo-carousel .carousel-container.scrolled::before {
         display: none;
@@ -1336,11 +1326,6 @@ a.catalogo-btn:hover,
     }
 }
 
-/* ==========================================
-   TEMA OSCURO - Iluminación específica Home
-   ========================================== */
-
-/* Iluminación en tarjetas de catálogo */
 [data-theme="dark"] .catalogo-card {
     background: linear-gradient(145deg, var(--bg-card) 0%, rgba(18, 18, 26, 1) 100%);
 }
@@ -1363,7 +1348,6 @@ a.catalogo-btn:hover,
     background: transparent;
 }
 
-/* Iluminación en product cards del home */
 [data-theme="dark"] .product-card {
     background: linear-gradient(145deg, var(--bg-card) 0%, rgba(18, 18, 26, 1) 100%);
 }
@@ -1374,17 +1358,11 @@ a.catalogo-btn:hover,
     background: transparent;
 }
 
-/* Iluminación en info cards */
 [data-theme="dark"] .info-card {
     background: linear-gradient(135deg, var(--bg-card) 0%, rgba(18, 18, 26, 1) 100%);
     overflow: hidden;
 }
 
-/* ==========================================
-   RESPONSIVE - Sección Equipos de Fútbol
-   ========================================== */
-
-/* Estilos base para equipos-grid */
 .equipos-section {
     padding: 4rem 2rem;
 }
@@ -1444,10 +1422,7 @@ a.catalogo-btn:hover,
     text-align: center;
 }
 
-/* Mobile responsive para section-header y equipos */
 @media (max-width: 768px) {
-
-    /* Section header vertical en móvil */
     .section-header {
         flex-direction: column;
         align-items: center;
@@ -1460,7 +1435,6 @@ a.catalogo-btn:hover,
         width: 100%;
     }
 
-    /* Link "Ver todo" centrado y más visible - morado oscuro */
     .link-arrow {
         background: linear-gradient(135deg, #6b21a8 0%, #4c1d95 100%);
         color: rgba(255, 255, 255, 0.9) !important;
@@ -1478,7 +1452,6 @@ a.catalogo-btn:hover,
         box-shadow: 0 6px 20px rgba(124, 58, 237, 0.5);
     }
 
-    /* Grid de equipos 2x2 en móvil */
     .equipos-grid {
         grid-template-columns: repeat(2, 1fr) !important;
         gap: 1rem !important;
@@ -1499,7 +1472,6 @@ a.catalogo-btn:hover,
         font-size: 0.85rem !important;
     }
 
-    /* Sección equipos padding */
     .equipos-section {
         padding: 2.5rem 1rem !important;
     }
