@@ -392,6 +392,12 @@ function populateTeamFilter(league) {
             option.textContent = team;
             teamSelect.appendChild(option);
         });
+
+        // Aplicar deduplicación inteligente si el módulo está disponible
+        if (typeof DropdownDedup !== 'undefined') {
+            DropdownDedup.applyMapToDropdown(teamSelect);
+        }
+
         teamStep.classList.remove('hidden');
     }
 }
