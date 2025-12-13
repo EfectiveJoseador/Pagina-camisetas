@@ -2182,7 +2182,7 @@ const products = [
     },
     {
         id: 115407,
-        name: "Mexico golden&amp;amp; Player 2025",
+        name: "Mexico Dorada 2025",
         category: "futbol",
         league: "selecciones",
         image: "/assets/productos/Yupoo/192260006/1.webp",
