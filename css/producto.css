@@ -1073,6 +1073,8 @@
     justify-content: center;
     animation: zoomIn 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     overflow: hidden;
+    /* Move image up on desktop to reduce top margin */
+    margin-bottom: 5vh;
 }
 
 .lightbox-image-wrapper {
@@ -1269,6 +1271,11 @@
 
 
 @media (max-width: 768px) {
+    .lightbox-content {
+        /* Reset desktop offset for mobile */
+        margin-bottom: 0;
+    }
+
     .lightbox-close {
         top: 1rem;
         right: 1rem;
