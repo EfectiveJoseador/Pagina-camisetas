@@ -1579,43 +1579,24 @@ async function importFromYupoo(albumUrl, options = {}) {
     // Generar ID estable
     const id = generateStableId(albumUrl);
 
-    // Generar slug
-    const slug = generateSlug(titleInfo.name);
-
-    // Generar alt de imagen
-    const imageAlt = generateImageAlt(titleInfo.name, 0);
-
-    // Construir objeto producto
+    // Construir objeto producto (campos mínimos esenciales)
     const product = {
         id,
         name: titleInfo.name,
-        slug,
         category,
         league,
-        price: 0, // El usuario debe establecer el precio
+        price: 0,
         image: imageData.image,
-        images: imageData.images,
-        imageAlt,
-        new: true,
-        sale: false,
-        source: {
-            provider: 'yupoo',
-            url: albumUrl,
-            albumId: extractAlbumId(albumUrl)
-        }
+        images: imageData.images
     };
 
-    // Añadir campos opcionales si existen
+    // Añadir campos opcionales solo si existen y son útiles
     if (titleInfo.temporada) {
         product.temporada = titleInfo.temporada;
     }
 
     if (titleInfo.tipo) {
         product.tipo = titleInfo.tipo;
-    }
-
-    if (titleInfo.tallas) {
-        product.tallas = titleInfo.tallas;
     }
 
     if (titleInfo.isKids) {
@@ -1770,10 +1751,11 @@ async function downloadProductImages(product, assetsDir, options = {}) {
         webpQuality = 85,
         generateThumbnails = true,
         thumbnailSize = 600,
-        thumbnailQuality = 80
+        thumbnailQuality = 80,
+        referer = 'https://yupoo.com/'
     } = options;
 
-    const albumId = product.source?.albumId || product.id.toString();
+    const albumId = product.id.toString();
     const productDir = path.join(assetsDir, 'productos', 'Yupoo', albumId);
     const webPath = `/assets/productos/Yupoo/${albumId}`;
 
@@ -1782,7 +1764,6 @@ async function downloadProductImages(product, assetsDir, options = {}) {
         fs.mkdirSync(productDir, { recursive: true });
     }
 
-    const referer = product.source?.url || 'https://yupoo.com/';
     const downloadedImages = [];
 
     // Collect all images to download

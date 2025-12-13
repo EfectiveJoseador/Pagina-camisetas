@@ -311,16 +311,6 @@ const products = [
         sale: false
     },
     {
-        id: 132,
-        name: "Rayo Vallecano 25/26 Local",
-        category: "futbol",
-        league: "laliga",
-        price: 79.99,
-        image: "/assets/productos/La Liga/Rayo2526L/1.webp",
-        new: true,
-        sale: false
-    },
-    {
         id: 133,
         name: "Real Madrid 25/26 Visitante",
         category: "futbol",
@@ -715,14 +705,13 @@ const products = [
     },
     {
         id: 701,
-        name: "Lakers LeBron James Icon",
+        name: "Lakers 25/26 Local",
         category: "nba",
         league: "nba",
         price: 95,
         image: "/assets/productos/NBA/Lakers1/1.webp",
         new: false,
-        sale: true,
-        oldPrice: 110
+        sale: true
     },
     {
         id: 702,
@@ -4578,8 +4567,8 @@ const products = [
     },
     {
         id: 553431,
-        name: "Rayo Vallecano 25/26 Visitante",
-        slug: "rayo-vallecano-2526-visitante",
+        name: "Rayo Vallecano 25/26 Tercera",
+        slug: "rayo-vallecano-2526-tercera",
         category: "futbol",
         league: "laliga",
         price: 0,
@@ -4588,7 +4577,7 @@ const products = [
             "/assets/productos/Yupoo/209571144/2.webp",
             "/assets/productos/Yupoo/209571144/3.webp"
         ],
-        imageAlt: "Rayo Vallecano 25/26 Visitante - Vista principal",
+        imageAlt: "Rayo Vallecano 25/26 Tercera - Vista principal",
         new: true,
         sale: false,
         source: {
@@ -5028,6 +5017,19 @@ const products = [
         temporada: "25/26",
         tipo: "local",
         tallas: "S-4XL"
+    },
+    {
+        id: 821734,
+        name: "Rayo Vallecano 25/26 Local",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/821734/1.webp",
+        images: [
+            "/assets/productos/Yupoo/821734/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "local"
     }
 ];
 

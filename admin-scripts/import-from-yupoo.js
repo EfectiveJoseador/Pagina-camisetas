@@ -258,7 +258,6 @@ function displayProductPreview(product) {
 
     console.log(`${COLORS.cyan}ID:${COLORS.reset}          ${product.id}`);
     console.log(`${COLORS.cyan}Nombre:${COLORS.reset}      ${product.name}`);
-    console.log(`${COLORS.cyan}Slug:${COLORS.reset}        ${product.slug}`);
     console.log(`${COLORS.cyan}Categoría:${COLORS.reset}   ${product.category}`);
     console.log(`${COLORS.cyan}Liga:${COLORS.reset}        ${product.league}`);
 
@@ -284,25 +283,16 @@ function displayProductPreview(product) {
     }
 
     separator();
-    console.log(`${COLORS.cyan}Origen:${COLORS.reset}`);
-    console.log(`  Provider: ${product.source.provider}`);
-    console.log(`  Album ID: ${product.source.albumId}`);
-    console.log(`  URL: ${COLORS.dim}${product.source.url}${COLORS.reset}`);
-
-    separator();
 
     // Mostrar flags activos
     const flags = [];
-    if (product.new) flags.push('🆕 Nuevo');
     if (product.kids) flags.push('👶 Niño');
     if (product.retro) flags.push('🏛️ Retro');
-    if (product.sale) flags.push('💰 Oferta');
 
     if (flags.length > 0) {
         console.log(`${COLORS.cyan}Tags:${COLORS.reset}        ${flags.join(' | ')}`);
+        separator();
     }
-
-    separator();
 }
 
 async function main() {
@@ -367,12 +357,16 @@ async function main() {
             console.log('');
 
             // Usar readline para input interactivo
-            // Si hay exactamente 2 imágenes, seleccionarlas automáticamente (1=Main, 0=Sec)
+            // Si hay exactamente 2 imágenes, seleccionarlas automáticamente (último=Main, penúltimo=Sec)
             let userInput;
+            const lastIdx = bigImages.length - 1;
+            const secondLastIdx = bigImages.length - 2;
+            const defaultSelection = secondLastIdx >= 0 ? `${lastIdx},${secondLastIdx}` : `${lastIdx}`;
+
             if (bigImages.length === 2) {
                 console.log(`${COLORS.green}✓ Detectadas exactamente 2 imágenes.${COLORS.reset}`);
-                console.log(`${COLORS.cyan}Auto-seleccionando: 1 (Principal), 0 (Secundaria)${COLORS.reset}`);
-                userInput = "1,0";
+                console.log(`${COLORS.cyan}Auto-seleccionando: ${lastIdx} (Principal), ${secondLastIdx} (Secundaria)${COLORS.reset}`);
+                userInput = defaultSelection;
             } else {
                 const readline = require('readline');
                 const rl = readline.createInterface({
@@ -381,7 +375,7 @@ async function main() {
                 });
 
                 userInput = await new Promise(resolve => {
-                    rl.question(`${COLORS.cyan}Índices (ej: 7,8) [Enter para 1,0]: ${COLORS.reset}`, answer => {
+                    rl.question(`${COLORS.cyan}Índices (ej: 7,8) [Enter para ${defaultSelection}]: ${COLORS.reset}`, answer => {
                         rl.close();
                         resolve(answer.trim());
                     });
@@ -391,8 +385,8 @@ async function main() {
             let finalInput = userInput;
 
             if (!finalInput) {
-                console.log(`${COLORS.yellow}⚠ Input vacío. Usando defecto: 1,0 (Imagen 1 Principal, Imagen 0 Secundaria)${COLORS.reset}`);
-                finalInput = "1,0";
+                console.log(`${COLORS.yellow}⚠ Input vacío. Usando defecto: ${defaultSelection} (Último=Principal, Penúltimo=Secundaria)${COLORS.reset}`);
+                finalInput = defaultSelection;
             }
 
             // Parsear índices del input - soporta "all" para todas las demás
@@ -543,7 +537,9 @@ async function main() {
         info('Descargando imágenes...');
         let productWithLocalImages;
         try {
-            productWithLocalImages = await downloadProductImages(product, ASSETS_DIR);
+            productWithLocalImages = await downloadProductImages(product, ASSETS_DIR, {
+                referer: options.url  // Pasar URL original como referer
+            });
             success(`Imágenes descargadas: ${[productWithLocalImages.image, ...productWithLocalImages.images].length}`);
         } catch (downloadErr) {
             error(`Error descargando imágenes: ${downloadErr.message}`);
