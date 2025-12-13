@@ -56,7 +56,8 @@ document.addEventListener('DOMContentLoaded', () => {
         'brasileirao': 'Brasileirão',
         'ligaarabe': 'Liga Árabe',
         'saf': 'SAF (Argentina)',
-        'nba': 'NBA'
+        'nba': 'NBA',
+        'ligaportugal': 'Liga Portugal'
     };
     const leagueName = leagueNames[product.league] || product.league;
     const breadcrumbLeague = document.getElementById('breadcrumb-league');

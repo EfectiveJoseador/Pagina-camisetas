@@ -1178,7 +1178,7 @@ const products = [
         name: "Zaragoza Local Retro",
         slug: "zaragoza-local-retro",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/199217731/1.webp",
         images: [
@@ -1235,7 +1235,7 @@ const products = [
         name: "Zaragoza 97/98 Local Retro",
         slug: "zaragoza-9798-local-retro",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/197575643/1.webp",
         images: [
@@ -1265,7 +1265,7 @@ const products = [
         name: "Getafe 09/10 Local Retro",
         slug: "getafe-0910-local-retro",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/192258362/1.webp",
         images: [
@@ -1295,7 +1295,7 @@ const products = [
         name: "Málaga CF Stadium Local Retro",
         slug: "malaga-cf-stadium-local-retro",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/187757557/1.webp",
         images: [
@@ -2530,7 +2530,7 @@ const products = [
         name: "Celta Tercera Retro",
         slug: "celta-tercera-retro",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/207564422/1.webp",
         images: [
@@ -2559,7 +2559,7 @@ const products = [
         name: "Real Oviedo 90/91 Local Retro",
         slug: "real-oviedo-9091-local-retro",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/207564621/1.webp",
         images: [
@@ -2763,7 +2763,7 @@ const products = [
         name: "Rayo Vallecano 97/98 Visitante Retro",
         slug: "rayo-vallecano-9798-visitante-retro",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/207451208/1.webp",
         images: [
@@ -2793,7 +2793,7 @@ const products = [
         name: "Rayo Vallecano 97/98 Local Retro",
         slug: "rayo-vallecano-9798-local-retro",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/207451307/1.webp",
         images: [
@@ -3468,7 +3468,7 @@ const products = [
         name: "Porto 99/00 Local Retro",
         slug: "porto-9900-local-retro",
         category: "futbol",
-        league: "otros",
+        league: "Primeira Liga",
         price: 0,
         image: "/assets/productos/Yupoo/200365393/1.webp",
         images: [
@@ -4141,7 +4141,7 @@ const products = [
         name: "Malaga 12/13 Local Retro",
         slug: "malaga-1213-local-retro",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/215727648/1.webp",
         images: [
@@ -4495,7 +4495,7 @@ const products = [
         name: "Zaragoza Second 95/96 Visitante Retro",
         slug: "zaragoza-second-9596-visitante-retro",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         price: 0,
         image: "/assets/productos/Yupoo/212487006/1.webp",
         images: [

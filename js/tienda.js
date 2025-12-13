@@ -407,7 +407,7 @@ function formatLeagueName(league) {
         'brasileirao': 'Brasileirão',
         'ligaarabe': 'Liga Árabe',
         'saf': 'SAF (Argentina)',
-        'nba': 'NBA'
+        'nba': 'NBA',
     };
     return map[league] || league;
 }
