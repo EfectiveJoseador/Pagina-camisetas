@@ -666,90 +666,115 @@ function initRelatedCarousel() {
     const cardWidth = 220 + 24;
     const totalCards = originalCards.length;
 
+    // Fix cloning with eager loading for images to prevent stutter
     originalCards.forEach(card => {
         const cloneEnd = card.cloneNode(true);
-        const cloneStart = card.cloneNode(true);
         cloneEnd.classList.add('carousel-clone');
-        cloneStart.classList.add('carousel-clone');
+        // Ensure images load immediately to avoid stutter
+        const img = cloneEnd.querySelector('img');
+        if (img) img.loading = 'eager';
         track.appendChild(cloneEnd);
+    });
+
+    // Prepend clones in correct order
+    [...originalCards].reverse().forEach(card => {
+        const cloneStart = card.cloneNode(true);
+        cloneStart.classList.add('carousel-clone');
+        // Ensure images load immediately
+        const img = cloneStart.querySelector('img');
+        if (img) img.loading = 'eager';
         track.insertBefore(cloneStart, track.firstChild);
     });
 
-    let currentIndex = totalCards;
+    let currentPosition = totalCards * cardWidth; // Start at Originals
     let isJumping = false;
-    let autoPlayInterval = null;
+    let animationId = null;
     let isPaused = false;
 
-    const AUTO_PLAY_DELAY = 4000;
-    const TRANSITION_DURATION = 600;
+    const SCROLL_SPEED = 0.3;
+    const PAUSE_DURATION = 3000; // Reduced to 3 seconds as requested (+2s faster than 5s)
 
-    function setPosition(index, animate = true, slow = false) {
+    function setPosition(position, animate = true) {
         if (animate) {
-            const duration = slow ? TRANSITION_DURATION : 150;
-            track.style.transition = `transform ${duration}ms ease-out`;
+            track.style.transition = 'transform 150ms ease-out';
         } else {
             track.style.transition = 'none';
         }
-        track.style.transform = `translateX(${-(index * cardWidth)}px)`;
+        track.style.transform = `translateX(${-position}px)`;
     }
 
-    function handleTransitionEnd() {
-        if (isJumping) return;
+    function checkBoundary(e) {
+        // Only trigger if it's the track moving, not a child element transition
+        if (e && e.target !== track) return;
 
-        if (currentIndex >= totalCards * 2) {
+        // Forward limit
+        if (currentPosition >= totalCards * 2 * cardWidth) {
             isJumping = true;
-            currentIndex = totalCards;
             track.style.transition = 'none';
-            void track.offsetHeight; // Force synchronous reflow
-            track.style.transform = `translateX(${-(currentIndex * cardWidth)}px)`;
-            void track.offsetHeight; // Ensure the change is applied
+            currentPosition -= totalCards * cardWidth;
+            track.style.transform = `translateX(${-currentPosition}px)`;
+            void track.offsetHeight;
             isJumping = false;
-        } else if (currentIndex < totalCards) {
+        }
+        // Backward limit
+        if (currentPosition < totalCards * cardWidth) {
             isJumping = true;
-            currentIndex = totalCards + currentIndex;
             track.style.transition = 'none';
-            void track.offsetHeight; // Force synchronous reflow
-            track.style.transform = `translateX(${-(currentIndex * cardWidth)}px)`;
-            void track.offsetHeight; // Ensure the change is applied
+            currentPosition += totalCards * cardWidth;
+            track.style.transform = `translateX(${-currentPosition}px)`;
+            void track.offsetHeight;
             isJumping = false;
         }
     }
 
-    track.addEventListener('transitionend', handleTransitionEnd);
-
-    function autoAdvance() {
-        if (isJumping || isPaused) return;
-        currentIndex++;
-        setPosition(currentIndex, true, true);
-    }
-
-    function startAutoPlay() {
-        if (autoPlayInterval) return;
-        autoPlayInterval = setInterval(autoAdvance, AUTO_PLAY_DELAY);
-    }
-
-    function stopAutoPlay() {
-        if (autoPlayInterval) {
-            clearInterval(autoPlayInterval);
-            autoPlayInterval = null;
+    // Continuous smooth scroll animation
+    function smoothScroll() {
+        if (isPaused || isJumping) {
+            animationId = requestAnimationFrame(smoothScroll);
+            return;
         }
+
+        currentPosition += SCROLL_SPEED;
+
+        // Auto-scroll boundary check
+        if (currentPosition >= totalCards * 2 * cardWidth) {
+            currentPosition -= totalCards * cardWidth;
+            track.style.transition = 'none';
+            track.style.transform = `translateX(${-currentPosition}px)`;
+        } else {
+            track.style.transition = 'none';
+            track.style.transform = `translateX(${-currentPosition}px)`;
+        }
+
+        animationId = requestAnimationFrame(smoothScroll);
     }
 
-    function pauseAutoPlay() {
-        isPaused = true;
-        stopAutoPlay();
-    }
-
-    function resumeAutoPlay() {
+    function startAutoScroll() {
+        if (animationId) return;
         isPaused = false;
-        startAutoPlay();
+        animationId = requestAnimationFrame(smoothScroll);
+    }
+
+    function stopAutoScroll() {
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+    }
+
+    function pauseAutoScroll() {
+        isPaused = true;
+    }
+
+    function resumeAutoScroll() {
+        isPaused = false;
     }
 
     let resumeTimeout = null;
     function handleUserInteraction() {
-        pauseAutoPlay();
+        pauseAutoScroll();
         if (resumeTimeout) clearTimeout(resumeTimeout);
-        resumeTimeout = setTimeout(resumeAutoPlay, 5000);
+        resumeTimeout = setTimeout(resumeAutoScroll, PAUSE_DURATION);
     }
 
     prevBtn.addEventListener('click', (e) => {
@@ -757,8 +782,8 @@ function initRelatedCarousel() {
         e.preventDefault();
         if (isJumping) return;
         handleUserInteraction();
-        currentIndex--;
-        setPosition(currentIndex, true, false);
+        currentPosition -= cardWidth;
+        setPosition(currentPosition, true);
     });
 
     nextBtn.addEventListener('click', (e) => {
@@ -766,59 +791,85 @@ function initRelatedCarousel() {
         e.preventDefault();
         if (isJumping) return;
         handleUserInteraction();
-        currentIndex++;
-        setPosition(currentIndex, true, false);
+        currentPosition += cardWidth;
+        setPosition(currentPosition, true);
     });
 
-    grid.addEventListener('mouseenter', pauseAutoPlay);
-    grid.addEventListener('mouseleave', () => {
+    track.addEventListener('transitionend', checkBoundary);
+
+    // Only pause when hovering over actual cards (track), not arrows or empty space
+    track.addEventListener('mouseenter', pauseAutoScroll);
+    track.addEventListener('mouseleave', () => {
         if (resumeTimeout) clearTimeout(resumeTimeout);
-        resumeAutoPlay();
+        resumeAutoScroll();
     });
 
-    setPosition(currentIndex, false);
+    // Initial position
+    setPosition(currentPosition, false);
     track.offsetHeight;
 
-    startAutoPlay();
+    // Start continuous scroll
+    startAutoScroll();
 
     const carouselContainer = grid?.querySelector('.carousel-container');
 
-    const isMobile = window.innerWidth <= 768;
-    if (isMobile && carouselContainer) {
+    // Unified Touch Support for Swipe
+    let isDragging = false;
+    let startPos = 0;
+    let currentTranslate = 0;
+    let prevTranslate = 0;
+    let animationID;
+    let startTime = 0;
+
+    track.addEventListener('touchstart', touchStart());
+    track.addEventListener('touchend', touchEnd);
+    track.addEventListener('touchmove', touchMove);
+
+    function touchStart() {
+        return function (event) {
+            isDragging = true;
+            startPos = getPositionX(event);
+            pauseAutoScroll(); // Pause auto scroll on touch
+            if (resumeTimeout) clearTimeout(resumeTimeout); // Clear resume timeout
+            animationID = requestAnimationFrame(animation);
+        }
+    }
+
+    function touchEnd() {
+        isDragging = false;
+        cancelAnimationFrame(animationID);
+        handleUserInteraction(); // Restart auto scroll after delay
+    }
+
+    function touchMove(event) {
+        if (isDragging) {
+            const currentPositionX = getPositionX(event);
+            const diff = currentPositionX - startPos;
+            currentPosition -= diff; // Invert diff because transform is negative
+            startPos = currentPositionX; // Update start for delta calculation
+            setPosition(currentPosition, false); // Move immediately without transition
+        }
+    }
+
+    function getPositionX(event) {
+        return event.touches[0].clientX;
+    }
+
+    function animation() {
+        if (isDragging) requestAnimationFrame(animation);
+    }
+
+    // Add Scrolled class on any movement
+    const addScrolledClass = () => {
+        carouselContainer.classList.add('scrolled');
+        grid.closest('.related-products')?.classList.add('scrolled');
+    };
+
+    track.addEventListener('touchstart', addScrolledClass, { once: true });
+    carouselContainer.addEventListener('scroll', addScrolledClass, { once: true }); // Fallback
+
+    if (carouselContainer) {
         carouselContainer.addEventListener('scroll', () => {
-            const scrollLeft = carouselContainer.scrollLeft;
-            const scrollWidth = carouselContainer.scrollWidth;
-            const clientWidth = carouselContainer.clientWidth;
-
-            if (scrollLeft + clientWidth >= scrollWidth - 400) {
-                originalCards.forEach(card => {
-                    const clone = card.cloneNode(true);
-                    clone.classList.add('carousel-clone');
-                    track.appendChild(clone);
-                });
-            }
-
-            if (scrollLeft <= 400) {
-                const currentScrollLeft = carouselContainer.scrollLeft;
-                const cardsToAdd = [...originalCards].reverse();
-                let addedWidth = 0;
-
-                cardsToAdd.forEach(card => {
-                    const clone = card.cloneNode(true);
-                    clone.classList.add('carousel-clone');
-                    track.insertBefore(clone, track.firstChild);
-                    addedWidth += clone.offsetWidth + 16;
-                });
-
-                carouselContainer.scrollLeft = currentScrollLeft + addedWidth;
-            }
-
-            carouselContainer.classList.add('scrolled');
-            grid.closest('.related-products')?.classList.add('scrolled');
-        }, { passive: true });
-    } else if (carouselContainer) {
-        carouselContainer.addEventListener('scroll', () => {
-            carouselContainer.classList.add('scrolled');
             handleUserInteraction();
         }, { passive: true });
     }

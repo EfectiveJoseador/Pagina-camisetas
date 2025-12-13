@@ -1166,12 +1166,8 @@ a.catalogo-btn:hover,
         padding: 0 1rem;
         padding-right: 0;
         /* Allow peek of next item */
-        overflow-x: auto;
-        overflow-y: visible;
-        scroll-behavior: smooth;
-        -webkit-overflow-scrolling: touch;
-        scroll-snap-type: x mandatory;
-        scrollbar-width: none;
+        overflow: hidden;
+        /* Disable native scroll, use JS transform */
     }
 
     .catalogo-carousel .carousel-container::-webkit-scrollbar {
@@ -1179,7 +1175,7 @@ a.catalogo-btn:hover,
     }
 
     .catalogo-carousel .carousel-track {
-        transform: none !important;
+        /* Enable transform for JS animation */
         gap: 1rem;
         padding-right: 1rem;
         /* Space at end */
