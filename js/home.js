@@ -446,8 +446,15 @@ function getMiniImagePath(imagePath) {
 
 // Helper function to get secondary image path (mini version)
 function getSecondaryMiniImage(product) {
+    // If product has explicit images array (Yupoo imports), use first one
     if (product.images && product.images.length > 0) {
         return getMiniImagePath(product.images[0]);
+    }
+    // For local products without images array, derive secondary from primary
+    // e.g., /assets/productos/La Liga/Alaves2526L/1.webp -> /assets/productos/La Liga/Alaves2526L/2_mini.webp
+    if (product.image) {
+        const secondaryPath = product.image.replace(/\/1\.(webp|jpg|png|jpeg)$/i, '/2.$1');
+        return getMiniImagePath(secondaryPath);
     }
     return null;
 }
