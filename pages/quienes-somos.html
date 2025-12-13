@@ -740,12 +740,17 @@
 
             track.addEventListener('transitionend', checkBoundary);
 
-            // Only pause when hovering over actual cards (track), not arrows or empty space
-            track.addEventListener('mouseenter', pauseAutoScroll);
-            track.addEventListener('mouseleave', () => {
-                if (resumeTimeout) clearTimeout(resumeTimeout);
-                resumeAutoScroll();
-            });
+            // Get carousel container for hover detection
+            const carouselContainer = grid?.querySelector('.carousel-container');
+
+            // Pause when hovering over the entire carousel container area
+            if (carouselContainer) {
+                carouselContainer.addEventListener('mouseenter', pauseAutoScroll);
+                carouselContainer.addEventListener('mouseleave', () => {
+                    if (resumeTimeout) clearTimeout(resumeTimeout);
+                    resumeAutoScroll();
+                });
+            }
 
             // Posición inicial sin animación
             setPosition(currentPosition, false);
@@ -766,8 +771,6 @@
             track.style.touchAction = 'pan-y';
             track.style.userSelect = 'none';
             track.style.webkitUserSelect = 'none';
-
-            const carouselContainer = grid?.querySelector('.carousel-container');
 
             function touchStart(event) {
                 // Stop any ongoing inertia

@@ -808,12 +808,17 @@ function initRelatedCarousel() {
 
     track.addEventListener('transitionend', checkBoundary);
 
-    // Only pause when hovering over actual cards (track), not arrows or empty space
-    track.addEventListener('mouseenter', pauseAutoScroll);
-    track.addEventListener('mouseleave', () => {
-        if (resumeTimeout) clearTimeout(resumeTimeout);
-        resumeAutoScroll();
-    });
+    // Get carousel container for hover detection
+    const carouselContainer = grid?.querySelector('.carousel-container');
+
+    // Pause when hovering over the entire carousel container area
+    if (carouselContainer) {
+        carouselContainer.addEventListener('mouseenter', pauseAutoScroll);
+        carouselContainer.addEventListener('mouseleave', () => {
+            if (resumeTimeout) clearTimeout(resumeTimeout);
+            resumeAutoScroll();
+        });
+    }
 
     // Initial position
     setPosition(currentPosition, false);
@@ -821,8 +826,6 @@ function initRelatedCarousel() {
 
     // Start continuous scroll
     startAutoScroll();
-
-    const carouselContainer = grid?.querySelector('.carousel-container');
 
     // Touch swipe support with inertia
     let isDragging = false;
