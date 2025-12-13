@@ -4707,8 +4707,8 @@ const products = [
     },
     {
         id: 728985,
-        name: "Croatia s 2026 Local",
-        slug: "croatia-s-2026-local",
+        name: "Croacia 2026 Local",
+        slug: "croacia-2026-local",
         category: "futbol",
         league: "selecciones",
         price: 0,
@@ -4716,7 +4716,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/219700516/2.webp"
         ],
-        imageAlt: "Croatia s 2026 Local - Vista principal",
+        imageAlt: "Croacia 2026 Local - Vista principal",
         new: true,
         sale: false,
         source: {

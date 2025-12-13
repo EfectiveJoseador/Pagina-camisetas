@@ -647,10 +647,10 @@ const TITLE_CLEANUP_PATTERNS = [
     /\b1:1\b/gi,
     /\bhigh\s*quality/gi,
 
-    // Términos genéricos a limpiar
-    /\bjersey\b/gi,
-    /\bshirt\b/gi,
-    /\bkit\b/gi,
+    // Términos genéricos a limpiar (incluyendo plurales)
+    /\bjerseys?\b/gi,
+    /\bshirts?\b/gi,
+    /\bkits?\b/gi,
     /\bsoccer\b/gi,
     /\bfootball\b/gi,
     /\bbasketball\b/gi
@@ -745,7 +745,7 @@ function parseProductTitle(rawTitle) {
         .replace(/\b(retro|classic|vintage)\b/gi, '')
         .replace(/\b(kids?|niños?|child|children|junior)\b/gi, '')
         .replace(/\b(S-\d?XL|S-4XL|XS-XXL|S-XXL|M-XXL|S-3XL)\b/gi, '')
-        .replace(/jersey|shirt|camisa|camiseta|kit/gi, ''); // Palabras genéricas
+        .replace(/\b(jerseys?|shirts?|camisas?|camisetas?|kits?)\b/gi, ''); // Palabras genéricas
 
     // 2. Aplicar patrones de limpieza específicos (junk phrases)
     TITLE_CLEANUP_PATTERNS.forEach(pattern => {
