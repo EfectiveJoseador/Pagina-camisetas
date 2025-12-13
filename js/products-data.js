@@ -4782,7 +4782,7 @@ const products = [
         name: "Miami 25/26 Tercera",
         slug: "miami-2526-tercera",
         category: "futbol",
-        league: "otros",
+        league: "MLS",
         price: 0,
         image: "/assets/productos/Yupoo/192250021/1.webp",
         images: [
@@ -4806,7 +4806,7 @@ const products = [
         name: "Miami 25/26 Local",
         slug: "miami-2526-local",
         category: "futbol",
-        league: "otros",
+        league: "MLS",
         price: 0,
         image: "/assets/productos/Yupoo/187746737/1.webp",
         images: [
@@ -4919,6 +4919,76 @@ const products = [
             albumId: "193879799"
         },
         temporada: "25/26",
+        tallas: "S-XXL"
+    },
+    {
+        id: 203152,
+        name: "Miami 25/26 Local (Niño)",
+        slug: "miami-2526-local-nino",
+        category: "futbol",
+        league: "MLS",
+        price: 0,
+        image: "/assets/productos/Yupoo/189206799/1.webp",
+        images: [
+            "/assets/productos/Yupoo/189206799/2.webp",
+            "/assets/productos/Yupoo/189206799/3.webp"
+        ],
+        imageAlt: "Miami 25/26 Local (Niño) - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/189206799?uid=1",
+            albumId: "189206799"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        kids: true
+    },
+    {
+        id: 866849,
+        name: "Miami 25/26 Visitante (Niño)",
+        slug: "miami-2526-visitante-nino",
+        category: "futbol",
+        league: "MLS",
+        price: 0,
+        image: "/assets/productos/Yupoo/187758478/1.webp",
+        images: [
+            "/assets/productos/Yupoo/187758478/2.webp",
+            "/assets/productos/Yupoo/187758478/3.webp"
+        ],
+        imageAlt: "Miami 25/26 Visitante (Niño) - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/187758478?uid=1",
+            albumId: "187758478"
+        },
+        temporada: "25/26",
+        tipo: "visitante",
+        kids: true
+    },
+    {
+        id: 974000,
+        name: "Miami 24/25",
+        slug: "miami-2425",
+        category: "futbol",
+        league: "MLS",
+        price: 0,
+        image: "/assets/productos/Yupoo/178962329/1.webp",
+        images: [
+            "/assets/productos/Yupoo/178962329/2.webp"
+        ],
+        imageAlt: "Miami FC 24/25 - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/178962329?uid=1",
+            albumId: "178962329"
+        },
+        temporada: "24/25",
         tallas: "S-XXL"
     }
 ];

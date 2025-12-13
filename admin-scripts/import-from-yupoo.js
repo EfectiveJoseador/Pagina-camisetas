@@ -27,7 +27,16 @@
 
 const fs = require('fs');
 const path = require('path');
-const { importFromYupoo, generateStableId, extractAlbumId, downloadProductImages, fetchYupooAlbum, toHighResUrl } = require('./yupoo-importer.js');
+const {
+    importFromYupoo,
+    generateStableId,
+    extractAlbumId,
+    downloadProductImages,
+    fetchYupooAlbum,
+    toHighResUrl,
+    TeamMatcher,
+    loadExistingProducts
+} = require('./yupoo-importer.js');
 
 const PRODUCTS_FILE = path.join(__dirname, '..', 'js', 'products-data.js');
 const ASSETS_DIR = path.join(__dirname, '..', 'assets');
@@ -469,11 +478,43 @@ async function main() {
             process.exit(0);
         }
 
-        // Mostrar preview
-        displayProductPreview(product);
-
         // Verificar si ya existe
         const { products } = readProductsFile();
+
+        // === COMPARACIÓN INTELIGENTE CON PRODUCTOS EXISTENTES ===
+        // Buscar productos similares para usar la misma liga Y nombre canónico
+        const matcher = new TeamMatcher(products);
+        const teamMatch = matcher.findBestMatch(product.name, 0.3); // Threshold bajo para más matches
+
+        if (teamMatch && teamMatch.league) {
+            // Encontró un match con liga conocida - usar esa liga
+            info(`🔗 Match encontrado: "${teamMatch.name}" (score: ${(teamMatch.score * 100).toFixed(0)}%)`);
+
+            // Usar el nombre canónico del equipo existente
+            const existingTeamName = teamMatch.name.replace(/\s*\d{2}\/?\d{2}.*$/, '').trim();
+            const currentTeamName = product.name.replace(/\s*\d{2}\/?\d{2}.*$/, '').trim();
+
+            if (existingTeamName && existingTeamName !== currentTeamName) {
+                // Reemplazar el nombre del equipo en el producto con el canónico
+                product.name = product.name.replace(currentTeamName, existingTeamName);
+                product.slug = product.slug.replace(
+                    currentTeamName.toLowerCase().replace(/\s+/g, '-'),
+                    existingTeamName.toLowerCase().replace(/\s+/g, '-')
+                );
+                info(`   Nombre normalizado: ${currentTeamName} → ${existingTeamName}`);
+            }
+
+            info(`   Liga detectada: ${teamMatch.league}`);
+            product.league = teamMatch.league;
+        } else if (product.league === 'otros') {
+            // No hay match pero está en 'otros' - intentar adivinar
+            warn('⚠️  No se encontró match, liga asignada: otros');
+            warn('   Considera revisar manualmente la liga después de importar');
+        }
+
+        // Mostrar preview (después de aplicar el match)
+        displayProductPreview(product);
+
         const existingById = findProductById(products, product.id);
         const existingByUrl = findProductBySourceUrl(products, options.url);
 

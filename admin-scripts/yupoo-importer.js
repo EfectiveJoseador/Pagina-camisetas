@@ -414,6 +414,228 @@ const EXCLUDED_URL_PATTERNS = [
     /size[-_]?chart/i
 ];
 
+// ============================================================
+// SISTEMA DE COMPARACIÓN INTELIGENTE DE EQUIPOS
+// ============================================================
+
+/**
+ * Palabras a ignorar en la comparación de nombres de equipo
+ */
+const TEAM_STOPWORDS = [
+    'fc', 'cf', 'sc', 'ac', 'as', 'rc', 'cd', 'ud', 'rcd', 'sd', 'real',
+    'club', 'sporting', 'deportivo', 'atletico', 'atlético', 'athletic',
+    'united', 'city', 'town', 'rovers', 'wanderers',
+    'local', 'visitante', 'tercera', 'cuarta', 'home', 'away', 'third', 'fourth',
+    'retro', 'special', 'especial', 'edition', 'classic', 'vintage',
+    'training', 'entrenamiento', 'portero', 'goalkeeper', 'gk',
+    'kids', 'niño', 'niños', 'junior'
+];
+
+/**
+ * Normaliza un nombre para comparación (sin tildes, minúsculas, sin puntuación)
+ */
+function normalizeForComparison(str) {
+    if (!str) return '';
+    return str
+        .toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '') // Sin tildes
+        .replace(/[^\w\s]/g, ' ')         // Puntuación a espacios
+        .replace(/\s+/g, ' ')             // Colapsar espacios
+        .trim();
+}
+
+/**
+ * Extrae tokens significativos de un nombre de equipo
+ */
+function extractTeamTokens(name) {
+    const normalized = normalizeForComparison(name);
+    const tokens = normalized.split(' ').filter(t => t.length > 1);
+
+    // Filtrar stopwords y números (temporadas)
+    return tokens.filter(t =>
+        !TEAM_STOPWORDS.includes(t) &&
+        !/^\d+$/.test(t) &&
+        !/^\d{2}\/?\d{2}$/.test(t) // Temporadas
+    );
+}
+
+/**
+ * Calcula score de similitud entre dos conjuntos de tokens
+ * @returns {number} Score de 0 a 1
+ */
+function calculateTokenSimilarity(tokens1, tokens2) {
+    if (tokens1.length === 0 || tokens2.length === 0) return 0;
+
+    const set1 = new Set(tokens1);
+    const set2 = new Set(tokens2);
+
+    // Contar matches exactos
+    let exactMatches = 0;
+    for (const t of set1) {
+        if (set2.has(t)) exactMatches++;
+    }
+
+    // Contar matches parciales (uno contiene al otro)
+    let partialMatches = 0;
+    for (const t1 of set1) {
+        for (const t2 of set2) {
+            if (t1 !== t2 && (t1.includes(t2) || t2.includes(t1))) {
+                partialMatches += 0.5;
+            }
+        }
+    }
+
+    const totalMatches = exactMatches + partialMatches;
+    const maxPossible = Math.max(set1.size, set2.size);
+
+    return totalMatches / maxPossible;
+}
+
+/**
+ * Clase para gestionar la comparación de equipos con productos existentes
+ */
+class TeamMatcher {
+    constructor(existingProducts = []) {
+        this.products = existingProducts;
+        this.teamIndex = new Map(); // token -> [productNames]
+        this.buildIndex();
+    }
+
+    /**
+     * Construye índice invertido de tokens a equipos
+     */
+    buildIndex() {
+        const teamNames = new Set();
+
+        // Extraer nombres únicos de equipos
+        this.products.forEach(p => {
+            if (p.name) {
+                // Extraer solo el nombre del equipo (primera parte antes de la temporada)
+                const teamPart = p.name.replace(/\d{2}\/?\d{2}.*$/, '').trim();
+                if (teamPart) teamNames.add(teamPart);
+            }
+        });
+
+        // Indexar por tokens
+        teamNames.forEach(name => {
+            const tokens = extractTeamTokens(name);
+            tokens.forEach(token => {
+                if (!this.teamIndex.has(token)) {
+                    this.teamIndex.set(token, new Set());
+                }
+                this.teamIndex.get(token).add(name);
+            });
+        });
+    }
+
+    /**
+     * Encuentra el mejor match para un nombre de equipo nuevo
+     * @param {string} newTeamName - Nombre del nuevo equipo
+     * @param {number} threshold - Umbral mínimo de similitud (0-1)
+     * @returns {Object|null} { name, score, league } o null si no hay match
+     */
+    findBestMatch(newTeamName, threshold = 0.5) {
+        const newTokens = extractTeamTokens(newTeamName);
+        if (newTokens.length === 0) return null;
+
+        // Buscar candidatos que compartan al menos un token
+        const candidates = new Set();
+        newTokens.forEach(token => {
+            if (this.teamIndex.has(token)) {
+                this.teamIndex.get(token).forEach(name => candidates.add(name));
+            }
+            // Buscar también matches parciales en tokens
+            this.teamIndex.forEach((names, indexToken) => {
+                if (token.includes(indexToken) || indexToken.includes(token)) {
+                    names.forEach(name => candidates.add(name));
+                }
+            });
+        });
+
+        if (candidates.size === 0) return null;
+
+        // Evaluar cada candidato
+        let bestMatch = null;
+        let bestScore = 0;
+
+        candidates.forEach(candidateName => {
+            const candidateTokens = extractTeamTokens(candidateName);
+            const score = calculateTokenSimilarity(newTokens, candidateTokens);
+
+            if (score > bestScore && score >= threshold) {
+                bestScore = score;
+                bestMatch = candidateName;
+            }
+        });
+
+        if (!bestMatch) return null;
+
+        // Buscar producto con ese nombre para obtener la liga
+        const matchingProduct = this.products.find(p =>
+            p.name && p.name.startsWith(bestMatch)
+        );
+
+        return {
+            name: bestMatch,
+            score: bestScore,
+            league: matchingProduct?.league || null
+        };
+    }
+
+    /**
+     * Normaliza el nombre de equipo basándose en matches existentes
+     * Si encuentra un match, usa el formato canónico existente
+     */
+    normalizeTeamName(newTeamName) {
+        const match = this.findBestMatch(newTeamName, 0.6);
+
+        if (match && match.score >= 0.8) {
+            // Alta coincidencia - usar el nombre existente
+            return {
+                name: match.name,
+                league: match.league,
+                matched: true,
+                score: match.score
+            };
+        }
+
+        // No hay match suficiente - usar el nombre nuevo
+        return {
+            name: newTeamName,
+            league: null,
+            matched: false,
+            score: 0
+        };
+    }
+}
+
+/**
+ * Carga productos existentes desde el archivo products-data.js
+ * @param {string} productsFilePath - Ruta al archivo products-data.js
+ * @returns {Array} Array de productos
+ */
+function loadExistingProducts(productsFilePath) {
+    try {
+        // Leer el archivo
+        const content = fs.readFileSync(productsFilePath, 'utf-8');
+
+        // Extraer el array de productos usando regex
+        const match = content.match(/const\s+products\s*=\s*(\[[\s\S]*?\]);/);
+        if (!match) {
+            console.warn('⚠️  No se pudo parsear products-data.js');
+            return [];
+        }
+
+        // Evaluar el array (cuidado: solo para archivos confiables)
+        const products = eval(match[1]);
+        return Array.isArray(products) ? products : [];
+    } catch (err) {
+        console.warn(`⚠️  Error cargando productos existentes: ${err.message}`);
+        return [];
+    }
+}
+
 /**
  * Genera un ID estable basado en hash de la URL del álbum
  * El ID se mantiene constante para la misma URL, permitiendo actualizaciones
@@ -663,9 +885,34 @@ const TITLE_CLEANUP_PATTERNS = [
  * @returns {Object} - Información parseada
  */
 function parseProductTitle(rawTitle) {
-    const title = rawTitle.trim();
+    // === LIMPIEZA INICIAL DEL TÍTULO ===
+    let title = rawTitle.trim();
+
+    // Limpiar entidades HTML escapadas
+    title = title
+        .replace(/&amp;amp;/gi, '&')
+        .replace(/&amp;/gi, '&')
+        .replace(/&lt;/gi, '<')
+        .replace(/&gt;/gi, '>')
+        .replace(/&quot;/gi, '"')
+        .replace(/&#39;/gi, "'")
+        .replace(/&nbsp;/gi, ' ');
+
+    // Eliminar caracteres especiales sueltos que no aportan (& sin contexto)
+    title = title.replace(/\s*&\s*/g, ' ');
+
+    // Eliminar colores comunes en inglés del título
+    const colors = ['black', 'white', 'red', 'blue', 'green', 'yellow', 'pink', 'gold', 'golden',
+        'purple', 'orange', 'grey', 'gray', 'navy', 'cyan', 'balck', 'bule', 'whit'];
+    colors.forEach(color => {
+        title = title.replace(new RegExp(`\\b${color}\\b`, 'gi'), '');
+    });
+
+    // Limpiar espacios múltiples
+    title = title.replace(/\s+/g, ' ').trim();
+
     const result = {
-        raw: title,
+        raw: rawTitle,
         name: '',
         team: '',
         temporada: null,
@@ -1625,6 +1872,13 @@ module.exports = {
     downloadImage,
     downloadAndConvertToWebP,
 
+    // Team matching (comparación inteligente)
+    TeamMatcher,
+    loadExistingProducts,
+    extractTeamTokens,
+    calculateTokenSimilarity,
+    normalizeForComparison,
+
     // Utilities (para testing/extensión)
     generateStableId,
     extractAlbumId,
@@ -1643,5 +1897,6 @@ module.exports = {
     // Constants (para extensión)
     TEAM_TO_LEAGUE,
     TEXT_NORMALIZATION,
-    EXCLUDED_IMAGE_KEYWORDS
+    EXCLUDED_IMAGE_KEYWORDS,
+    TEAM_STOPWORDS
 };
