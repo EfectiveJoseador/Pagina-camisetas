@@ -1,9 +1,9 @@
 .product-container {
-    padding-top: 1rem;
+    padding-top: 0.5rem;
 }
 
 .breadcrumbs {
-    margin-bottom: 2rem;
+    margin-bottom: 1rem;
     color: var(--text-muted);
     font-size: 0.9rem;
     animation: fadeIn 0.8s ease backwards;
@@ -953,8 +953,9 @@
     bottom: 0;
     z-index: 10000;
     display: none;
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
+    padding-top: 3vh;
 }
 
 .image-lightbox.active {
@@ -1047,6 +1048,9 @@
     cursor: grab;
     touch-action: none;
     user-select: none;
+    /* Mantener esquinas redondeadas durante el zoom */
+    border-radius: var(--radius-lg);
+    overflow: hidden;
 }
 
 .lightbox-image-wrapper.dragging {
@@ -1058,14 +1062,14 @@
 }
 
 #lightbox-image {
-    max-width: 90vw;
-    max-height: 80vh;
-
+    max-width: 92vw;
+    max-height: 88vh;
     object-fit: contain;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
     transform-origin: center center;
-
+    /* Evitar que la imagen pierda las esquinas durante transformaciones */
+    will-change: transform;
 }
 
 .lightbox-thumbnails {
