@@ -1107,7 +1107,45 @@ a.catalogo-btn:hover,
 .catalogo-carousel .carousel-track {
     display: flex;
     gap: 1.5rem;
-    transition: transform 0.15s ease-out;
+    /* GPU acceleration */
+    transform: translate3d(0, 0, 0);
+    will-change: transform;
+}
+
+/* CRITICAL: Performance optimizations during touch drag */
+.catalogo-carousel .carousel-track.dragging {
+    will-change: transform;
+    /* Remove transition during drag for instant response */
+}
+
+.catalogo-carousel .carousel-track.dragging,
+.catalogo-carousel .carousel-track.dragging * {
+    transition: none !important;
+}
+
+.catalogo-carousel .carousel-track.dragging .catalogo-card,
+.catalogo-carousel .carousel-track.dragging .catalogo-card * {
+    pointer-events: none;
+    animation: none !important;
+}
+
+/* Disable hover effects on touch devices for performance */
+@media (hover: none) {
+    .catalogo-card:hover {
+        transform: none;
+    }
+
+    .catalogo-card:hover .catalogo-img {
+        transform: none;
+    }
+
+    .catalogo-img {
+        transition: none;
+    }
+
+    .catalogo-card {
+        transition: none;
+    }
 }
 
 .catalogo-carousel .carousel-arrows {
