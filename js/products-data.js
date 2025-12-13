@@ -5030,6 +5030,19 @@ const products = [
         ],
         temporada: "25/26",
         tipo: "local"
+    },
+    {
+        id: 884672,
+        name: "Rayo Vallecano 94/95 Local Retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/884672/1.webp",
+        images: [
+            "/assets/productos/Yupoo/884672/2.webp"
+        ],
+        temporada: "94/95",
+        tipo: "local",
+        retro: true
     }
 ];
 

@@ -1585,7 +1585,6 @@ async function importFromYupoo(albumUrl, options = {}) {
         name: titleInfo.name,
         category,
         league,
-        price: 0,
         image: imageData.image,
         images: imageData.images
     };
