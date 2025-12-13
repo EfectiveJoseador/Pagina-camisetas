@@ -692,7 +692,7 @@ function initRelatedCarousel() {
     let isPaused = false;
 
     const SCROLL_SPEED = 0.3;
-    const PAUSE_DURATION = 3000; // Reduced to 3 seconds as requested (+2s faster than 5s)
+    const PAUSE_DURATION = 3000;
 
     function setPosition(position, animate = true) {
         if (animate) {
@@ -700,7 +700,8 @@ function initRelatedCarousel() {
         } else {
             track.style.transition = 'none';
         }
-        track.style.transform = `translateX(${-position}px)`;
+        // Use translate3d for GPU acceleration
+        track.style.transform = `translate3d(${-position}px, 0, 0)`;
     }
 
     function checkBoundary(e) {
@@ -712,7 +713,7 @@ function initRelatedCarousel() {
             isJumping = true;
             track.style.transition = 'none';
             currentPosition -= totalCards * cardWidth;
-            track.style.transform = `translateX(${-currentPosition}px)`;
+            track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
             void track.offsetHeight;
             isJumping = false;
         }
@@ -721,7 +722,7 @@ function initRelatedCarousel() {
             isJumping = true;
             track.style.transition = 'none';
             currentPosition += totalCards * cardWidth;
-            track.style.transform = `translateX(${-currentPosition}px)`;
+            track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
             void track.offsetHeight;
             isJumping = false;
         }
@@ -739,12 +740,10 @@ function initRelatedCarousel() {
         // Auto-scroll boundary check
         if (currentPosition >= totalCards * 2 * cardWidth) {
             currentPosition -= totalCards * cardWidth;
-            track.style.transition = 'none';
-            track.style.transform = `translateX(${-currentPosition}px)`;
-        } else {
-            track.style.transition = 'none';
-            track.style.transform = `translateX(${-currentPosition}px)`;
         }
+
+        // Use translate3d for GPU acceleration
+        track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
 
         animationId = requestAnimationFrame(smoothScroll);
     }
@@ -826,6 +825,22 @@ function initRelatedCarousel() {
     track.style.userSelect = 'none';
     track.style.webkitUserSelect = 'none';
 
+    // Optimized position setter using translate3d for GPU compositing
+    function setTrackPosition(pos) {
+        track.style.transform = `translate3d(${-pos}px, 0, 0)`;
+    }
+
+    // Boundary check helper
+    function checkAndWrapBoundaries() {
+        if (currentPosition >= totalCards * 2 * cardWidth) {
+            currentPosition -= totalCards * cardWidth;
+            setTrackPosition(currentPosition);
+        } else if (currentPosition < totalCards * cardWidth) {
+            currentPosition += totalCards * cardWidth;
+            setTrackPosition(currentPosition);
+        }
+    }
+
     function touchStart(event) {
         // Stop any ongoing inertia
         if (inertiaId) {
@@ -833,9 +848,10 @@ function initRelatedCarousel() {
             inertiaId = null;
         }
         isDragging = true;
+        track.classList.add('dragging');
         startPos = event.touches[0].clientX;
         lastPos = startPos;
-        lastTime = Date.now();
+        lastTime = performance.now();
         velocity = 0;
         pauseAutoScroll();
         if (resumeTimeout) clearTimeout(resumeTimeout);
@@ -846,38 +862,31 @@ function initRelatedCarousel() {
 
         const currentX = event.touches[0].clientX;
         const diff = currentX - lastPos;
-        const now = Date.now();
+        const now = performance.now();
         const dt = now - lastTime;
 
-        // Calculate velocity for inertia
+        // Calculate velocity for inertia (weighted average for smoothness)
         if (dt > 0) {
-            velocity = diff / dt * 16; // Normalize to ~60fps
+            const newVelocity = diff / dt * 16;
+            velocity = velocity * 0.4 + newVelocity * 0.6; // Smoothed velocity
         }
 
         currentPosition -= diff;
         lastPos = currentX;
         lastTime = now;
 
-        // Apply position immediately with no transition
-        track.style.transition = 'none';
-        track.style.transform = `translateX(${-currentPosition}px)`;
-
-        // Check boundaries during drag
-        if (currentPosition >= totalCards * 2 * cardWidth) {
-            currentPosition -= totalCards * cardWidth;
-            track.style.transform = `translateX(${-currentPosition}px)`;
-        } else if (currentPosition < totalCards * cardWidth) {
-            currentPosition += totalCards * cardWidth;
-            track.style.transform = `translateX(${-currentPosition}px)`;
-        }
+        // Apply position immediately
+        setTrackPosition(currentPosition);
+        checkAndWrapBoundaries();
     }
 
     function touchEnd() {
         if (!isDragging) return;
         isDragging = false;
+        track.classList.remove('dragging');
 
         // Apply inertia if velocity is significant
-        if (Math.abs(velocity) > 0.5) {
+        if (Math.abs(velocity) > 0.3) {
             applyInertia();
         } else {
             handleUserInteraction();
@@ -885,10 +894,10 @@ function initRelatedCarousel() {
     }
 
     function applyInertia() {
-        const friction = 0.95;
+        const friction = 0.92; // Lower = more friction = stops faster
 
         function inertiaStep() {
-            if (Math.abs(velocity) < 0.1) {
+            if (Math.abs(velocity) < 0.05) {
                 inertiaId = null;
                 handleUserInteraction();
                 return;
@@ -897,15 +906,8 @@ function initRelatedCarousel() {
             currentPosition -= velocity;
             velocity *= friction;
 
-            // Check boundaries during inertia
-            if (currentPosition >= totalCards * 2 * cardWidth) {
-                currentPosition -= totalCards * cardWidth;
-            } else if (currentPosition < totalCards * cardWidth) {
-                currentPosition += totalCards * cardWidth;
-            }
-
-            track.style.transition = 'none';
-            track.style.transform = `translateX(${-currentPosition}px)`;
+            checkAndWrapBoundaries();
+            setTrackPosition(currentPosition);
 
             inertiaId = requestAnimationFrame(inertiaStep);
         }
@@ -916,6 +918,7 @@ function initRelatedCarousel() {
     track.addEventListener('touchstart', touchStart, { passive: true });
     track.addEventListener('touchmove', touchMove, { passive: false });
     track.addEventListener('touchend', touchEnd, { passive: true });
+    track.addEventListener('touchcancel', touchEnd, { passive: true });
 
     // Add Scrolled class on any movement
     const addScrolledClass = () => {
