@@ -324,14 +324,14 @@ const products = [
     },
     {
         id: 206,
-        name: "Man City 25/26 Visitante",
+        name: "Manchester City 25/26 Visitante",
         category: "futbol",
         league: "premier",
         image: "/assets/productos/Premier League/ManCity2526F/1.webp",
     },
     {
         id: 207,
-        name: "Man United 25/26 Local",
+        name: "Manchester United 25/26 Local",
         category: "futbol",
         league: "premier",
         image: "/assets/productos/Premier League/ManUnited2526L/1.webp",
@@ -345,7 +345,7 @@ const products = [
     },
     {
         id: 209,
-        name: "Man United 25/26 Visitante",
+        name: "Manchester United 25/26 Visitante",
         category: "futbol",
         league: "premier",
         image: "/assets/productos/Premier League/UnitedKids2526F/1.webp",
@@ -1959,7 +1959,7 @@ const products = [
     },
     {
         id: 608983,
-        name: "Man City 19/20 Local Retro",
+        name: "Manchester City 19/20 Local Retro",
         category: "futbol",
         league: "premier",
         image: "/assets/productos/Yupoo/202656896/1.webp",
