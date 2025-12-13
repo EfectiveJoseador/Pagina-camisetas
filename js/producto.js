@@ -814,6 +814,7 @@ function initRelatedCarousel() {
             }
 
             carouselContainer.classList.add('scrolled');
+            grid.closest('.related-products')?.classList.add('scrolled');
         }, { passive: true });
     } else if (carouselContainer) {
         carouselContainer.addEventListener('scroll', () => {

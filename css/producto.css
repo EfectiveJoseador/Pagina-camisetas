@@ -643,146 +643,67 @@
 
     .carousel-container {
         padding: 0 1rem;
+        padding-right: 0;
+        /* Allow peek of next item */
         overflow-x: auto;
-        overflow-y: hidden;
+        overflow-y: visible;
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
         scrollbar-width: none;
-
     }
 
     .carousel-container::-webkit-scrollbar {
         display: none;
-
     }
 
     .carousel-track {
         transform: none !important;
-
         scroll-snap-align: start;
+        padding-right: 1rem;
+        /* Space at end for last item */
     }
 
     .carousel-track .product-card {
         scroll-snap-align: start;
     }
 
-
     .carousel-arrow {
         display: none;
     }
 
     .related-products .product-card {
-        min-width: 180px;
-        max-width: 180px;
-        width: 180px;
+        min-width: 45vw;
+        max-width: 45vw;
+        width: 45vw;
     }
 
-
-
-
+    /* Subtle fade gradient on right edge to hint more content */
     .related-products {
         position: relative;
     }
-
 
     .related-products::after {
         content: '';
         position: absolute;
         top: 60px;
-
         right: 0;
-        width: 40px;
+        width: 50px;
         height: calc(100% - 60px);
         background: linear-gradient(to left, var(--bg-body) 0%, transparent 100%);
         pointer-events: none;
         z-index: 5;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
     }
 
-
-    .carousel-container::after {
-        content: '';
-        position: absolute;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 24px;
-        height: 24px;
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 50%;
-        z-index: 10;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        animation: pulseHint 2s ease-in-out infinite;
+    /* Hide fade when scrolled to show user has discovered swipe */
+    .related-products.scrolled::after {
+        opacity: 0;
     }
-
-
-    .carousel-container::before {
-        content: '›';
-        position: absolute;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 24px;
-        height: 24px;
-        z-index: 11;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: var(--primary);
-        animation: slideHint 1.5s ease-in-out infinite;
-        pointer-events: none;
-    }
-
-    @keyframes pulseHint {
-
-        0%,
-        100% {
-            opacity: 1;
-            transform: translateY(-50%) scale(1);
-        }
-
-        50% {
-            opacity: 0.8;
-            transform: translateY(-50%) scale(0.95);
-        }
-    }
-
-    @keyframes slideHint {
-
-        0%,
-        100% {
-            transform: translateY(-50%) translateX(0);
-        }
-
-        50% {
-            transform: translateY(-50%) translateX(3px);
-        }
-    }
-
-
-    .carousel-container.scrolled::after,
-    .carousel-container.scrolled::before {
-        display: none;
-    }
-
 
     .related-products .carousel-container {
-
         padding-right: 0;
-    }
-
-    .related-products .product-card {
-
-        min-width: 42vw;
-        max-width: 42vw;
-        width: 42vw;
     }
 }
 

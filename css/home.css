@@ -1164,8 +1164,10 @@ a.catalogo-btn:hover,
     .catalogo-carousel .carousel-container {
         position: relative;
         padding: 0 1rem;
+        padding-right: 0;
+        /* Allow peek of next item */
         overflow-x: auto;
-        overflow-y: hidden;
+        overflow-y: visible;
         scroll-behavior: smooth;
         -webkit-overflow-scrolling: touch;
         scroll-snap-type: x mandatory;
@@ -1179,102 +1181,39 @@ a.catalogo-btn:hover,
     .catalogo-carousel .carousel-track {
         transform: none !important;
         gap: 1rem;
+        padding-right: 1rem;
+        /* Space at end */
     }
 
     .catalogo-carousel .catalogo-card {
         scroll-snap-align: start;
-        min-width: 180px;
-        max-width: 180px;
-        width: 180px;
+        min-width: 45vw;
+        max-width: 45vw;
+        width: 45vw;
     }
 
     .catalogo-carousel .carousel-arrow {
         display: none;
     }
 
+    /* Subtle fade gradient on right edge */
     .catalogo-carousel::after {
         content: '';
         position: absolute;
         top: 0;
         right: 0;
-        width: 40px;
+        width: 50px;
         height: 100%;
         background: linear-gradient(to left, var(--bg-body) 0%, transparent 100%);
         pointer-events: none;
         z-index: 5;
+        opacity: 0.8;
+        transition: opacity 0.3s ease;
     }
 
-    .catalogo-carousel .carousel-container::after {
-        content: '';
-        position: absolute;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 24px;
-        height: 24px;
-        background: var(--bg-card);
-        border: 1px solid var(--border);
-        border-radius: 50%;
-        z-index: 10;
-        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        animation: pulseHintCatalogo 2s ease-in-out infinite;
-    }
-
-    .catalogo-carousel .carousel-container::before {
-        content: '›';
-        position: absolute;
-        right: 8px;
-        top: 50%;
-        transform: translateY(-50%);
-        width: 24px;
-        height: 24px;
-        z-index: 11;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 1.2rem;
-        font-weight: bold;
-        color: var(--primary);
-        animation: slideHintCatalogo 1.5s ease-in-out infinite;
-        pointer-events: none;
-    }
-
-    @keyframes pulseHintCatalogo {
-
-        0%,
-        100% {
-            opacity: 1;
-            transform: translateY(-50%) scale(1);
-        }
-
-        50% {
-            opacity: 0.8;
-            transform: translateY(-50%) scale(0.95);
-        }
-    }
-
-    @keyframes slideHintCatalogo {
-
-        0%,
-        100% {
-            transform: translateY(-50%) translateX(0);
-        }
-
-        50% {
-            transform: translateY(-50%) translateX(3px);
-        }
-    }
-
-    .catalogo-carousel .carousel-container.scrolled::after,
-    .catalogo-carousel .carousel-container.scrolled::before {
-        display: none;
-    }
-
+    /* Hide fade when scrolled */
     .catalogo-carousel.scrolled::after {
-        display: none;
+        opacity: 0;
     }
 }
 
