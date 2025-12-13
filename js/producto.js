@@ -57,13 +57,30 @@ document.addEventListener('DOMContentLoaded', () => {
         'ligaarabe': 'Liga Árabe',
         'saf': 'SAF (Argentina)',
         'nba': 'NBA',
-        'ligaportugal': 'Liga Portugal'
+        'ligaportugal': 'Liga Portugal',
+        'Primeira Liga': 'Primeira Liga',
+        'MLS': 'MLS'
     };
     const leagueName = leagueNames[product.league] || product.league;
     const breadcrumbLeague = document.getElementById('breadcrumb-league');
     if (breadcrumbLeague) {
         breadcrumbLeague.textContent = leagueName;
         breadcrumbLeague.href = `/pages/tienda.html?league=${product.league}`;
+    }
+
+    // Extraer nombre del equipo (antes de la temporada o tipo)
+    // Ejemplo: "Benfica 25/26 Especial" → "Benfica"
+    const teamName = product.name
+        .replace(/\s*\d{2}\/?\d{2}.*$/, '')  // Quitar temporada y lo que sigue
+        .replace(/\s*\(Niño\).*$/i, '')      // Quitar (Niño)
+        .replace(/\s*(Local|Visitante|Tercera|Cuarta|Especial|Retro|Entrenamiento|Portero).*$/i, '')
+        .trim();
+
+    const breadcrumbTeam = document.getElementById('breadcrumb-team');
+    if (breadcrumbTeam && teamName) {
+        breadcrumbTeam.textContent = teamName;
+        // Filtrar por equipo en la tienda
+        breadcrumbTeam.href = `/pages/tienda.html?league=${product.league}&team=${encodeURIComponent(teamName)}`;
     }
 
     document.getElementById('breadcrumb-name').textContent = product.name;
