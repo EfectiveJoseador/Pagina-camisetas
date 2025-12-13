@@ -246,80 +246,103 @@ function initCatalogoCarousel() {
             cancelAnimationFrame(inertiaId);
             inertiaId = null;
         }
+        // Also stop auto-scroll animation completely during touch
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+            animationId = null;
+        }
+
         isDragging = true;
+        track.classList.add('dragging');
         startPos = event.touches[0].clientX;
         lastPos = startPos;
-        lastTime = Date.now();
+        lastTime = performance.now();
         velocity = 0;
-        pauseAutoScroll();
+        isPaused = true;
         if (resumeTimeout) clearTimeout(resumeTimeout);
     }
 
     function touchMove(event) {
         if (!isDragging) return;
 
+        // Prevent browser from scrolling - this eliminates the delay
+        event.preventDefault();
+
         const currentX = event.touches[0].clientX;
         const diff = currentX - lastPos;
-        const now = Date.now();
+        const now = performance.now();
         const dt = now - lastTime;
 
-        // Calculate velocity for inertia
+        // Direct velocity calculation
         if (dt > 0) {
-            velocity = diff / dt * 16; // Normalize to ~60fps
+            velocity = diff / dt * 16;
         }
 
         currentPosition -= diff;
         lastPos = currentX;
         lastTime = now;
 
-        // Apply position immediately with no transition
-        track.style.transition = 'none';
-        track.style.transform = `translateX(${-currentPosition}px)`;
+        // Apply position immediately with translate3d for GPU
+        track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
 
-        // Check boundaries during drag
+        // Inline boundary check
         if (currentPosition >= totalCards * 2 * cardWidth) {
             currentPosition -= totalCards * cardWidth;
-            track.style.transform = `translateX(${-currentPosition}px)`;
+            track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
         } else if (currentPosition < totalCards * cardWidth) {
             currentPosition += totalCards * cardWidth;
-            track.style.transform = `translateX(${-currentPosition}px)`;
+            track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
         }
     }
 
     function touchEnd() {
         if (!isDragging) return;
         isDragging = false;
+        track.classList.remove('dragging');
 
         // Apply inertia if velocity is significant
         if (Math.abs(velocity) > 0.5) {
             applyInertia();
         } else {
-            handleUserInteraction();
+            // Restart auto-scroll after delay
+            if (resumeTimeout) clearTimeout(resumeTimeout);
+            resumeTimeout = setTimeout(() => {
+                isPaused = false;
+                if (!animationId) {
+                    animationId = requestAnimationFrame(smoothScroll);
+                }
+            }, PAUSE_DURATION);
         }
     }
 
     function applyInertia() {
-        const friction = 0.95;
+        const friction = 0.94;
 
         function inertiaStep() {
             if (Math.abs(velocity) < 0.1) {
                 inertiaId = null;
-                handleUserInteraction();
+                // Restart auto-scroll after delay
+                if (resumeTimeout) clearTimeout(resumeTimeout);
+                resumeTimeout = setTimeout(() => {
+                    isPaused = false;
+                    if (!animationId) {
+                        animationId = requestAnimationFrame(smoothScroll);
+                    }
+                }, PAUSE_DURATION);
                 return;
             }
 
             currentPosition -= velocity;
             velocity *= friction;
 
-            // Check boundaries during inertia
+            // Inline boundary check
             if (currentPosition >= totalCards * 2 * cardWidth) {
                 currentPosition -= totalCards * cardWidth;
             } else if (currentPosition < totalCards * cardWidth) {
                 currentPosition += totalCards * cardWidth;
             }
 
-            track.style.transition = 'none';
-            track.style.transform = `translateX(${-currentPosition}px)`;
+            track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
 
             inertiaId = requestAnimationFrame(inertiaStep);
         }
