@@ -515,6 +515,18 @@ async function renderBestSellers() {
     }
 }
 async function getGlobalFeaturedProducts() {
+    // First check sessionStorage for current session persistence
+    const sessionCached = sessionStorage.getItem('featuredProductsSession');
+    if (sessionCached) {
+        try {
+            const cached = JSON.parse(sessionCached);
+            if (cached.products && cached.products.length === FEATURED_CONFIG.PRODUCT_COUNT) {
+                console.log('Using session-cached featured products');
+                return cached.products;
+            }
+        } catch (e) { /* ignore parse errors */ }
+    }
+
     // Timeout wrapper to handle blocked Firebase
     const TIMEOUT_MS = 5000;
 
@@ -525,11 +537,25 @@ async function getGlobalFeaturedProducts() {
                 setTimeout(() => reject(new Error('Firebase timeout')), TIMEOUT_MS)
             )
         ]);
+        // Save to sessionStorage for session persistence
+        saveToSessionStorage(result);
         return result;
     } catch (error) {
         console.warn('Firebase unavailable, using local fallback:', error.message);
-        return getLocalFallbackProducts();
+        const fallback = getLocalFallbackProducts();
+        // Save fallback to sessionStorage too
+        saveToSessionStorage(fallback);
+        return fallback;
     }
+}
+
+function saveToSessionStorage(productIds) {
+    try {
+        sessionStorage.setItem('featuredProductsSession', JSON.stringify({
+            products: productIds,
+            timestamp: Date.now()
+        }));
+    } catch (e) { /* ignore storage errors */ }
 }
 
 async function getGlobalFeaturedProductsFromFirebase() {
