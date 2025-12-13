@@ -111,29 +111,24 @@ function initCatalogoCarousel() {
     function handleTransitionEnd() {
         if (isJumping) return;
 
-        if (isJumping) return;
         if (currentIndex >= totalCards * 2) {
             isJumping = true;
             currentIndex = totalCards;
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    setPosition(currentIndex, false);
-                    isJumping = false;
-                });
-            });
+            track.style.transition = 'none';
+            void track.offsetHeight; // Force synchronous reflow
+            track.style.transform = `translateX(${-(currentIndex * cardWidth)}px)`;
+            void track.offsetHeight; // Ensure the change is applied
+            isJumping = false;
         } else if (currentIndex < totalCards) {
             isJumping = true;
             currentIndex = totalCards + currentIndex;
-            requestAnimationFrame(() => {
-                requestAnimationFrame(() => {
-                    setPosition(currentIndex, false);
-                    isJumping = false;
-                });
-            });
+            track.style.transition = 'none';
+            void track.offsetHeight; // Force synchronous reflow
+            track.style.transform = `translateX(${-(currentIndex * cardWidth)}px)`;
+            void track.offsetHeight; // Ensure the change is applied
+            isJumping = false;
         }
     }
-
-    track.addEventListener('transitionend', handleTransitionEnd);
 
     track.addEventListener('transitionend', handleTransitionEnd);
     function autoAdvance() {
