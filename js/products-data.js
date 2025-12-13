@@ -178,16 +178,6 @@ const products = [
         sale: false
     },
     {
-        id: 118,
-        name: "Elche 25/26 Local",
-        category: "futbol",
-        league: "laliga",
-        price: 74.99,
-        image: "/assets/productos/La Liga/Elche2526L/1.webp",
-        new: true,
-        sale: false
-    },
-    {
         id: 119,
         name: "Espanyol 99/00 Local Retro",
         category: "futbol",
@@ -5015,6 +5005,29 @@ const products = [
         temporada: "25/26",
         tipo: "entrenamiento",
         tallas: "S-XXL"
+    },
+    {
+        id: 378241,
+        name: "Elche 25/26 Local",
+        slug: "elche-2526-local",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/214401561/1.webp",
+        images: [
+            "/assets/productos/Yupoo/214401561/2.webp"
+        ],
+        imageAlt: "Elche 25/26 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://minkang.x.yupoo.com/albums/214401561?uid=1",
+            albumId: "214401561"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        tallas: "S-4XL"
     }
 ];
 
