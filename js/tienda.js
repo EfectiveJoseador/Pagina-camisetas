@@ -237,7 +237,7 @@ function applySpecialPricing() {
     allProducts.forEach(product => {
         const nameLower = product.name.toLowerCase();
         const isKids = nameLower.includes('kids') || nameLower.includes('niño');
-        const isRetro = product.name.trim().endsWith('R') || product.league === 'retro';
+        const isRetro = product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro';
         const isNBA = product.category === 'nba' || product.league === 'nba';
         let oldPrice = 25.00;
         let newPrice = 19.90;
@@ -686,7 +686,7 @@ function getProductType(product) {
     const nameLower = product.name.toLowerCase();
     if (nameLower.includes('kids') || nameLower.includes('niño')) return 'kids';
     if (product.category === 'nba' || product.league === 'nba') return 'nba';
-    if (product.name.trim().endsWith('R') || product.league === 'retro') return 'retro';
+    if (product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro') return 'retro';
     return 'normal';
 }
 function populateSizeOptions() {

@@ -43,6 +43,28 @@ document.addEventListener('DOMContentLoaded', () => {
     applySpecialPricing(product);
     products.forEach(p => applySpecialPricing(p));
     document.title = `${product.name} - Camisetazo`;
+
+    // Actualizar breadcrumb con liga
+    const leagueNames = {
+        'laliga': 'La Liga',
+        'premier': 'Premier League',
+        'seriea': 'Serie A',
+        'bundesliga': 'Bundesliga',
+        'ligue1': 'Ligue 1',
+        'retro': 'Retro',
+        'selecciones': 'Selecciones',
+        'brasileirao': 'Brasileirão',
+        'ligaarabe': 'Liga Árabe',
+        'saf': 'SAF (Argentina)',
+        'nba': 'NBA'
+    };
+    const leagueName = leagueNames[product.league] || product.league;
+    const breadcrumbLeague = document.getElementById('breadcrumb-league');
+    if (breadcrumbLeague) {
+        breadcrumbLeague.textContent = leagueName;
+        breadcrumbLeague.href = `/pages/tienda.html?league=${product.league}`;
+    }
+
     document.getElementById('breadcrumb-name').textContent = product.name;
     document.getElementById('product-category').textContent = product.category;
     document.getElementById('product-name').textContent = product.name;
@@ -206,7 +228,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function applySpecialPricing(p) {
     const nameLower = p.name.toLowerCase();
     const isKids = nameLower.includes('kids') || nameLower.includes('niño');
-    const isRetro = p.name.trim().endsWith('R') || p.league === 'retro';
+    const isRetro = p.retro === true || p.name.toLowerCase().includes('retro') || p.league === 'retro';
     const isNBA = p.category === 'nba' || p.league === 'nba';
     let oldPrice = 25.00;
     let newPrice = 19.90;
@@ -230,7 +252,7 @@ function isRestrictedCategory() {
     if (!product) return { isRestricted: false, isNBA: false };
     const nameLower = product.name.toLowerCase();
     const isKids = nameLower.includes('kids') || nameLower.includes('niño');
-    const isRetro = product.name.trim().endsWith('R') || product.league === 'retro';
+    const isRetro = product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro';
     const isNBA = product.category === 'nba' || product.league === 'nba';
 
     return {
