@@ -188,7 +188,8 @@
 .product-details {
     display: flex;
     flex-direction: column;
-
+    gap: 0;
+    /* Remove any default gap, use individual margins instead */
     animation: slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.3s backwards;
 }
 
@@ -224,12 +225,17 @@
     font-family: var(--font-heading);
     font-size: 2.5rem;
     font-weight: 800;
-    margin-bottom: 1rem;
+    margin-bottom: 0.75rem;
+    /* Reduced from 1rem for tighter spacing */
     line-height: 1.1;
+    /* Make height fully dynamic based on content */
+    min-height: unset;
+    height: auto;
 }
 
 .price-block {
-    margin-bottom: 2rem;
+    margin-bottom: 1.5rem;
+    /* Reduced from 2rem for more balanced spacing */
     display: flex;
     align-items: center;
     gap: 1rem;
