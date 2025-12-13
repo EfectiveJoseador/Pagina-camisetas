@@ -615,12 +615,22 @@ function loadRelatedProducts() {
     const finalRelated = combined.slice(0, 8);
 
     const grid = document.getElementById('related-grid');
+
+    // Helper to get secondary image (first in images array if available)
+    const getSecondaryImage = (p) => {
+        if (p.images && p.images.length > 0) {
+            return p.images[0];
+        }
+        return p.image; // Fallback to primary
+    };
+
     const cardsHtml = finalRelated.map(p => `
         <article class="product-card">
             <div class="product-image">
                 <span class="badge-sale">OFERTA</span>
                 <a href="/pages/producto.html?id=${p.id}">
-                    <img src="${p.image}" alt="${p.name}" loading="lazy">
+                    <img class="primary-image" src="${p.image}" alt="${p.name}" loading="lazy">
+                    <img class="secondary-image" src="${getSecondaryImage(p)}" alt="${p.name}" loading="lazy">
                 </a>
             </div>
             <div class="product-info">

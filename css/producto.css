@@ -618,19 +618,56 @@
     display: block;
 }
 
-.related-products .product-image img {
+/* Primary image - visible by default */
+.related-products .product-image img.primary-image {
+    position: absolute;
+    top: 0;
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
-    /* Reduced transition for better performance */
-    transition: transform 0.3s ease;
+    transition: opacity 0.4s ease;
+    z-index: 2;
 }
 
-/* Disable image zoom on touch devices for performance */
+/* Secondary image - hidden by default, shown on hover */
+.related-products .product-image img.secondary-image {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    z-index: 1;
+}
+
+/* Hover effect - swap images */
+.related-products .product-card:hover .product-image img.primary-image {
+    opacity: 0;
+}
+
+.related-products .product-card:hover .product-image img.secondary-image {
+    opacity: 1;
+}
+
+/* Disable image hover on touch devices for performance */
 @media (hover: none) {
-    .related-products .product-image img {
+
+    .related-products .product-image img.primary-image,
+    .related-products .product-image img.secondary-image {
         transition: none;
+    }
+
+    .related-products .product-card:hover .product-image img.primary-image {
+        opacity: 1;
+    }
+
+    .related-products .product-card:hover .product-image img.secondary-image {
+        opacity: 0;
     }
 
     .related-products .product-card:hover .product-image img {
