@@ -245,7 +245,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 function applySpecialPricing(p) {
     const nameLower = p.name.toLowerCase();
-    const isKids = nameLower.includes('kids') || nameLower.includes('niño');
+    const imageLower = (p.image || '').toLowerCase();
+    const isKids = p.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
     const isRetro = p.retro === true || p.name.toLowerCase().includes('retro') || p.league === 'retro';
     const isNBA = p.category === 'nba' || p.league === 'nba';
     let oldPrice = 25.00;
@@ -269,7 +270,8 @@ function applySpecialPricing(p) {
 function isRestrictedCategory() {
     if (!product) return { isRestricted: false, isNBA: false };
     const nameLower = product.name.toLowerCase();
-    const isKids = nameLower.includes('kids') || nameLower.includes('niño');
+    const imageLower = (product.image || '').toLowerCase();
+    const isKids = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
     const isRetro = product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro';
     const isNBA = product.category === 'nba' || product.league === 'nba';
 
@@ -991,7 +993,8 @@ const SIZE_GUIDE_IMAGES = {
 function getProductType() {
     if (!product) return 'normal';
     const nameLower = product.name.toLowerCase();
-    if (nameLower.includes('kids') || nameLower.includes('niño')) return 'kids';
+    const imageLower = (product.image || '').toLowerCase();
+    if (product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids')) return 'kids';
     if (product.category === 'nba' || product.league === 'nba') return 'nba';
     return 'normal';
 }

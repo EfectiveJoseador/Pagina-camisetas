@@ -47,6 +47,21 @@
                                 <!-- Populated by JS -->
                             </select>
                         </div>
+                        
+                        <!-- Checkbox Filters -->
+                        <div class="mobile-filter-step mobile-filter-checkboxes">
+                            <label class="mobile-filter-checkbox" for="mobile-filter-kids">
+                                <input type="checkbox" id="mobile-filter-kids">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-label">Solo Niños</span>
+                            </label>
+                            
+                            <label class="mobile-filter-checkbox" for="mobile-filter-retro">
+                                <input type="checkbox" id="mobile-filter-retro">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-label">Solo Retro</span>
+                            </label>
+                        </div>
                     </div>
                     
                     <!-- Footer -->
@@ -85,8 +100,13 @@
         const mobileLeagueSelect = document.getElementById('mobile-filter-league');
         const mobileTeamSelect = document.getElementById('mobile-filter-team');
         const mobileTeamStep = document.getElementById('mobile-team-step');
+        const mobileKidsCheckbox = document.getElementById('mobile-filter-kids');
+        const mobileRetroCheckbox = document.getElementById('mobile-filter-retro');
+
         const desktopLeagueSelect = document.getElementById('filter-league');
         const desktopTeamSelect = document.getElementById('filter-team');
+        const desktopKidsCheckbox = document.getElementById('filter-kids');
+        const desktopRetroCheckbox = document.getElementById('filter-retro');
 
         if (!panel || !btn) {
             console.warn('Mobile filter elements not found');
@@ -116,14 +136,35 @@
             } else {
                 mobileTeamStep.classList.add('hidden');
             }
+            // Sync checkboxes
+            if (desktopKidsCheckbox && mobileKidsCheckbox) {
+                mobileKidsCheckbox.checked = desktopKidsCheckbox.checked;
+            }
+            if (desktopRetroCheckbox && mobileRetroCheckbox) {
+                mobileRetroCheckbox.checked = desktopRetroCheckbox.checked;
+            }
         }
         function applyFilters() {
             const selectedLeague = mobileLeagueSelect.value;
             const selectedTeam = mobileTeamSelect.value;
+            const kidsChecked = mobileKidsCheckbox ? mobileKidsCheckbox.checked : false;
+            const retroChecked = mobileRetroCheckbox ? mobileRetroCheckbox.checked : false;
+
             if (desktopLeagueSelect) {
                 desktopLeagueSelect.value = selectedLeague;
                 desktopLeagueSelect.dispatchEvent(new Event('change'));
             }
+
+            // Apply checkbox filters
+            if (desktopKidsCheckbox) {
+                desktopKidsCheckbox.checked = kidsChecked;
+                desktopKidsCheckbox.dispatchEvent(new Event('change'));
+            }
+            if (desktopRetroCheckbox) {
+                desktopRetroCheckbox.checked = retroChecked;
+                desktopRetroCheckbox.dispatchEvent(new Event('change'));
+            }
+
             setTimeout(() => {
                 if (selectedTeam && desktopTeamSelect) {
                     desktopTeamSelect.value = selectedTeam;
@@ -136,9 +177,20 @@
             mobileLeagueSelect.value = '';
             mobileTeamSelect.value = '';
             mobileTeamStep.classList.add('hidden');
+            if (mobileKidsCheckbox) mobileKidsCheckbox.checked = false;
+            if (mobileRetroCheckbox) mobileRetroCheckbox.checked = false;
+
             if (desktopLeagueSelect) {
                 desktopLeagueSelect.value = '';
                 desktopLeagueSelect.dispatchEvent(new Event('change'));
+            }
+            if (desktopKidsCheckbox) {
+                desktopKidsCheckbox.checked = false;
+                desktopKidsCheckbox.dispatchEvent(new Event('change'));
+            }
+            if (desktopRetroCheckbox) {
+                desktopRetroCheckbox.checked = false;
+                desktopRetroCheckbox.dispatchEvent(new Event('change'));
             }
 
             closePanel();

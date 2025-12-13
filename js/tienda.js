@@ -11,7 +11,7 @@ let filteredProducts = [];
 let currentProduct = null;
 let selectedLeague = '';
 let selectedTeam = '';
-let selectedKids = '';
+let selectedKids = false;
 let selectedRetro = false;
 let currentPage = 1;
 let totalPages = 1;
@@ -236,7 +236,8 @@ function shuffleArray(array) {
 function applySpecialPricing() {
     allProducts.forEach(product => {
         const nameLower = product.name.toLowerCase();
-        const isKids = nameLower.includes('kids') || nameLower.includes('niño');
+        const imageLower = (product.image || '').toLowerCase();
+        const isKids = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
         const isRetro = product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro';
         const isNBA = product.category === 'nba' || product.league === 'nba';
         let oldPrice = 25.00;
@@ -452,10 +453,10 @@ function applyURLFilters() {
     }
 
     if (kids) {
-        selectedKids = kids;
-        const kidsSelect = document.getElementById('filter-kids');
-        if (kidsSelect) {
-            kidsSelect.value = kids;
+        selectedKids = kids === 'true' || kids === 'kids';
+        const kidsCheckbox = document.getElementById('filter-kids');
+        if (kidsCheckbox) {
+            kidsCheckbox.checked = selectedKids;
         }
     }
 
@@ -506,10 +507,14 @@ function attachEventListeners() {
         selectedTeam = e.target.value;
         applyFilters();
     });
-    document.getElementById('filter-kids').addEventListener('change', (e) => {
-        selectedKids = e.target.value;
-        applyFilters();
-    });
+    // Event listener para filtro Kids (checkbox)
+    const kidsCheckbox = document.getElementById('filter-kids');
+    if (kidsCheckbox) {
+        kidsCheckbox.addEventListener('change', (e) => {
+            selectedKids = e.target.checked;
+            applyFilters();
+        });
+    }
     // Event listener para filtro Retro
     const retroCheckbox = document.getElementById('filter-retro');
     if (retroCheckbox) {
@@ -541,10 +546,12 @@ function attachEventListeners() {
         document.getElementById('filter-league').value = '';
         selectedLeague = '';
         selectedTeam = '';
-        selectedKids = '';
+        selectedKids = false;
         selectedRetro = false;
         document.getElementById('team-step').classList.add('hidden');
-        document.getElementById('filter-kids').value = '';
+        // Reset kids checkbox
+        const kidsCb = document.getElementById('filter-kids');
+        if (kidsCb) kidsCb.checked = false;
         // Reset retro checkbox
         const retroCb = document.getElementById('filter-retro');
         if (retroCb) retroCb.checked = false;
@@ -596,12 +603,11 @@ function applyFilters(updateURL = true) {
         }
         let matchesKids = true;
         const nameLower = product.name.toLowerCase();
-        const isKidsProduct = nameLower.includes('kids') || nameLower.includes('niño');
+        const imageLower = (product.image || '').toLowerCase();
+        const isKidsProduct = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
 
-        if (selectedKids === 'kids') {
+        if (selectedKids) {
             matchesKids = isKidsProduct;
-        } else if (selectedKids === 'adults') {
-            matchesKids = !isKidsProduct;
         }
 
         // Filtro retro
@@ -614,7 +620,7 @@ function applyFilters(updateURL = true) {
     });
     function getProductTypeOrder(name) {
         const nameLower = name.toLowerCase();
-        const isKids = nameLower.includes('kids') || nameLower.includes('niño');
+        const isKids = nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños');
 
         if (isKids) return 4;
         if (nameLower.includes('tercera')) return 3;
@@ -690,7 +696,8 @@ function openCustomizationModal(productId) {
 }
 function getProductType(product) {
     const nameLower = product.name.toLowerCase();
-    if (nameLower.includes('kids') || nameLower.includes('niño')) return 'kids';
+    const imageLower = (product.image || '').toLowerCase();
+    if (product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids')) return 'kids';
     if (product.category === 'nba' || product.league === 'nba') return 'nba';
     if (product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro') return 'retro';
     return 'normal';

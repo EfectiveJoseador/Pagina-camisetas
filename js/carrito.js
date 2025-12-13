@@ -2,7 +2,8 @@ import products from './products-data.js';
 function applySpecialPricing() {
     products.forEach(product => {
         const nameLower = product.name.toLowerCase();
-        const isKids = nameLower.includes('kids') || nameLower.includes('niño');
+        const imageLower = (product.image || '').toLowerCase();
+        const isKids = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
         const isRetro = product.name.trim().endsWith('R') || product.league === 'retro';
         const isNBA = product.category === 'nba' || product.league === 'nba';
         let oldPrice = 25.00;
