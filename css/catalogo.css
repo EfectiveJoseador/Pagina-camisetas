@@ -874,3 +874,48 @@
     box-shadow: 0 0 25px rgba(99, 102, 241, 0.5), inset 0 0 10px rgba(99, 102, 241, 0.1);
     transform: translateY(-2px);
 }
+
+/* =================================================
+   CRITICAL MOBILE PERFORMANCE OPTIMIZATIONS
+   Disable heavy animations on touch devices
+   ================================================= */
+
+/* Disable expensive hover transforms on touch devices */
+@media (hover: none) {
+    .product-card:hover {
+        transform: none;
+        box-shadow: var(--shadow-sm);
+    }
+
+    .product-card:hover .product-image img {
+        transform: none;
+    }
+
+    .product-image img {
+        transition: none;
+    }
+
+    /* Disable priceGlow animation on mobile */
+    .product-price .price {
+        animation: none;
+        text-shadow: 0 0 5px rgba(168, 85, 247, 0.2);
+    }
+
+    /* Disable blurIn animation on mobile */
+    .product-card {
+        animation: none;
+    }
+
+    .badge-sale {
+        animation: none;
+    }
+}
+
+/* Carousel dragging state - disable ALL animations */
+.carousel-track.dragging,
+.carousel-track.dragging *,
+.carousel-track.dragging .product-card,
+.carousel-track.dragging .product-card * {
+    transition: none !important;
+    animation: none !important;
+}

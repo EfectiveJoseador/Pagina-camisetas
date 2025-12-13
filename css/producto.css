@@ -511,6 +511,21 @@
     transition: none !important;
 }
 
+/* CRITICAL: Disable ALL animations and transitions during carousel drag for maximum performance */
+.carousel-track.dragging,
+.carousel-track.dragging *,
+.carousel-track.dragging .product-card,
+.carousel-track.dragging .product-card *,
+.carousel-track.dragging .product-image,
+.carousel-track.dragging .product-image img,
+.carousel-track.dragging .badge-sale,
+.carousel-track.dragging .product-info,
+.carousel-track.dragging .product-price .price {
+    transition: none !important;
+    animation: none !important;
+    transform: none !important;
+}
+
 
 .carousel-arrows {
     display: flex;
