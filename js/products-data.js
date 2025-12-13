@@ -183,14 +183,14 @@ const products = [
     },
     {
         id: 127,
-        name: "Málaga 25/26 Local",
+        name: "Málaga CF 25/26 Local",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/La Liga/Malaga2526L/1.webp",
     },
     {
         id: 128,
-        name: "Málaga 25/26 Local",
+        name: "Málaga CF 25/26 Local",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/La Liga/MalagaKids2526L/1.webp",
@@ -539,7 +539,7 @@ const products = [
     },
     {
         id: 362332,
-        name: "Alaves 25/26 Local",
+        name: "Alaves 25/26 Visitante",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/216419940/1.webp",
@@ -769,7 +769,7 @@ const products = [
     },
     {
         id: 489081,
-        name: "Zaragoza Local Retro",
+        name: "Zaragoza 04/05 Local Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/199217731/1.webp",
@@ -787,7 +787,7 @@ const products = [
     },
     {
         id: 891737,
-        name: "Real Madrid 25/26 Black",
+        name: "Real Madrid 25/26 Portero Tercera",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/197579658/1.webp",
@@ -842,7 +842,7 @@ const products = [
     },
     {
         id: 144708,
-        name: "Málaga CF Stadium Local Retro",
+        name: "Málaga CF 97/98 Local Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/187757557/1.webp",
@@ -989,7 +989,7 @@ const products = [
     },
     {
         id: 666279,
-        name: "Flamengo black 25/26",
+        name: "Flamengo 25/26 Especial",
         category: "futbol",
         league: "brasileirao",
         image: "/assets/productos/Yupoo/216806004/1.webp",
@@ -1270,7 +1270,7 @@ const products = [
     },
     {
         id: 535164,
-        name: "Sporting Lisboa Green 25/26",
+        name: "Sporting Lisboa 25/26 Portero Cuarta",
         category: "futbol",
         league: "Primeira Liga",
         image: "/assets/productos/Yupoo/216420441/1.webp",
@@ -1281,7 +1281,7 @@ const products = [
     },
     {
         id: 351327,
-        name: "Sporting Lisboa cyan 25/26",
+        name: "Sporting Lisboa 25/26 Tercera",
         category: "futbol",
         league: "Primeira Liga",
         image: "/assets/productos/Yupoo/216420176/1.webp",
@@ -1292,7 +1292,7 @@ const products = [
     },
     {
         id: 316255,
-        name: "Sporting Lisboa Edición Conmemorativa 25/26",
+        name: "Sporting Lisboa 25/26 Edición Conmemorativa",
         category: "futbol",
         league: "Primeira Liga",
         image: "/assets/productos/Yupoo/216420592/1.webp",
@@ -1434,7 +1434,7 @@ const products = [
     },
     {
         id: 448046,
-        name: "Flamengo Red 25/26",
+        name: "Flamengo 25/26 Portero Tercera",
         category: "futbol",
         league: "brasileirao",
         image: "/assets/productos/Yupoo/216805953/1.webp",
@@ -1505,7 +1505,7 @@ const products = [
     },
     {
         id: 993378,
-        name: "Celta Tercera Retro",
+        name: "Celta 01/03 Tercera Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/207564422/1.webp",
@@ -1752,7 +1752,7 @@ const products = [
     },
     {
         id: 762229,
-        name: "Roma 25/26 Local",
+        name: "AS Roma25/26 Local",
         category: "futbol",
         league: "seriea",
         image: "/assets/productos/Yupoo/203703113/1.webp",
@@ -1974,7 +1974,7 @@ const products = [
     },
     {
         id: 529738,
-        name: "Man Utd 19/20 Visitante Retro",
+        name: "Manchester United 19/20 Visitante Retro",
         category: "futbol",
         league: "premier",
         image: "/assets/productos/Yupoo/202657093/1.webp",
@@ -2073,7 +2073,7 @@ const products = [
     },
     {
         id: 592754,
-        name: "Man Utd 25/26 Tercera",
+        name: "Manchester United 25/26 Tercera",
         category: "futbol",
         league: "premier",
         image: "/assets/productos/Yupoo/199227576/1.webp",
@@ -2087,7 +2087,7 @@ const products = [
     },
     {
         id: 489628,
-        name: "Boca Juniors Stadium 25/26 Local",
+        name: "Boca Juniors 25/26 Local",
         category: "futbol",
         league: "saf",
         image: "/assets/productos/Yupoo/197577020/1.webp",
@@ -2221,7 +2221,7 @@ const products = [
     },
     {
         id: 224087,
-        name: "Roma 00/01 Local Retro",
+        name: "AS Roma00/01 Local Retro",
         category: "futbol",
         league: "seriea",
         image: "/assets/productos/Yupoo/192257942/1.webp",
@@ -2236,7 +2236,7 @@ const products = [
     },
     {
         id: 833095,
-        name: "Roma Local Retro",
+        name: "AS RomaLocal Retro",
         category: "futbol",
         league: "seriea",
         image: "/assets/productos/Yupoo/192257870/1.webp",
@@ -2250,7 +2250,7 @@ const products = [
     },
     {
         id: 635969,
-        name: "Roma 95/96 Local Retro",
+        name: "AS Roma95/96 Local Retro",
         category: "futbol",
         league: "seriea",
         image: "/assets/productos/Yupoo/192257826/1.webp",
@@ -2280,7 +2280,7 @@ const products = [
     },
     {
         id: 588525,
-        name: "Real Madrid Visitante Retro",
+        name: "Real Madrid 86/88 Visitante Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/189209051/1.webp",
@@ -2293,7 +2293,7 @@ const products = [
     },
     {
         id: 766126,
-        name: "Real Madrid Tercera Retro",
+        name: "Real Madrid 98/00 Tercera Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/167010565/1.webp",
@@ -2337,7 +2337,7 @@ const products = [
     },
     {
         id: 167625,
-        name: "Real Madrid Local Retro",
+        name: "Real Madrid 88/89 Local Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/169073222/1.webp",
@@ -2350,7 +2350,7 @@ const products = [
     },
     {
         id: 419589,
-        name: "Barcelona 2007 Retro",
+        name: "FC Barcelona 2007 Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/69556791/1.webp",
@@ -2363,7 +2363,7 @@ const products = [
     },
     {
         id: 938026,
-        name: "Barcelona 16/17 Visitante Retro",
+        name: "FC Barcelona 16/17 Visitante Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/138944331/1.webp",
@@ -2378,7 +2378,7 @@ const products = [
     },
     {
         id: 769552,
-        name: "Barcelona 17/18 Tercera Retro",
+        name: "FC Barcelona 17/18 Tercera Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/192251388/1.webp",
@@ -2393,7 +2393,7 @@ const products = [
     },
     {
         id: 820529,
-        name: "Barcelona 09/10 Local Retro",
+        name: "FC Barcelona 09/10 Local Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/138944262/1.webp",
@@ -2407,7 +2407,7 @@ const products = [
     },
     {
         id: 736040,
-        name: "Barcelona 13/14 Local Retro",
+        name: "FC Barcelona 13/14 Local Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/146962779/1.webp",
@@ -2421,7 +2421,7 @@ const products = [
     },
     {
         id: 497972,
-        name: "Barcelona 08/09 Local Retro",
+        name: "FC Barcelona 08/09 Local Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/134230348/1.webp",
@@ -2435,7 +2435,7 @@ const products = [
     },
     {
         id: 421151,
-        name: "Malaga 12/13 Local Retro",
+        name: "Málaga CF 12/13 Local Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/215727648/1.webp",
@@ -2498,7 +2498,7 @@ const products = [
     },
     {
         id: 506078,
-        name: "Athletic Bilbao Visitante Retro",
+        name: "Athletic Bilbao 96/97 Visitante Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/214136150/1.webp",
@@ -2549,7 +2549,7 @@ const products = [
     },
     {
         id: 483007,
-        name: "Barcelona Fourth S-XXL 25/26",
+        name: "FC Barcelona 25/26 Cuarta",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/213273196/1.webp",
@@ -2560,7 +2560,7 @@ const products = [
     },
     {
         id: 887491,
-        name: "Barcelona 14/15 Local Retro",
+        name: "FC Barcelona 14/15 Local Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/212822675/1.webp",
@@ -2625,7 +2625,7 @@ const products = [
     },
     {
         id: 487998,
-        name: "Zaragoza Second 95/96 Visitante Retro",
+        name: "Zaragoza 95/96 Visitante Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/212487006/1.webp",
@@ -2638,7 +2638,7 @@ const products = [
     },
     {
         id: 798155,
-        name: "Barcelona 17/18 Local Retro",
+        name: "FC Barcelona 17/18 Local Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/212389897/1.webp",
@@ -2651,7 +2651,7 @@ const products = [
     },
     {
         id: 804311,
-        name: "Barcelona 12/13 Local Retro",
+        name: "FC Barcelona 12/13 Local Retro",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/212390713/1.webp",
@@ -2846,7 +2846,7 @@ const products = [
     },
     {
         id: 703398,
-        name: "Barcelona 25/26",
+        name: "FC Barcelona 25/26 Especial",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/193879799/1.webp",
@@ -2886,7 +2886,7 @@ const products = [
     },
     {
         id: 974000,
-        name: "Miami 24/25",
+        name: "Miami 24/25 Especial",
         category: "futbol",
         league: "MLS",
         image: "/assets/productos/Yupoo/178962329/1.webp",
