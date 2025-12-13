@@ -515,6 +515,24 @@ async function renderBestSellers() {
     }
 }
 async function getGlobalFeaturedProducts() {
+    // Timeout wrapper to handle blocked Firebase
+    const TIMEOUT_MS = 5000;
+
+    try {
+        const result = await Promise.race([
+            getGlobalFeaturedProductsFromFirebase(),
+            new Promise((_, reject) =>
+                setTimeout(() => reject(new Error('Firebase timeout')), TIMEOUT_MS)
+            )
+        ]);
+        return result;
+    } catch (error) {
+        console.warn('Firebase unavailable, using local fallback:', error.message);
+        return getLocalFallbackProducts();
+    }
+}
+
+async function getGlobalFeaturedProductsFromFirebase() {
     const configRef = ref(db, 'config/featured_products');
     const snapshot = await get(configRef);
     const now = Date.now();
@@ -525,11 +543,43 @@ async function getGlobalFeaturedProducts() {
             data.products &&
             data.products.length === FEATURED_CONFIG.PRODUCT_COUNT) {
             console.log('Using existing featured products from Firebase');
+            // Cache to localStorage for fallback
+            cacheFeaturedProducts(data.products, data.week_end);
             return data.products;
         }
     }
     console.log('Generating new featured products rotation');
-    return await generateNewFeaturedProducts(configRef, now);
+    const newProducts = await generateNewFeaturedProducts(configRef, now);
+    // Cache new products
+    cacheFeaturedProducts(newProducts, now + FEATURED_CONFIG.ROTATION_DAYS * 24 * 60 * 60 * 1000);
+    return newProducts;
+}
+
+function cacheFeaturedProducts(productIds, expires) {
+    try {
+        localStorage.setItem('featuredProductsCache', JSON.stringify({
+            products: productIds,
+            expires: expires
+        }));
+    } catch (e) { /* ignore storage errors */ }
+}
+
+function getLocalFallbackProducts() {
+    // Use localStorage cache if available
+    const cached = localStorage.getItem('featuredProductsCache');
+    if (cached) {
+        try {
+            const data = JSON.parse(cached);
+            if (data.products && Date.now() < data.expires) {
+                console.log('Using cached featured products');
+                return data.products;
+            }
+        } catch (e) { /* ignore parse errors */ }
+    }
+
+    // Fallback: shuffle local products and pick PRODUCT_COUNT
+    const shuffled = [...products].sort(() => Math.random() - 0.5);
+    return shuffled.slice(0, FEATURED_CONFIG.PRODUCT_COUNT).map(p => p.id);
 }
 async function generateNewFeaturedProducts(configRef, now) {
     const shuffled = [...products];

@@ -1,5 +1,5 @@
-// Firebase SDK - Local (evita bloqueo de adblockers)
-import { initializeApp, getApps, getApp } from "/js/firebase/firebase-app.js";
+// Firebase SDK - CDN con manejo de errores y timeout
+import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import {
     getAuth,
     setPersistence,
@@ -14,7 +14,7 @@ import {
     signInWithPopup,
     sendEmailVerification,
     RecaptchaVerifier
-} from "/js/firebase/firebase-auth.js";
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import {
     getDatabase,
     ref,
@@ -25,7 +25,7 @@ import {
     push,
     onValue,
     runTransaction
-} from "/js/firebase/firebase-database.js";
+} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
 const firebaseConfig = {
     apiKey: "AIzaSyBYPvmvzzNxtTFOVpPXKRvUhoHBjBTCVBE",
