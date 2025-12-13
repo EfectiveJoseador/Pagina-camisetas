@@ -4751,6 +4751,175 @@ const products = [
         tallas: "S-XXL",
         retro: true,
         temporada: "87/89"
+    },
+    {
+        id: 154366,
+        name: "Como 25/26 Local",
+        slug: "como-2526-local",
+        category: "futbol",
+        league: "seriea",
+        price: 0,
+        image: "/assets/productos/Yupoo/211234031/1.webp",
+        images: [
+            "/assets/productos/Yupoo/211234031/2.webp",
+            "/assets/productos/Yupoo/211234031/3.webp",
+            "/assets/productos/Yupoo/211234031/4.webp"
+        ],
+        imageAlt: "Como 25/26 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/211234031?uid=1",
+            albumId: "211234031"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        tallas: "S-XXL"
+    },
+    {
+        id: 894216,
+        name: "Miami 25/26 Tercera",
+        slug: "miami-2526-tercera",
+        category: "futbol",
+        league: "otros",
+        price: 0,
+        image: "/assets/productos/Yupoo/192250021/1.webp",
+        images: [
+            "/assets/productos/Yupoo/192250021/2.webp",
+            "/assets/productos/Yupoo/192250021/3.webp"
+        ],
+        imageAlt: "Miami 25/26 Tercera - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/192250021?uid=1",
+            albumId: "192250021"
+        },
+        temporada: "25/26",
+        tipo: "tercera",
+        tallas: "S-4XL"
+    },
+    {
+        id: 308311,
+        name: "Miami 25/26 Local",
+        slug: "miami-2526-local",
+        category: "futbol",
+        league: "otros",
+        price: 0,
+        image: "/assets/productos/Yupoo/187746737/1.webp",
+        images: [
+            "/assets/productos/Yupoo/187746737/2.webp",
+            "/assets/productos/Yupoo/187746737/3.webp",
+            "/assets/productos/Yupoo/187746737/4.webp"
+        ],
+        imageAlt: "Miami 25/26 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/187746737?uid=1",
+            albumId: "187746737"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 570882,
+        name: "Marseille 25/26 Tercera",
+        slug: "marseille-2526-tercera",
+        category: "futbol",
+        league: "ligue1",
+        price: 0,
+        image: "/assets/productos/Yupoo/211234336/1.webp",
+        images: [
+            "/assets/productos/Yupoo/211234336/2.webp",
+            "/assets/productos/Yupoo/211234336/3.webp"
+        ],
+        imageAlt: "Marseille 25/26 Tercera - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/211234336?uid=1",
+            albumId: "211234336"
+        },
+        temporada: "25/26",
+        tipo: "tercera",
+        tallas: "S-4XL"
+    },
+    {
+        id: 229242,
+        name: "Palmeiras 25/26 Local",
+        slug: "palmeiras-2526-local",
+        category: "futbol",
+        league: "brasileirao",
+        price: 0,
+        image: "/assets/productos/Yupoo/187764069/1.webp",
+        images: [
+            "/assets/productos/Yupoo/187764069/2.webp",
+            "/assets/productos/Yupoo/187764069/3.webp"
+        ],
+        imageAlt: "Palmeiras 25/26 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/187764069?uid=1",
+            albumId: "187764069"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 128909,
+        name: "Flamengo 25/26 Local",
+        slug: "flamengo-2526-local",
+        category: "futbol",
+        league: "brasileirao",
+        price: 0,
+        image: "/assets/productos/Yupoo/187670662/1.webp",
+        images: [
+            "/assets/productos/Yupoo/187670662/2.webp",
+            "/assets/productos/Yupoo/187670662/3.webp"
+        ],
+        imageAlt: "Flamengo 25/26 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/187670662?uid=1",
+            albumId: "187670662"
+        },
+        temporada: "25/26",
+        tipo: "local",
+        tallas: "S-4XL"
+    },
+    {
+        id: 703398,
+        name: "Barcelona 25/26",
+        slug: "barcelona-2526",
+        category: "futbol",
+        league: "laliga",
+        price: 0,
+        image: "/assets/productos/Yupoo/193879799/1.webp",
+        images: [
+            "/assets/productos/Yupoo/193879799/2.webp",
+            "/assets/productos/Yupoo/193879799/3.webp"
+        ],
+        imageAlt: "Barcelona 25/26 - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/193879799?uid=1",
+            albumId: "193879799"
+        },
+        temporada: "25/26",
+        tallas: "S-XXL"
     }
 ];
 

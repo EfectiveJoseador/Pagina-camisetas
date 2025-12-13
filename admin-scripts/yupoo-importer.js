@@ -716,10 +716,16 @@ function parseProductTitle(rawTitle) {
         result.tipo = 'visitante';
     } else if (titleLower.includes('third') || titleLower.includes('tercera')) {
         result.tipo = 'tercera';
+    } else if (titleLower.includes('fourth') || titleLower.includes('cuarta')) {
+        result.tipo = 'cuarta';
     } else if (titleLower.includes('home') || titleLower.includes('local')) {
         result.tipo = 'local';
     } else if (titleLower.includes('gk') || titleLower.includes('goalkeeper') || titleLower.includes('portero')) {
         result.tipo = 'portero';
+    } else if (titleLower.includes('special') || titleLower.includes('especial') || titleLower.includes('edition')) {
+        result.tipo = 'especial';
+    } else if (titleLower.includes('training') || titleLower.includes('entrenamiento')) {
+        result.tipo = 'entrenamiento';
     }
 
     // Detectar tallas
@@ -741,7 +747,9 @@ function parseProductTitle(rawTitle) {
     teamName = teamName
         .replace(/\b(20\d{2})\b/g, '')                 // Años 20XX
         .replace(/(\d{2})[\/-]?(\d{2})\b/g, '')        // Temporadas XX/YY o XXYY
-        .replace(/\b(away|home|third|visitante|local|tercera|gk|goalkeeper|portero)\b/gi, '')
+        .replace(/\b(away|home|third|fourth|visitante|local|tercera|cuarta|gk|goalkeeper|portero)\b/gi, '')
+        .replace(/\b(special|especial|edition|edici[oó]n)\b/gi, '')
+        .replace(/\b(training|entrenamiento|pre-?match|warm-?up)\b/gi, '')
         .replace(/\b(retro|classic|vintage)\b/gi, '')
         .replace(/\b(kids?|niños?|child|children|junior)\b/gi, '')
         .replace(/\b(S-\d?XL|S-4XL|XS-XXL|S-XXL|M-XXL|S-3XL)\b/gi, '')
