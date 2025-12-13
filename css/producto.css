@@ -511,9 +511,14 @@
     transition: none !important;
 }
 
-/* CRITICAL: Disable ALL animations and transitions during carousel drag for maximum performance */
-.carousel-track.dragging,
-.carousel-track.dragging *,
+/* CRITICAL: Disable animations on CHILDREN only - NOT the track itself (needs transform for swipe) */
+.carousel-track.dragging {
+    /* Keep will-change for GPU acceleration */
+    will-change: transform;
+}
+
+/* Disable animations on all CHILDREN of the track during drag */
+.carousel-track.dragging>*,
 .carousel-track.dragging .product-card,
 .carousel-track.dragging .product-card *,
 .carousel-track.dragging .product-image,
@@ -523,7 +528,6 @@
 .carousel-track.dragging .product-price .price {
     transition: none !important;
     animation: none !important;
-    transform: none !important;
 }
 
 

@@ -911,9 +911,8 @@
     }
 }
 
-/* Carousel dragging state - disable ALL animations */
-.carousel-track.dragging,
-.carousel-track.dragging *,
+/* Carousel dragging state - disable animations on CHILDREN only */
+.carousel-track.dragging>*,
 .carousel-track.dragging .product-card,
 .carousel-track.dragging .product-card * {
     transition: none !important;
