@@ -213,7 +213,20 @@ function renderProducts() {
     });
 }
 function init() {
-    allProducts = shuffleArray([...products]);
+    // Try to get cached product order from sessionStorage
+    const cachedOrder = getProductOrderFromSession();
+
+    if (cachedOrder && cachedOrder.length === products.length) {
+        // Use cached order - map IDs back to product objects
+        allProducts = cachedOrder.map(id => products.find(p => p.id === id)).filter(Boolean);
+        console.log('Using session-cached product order');
+    } else {
+        // Shuffle and cache the new order
+        allProducts = shuffleArray([...products]);
+        saveProductOrderToSession(allProducts.map(p => p.id));
+        console.log('Generated and cached new product order');
+    }
+
     applySpecialPricing();
 
     filteredProducts = allProducts;
@@ -226,12 +239,37 @@ function init() {
     applyURLFilters();
     applyFilters(false);
 }
+
 function shuffleArray(array) {
     for (let i = array.length - 1; i > 0; i--) {
         const j = Math.floor(Math.random() * (i + 1));
         [array[i], array[j]] = [array[j], array[i]];
     }
     return array;
+}
+
+// Session storage helpers for product order persistence
+function getProductOrderFromSession() {
+    try {
+        const cached = sessionStorage.getItem('tiendaProductOrder');
+        if (cached) {
+            const data = JSON.parse(cached);
+            // Validate it's an array of product IDs
+            if (Array.isArray(data.order)) {
+                return data.order;
+            }
+        }
+    } catch (e) { /* ignore parse errors */ }
+    return null;
+}
+
+function saveProductOrderToSession(orderIds) {
+    try {
+        sessionStorage.setItem('tiendaProductOrder', JSON.stringify({
+            order: orderIds,
+            timestamp: Date.now()
+        }));
+    } catch (e) { /* ignore storage errors */ }
 }
 function applySpecialPricing() {
     allProducts.forEach(product => {
