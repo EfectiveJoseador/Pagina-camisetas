@@ -1086,7 +1086,7 @@ const products = [
     },
     {
         id: 951872,
-        name: "Real Madrid Local Retro",
+        name: "Real Madrid 90/92 Local Retro",
         slug: "real-madrid-local-retro",
         category: "futbol",
         league: "laliga",
@@ -4113,8 +4113,8 @@ const products = [
     },
     {
         id: 497972,
-        name: "Barcelona UEFA Champions League 08/09 Local Retro",
-        slug: "barcelona-uefa-champions-league-0809-local-retro",
+        name: "Barcelona 08/09 Local Retro",
+        slug: "barcelona-0809-local-retro",
         category: "futbol",
         league: "laliga",
         price: 0,
@@ -4123,7 +4123,7 @@ const products = [
             "/assets/productos/Yupoo/134230348/2.webp",
             "/assets/productos/Yupoo/134230348/3.webp"
         ],
-        imageAlt: "Barcelona UEFA Champions League 08/09 Local Retro - Vista principal",
+        imageAlt: "Barcelona 08/09 Local Retro - Vista principal",
         new: true,
         sale: false,
         source: {
@@ -4704,9 +4704,30 @@ const products = [
         temporada: "25/26",
         tipo: "local",
         tallas: "S-4XL"
+    },
+    {
+        id: 728985,
+        name: "Croacia 2026 Local",
+        slug: "croacia-2026-local",
+        category: "futbol",
+        league: "selecciones",
+        price: 0,
+        image: "/assets/productos/Yupoo/219700516/1.jpg",
+        images: [
+            "/assets/productos/Yupoo/219700516/2.jpg"
+        ],
+        imageAlt: "Croacia 2026 Local - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://minkang.x.yupoo.com/albums/219700516?uid=1&isSubCate=false&referrercate=712891",
+            albumId: "219700516"
+        },
+        temporada: "2026",
+        tipo: "local",
+        tallas: "S-4XL"
     }
 ];
 
 export default products;
-
-

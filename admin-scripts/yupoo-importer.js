@@ -305,22 +305,75 @@ const TEAM_TO_LEAGUE = {
     'ireland': 'selecciones',
     'irlanda': 'selecciones',
 
-    // NBA
+    // NBA - Todos los equipos
     'lakers': 'nba',
+    'los angeles lakers': 'nba',
     'celtics': 'nba',
+    'boston celtics': 'nba',
     'bulls': 'nba',
+    'chicago bulls': 'nba',
     'warriors': 'nba',
+    'golden state warriors': 'nba',
+    'golden state': 'nba',
     'heat': 'nba',
+    'miami heat': 'nba',
     'nets': 'nba',
+    'brooklyn nets': 'nba',
     'knicks': 'nba',
+    'new york knicks': 'nba',
     'clippers': 'nba',
+    'la clippers': 'nba',
+    'los angeles clippers': 'nba',
     'mavericks': 'nba',
+    'dallas mavericks': 'nba',
     'suns': 'nba',
+    'phoenix suns': 'nba',
     'bucks': 'nba',
+    'milwaukee bucks': 'nba',
     '76ers': 'nba',
     'sixers': 'nba',
+    'philadelphia 76ers': 'nba',
     'thunder': 'nba',
-    'oklahoma': 'nba'
+    'oklahoma': 'nba',
+    'oklahoma city thunder': 'nba',
+    'spurs': 'nba',
+    'san antonio spurs': 'nba',
+    'raptors': 'nba',
+    'toronto raptors': 'nba',
+    'rockets': 'nba',
+    'houston rockets': 'nba',
+    'nuggets': 'nba',
+    'denver nuggets': 'nba',
+    'timberwolves': 'nba',
+    'minnesota timberwolves': 'nba',
+    'grizzlies': 'nba',
+    'memphis grizzlies': 'nba',
+    'pelicans': 'nba',
+    'new orleans pelicans': 'nba',
+    'hawks': 'nba',
+    'atlanta hawks': 'nba',
+    'hornets': 'nba',
+    'charlotte hornets': 'nba',
+    'wizards': 'nba',
+    'washington wizards': 'nba',
+    'pacers': 'nba',
+    'indiana pacers': 'nba',
+    'pistons': 'nba',
+    'detroit pistons': 'nba',
+    'cavaliers': 'nba',
+    'cleveland cavaliers': 'nba',
+    'magic': 'nba',
+    'orlando magic': 'nba',
+    'jazz': 'nba',
+    'utah jazz': 'nba',
+    'kings': 'nba',
+    'sacramento kings': 'nba',
+    'trail blazers': 'nba',
+    'blazers': 'nba',
+    'portland trail blazers': 'nba',
+    'lebron': 'nba',
+    'curry': 'nba',
+    'jordan': 'nba'
 };
 
 /**
@@ -447,6 +500,7 @@ function normalizeText(text) {
  * Mapeo de traducciones de países y equipos conocidos
  */
 const TEAM_TRANSLATIONS = {
+    // Países europeos
     'germany': 'Alemania',
     'deutschland': 'Alemania',
     'england': 'Inglaterra',
@@ -457,38 +511,149 @@ const TEAM_TRANSLATIONS = {
     'netherlands': 'Holanda',
     'holland': 'Holanda',
     'belgium': 'Bélgica',
+    'croatia': 'Croacia',
+    'switzerland': 'Suiza',
+    'austria': 'Austria',
+    'poland': 'Polonia',
+    'denmark': 'Dinamarca',
+    'sweden': 'Suecia',
+    'norway': 'Noruega',
+    'finland': 'Finlandia',
+    'greece': 'Grecia',
+    'turkey': 'Turquía',
+    'serbia': 'Serbia',
+    'ukraine': 'Ucrania',
+    'czech republic': 'República Checa',
+    'czechia': 'Chequia',
+    'russia': 'Rusia',
+    'scotland': 'Escocia',
+    'wales': 'Gales',
+    'ireland': 'Irlanda',
+    'hungary': 'Hungría',
+    'romania': 'Rumania',
+    'slovakia': 'Eslovaquia',
+    'slovenia': 'Eslovenia',
+    'iceland': 'Islandia',
+
+    // Países americanos
     'brazil': 'Brasil',
     'argentina': 'Argentina',
     'mexico': 'México',
     'usa': 'Estados Unidos',
-    'japan': 'Japón',
-    'morocco': 'Marruecos',
-    'croatia': 'Croacia',
-    'switzerland': 'Suiza',
-    'uruguay': 'Uruguay',
+    'united states': 'Estados Unidos',
     'colombia': 'Colombia',
-    'south korea': 'Corea del Sur'
+    'uruguay': 'Uruguay',
+    'chile': 'Chile',
+    'peru': 'Perú',
+    'ecuador': 'Ecuador',
+    'venezuela': 'Venezuela',
+    'paraguay': 'Paraguay',
+    'bolivia': 'Bolivia',
+    'costa rica': 'Costa Rica',
+    'panama': 'Panamá',
+    'canada': 'Canadá',
+
+    // Países africanos
+    'morocco': 'Marruecos',
+    'egypt': 'Egipto',
+    'nigeria': 'Nigeria',
+    'senegal': 'Senegal',
+    'cameroon': 'Camerún',
+    'ghana': 'Ghana',
+    'ivory coast': 'Costa de Marfil',
+    'cote divoire': 'Costa de Marfil',
+    'tunisia': 'Túnez',
+    'algeria': 'Argelia',
+    'south africa': 'Sudáfrica',
+
+    // Países asiáticos
+    'japan': 'Japón',
+    'south korea': 'Corea del Sur',
+    'korea': 'Corea del Sur',
+    'china': 'China',
+    'saudi arabia': 'Arabia Saudita',
+    'iran': 'Irán',
+    'qatar': 'Qatar',
+    'australia': 'Australia',
+
+    // Equipos con variaciones
+    'man utd': 'Manchester United',
+    'man city': 'Manchester City',
+    'spurs': 'Tottenham',
+    'barca': 'FC Barcelona',
+    'bayern': 'Bayern Munich',
+    'juve': 'Juventus',
+    'psg': 'PSG',
+    'real': 'Real Madrid',
+    'inter': 'Inter de Milán',
+    'atletico': 'Atlético Madrid',
+    'atlético': 'Atlético Madrid'
 };
 
 /**
  * Patrones de texto para eliminar del nombre del equipo
  */
 const TITLE_CLEANUP_PATTERNS = [
+    // Sponsors y versiones
     /with\s+\w+\s+sponsor/gi,      // with white sponsor
     /with\s+\w+\s+sponosr/gi,      // typo common in yupoo: sponosr
     /player\s+version/gi,
-    /fans\s+version/gi,
+    /fans?\s+version/gi,
     /match\s+version/gi,
+    /authentic\s+version/gi,
+    /replica\s+version/gi,
+
+    // Colores y patrones de diseño
     /black[\s-]?red(\s+line)?/gi,
     /white[\s-]?red(\s+line)?/gi,
+    /blue[\s-]?white(\s+line)?/gi,
+    /\b(Black|Gold|Blue|White|Pink|Red|Green|Yellow|Purple|Orange|Grey|Gray|Cyan|Navy)\b/gi,
+
+    // Ediciones especiales
     /\d+th\s+anniversary/gi,
+    /\d+\s+anniversary/gi,
     /special\s+edition/gi,
+    /limited\s+edition/gi,
+    /commemorative/gi,
     /edici[oó]n\s+especial/gi,
     /edici[oó]n\s+limitada/gi,
-    /\(.*\)/g,                      // Cosas entre paréntesis
-    /\b(Training|Entrenamiento|Pre-match|Warm-up)\b/gi,
-    /\b(Black|Gold|Blue|White|Pink)\b/gi,
-    /\b(Vapor|Authentic|Fan)\b/gi
+    /aniversario/gi,
+
+    // Contenido entre paréntesis y corchetes
+    /\(.*?\)/g,
+    /\[.*?\]/g,
+
+    // Entrenamientos y pre-partido
+    /\b(Training|Entrenamiento|Pre-match|Warm-up|Prematch|Warmup)\b/gi,
+
+    // Versiones de equipación
+    /\b(Vapor|Authentic|Fan|Elite|Match|Stadium|Player|Replica)\b/gi,
+
+    // Marcas y textos comerciales
+    /\b(Nike|Adidas|Puma|New Balance|Kappa|Umbro|Under Armour|Jordan)\b/gi,
+
+    // Patrones de tallas en el título
+    /\b(Size|Talla)\s*[:=]?\s*[XSMLxsml0-9-]+\b/gi,
+
+    // Números de modelo
+    /\b[A-Z]{2,3}\d{4,}\b/gi,
+
+    // Sufijos de versión
+    /\bv\d+\.?\d*\b/gi,
+
+    // Indicadores de calidad (Yupoo)
+    /\b(AAA|AA|A)\s*quality/gi,
+    /\bThai\s*quality/gi,
+    /\b1:1\b/gi,
+    /\bhigh\s*quality/gi,
+
+    // Términos genéricos a limpiar
+    /\bjersey\b/gi,
+    /\bshirt\b/gi,
+    /\bkit\b/gi,
+    /\bsoccer\b/gi,
+    /\bfootball\b/gi,
+    /\bbasketball\b/gi
 ];
 
 /**
@@ -639,9 +804,8 @@ function parseProductTitle(rawTitle) {
  * @returns {string} - Código de liga
  */
 function detectLeague(teamName, isRetro = false) {
-    if (isRetro) {
-        return 'retro';
-    }
+    // NOTA: Ya no retornamos 'retro' como liga.
+    // Los productos retro mantienen su liga real y tienen retro: true
 
     const teamLower = teamName.toLowerCase().trim();
 
@@ -651,14 +815,25 @@ function detectLeague(teamName, isRetro = false) {
     }
 
     // Heurística simple para selecciones
-    const SELECCIONES = ['alemania', 'inglaterra', 'españa', 'francia', 'italia', 'portugal', 'holanda', 'bélgica', 'brasil', 'argentina', 'méxico', 'estados unidos', 'japón', 'marruecos', 'croacia', 'suiza', 'uruguay', 'colombia', 'corea del sur'];
+    const SELECCIONES = [
+        'alemania', 'inglaterra', 'españa', 'francia', 'italia', 'portugal',
+        'holanda', 'bélgica', 'brasil', 'argentina', 'méxico', 'estados unidos',
+        'japón', 'marruecos', 'croacia', 'suiza', 'uruguay', 'colombia',
+        'corea del sur', 'nigeria', 'senegal', 'camerún', 'ghana', 'egipto',
+        'túnez', 'argelia', 'costa de marfil', 'perú', 'chile', 'ecuador',
+        'venezuela', 'paraguay', 'panamá', 'costa rica', 'canadá',
+        'polonia', 'dinamarca', 'suecia', 'noruega', 'austria', 'turquía',
+        'grecia', 'serbia', 'ucrania', 'chequia', 'rusia', 'escocia',
+        'gales', 'irlanda', 'hungría', 'rumania', 'eslovaquia', 'eslovenia',
+        'islandia', 'finlandia', 'arabia saudita', 'irán', 'qatar', 'australia',
+        'china', 'sudáfrica'
+    ];
 
     if (SELECCIONES.includes(teamLower)) {
         return 'selecciones';
     }
 
     // Buscar coincidencia parcial, priorizando las cadenas más largas
-    // Esto evita que "Atletico Mineiro" detecte "Atletico" (Madrid) por error
     const sortedTeams = Object.keys(TEAM_TO_LEAGUE).sort((a, b) => b.length - a.length);
 
     for (const team of sortedTeams) {
