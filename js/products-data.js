@@ -4707,16 +4707,16 @@ const products = [
     },
     {
         id: 728985,
-        name: "Croacia 2026 Local",
-        slug: "croacia-2026-local",
+        name: "Croatia s 2026 Local",
+        slug: "croatia-s-2026-local",
         category: "futbol",
         league: "selecciones",
         price: 0,
-        image: "/assets/productos/Yupoo/219700516/1.jpg",
+        image: "/assets/productos/Yupoo/219700516/1.webp",
         images: [
-            "/assets/productos/Yupoo/219700516/2.jpg"
+            "/assets/productos/Yupoo/219700516/2.webp"
         ],
-        imageAlt: "Croacia 2026 Local - Vista principal",
+        imageAlt: "Croatia s 2026 Local - Vista principal",
         new: true,
         sale: false,
         source: {
@@ -4727,6 +4727,30 @@ const products = [
         temporada: "2026",
         tipo: "local",
         tallas: "S-4XL"
+    },
+    {
+        id: 384796,
+        name: "Tottenham Hotspur 87/89 Local Retro",
+        slug: "tottenham-hotspur-8789-local-retro",
+        category: "futbol",
+        league: "premier",
+        price: 0,
+        image: "/assets/productos/Yupoo/215724075/1.webp",
+        images: [
+            "/assets/productos/Yupoo/215724075/2.webp"
+        ],
+        imageAlt: "Tottenham Hotspur 87/89 Local Retro - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://minkang.x.yupoo.com/albums/215724075?uid=1&isSubCate=false&referrercate=680719",
+            albumId: "215724075"
+        },
+        tipo: "local",
+        tallas: "S-XXL",
+        retro: true,
+        temporada: "87/89"
     }
 ];
 

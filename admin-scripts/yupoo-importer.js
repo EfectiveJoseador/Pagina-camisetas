@@ -676,28 +676,31 @@ function parseProductTitle(rawTitle) {
     };
 
     // Detectar temporada (formato XX/XX, 20XX, o XXYY)
-    // Prioridad: 20XX (año completo), luego formatos combinados
-    // Match 2026, 2025, etc.
+    // Prioridad: formato XX/XX explícito, luego 20XX (año completo)
+
+    // Buscar primero formato explícito XX/XX o XX-XX (ej: 87/89, 25/26)
+    const explicitSeasonMatch = title.match(/\b(\d{2})[\/\-](\d{2})\b/);
+    // Buscar año completo 20XX
     const fullYearMatch = title.match(/\b(20\d{2})\b/);
-    const seasonPairMatch = title.match(/(\d{2})[\/-]?(\d{2})\b/);
+    // Buscar formato pegado XXYY (ej: 2526)
+    const gluedSeasonMatch = title.match(/\b(\d{2})(\d{2})\b(?!\d)/);
 
-    if (fullYearMatch) {
-        // Año simple: 2026 -> usar 2026 tal cual si es futuro, o convertir a temporada si es pasado/presente reciente
-        // El usuario prefiere ver la fecha. Si es 2026 (Mundial), dejar 2026.
+    if (explicitSeasonMatch) {
+        // Formato explícito XX/XX (ej: 87/89, 25/26, 97/98)
+        const y1 = explicitSeasonMatch[1];
+        const y2 = explicitSeasonMatch[2];
+        result.temporada = `${y1}/${y2}`;
+    } else if (fullYearMatch) {
+        // Año simple: 2026 -> usar tal cual para mundiales y eventos
         result.temporada = fullYearMatch[1];
-
-        // Opcional: convertir a XX/YY si se prefiere estándar
-        // const year = parseInt(fullYearMatch[1]);
-        // const nextYear = (year + 1) % 100;
-        // result.temporada = `${year % 100}/${nextYear.toString().padStart(2, '0')}`;
-    } else if (seasonPairMatch) {
-        // Formato 25/26 o 2526
-        const y1 = seasonPairMatch[1];
-        const y2 = seasonPairMatch[2];
-        // Validar consecutividad simple
+    } else if (gluedSeasonMatch) {
+        // Formato pegado 2526 -> 25/26
+        const y1 = gluedSeasonMatch[1];
+        const y2 = gluedSeasonMatch[2];
         const n1 = parseInt(y1);
         const n2 = parseInt(y2);
-        if ((n1 + 1) % 100 === n2) {
+        // Solo aceptar si parece una temporada válida (segundo > primero o es vuelta de siglo)
+        if (n2 > n1 || (n1 >= 90 && n2 < 10)) {
             result.temporada = `${y1}/${y2}`;
         }
     }
@@ -1439,13 +1442,82 @@ function downloadImage(imageUrl, destPath, referer) {
 }
 
 /**
+ * Descarga una imagen y la convierte a WebP
+ * Requiere: npm install sharp
+ * 
+ * @param {string} imageUrl - URL de la imagen
+ * @param {string} destPath - Ruta de destino (sin extensión, se añade .webp)
+ * @param {string} referer - URL de referrer para la petición
+ * @param {Object} options - Opciones de conversión
+ * @param {number} options.quality - Calidad WebP (1-100, default: 85)
+ * @returns {Promise<string>} - Ruta final del archivo WebP
+ */
+async function downloadAndConvertToWebP(imageUrl, destPath, referer, options = {}) {
+    const { quality = 85 } = options;
+
+    // Crear ruta temporal para descarga original
+    const tempPath = destPath + '.tmp';
+    const webpPath = destPath.replace(/\.[^.]+$/, '') + '.webp';
+
+    try {
+        // Descargar imagen original
+        await downloadImage(imageUrl, tempPath, referer);
+
+        // Intentar cargar sharp (debe estar instalado)
+        let sharp;
+        try {
+            sharp = require('sharp');
+        } catch (e) {
+            // Si sharp no está disponible, renombrar el archivo sin conversión
+            console.warn('⚠️  sharp no está instalado. Ejecuta: npm install sharp');
+            console.warn('    Guardando imagen sin conversión a WebP.');
+            const originalExt = path.extname(imageUrl).split('?')[0] || '.jpg';
+            const finalPath = destPath.replace(/\.[^.]+$/, '') + originalExt;
+            fs.renameSync(tempPath, finalPath);
+            return finalPath;
+        }
+
+        // Convertir a WebP
+        await sharp(tempPath)
+            .webp({ quality })
+            .toFile(webpPath);
+
+        // Eliminar archivo temporal
+        fs.unlinkSync(tempPath);
+
+        return webpPath;
+    } catch (err) {
+        // Limpiar archivos temporales en caso de error
+        if (fs.existsSync(tempPath)) {
+            fs.unlinkSync(tempPath);
+        }
+        throw err;
+    }
+}
+
+/**
  * Descarga todas las imágenes de un producto y actualiza las rutas
+ * Genera miniaturas 600x600 para las primeras 2 imágenes (1_mini.webp, 2_mini.webp)
  * 
  * @param {Object} product - Producto con URLs de Yupoo
  * @param {string} assetsDir - Directorio base de assets
+ * @param {Object} options - Opciones de descarga
+ * @param {boolean} options.convertToWebP - Si convertir a WebP (default: true)
+ * @param {number} options.webpQuality - Calidad WebP 1-100 (default: 85)
+ * @param {boolean} options.generateThumbnails - Si generar miniaturas (default: true)
+ * @param {number} options.thumbnailSize - Tamaño máximo de miniatura (default: 600)
+ * @param {number} options.thumbnailQuality - Calidad de miniatura (default: 80)
  * @returns {Promise<Object>} - Producto con rutas locales
  */
-async function downloadProductImages(product, assetsDir) {
+async function downloadProductImages(product, assetsDir, options = {}) {
+    const {
+        convertToWebP = true,
+        webpQuality = 85,
+        generateThumbnails = true,
+        thumbnailSize = 600,
+        thumbnailQuality = 80
+    } = options;
+
     const albumId = product.source?.albumId || product.id.toString();
     const productDir = path.join(assetsDir, 'productos', 'Yupoo', albumId);
     const webPath = `/assets/productos/Yupoo/${albumId}`;
@@ -1461,18 +1533,66 @@ async function downloadProductImages(product, assetsDir) {
     // Collect all images to download
     const allImages = [product.image, ...(product.images || [])].filter(Boolean);
 
+    // Cargar sharp si está disponible (para miniaturas)
+    let sharp = null;
+    if (generateThumbnails) {
+        try {
+            sharp = require('sharp');
+        } catch (e) {
+            console.warn('⚠️  sharp no disponible, miniaturas no se generarán');
+        }
+    }
+
     for (let i = 0; i < allImages.length; i++) {
         const imageUrl = allImages[i];
-        const ext = path.extname(imageUrl).split('?')[0] || '.jpg';
-        const filename = `${i + 1}${ext}`;
-        const localPath = path.join(productDir, filename);
-        const localWebPath = `${webPath}/${filename}`;
+        const imageNumber = i + 1;
+        const baseFilename = `${imageNumber}`;
+        const localBasePath = path.join(productDir, baseFilename);
 
         try {
-            await downloadImage(imageUrl, localPath, referer);
-            downloadedImages.push(localWebPath);
+            let finalPath;
+
+            if (convertToWebP) {
+                // Descargar y convertir a WebP
+                finalPath = await downloadAndConvertToWebP(
+                    imageUrl,
+                    localBasePath + '.tmp',
+                    referer,
+                    { quality: webpQuality }
+                );
+            } else {
+                // Descargar sin conversión
+                const ext = path.extname(imageUrl).split('?')[0] || '.jpg';
+                finalPath = localBasePath + ext;
+                await downloadImage(imageUrl, finalPath, referer);
+            }
+
+            // Extraer nombre de archivo del path final para la ruta web
+            const finalFilename = path.basename(finalPath);
+            downloadedImages.push(`${webPath}/${finalFilename}`);
+
+            // Generar miniatura solo para las primeras 2 imágenes
+            if (sharp && generateThumbnails && imageNumber <= 2) {
+                try {
+                    const miniFilename = `${imageNumber}_mini.webp`;
+                    const miniPath = path.join(productDir, miniFilename);
+
+                    await sharp(finalPath)
+                        .resize(thumbnailSize, thumbnailSize, {
+                            fit: 'cover',
+                            position: 'center'
+                        })
+                        .webp({ quality: thumbnailQuality })
+                        .toFile(miniPath);
+
+                    console.log(`  ✓ Miniatura generada: ${miniFilename}`);
+                } catch (thumbErr) {
+                    console.warn(`  ⚠️ Error generando miniatura ${imageNumber}: ${thumbErr.message}`);
+                }
+            }
+
         } catch (err) {
-            console.warn(`Warning: Failed to download image ${i + 1}: ${err.message}`);
+            console.warn(`Warning: Failed to download image ${imageNumber}: ${err.message}`);
         }
     }
 
@@ -1495,6 +1615,7 @@ module.exports = {
     // Image download
     downloadProductImages,
     downloadImage,
+    downloadAndConvertToWebP,
 
     // Utilities (para testing/extensión)
     generateStableId,
