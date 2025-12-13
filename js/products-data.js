@@ -3166,8 +3166,8 @@ const products = [
     },
     {
         id: 218012,
-        name: "Benfica 25/26",
-        slug: "benfica-2526",
+        name: "Benfica 25/26 Entrenamiento Negra",
+        slug: "benfica-2526-entrenamiento-negra",
         category: "futbol",
         league: "Primeira Liga",
         price: 0,
@@ -3391,7 +3391,7 @@ const products = [
     },
     {
         id: 705945,
-        name: "Benfica 25/26",
+        name: "Benfica 25/26 Especial",
         slug: "benfica-2526",
         category: "futbol",
         league: "Primeira Liga",
@@ -4989,6 +4989,31 @@ const products = [
             albumId: "178962329"
         },
         temporada: "24/25",
+        tallas: "S-XXL"
+    },
+    {
+        id: 896413,
+        name: "Benfica 25/26 Entrenamiento",
+        slug: "benfica-2526-entrenamiento",
+        category: "futbol",
+        league: "Primeira Liga",
+        price: 0,
+        image: "/assets/productos/Yupoo/188021703/1.webp",
+        images: [
+            "/assets/productos/Yupoo/188021703/2.webp",
+            "/assets/productos/Yupoo/188021703/3.webp",
+            "/assets/productos/Yupoo/188021703/4.webp"
+        ],
+        imageAlt: "Benfica 25/26 Entrenamiento - Vista principal",
+        new: true,
+        sale: false,
+        source: {
+            provider: "yupoo",
+            url: "https://pandasportjersey.x.yupoo.com/albums/188021703?uid=1",
+            albumId: "188021703"
+        },
+        temporada: "25/26",
+        tipo: "entrenamiento",
         tallas: "S-XXL"
     }
 ];
