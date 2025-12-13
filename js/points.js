@@ -1,7 +1,6 @@
 
 
-import { db } from './firebase-config.js';
-import { ref, get, set, push, update, runTransaction } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { db, ref, get, set, push, update, runTransaction } from './firebase-config.js';
 const POINTS_PER_SHIRT = 10;
 const MAX_POINTS_PER_TRANSACTION = 1000;
 const REWARDS = [

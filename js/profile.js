@@ -1,11 +1,4 @@
-import { auth, db } from './firebase-config.js';
-import {
-    onAuthStateChanged,
-    signOut,
-    sendPasswordResetEmail,
-    updateProfile
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { ref, set, get, update, remove, push, onValue } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { auth, db, onAuthStateChanged, signOut, sendPasswordResetEmail, updateProfile, ref, set, get, update, remove, push, onValue } from './firebase-config.js';
 import { loadUserPoints, loadPointsHistory, redeemCoupon, getUserCoupons, REWARDS } from './points.js';
 let currentUser = null;
 let currentAddressId = null;

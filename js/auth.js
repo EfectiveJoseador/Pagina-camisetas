@@ -1,16 +1,4 @@
-import { auth, db, googleProvider } from './firebase-config.js';
-import {
-    signInWithEmailAndPassword,
-    createUserWithEmailAndPassword,
-    signOut,
-    onAuthStateChanged,
-    signInWithPopup,
-    sendPasswordResetEmail,
-    sendEmailVerification,
-    updateProfile,
-    RecaptchaVerifier
-} from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { ref, set, get } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { auth, db, googleProvider, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, onAuthStateChanged, signInWithPopup, sendPasswordResetEmail, sendEmailVerification, updateProfile, RecaptchaVerifier, ref, set, get } from './firebase-config.js';
 import { sanitizeInput, isValidEmail, checkRateLimit, getRemainingAttempts } from './security.js';
 const LOGIN_RATE_LIMIT_KEY = 'login_attempts';
 const MAX_LOGIN_ATTEMPTS = 5;

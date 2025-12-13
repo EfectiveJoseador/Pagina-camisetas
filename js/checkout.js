@@ -1,6 +1,4 @@
-﻿import { auth, db } from './firebase-config.js';
-import { onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-import { ref, get, push, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+﻿import { auth, db, onAuthStateChanged, ref, get, push, set } from './firebase-config.js';
 import Cart from './carrito.js';
 import products from './products-data.js';
 import { getUserCoupons, useCoupon, addPendingPoints } from './points.js';

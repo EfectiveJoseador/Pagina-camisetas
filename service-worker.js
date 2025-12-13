@@ -1,4 +1,4 @@
-const CACHE_NAME = 'camisetazo-cache-v2';
+const CACHE_NAME = 'camisetazo-cache-v3';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -16,8 +16,15 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-
-        return cache.addAll(ASSETS_TO_CACHE);
+        // Cache items individually to prevent failure if one is blocked
+        return Promise.allSettled(
+          ASSETS_TO_CACHE.map(url =>
+            cache.add(url).catch(err => {
+              console.warn('Failed to cache:', url, err);
+              return null;
+            })
+          )
+        );
       })
       .then(() => self.skipWaiting())
   );
@@ -40,16 +47,22 @@ self.addEventListener('activate', (event) => {
 });
 
 self.addEventListener('fetch', (event) => {
-
   const url = event.request.url;
 
+  // Only handle GET requests
   if (event.request.method !== 'GET') return;
-  if (
-    url.startsWith('chrome-extension://') ||
-    url.includes('.map')
-  ) {
+
+  // Ignore non-http(s) URLs: chrome-extension, blob, data, etc.
+  if (!url.startsWith('http://') && !url.startsWith('https://')) {
     return;
   }
+
+  // Ignore source maps
+  if (url.includes('.map')) {
+    return;
+  }
+
+  // Skip analytics and external services - pass through to network
   if (
     url.includes('analytics.vercel.com') ||
     url.includes('www.googletagmanager.com') ||
@@ -57,24 +70,41 @@ self.addEventListener('fetch', (event) => {
     url.includes('analytics.google.com') ||
     url.includes('plausible.io') ||
     url.includes('contentsquare.net') ||
-    url.includes('api.web3forms.com')
+    url.includes('api.web3forms.com') ||
+    url.includes('gstatic.com') ||
+    url.includes('firebaseio.com') ||
+    url.includes('firebasedatabase.app') ||
+    url.includes('googleapis.com')
   ) {
-    event.respondWith(fetch(event.request));
+    event.respondWith(fetch(event.request).catch(() => {
+      // Return empty response if blocked
+      return new Response('', { status: 503 });
+    }));
     return;
   }
 
+  // Only cache same-origin requests
+  const requestUrl = new URL(url);
+  const isSameOrigin = requestUrl.origin === location.origin;
+
+  if (!isSameOrigin) {
+    // For cross-origin, just fetch without caching
+    event.respondWith(fetch(event.request).catch(() => {
+      return new Response('', { status: 503 });
+    }));
+    return;
+  }
+
+  // Same-origin: Network first, fallback to cache
   event.respondWith(
     fetch(event.request)
       .then((response) => {
-
         if (response && response.status === 200) {
           const responseToCache = response.clone();
-
           caches.open(CACHE_NAME).then((cache) => {
             cache.put(event.request, responseToCache);
           });
         }
-
         return response;
       })
       .catch(() => {

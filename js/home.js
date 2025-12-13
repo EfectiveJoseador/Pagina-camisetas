@@ -1,6 +1,5 @@
 import products from './products-data.js';
-import { db } from './firebase-config.js';
-import { ref, get, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+import { db, ref, get, set } from './firebase-config.js';
 const FEATURED_CONFIG = {
     PRODUCT_COUNT: 6,
     ROTATION_DAYS: 7
