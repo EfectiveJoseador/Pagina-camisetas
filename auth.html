@@ -497,6 +497,10 @@
     });
 
     // 6) Reaccionar a cambios de sesión y redirigir según rol
+    // Obtener parámetro de redirección de la URL
+    const urlParams = new URLSearchParams(window.location.search);
+    const redirectParam = urlParams.get('redirect');
+
     onAuthStateChanged(auth, async (user) => {
       if (user) {
         console.log('Usuario autenticado', { uid: user.uid, email: user.email });
@@ -513,14 +517,23 @@
             console.log('✅ Usuario es admin - redirigiendo a admin.html');
             window.location.href = '/pages/admin.html';
           } else {
-            // Usuario normal - redirigir al perfil
-            console.log('👤 Usuario normal - redirigiendo al perfil');
-            window.location.href = '/pages/perfil.html';
+            // Usuario normal - verificar si hay redirección pendiente
+            if (redirectParam === 'checkout') {
+              console.log('🛒 Redirigiendo al checkout después de login');
+              window.location.href = '/pages/checkout.html';
+            } else {
+              console.log('👤 Usuario normal - redirigiendo al perfil');
+              window.location.href = '/pages/perfil.html';
+            }
           }
         } catch (error) {
           console.error('Error verificando claims:', error);
-          // En caso de error, redirigir al perfil normal
-          window.location.href = '/pages/perfil.html';
+          // En caso de error, verificar redirección o ir al perfil
+          if (redirectParam === 'checkout') {
+            window.location.href = '/pages/checkout.html';
+          } else {
+            window.location.href = '/pages/perfil.html';
+          }
         }
       } else {
         console.log('No autenticado');

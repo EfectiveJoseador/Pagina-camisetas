@@ -485,10 +485,10 @@ function showLoginPrompt() {
                     Para realizar un pedido necesitas tener una cuenta. Así podrás guardar tus direcciones y ver el historial de tus pedidos.
                 </p>
                 <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
-                    <a href="/pages/login.html" class="btn-modal-primary" style="text-decoration: none;">
+                    <a href="/pages/login.html?redirect=checkout" class="btn-modal-primary" style="text-decoration: none;">
                         <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                     </a>
-                    <a href="/pages/login.html#register" class="btn-modal-secondary" style="text-decoration: none;">
+                    <a href="/pages/login.html?redirect=checkout#register" class="btn-modal-secondary" style="text-decoration: none;">
                         <i class="fas fa-user-plus"></i> Crear Cuenta
                     </a>
                 </div>

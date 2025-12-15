@@ -3,6 +3,21 @@ import { sanitizeInput, isValidEmail, checkRateLimit, getRemainingAttempts } fro
 const LOGIN_RATE_LIMIT_KEY = 'login_attempts';
 const MAX_LOGIN_ATTEMPTS = 5;
 const RATE_LIMIT_WINDOW_MS = 300000;
+
+// Obtener parámetro de redirección de la URL
+const urlParams = new URLSearchParams(window.location.search);
+const redirectParam = urlParams.get('redirect');
+
+// Función helper para obtener la URL de redirección correcta
+function getRedirectUrl(isAdmin) {
+    if (isAdmin) {
+        return '/pages/admin.html';
+    }
+    if (redirectParam === 'checkout') {
+        return '/pages/checkout.html';
+    }
+    return '/pages/perfil.html';
+}
 function mapAuthError(code) {
     switch (code) {
         case 'auth/email-already-in-use': return 'Este email ya está registrado.';
@@ -42,14 +57,11 @@ onAuthStateChanged(auth, async (user) => {
     if (user && user.emailVerified) {
         try {
             const idTokenResult = await user.getIdTokenResult(true);
-            if (idTokenResult.claims.admin === true) {
-                window.location.href = '/pages/admin.html';
-            } else {
-                window.location.href = '/pages/perfil.html';
-            }
+            const isAdmin = idTokenResult.claims.admin === true;
+            window.location.href = getRedirectUrl(isAdmin);
         } catch (error) {
             console.error('Error checking admin status:', error);
-            window.location.href = '/pages/perfil.html';
+            window.location.href = getRedirectUrl(false);
         }
     }
 });
@@ -148,11 +160,8 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
                 const idTokenResult = await user.getIdTokenResult(true);
-                if (idTokenResult.claims.admin === true) {
-                    window.location.href = '/pages/admin.html';
-                } else {
-                    window.location.href = '/pages/perfil.html';
-                }
+                const isAdmin = idTokenResult.claims.admin === true;
+                window.location.href = getRedirectUrl(isAdmin);
             } catch (error) {
                 console.error(error);
                 showError('login-error', mapAuthError(error.code));
