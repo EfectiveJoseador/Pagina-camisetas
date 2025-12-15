@@ -41,6 +41,92 @@ const extraPrices = {
     manga: 4,
     oficial: 10
 };
+
+// Patch definitions for dynamic options
+const PATCH_DEFINITIONS = {
+    liga: "La Liga",
+    premier: "Premier",
+    seriea: "Serie A",
+    bundesliga: "Bundesliga",
+    ligue1: "Ligue 1",
+    champions: "Champions",
+    europa: "Europa League",
+    mundial_clubes: "Mundial Clubes",
+    copamundo: "Copa del Mundo",
+    eurocopa: "Eurocopa",
+    copa_america: "Copa América"
+};
+
+// Get allowed patches based on product league
+function getAllowedPatches(product) {
+    if (!product) return [];
+
+    const allowed = [];
+    const league = product.league;
+    const isNBA = product.category === 'nba' || product.league === 'nba';
+
+    // NBA products don't get patches
+    if (isNBA) return [];
+
+    // National teams get different patches
+    if (league === 'selecciones' || product.category === 'selecciones') {
+        allowed.push('copamundo');
+        allowed.push('eurocopa');
+        allowed.push('copa_america');
+        return allowed;
+    }
+
+    // Club teams get European competition patches
+    allowed.push('champions');
+    allowed.push('europa');
+    allowed.push('mundial_clubes');
+
+    // League-specific patches
+    switch (league) {
+        case 'laliga':
+            allowed.push('liga');
+            break;
+        case 'premier':
+            allowed.push('premier');
+            break;
+        case 'seriea':
+            allowed.push('seriea');
+            break;
+        case 'bundesliga':
+            allowed.push('bundesliga');
+            break;
+        case 'ligue1':
+            allowed.push('ligue1');
+            break;
+    }
+
+    return allowed;
+}
+
+// Generate patch options HTML for a product
+function generatePatchOptionsHTML(product) {
+    const allowedPatches = getAllowedPatches(product);
+
+    if (allowedPatches.length === 0) {
+        return ''; // No patches available for this product
+    }
+
+    let options = '<option value="none">Sin parche</option>';
+    allowedPatches.forEach(patchKey => {
+        if (PATCH_DEFINITIONS[patchKey]) {
+            options += `<option value="${patchKey}">${PATCH_DEFINITIONS[patchKey]}</option>`;
+        }
+    });
+
+    return `
+        <div class="form-group">
+            <label>Parche (+€1)</label>
+            <select class="quick-patch">
+                ${options}
+            </select>
+        </div>
+    `;
+}
 import * as imageLoader from './imageLoader.js';
 function initLazyLoading() {
     imageLoader.init();
@@ -162,7 +248,14 @@ function renderProducts() {
     const fragment = document.createDocumentFragment();
     const tempDiv = document.createElement('div');
 
-    tempDiv.innerHTML = productsToShow.map(product => `
+    tempDiv.innerHTML = productsToShow.map(product => {
+        const productType = getProductType(product);
+        const sizes = SIZE_CONFIGS[productType];
+        const sizeOptions = sizes.map(size => {
+            const sizeLabel = (size === '3XL' || size === '4XL') ? `${size} (+€2)` : size;
+            return `<option value="${size}">${sizeLabel}</option>`;
+        }).join('');
+        return `
         <article class="product-card" data-id="${product.id}">
             <div class="product-image">
                 <span class="badge-sale">OFERTA</span>
@@ -186,7 +279,54 @@ function renderProducts() {
                         loading="lazy"
                     >
                 </a>
-                <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
+                <button class="btn-quick-add" data-id="${product.id}" title="Añadir al carrito">
+                    <i class="fas fa-shopping-basket"></i>
+                </button>
+                
+                <!-- Quick Add Panel -->
+                <div class="quick-add-panel" data-product-id="${product.id}">
+                    <div class="panel-header">
+                        <span class="panel-title">Añadir rápido</span>
+                        <button class="panel-close" data-id="${product.id}"><i class="fas fa-times"></i></button>
+                    </div>
+                    <form class="quick-add-form" data-product-id="${product.id}">
+                        <div class="form-group">
+                            <label>Talla *</label>
+                            <select class="quick-size" required>
+                                <option value="">Seleccionar</option>
+                                ${sizeOptions}
+                            </select>
+                        </div>
+                        
+                        <div class="optional-toggle" data-id="${product.id}">
+                            <i class="fas fa-chevron-down"></i>
+                            <span>Personalización (opcional)</span>
+                        </div>
+                        
+                        <div class="optional-fields" data-id="${product.id}">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label>Nombre</label>
+                                    <input type="text" class="quick-name" placeholder="Ej: MESSI" maxlength="15" pattern="[A-Za-zÀ-ÿ\\s]*">
+                                </div>
+                                <div class="form-group">
+                                    <label>Dorsal</label>
+                                    <input type="text" class="quick-number" placeholder="10" maxlength="2" inputmode="numeric" pattern="[0-9]*">
+                                </div>
+                            </div>
+                            ${generatePatchOptionsHTML(product)}
+                        </div>
+                        
+                        <div class="price-preview">
+                            <span class="price-label">Total:</span>
+                            <span class="price-value" data-base="${product.price}">€${product.price.toFixed(2)}</span>
+                        </div>
+                        
+                        <button type="submit" class="btn-add-quick">
+                            <i class="fas fa-cart-plus"></i> Añadir
+                        </button>
+                    </form>
+                </div>
             </div>
             <div class="product-info">
                 <span class="product-category">${product.category}</span>
@@ -197,7 +337,8 @@ function renderProducts() {
                 </div>
             </div>
         </article>
-    `).join('');
+    `;
+    }).join('');
     grid.innerHTML = '';
     while (tempDiv.firstChild) {
         fragment.appendChild(tempDiv.firstChild);
@@ -205,12 +346,258 @@ function renderProducts() {
     grid.appendChild(fragment);
     observeLazyImages();
     renderPagination();
-    document.querySelectorAll('.btn-add').forEach(btn => {
+    setupQuickAddListeners();
+}
+
+// Quick Add Panel Functions
+function setupQuickAddListeners() {
+    // Quick add button click - toggle panel
+    document.querySelectorAll('.btn-quick-add').forEach(btn => {
         btn.addEventListener('click', (e) => {
-            const productId = parseInt(e.target.dataset.id);
-            openCustomizationModal(productId);
+            e.preventDefault();
+            e.stopPropagation();
+            const productId = btn.dataset.id;
+            toggleQuickAddPanel(productId);
         });
     });
+
+    // Close button click
+    document.querySelectorAll('.quick-add-panel .panel-close').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const productId = btn.dataset.id;
+            closeQuickAddPanel(productId);
+        });
+    });
+
+    // Optional fields toggle
+    document.querySelectorAll('.optional-toggle').forEach(toggle => {
+        toggle.addEventListener('click', (e) => {
+            e.preventDefault();
+            const productId = toggle.dataset.id;
+            const optionalFields = document.querySelector(`.optional-fields[data-id="${productId}"]`);
+            if (optionalFields) {
+                optionalFields.classList.toggle('show');
+                toggle.classList.toggle('expanded');
+            }
+        });
+    });
+
+    // Form inputs - update price preview
+    document.querySelectorAll('.quick-add-form').forEach(form => {
+        const productId = form.dataset.productId;
+        const product = allProducts.find(p => p.id === parseInt(productId));
+        if (!product) return;
+
+        const updatePrice = () => {
+            const sizeSelect = form.querySelector('.quick-size');
+            const nameInput = form.querySelector('.quick-name');
+            const numberInput = form.querySelector('.quick-number');
+            const patchSelect = form.querySelector('.quick-patch');
+            const priceValue = form.querySelector('.price-value');
+
+            let total = product.price;
+
+            // Extra size cost
+            const size = sizeSelect?.value;
+            if (size === '3XL' || size === '4XL') {
+                total += 2;
+            }
+
+            // Personalization cost
+            const name = nameInput?.value?.trim();
+            const number = numberInput?.value?.trim();
+            if (name && number) {
+                total += 2;
+            }
+
+            // Patch cost
+            const patch = patchSelect?.value;
+            if (patch && patch !== 'none') {
+                total += 1;
+            }
+
+            if (priceValue) {
+                priceValue.textContent = `€${total.toFixed(2)}`;
+            }
+        };
+
+        // Name input validation - only letters and spaces
+        const nameInput = form.querySelector('.quick-name');
+        if (nameInput) {
+            nameInput.addEventListener('input', (e) => {
+                let value = e.target.value;
+                // Remove any non-letter characters except spaces
+                value = value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+                if (value.length > 15) {
+                    value = value.slice(0, 15);
+                }
+                e.target.value = value;
+                updatePrice();
+            });
+        }
+
+        // Number input validation - only digits, max 2
+        const numberInput = form.querySelector('.quick-number');
+        if (numberInput) {
+            numberInput.addEventListener('input', (e) => {
+                let value = e.target.value;
+                // Remove any non-digit characters
+                value = value.replace(/\D/g, '');
+                if (value.length > 2) {
+                    value = value.slice(0, 2);
+                }
+                // Ensure max value is 99
+                if (value !== '' && parseInt(value) > 99) {
+                    value = '99';
+                }
+                e.target.value = value;
+                updatePrice();
+            });
+        }
+
+        // Other form inputs - update price preview
+        form.querySelectorAll('select').forEach(input => {
+            input.addEventListener('change', updatePrice);
+        });
+
+        // Form submission
+        form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            handleQuickAddSubmit(form, product);
+        });
+    });
+
+    // Close panel when clicking outside
+    document.addEventListener('click', (e) => {
+        if (!e.target.closest('.quick-add-panel') && !e.target.closest('.btn-quick-add')) {
+            closeAllQuickAddPanels();
+        }
+    });
+}
+
+function toggleQuickAddPanel(productId) {
+    const panel = document.querySelector(`.quick-add-panel[data-product-id="${productId}"]`);
+    const btn = document.querySelector(`.btn-quick-add[data-id="${productId}"]`);
+
+    if (!panel) return;
+
+    const isActive = panel.classList.contains('active');
+
+    // Close all other panels first
+    closeAllQuickAddPanels();
+
+    if (!isActive) {
+        panel.classList.add('active');
+        if (btn) btn.classList.add('active');
+    }
+}
+
+function closeQuickAddPanel(productId) {
+    const panel = document.querySelector(`.quick-add-panel[data-product-id="${productId}"]`);
+    const btn = document.querySelector(`.btn-quick-add[data-id="${productId}"]`);
+
+    if (panel) panel.classList.remove('active');
+    if (btn) btn.classList.remove('active');
+}
+
+function closeAllQuickAddPanels() {
+    document.querySelectorAll('.quick-add-panel.active').forEach(panel => {
+        panel.classList.remove('active');
+    });
+    document.querySelectorAll('.btn-quick-add.active').forEach(btn => {
+        btn.classList.remove('active');
+    });
+}
+
+function handleQuickAddSubmit(form, product) {
+    const sizeSelect = form.querySelector('.quick-size');
+    const nameInput = form.querySelector('.quick-name');
+    const numberInput = form.querySelector('.quick-number');
+    const patchSelect = form.querySelector('.quick-patch');
+
+    // Validation
+    const size = sizeSelect?.value;
+    if (!size) {
+        if (window.Toast) {
+            window.Toast.error('Por favor, selecciona una talla');
+        } else {
+            alert('Por favor, selecciona una talla');
+        }
+        return;
+    }
+
+    const name = nameInput?.value?.trim().toUpperCase() || '';
+    const number = numberInput?.value?.trim() || '';
+
+    // Name and number must go together
+    if ((name && !number) || (!name && number)) {
+        if (window.Toast) {
+            window.Toast.error('El nombre y dorsal deben ir juntos');
+        } else {
+            alert('El nombre y dorsal deben ir juntos');
+        }
+        return;
+    }
+
+    // Calculate price
+    let totalPrice = product.price;
+
+    if (size === '3XL' || size === '4XL') {
+        totalPrice += 2;
+    }
+
+    if (name && number) {
+        totalPrice += 2;
+    }
+
+    const patch = patchSelect?.value || 'none';
+    if (patch !== 'none') {
+        totalPrice += patchPrices[patch] || 1;
+    }
+
+    // Create cart item
+    const customization = {
+        size: size,
+        version: 'aficionado', // Default version for quick add
+        name: name,
+        number: number,
+        patch: patch,
+        extras: []
+    };
+
+    const cartItem = {
+        id: product.id,
+        name: product.name,
+        image: product.image,
+        basePrice: product.price,
+        price: totalPrice,
+        quantity: 1,
+        customization: customization
+    };
+
+    // Add to cart
+    addToCart(cartItem);
+
+    // Close panel
+    closeQuickAddPanel(product.id.toString());
+
+    // Reset form
+    form.reset();
+    const optionalFields = form.querySelector('.optional-fields');
+    const optionalToggle = form.querySelector('.optional-toggle');
+    if (optionalFields) optionalFields.classList.remove('show');
+    if (optionalToggle) optionalToggle.classList.remove('expanded');
+
+    // Show feedback
+    if (window.Toast) {
+        window.Toast.success(`${product.name} añadido al carrito`);
+    }
+    if (window.CartBadge) {
+        window.CartBadge.animate();
+    }
 }
 function init() {
     // Try to get cached product order from sessionStorage
