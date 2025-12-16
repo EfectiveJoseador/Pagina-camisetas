@@ -1,4 +1,4 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-theme="dark">
 
 <head>
@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="../assets/logo/logo.png">
     <meta name="robots" content="noindex, nofollow">
-    <title>Panel de Administraci√≥n - Camisetazo</title>
+    <title>Panel de AdministraciÛn - Camisetazo</title>
 
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
@@ -20,16 +20,10 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com" crossorigin>
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style">
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-solid-900.woff2"
-        as="font" type="font/woff2" crossorigin>
-    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/webfonts/fa-brands-400.woff2"
-        as="font" type="font/woff2" crossorigin>
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
         rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Font Awesome Local --><link rel="stylesheet" href="/assets/fonts/fontawesome/css/all.min.css">
 
 
     <link rel="stylesheet" href="/css/variables.css">
@@ -96,7 +90,7 @@
             <div class="header-right">
                 <span class="admin-email" id="admin-email"></span>
                 <button class="btn-logout" id="btn-logout">
-                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesi√≥n
+                    <i class="fas fa-sign-out-alt"></i> Cerrar SesiÛn
                 </button>
             </div>
         </header>
@@ -203,22 +197,22 @@
 
 
             <section class="promo-codes-section">
-                <h2 class="section-title"><i class="fas fa-tags"></i> C√≥digos Promocionales</h2>
+                <h2 class="section-title"><i class="fas fa-tags"></i> CÛdigos Promocionales</h2>
 
 
                 <div class="promo-create-form">
-                    <h3>Crear Nuevo C√≥digo</h3>
+                    <h3>Crear Nuevo CÛdigo</h3>
                     <div class="form-row">
                         <div class="form-group">
-                            <label for="promo-code">C√≥digo</label>
+                            <label for="promo-code">CÛdigo</label>
                             <input type="text" id="promo-code" placeholder="Ej: VERANO20" maxlength="30">
                         </div>
                         <div class="form-group">
                             <label for="promo-type">Tipo</label>
                             <select id="promo-type">
                                 <option value="percentage">% Porcentaje</option>
-                                <option value="fixed">‚Ç¨ Euros fijos</option>
-                                <option value="free_shipping">Env√≠o gratis</option>
+                                <option value="fixed">Ä Euros fijos</option>
+                                <option value="free_shipping">EnvÌo gratis</option>
                             </select>
                         </div>
                         <div class="form-group">
@@ -226,11 +220,11 @@
                             <input type="number" id="promo-value" placeholder="Ej: 10" min="1" max="100">
                         </div>
                         <div class="form-group">
-                            <label for="promo-max-uses">Usos m√°x. (vac√≠o = ilimitado)</label>
+                            <label for="promo-max-uses">Usos m·x. (vacÌo = ilimitado)</label>
                             <input type="number" id="promo-max-uses" placeholder="Ilimitado" min="1">
                         </div>
                         <button class="btn-create-promo" id="btn-create-promo">
-                            <i class="fas fa-plus"></i> Crear C√≥digo
+                            <i class="fas fa-plus"></i> Crear CÛdigo
                         </button>
                     </div>
                 </div>
@@ -240,7 +234,7 @@
                     <table class="promo-codes-table">
                         <thead>
                             <tr>
-                                <th>C√≥digo</th>
+                                <th>CÛdigo</th>
                                 <th>Tipo</th>
                                 <th>Valor</th>
                                 <th>Usos</th>
@@ -254,14 +248,14 @@
                     </table>
                     <div class="empty-state hidden" id="promo-empty-state">
                         <i class="fas fa-tag"></i>
-                        <p>No hay c√≥digos promocionales</p>
+                        <p>No hay cÛdigos promocionales</p>
                     </div>
                 </div>
             </section>
 
 
             <section class="users-section">
-                <h2 class="section-title"><i class="fas fa-users"></i> Gesti√≥n de Usuarios</h2>
+                <h2 class="section-title"><i class="fas fa-users"></i> GestiÛn de Usuarios</h2>
 
 
                 <div class="users-search-bar">
