@@ -703,6 +703,27 @@ a.catalogo-btn:hover,
         padding: 0.55rem 0.85rem;
         font-size: 0.72rem;
     }
+
+    /* Dropdown en móvil */
+    .catalogo-card.dropdown-open {
+        z-index: 99999 !important;
+        overflow: visible !important;
+    }
+
+    .catalogo-card.dropdown-open .dropdown-menu {
+        z-index: 999999 !important;
+        position: absolute;
+        top: 100%;
+        left: 0;
+        right: 0;
+        min-width: 100%;
+    }
+
+    .collections-section {
+        position: relative;
+        z-index: 10;
+        overflow: visible;
+    }
 }
 
 @media (max-width: 480px) {
@@ -750,6 +771,38 @@ a.catalogo-btn:hover,
 
 .link-arrow:hover {
     gap: 1rem;
+}
+
+/* Responsive para featured section - Ver todo debajo del título en móvil */
+@media (max-width: 768px) {
+    .featured-section-header {
+        align-items: center !important;
+    }
+
+    .featured-header-row {
+        flex-direction: column !important;
+        align-items: center !important;
+        gap: 0.75rem;
+        text-align: center;
+    }
+
+    .featured-title {
+        font-size: 2.2rem !important;
+        justify-content: center;
+    }
+
+    .featured-title i {
+        display: none;
+    }
+
+    .featured-link-arrow {
+        margin-left: 0;
+    }
+
+    .featured-description {
+        margin-left: 0 !important;
+        text-align: center;
+    }
 }
 
 .products-grid {
@@ -1286,7 +1339,7 @@ a.catalogo-btn:hover,
 .catalogo-carousel .carousel-track {
     display: flex;
     gap: 1.5rem;
-    
+
     transform: translate3d(0, 0, 0);
     will-change: transform;
 }
@@ -1294,7 +1347,7 @@ a.catalogo-btn:hover,
 
 .catalogo-carousel .carousel-track.dragging {
     will-change: transform;
-    
+
 }
 
 .catalogo-carousel .carousel-track.dragging,
@@ -1382,9 +1435,10 @@ a.catalogo-btn:hover,
         position: relative;
         padding: 0 1rem;
         padding-right: 0;
-        
-        overflow: hidden;
-        
+        padding-bottom: 180px;
+        margin-bottom: -180px;
+        overflow: visible;
+
     }
 
     .catalogo-carousel .carousel-container::-webkit-scrollbar {
@@ -1392,10 +1446,10 @@ a.catalogo-btn:hover,
     }
 
     .catalogo-carousel .carousel-track {
-        
+
         gap: 1rem;
         padding-right: 1rem;
-        
+
     }
 
     .catalogo-carousel .catalogo-card {
@@ -1409,7 +1463,7 @@ a.catalogo-btn:hover,
         display: none;
     }
 
-    
+
     .catalogo-carousel::after {
         content: '';
         position: absolute;
@@ -1424,7 +1478,7 @@ a.catalogo-btn:hover,
         transition: opacity 0.3s ease;
     }
 
-    
+
     .catalogo-carousel.scrolled::after {
         opacity: 0;
     }
@@ -1517,6 +1571,8 @@ a.catalogo-btn:hover,
 
 .equipos-section {
     padding: 4rem 2rem;
+    position: relative;
+    z-index: 1;
 }
 
 .equipos-description {

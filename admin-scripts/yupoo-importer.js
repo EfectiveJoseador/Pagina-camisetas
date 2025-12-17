@@ -4,7 +4,7 @@ const crypto = require('crypto');
 
 
 const TEXT_NORMALIZATION = {
-    
+
     'away': 'Visitante',
     'home': 'Local',
     'third': 'Tercera',
@@ -16,7 +16,7 @@ const TEXT_NORMALIZATION = {
     'special': 'Especial',
     'anniversary': 'Aniversario',
     'classic': 'Clásica',
-    
+
     'jersey': 'Camiseta',
     'shirt': 'Camiseta',
     'kit': 'Equipación',
@@ -26,7 +26,7 @@ const TEXT_NORMALIZATION = {
 
 
 const TEAM_TO_LEAGUE = {
-    
+
     'athletic': 'laliga',
     'athletic club': 'laliga',
     'athletic bilbao': 'laliga',
@@ -77,7 +77,7 @@ const TEAM_TO_LEAGUE = {
     'racing santander': 'laliga',
     'zaragoza': 'laliga',
 
-    
+
     'arsenal': 'premier',
 
     'chelsea': 'premier',
@@ -109,7 +109,7 @@ const TEAM_TO_LEAGUE = {
     'ipswich': 'premier',
     'southampton': 'premier',
 
-    
+
     'juventus': 'seriea',
     'juve': 'seriea',
     'inter': 'seriea',
@@ -133,7 +133,7 @@ const TEAM_TO_LEAGUE = {
     'parma': 'seriea',
     'como': 'seriea',
 
-    
+
     'bayern': 'bundesliga',
     'bayern munich': 'bundesliga',
     'bayern munchen': 'bundesliga',
@@ -158,7 +158,7 @@ const TEAM_TO_LEAGUE = {
     'union berlin': 'bundesliga',
     'stuttgart': 'bundesliga',
 
-    
+
     'psg': 'ligue1',
     'paris': 'ligue1',
     'paris saint-germain': 'ligue1',
@@ -182,7 +182,7 @@ const TEAM_TO_LEAGUE = {
     'reims': 'ligue1',
     'brest': 'ligue1',
 
-    
+
     'flamengo': 'brasileirao',
     'palmeiras': 'brasileirao',
     'corinthians': 'brasileirao',
@@ -196,7 +196,7 @@ const TEAM_TO_LEAGUE = {
     'cruzeiro': 'brasileirao',
     'atletico mineiro': 'brasileirao',
 
-    
+
     'boca': 'saf',
     'boca juniors': 'saf',
     'river': 'saf',
@@ -206,7 +206,7 @@ const TEAM_TO_LEAGUE = {
     'san lorenzo': 'saf',
     'estudiantes': 'saf',
 
-    
+
     'al-nassr': 'ligaarabe',
     'al nassr': 'ligaarabe',
     'al-hilal': 'ligaarabe',
@@ -215,7 +215,7 @@ const TEAM_TO_LEAGUE = {
     'al ittihad': 'ligaarabe',
     'al-ahli': 'ligaarabe',
 
-    
+
     'spain': 'selecciones',
     'españa': 'selecciones',
     'france': 'selecciones',
@@ -291,7 +291,7 @@ const TEAM_TO_LEAGUE = {
     'ireland': 'selecciones',
     'irlanda': 'selecciones',
 
-    
+
     'lakers': 'nba',
     'los angeles lakers': 'nba',
     'celtics': 'nba',
@@ -391,8 +391,8 @@ const EXCLUDED_URL_PATTERNS = [
     /instagram/i,
     /facebook/i,
     /telegram/i,
-    /\/icon\
-    /\/logo\
+    /\/icon/i,
+    /\/logo/i,
     /size[-_]?chart/i
 ];
 
@@ -417,9 +417,9 @@ function normalizeForComparison(str) {
     return str
         .toLowerCase()
         .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '') 
-        .replace(/[^\w\s]/g, ' ')         
-        .replace(/\s+/g, ' ')             
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^\w\s]/g, ' ')
+        .replace(/\s+/g, ' ')
         .trim();
 }
 
@@ -428,11 +428,11 @@ function extractTeamTokens(name) {
     const normalized = normalizeForComparison(name);
     const tokens = normalized.split(' ').filter(t => t.length > 1);
 
-    
+
     return tokens.filter(t =>
         !TEAM_STOPWORDS.includes(t) &&
         !/^\d+$/.test(t) &&
-        !/^\d{2}\/?\d{2}$/.test(t) 
+        !/^\d{2}\/?\d{2}$/.test(t)
     );
 }
 
@@ -443,13 +443,13 @@ function calculateTokenSimilarity(tokens1, tokens2) {
     const set1 = new Set(tokens1);
     const set2 = new Set(tokens2);
 
-    
+
     let exactMatches = 0;
     for (const t of set1) {
         if (set2.has(t)) exactMatches++;
     }
 
-    
+
     let partialMatches = 0;
     for (const t1 of set1) {
         for (const t2 of set2) {
@@ -469,24 +469,24 @@ function calculateTokenSimilarity(tokens1, tokens2) {
 class TeamMatcher {
     constructor(existingProducts = []) {
         this.products = existingProducts;
-        this.teamIndex = new Map(); 
+        this.teamIndex = new Map();
         this.buildIndex();
     }
 
-    
+
     buildIndex() {
         const teamNames = new Set();
 
-        
+
         this.products.forEach(p => {
             if (p.name) {
-                
+
                 const teamPart = p.name.replace(/\d{2}\/?\d{2}.*$/, '').trim();
                 if (teamPart) teamNames.add(teamPart);
             }
         });
 
-        
+
         teamNames.forEach(name => {
             const tokens = extractTeamTokens(name);
             tokens.forEach(token => {
@@ -498,18 +498,18 @@ class TeamMatcher {
         });
     }
 
-    
+
     findBestMatch(newTeamName, threshold = 0.5) {
         const newTokens = extractTeamTokens(newTeamName);
         if (newTokens.length === 0) return null;
 
-        
+
         const candidates = new Set();
         newTokens.forEach(token => {
             if (this.teamIndex.has(token)) {
                 this.teamIndex.get(token).forEach(name => candidates.add(name));
             }
-            
+
             this.teamIndex.forEach((names, indexToken) => {
                 if (token.includes(indexToken) || indexToken.includes(token)) {
                     names.forEach(name => candidates.add(name));
@@ -519,7 +519,7 @@ class TeamMatcher {
 
         if (candidates.size === 0) return null;
 
-        
+
         let bestMatch = null;
         let bestScore = 0;
 
@@ -535,7 +535,7 @@ class TeamMatcher {
 
         if (!bestMatch) return null;
 
-        
+
         const matchingProduct = this.products.find(p =>
             p.name && p.name.startsWith(bestMatch)
         );
@@ -547,12 +547,12 @@ class TeamMatcher {
         };
     }
 
-    
+
     normalizeTeamName(newTeamName) {
         const match = this.findBestMatch(newTeamName, 0.6);
 
         if (match && match.score >= 0.8) {
-            
+
             return {
                 name: match.name,
                 league: match.league,
@@ -561,7 +561,7 @@ class TeamMatcher {
             };
         }
 
-        
+
         return {
             name: newTeamName,
             league: null,
@@ -574,17 +574,17 @@ class TeamMatcher {
 
 function loadExistingProducts(productsFilePath) {
     try {
-        
+
         const content = fs.readFileSync(productsFilePath, 'utf-8');
 
-        
+
         const match = content.match(/const\s+products\s*=\s*(\[[\s\S]*?\]);/);
         if (!match) {
             console.warn('⚠️  No se pudo parsear products-data.js');
             return [];
         }
 
-        
+
         const products = eval(match[1]);
         return Array.isArray(products) ? products : [];
     } catch (err) {
@@ -595,17 +595,17 @@ function loadExistingProducts(productsFilePath) {
 
 
 function generateStableId(albumUrl) {
-    
+
     const albumIdMatch = albumUrl.match(/albums\/(\d+)/);
     const albumId = albumIdMatch ? albumIdMatch[1] : albumUrl;
 
-    
+
     const hash = crypto.createHash('sha256').update(albumId).digest('hex');
 
-    
+
     const numericHash = parseInt(hash.substring(0, 8), 16);
 
-    
+
     return 100000 + (numericHash % 900000);
 }
 
@@ -620,11 +620,11 @@ function generateSlug(name) {
     return name
         .toLowerCase()
         .normalize('NFD')
-        .replace(/[\u0300-\u036f]/g, '') 
-        .replace(/[^a-z0-9\s-]/g, '')    
-        .replace(/\s+/g, '-')            
-        .replace(/-+/g, '-')             
-        .replace(/^-|-$/g, '');          
+        .replace(/[\u0300-\u036f]/g, '')
+        .replace(/[^a-z0-9\s-]/g, '')
+        .replace(/\s+/g, '-')
+        .replace(/-+/g, '-')
+        .replace(/^-|-$/g, '');
 }
 
 
@@ -639,7 +639,7 @@ function generateImageAlt(productName, imageIndex = 0) {
 function normalizeText(text) {
     let normalized = text;
 
-    
+
     for (const [english, spanish] of Object.entries(TEXT_NORMALIZATION)) {
         const regex = new RegExp(`\\b${english}\\b`, 'gi');
         normalized = normalized.replace(regex, spanish);
@@ -650,7 +650,7 @@ function normalizeText(text) {
 
 
 const TEAM_TRANSLATIONS = {
-    
+
     'germany': 'Alemania',
     'deutschland': 'Alemania',
     'england': 'Inglaterra',
@@ -685,7 +685,7 @@ const TEAM_TRANSLATIONS = {
     'slovenia': 'Eslovenia',
     'iceland': 'Islandia',
 
-    
+
     'brazil': 'Brasil',
     'argentina': 'Argentina',
     'mexico': 'México',
@@ -703,7 +703,7 @@ const TEAM_TRANSLATIONS = {
     'panama': 'Panamá',
     'canada': 'Canadá',
 
-    
+
     'morocco': 'Marruecos',
     'egypt': 'Egipto',
     'nigeria': 'Nigeria',
@@ -716,7 +716,7 @@ const TEAM_TRANSLATIONS = {
     'algeria': 'Argelia',
     'south africa': 'Sudáfrica',
 
-    
+
     'japan': 'Japón',
     'south korea': 'Corea del Sur',
     'korea': 'Corea del Sur',
@@ -726,7 +726,7 @@ const TEAM_TRANSLATIONS = {
     'qatar': 'Qatar',
     'australia': 'Australia',
 
-    
+
     'man utd': 'Manchester United',
     'man city': 'Manchester City',
     'spurs': 'Tottenham',
@@ -742,22 +742,22 @@ const TEAM_TRANSLATIONS = {
 
 
 const TITLE_CLEANUP_PATTERNS = [
-    
-    /with\s+\w+\s+sponsor/gi,      
-    /with\s+\w+\s+sponosr/gi,      
+
+    /with\s+\w+\s+sponsor/gi,
+    /with\s+\w+\s+sponosr/gi,
     /player\s+version/gi,
     /fans?\s+version/gi,
     /match\s+version/gi,
     /authentic\s+version/gi,
     /replica\s+version/gi,
 
-    
+
     /black[\s-]?red(\s+line)?/gi,
     /white[\s-]?red(\s+line)?/gi,
     /blue[\s-]?white(\s+line)?/gi,
     /\b(Black|Gold|Blue|White|Pink|Red|Green|Yellow|Purple|Orange|Grey|Gray|Cyan|Navy)\b/gi,
 
-    
+
     /\d+th\s+anniversary/gi,
     /\d+\s+anniversary/gi,
     /special\s+edition/gi,
@@ -767,35 +767,35 @@ const TITLE_CLEANUP_PATTERNS = [
     /edici[oó]n\s+limitada/gi,
     /aniversario/gi,
 
-    
+
     /\(.*?\)/g,
     /\[.*?\]/g,
 
-    
+
     /\b(Training|Entrenamiento|Pre-match|Warm-up|Prematch|Warmup)\b/gi,
 
-    
+
     /\b(Vapor|Authentic|Fan|Elite|Match|Stadium|Player|Replica)\b/gi,
 
-    
+
     /\b(Nike|Adidas|Puma|New Balance|Kappa|Umbro|Under Armour|Jordan)\b/gi,
 
-    
+
     /\b(Size|Talla)\s*[:=]?\s*[XSMLxsml0-9-]+\b/gi,
 
-    
+
     /\b[A-Z]{2,3}\d{4,}\b/gi,
 
-    
+
     /\bv\d+\.?\d*\b/gi,
 
-    
+
     /\b(AAA|AA|A)\s*quality/gi,
     /\bThai\s*quality/gi,
     /\b1:1\b/gi,
     /\bhigh\s*quality/gi,
 
-    
+
     /\bjerseys?\b/gi,
     /\bshirts?\b/gi,
     /\bkits?\b/gi,
@@ -806,10 +806,10 @@ const TITLE_CLEANUP_PATTERNS = [
 
 
 function parseProductTitle(rawTitle) {
-    
+
     let title = rawTitle.trim();
 
-    
+
     title = title
         .replace(/&amp;amp;/gi, '&')
         .replace(/&amp;/gi, '&')
@@ -819,17 +819,17 @@ function parseProductTitle(rawTitle) {
         .replace(/&#39;/gi, "'")
         .replace(/&nbsp;/gi, ' ');
 
-    
+
     title = title.replace(/\s*&\s*/g, ' ');
 
-    
+
     const colors = ['black', 'white', 'red', 'blue', 'green', 'yellow', 'pink', 'gold', 'golden',
         'purple', 'orange', 'grey', 'gray', 'navy', 'cyan', 'balck', 'bule', 'whit'];
     colors.forEach(color => {
         title = title.replace(new RegExp(`\\b${color}\\b`, 'gi'), '');
     });
 
-    
+
     title = title.replace(/\s+/g, ' ').trim();
 
     const result = {
@@ -843,42 +843,42 @@ function parseProductTitle(rawTitle) {
         isRetro: false
     };
 
-    
-    
 
-    
+
+
+
     const explicitSeasonMatch = title.match(/\b(\d{2})[\/\-](\d{2})\b/);
-    
+
     const fullYearMatch = title.match(/\b(20\d{2})\b/);
-    
+
     const gluedSeasonMatch = title.match(/\b(\d{2})(\d{2})\b(?!\d)/);
 
     if (explicitSeasonMatch) {
-        
+
         const y1 = explicitSeasonMatch[1];
         const y2 = explicitSeasonMatch[2];
         result.temporada = `${y1}/${y2}`;
     } else if (fullYearMatch) {
-        
+
         result.temporada = fullYearMatch[1];
     } else if (gluedSeasonMatch) {
-        
+
         const y1 = gluedSeasonMatch[1];
         const y2 = gluedSeasonMatch[2];
         const n1 = parseInt(y1);
         const n2 = parseInt(y2);
-        
+
         if (n2 > n1 || (n1 >= 90 && n2 < 10)) {
             result.temporada = `${y1}/${y2}`;
         }
     }
 
-    
+
     if (!result.temporada && title.includes('25/26')) result.temporada = '25/26';
     if (!result.temporada && title.includes('24/25')) result.temporada = '24/25';
 
 
-    
+
     const titleLower = title.toLowerCase();
     if (titleLower.includes('away') || titleLower.includes('visitante')) {
         result.tipo = 'visitante';
@@ -896,56 +896,56 @@ function parseProductTitle(rawTitle) {
         result.tipo = 'entrenamiento';
     }
 
-    
+
     const sizesMatch = title.match(/\b(S-\d?XL|S-4XL|XS-XXL|S-XXL|M-XXL|S-3XL)/i);
     if (sizesMatch) {
         result.tallas = sizesMatch[1].toUpperCase();
     }
 
-    
+
     result.isKids = /\b(kids?|niños?|child|children|junior)\b/i.test(titleLower);
 
-    
+
     result.isRetro = /\bretro\b/i.test(titleLower);
 
-    
+
     let teamName = title;
 
-    
+
     teamName = teamName
-        .replace(/\b(20\d{2})\b/g, '')                 
-        .replace(/(\d{2})[\/-]?(\d{2})\b/g, '')        
+        .replace(/\b(20\d{2})\b/g, '')
+        .replace(/(\d{2})[\/-]?(\d{2})\b/g, '')
         .replace(/\b(away|home|third|fourth|visitante|local|tercera|cuarta|gk|goalkeeper|portero)\b/gi, '')
         .replace(/\b(special|especial|edition|edici[oó]n)\b/gi, '')
         .replace(/\b(training|entrenamiento|pre-?match|warm-?up)\b/gi, '')
         .replace(/\b(retro|classic|vintage)\b/gi, '')
         .replace(/\b(kids?|niños?|child|children|junior)\b/gi, '')
         .replace(/\b(S-\d?XL|S-4XL|XS-XXL|S-XXL|M-XXL|S-3XL)\b/gi, '')
-        .replace(/\b(jerseys?|shirts?|camisas?|camisetas?|kits?)\b/gi, ''); 
+        .replace(/\b(jerseys?|shirts?|camisas?|camisetas?|kits?)\b/gi, '');
 
-    
+
     TITLE_CLEANUP_PATTERNS.forEach(pattern => {
         teamName = teamName.replace(pattern, '');
     });
 
-    
+
     teamName = teamName
         .replace(/\s+/g, ' ')
-        .replace(/^\W+|\W+$/g, '') 
+        .replace(/^\W+|\W+$/g, '')
         .trim();
 
-    
+
     const lowerTeam = teamName.toLowerCase();
     if (TEAM_TRANSLATIONS[lowerTeam]) {
         teamName = TEAM_TRANSLATIONS[lowerTeam];
     } else {
-        
-        
-        
-        
+
+
+
+
         for (const [eng, esp] of Object.entries(TEAM_TRANSLATIONS)) {
-            const regex = new RegExp(`\\b${eng}\\b`, 'yi'); 
-            if (lowerTeam === eng) { 
+            const regex = new RegExp(`\\b${eng}\\b`, 'yi');
+            if (lowerTeam === eng) {
                 teamName = esp;
                 break;
             }
@@ -954,8 +954,8 @@ function parseProductTitle(rawTitle) {
 
     result.team = teamName;
 
-    
-    
+
+
     let finalParts = [result.team];
 
     if (result.temporada) finalParts.push(result.temporada);
@@ -969,7 +969,7 @@ function parseProductTitle(rawTitle) {
 
     result.name = finalParts.join(' ');
 
-    
+
     if (!result.name.trim()) result.name = result.raw;
 
     return result;
@@ -977,17 +977,17 @@ function parseProductTitle(rawTitle) {
 
 
 function detectLeague(teamName, isRetro = false) {
-    
-    
+
+
 
     const teamLower = teamName.toLowerCase().trim();
 
-    
+
     if (TEAM_TO_LEAGUE[teamLower]) {
         return TEAM_TO_LEAGUE[teamLower];
     }
 
-    
+
     const SELECCIONES = [
         'alemania', 'inglaterra', 'españa', 'francia', 'italia', 'portugal',
         'holanda', 'bélgica', 'brasil', 'argentina', 'méxico', 'estados unidos',
@@ -1006,7 +1006,7 @@ function detectLeague(teamName, isRetro = false) {
         return 'selecciones';
     }
 
-    
+
     const sortedTeams = Object.keys(TEAM_TO_LEAGUE).sort((a, b) => b.length - a.length);
 
     for (const team of sortedTeams) {
@@ -1015,7 +1015,7 @@ function detectLeague(teamName, isRetro = false) {
         }
     }
 
-    
+
     return 'otros';
 }
 
@@ -1032,14 +1032,14 @@ function shouldExcludeImage(url, alt = '') {
     const urlLower = url.toLowerCase();
     const altLower = (alt || '').toLowerCase();
 
-    
+
     for (const pattern of EXCLUDED_URL_PATTERNS) {
         if (pattern.test(urlLower)) {
             return true;
         }
     }
 
-    
+
     for (const keyword of EXCLUDED_IMAGE_KEYWORDS) {
         if (urlLower.includes(keyword) || altLower.includes(keyword)) {
             return true;
@@ -1054,9 +1054,9 @@ function extractTrailingNumber(url) {
     try {
         const clean = url.split('?')[0];
         const filename = clean.split('/').pop() || '';
-        const base = filename.replace(/\.[^.]+$/, ''); 
+        const base = filename.replace(/\.[^.]+$/, '');
 
-        
+
         const m = base.match(/(\d+)(?!.*\d)/);
         return m ? parseInt(m[1], 10) : null;
     } catch {
@@ -1069,26 +1069,26 @@ function isHighResImage(url) {
     const u = url.toLowerCase();
     if (!u.includes('photo.yupoo.com')) return false;
 
-    
+
     if (u.includes('square.jpg') || u.includes('/small.') ||
         u.includes('/medium.') || u.includes('/thumb.')) {
         return false;
     }
 
-    
+
     if (/\/big\.jpg(\?.*)?$/i.test(u)) return true;
 
-    
+
     const n = extractTrailingNumber(url);
     return n !== null;
 }
 
 
 function toHighResUrl(url) {
-    
+
     let highRes = url.startsWith('//') ? `https:${url}` : url;
 
-    
+
     highRes = highRes
         .replace(/\/small\./gi, '/big.')
         .replace(/\/medium\./gi, '/big.')
@@ -1103,35 +1103,35 @@ function processImages(images, strictMode = false) {
     const validImages = [];
 
     for (const img of images) {
-        
+
         if (!img.url || img.url === 'undefined' || img.url.includes('undefined')) continue;
         if (!img.url.includes('photo.yupoo.com')) continue;
 
         const url = toHighResUrl(img.url);
 
-        
+
         if (seen.has(url)) continue;
         seen.add(url);
 
-        
+
         if (shouldExcludeImage(url, img.alt)) continue;
 
-        
+
         if (!isHighResImage(url)) continue;
 
-        
+
         let fileNumber = null;
         const filename = img.filename || img.alt || '';
 
-        
+
         const numMatch = filename.match(/(\d+)(?=\.[^.]+$)|(\d+)$/);
         if (numMatch) {
             fileNumber = parseInt(numMatch[1] || numMatch[2], 10);
         }
 
-        
+
         if (fileNumber === null) {
-            const hashMatch = url.match(/\/([a-f0-9]{8})\
+            const hashMatch = url.match(/\/([a-f0-9]{8})/);
             if (hashMatch) {
                 fileNumber = parseInt(hashMatch[1], 16);
             }
@@ -1145,7 +1145,7 @@ function processImages(images, strictMode = false) {
         });
     }
 
-    
+
     if (process.env.DEBUG_YUPOO) {
         console.log('\n=== DEBUG: Imágenes válidas para selección ===');
         validImages.forEach((img, i) => {
@@ -1153,18 +1153,18 @@ function processImages(images, strictMode = false) {
         });
     }
 
-    
-    
+
+
     const withNumber = validImages.filter(img => img.fileNumber !== null);
 
     let finalImages = [];
 
     if (withNumber.length >= 2) {
-        
+
         withNumber.sort((a, b) => a.fileNumber - b.fileNumber);
 
-        const minImg = withNumber[0];                      
-        const maxImg = withNumber[withNumber.length - 1];  
+        const minImg = withNumber[0];
+        const maxImg = withNumber[withNumber.length - 1];
 
         finalImages = [minImg, maxImg];
 
@@ -1174,7 +1174,7 @@ function processImages(images, strictMode = false) {
     } else if (withNumber.length === 1) {
         finalImages = [withNumber[0]];
     } else if (validImages.length >= 2) {
-        
+
         finalImages = [
             validImages[validImages.length - 1],
             validImages[validImages.length - 2]
@@ -1202,11 +1202,11 @@ async function fetchYupooJson(albumUrl) {
         const albumId = extractAlbumId(albumUrl);
         if (!albumId) return null;
 
-        
+
         const urlObj = new URL(albumUrl);
         const subdomain = urlObj.hostname.split('.')[0];
 
-        
+
         const apiUrl = `https://${subdomain}.x.yupoo.com/api/albums/${albumId}?uid=1`;
 
         const response = await fetch(apiUrl, {
@@ -1222,7 +1222,7 @@ async function fetchYupooJson(albumUrl) {
         const data = await response.json();
         return data;
     } catch (error) {
-        
+
         return null;
     }
 }
@@ -1234,29 +1234,29 @@ function parseYupooHtml(html, albumUrl) {
         images: []
     };
 
-    
-    
+
+
     const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
     if (titleMatch) {
-        
+
         result.title = titleMatch[1]
             .replace(/\s*\|\s*又拍图片管家.*$/i, '')
             .replace(/\s*\|\s*yupoo.*$/i, '')
             .replace(/\s*-\s*yupoo.*$/i, '')
             .replace(/\s*\|\s*Yupoo.*$/i, '')
-            .replace(/\bjersey\b/gi, '')  
-            .replace(/\s+/g, ' ')  
+            .replace(/\bjersey\b/gi, '')
+            .replace(/\s+/g, ' ')
             .trim();
     }
 
-    
-    
-    
-    
-    
-    
 
-    
+
+
+
+
+
+
+
     const jsonDataPattern = /(?:photos|images)\s*[:=]\s*(\[[^\]]+\])/gi;
     let jsonMatch;
     while ((jsonMatch = jsonDataPattern.exec(html)) !== null) {
@@ -1298,20 +1298,20 @@ function parseYupooHtml(html, albumUrl) {
         const dataNameMatch = block.match(/data-name=["']([^"']*)["']/i);
         if (!filename && dataNameMatch) filename = dataNameMatch[1];
 
-        
+
         const filenameTextMatch = block.match(/>(\d+\.(?:jpg|png|jpeg))</i);
         if (!filename && filenameTextMatch) filename = filenameTextMatch[1];
 
         result.images.push({ url, alt: filename, filename });
     }
 
-    
+
     const dataSrcPattern = /data-src=["']([^"']+)["'][^>]*>/gi;
     while ((match = dataSrcPattern.exec(html)) !== null) {
         const url = match[1];
         if (!url.includes('photo.yupoo.com')) continue;
 
-        
+
         const contextStart = match.index;
         const context = html.substring(contextStart, contextStart + 300);
 
@@ -1325,13 +1325,13 @@ function parseYupooHtml(html, albumUrl) {
         result.images.push({ url, alt: filename, filename });
     }
 
-    
+
     const srcPattern = /src=["']((?:https?:)?\/\/photo\.yupoo\.com[^"']+)["']/gi;
     while ((match = srcPattern.exec(html)) !== null) {
         result.images.push({ url: match[1], alt: '', filename: '' });
     }
 
-    
+
     const seen = new Map();
     for (const img of result.images) {
         const key = img.url.replace(/^https?:/, '');
@@ -1341,7 +1341,7 @@ function parseYupooHtml(html, albumUrl) {
     }
     result.images = Array.from(seen.values());
 
-    
+
     if (process.env.DEBUG_YUPOO) {
         console.log('\n=== DEBUG: Imágenes extraídas ===');
         result.images.forEach((img, i) => {
@@ -1362,7 +1362,7 @@ async function fetchYupooAlbum(albumUrl) {
         throw new Error(`URL de álbum inválida: ${albumUrl}`);
     }
 
-    
+
     const jsonData = await fetchYupooJson(albumUrl);
 
     if (jsonData && jsonData.album) {
@@ -1376,7 +1376,7 @@ async function fetchYupooAlbum(albumUrl) {
         };
     }
 
-    
+
     const response = await fetch(albumUrl, {
         headers: {
             'Accept': 'text/html',
@@ -1397,22 +1397,22 @@ async function fetchYupooAlbum(albumUrl) {
 async function importFromYupoo(albumUrl, options = {}) {
     const { strictImages = false } = options;
 
-    
+
     if (!albumUrl || !albumUrl.includes('yupoo.com')) {
         throw new Error('URL de Yupoo inválida');
     }
 
-    
+
     const albumData = await fetchYupooAlbum(albumUrl);
 
     if (!albumData.title) {
         throw new Error('No se pudo extraer el título del producto');
     }
 
-    
+
     const titleInfo = parseProductTitle(albumData.title);
 
-    
+
     const imageData = processImages(albumData.images, strictImages);
 
     if (strictImages && !imageData.image) {
@@ -1420,7 +1420,7 @@ async function importFromYupoo(albumUrl, options = {}) {
     }
 
     if (!imageData.image && albumData.images.length > 0) {
-        
+
         imageData.image = toHighResUrl(albumData.images[0].url);
     }
 
@@ -1428,24 +1428,25 @@ async function importFromYupoo(albumUrl, options = {}) {
         throw new Error('No se encontraron imágenes válidas en el álbum');
     }
 
-    
+
     const league = detectLeague(titleInfo.team, titleInfo.isRetro);
     const category = detectCategory(league);
 
-    
+
     const id = generateStableId(albumUrl);
 
-    
+
     const product = {
         id,
         name: titleInfo.name,
+        slug: generateSlug(titleInfo.name),
         category,
         league,
         image: imageData.image,
         images: imageData.images
     };
 
-    
+
     if (titleInfo.temporada) {
         product.temporada = titleInfo.temporada;
     }
@@ -1484,7 +1485,7 @@ function downloadImage(imageUrl, destPath, referer) {
         };
 
         const request = protocol.get(url, options, (response) => {
-            
+
             if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
                 downloadImage(response.headers.location, destPath, referer)
                     .then(resolve)
@@ -1497,7 +1498,7 @@ function downloadImage(imageUrl, destPath, referer) {
                 return;
             }
 
-            
+
             const dir = path.dirname(destPath);
             if (!fs.existsSync(dir)) {
                 fs.mkdirSync(dir, { recursive: true });
@@ -1512,7 +1513,7 @@ function downloadImage(imageUrl, destPath, referer) {
             });
 
             fileStream.on('error', (err) => {
-                fs.unlink(destPath, () => { }); 
+                fs.unlink(destPath, () => { });
                 reject(err);
             });
         });
@@ -1529,20 +1530,20 @@ function downloadImage(imageUrl, destPath, referer) {
 async function downloadAndConvertToWebP(imageUrl, destPath, referer, options = {}) {
     const { quality = 85 } = options;
 
-    
+
     const tempPath = destPath + '.tmp';
     const webpPath = destPath.replace(/\.[^.]+$/, '') + '.webp';
 
     try {
-        
+
         await downloadImage(imageUrl, tempPath, referer);
 
-        
+
         let sharp;
         try {
             sharp = require('sharp');
         } catch (e) {
-            
+
             console.warn('⚠️  sharp no está instalado. Ejecuta: npm install sharp');
             console.warn('    Guardando imagen sin conversión a WebP.');
             const originalExt = path.extname(imageUrl).split('?')[0] || '.jpg';
@@ -1551,17 +1552,17 @@ async function downloadAndConvertToWebP(imageUrl, destPath, referer, options = {
             return finalPath;
         }
 
-        
+
         await sharp(tempPath)
             .webp({ quality })
             .toFile(webpPath);
 
-        
+
         fs.unlinkSync(tempPath);
 
         return webpPath;
     } catch (err) {
-        
+
         if (fs.existsSync(tempPath)) {
             fs.unlinkSync(tempPath);
         }
@@ -1584,17 +1585,17 @@ async function downloadProductImages(product, assetsDir, options = {}) {
     const productDir = path.join(assetsDir, 'productos', 'Yupoo', albumId);
     const webPath = `/assets/productos/Yupoo/${albumId}`;
 
-    
+
     if (!fs.existsSync(productDir)) {
         fs.mkdirSync(productDir, { recursive: true });
     }
 
     const downloadedImages = [];
 
-    
+
     const allImages = [product.image, ...(product.images || [])].filter(Boolean);
 
-    
+
     let sharp = null;
     if (generateThumbnails) {
         try {
@@ -1614,7 +1615,7 @@ async function downloadProductImages(product, assetsDir, options = {}) {
             let finalPath;
 
             if (convertToWebP) {
-                
+
                 finalPath = await downloadAndConvertToWebP(
                     imageUrl,
                     localBasePath + '.tmp',
@@ -1622,17 +1623,17 @@ async function downloadProductImages(product, assetsDir, options = {}) {
                     { quality: webpQuality }
                 );
             } else {
-                
+
                 const ext = path.extname(imageUrl).split('?')[0] || '.jpg';
                 finalPath = localBasePath + ext;
                 await downloadImage(imageUrl, finalPath, referer);
             }
 
-            
+
             const finalFilename = path.basename(finalPath);
             downloadedImages.push(`${webPath}/${finalFilename}`);
 
-            
+
             if (sharp && generateThumbnails && imageNumber <= 2) {
                 try {
                     const miniFilename = `${imageNumber}_mini.webp`;
@@ -1661,7 +1662,7 @@ async function downloadProductImages(product, assetsDir, options = {}) {
         throw new Error('No se pudieron descargar imágenes');
     }
 
-    
+
     return {
         ...product,
         image: downloadedImages[0],
@@ -1670,22 +1671,22 @@ async function downloadProductImages(product, assetsDir, options = {}) {
 }
 
 module.exports = {
-    
+
     importFromYupoo,
 
-    
+
     downloadProductImages,
     downloadImage,
     downloadAndConvertToWebP,
 
-    
+
     TeamMatcher,
     loadExistingProducts,
     extractTeamTokens,
     calculateTokenSimilarity,
     normalizeForComparison,
 
-    
+
     generateStableId,
     extractAlbumId,
     generateSlug,
@@ -1700,7 +1701,7 @@ module.exports = {
     toHighResUrl,
     fetchYupooAlbum,
 
-    
+
     TEAM_TO_LEAGUE,
     TEXT_NORMALIZATION,
     EXCLUDED_IMAGE_KEYWORDS,

@@ -1,5 +1,5 @@
 import products from './products-data.js';
-import { db, ref, get, set } from './firebase-config.js';
+
 const FEATURED_CONFIG = {
     PRODUCT_COUNT: 6,
     ROTATION_DAYS: 7
@@ -80,34 +80,34 @@ function initCatalogoCarousel() {
     const totalCards = originalCards.length;
 
 
-    
-    
+
+
     originalCards.forEach(card => {
         const cloneEnd = card.cloneNode(true);
         cloneEnd.classList.add('carousel-clone');
-        
+
         const img = cloneEnd.querySelector('img');
         if (img) img.loading = 'eager';
         track.appendChild(cloneEnd);
     });
 
-    
+
     [...originalCards].reverse().forEach(card => {
         const cloneStart = card.cloneNode(true);
         cloneStart.classList.add('carousel-clone');
-        
+
         const img = cloneStart.querySelector('img');
         if (img) img.loading = 'eager';
         track.insertBefore(cloneStart, track.firstChild);
     });
 
-    let currentPosition = totalCards * cardWidth; 
+    let currentPosition = totalCards * cardWidth;
     let isJumping = false;
     let animationId = null;
     let isPaused = false;
 
     const SCROLL_SPEED = 0.3;
-    const PAUSE_DURATION = 3000; 
+    const PAUSE_DURATION = 3000;
 
     function setPosition(position, animate = true) {
         if (animate) {
@@ -119,10 +119,10 @@ function initCatalogoCarousel() {
     }
 
     function checkBoundary(e) {
-        
+
         if (e && e.target !== track) return;
 
-        
+
         if (currentPosition >= totalCards * 2 * cardWidth) {
             isJumping = true;
             track.style.transition = 'none';
@@ -131,7 +131,7 @@ function initCatalogoCarousel() {
             void track.offsetHeight;
             isJumping = false;
         }
-        
+
         if (currentPosition < totalCards * cardWidth) {
             isJumping = true;
             track.style.transition = 'none';
@@ -142,7 +142,7 @@ function initCatalogoCarousel() {
         }
     }
 
-    
+
     function smoothScroll() {
         if (isPaused || isJumping) {
             animationId = requestAnimationFrame(smoothScroll);
@@ -151,7 +151,7 @@ function initCatalogoCarousel() {
 
         currentPosition += SCROLL_SPEED;
 
-        
+
         if (currentPosition >= totalCards * 2 * cardWidth) {
             currentPosition -= totalCards * cardWidth;
             track.style.transition = 'none';
@@ -212,21 +212,21 @@ function initCatalogoCarousel() {
 
     track.addEventListener('transitionend', checkBoundary);
 
-    
+
     carouselContainer.addEventListener('mouseenter', pauseAutoScroll);
     carouselContainer.addEventListener('mouseleave', () => {
         if (resumeTimeout) clearTimeout(resumeTimeout);
         resumeAutoScroll();
     });
 
-    
+
     setPosition(currentPosition, false);
     track.offsetHeight;
 
-    
+
     startAutoScroll();
 
-    
+
     let isDragging = false;
     let startPos = 0;
     let lastPos = 0;
@@ -234,18 +234,18 @@ function initCatalogoCarousel() {
     let velocity = 0;
     let inertiaId = null;
 
-    
+
     track.style.touchAction = 'pan-y';
     track.style.userSelect = 'none';
     track.style.webkitUserSelect = 'none';
 
     function touchStart(event) {
-        
+
         if (inertiaId) {
             cancelAnimationFrame(inertiaId);
             inertiaId = null;
         }
-        
+
         if (animationId) {
             cancelAnimationFrame(animationId);
             animationId = null;
@@ -264,7 +264,7 @@ function initCatalogoCarousel() {
     function touchMove(event) {
         if (!isDragging) return;
 
-        
+
         event.preventDefault();
 
         const currentX = event.touches[0].clientX;
@@ -272,7 +272,7 @@ function initCatalogoCarousel() {
         const now = performance.now();
         const dt = now - lastTime;
 
-        
+
         if (dt > 0) {
             velocity = diff / dt * 16;
         }
@@ -281,10 +281,10 @@ function initCatalogoCarousel() {
         lastPos = currentX;
         lastTime = now;
 
-        
+
         track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
 
-        
+
         if (currentPosition >= totalCards * 2 * cardWidth) {
             currentPosition -= totalCards * cardWidth;
             track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
@@ -299,11 +299,11 @@ function initCatalogoCarousel() {
         isDragging = false;
         track.classList.remove('dragging');
 
-        
+
         if (Math.abs(velocity) > 0.5) {
             applyInertia();
         } else {
-            
+
             if (resumeTimeout) clearTimeout(resumeTimeout);
             resumeTimeout = setTimeout(() => {
                 isPaused = false;
@@ -320,7 +320,7 @@ function initCatalogoCarousel() {
         function inertiaStep() {
             if (Math.abs(velocity) < 0.1) {
                 inertiaId = null;
-                
+
                 if (resumeTimeout) clearTimeout(resumeTimeout);
                 resumeTimeout = setTimeout(() => {
                     isPaused = false;
@@ -334,7 +334,7 @@ function initCatalogoCarousel() {
             currentPosition -= velocity;
             velocity *= friction;
 
-            
+
             if (currentPosition >= totalCards * 2 * cardWidth) {
                 currentPosition -= totalCards * cardWidth;
             } else if (currentPosition < totalCards * cardWidth) {
@@ -353,14 +353,14 @@ function initCatalogoCarousel() {
     track.addEventListener('touchmove', touchMove, { passive: false });
     track.addEventListener('touchend', touchEnd, { passive: true });
 
-    
+
     const addScrolledClass = () => {
         carouselContainer.classList.add('scrolled');
         carousel.classList.add('scrolled');
     };
 
     track.addEventListener('touchstart', addScrolledClass, { once: true, passive: true });
-    carouselContainer.addEventListener('scroll', addScrolledClass, { once: true }); 
+    carouselContainer.addEventListener('scroll', addScrolledClass, { once: true });
 
     if (carouselContainer) {
         carouselContainer.addEventListener('scroll', () => {
@@ -447,12 +447,12 @@ function getMiniImagePath(imagePath) {
 
 
 function getSecondaryMiniImage(product) {
-    
+
     if (product.images && product.images.length > 0) {
         return getMiniImagePath(product.images[0]);
     }
-    
-    
+
+
     if (product.image) {
         const secondaryPath = product.image.replace(/\/1\.(webp|jpg|png|jpeg)$/i, '/2.$1');
         return getMiniImagePath(secondaryPath);
@@ -523,38 +523,20 @@ async function renderBestSellers() {
     }
 }
 async function getGlobalFeaturedProducts() {
-    
+
     const sessionCached = sessionStorage.getItem('featuredProductsSession');
     if (sessionCached) {
         try {
             const cached = JSON.parse(sessionCached);
             if (cached.products && cached.products.length === FEATURED_CONFIG.PRODUCT_COUNT) {
-                console.log('Using session-cached featured products');
                 return cached.products;
             }
-        } catch (e) {  }
+        } catch (e) { }
     }
 
-    
-    const TIMEOUT_MS = 5000;
-
-    try {
-        const result = await Promise.race([
-            getGlobalFeaturedProductsFromFirebase(),
-            new Promise((_, reject) =>
-                setTimeout(() => reject(new Error('Firebase timeout')), TIMEOUT_MS)
-            )
-        ]);
-        
-        saveToSessionStorage(result);
-        return result;
-    } catch (error) {
-        console.warn('Firebase unavailable, using local fallback:', error.message);
-        const fallback = getLocalFallbackProducts();
-        
-        saveToSessionStorage(fallback);
-        return fallback;
-    }
+    const randomProducts = getRandomFeaturedProducts();
+    saveToSessionStorage(randomProducts);
+    return randomProducts;
 }
 
 function saveToSessionStorage(productIds) {
@@ -563,84 +545,10 @@ function saveToSessionStorage(productIds) {
             products: productIds,
             timestamp: Date.now()
         }));
-    } catch (e) {  }
+    } catch (e) { }
 }
 
-async function getGlobalFeaturedProductsFromFirebase() {
-    const configRef = ref(db, 'config/featured_products');
-    const snapshot = await get(configRef);
-    const now = Date.now();
-
-    if (snapshot.exists()) {
-        const data = snapshot.val();
-        if (data.week_end > now &&
-            data.products &&
-            data.products.length === FEATURED_CONFIG.PRODUCT_COUNT) {
-            console.log('Using existing featured products from Firebase');
-            
-            cacheFeaturedProducts(data.products, data.week_end);
-            return data.products;
-        }
-    }
-    console.log('Generating new featured products rotation');
-    const newProducts = await generateNewFeaturedProducts(configRef, now);
-    
-    cacheFeaturedProducts(newProducts, now + FEATURED_CONFIG.ROTATION_DAYS * 24 * 60 * 60 * 1000);
-    return newProducts;
-}
-
-function cacheFeaturedProducts(productIds, expires) {
-    try {
-        localStorage.setItem('featuredProductsCache', JSON.stringify({
-            products: productIds,
-            expires: expires
-        }));
-    } catch (e) {  }
-}
-
-function getLocalFallbackProducts() {
-    
-    const cached = localStorage.getItem('featuredProductsCache');
-    if (cached) {
-        try {
-            const data = JSON.parse(cached);
-            if (data.products && Date.now() < data.expires) {
-                console.log('Using cached featured products');
-                return data.products;
-            }
-        } catch (e) {  }
-    }
-
-    
+function getRandomFeaturedProducts() {
     const shuffled = [...products].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, FEATURED_CONFIG.PRODUCT_COUNT).map(p => p.id);
-}
-async function generateNewFeaturedProducts(configRef, now) {
-    const shuffled = [...products];
-    for (let i = shuffled.length - 1; i > 0; i--) {
-        const j = Math.floor(Math.random() * (i + 1));
-        [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
-    }
-
-    const selected = shuffled.slice(0, FEATURED_CONFIG.PRODUCT_COUNT).map(p => p.id);
-
-    const rotationMs = FEATURED_CONFIG.ROTATION_DAYS * 24 * 60 * 60 * 1000;
-
-    const newData = {
-        products: selected,
-        week_start: now,
-        week_end: now + rotationMs,
-        product_count: FEATURED_CONFIG.PRODUCT_COUNT,
-        rotation_days: FEATURED_CONFIG.ROTATION_DAYS,
-        updated_at: new Date().toISOString()
-    };
-
-    try {
-        await set(configRef, newData);
-        console.log('New featured products saved to Firebase:', selected);
-    } catch (error) {
-        console.error('Failed to save to Firebase:', error);
-    }
-
-    return selected;
 }

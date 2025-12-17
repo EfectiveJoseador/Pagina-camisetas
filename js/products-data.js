@@ -4,14 +4,14 @@ const products = [
         name: "Alavés 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Alaves2526L/1.webp",
+        image: "/assets/productos/La Liga/Alaves2526L/1.webp"
     },
     {
         id: 102,
         name: "Albacete 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Albacete2526L/1.webp",
+        image: "/assets/productos/La Liga/Albacete2526L/1.webp"
     },
     {
         id: 103,
@@ -19,7 +19,7 @@ const products = [
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/La Liga/AthelticKids2526T/1.webp",
-        kids: true,
+        kids: true
     },
     {
         id: 104,
@@ -34,7 +34,7 @@ const products = [
         name: "Athletic Club 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Athletic2526L/1.webp",
+        image: "/assets/productos/La Liga/Athletic2526L/1.webp"
     },
     {
         id: 106,
@@ -49,14 +49,14 @@ const products = [
         name: "Atlético Madrid 25/26 Visitante",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Atletico2526F/1.webp",
+        image: "/assets/productos/La Liga/Atletico2526F/1.webp"
     },
     {
         id: 108,
         name: "Atlético Madrid 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Atletico2526L/1.webp",
+        image: "/assets/productos/La Liga/Atletico2526L/1.webp"
     },
     {
         id: 109,
@@ -72,28 +72,28 @@ const products = [
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/La Liga/AtleticoKids2526F/1.webp",
-        kids: true,
+        kids: true
     },
     {
         id: 111,
         name: "FC Barcelona 25/26 Visitante",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Barcelona2526F/1.webp",
+        image: "/assets/productos/La Liga/Barcelona2526F/1.webp"
     },
     {
         id: 112,
         name: "FC Barcelona 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Barcelona2526L/1.webp",
+        image: "/assets/productos/La Liga/Barcelona2526L/1.webp"
     },
     {
         id: 113,
         name: "FC Barcelona 25/26 Tercera",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Barcelona2526T/1.webp",
+        image: "/assets/productos/La Liga/Barcelona2526T/1.webp"
     },
     {
         id: 114,
@@ -108,21 +108,21 @@ const products = [
         name: "Real Betis 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Betis2526L/1.webp",
+        image: "/assets/productos/La Liga/Betis2526L/1.webp"
     },
     {
         id: 116,
         name: "Celta de Vigo 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Celta2526L/1.webp",
+        image: "/assets/productos/La Liga/Celta2526L/1.webp"
     },
     {
         id: 117,
         name: "Elche 25/26 Visitante",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Elche2526F/1.webp",
+        image: "/assets/productos/La Liga/Elche2526F/1.webp"
     },
     {
         id: 119,
@@ -137,56 +137,56 @@ const products = [
         name: "Getafe 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Getafe2526L/1.webp",
+        image: "/assets/productos/La Liga/Getafe2526L/1.webp"
     },
     {
         id: 121,
         name: "Girona 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Girona2526L/1.webp",
+        image: "/assets/productos/La Liga/Girona2526L/1.webp"
     },
     {
         id: 122,
         name: "Granada 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Granada2526L/1.webp",
+        image: "/assets/productos/La Liga/Granada2526L/1.webp"
     },
     {
         id: 123,
         name: "Las Palmas 25/26 Visitante",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/LasPalmas2526F/1.webp",
+        image: "/assets/productos/La Liga/LasPalmas2526F/1.webp"
     },
     {
         id: 124,
         name: "Las Palmas 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/LasPalmas2526L/1.webp",
+        image: "/assets/productos/La Liga/LasPalmas2526L/1.webp"
     },
     {
         id: 125,
         name: "Leganés 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Leganes2526L/1.webp",
+        image: "/assets/productos/La Liga/Leganes2526L/1.webp"
     },
     {
         id: 126,
         name: "Levante 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Levante2526L/1.webp",
+        image: "/assets/productos/La Liga/Levante2526L/1.webp"
     },
     {
         id: 127,
         name: "Málaga CF 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Malaga2526L/1.webp",
+        image: "/assets/productos/La Liga/Malaga2526L/1.webp"
     },
     {
         id: 128,
@@ -194,154 +194,154 @@ const products = [
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/La Liga/MalagaKids2526L/1.webp",
-        kids: true,
+        kids: true
     },
     {
         id: 129,
         name: "Mallorca 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Mallorca2526L/1.webp",
+        image: "/assets/productos/La Liga/Mallorca2526L/1.webp"
     },
     {
         id: 130,
         name: "Osasuna 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Osasuna2526L/1.webp",
+        image: "/assets/productos/La Liga/Osasuna2526L/1.webp"
     },
     {
         id: 131,
         name: "Real Oviedo 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Oviedo2526L/1.webp",
+        image: "/assets/productos/La Liga/Oviedo2526L/1.webp"
     },
     {
         id: 133,
         name: "Real Madrid 25/26 Visitante",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/RealMadrid2526F/1.webp",
+        image: "/assets/productos/La Liga/RealMadrid2526F/1.webp"
     },
     {
         id: 134,
         name: "Real Madrid 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/RealMadrid2526L/1.webp",
+        image: "/assets/productos/La Liga/RealMadrid2526L/1.webp"
     },
     {
         id: 135,
         name: "Real Madrid 25/26 Tercera",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/RealMadrid2526T/1.webp",
+        image: "/assets/productos/La Liga/RealMadrid2526T/1.webp"
     },
     {
         id: 136,
         name: "Real Sociedad 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/RealSociedad2526L/1.webp",
+        image: "/assets/productos/La Liga/RealSociedad2526L/1.webp"
     },
     {
         id: 137,
         name: "Sevilla 25/26 Visitante",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Sevilla2526F/1.webp",
+        image: "/assets/productos/La Liga/Sevilla2526F/1.webp"
     },
     {
         id: 138,
         name: "Sevilla 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Sevilla2526L/1.webp",
+        image: "/assets/productos/La Liga/Sevilla2526L/1.webp"
     },
     {
         id: 139,
         name: "Sevilla 25/26 Tercera",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Sevilla2526T/1.webp",
+        image: "/assets/productos/La Liga/Sevilla2526T/1.webp"
     },
     {
         id: 140,
         name: "Valencia 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Valencia2526L/1.webp",
+        image: "/assets/productos/La Liga/Valencia2526L/1.webp"
     },
     {
         id: 141,
         name: "Valladolid 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Valladolid2526L/1.webp",
+        image: "/assets/productos/La Liga/Valladolid2526L/1.webp"
     },
     {
         id: 142,
         name: "Villarreal 25/26 Local",
         category: "futbol",
         league: "laliga",
-        image: "/assets/productos/La Liga/Villarreal2526L/1.webp",
+        image: "/assets/productos/La Liga/Villarreal2526L/1.webp"
     },
     {
         id: 201,
         name: "Arsenal 25/26 Local",
         category: "futbol",
         league: "premier",
-        image: "/assets/productos/Premier League/Arsenal2525L/1.webp",
+        image: "/assets/productos/Premier League/Arsenal2525L/1.webp"
     },
     {
         id: 202,
         name: "Arsenal 25/26 Visitante",
         category: "futbol",
         league: "premier",
-        image: "/assets/productos/Premier League/Arsenal2526F/1.webp",
+        image: "/assets/productos/Premier League/Arsenal2526F/1.webp"
     },
     {
         id: 203,
         name: "Aston Villa 25/26 Visitante",
         category: "futbol",
         league: "premier",
-        image: "/assets/productos/Premier League/AstonVilla2526L/1.webp",
+        image: "/assets/productos/Premier League/AstonVilla2526L/1.webp"
     },
     {
         id: 204,
         name: "Chelsea 25/26 Local",
         category: "futbol",
         league: "premier",
-        image: "/assets/productos/Premier League/Chealsea2526L/1.webp",
+        image: "/assets/productos/Premier League/Chealsea2526L/1.webp"
     },
     {
         id: 205,
         name: "Crystal Palace 25/26 Local",
         category: "futbol",
         league: "premier",
-        image: "/assets/productos/Premier League/CrystalPalace2526L/1.webp",
+        image: "/assets/productos/Premier League/CrystalPalace2526L/1.webp"
     },
     {
         id: 206,
         name: "Manchester City 25/26 Visitante",
         category: "futbol",
         league: "premier",
-        image: "/assets/productos/Premier League/ManCity2526F/1.webp",
+        image: "/assets/productos/Premier League/ManCity2526F/1.webp"
     },
     {
         id: 207,
         name: "Manchester United 25/26 Local",
         category: "futbol",
         league: "premier",
-        image: "/assets/productos/Premier League/ManUnited2526L/1.webp",
+        image: "/assets/productos/Premier League/ManUnited2526L/1.webp"
     },
     {
         id: 208,
         name: "Newcastle 25/26 Local",
         category: "futbol",
         league: "premier",
-        image: "/assets/productos/Premier League/Newcastle2526L/1.webp",
+        image: "/assets/productos/Premier League/Newcastle2526L/1.webp"
     },
     {
         id: 209,
@@ -349,14 +349,14 @@ const products = [
         category: "futbol",
         league: "premier",
         image: "/assets/productos/Premier League/UnitedKids2526F/1.webp",
-        kids: true,
+        kids: true
     },
     {
         id: 301,
         name: "Lazio 25/26 Visitante",
         category: "futbol",
         league: "seriea",
-        image: "/assets/productos/Serie A/Lazio2526F/1.webp",
+        image: "/assets/productos/Serie A/Lazio2526F/1.webp"
     },
     {
         id: 302,
@@ -371,7 +371,7 @@ const products = [
         name: "Napoli 25/26 Local",
         category: "futbol",
         league: "seriea",
-        image: "/assets/productos/Serie A/Napoli2526L/1.webp",
+        image: "/assets/productos/Serie A/Napoli2526L/1.webp"
     },
     {
         id: 304,
@@ -379,21 +379,21 @@ const products = [
         category: "futbol",
         league: "seriea",
         image: "/assets/productos/Serie A/RomaKids2526L/1.webp",
-        kids: true,
+        kids: true
     },
     {
         id: 401,
         name: "Bayern Munich 25/26 Local",
         category: "futbol",
         league: "bundesliga",
-        image: "/assets/productos/Bundesliga/Munich2526L/1.webp",
+        image: "/assets/productos/Bundesliga/Munich2526L/1.webp"
     },
     {
         id: 402,
         name: "Schalke 04 25/26 Local",
         category: "futbol",
         league: "bundesliga",
-        image: "/assets/productos/Bundesliga/Schalke2526L/1.webp",
+        image: "/assets/productos/Bundesliga/Schalke2526L/1.webp"
     },
     {
         id: 501,
@@ -401,28 +401,28 @@ const products = [
         category: "futbol",
         league: "ligue1",
         image: "/assets/productos/Ligue 1/MarseillaKids2526F/1.webp",
-        kids: true,
+        kids: true
     },
     {
         id: 502,
         name: "Monaco 25/26 Visitante",
         category: "futbol",
         league: "ligue1",
-        image: "/assets/productos/Ligue 1/Monaco2526F/1.webp",
+        image: "/assets/productos/Ligue 1/Monaco2526F/1.webp"
     },
     {
         id: 503,
         name: "PSG 25/26 Local",
         category: "futbol",
         league: "ligue1",
-        image: "/assets/productos/Ligue 1/Paris2526L/1.webp",
+        image: "/assets/productos/Ligue 1/Paris2526L/1.webp"
     },
     {
         id: 504,
         name: "PSG 25/26 Tercera",
         category: "futbol",
         league: "ligue1",
-        image: "/assets/productos/Ligue 1/PSG2526T/1.webp",
+        image: "/assets/productos/Ligue 1/PSG2526T/1.webp"
     },
     {
         id: 601,
@@ -437,7 +437,7 @@ const products = [
         name: "España 24/25 Local",
         category: "futbol",
         league: "selecciones",
-        image: "/assets/productos/Internacional/España2425L/1.webp",
+        image: "/assets/productos/Internacional/España2425L/1.webp"
     },
     {
         id: 603,
@@ -460,14 +460,14 @@ const products = [
         name: "Flamengo 25/26 Tercera",
         category: "futbol",
         league: "brasileirao",
-        image: "/assets/productos/Brasileirão Série A/Flamengo2526T/1.webp",
+        image: "/assets/productos/Brasileirão Série A/Flamengo2526T/1.webp"
     },
     {
         id: 561,
         name: "Al-Nassr 25/26 Local",
         category: "futbol",
         league: "ligaarabe",
-        image: "/assets/productos/Liga Arabe/Al-Nassr2526L/1.webp",
+        image: "/assets/productos/Liga Arabe/Al-Nassr2526L/1.webp"
     },
     {
         id: 571,
@@ -482,7 +482,7 @@ const products = [
         name: "River Plate 25/26 Local",
         category: "futbol",
         league: "saf",
-        image: "/assets/productos/SAF (Argentina)/River2526L/1.webp",
+        image: "/assets/productos/SAF (Argentina)/River2526L/1.webp"
     },
     {
         id: 573,
@@ -490,28 +490,28 @@ const products = [
         category: "futbol",
         league: "saf",
         image: "/assets/productos/SAF (Argentina)/RiverKids2526L/1.webp",
-        kids: true,
+        kids: true
     },
     {
         id: 701,
         name: "Lakers 25/26 Local",
         category: "nba",
         league: "nba",
-        image: "/assets/productos/NBA/Lakers1/1.webp",
+        image: "/assets/productos/NBA/Lakers1/1.webp"
     },
     {
         id: 702,
         name: "Oklahoma City Thunder",
         category: "nba",
         league: "nba",
-        image: "/assets/productos/NBA/Oklahoma/1.webp",
+        image: "/assets/productos/NBA/Oklahoma/1.webp"
     },
     {
         id: 703,
         name: "Philadelphia 76ers",
         category: "nba",
         league: "nba",
-        image: "/assets/productos/NBA/Phila1/1.webp",
+        image: "/assets/productos/NBA/Phila1/1.webp"
     },
     {
         id: 937715,
@@ -535,7 +535,7 @@ const products = [
             "/assets/productos/Yupoo/210081096/2.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 362332,
@@ -547,7 +547,7 @@ const products = [
             "/assets/productos/Yupoo/216419940/2.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 948475,
@@ -559,7 +559,7 @@ const products = [
             "/assets/productos/Yupoo/216806487/2.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 892563,
@@ -577,7 +577,7 @@ const products = [
             "/assets/productos/Yupoo/211234491/8.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 388938,
@@ -595,7 +595,7 @@ const products = [
             "/assets/productos/Yupoo/211234641/8.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 105061,
@@ -613,7 +613,7 @@ const products = [
             "/assets/productos/Yupoo/207563358/8.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 945475,
@@ -634,7 +634,7 @@ const products = [
             "/assets/productos/Yupoo/207560329/11.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 520253,
@@ -653,7 +653,7 @@ const products = [
             "/assets/productos/Yupoo/207558615/9.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 811678,
@@ -671,7 +671,7 @@ const products = [
             "/assets/productos/Yupoo/207558748/8.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 199666,
@@ -690,7 +690,7 @@ const products = [
             "/assets/productos/Yupoo/207557734/9.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 987640,
@@ -709,7 +709,7 @@ const products = [
             "/assets/productos/Yupoo/203698925/9.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 951872,
@@ -747,7 +747,7 @@ const products = [
             "/assets/productos/Yupoo/201350059/10.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 126754,
@@ -765,7 +765,7 @@ const products = [
             "/assets/productos/Yupoo/200370927/8.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 489081,
@@ -800,7 +800,7 @@ const products = [
             "/assets/productos/Yupoo/197579658/7.webp",
             "/assets/productos/Yupoo/197579658/8.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 737878,
@@ -903,7 +903,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/218139532/2.webp"
         ],
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 882796,
@@ -926,7 +926,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/218138743/2.webp"
         ],
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 238510,
@@ -938,7 +938,7 @@ const products = [
             "/assets/productos/Yupoo/216807613/2.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 671227,
@@ -950,7 +950,7 @@ const products = [
             "/assets/productos/Yupoo/216806586/2.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 729212,
@@ -962,7 +962,7 @@ const products = [
             "/assets/productos/Yupoo/216806631/2.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 984139,
@@ -974,7 +974,7 @@ const products = [
             "/assets/productos/Yupoo/216806537/2.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 144601,
@@ -985,7 +985,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/216806071/2.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 666279,
@@ -996,7 +996,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/216806004/2.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 791626,
@@ -1032,7 +1032,7 @@ const products = [
             "/assets/productos/Yupoo/216441953/2.webp"
         ],
         temporada: "2026",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 851677,
@@ -1044,7 +1044,7 @@ const products = [
             "/assets/productos/Yupoo/216423857/2.webp"
         ],
         temporada: "26/27",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 382204,
@@ -1056,7 +1056,7 @@ const products = [
             "/assets/productos/Yupoo/216423781/2.webp"
         ],
         temporada: "26/27",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 523301,
@@ -1068,7 +1068,7 @@ const products = [
             "/assets/productos/Yupoo/216420875/2.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 968048,
@@ -1080,7 +1080,7 @@ const products = [
             "/assets/productos/Yupoo/216420668/2.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 407027,
@@ -1091,7 +1091,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/213836929/2.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 851556,
@@ -1103,7 +1103,7 @@ const products = [
             "/assets/productos/Yupoo/213836761/2.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 382182,
@@ -1115,7 +1115,7 @@ const products = [
             "/assets/productos/Yupoo/213836701/2.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 162492,
@@ -1127,7 +1127,7 @@ const products = [
             "/assets/productos/Yupoo/212532108/2.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 637422,
@@ -1145,7 +1145,7 @@ const products = [
             "/assets/productos/Yupoo/211519379/8.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 580856,
@@ -1163,7 +1163,7 @@ const products = [
             "/assets/productos/Yupoo/211519500/8.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 638151,
@@ -1250,7 +1250,7 @@ const products = [
             "/assets/productos/Yupoo/211234781/8.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 549694,
@@ -1266,7 +1266,7 @@ const products = [
             "/assets/productos/Yupoo/208905010/6.webp",
             "/assets/productos/Yupoo/208905010/7.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 535164,
@@ -1277,7 +1277,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/216420441/2.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 351327,
@@ -1288,7 +1288,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/216420176/2.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 316255,
@@ -1299,7 +1299,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/216420592/2.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 755900,
@@ -1311,7 +1311,7 @@ const products = [
             "/assets/productos/Yupoo/219490648/2.webp"
         ],
         temporada: "2026",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 475090,
@@ -1323,7 +1323,7 @@ const products = [
             "/assets/productos/Yupoo/219490303/2.webp"
         ],
         temporada: "2026",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 122777,
@@ -1335,7 +1335,7 @@ const products = [
             "/assets/productos/Yupoo/219464146/2.webp"
         ],
         temporada: "2026",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 443462,
@@ -1347,7 +1347,7 @@ const products = [
             "/assets/productos/Yupoo/219490239/2.webp"
         ],
         temporada: "2026",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 935379,
@@ -1359,7 +1359,7 @@ const products = [
             "/assets/productos/Yupoo/219464881/2.webp"
         ],
         temporada: "2026",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 938860,
@@ -1370,7 +1370,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/219464642/2.webp"
         ],
-        temporada: "2026",
+        temporada: "2026"
     },
     {
         id: 159689,
@@ -1382,7 +1382,7 @@ const products = [
             "/assets/productos/Yupoo/219462514/2.webp"
         ],
         temporada: "2026",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 623155,
@@ -1394,7 +1394,7 @@ const products = [
             "/assets/productos/Yupoo/219462414/2.webp"
         ],
         temporada: "2026",
-        tipo: "portero",
+        tipo: "portero"
     },
     {
         id: 792005,
@@ -1406,7 +1406,7 @@ const products = [
             "/assets/productos/Yupoo/218139468/2.webp"
         ],
         temporada: "2026",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 381663,
@@ -1418,7 +1418,7 @@ const products = [
             "/assets/productos/Yupoo/218139206/2.webp"
         ],
         temporada: "2026",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 433188,
@@ -1430,7 +1430,7 @@ const products = [
             "/assets/productos/Yupoo/216806220/2.webp"
         ],
         temporada: "2025",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 448046,
@@ -1441,7 +1441,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/216805953/2.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 571063,
@@ -1453,7 +1453,7 @@ const products = [
             "/assets/productos/Yupoo/216442420/2.webp"
         ],
         temporada: "2026",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 711830,
@@ -1465,7 +1465,7 @@ const products = [
             "/assets/productos/Yupoo/216442463/2.webp"
         ],
         temporada: "2026",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 320201,
@@ -1477,7 +1477,7 @@ const products = [
             "/assets/productos/Yupoo/216442560/1.webp"
         ],
         temporada: "2026",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 670833,
@@ -1489,7 +1489,7 @@ const products = [
             "/assets/productos/Yupoo/216442511/2.webp"
         ],
         temporada: "2026",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 417471,
@@ -1501,7 +1501,7 @@ const products = [
             "/assets/productos/Yupoo/216441659/2.webp"
         ],
         temporada: "2026",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 993378,
@@ -1595,7 +1595,7 @@ const products = [
             "/assets/productos/Yupoo/207559992/8.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 540044,
@@ -1613,7 +1613,7 @@ const products = [
             "/assets/productos/Yupoo/207561041/8.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 985030,
@@ -1631,7 +1631,7 @@ const products = [
             "/assets/productos/Yupoo/207557639/8.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 744047,
@@ -1646,7 +1646,7 @@ const products = [
             "/assets/productos/Yupoo/207450991/5.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 255670,
@@ -1696,7 +1696,7 @@ const products = [
             "/assets/productos/Yupoo/204720362/5.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 776038,
@@ -1714,7 +1714,7 @@ const products = [
             "/assets/productos/Yupoo/204720483/8.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 803718,
@@ -1732,7 +1732,7 @@ const products = [
             "/assets/productos/Yupoo/204720187/8.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 210794,
@@ -1748,7 +1748,7 @@ const products = [
             "/assets/productos/Yupoo/204718775/6.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 762229,
@@ -1764,7 +1764,7 @@ const products = [
             "/assets/productos/Yupoo/203703113/6.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 676633,
@@ -1782,7 +1782,7 @@ const products = [
             "/assets/productos/Yupoo/203701729/8.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 869699,
@@ -1797,7 +1797,7 @@ const products = [
             "/assets/productos/Yupoo/203701585/5.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 747923,
@@ -1812,7 +1812,7 @@ const products = [
             "/assets/productos/Yupoo/203701618/5.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 464510,
@@ -1827,7 +1827,7 @@ const products = [
             "/assets/productos/Yupoo/203701302/5.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 881988,
@@ -1842,7 +1842,7 @@ const products = [
             "/assets/productos/Yupoo/202779885/5.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 959227,
@@ -1857,7 +1857,7 @@ const products = [
             "/assets/productos/Yupoo/203698766/5.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 883948,
@@ -1872,7 +1872,7 @@ const products = [
             "/assets/productos/Yupoo/202779358/5.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 511048,
@@ -1887,7 +1887,7 @@ const products = [
             "/assets/productos/Yupoo/202779313/5.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 218012,
@@ -1899,7 +1899,7 @@ const products = [
             "/assets/productos/Yupoo/202779248/2.webp",
             "/assets/productos/Yupoo/202779248/3.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 240084,
@@ -1913,7 +1913,7 @@ const products = [
             "/assets/productos/Yupoo/202778698/4.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 899447,
@@ -1927,7 +1927,7 @@ const products = [
             "/assets/productos/Yupoo/202778041/4.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 385548,
@@ -1941,7 +1941,7 @@ const products = [
             "/assets/productos/Yupoo/202777830/4.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 850115,
@@ -1999,7 +1999,7 @@ const products = [
             "/assets/productos/Yupoo/201350547/4.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 903135,
@@ -2013,7 +2013,7 @@ const products = [
             "/assets/productos/Yupoo/201350489/4.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 705945,
@@ -2026,7 +2026,7 @@ const products = [
             "/assets/productos/Yupoo/201349762/3.webp",
             "/assets/productos/Yupoo/201349762/4.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 102616,
@@ -2040,7 +2040,7 @@ const products = [
             "/assets/productos/Yupoo/201349635/4.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 479020,
@@ -2054,7 +2054,7 @@ const products = [
             "/assets/productos/Yupoo/200370613/4.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 255538,
@@ -2083,7 +2083,7 @@ const products = [
             "/assets/productos/Yupoo/199227576/4.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 489628,
@@ -2096,7 +2096,7 @@ const products = [
             "/assets/productos/Yupoo/197577020/3.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 100332,
@@ -2125,7 +2125,7 @@ const products = [
             "/assets/productos/Yupoo/197477146/4.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 875632,
@@ -2137,7 +2137,7 @@ const products = [
             "/assets/productos/Yupoo/193931028/2.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 286288,
@@ -2150,7 +2150,7 @@ const products = [
             "/assets/productos/Yupoo/193927751/3.webp",
             "/assets/productos/Yupoo/193927751/4.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 279168,
@@ -2178,7 +2178,7 @@ const products = [
             "/assets/productos/Yupoo/193882594/3.webp",
             "/assets/productos/Yupoo/193882594/4.webp"
         ],
-        temporada: "2025",
+        temporada: "2025"
     },
     {
         id: 115407,
@@ -2191,7 +2191,7 @@ const products = [
             "/assets/productos/Yupoo/192260006/3.webp",
             "/assets/productos/Yupoo/192260006/4.webp"
         ],
-        temporada: "2025",
+        temporada: "2025"
     },
     {
         id: 655802,
@@ -2204,7 +2204,7 @@ const products = [
             "/assets/productos/Yupoo/192260092/3.webp",
             "/assets/productos/Yupoo/192260092/4.webp"
         ],
-        temporada: "2025",
+        temporada: "2025"
     },
     {
         id: 435415,
@@ -2217,7 +2217,7 @@ const products = [
             "/assets/productos/Yupoo/192259967/3.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 224087,
@@ -2456,7 +2456,7 @@ const products = [
             "/assets/productos/Yupoo/213790918/2.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 567203,
@@ -2468,7 +2468,7 @@ const products = [
             "/assets/productos/Yupoo/213790880/2.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 921620,
@@ -2673,7 +2673,7 @@ const products = [
             "/assets/productos/Yupoo/209571129/3.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 553431,
@@ -2686,7 +2686,7 @@ const products = [
             "/assets/productos/Yupoo/209571144/3.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 593027,
@@ -2699,7 +2699,7 @@ const products = [
             "/assets/productos/Yupoo/209571071/3.webp"
         ],
         temporada: "25/26",
-        tipo: "visitante",
+        tipo: "visitante"
     },
     {
         id: 386584,
@@ -2712,7 +2712,7 @@ const products = [
             "/assets/productos/Yupoo/210323914/3.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 716949,
@@ -2723,7 +2723,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/216807171/2.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 276794,
@@ -2737,7 +2737,7 @@ const products = [
             "/assets/productos/Yupoo/201349993/4.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 728985,
@@ -2749,7 +2749,7 @@ const products = [
             "/assets/productos/Yupoo/219700516/2.webp"
         ],
         temporada: "2026",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 384796,
@@ -2776,7 +2776,7 @@ const products = [
             "/assets/productos/Yupoo/211234031/4.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 894216,
@@ -2789,7 +2789,7 @@ const products = [
             "/assets/productos/Yupoo/192250021/3.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 308311,
@@ -2803,7 +2803,7 @@ const products = [
             "/assets/productos/Yupoo/187746737/4.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 570882,
@@ -2816,7 +2816,7 @@ const products = [
             "/assets/productos/Yupoo/211234336/3.webp"
         ],
         temporada: "25/26",
-        tipo: "tercera",
+        tipo: "tercera"
     },
     {
         id: 229242,
@@ -2829,7 +2829,7 @@ const products = [
             "/assets/productos/Yupoo/187764069/3.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 128909,
@@ -2842,7 +2842,7 @@ const products = [
             "/assets/productos/Yupoo/187670662/3.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 703398,
@@ -2854,7 +2854,7 @@ const products = [
             "/assets/productos/Yupoo/193879799/2.webp",
             "/assets/productos/Yupoo/193879799/3.webp"
         ],
-        temporada: "25/26",
+        temporada: "25/26"
     },
     {
         id: 203152,
@@ -2893,7 +2893,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/178962329/2.webp"
         ],
-        temporada: "24/25",
+        temporada: "24/25"
     },
     {
         id: 896413,
@@ -2907,7 +2907,7 @@ const products = [
             "/assets/productos/Yupoo/188021703/4.webp"
         ],
         temporada: "25/26",
-        tipo: "entrenamiento",
+        tipo: "entrenamiento"
     },
     {
         id: 378241,
@@ -2919,7 +2919,7 @@ const products = [
             "/assets/productos/Yupoo/214401561/2.webp"
         ],
         temporada: "25/26",
-        tipo: "local",
+        tipo: "local"
     },
     {
         id: 821734,
@@ -2944,6 +2944,20 @@ const products = [
         ],
         temporada: "94/95",
         tipo: "local",
+        retro: true
+    },
+    {
+        id: 333660,
+        name: "AS Roma 98/99 Visitante Retro",
+        slug: "as-roma-9899-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/333660/1.webp",
+        images: [
+            "/assets/productos/Yupoo/333660/2.webp"
+        ],
+        temporada: "98/99",
+        tipo: "visitante",
         retro: true
     }
 ];
