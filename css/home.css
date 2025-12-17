@@ -713,10 +713,12 @@ a.catalogo-btn:hover,
     .catalogo-card.dropdown-open .dropdown-menu {
         z-index: 999999 !important;
         position: absolute;
-        top: 100%;
+        bottom: 100%;
+        top: auto;
         left: 0;
         right: 0;
         min-width: 100%;
+        margin-bottom: 0.5rem;
     }
 
     .collections-section {
