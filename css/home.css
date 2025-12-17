@@ -723,6 +723,10 @@ a.catalogo-btn:hover,
         position: relative;
         z-index: 30;
         overflow: visible;
+        transition: padding-bottom 0.3s ease;
+    }
+
+    .collections-section:has(.dropdown-open) {
         padding-bottom: 12rem;
     }
 }
