@@ -2973,6 +2973,21 @@ const products = [
         temporada: "95/96",
         tipo: "visitante",
         retro: true
+    },
+    {
+        id: 253296,
+        name: "Los Angeles 25/26 Visitante",
+        slug: "los-angeles-2526-visitante",
+        category: "futbol",
+        league: "MLS",
+        image: "/assets/productos/Yupoo/253296/1.webp",
+        images: [
+            "/assets/productos/Yupoo/253296/2.webp",
+            "/assets/productos/Yupoo/253296/3.webp",
+            "/assets/productos/Yupoo/253296/4.webp"
+        ],
+        temporada: "25/26",
+        tipo: "visitante"
     }
 ];
 

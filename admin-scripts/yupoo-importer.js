@@ -120,6 +120,205 @@ const TEAM_NAME_NORMALIZATION = {
 };
 
 
+// Mapeo de categorías de Yupoo a ligas del sistema
+const YUPOO_CATEGORY_TO_LEAGUE = {
+    // Premier League
+    'premier league': 'premier',
+    'premier': 'premier',
+    'english premier': 'premier',
+    'epl': 'premier',
+    'england': 'premier',
+    'english league': 'premier',
+
+    // La Liga
+    'la liga': 'laliga',
+    'laliga': 'laliga',
+    'spanish league': 'laliga',
+    'spain': 'laliga',
+    'liga española': 'laliga',
+    'liga espanola': 'laliga',
+
+    // Serie A
+    'serie a': 'seriea',
+    'seriea': 'seriea',
+    'italian league': 'seriea',
+    'italy': 'seriea',
+    'calcio': 'seriea',
+
+    // Bundesliga
+    'bundesliga': 'bundesliga',
+    'german league': 'bundesliga',
+    'germany': 'bundesliga',
+
+    // Ligue 1
+    'ligue 1': 'ligue1',
+    'ligue1': 'ligue1',
+    'french league': 'ligue1',
+    'france': 'ligue1',
+
+    // Brasileirao
+    'brasileiro': 'brasileirao',
+    'brasileirao': 'brasileirao',
+    'brasileiro série a': 'brasileirao',
+    'brasileiro serie a': 'brasileirao',
+    'brazilian league': 'brasileirao',
+    'brazil': 'brasileirao',
+
+    // SAF (Argentina)
+    'saf': 'saf',
+    'superliga argentina': 'saf',
+    'argentine league': 'saf',
+    'argentina': 'saf',
+    'liga argentina': 'saf',
+
+    // Liga Árabe
+    'saudi': 'ligaarabe',
+    'saudi league': 'ligaarabe',
+    'saudi pro league': 'ligaarabe',
+    'arabian': 'ligaarabe',
+    'arab league': 'ligaarabe',
+
+    // Selecciones
+    'national team': 'selecciones',
+    'national teams': 'selecciones',
+    'selecciones': 'selecciones',
+    'seleccion': 'selecciones',
+    'national': 'selecciones',
+    'country': 'selecciones',
+    'countries': 'selecciones',
+    'world cup': 'selecciones',
+    'euro': 'selecciones',
+    'copa america': 'selecciones',
+
+    // NBA
+    'nba': 'nba',
+    'basketball': 'nba',
+
+    // Otras ligas
+    'eredivisie': 'eredivisie',
+    'dutch league': 'eredivisie',
+    'netherlands': 'eredivisie',
+    'holland': 'eredivisie',
+
+    'liga portugal': 'ligaportugal',
+    'portuguese league': 'ligaportugal',
+    'portugal': 'ligaportugal',
+    'primeira liga': 'ligaportugal',
+
+    'scottish': 'scottish',
+    'scotland': 'scottish',
+    'spfl': 'scottish',
+
+    'mls': 'MLS',
+    'major league soccer': 'MLS',
+    'usa soccer': 'MLS',
+    // NO mapear 'major league' solo porque puede ser 'Major League / Liga MX'
+
+    'liga mx': 'ligamx',
+    'mexican league': 'ligamx',
+    // NO mapear 'mexico' solo porque puede confundirse con la selección
+};
+
+// Equipos MLS (Estados Unidos y Canadá)
+const MLS_TEAMS = [
+    'la galaxy', 'galaxy', 'los angeles galaxy',
+    'lafc', 'los angeles fc', 'la fc',
+    'inter miami', 'miami',
+    'new york red bulls', 'red bulls', 'nyrb',
+    'new york city', 'nyc fc', 'nycfc',
+    'seattle sounders', 'sounders', 'seattle',
+    'atlanta united', 'atlanta',
+    'portland timbers', 'timbers', 'portland',
+    'philadelphia union', 'union', 'philadelphia',
+    'dc united', 'dc',
+    'chicago fire', 'fire', 'chicago',
+    'columbus crew', 'crew', 'columbus',
+    'houston dynamo', 'dynamo', 'houston',
+    'fc dallas', 'dallas',
+    'sporting kansas city', 'kansas city', 'skc',
+    'colorado rapids', 'rapids', 'colorado',
+    'san jose earthquakes', 'earthquakes', 'san jose',
+    'orlando city', 'orlando',
+    'minnesota united', 'minnesota',
+    'nashville sc', 'nashville',
+    'austin fc', 'austin',
+    'charlotte fc', 'charlotte',
+    'st louis city', 'st louis',
+    'toronto fc', 'toronto',
+    'cf montreal', 'montreal',
+    'vancouver whitecaps', 'whitecaps', 'vancouver'
+];
+
+// Equipos Liga MX (México)
+const LIGA_MX_TEAMS = [
+    'america', 'club america', 'aguilas',
+    'chivas', 'guadalajara', 'cd guadalajara',
+    'cruz azul', 'la maquina',
+    'pumas', 'pumas unam', 'unam',
+    'tigres', 'tigres uanl', 'uanl',
+    'monterrey', 'rayados',
+    'santos laguna', 'santos',
+    'leon', 'club leon',
+    'toluca', 'deportivo toluca',
+    'pachuca', 'tuzos',
+    'atlas', 'atlas fc',
+    'necaxa', 'rayos',
+    'puebla', 'la franja',
+    'tijuana', 'xolos', 'club tijuana',
+    'queretaro', 'gallos',
+    'mazatlan', 'mazatlan fc',
+    'juarez', 'fc juarez', 'bravos',
+    'san luis', 'atletico san luis'
+];
+
+
+// Función para detectar liga desde la categoría de Yupoo
+function detectLeagueFromYupooCategory(categoryPath) {
+    if (!categoryPath) return null;
+
+    const normalized = categoryPath.toLowerCase()
+        .normalize('NFD')
+        .replace(/[\u0300-\u036f]/g, '');
+
+    // Si la categoría es combinada "Major League / Liga MX", retornar null
+    // para que se use el nombre del equipo para determinar la liga
+    if (normalized.includes('major league') && normalized.includes('liga mx')) {
+        return null; // Será determinado por el nombre del equipo
+    }
+
+    // Buscar coincidencia en el diccionario
+    for (const [key, league] of Object.entries(YUPOO_CATEGORY_TO_LEAGUE)) {
+        if (normalized.includes(key)) {
+            return league;
+        }
+    }
+
+    return null;
+}
+
+
+// Función para detectar si es MLS o Liga MX por nombre de equipo
+function detectMLSorLigaMX(teamName) {
+    const teamLower = teamName.toLowerCase().trim();
+
+    // Verificar si es equipo de MLS
+    for (const mlsTeam of MLS_TEAMS) {
+        if (teamLower.includes(mlsTeam) || mlsTeam.includes(teamLower)) {
+            return 'MLS';
+        }
+    }
+
+    // Verificar si es equipo de Liga MX
+    for (const mxTeam of LIGA_MX_TEAMS) {
+        if (teamLower.includes(mxTeam) || mxTeam.includes(teamLower)) {
+            return 'ligamx';
+        }
+    }
+
+    return null;
+}
+
+
 const TEAM_TO_LEAGUE = {
 
     // La Liga y Segunda División - España
@@ -1233,9 +1432,15 @@ function parseProductTitle(rawTitle) {
 }
 
 
-function detectLeague(teamName, isRetro = false) {
+function detectLeague(teamName, isRetro = false, categoryPath = null) {
 
-
+    // Primero intentar detectar desde la categoría de Yupoo (si está disponible)
+    if (categoryPath) {
+        const leagueFromCategory = detectLeagueFromYupooCategory(categoryPath);
+        if (leagueFromCategory) {
+            return leagueFromCategory;
+        }
+    }
 
     const teamLower = teamName.toLowerCase().trim();
 
@@ -1272,6 +1477,11 @@ function detectLeague(teamName, isRetro = false) {
         }
     }
 
+    // Intentar detectar MLS o Liga MX por nombre de equipo
+    const mlsOrMx = detectMLSorLigaMX(teamName);
+    if (mlsOrMx) {
+        return mlsOrMx;
+    }
 
     return 'otros';
 }
