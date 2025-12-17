@@ -20,6 +20,52 @@
     display: block;
     padding: 2rem 2%;
     position: relative;
+    min-height: 100vh;
+}
+
+/* Brillos púrpura de fondo distribuidos */
+.catalog-container::before {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -1;
+    background:
+        /* Brillo superior izquierdo */
+        radial-gradient(ellipse 600px 400px at 5% 10%, rgba(139, 92, 246, 0.08) 0%, transparent 50%),
+        /* Brillo central derecho */
+        radial-gradient(ellipse 500px 500px at 95% 30%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+        /* Brillo inferior izquierdo */
+        radial-gradient(ellipse 700px 400px at 10% 70%, rgba(99, 102, 241, 0.07) 0%, transparent 50%),
+        /* Brillo central superior */
+        radial-gradient(ellipse 400px 300px at 50% 5%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+        /* Brillo inferior derecho */
+        radial-gradient(ellipse 600px 500px at 90% 85%, rgba(168, 85, 247, 0.06) 0%, transparent 50%),
+        /* Brillo central */
+        radial-gradient(ellipse 500px 400px at 40% 50%, rgba(99, 102, 241, 0.04) 0%, transparent 50%),
+        /* Brillo adicional aleatorio */
+        radial-gradient(ellipse 350px 250px at 75% 60%, rgba(139, 92, 246, 0.05) 0%, transparent 50%),
+        radial-gradient(ellipse 400px 300px at 25% 40%, rgba(168, 85, 247, 0.04) 0%, transparent 50%);
+}
+
+/* Segunda capa de brillos para más profundidad */
+.catalog-container::after {
+    content: '';
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: -2;
+    background:
+        radial-gradient(ellipse 800px 600px at 15% 25%, rgba(139, 92, 246, 0.04) 0%, transparent 60%),
+        radial-gradient(ellipse 600px 700px at 80% 55%, rgba(99, 102, 241, 0.035) 0%, transparent 55%),
+        radial-gradient(ellipse 500px 400px at 60% 80%, rgba(168, 85, 247, 0.04) 0%, transparent 50%),
+        radial-gradient(ellipse 450px 350px at 30% 90%, rgba(139, 92, 246, 0.03) 0%, transparent 50%);
 }
 
 
@@ -1090,13 +1136,13 @@
         transition: none;
     }
 
-    
+
     .product-price .price {
         animation: none;
         text-shadow: 0 0 5px rgba(168, 85, 247, 0.2);
     }
 
-    
+
     .product-card {
         animation: none;
     }
@@ -1403,7 +1449,7 @@
 @media (max-width: 768px) {
     .btn-quick-add {
         opacity: 1;
-        
+
         width: 2.25rem;
         height: 2.25rem;
     }
@@ -1416,13 +1462,13 @@
     .quick-add-form input {
         padding: 0.6rem;
         font-size: 16px;
-        
+
     }
 
     .quick-add-form .btn-add-quick {
         padding: 0.75rem;
         min-height: 44px;
-        
+
     }
 }
 
@@ -1430,5 +1476,67 @@
 @media (hover: none) {
     .quick-add-panel {
         transition: opacity 0.2s, max-height 0.2s;
+    }
+}
+
+
+/* ========================================
+   HERO CATÁLOGO - Estilo tarjeta premium
+   ======================================== */
+
+.page-catalogo .hero-small {
+    background: linear-gradient(135deg, rgba(15, 15, 25, 0.95) 0%, rgba(20, 20, 30, 0.98) 100%) !important;
+    border-radius: var(--radius-lg);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    margin: 1.5rem 2rem;
+    padding: 2.5rem 2rem !important;
+    position: relative;
+    overflow: hidden;
+    box-shadow:
+        0 4px 20px rgba(0, 0, 0, 0.3),
+        0 0 40px rgba(139, 92, 246, 0.08),
+        inset 0 0 60px rgba(139, 92, 246, 0.03);
+}
+
+/* Brillo superior sutil */
+.page-catalogo .hero-small::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 60%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(168, 85, 247, 0.5), transparent);
+}
+
+/* Brillo púrpura de fondo */
+.page-catalogo .hero-small::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    width: 80%;
+    height: 80%;
+    background: radial-gradient(ellipse at center, rgba(139, 92, 246, 0.06) 0%, transparent 70%);
+    pointer-events: none;
+}
+
+.page-catalogo .hero-small h1 {
+    position: relative;
+    z-index: 1;
+}
+
+.page-catalogo .hero-small p {
+    position: relative;
+    z-index: 1;
+}
+
+@media (max-width: 768px) {
+    .page-catalogo .hero-small {
+        margin: 1rem;
+        padding: 2rem 1.5rem !important;
+        border-radius: var(--radius-md);
     }
 }

@@ -46,6 +46,7 @@
     <link rel="stylesheet" href="/css/reset.css">
     <link rel="stylesheet" href="/css/styles.css">
     <link rel="stylesheet" href="/css/home.css">
+    <link rel="stylesheet" href="/css/catalogo.css">
     <link rel="stylesheet" href="/css/badges.css">
     <link rel="stylesheet" href="/css/ux-feedback.css">
 
@@ -213,7 +214,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            
+
             document.querySelectorAll('.dropdown-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -227,7 +228,7 @@
                 });
             });
 
-            
+
             document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
                 card.addEventListener('click', (e) => {
                     if (e.target.closest('.dropdown-menu') || e.target.closest('.dropdown-btn') || e.target.closest('.catalogo-btn')) {
@@ -238,14 +239,14 @@
                 });
             });
 
-            
+
             document.querySelectorAll('.dropdown-menu a').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.stopPropagation();
                 });
             });
 
-            
+
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.catalogo-card')) {
                     document.querySelectorAll('.catalogo-card.dropdown-open').forEach(card => {
