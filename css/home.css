@@ -357,6 +357,14 @@ body.low-performance * {
     padding: 5rem 2rem;
     max-width: 1400px;
     margin: 0 auto;
+    position: relative;
+    z-index: 30;
+    overflow: visible;
+    transition: padding-bottom 0.3s ease;
+}
+
+.collections-section:has(.dropdown-open) {
+    padding-bottom: 12rem;
 }
 
 .section-title {
@@ -1392,6 +1400,11 @@ a.catalogo-btn:hover,
     margin-top: 1.5rem;
 }
 
+.catalogo-carousel:has(.dropdown-open) .carousel-arrows {
+    opacity: 0;
+    pointer-events: none;
+}
+
 .catalogo-carousel .carousel-arrow {
     position: relative;
     top: auto;
@@ -1407,7 +1420,7 @@ a.catalogo-btn:hover,
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    z-index: 10;
+    z-index: 5;
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
     color: var(--text-main);
     box-shadow: var(--shadow-sm);

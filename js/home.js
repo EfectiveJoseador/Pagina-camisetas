@@ -374,6 +374,22 @@ let catalogoCardsInitialized = false;
 function initCatalogoCards() {
     if (catalogoCardsInitialized) return;
     catalogoCardsInitialized = true;
+
+    // Close dropdown when mouse leaves the card area
+    document.querySelectorAll('.catalogo-card.has-dropdown').forEach(card => {
+        let closeTimeout;
+
+        card.addEventListener('mouseleave', () => {
+            closeTimeout = setTimeout(() => {
+                card.classList.remove('dropdown-open');
+            }, 150);
+        });
+
+        card.addEventListener('mouseenter', () => {
+            if (closeTimeout) clearTimeout(closeTimeout);
+        });
+    });
+
     document.addEventListener('click', (e) => {
         const dropdownBtn = e.target.closest('.dropdown-btn');
         if (dropdownBtn) {
