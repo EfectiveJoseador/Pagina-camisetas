@@ -15,7 +15,7 @@ const products = [
     },
     {
         id: 103,
-        name: "Athletic Club 25/26 Tercera",
+        name: "Athletic Club 25/26 Tercera (Niño)",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/La Liga/AthelticKids2526T/1.webp",
@@ -68,7 +68,7 @@ const products = [
     },
     {
         id: 110,
-        name: "Atlético Madrid 25/26 Visitante",
+        name: "Atlético Madrid 25/26 Visitante (Niño)",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/La Liga/AtleticoKids2526F/1.webp",
@@ -190,7 +190,7 @@ const products = [
     },
     {
         id: 128,
-        name: "Málaga CF 25/26 Local",
+        name: "Málaga CF 25/26 Local (Niño)",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/La Liga/MalagaKids2526L/1.webp",
@@ -345,7 +345,7 @@ const products = [
     },
     {
         id: 209,
-        name: "Manchester United 25/26 Visitante",
+        name: "Manchester United 25/26 Visitante (Niño)",
         category: "futbol",
         league: "premier",
         image: "/assets/productos/Premier League/UnitedKids2526F/1.webp",
@@ -397,7 +397,7 @@ const products = [
     },
     {
         id: 501,
-        name: "Marseille 25/26 Visitante",
+        name: "Marseille 25/26 Visitante (Niño)",
         category: "futbol",
         league: "ligue1",
         image: "/assets/productos/Ligue 1/MarseillaKids2526F/1.webp",
@@ -486,7 +486,7 @@ const products = [
     },
     {
         id: 573,
-        name: "River Plate 25/26 Local",
+        name: "River Plate 25/26 Local (Niño)",
         category: "futbol",
         league: "saf",
         image: "/assets/productos/SAF (Argentina)/RiverKids2526L/1.webp",
