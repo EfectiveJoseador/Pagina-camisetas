@@ -2959,6 +2959,20 @@ const products = [
         temporada: "98/99",
         tipo: "visitante",
         retro: true
+    },
+    {
+        id: 771897,
+        name: "Tenerife 95/96 Visitante Retro",
+        slug: "tenerife-9596-visitante-retro",
+        category: "futbol",
+        league: "otros",
+        image: "/assets/productos/Yupoo/771897/1.webp",
+        images: [
+            "/assets/productos/Yupoo/771897/2.webp"
+        ],
+        temporada: "95/96",
+        tipo: "visitante",
+        retro: true
     }
 ];
 
