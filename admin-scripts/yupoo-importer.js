@@ -214,8 +214,8 @@ const YUPOO_CATEGORY_TO_LEAGUE = {
     'usa soccer': 'MLS',
     // NO mapear 'major league' solo porque puede ser 'Major League / Liga MX'
 
-    'liga mx': 'ligamx',
-    'mexican league': 'ligamx',
+    'liga mx': 'Liga MX',
+    'mexican league': 'Liga MX',
     // NO mapear 'mexico' solo porque puede confundirse con la selección
 };
 
@@ -311,7 +311,7 @@ function detectMLSorLigaMX(teamName) {
     // Verificar si es equipo de Liga MX
     for (const mxTeam of LIGA_MX_TEAMS) {
         if (teamLower.includes(mxTeam) || mxTeam.includes(teamLower)) {
-            return 'ligamx';
+            return 'Liga MX';
         }
     }
 

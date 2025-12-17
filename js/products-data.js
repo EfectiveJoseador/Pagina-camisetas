@@ -2988,6 +2988,36 @@ const products = [
         ],
         temporada: "25/26",
         tipo: "visitante"
+    },
+    {
+        id: 449990,
+        name: "Monterrey 25/26 Local",
+        slug: "monterrey-2526-local",
+        category: "futbol",
+        league: "Liga MX",
+        image: "/assets/productos/Yupoo/449990/1.webp",
+        images: [
+            "/assets/productos/Yupoo/449990/2.webp",
+            "/assets/productos/Yupoo/449990/3.webp",
+            "/assets/productos/Yupoo/449990/4.webp"
+        ],
+        temporada: "25/26",
+        tipo: "local"
+    },
+    {
+        id: 510415,
+        name: "Chivas 25/26 Local",
+        slug: "chivas-2526-local",
+        category: "futbol",
+        league: "Liga MX",
+        image: "/assets/productos/Yupoo/510415/1.webp",
+        images: [
+            "/assets/productos/Yupoo/510415/2.webp",
+            "/assets/productos/Yupoo/510415/3.webp",
+            "/assets/productos/Yupoo/510415/4.webp"
+        ],
+        temporada: "25/26",
+        tipo: "local"
     }
 ];
 
