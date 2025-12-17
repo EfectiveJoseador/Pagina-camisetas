@@ -50,7 +50,7 @@ document.addEventListener('DOMContentLoaded', () => {
     } else {
         setTimeout(() => {
             sessionStorage.setItem('homeAnimationSeen', 'true');
-        }, 1500);
+        }, 2500);
     }
 
     initHome();
