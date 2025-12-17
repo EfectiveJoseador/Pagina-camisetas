@@ -375,7 +375,7 @@ const products = [
     },
     {
         id: 304,
-        name: "AS Roma 25/26 Local",
+        name: "AS Roma 25/26 Local (Niño)",
         category: "futbol",
         league: "seriea",
         image: "/assets/productos/Serie A/RomaKids2526L/1.webp",
@@ -1752,7 +1752,7 @@ const products = [
     },
     {
         id: 762229,
-        name: "AS Roma25/26 Local",
+        name: "AS Roma 25/26 Local",
         category: "futbol",
         league: "seriea",
         image: "/assets/productos/Yupoo/203703113/1.webp",
@@ -2221,7 +2221,7 @@ const products = [
     },
     {
         id: 224087,
-        name: "AS Roma00/01 Local Retro",
+        name: "AS Roma 00/01 Local Retro",
         category: "futbol",
         league: "seriea",
         image: "/assets/productos/Yupoo/192257942/1.webp",
@@ -2236,7 +2236,7 @@ const products = [
     },
     {
         id: 833095,
-        name: "AS RomaLocal Retro",
+        name: "AS Roma 92/94 Local Retro",
         category: "futbol",
         league: "seriea",
         image: "/assets/productos/Yupoo/192257870/1.webp",
@@ -2250,7 +2250,7 @@ const products = [
     },
     {
         id: 635969,
-        name: "AS Roma95/96 Local Retro",
+        name: "AS Roma 95/96 Local Retro",
         category: "futbol",
         league: "seriea",
         image: "/assets/productos/Yupoo/192257826/1.webp",
