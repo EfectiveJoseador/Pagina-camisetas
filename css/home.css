@@ -1435,10 +1435,7 @@ a.catalogo-btn:hover,
         position: relative;
         padding: 0 1rem;
         padding-right: 0;
-        padding-bottom: 180px;
-        margin-bottom: -180px;
         overflow: visible;
-
     }
 
     .catalogo-carousel .carousel-container::-webkit-scrollbar {
