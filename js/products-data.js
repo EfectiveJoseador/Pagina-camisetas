@@ -2965,7 +2965,7 @@ const products = [
         name: "Tenerife 95/96 Visitante Retro",
         slug: "tenerife-9596-visitante-retro",
         category: "futbol",
-        league: "otros",
+        league: "laliga",
         image: "/assets/productos/Yupoo/771897/1.webp",
         images: [
             "/assets/productos/Yupoo/771897/2.webp"
