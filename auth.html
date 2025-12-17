@@ -321,8 +321,8 @@
     import { getAuth, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
     import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-    // 1) Configuración Firebase
-    // Usa window.FIREBASE_CONFIG si está definida (permite cambiar a otro proyecto/DB sin tocar el código)
+    
+    
     const defaultConfig = {
       apiKey: "AIzaSyBYPvmvzzNxtTFOVpPXKRvUhoHBjBTCVBE",
       authDomain: "camisetazo-puntos.firebaseapp.com",
@@ -340,7 +340,7 @@
     const db = getDatabase(app, window.FIREBASE_DB_URL || firebaseConfig.databaseURL);
     await setPersistence(auth, browserLocalPersistence);
 
-    // 2) Utilidades de UI
+    
     const $ = (sel) => document.querySelector(sel);
     const show = (el) => el.classList.remove('hidden');
     const hide = (el) => el.classList.add('hidden');
@@ -369,7 +369,7 @@
       }
     }
 
-    // 3) Tabs accesibles
+    
     const tabLogin = $('#tab-login');
     const tabRegister = $('#tab-register');
     const panelLogin = $('#panel-login');
@@ -385,7 +385,7 @@
     tabLogin.addEventListener('click', () => selectTab('login'));
     tabRegister.addEventListener('click', () => selectTab('register'));
 
-    // 4) Login con email/contraseña
+    
     const loginForm = $('#form-login');
     const loginEmail = $('#login-email');
     const loginPass = $('#login-password');
@@ -393,11 +393,11 @@
 
     loginForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      // Limpiar mensajes
+      
       loginMsg.className = 'hidden'; loginMsg.textContent = '';
       $('#login-email-error').className = 'small hidden'; $('#login-password-error').className = 'small hidden';
 
-      // Validación
+      
       const email = loginEmail.value.trim();
       const pass = loginPass.value;
       let ok = true;
@@ -405,7 +405,7 @@
       if (!pass || pass.length < 6) { ok = false; const el = $('#login-password-error'); el.textContent = 'La contraseña debe tener al menos 6 caracteres.'; el.className = 'small'; }
       if (!ok) return;
 
-      // Procesar
+      
       const btn = $('#btn-login'); const prev = btn.textContent; btn.disabled = true; btn.textContent = 'Accediendo...';
       try {
         await signInWithEmailAndPassword(auth, email, pass);
@@ -418,7 +418,7 @@
       }
     });
 
-    // Recuperar contraseña
+    
     $('#btn-forgot').addEventListener('click', async () => {
       const email = (loginEmail.value || '').trim();
       loginMsg.className = 'hidden'; loginMsg.textContent = '';
@@ -436,7 +436,7 @@
       } finally { btn.disabled = false; btn.textContent = prev; }
     });
 
-    // 5) Registro con email/contraseña
+    
     const regForm = $('#form-register');
     const regEmail = $('#reg-email');
     const regPass = $('#reg-password');
@@ -447,11 +447,11 @@
 
     regForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      // Limpiar mensajes
+      
       regMsg.className = 'hidden'; regMsg.textContent = '';
       ['#reg-email-error', '#reg-password-error', '#reg-password2-error'].forEach(s => { const el = $(s); el.textContent = ''; el.className = 'small hidden'; });
 
-      // Validación
+      
       const email = regEmail.value.trim();
       const p1 = regPass.value; const p2 = regPass2.value;
       let ok = true;
@@ -460,18 +460,18 @@
       if (p1 !== p2) { ok = false; const el = $('#reg-password2-error'); el.textContent = 'Las contraseñas no coinciden.'; el.className = 'small'; }
       if (!ok) return;
 
-      // Procesar
+      
       const btn = $('#btn-register'); const prev = btn.textContent; btn.disabled = true; btn.textContent = 'Creando cuenta...';
       try {
         const cred = await createUserWithEmailAndPassword(auth, email, p1);
-        // Crear perfil mínimo en RTDB (sin datos sensibles)
+        
         const uid = cred.user.uid;
         await set(ref(db, `users/${uid}`), {
           email,
           createdAt: new Date().toISOString(),
           puntosCliente: 0
         });
-        // Enviar correo de verificación (con fallback si el dominio no está autorizado)
+        
         let verifOk = false;
         try {
           await sendEmailVerification(cred.user, { url: window.location.origin + '/' });
@@ -496,8 +496,8 @@
       } finally { btn.disabled = false; btn.textContent = prev; }
     });
 
-    // 6) Reaccionar a cambios de sesión y redirigir según rol
-    // Obtener parámetro de redirección de la URL
+    
+    
     const urlParams = new URLSearchParams(window.location.search);
     const redirectParam = urlParams.get('redirect');
 
@@ -505,19 +505,19 @@
       if (user) {
         console.log('Usuario autenticado', { uid: user.uid, email: user.email });
 
-        // Verificar si es admin mediante custom claims
+        
         try {
-          const idTokenResult = await user.getIdTokenResult(true); // Force refresh para obtener claims actualizados
+          const idTokenResult = await user.getIdTokenResult(true); 
           const isAdmin = idTokenResult.claims.admin === true;
 
           console.log('🔍 Admin claim:', isAdmin);
 
           if (isAdmin) {
-            // Es admin - redirigir al panel de administración
+            
             console.log('✅ Usuario es admin - redirigiendo a admin.html');
             window.location.href = '/pages/admin.html';
           } else {
-            // Usuario normal - verificar si hay redirección pendiente
+            
             if (redirectParam === 'checkout') {
               console.log('🛒 Redirigiendo al checkout después de login');
               window.location.href = '/pages/checkout.html';
@@ -528,7 +528,7 @@
           }
         } catch (error) {
           console.error('Error verificando claims:', error);
-          // En caso de error, verificar redirección o ir al perfil
+          
           if (redirectParam === 'checkout') {
             window.location.href = '/pages/checkout.html';
           } else {

@@ -16,7 +16,7 @@ self.addEventListener('install', (event) => {
   event.waitUntil(
     caches.open(CACHE_NAME)
       .then((cache) => {
-        // Cache items individually to prevent failure if one is blocked
+        
         return Promise.allSettled(
           ASSETS_TO_CACHE.map(url =>
             cache.add(url).catch(err => {
@@ -49,20 +49,20 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
 
-  // Only handle GET requests
+  
   if (event.request.method !== 'GET') return;
 
-  // Ignore non-http(s) URLs: chrome-extension, blob, data, etc.
+  
   if (!url.startsWith('http://') && !url.startsWith('https://')) {
     return;
   }
 
-  // Ignore source maps
+  
   if (url.includes('.map')) {
     return;
   }
 
-  // Skip analytics and external services - pass through to network
+  
   if (
     url.includes('analytics.vercel.com') ||
     url.includes('www.googletagmanager.com') ||
@@ -77,25 +77,25 @@ self.addEventListener('fetch', (event) => {
     url.includes('googleapis.com')
   ) {
     event.respondWith(fetch(event.request).catch(() => {
-      // Return empty response if blocked
+      
       return new Response('', { status: 503 });
     }));
     return;
   }
 
-  // Only cache same-origin requests
+  
   const requestUrl = new URL(url);
   const isSameOrigin = requestUrl.origin === location.origin;
 
   if (!isSameOrigin) {
-    // For cross-origin, just fetch without caching
+    
     event.respondWith(fetch(event.request).catch(() => {
       return new Response('', { status: 503 });
     }));
     return;
   }
 
-  // Same-origin: Network first, fallback to cache
+  
   event.respondWith(
     fetch(event.request)
       .then((response) => {

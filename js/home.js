@@ -80,34 +80,34 @@ function initCatalogoCarousel() {
     const totalCards = originalCards.length;
 
 
-    // Fix cloning to ensure order [1,2,3... 1,2,3 ... 1,2,3]
-    // Fix cloning with eager loading for images to prevent stutter
+    
+    
     originalCards.forEach(card => {
         const cloneEnd = card.cloneNode(true);
         cloneEnd.classList.add('carousel-clone');
-        // Ensure images load immediately to avoid stutter
+        
         const img = cloneEnd.querySelector('img');
         if (img) img.loading = 'eager';
         track.appendChild(cloneEnd);
     });
 
-    // Prepend clones in correct order
+    
     [...originalCards].reverse().forEach(card => {
         const cloneStart = card.cloneNode(true);
         cloneStart.classList.add('carousel-clone');
-        // Ensure images load immediately
+        
         const img = cloneStart.querySelector('img');
         if (img) img.loading = 'eager';
         track.insertBefore(cloneStart, track.firstChild);
     });
 
-    let currentPosition = totalCards * cardWidth; // Start at Originals
+    let currentPosition = totalCards * cardWidth; 
     let isJumping = false;
     let animationId = null;
     let isPaused = false;
 
     const SCROLL_SPEED = 0.3;
-    const PAUSE_DURATION = 3000; // Reduced to 3 seconds as requested (+2s faster than 5s)
+    const PAUSE_DURATION = 3000; 
 
     function setPosition(position, animate = true) {
         if (animate) {
@@ -119,10 +119,10 @@ function initCatalogoCarousel() {
     }
 
     function checkBoundary(e) {
-        // Only trigger if it's the track moving, not a child element transition
+        
         if (e && e.target !== track) return;
 
-        // Forward limit (End of Originals -> Jump to Start of Originals)
+        
         if (currentPosition >= totalCards * 2 * cardWidth) {
             isJumping = true;
             track.style.transition = 'none';
@@ -131,7 +131,7 @@ function initCatalogoCarousel() {
             void track.offsetHeight;
             isJumping = false;
         }
-        // Backward limit (Start of Originals -> Jump to End of Originals)
+        
         if (currentPosition < totalCards * cardWidth) {
             isJumping = true;
             track.style.transition = 'none';
@@ -142,7 +142,7 @@ function initCatalogoCarousel() {
         }
     }
 
-    // Continuous smooth scroll animation
+    
     function smoothScroll() {
         if (isPaused || isJumping) {
             animationId = requestAnimationFrame(smoothScroll);
@@ -151,7 +151,7 @@ function initCatalogoCarousel() {
 
         currentPosition += SCROLL_SPEED;
 
-        // Auto-scroll boundary check
+        
         if (currentPosition >= totalCards * 2 * cardWidth) {
             currentPosition -= totalCards * cardWidth;
             track.style.transition = 'none';
@@ -212,21 +212,21 @@ function initCatalogoCarousel() {
 
     track.addEventListener('transitionend', checkBoundary);
 
-    // Only pause when hovering over actual cards (track), not arrows or empty space
+    
     carouselContainer.addEventListener('mouseenter', pauseAutoScroll);
     carouselContainer.addEventListener('mouseleave', () => {
         if (resumeTimeout) clearTimeout(resumeTimeout);
         resumeAutoScroll();
     });
 
-    // Initial position
+    
     setPosition(currentPosition, false);
     track.offsetHeight;
 
-    // Start continuous scroll
+    
     startAutoScroll();
 
-    // Touch swipe support with inertia
+    
     let isDragging = false;
     let startPos = 0;
     let lastPos = 0;
@@ -234,18 +234,18 @@ function initCatalogoCarousel() {
     let velocity = 0;
     let inertiaId = null;
 
-    // Set touch-action to allow vertical scroll but capture horizontal
+    
     track.style.touchAction = 'pan-y';
     track.style.userSelect = 'none';
     track.style.webkitUserSelect = 'none';
 
     function touchStart(event) {
-        // Stop any ongoing inertia
+        
         if (inertiaId) {
             cancelAnimationFrame(inertiaId);
             inertiaId = null;
         }
-        // Also stop auto-scroll animation completely during touch
+        
         if (animationId) {
             cancelAnimationFrame(animationId);
             animationId = null;
@@ -264,7 +264,7 @@ function initCatalogoCarousel() {
     function touchMove(event) {
         if (!isDragging) return;
 
-        // Prevent browser from scrolling - this eliminates the delay
+        
         event.preventDefault();
 
         const currentX = event.touches[0].clientX;
@@ -272,7 +272,7 @@ function initCatalogoCarousel() {
         const now = performance.now();
         const dt = now - lastTime;
 
-        // Direct velocity calculation
+        
         if (dt > 0) {
             velocity = diff / dt * 16;
         }
@@ -281,10 +281,10 @@ function initCatalogoCarousel() {
         lastPos = currentX;
         lastTime = now;
 
-        // Apply position immediately with translate3d for GPU
+        
         track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
 
-        // Inline boundary check
+        
         if (currentPosition >= totalCards * 2 * cardWidth) {
             currentPosition -= totalCards * cardWidth;
             track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
@@ -299,11 +299,11 @@ function initCatalogoCarousel() {
         isDragging = false;
         track.classList.remove('dragging');
 
-        // Apply inertia if velocity is significant
+        
         if (Math.abs(velocity) > 0.5) {
             applyInertia();
         } else {
-            // Restart auto-scroll after delay
+            
             if (resumeTimeout) clearTimeout(resumeTimeout);
             resumeTimeout = setTimeout(() => {
                 isPaused = false;
@@ -320,7 +320,7 @@ function initCatalogoCarousel() {
         function inertiaStep() {
             if (Math.abs(velocity) < 0.1) {
                 inertiaId = null;
-                // Restart auto-scroll after delay
+                
                 if (resumeTimeout) clearTimeout(resumeTimeout);
                 resumeTimeout = setTimeout(() => {
                     isPaused = false;
@@ -334,7 +334,7 @@ function initCatalogoCarousel() {
             currentPosition -= velocity;
             velocity *= friction;
 
-            // Inline boundary check
+            
             if (currentPosition >= totalCards * 2 * cardWidth) {
                 currentPosition -= totalCards * cardWidth;
             } else if (currentPosition < totalCards * cardWidth) {
@@ -353,14 +353,14 @@ function initCatalogoCarousel() {
     track.addEventListener('touchmove', touchMove, { passive: false });
     track.addEventListener('touchend', touchEnd, { passive: true });
 
-    // Add Scrolled class on any movement
+    
     const addScrolledClass = () => {
         carouselContainer.classList.add('scrolled');
         carousel.classList.add('scrolled');
     };
 
     track.addEventListener('touchstart', addScrolledClass, { once: true, passive: true });
-    carouselContainer.addEventListener('scroll', addScrolledClass, { once: true }); // Fallback
+    carouselContainer.addEventListener('scroll', addScrolledClass, { once: true }); 
 
     if (carouselContainer) {
         carouselContainer.addEventListener('scroll', () => {
@@ -440,19 +440,19 @@ function applySpecialPricing() {
         product.sale = true;
     });
 }
-// Helper function to convert image path to mini version
+
 function getMiniImagePath(imagePath) {
     return imagePath.replace(/\/(\d+)\.(webp|jpg|png|jpeg)$/i, '/$1_mini.$2');
 }
 
-// Helper function to get secondary image path (mini version)
+
 function getSecondaryMiniImage(product) {
-    // If product has explicit images array (Yupoo imports), use first one
+    
     if (product.images && product.images.length > 0) {
         return getMiniImagePath(product.images[0]);
     }
-    // For local products without images array, derive secondary from primary
-    // e.g., /assets/productos/La Liga/Alaves2526L/1.webp -> /assets/productos/La Liga/Alaves2526L/2_mini.webp
+    
+    
     if (product.image) {
         const secondaryPath = product.image.replace(/\/1\.(webp|jpg|png|jpeg)$/i, '/2.$1');
         return getMiniImagePath(secondaryPath);
@@ -523,7 +523,7 @@ async function renderBestSellers() {
     }
 }
 async function getGlobalFeaturedProducts() {
-    // First check sessionStorage for current session persistence
+    
     const sessionCached = sessionStorage.getItem('featuredProductsSession');
     if (sessionCached) {
         try {
@@ -532,10 +532,10 @@ async function getGlobalFeaturedProducts() {
                 console.log('Using session-cached featured products');
                 return cached.products;
             }
-        } catch (e) { /* ignore parse errors */ }
+        } catch (e) {  }
     }
 
-    // Timeout wrapper to handle blocked Firebase
+    
     const TIMEOUT_MS = 5000;
 
     try {
@@ -545,13 +545,13 @@ async function getGlobalFeaturedProducts() {
                 setTimeout(() => reject(new Error('Firebase timeout')), TIMEOUT_MS)
             )
         ]);
-        // Save to sessionStorage for session persistence
+        
         saveToSessionStorage(result);
         return result;
     } catch (error) {
         console.warn('Firebase unavailable, using local fallback:', error.message);
         const fallback = getLocalFallbackProducts();
-        // Save fallback to sessionStorage too
+        
         saveToSessionStorage(fallback);
         return fallback;
     }
@@ -563,7 +563,7 @@ function saveToSessionStorage(productIds) {
             products: productIds,
             timestamp: Date.now()
         }));
-    } catch (e) { /* ignore storage errors */ }
+    } catch (e) {  }
 }
 
 async function getGlobalFeaturedProductsFromFirebase() {
@@ -577,14 +577,14 @@ async function getGlobalFeaturedProductsFromFirebase() {
             data.products &&
             data.products.length === FEATURED_CONFIG.PRODUCT_COUNT) {
             console.log('Using existing featured products from Firebase');
-            // Cache to localStorage for fallback
+            
             cacheFeaturedProducts(data.products, data.week_end);
             return data.products;
         }
     }
     console.log('Generating new featured products rotation');
     const newProducts = await generateNewFeaturedProducts(configRef, now);
-    // Cache new products
+    
     cacheFeaturedProducts(newProducts, now + FEATURED_CONFIG.ROTATION_DAYS * 24 * 60 * 60 * 1000);
     return newProducts;
 }
@@ -595,11 +595,11 @@ function cacheFeaturedProducts(productIds, expires) {
             products: productIds,
             expires: expires
         }));
-    } catch (e) { /* ignore storage errors */ }
+    } catch (e) {  }
 }
 
 function getLocalFallbackProducts() {
-    // Use localStorage cache if available
+    
     const cached = localStorage.getItem('featuredProductsCache');
     if (cached) {
         try {
@@ -608,10 +608,10 @@ function getLocalFallbackProducts() {
                 console.log('Using cached featured products');
                 return data.products;
             }
-        } catch (e) { /* ignore parse errors */ }
+        } catch (e) {  }
     }
 
-    // Fallback: shuffle local products and pick PRODUCT_COUNT
+    
     const shuffled = [...products].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, FEATURED_CONFIG.PRODUCT_COUNT).map(p => p.id);
 }

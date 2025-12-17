@@ -851,9 +851,7 @@
 
 
 
-/* ===============================================
-   ORDER CARDS - PREMIUM REDESIGN
-   =============================================== */
+
 
 .order-card {
     background: var(--bg-card);
@@ -887,7 +885,7 @@
     opacity: 1;
 }
 
-/* Dark mode order cards */
+
 [data-theme="dark"] .order-card {
     background: linear-gradient(180deg, rgba(20, 20, 30, 0.95) 0%, rgba(15, 15, 25, 0.98) 100%);
     border-color: rgba(255, 255, 255, 0.08);
@@ -911,7 +909,7 @@
     opacity: 1;
 }
 
-/* Order card internal elements improvement */
+
 .order-card h3 {
     font-size: 1.2rem;
     font-weight: 700;
@@ -926,13 +924,13 @@
     margin-bottom: 0.75rem;
 }
 
-/* Status badge improvements */
+
 .order-card [style*="border-radius: 50px"] {
     backdrop-filter: blur(10px);
     text-shadow: none;
 }
 
-/* Address section styling */
+
 [data-theme="dark"] .order-card [style*="border-left: 3px solid"] {
     background: rgba(15, 15, 25, 0.8) !important;
     border-left-color: #8b5cf6 !important;
@@ -940,7 +938,7 @@
         inset 0 0 20px rgba(139, 92, 246, 0.03);
 }
 
-/* Product items styling */
+
 [data-theme="dark"] .order-card [style*="background: var(--bg-body)"] {
     background: rgba(10, 10, 20, 0.6) !important;
     border-color: rgba(255, 255, 255, 0.08) !important;
@@ -951,18 +949,18 @@
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
 }
 
-/* Price styling */
+
 [data-theme="dark"] .order-card [style*="font-size: 1.5rem"][style*="font-weight: 800"] {
     text-shadow: 0 0 20px rgba(139, 92, 246, 0.4);
 }
 
-/* Tracking number section */
+
 [data-theme="dark"] .order-card [style*="rgba(34, 197, 94"] {
     background: linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(34, 197, 94, 0.06)) !important;
     border-color: rgba(34, 197, 94, 0.25) !important;
 }
 
-/* Product image container */
+
 .order-card [style*="width: 70px"][style*="height: 70px"] {
     box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
 }
@@ -973,7 +971,7 @@
         0 0 20px rgba(168, 85, 247, 0.05);
 }
 
-/* Edit/Action buttons in order cards */
+
 .order-card button[style*="linear-gradient(135deg, #6366f1"],
 .order-card button[style*="linear-gradient(135deg, #1a1a2e"] {
     position: relative;
@@ -1245,11 +1243,9 @@
 }
 
 
-/* ===============================================
-   PERFIL PAGE - DARK MODE PURPLE GLOW EFFECTS
-   =============================================== */
 
-/* Profile container subtle purple ambient glow */
+
+
 [data-theme="dark"] .profile-container {
     position: relative;
 }
@@ -1279,7 +1275,7 @@
     z-index: -1;
 }
 
-/* Profile sidebar - subtle purple border glow */
+
 [data-theme="dark"] .profile-sidebar {
     background: linear-gradient(180deg, rgba(15, 15, 25, 0.95) 0%, rgba(10, 10, 18, 0.98) 100%);
     border-color: rgba(168, 85, 247, 0.15);
@@ -1293,7 +1289,7 @@
         0 0 50px rgba(168, 85, 247, 0.12);
 }
 
-/* Avatar purple glow on hover */
+
 [data-theme="dark"] .avatar {
     box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
 }
@@ -1303,7 +1299,7 @@
         0 0 60px rgba(168, 85, 247, 0.3);
 }
 
-/* Nav items subtle purple indicator */
+
 [data-theme="dark"] .nav-item:hover,
 [data-theme="dark"] .nav-item.active {
     background: linear-gradient(90deg, rgba(168, 85, 247, 0.15) 0%, rgba(139, 92, 246, 0.05) 100%);
@@ -1311,7 +1307,7 @@
     box-shadow: inset 0 0 15px rgba(168, 85, 247, 0.05);
 }
 
-/* Profile content section subtle glow */
+
 [data-theme="dark"] .profile-content {
     position: relative;
 }
@@ -1320,7 +1316,7 @@
     text-shadow: 0 0 30px rgba(168, 85, 247, 0.2);
 }
 
-/* Order and Address cards with purple accent */
+
 [data-theme="dark"] .order-card,
 [data-theme="dark"] .address-card {
     border-color: rgba(255, 255, 255, 0.08);
@@ -1335,27 +1331,27 @@
         0 0 40px rgba(168, 85, 247, 0.1);
 }
 
-/* Settings cards subtle glow */
+
 [data-theme="dark"] .settings-card {
     border-color: rgba(255, 255, 255, 0.08);
     box-shadow: 0 2px 15px rgba(0, 0, 0, 0.3),
         0 0 25px rgba(139, 92, 246, 0.04);
 }
 
-/* Points cards with enhanced glow */
+
 [data-theme="dark"] .points-card {
     box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3),
         0 0 30px rgba(168, 85, 247, 0.06);
 }
 
-/* Modal content purple glow */
+
 [data-theme="dark"] .modal-content {
     border: 1px solid rgba(168, 85, 247, 0.15);
     box-shadow: 0 20px 60px rgba(0, 0, 0, 0.6),
         0 0 80px rgba(168, 85, 247, 0.1);
 }
 
-/* Reward cards hover glow */
+
 [data-theme="dark"] .reward-card:hover {
     border-color: rgba(168, 85, 247, 0.4);
     box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4),

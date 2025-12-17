@@ -39,7 +39,7 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
         rel="stylesheet">
-    <!-- Font Awesome Local --><link rel="stylesheet" href="/assets/fonts/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="/assets/fonts/fontawesome/css/all.min.css">
 
 
     <link rel="stylesheet" href="/css/variables.css">
@@ -213,7 +213,7 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Handle dropdown buttons
+            
             document.querySelectorAll('.dropdown-btn').forEach(btn => {
                 btn.addEventListener('click', (e) => {
                     e.stopPropagation();
@@ -227,7 +227,7 @@
                 });
             });
 
-            // Handle clickable cards
+            
             document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
                 card.addEventListener('click', (e) => {
                     if (e.target.closest('.dropdown-menu') || e.target.closest('.dropdown-btn') || e.target.closest('.catalogo-btn')) {
@@ -238,14 +238,14 @@
                 });
             });
 
-            // Handle dropdown menu links
+            
             document.querySelectorAll('.dropdown-menu a').forEach(link => {
                 link.addEventListener('click', (e) => {
                     e.stopPropagation();
                 });
             });
 
-            // Close dropdown when clicking outside
+            
             document.addEventListener('click', (e) => {
                 if (!e.target.closest('.catalogo-card')) {
                     document.querySelectorAll('.catalogo-card.dropdown-open').forEach(card => {

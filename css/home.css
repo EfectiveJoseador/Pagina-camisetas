@@ -774,7 +774,7 @@ a.catalogo-btn:hover,
     align-items: center;
 }
 
-/* Headline left section */
+
 .info-headline {
     display: flex;
     flex-direction: column;
@@ -848,7 +848,7 @@ a.catalogo-btn:hover,
     transform: translateX(3px);
 }
 
-/* Cards wrapper - right section */
+
 .info-cards-wrapper {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -891,7 +891,7 @@ a.catalogo-btn:hover,
     font-size: 0.95rem;
 }
 
-/* Responsive for info section */
+
 @media (max-width: 1024px) {
     .info-section-content {
         grid-template-columns: 1fr;
@@ -985,14 +985,14 @@ a.catalogo-btn:hover,
     transition: transform 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Primary image - shown by default */
+
 .product-image img.primary-image {
     z-index: 2;
     opacity: 1;
     transition: opacity 0.5s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
-/* Secondary image - hidden by default, shown on hover */
+
 .product-image img.secondary-image {
     z-index: 1;
     opacity: 0;
@@ -1007,12 +1007,12 @@ a.catalogo-btn:hover,
     opacity: 1;
 }
 
-/* Scale effect on hover for cards without secondary image */
+
 .product-card:hover .product-image img:only-child {
     transform: scale(1.1);
 }
 
-/* Disable image swap on touch devices */
+
 @media (hover: none) and (pointer: coarse) {
     .product-card:hover .product-image img.primary-image {
         opacity: 1;
@@ -1286,15 +1286,15 @@ a.catalogo-btn:hover,
 .catalogo-carousel .carousel-track {
     display: flex;
     gap: 1.5rem;
-    /* GPU acceleration */
+    
     transform: translate3d(0, 0, 0);
     will-change: transform;
 }
 
-/* CRITICAL: Performance optimizations during touch drag */
+
 .catalogo-carousel .carousel-track.dragging {
     will-change: transform;
-    /* Remove transition during drag for instant response */
+    
 }
 
 .catalogo-carousel .carousel-track.dragging,
@@ -1308,7 +1308,7 @@ a.catalogo-btn:hover,
     animation: none !important;
 }
 
-/* Disable hover effects on touch devices for performance */
+
 @media (hover: none) {
     .catalogo-card:hover {
         transform: none;
@@ -1382,9 +1382,9 @@ a.catalogo-btn:hover,
         position: relative;
         padding: 0 1rem;
         padding-right: 0;
-        /* Allow peek of next item */
+        
         overflow: hidden;
-        /* Disable native scroll, use JS transform */
+        
     }
 
     .catalogo-carousel .carousel-container::-webkit-scrollbar {
@@ -1392,10 +1392,10 @@ a.catalogo-btn:hover,
     }
 
     .catalogo-carousel .carousel-track {
-        /* Enable transform for JS animation */
+        
         gap: 1rem;
         padding-right: 1rem;
-        /* Space at end */
+        
     }
 
     .catalogo-carousel .catalogo-card {
@@ -1409,7 +1409,7 @@ a.catalogo-btn:hover,
         display: none;
     }
 
-    /* Subtle fade gradient on right edge */
+    
     .catalogo-carousel::after {
         content: '';
         position: absolute;
@@ -1424,7 +1424,7 @@ a.catalogo-btn:hover,
         transition: opacity 0.3s ease;
     }
 
-    /* Hide fade when scrolled */
+    
     .catalogo-carousel.scrolled::after {
         opacity: 0;
     }

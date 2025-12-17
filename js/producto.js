@@ -44,7 +44,7 @@ document.addEventListener('DOMContentLoaded', () => {
     products.forEach(p => applySpecialPricing(p));
     document.title = `${product.name} - Camisetazo`;
 
-    // Actualizar breadcrumb con liga
+    
     const leagueNames = {
         'laliga': 'La Liga',
         'premier': 'Premier League',
@@ -68,18 +68,18 @@ document.addEventListener('DOMContentLoaded', () => {
         breadcrumbLeague.href = `/pages/tienda.html?league=${product.league}`;
     }
 
-    // Extraer nombre del equipo (antes de la temporada o tipo)
-    // Ejemplo: "Benfica 25/26 Especial" → "Benfica"
+    
+    
     const teamName = product.name
-        .replace(/\s*\d{2}\/?\d{2}.*$/, '')  // Quitar temporada y lo que sigue
-        .replace(/\s*\(Niño\).*$/i, '')      // Quitar (Niño)
+        .replace(/\s*\d{2}\/?\d{2}.*$/, '')  
+        .replace(/\s*\(Niño\).*$/i, '')      
         .replace(/\s*(Local|Visitante|Tercera|Cuarta|Especial|Retro|Entrenamiento|Portero).*$/i, '')
         .trim();
 
     const breadcrumbTeam = document.getElementById('breadcrumb-team');
     if (breadcrumbTeam && teamName) {
         breadcrumbTeam.textContent = teamName;
-        // Filtrar por equipo en la tienda
+        
         breadcrumbTeam.href = `/pages/tienda.html?league=${product.league}&team=${encodeURIComponent(teamName)}`;
     }
 
@@ -99,7 +99,7 @@ document.addEventListener('DOMContentLoaded', () => {
     mainImg.src = product.image;
     mainImg.alt = product.imageAlt || product.name;
 
-    // Add error handling for external images (e.g., Yupoo)
+    
     mainImg.onerror = function () {
         this.onerror = null;
         this.src = '/assets/images/placeholder-jersey.webp';
@@ -110,26 +110,21 @@ document.addEventListener('DOMContentLoaded', () => {
     let availableImages = [];
     let currentImageIndex = 0;
 
-    /**
-     * Loads images for the gallery
-     * Supports both:
-     * - New format: product.images[] array (from Yupoo imports)
-     * - Legacy format: probing /1.webp, /2.webp, etc paths
-     */
+    
     async function loadProductImages() {
-        // Check if product has explicit images array (Yupoo imports)
+        
         if (product.images && Array.isArray(product.images) && product.images.length > 0) {
-            // Use explicit images array
+            
             const allImages = [product.image, ...product.images];
 
-            // Validate each image
+            
             const imagePromises = allImages.map((imgUrl, index) => {
                 return new Promise((resolve) => {
                     const img = new Image();
                     img.onload = () => resolve({ index: index + 1, path: imgUrl, exists: true });
                     img.onerror = () => resolve({ index: index + 1, path: imgUrl, exists: false });
                     img.src = imgUrl;
-                    // Timeout for slow external images
+                    
                     setTimeout(() => resolve({ index: index + 1, path: imgUrl, exists: false }), 5000);
                 });
             });
@@ -138,7 +133,7 @@ document.addEventListener('DOMContentLoaded', () => {
             availableImages = results.filter(r => r.exists);
 
         } else {
-            // Legacy: probe for local images by path pattern
+            
             const basePath = product.image.replace('/1.webp', '');
             const imagePromises = [];
 
@@ -158,12 +153,12 @@ document.addEventListener('DOMContentLoaded', () => {
             availableImages = results.filter(r => r.exists);
         }
 
-        // Fallback: ensure at least the main image is shown
+        
         if (availableImages.length === 0 && product.image) {
             availableImages = [{ index: 1, path: product.image, exists: true }];
         }
 
-        // Render thumbnails
+        
         availableImages.forEach((img, idx) => {
             const thumb = document.createElement('div');
             thumb.className = `thumb ${idx === 0 ? 'active' : ''}`;
@@ -175,7 +170,7 @@ document.addEventListener('DOMContentLoaded', () => {
             thumbnailsContainer.appendChild(thumb);
         });
 
-        // Setup navigation
+        
         const prevBtn = document.getElementById('prev-image');
         const nextBtn = document.getElementById('next-image');
 
@@ -199,7 +194,7 @@ document.addEventListener('DOMContentLoaded', () => {
         }
     }
 
-    // Load images
+    
     loadProductImages();
 
     document.querySelectorAll('.size-btn').forEach(btn => {
@@ -618,12 +613,12 @@ function loadRelatedProducts() {
 
     const grid = document.getElementById('related-grid');
 
-    // Helper to get secondary image (first in images array if available)
+    
     const getSecondaryImage = (p) => {
         if (p.images && p.images.length > 0) {
             return p.images[0];
         }
-        return p.image; // Fallback to primary
+        return p.image; 
     };
 
     const cardsHtml = finalRelated.map(p => `
@@ -678,27 +673,27 @@ function initRelatedCarousel() {
     const cardWidth = 220 + 24;
     const totalCards = originalCards.length;
 
-    // Fix cloning with eager loading for images to prevent stutter
+    
     originalCards.forEach(card => {
         const cloneEnd = card.cloneNode(true);
         cloneEnd.classList.add('carousel-clone');
-        // Ensure images load immediately to avoid stutter
+        
         const img = cloneEnd.querySelector('img');
         if (img) img.loading = 'eager';
         track.appendChild(cloneEnd);
     });
 
-    // Prepend clones in correct order
+    
     [...originalCards].reverse().forEach(card => {
         const cloneStart = card.cloneNode(true);
         cloneStart.classList.add('carousel-clone');
-        // Ensure images load immediately
+        
         const img = cloneStart.querySelector('img');
         if (img) img.loading = 'eager';
         track.insertBefore(cloneStart, track.firstChild);
     });
 
-    let currentPosition = totalCards * cardWidth; // Start at Originals
+    let currentPosition = totalCards * cardWidth; 
     let isJumping = false;
     let animationId = null;
     let isPaused = false;
@@ -712,15 +707,15 @@ function initRelatedCarousel() {
         } else {
             track.style.transition = 'none';
         }
-        // Use translate3d for GPU acceleration
+        
         track.style.transform = `translate3d(${-position}px, 0, 0)`;
     }
 
     function checkBoundary(e) {
-        // Only trigger if it's the track moving, not a child element transition
+        
         if (e && e.target !== track) return;
 
-        // Forward limit
+        
         if (currentPosition >= totalCards * 2 * cardWidth) {
             isJumping = true;
             track.style.transition = 'none';
@@ -729,7 +724,7 @@ function initRelatedCarousel() {
             void track.offsetHeight;
             isJumping = false;
         }
-        // Backward limit
+        
         if (currentPosition < totalCards * cardWidth) {
             isJumping = true;
             track.style.transition = 'none';
@@ -740,7 +735,7 @@ function initRelatedCarousel() {
         }
     }
 
-    // Continuous smooth scroll animation
+    
     function smoothScroll() {
         if (isPaused || isJumping) {
             animationId = requestAnimationFrame(smoothScroll);
@@ -749,12 +744,12 @@ function initRelatedCarousel() {
 
         currentPosition += SCROLL_SPEED;
 
-        // Auto-scroll boundary check
+        
         if (currentPosition >= totalCards * 2 * cardWidth) {
             currentPosition -= totalCards * cardWidth;
         }
 
-        // Use translate3d for GPU acceleration
+        
         track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
 
         animationId = requestAnimationFrame(smoothScroll);
@@ -808,10 +803,10 @@ function initRelatedCarousel() {
 
     track.addEventListener('transitionend', checkBoundary);
 
-    // Get carousel container for hover detection
+    
     const carouselContainer = grid?.querySelector('.carousel-container');
 
-    // Pause when hovering over the entire carousel container area
+    
     if (carouselContainer) {
         carouselContainer.addEventListener('mouseenter', pauseAutoScroll);
         carouselContainer.addEventListener('mouseleave', () => {
@@ -820,14 +815,14 @@ function initRelatedCarousel() {
         });
     }
 
-    // Initial position
+    
     setPosition(currentPosition, false);
     track.offsetHeight;
 
-    // Start continuous scroll
+    
     startAutoScroll();
 
-    // Touch swipe support with inertia
+    
     let isDragging = false;
     let startPos = 0;
     let lastPos = 0;
@@ -835,17 +830,17 @@ function initRelatedCarousel() {
     let velocity = 0;
     let inertiaId = null;
 
-    // Set touch-action to allow vertical scroll but capture horizontal
+    
     track.style.touchAction = 'pan-y';
     track.style.userSelect = 'none';
     track.style.webkitUserSelect = 'none';
 
-    // Optimized position setter using translate3d for GPU compositing
+    
     function setTrackPosition(pos) {
         track.style.transform = `translate3d(${-pos}px, 0, 0)`;
     }
 
-    // Boundary check helper
+    
     function checkAndWrapBoundaries() {
         if (currentPosition >= totalCards * 2 * cardWidth) {
             currentPosition -= totalCards * cardWidth;
@@ -857,12 +852,12 @@ function initRelatedCarousel() {
     }
 
     function touchStart(event) {
-        // Stop any ongoing inertia
+        
         if (inertiaId) {
             cancelAnimationFrame(inertiaId);
             inertiaId = null;
         }
-        // Also stop auto-scroll animation completely during touch
+        
         if (animationId) {
             cancelAnimationFrame(animationId);
             animationId = null;
@@ -874,14 +869,14 @@ function initRelatedCarousel() {
         lastPos = startPos;
         lastTime = performance.now();
         velocity = 0;
-        isPaused = true; // Pause auto-scroll
+        isPaused = true; 
         if (resumeTimeout) clearTimeout(resumeTimeout);
     }
 
     function touchMove(event) {
         if (!isDragging) return;
 
-        // Prevent browser from scrolling - this eliminates the delay
+        
         event.preventDefault();
 
         const currentX = event.touches[0].clientX;
@@ -889,7 +884,7 @@ function initRelatedCarousel() {
         const now = performance.now();
         const dt = now - lastTime;
 
-        // Direct velocity calculation - simpler and more responsive
+        
         if (dt > 0) {
             velocity = diff / dt * 16;
         }
@@ -898,10 +893,10 @@ function initRelatedCarousel() {
         lastPos = currentX;
         lastTime = now;
 
-        // Apply position immediately - write directly to avoid function call overhead
+        
         track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
 
-        // Inline boundary check for speed
+        
         if (currentPosition >= totalCards * 2 * cardWidth) {
             currentPosition -= totalCards * cardWidth;
             track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
@@ -916,11 +911,11 @@ function initRelatedCarousel() {
         isDragging = false;
         track.classList.remove('dragging');
 
-        // Apply inertia if velocity is significant
+        
         if (Math.abs(velocity) > 0.5) {
             applyInertia();
         } else {
-            // Restart auto-scroll after delay
+            
             if (resumeTimeout) clearTimeout(resumeTimeout);
             resumeTimeout = setTimeout(() => {
                 isPaused = false;
@@ -937,7 +932,7 @@ function initRelatedCarousel() {
         function inertiaStep() {
             if (Math.abs(velocity) < 0.1) {
                 inertiaId = null;
-                // Restart auto-scroll after delay
+                
                 if (resumeTimeout) clearTimeout(resumeTimeout);
                 resumeTimeout = setTimeout(() => {
                     isPaused = false;
@@ -951,7 +946,7 @@ function initRelatedCarousel() {
             currentPosition -= velocity;
             velocity *= friction;
 
-            // Inline boundary check
+            
             if (currentPosition >= totalCards * 2 * cardWidth) {
                 currentPosition -= totalCards * cardWidth;
             } else if (currentPosition < totalCards * cardWidth) {
@@ -971,14 +966,14 @@ function initRelatedCarousel() {
     track.addEventListener('touchend', touchEnd, { passive: true });
     track.addEventListener('touchcancel', touchEnd, { passive: true });
 
-    // Add Scrolled class on any movement
+    
     const addScrolledClass = () => {
         carouselContainer.classList.add('scrolled');
         grid.closest('.related-products')?.classList.add('scrolled');
     };
 
     track.addEventListener('touchstart', addScrolledClass, { once: true, passive: true });
-    carouselContainer.addEventListener('scroll', addScrolledClass, { once: true }); // Fallback
+    carouselContainer.addEventListener('scroll', addScrolledClass, { once: true }); 
 
     if (carouselContainer) {
         carouselContainer.addEventListener('scroll', () => {

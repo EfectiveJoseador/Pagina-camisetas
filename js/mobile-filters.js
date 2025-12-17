@@ -136,7 +136,7 @@
             } else {
                 mobileTeamStep.classList.add('hidden');
             }
-            // Sync checkboxes
+            
             if (desktopKidsCheckbox && mobileKidsCheckbox) {
                 mobileKidsCheckbox.checked = desktopKidsCheckbox.checked;
             }
@@ -155,7 +155,7 @@
                 desktopLeagueSelect.dispatchEvent(new Event('change'));
             }
 
-            // Apply checkbox filters
+            
             if (desktopKidsCheckbox) {
                 desktopKidsCheckbox.checked = kidsChecked;
                 desktopKidsCheckbox.dispatchEvent(new Event('change'));

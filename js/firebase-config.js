@@ -1,4 +1,4 @@
-// Firebase SDK - CDN con manejo de errores y timeout
+
 import { initializeApp, getApps, getApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
 import {
     getAuth,
@@ -53,14 +53,14 @@ setPersistence(auth, browserLocalPersistence).catch((error) => {
     console.error("Auth persistence error:", error);
 });
 
-// Re-export everything for centralized imports
+
 export {
-    // Core
+    
     auth,
     db,
     googleProvider,
 
-    // Auth Functions
+    
     onAuthStateChanged,
     signOut,
     signInWithEmailAndPassword,
@@ -71,7 +71,7 @@ export {
     sendEmailVerification,
     RecaptchaVerifier,
 
-    // Database Functions
+    
     ref,
     get,
     set,

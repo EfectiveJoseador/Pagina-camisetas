@@ -42,7 +42,7 @@ const extraPrices = {
     oficial: 10
 };
 
-// Patch definitions for dynamic options
+
 const PATCH_DEFINITIONS = {
     liga: "La Liga",
     premier: "Premier",
@@ -57,7 +57,7 @@ const PATCH_DEFINITIONS = {
     copa_america: "Copa América"
 };
 
-// Get allowed patches based on product league
+
 function getAllowedPatches(product) {
     if (!product) return [];
 
@@ -65,10 +65,10 @@ function getAllowedPatches(product) {
     const league = product.league;
     const isNBA = product.category === 'nba' || product.league === 'nba';
 
-    // NBA products don't get patches
+    
     if (isNBA) return [];
 
-    // National teams get different patches
+    
     if (league === 'selecciones' || product.category === 'selecciones') {
         allowed.push('copamundo');
         allowed.push('eurocopa');
@@ -76,12 +76,12 @@ function getAllowedPatches(product) {
         return allowed;
     }
 
-    // Club teams get European competition patches
+    
     allowed.push('champions');
     allowed.push('europa');
     allowed.push('mundial_clubes');
 
-    // League-specific patches
+    
     switch (league) {
         case 'laliga':
             allowed.push('liga');
@@ -103,12 +103,12 @@ function getAllowedPatches(product) {
     return allowed;
 }
 
-// Generate patch options HTML for a product
+
 function generatePatchOptionsHTML(product) {
     const allowedPatches = getAllowedPatches(product);
 
     if (allowedPatches.length === 0) {
-        return ''; // No patches available for this product
+        return ''; 
     }
 
     let options = '<option value="none">Sin parche</option>';
@@ -214,18 +214,18 @@ function renderPagination() {
         });
     });
 }
-// Helper function to convert image path to mini version
+
 function getMiniImagePath(imagePath) {
-    // Convert /path/to/1.webp to /path/to/1_mini.webp
+    
     return imagePath.replace(/\/(\d+)\.(webp|jpg|png|jpeg)$/i, '/$1_mini.$2');
 }
 
-// Helper function to get secondary image path (mini version)
+
 function getSecondaryMiniImagePath(product) {
     if (product.images && product.images.length > 0) {
         return getMiniImagePath(product.images[0]);
     }
-    // Fallback: replace 1 with 2 and add _mini
+    
     return product.image.replace(/\/1\.(webp|jpg|png|jpeg)$/i, '/2_mini.$1');
 }
 
@@ -349,9 +349,9 @@ function renderProducts() {
     setupQuickAddListeners();
 }
 
-// Quick Add Panel Functions
+
 function setupQuickAddListeners() {
-    // Quick add button click - toggle panel
+    
     document.querySelectorAll('.btn-quick-add').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -361,7 +361,7 @@ function setupQuickAddListeners() {
         });
     });
 
-    // Close button click
+    
     document.querySelectorAll('.quick-add-panel .panel-close').forEach(btn => {
         btn.addEventListener('click', (e) => {
             e.preventDefault();
@@ -371,7 +371,7 @@ function setupQuickAddListeners() {
         });
     });
 
-    // Optional fields toggle
+    
     document.querySelectorAll('.optional-toggle').forEach(toggle => {
         toggle.addEventListener('click', (e) => {
             e.preventDefault();
@@ -384,7 +384,7 @@ function setupQuickAddListeners() {
         });
     });
 
-    // Form inputs - update price preview
+    
     document.querySelectorAll('.quick-add-form').forEach(form => {
         const productId = form.dataset.productId;
         const product = allProducts.find(p => p.id === parseInt(productId));
@@ -399,20 +399,20 @@ function setupQuickAddListeners() {
 
             let total = product.price;
 
-            // Extra size cost
+            
             const size = sizeSelect?.value;
             if (size === '3XL' || size === '4XL') {
                 total += 2;
             }
 
-            // Personalization cost
+            
             const name = nameInput?.value?.trim();
             const number = numberInput?.value?.trim();
             if (name && number) {
                 total += 2;
             }
 
-            // Patch cost
+            
             const patch = patchSelect?.value;
             if (patch && patch !== 'none') {
                 total += 1;
@@ -423,12 +423,12 @@ function setupQuickAddListeners() {
             }
         };
 
-        // Name input validation - only letters and spaces
+        
         const nameInput = form.querySelector('.quick-name');
         if (nameInput) {
             nameInput.addEventListener('input', (e) => {
                 let value = e.target.value;
-                // Remove any non-letter characters except spaces
+                
                 value = value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
                 if (value.length > 15) {
                     value = value.slice(0, 15);
@@ -438,17 +438,17 @@ function setupQuickAddListeners() {
             });
         }
 
-        // Number input validation - only digits, max 2
+        
         const numberInput = form.querySelector('.quick-number');
         if (numberInput) {
             numberInput.addEventListener('input', (e) => {
                 let value = e.target.value;
-                // Remove any non-digit characters
+                
                 value = value.replace(/\D/g, '');
                 if (value.length > 2) {
                     value = value.slice(0, 2);
                 }
-                // Ensure max value is 99
+                
                 if (value !== '' && parseInt(value) > 99) {
                     value = '99';
                 }
@@ -457,12 +457,12 @@ function setupQuickAddListeners() {
             });
         }
 
-        // Other form inputs - update price preview
+        
         form.querySelectorAll('select').forEach(input => {
             input.addEventListener('change', updatePrice);
         });
 
-        // Form submission
+        
         form.addEventListener('submit', (e) => {
             e.preventDefault();
             e.stopPropagation();
@@ -470,7 +470,7 @@ function setupQuickAddListeners() {
         });
     });
 
-    // Close panel when clicking outside
+    
     document.addEventListener('click', (e) => {
         if (!e.target.closest('.quick-add-panel') && !e.target.closest('.btn-quick-add')) {
             closeAllQuickAddPanels();
@@ -486,7 +486,7 @@ function toggleQuickAddPanel(productId) {
 
     const isActive = panel.classList.contains('active');
 
-    // Close all other panels first
+    
     closeAllQuickAddPanels();
 
     if (!isActive) {
@@ -518,7 +518,7 @@ function handleQuickAddSubmit(form, product) {
     const numberInput = form.querySelector('.quick-number');
     const patchSelect = form.querySelector('.quick-patch');
 
-    // Validation
+    
     const size = sizeSelect?.value;
     if (!size) {
         if (window.Toast) {
@@ -532,7 +532,7 @@ function handleQuickAddSubmit(form, product) {
     const name = nameInput?.value?.trim().toUpperCase() || '';
     const number = numberInput?.value?.trim() || '';
 
-    // Name and number must go together
+    
     if ((name && !number) || (!name && number)) {
         if (window.Toast) {
             window.Toast.error('El nombre y dorsal deben ir juntos');
@@ -542,7 +542,7 @@ function handleQuickAddSubmit(form, product) {
         return;
     }
 
-    // Calculate price
+    
     let totalPrice = product.price;
 
     if (size === '3XL' || size === '4XL') {
@@ -558,10 +558,10 @@ function handleQuickAddSubmit(form, product) {
         totalPrice += patchPrices[patch] || 1;
     }
 
-    // Create cart item
+    
     const customization = {
         size: size,
-        version: 'aficionado', // Default version for quick add
+        version: 'aficionado', 
         name: name,
         number: number,
         patch: patch,
@@ -578,20 +578,20 @@ function handleQuickAddSubmit(form, product) {
         customization: customization
     };
 
-    // Add to cart
+    
     addToCart(cartItem);
 
-    // Close panel
+    
     closeQuickAddPanel(product.id.toString());
 
-    // Reset form
+    
     form.reset();
     const optionalFields = form.querySelector('.optional-fields');
     const optionalToggle = form.querySelector('.optional-toggle');
     if (optionalFields) optionalFields.classList.remove('show');
     if (optionalToggle) optionalToggle.classList.remove('expanded');
 
-    // Show feedback
+    
     if (window.Toast) {
         window.Toast.success(`${product.name} añadido al carrito`);
     }
@@ -600,15 +600,15 @@ function handleQuickAddSubmit(form, product) {
     }
 }
 function init() {
-    // Try to get cached product order from sessionStorage
+    
     const cachedOrder = getProductOrderFromSession();
 
     if (cachedOrder && cachedOrder.length === products.length) {
-        // Use cached order - map IDs back to product objects
+        
         allProducts = cachedOrder.map(id => products.find(p => p.id === id)).filter(Boolean);
         console.log('Using session-cached product order');
     } else {
-        // Shuffle and cache the new order
+        
         allProducts = shuffleArray([...products]);
         saveProductOrderToSession(allProducts.map(p => p.id));
         console.log('Generated and cached new product order');
@@ -635,18 +635,18 @@ function shuffleArray(array) {
     return array;
 }
 
-// Session storage helpers for product order persistence
+
 function getProductOrderFromSession() {
     try {
         const cached = sessionStorage.getItem('tiendaProductOrder');
         if (cached) {
             const data = JSON.parse(cached);
-            // Validate it's an array of product IDs
+            
             if (Array.isArray(data.order)) {
                 return data.order;
             }
         }
-    } catch (e) { /* ignore parse errors */ }
+    } catch (e) {  }
     return null;
 }
 
@@ -656,7 +656,7 @@ function saveProductOrderToSession(orderIds) {
             order: orderIds,
             timestamp: Date.now()
         }));
-    } catch (e) { /* ignore storage errors */ }
+    } catch (e) {  }
 }
 function applySpecialPricing() {
     allProducts.forEach(product => {
@@ -709,7 +709,7 @@ function populateTeamFilter(league) {
 
     const leagueProducts = allProducts.filter(p => p.league === league);
 
-    // Lista de variantes a limpiar (más completa)
+    
     const variants = [
         'Local', 'Visitante', 'Tercera', 'Cuarta', 'Fourth', 'Home', 'Away', 'Third',
         'Portero', 'Goalkeeper', 'GK',
@@ -723,11 +723,11 @@ function populateTeamFilter(league) {
     ];
     const variantRegex = new RegExp(`\\b(${variants.join('|')})\\b`, 'gi');
 
-    // Patrón para eliminar tallas como "S-XXL", "S-4XL", etc.
+    
     const sizePattern = /\bS-[X\d]+L?\b/gi;
 
-    // Mapeo de nombres canónicos (clave normalizada -> nombre correcto a mostrar)
-    // Y mapeo de alias a clave canónica para unificar variantes
+    
+    
     const canonicalNames = {
         'mexico': 'México',
         'newcastle': 'Newcastle United',
@@ -759,7 +759,7 @@ function populateTeamFilter(league) {
         'brazil': 'Brasil'
     };
 
-    // Mapeo de alias a clave canónica (para agrupar variantes en la misma entrada)
+    
     const canonicalKeys = {
         'barcelona': 'fc barcelona',
         'newcastle': 'newcastle united',
@@ -777,31 +777,31 @@ function populateTeamFilter(league) {
         'brazil': 'brasil'
     };
 
-    // Usar Map para deduplicar normalizando claves
+    
     const teamMap = new Map();
 
     leagueProducts.forEach(p => {
         let name = p.name;
-        // Limpiar entidades HTML escapadas
+        
         name = name.replace(/&amp;/g, '&').replace(/&[a-z]+;/gi, ' ');
         name = name.replace(/\d{2}\/\d{2}/, '');
-        name = name.replace(/\b20\d{2}\b/, ''); // Eliminar años
-        name = name.replace(/\(.*\)/g, ''); // Eliminar paréntesis completos
+        name = name.replace(/\b20\d{2}\b/, ''); 
+        name = name.replace(/\(.*\)/g, ''); 
         name = name.replace(variantRegex, '');
-        name = name.replace(sizePattern, ''); // Eliminar tallas
+        name = name.replace(sizePattern, ''); 
         name = name.replace(/\s+/g, ' ').trim();
 
         if (name) {
-            // Clave normalizada (sin tildes, minúsculas)
+            
             let key = normalizeString(name);
 
-            // Usar clave canónica si existe (para agrupar variantes)
+            
             key = canonicalKeys[key] || key;
 
-            // Buscar nombre canónico para mostrar
+            
             const displayName = canonicalNames[key] || canonicalNames[normalizeString(name)] || name;
 
-            // Si no existe, guardar. Siempre preferir el nombre canónico.
+            
             if (!teamMap.has(key)) {
                 teamMap.set(key, displayName);
             }
@@ -819,7 +819,7 @@ function populateTeamFilter(league) {
             teamSelect.appendChild(option);
         });
 
-        // Aplicar deduplicación inteligente si el módulo está disponible
+        
         if (typeof DropdownDedup !== 'undefined') {
             DropdownDedup.applyMapToDropdown(teamSelect);
         }
@@ -932,7 +932,7 @@ function attachEventListeners() {
         selectedTeam = e.target.value;
         applyFilters();
     });
-    // Event listener para filtro Kids (checkbox)
+    
     const kidsCheckbox = document.getElementById('filter-kids');
     if (kidsCheckbox) {
         kidsCheckbox.addEventListener('change', (e) => {
@@ -940,7 +940,7 @@ function attachEventListeners() {
             applyFilters();
         });
     }
-    // Event listener para filtro Retro
+    
     const retroCheckbox = document.getElementById('filter-retro');
     if (retroCheckbox) {
         retroCheckbox.addEventListener('change', (e) => {
@@ -974,10 +974,10 @@ function attachEventListeners() {
         selectedKids = false;
         selectedRetro = false;
         document.getElementById('team-step').classList.add('hidden');
-        // Reset kids checkbox
+        
         const kidsCb = document.getElementById('filter-kids');
         if (kidsCb) kidsCb.checked = false;
-        // Reset retro checkbox
+        
         const retroCb = document.getElementById('filter-retro');
         if (retroCb) retroCb.checked = false;
 
@@ -986,7 +986,7 @@ function attachEventListeners() {
         applyFilters();
     });
 }
-// Helper para normalizar strings (quitar tildes y lowerCase)
+
 function normalizeString(str) {
     return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "").toLowerCase();
 }
@@ -997,7 +997,7 @@ function applyFilters(updateURL = true) {
     const sortBy = document.getElementById('sort-select').value;
     currentPage = 1;
 
-    // Mapeo de nombres canónicos a patrones de búsqueda alternativos
+    
     const teamSearchAliases = {
         'sporting de lisboa': ['sporting lisboa', 'sporting lisbon', 'sporting de lisboa'],
         'fc barcelona': ['fc barcelona', 'barcelona'],
@@ -1023,7 +1023,7 @@ function applyFilters(updateURL = true) {
         if (selectedTeam !== '') {
             const teamKey = normalizeString(selectedTeam);
             const aliases = teamSearchAliases[teamKey] || [teamKey];
-            // Verificar si el producto coincide con alguno de los alias
+            
             matchesTeam = aliases.some(alias => productName.includes(normalizeString(alias)));
         }
         let matchesKids = true;
@@ -1035,7 +1035,7 @@ function applyFilters(updateURL = true) {
             matchesKids = isKidsProduct;
         }
 
-        // Filtro retro
+        
         let matchesRetro = true;
         if (selectedRetro) {
             matchesRetro = nameLower.includes('retro');

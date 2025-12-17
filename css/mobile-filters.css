@@ -309,7 +309,7 @@
     }
 }
 
-/* Mobile Filter Checkboxes */
+
 .mobile-filter-checkboxes {
     display: flex;
     flex-direction: column;
@@ -396,7 +396,7 @@
     transition: all 0.25s ease;
 }
 
-/* Light theme adjustments for mobile checkboxes */
+
 [data-theme="light"] .mobile-filter-checkbox {
     background: rgba(255, 255, 255, 0.9);
     border-color: rgba(0, 0, 0, 0.1);

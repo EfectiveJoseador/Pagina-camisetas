@@ -4,11 +4,11 @@ const LOGIN_RATE_LIMIT_KEY = 'login_attempts';
 const MAX_LOGIN_ATTEMPTS = 5;
 const RATE_LIMIT_WINDOW_MS = 300000;
 
-// Obtener parámetro de redirección de la URL
+
 const urlParams = new URLSearchParams(window.location.search);
 const redirectParam = urlParams.get('redirect');
 
-// Función helper para obtener la URL de redirección correcta
+
 function getRedirectUrl(isAdmin) {
     if (isAdmin) {
         return '/pages/admin.html';

@@ -181,7 +181,7 @@
     font-size: 0.8rem;
 }
 
-/* Checkbox personalizado para filtros */
+
 .filter-checkbox {
     display: flex;
     align-items: center;
@@ -254,7 +254,7 @@
     transform: scale(1) rotate(0deg);
 }
 
-/* Enhanced active state for the entire checkbox label when checked */
+
 .filter-checkbox:has(input[type="checkbox"]:checked) {
     background: linear-gradient(135deg, rgba(139, 92, 246, 0.15) 0%, rgba(168, 85, 247, 0.2) 100%);
     border-color: rgba(168, 85, 247, 0.6);
@@ -931,11 +931,9 @@
     transform: translateY(-2px);
 }
 
-/* =================================================
-   LIGHT THEME STYLES
-   ================================================= */
 
-/* Filters Sidebar - Light Theme */
+
+
 [data-theme="light"] .filters-sidebar {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.99) 100%);
     border-color: rgba(99, 102, 241, 0.2);
@@ -964,7 +962,7 @@
     color: #475569;
 }
 
-/* Custom Select - Light Theme */
+
 [data-theme="light"] .custom-select {
     background: rgba(255, 255, 255, 0.9);
     color: #1e293b;
@@ -990,7 +988,7 @@
     color: #64748b;
 }
 
-/* Sort Select - Light Theme */
+
 [data-theme="light"] #sort-select {
     background: rgba(255, 255, 255, 0.95);
     color: #1e293b;
@@ -1017,7 +1015,7 @@
     color: #1e293b;
 }
 
-/* Checkbox - Light Theme */
+
 [data-theme="light"] .filter-checkbox {
     background: rgba(255, 255, 255, 0.9);
     border-color: rgba(0, 0, 0, 0.1);
@@ -1052,7 +1050,7 @@
     background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 50%, #a855f7 100%);
 }
 
-/* Show Filters Button - Light Theme */
+
 [data-theme="light"] .btn-show-filters {
     background: rgba(255, 255, 255, 0.95);
     color: #1e293b;
@@ -1066,7 +1064,7 @@
     box-shadow: 0 4px 20px rgba(99, 102, 241, 0.3);
 }
 
-/* Clear Filters Button - Light Theme */
+
 [data-theme="light"] .btn-text {
     color: #64748b;
 }
@@ -1075,12 +1073,9 @@
     color: #6366f1;
 }
 
-/* =================================================
-   CRITICAL MOBILE PERFORMANCE OPTIMIZATIONS
-   Disable heavy animations on touch devices
-   ================================================= */
 
-/* Disable expensive hover transforms on touch devices */
+
+
 @media (hover: none) {
     .product-card:hover {
         transform: none;
@@ -1095,13 +1090,13 @@
         transition: none;
     }
 
-    /* Disable priceGlow animation on mobile */
+    
     .product-price .price {
         animation: none;
         text-shadow: 0 0 5px rgba(168, 85, 247, 0.2);
     }
 
-    /* Disable blurIn animation on mobile */
+    
     .product-card {
         animation: none;
     }
@@ -1111,7 +1106,7 @@
     }
 }
 
-/* Carousel dragging state - disable animations on CHILDREN only */
+
 .carousel-track.dragging>*,
 .carousel-track.dragging .product-card,
 .carousel-track.dragging .product-card * {
@@ -1119,11 +1114,9 @@
     animation: none !important;
 }
 
-/* =================================================
-   QUICK ADD TO CART PANEL
-   ================================================= */
 
-/* Quick Add Button (replaces quick-view button) */
+
+
 .btn-quick-add {
     position: absolute;
     bottom: 0.5rem;
@@ -1160,7 +1153,7 @@
     box-shadow: 0 4px 15px rgba(34, 197, 94, 0.4);
 }
 
-/* Quick Add Panel */
+
 .quick-add-panel {
     position: absolute;
     bottom: 0;
@@ -1218,7 +1211,7 @@
     color: #ef4444;
 }
 
-/* Quick Add Form */
+
 .quick-add-form {
     display: flex;
     flex-direction: column;
@@ -1275,7 +1268,7 @@
     color: #fff;
 }
 
-/* Optional fields toggle */
+
 .quick-add-form .optional-toggle {
     display: flex;
     align-items: center;
@@ -1311,7 +1304,7 @@
     flex-direction: column;
 }
 
-/* Quick Add Button in Panel */
+
 .quick-add-form .btn-add-quick {
     width: 100% !important;
     padding: 0.4rem !important;
@@ -1347,7 +1340,7 @@
     transform: none;
 }
 
-/* Quick Add Price Preview */
+
 .quick-add-form .price-preview {
     display: flex;
     justify-content: space-between;
@@ -1368,7 +1361,7 @@
     color: #a855f7;
 }
 
-/* Light Theme Quick Add Panel */
+
 [data-theme="light"] .quick-add-panel {
     background: linear-gradient(180deg, rgba(255, 255, 255, 0.98) 0%, rgba(248, 250, 252, 0.99) 100%);
     border-top-color: rgba(99, 102, 241, 0.2);
@@ -1406,11 +1399,11 @@
     color: #64748b;
 }
 
-/* Mobile Responsive Quick Add */
+
 @media (max-width: 768px) {
     .btn-quick-add {
         opacity: 1;
-        /* Always visible on mobile */
+        
         width: 2.25rem;
         height: 2.25rem;
     }
@@ -1423,17 +1416,17 @@
     .quick-add-form input {
         padding: 0.6rem;
         font-size: 16px;
-        /* Prevent iOS zoom */
+        
     }
 
     .quick-add-form .btn-add-quick {
         padding: 0.75rem;
         min-height: 44px;
-        /* Minimum touch target */
+        
     }
 }
 
-/* Disable panel animations on touch devices for performance */
+
 @media (hover: none) {
     .quick-add-panel {
         transition: opacity 0.2s, max-height 0.2s;

@@ -90,7 +90,7 @@ function optimizePersonalizationModal() {
                         observer.observe(document.body, { childList: true, subtree: true });
                         const onKey = function(k){ if (k.key === 'Escape') setTimeout(cleanup, 0); };
                         document.addEventListener('keydown', onKey, true);
-                    } catch(_e) { /* noop */ }
+                    } catch(_e) {  }
                     modal.addEventListener('touchmove', function(e) {
                         e.stopPropagation();
                     }, { passive: true });

@@ -1,29 +1,6 @@
 #!/usr/bin/env node
 
-/**
- * Yupoo Product Import CLI
- * 
- * Script de línea de comandos para importar productos desde Yupoo
- * y añadirlos al catálogo de productos de la tienda.
- * 
- * Uso:
- *   node import-from-yupoo.js <url> [opciones]
- * 
- * Opciones:
- *   --dry-run        Previsualizar sin guardar cambios
- *   --write          Guardar producto en products-data.js
- *   --json           Salida en formato JSON
- *   --strict-images  Fallar si no hay imágenes 1000x1000
- *   --update         Actualizar producto existente si ya existe
- *   --help           Mostrar ayuda
- * 
- * Ejemplos:
- *   node import-from-yupoo.js "https://pandasportjersey.x.yupoo.com/albums/203698766?uid=1" --dry-run
- *   node import-from-yupoo.js "https://pandasportjersey.x.yupoo.com/albums/203698766?uid=1" --write
- * 
- * @author Camisetazo Admin Scripts
- * @version 2.0.0
- */
+
 
 const fs = require('fs');
 const path = require('path');
@@ -53,51 +30,37 @@ const COLORS = {
     white: '\x1b[37m'
 };
 
-/**
- * Imprime texto con color
- */
+
 function print(color, text) {
     console.log(`${COLORS[color]}${text}${COLORS.reset}`);
 }
 
-/**
- * Imprime mensaje de éxito
- */
+
 function success(text) {
     print('green', `✓ ${text}`);
 }
 
-/**
- * Imprime mensaje de error
- */
+
 function error(text) {
     print('red', `✗ ${text}`);
 }
 
-/**
- * Imprime mensaje de advertencia
- */
+
 function warn(text) {
     print('yellow', `⚠ ${text}`);
 }
 
-/**
- * Imprime mensaje informativo
- */
+
 function info(text) {
     print('cyan', `ℹ ${text}`);
 }
 
-/**
- * Imprime línea separadora
- */
+
 function separator() {
     console.log(`${COLORS.dim}${'─'.repeat(60)}${COLORS.reset}`);
 }
 
-/**
- * Muestra mensaje de ayuda
- */
+
 function showHelp() {
     console.log(`
 ${COLORS.bright}Yupoo Product Import CLI${COLORS.reset}
@@ -136,19 +99,17 @@ ${COLORS.cyan}Ejemplos:${COLORS.reset}
 `);
 }
 
-/**
- * Parsea argumentos de línea de comandos
- */
+
 function parseArgs(args) {
     const options = {
         url: null,
-        dryRun: true, // Por defecto es dry-run
+        dryRun: true, 
         write: false,
         json: false,
         strictImages: false,
         update: false,
         help: false,
-        imageIndices: null,  // Array de índices [8, 9]
+        imageIndices: null,  
         listImages: false
     };
 
@@ -172,10 +133,10 @@ function parseArgs(args) {
         } else if (arg === '--list-images') {
             options.listImages = true;
         } else if (arg === '--images' && args[i + 1]) {
-            // Parsear índices: --images 8,9
+            
             const indicesStr = args[i + 1];
             options.imageIndices = indicesStr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
-            i++; // Saltar el siguiente argumento
+            i++; 
         } else if (!arg.startsWith('-') && arg.includes('yupoo.com')) {
             options.url = arg;
         }
@@ -184,9 +145,7 @@ function parseArgs(args) {
     return options;
 }
 
-/**
- * Lee el archivo de productos y extrae el array
- */
+
 function readProductsFile() {
     if (!fs.existsSync(PRODUCTS_FILE)) {
         throw new Error(`Archivo de productos no encontrado: ${PRODUCTS_FILE}`);
@@ -194,15 +153,15 @@ function readProductsFile() {
 
     const content = fs.readFileSync(PRODUCTS_FILE, 'utf-8');
 
-    // Extraer el array de productos del archivo JS
-    // El archivo tiene formato: const products = [...]; export default products;
+    
+    
     const match = content.match(/const\s+products\s*=\s*(\[[\s\S]*?\]);/);
 
     if (!match) {
         throw new Error('No se pudo parsear el archivo de productos');
     }
 
-    // Evaluar el array (cuidado: solo usar con archivos confiables)
+    
     const productsArray = eval(match[1]);
 
     return {
@@ -211,13 +170,11 @@ function readProductsFile() {
     };
 }
 
-/**
- * Escribe el archivo de productos actualizado
- */
+
 function writeProductsFile(products) {
-    // Formatear el array de productos
+    
     const productsJson = JSON.stringify(products, null, 4)
-        // Convertir comillas dobles a simples para strings simples (estilo original)
+        
         .replace(/"([^"]+)":/g, '$1:')
         .replace(/: "([^"]+)"/g, ': "$1"');
 
@@ -230,17 +187,13 @@ export default products;
     fs.writeFileSync(PRODUCTS_FILE, content.trim() + '\n', 'utf-8');
 }
 
-/**
- * Busca un producto por ID
- */
+
 function findProductById(products, id) {
     const index = products.findIndex(p => p.id === id);
     return { product: products[index] || null, index };
 }
 
-/**
- * Busca un producto por URL de origen
- */
+
 function findProductBySourceUrl(products, url) {
     const index = products.findIndex(p =>
         p.source && p.source.url === url
@@ -248,9 +201,7 @@ function findProductBySourceUrl(products, url) {
     return { product: products[index] || null, index };
 }
 
-/**
- * Muestra preview del producto en formato legible
- */
+
 function displayProductPreview(product) {
     separator();
     console.log(`${COLORS.bright}${COLORS.magenta}PRODUCTO IMPORTADO${COLORS.reset}`);
@@ -284,7 +235,7 @@ function displayProductPreview(product) {
 
     separator();
 
-    // Mostrar flags activos
+    
     const flags = [];
     if (product.kids) flags.push('👶 Niño');
     if (product.retro) flags.push('🏛️ Retro');
@@ -299,13 +250,13 @@ async function main() {
     const args = process.argv.slice(2);
     const options = parseArgs(args);
 
-    // Mostrar ayuda si se solicita
+    
     if (options.help || args.length === 0) {
         showHelp();
         process.exit(0);
     }
 
-    // Validar URL
+    
     if (!options.url) {
         error('No se proporcionó una URL de Yupoo válida');
         console.log(`\nUso: node import-from-yupoo.js <url> [opciones]`);
@@ -313,7 +264,7 @@ async function main() {
         process.exit(1);
     }
 
-    // Modo silencioso para JSON
+    
     const silent = options.json;
 
     if (!silent) {
@@ -323,7 +274,7 @@ async function main() {
     }
 
     try {
-        // Manejar --list-images: mostrar solo imágenes big.jpg y pedir selección
+        
         if (options.listImages) {
             const albumData = await fetchYupooAlbum(options.url);
             separator();
@@ -332,12 +283,12 @@ async function main() {
             console.log(`${COLORS.cyan}Título:${COLORS.reset} ${albumData.title}`);
             console.log('');
 
-            // Filtrar SOLO big.jpg (excluir square, small, medium, hashes aleatorios)
+            
             const bigImages = albumData.images.filter(img => {
                 if (!img.url || !img.url.includes('photo.yupoo.com')) return false;
                 const urlLower = img.url.toLowerCase();
                 if (urlLower.includes('whatsapp') || urlLower.includes('wechat') || urlLower.includes('qr')) return false;
-                // SOLO big.jpg
+                
                 return urlLower.includes('/big.');
             });
 
@@ -356,8 +307,8 @@ async function main() {
             console.log(`${COLORS.dim}Ejemplos: 7,8  ó  4,5,all${COLORS.reset}`);
             console.log('');
 
-            // Usar readline para input interactivo
-            // Si hay exactamente 2 imágenes, seleccionarlas automáticamente (último=Main, penúltimo=Sec)
+            
+            
             let userInput;
             const lastIdx = bigImages.length - 1;
             const secondLastIdx = bigImages.length - 2;
@@ -389,7 +340,7 @@ async function main() {
                 finalInput = defaultSelection;
             }
 
-            // Parsear índices del input - soporta "all" para todas las demás
+            
             const inputParts = finalInput.split(',').map(s => s.trim().toLowerCase());
             const hasAll = inputParts.includes('all');
             const selectedIndices = inputParts
@@ -402,7 +353,7 @@ async function main() {
                 process.exit(1);
             }
 
-            // Si hay "all", añadir todos los demás índices después de los seleccionados
+            
             if (hasAll) {
                 const alreadySelected = new Set(selectedIndices);
                 for (let i = 0; i < bigImages.length; i++) {
@@ -412,14 +363,14 @@ async function main() {
                 }
             }
 
-            // Sobrescribir options para continuar con la importación
+            
             options.imageIndices = selectedIndices;
             options.includeAll = hasAll;
             options.write = true;
             options.dryRun = false;
-            options.update = true;  // Actualizar automáticamente si ya existe
+            options.update = true;  
 
-            // Guardar las bigImages para uso posterior
+            
             options._bigImages = bigImages;
 
             console.log('');
@@ -431,14 +382,14 @@ async function main() {
             console.log('');
         }
 
-        // Importar producto desde Yupoo
+        
         let product = await importFromYupoo(options.url, {
             strictImages: options.strictImages
         });
 
-        // Manejar --images: sobrescribir imágenes con índices específicos
+        
         if (options.imageIndices && options.imageIndices.length > 0) {
-            // Usar bigImages cacheadas de --list-images, o fetch nuevas
+            
             let validImages = options._bigImages;
 
             if (!validImages) {
@@ -447,7 +398,7 @@ async function main() {
                     if (!img.url || !img.url.includes('photo.yupoo.com')) return false;
                     const urlLower = img.url.toLowerCase();
                     if (urlLower.includes('whatsapp') || urlLower.includes('wechat') || urlLower.includes('qr')) return false;
-                    // SOLO big.jpg
+                    
                     return urlLower.includes('/big.');
                 });
             }
@@ -466,30 +417,30 @@ async function main() {
             }
         }
 
-        // Salida JSON
+        
         if (options.json) {
             console.log(JSON.stringify(product, null, 2));
             process.exit(0);
         }
 
-        // Verificar si ya existe
+        
         const { products } = readProductsFile();
 
-        // === COMPARACIÓN INTELIGENTE CON PRODUCTOS EXISTENTES ===
-        // Buscar productos similares para usar la misma liga Y nombre canónico
+        
+        
         const matcher = new TeamMatcher(products);
-        const teamMatch = matcher.findBestMatch(product.name, 0.3); // Threshold bajo para más matches
+        const teamMatch = matcher.findBestMatch(product.name, 0.3); 
 
         if (teamMatch && teamMatch.league) {
-            // Encontró un match con liga conocida - usar esa liga
+            
             info(`🔗 Match encontrado: "${teamMatch.name}" (score: ${(teamMatch.score * 100).toFixed(0)}%)`);
 
-            // Usar el nombre canónico del equipo existente
+            
             const existingTeamName = teamMatch.name.replace(/\s*\d{2}\/?\d{2}.*$/, '').trim();
             const currentTeamName = product.name.replace(/\s*\d{2}\/?\d{2}.*$/, '').trim();
 
             if (existingTeamName && existingTeamName !== currentTeamName) {
-                // Reemplazar el nombre del equipo en el producto con el canónico
+                
                 product.name = product.name.replace(currentTeamName, existingTeamName);
                 product.slug = product.slug.replace(
                     currentTeamName.toLowerCase().replace(/\s+/g, '-'),
@@ -501,12 +452,12 @@ async function main() {
             info(`   Liga detectada: ${teamMatch.league}`);
             product.league = teamMatch.league;
         } else if (product.league === 'otros') {
-            // No hay match pero está en 'otros' - intentar adivinar
+            
             warn('⚠️  No se encontró match, liga asignada: otros');
             warn('   Considera revisar manualmente la liga después de importar');
         }
 
-        // Mostrar preview (después de aplicar el match)
+        
         displayProductPreview(product);
 
         const existingById = findProductById(products, product.id);
@@ -521,7 +472,7 @@ async function main() {
             }
         }
 
-        // Modo dry-run
+        
         if (!options.write) {
             separator();
             warn('Modo DRY-RUN: No se guardaron cambios');
@@ -530,15 +481,15 @@ async function main() {
             process.exit(0);
         }
 
-        // Guardar producto
+        
         separator();
 
-        // Descargar imágenes localmente
+        
         info('Descargando imágenes...');
         let productWithLocalImages;
         try {
             productWithLocalImages = await downloadProductImages(product, ASSETS_DIR, {
-                referer: options.url  // Pasar URL original como referer
+                referer: options.url  
             });
             success(`Imágenes descargadas: ${[productWithLocalImages.image, ...productWithLocalImages.images].length}`);
         } catch (downloadErr) {
@@ -550,19 +501,19 @@ async function main() {
         info('Guardando producto...');
 
         if (existingById.product && options.update) {
-            // Actualizar existente
+            
             products[existingById.index] = { ...products[existingById.index], ...productWithLocalImages };
             success(`Producto actualizado: ID ${productWithLocalImages.id}`);
         } else if (existingByUrl.product && options.update) {
-            // Actualizar por URL
+            
             products[existingByUrl.index] = { ...products[existingByUrl.index], ...productWithLocalImages };
             success(`Producto actualizado: ID ${productWithLocalImages.id}`);
         } else if (existingById.product || existingByUrl.product) {
-            // Existe pero no se solicitó update
+            
             error('Producto ya existe. Usa --update para sobrescribir');
             process.exit(1);
         } else {
-            // Añadir nuevo
+            
             products.push(productWithLocalImages);
             success(`Producto añadido: ID ${productWithLocalImages.id}`);
         }
@@ -591,7 +542,7 @@ async function main() {
     }
 }
 
-// Ejecutar
+
 main().catch(err => {
     console.error('Error fatal:', err);
     process.exit(1);

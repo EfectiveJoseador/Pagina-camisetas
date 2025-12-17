@@ -1,9 +1,5 @@
 #!/usr/bin/env node
-/**
- * Quick Yupoo Import - Modo continuo
- * Uso: node yupoo-quick.js
- * Escribe 'exit' o presiona Enter sin URL para salir
- */
+
 
 const { spawnSync } = require('child_process');
 const readline = require('readline');
@@ -44,7 +40,7 @@ async function main() {
     while (true) {
         const url = await askForUrl(rl);
 
-        // Salir si está vacío o es 'exit'
+        
         if (!url || url.toLowerCase() === 'exit' || url.toLowerCase() === 'salir') {
             console.log('');
             console.log(`${COLORS.green}✓ ${importCount} producto(s) importado(s). ¡Hasta luego!${COLORS.reset}`);
@@ -52,13 +48,13 @@ async function main() {
             process.exit(0);
         }
 
-        // Validar URL
+        
         if (!url.includes('yupoo.com')) {
             console.log(`${COLORS.yellow}⚠ URL no válida, debe ser de yupoo.com${COLORS.reset}`);
             continue;
         }
 
-        // Ejecutar importador sincrónicamente
+        
         console.log('');
         const result = spawnSync('node', [importerPath, url, '--list-images'], {
             stdio: 'inherit',
