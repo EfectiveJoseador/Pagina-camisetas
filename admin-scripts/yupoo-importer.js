@@ -25,8 +25,104 @@ const TEXT_NORMALIZATION = {
 };
 
 
+// Normalización de nombres de equipos (filiales y variaciones → equipo principal)
+const TEAM_NAME_NORMALIZATION = {
+    // España - Filiales
+    'barcelona b': 'FC Barcelona',
+    'barcelona atletic': 'FC Barcelona',
+    'barca b': 'FC Barcelona',
+    'barca atletic': 'FC Barcelona',
+    'real madrid castilla': 'Real Madrid',
+    'castilla': 'Real Madrid',
+    'atletico madrid b': 'Atlético Madrid',
+    'villarreal b': 'Villarreal',
+    'real sociedad b': 'Real Sociedad',
+    'athletic bilbao b': 'Athletic Club',
+    'bilbao athletic': 'Athletic Club',
+    'sevilla atlético': 'Sevilla',
+    'sevilla atletico': 'Sevilla',
+    'valencia mestalla': 'Valencia',
+    'betis deportivo': 'Real Betis',
+
+    // Inglaterra - Variaciones
+    'man utd': 'Manchester United',
+    'man united': 'Manchester United',
+    'united': 'Manchester United',
+    'man city': 'Manchester City',
+    'city': 'Manchester City',
+    'spurs': 'Tottenham',
+    'tottenham hotspur': 'Tottenham',
+    'wolves': 'Wolverhampton',
+    'palace': 'Crystal Palace',
+    'villa': 'Aston Villa',
+
+    // Italia - Variaciones
+    'juve': 'Juventus',
+    'inter': 'Inter de Milán',
+    'inter milan': 'Inter de Milán',
+    'internazionale': 'Inter de Milán',
+    'milan': 'AC Milan',
+    'ac milan': 'AC Milan',
+    'hellas verona': 'Verona',
+
+    // Alemania - Variaciones
+    'bayern': 'Bayern Munich',
+    'bayern munchen': 'Bayern Munich',
+    'bayern münchen': 'Bayern Munich',
+    'bvb': 'Borussia Dortmund',
+    'dortmund': 'Borussia Dortmund',
+    'gladbach': 'Borussia Mönchengladbach',
+    'monchengladbach': 'Borussia Mönchengladbach',
+    'leverkusen': 'Bayer Leverkusen',
+    'leipzig': 'RB Leipzig',
+    'rb leipzig': 'RB Leipzig',
+    'hsv': 'Hamburgo',
+    'hamburg': 'Hamburgo',
+    'hamburger sv': 'Hamburgo',
+    'werder': 'Werder Bremen',
+    'bremen': 'Werder Bremen',
+    'koln': 'FC Köln',
+    'cologne': 'FC Köln',
+    'fc koln': 'FC Köln',
+    'hertha': 'Hertha Berlin',
+    'hertha bsc': 'Hertha Berlin',
+
+    // Francia - Variaciones
+    'psg': 'Paris Saint-Germain',
+    'paris': 'Paris Saint-Germain',
+    'paris saint germain': 'Paris Saint-Germain',
+    'om': 'Olympique Marseille',
+    'marseille': 'Olympique Marseille',
+    'ol': 'Olympique Lyon',
+    'lyon': 'Olympique Lyon',
+
+    // España - Variaciones adicionales
+    'barca': 'FC Barcelona',
+    'fc barcelona': 'FC Barcelona',
+    'barcelona': 'FC Barcelona',
+    'madrid': 'Real Madrid',
+    'atletico': 'Atlético Madrid',
+    'atlético': 'Atlético Madrid',
+    'atletico madrid': 'Atlético Madrid',
+    'atlético madrid': 'Atlético Madrid',
+    'athletic': 'Athletic Club',
+    'athletic bilbao': 'Athletic Club',
+    'bilbao': 'Athletic Club',
+    'sociedad': 'Real Sociedad',
+    'betis': 'Real Betis',
+    'depor': 'Deportivo',
+    'deportivo la coruna': 'Deportivo',
+    'celta': 'Celta de Vigo',
+    'celta vigo': 'Celta de Vigo',
+    'rayo': 'Rayo Vallecano',
+    'sporting': 'Sporting Gijón',
+    'sporting gijon': 'Sporting Gijón',
+};
+
+
 const TEAM_TO_LEAGUE = {
 
+    // La Liga y Segunda División - España
     'athletic': 'laliga',
     'athletic club': 'laliga',
     'athletic bilbao': 'laliga',
@@ -66,7 +162,7 @@ const TEAM_TO_LEAGUE = {
     'elche': 'laliga',
     'levante': 'laliga',
     'oviedo': 'laliga',
-    'albacete': 'laliga',
+    'real oviedo': 'laliga',
     'albacete': 'laliga',
     'malaga': 'laliga',
     'real murcia': 'laliga',
@@ -76,6 +172,58 @@ const TEAM_TO_LEAGUE = {
     'depor': 'laliga',
     'racing santander': 'laliga',
     'zaragoza': 'laliga',
+    'real zaragoza': 'laliga',
+    // Segunda División España
+    'tenerife': 'laliga',
+    'cd tenerife': 'laliga',
+    'sporting': 'laliga',
+    'sporting gijon': 'laliga',
+    'sporting gijón': 'laliga',
+    'eibar': 'laliga',
+    'huesca': 'laliga',
+    'sd huesca': 'laliga',
+    'racing': 'laliga',
+    'numancia': 'laliga',
+    'ponferradina': 'laliga',
+    'sd ponferradina': 'laliga',
+    'cartagena': 'laliga',
+    'fc cartagena': 'laliga',
+    'burgos': 'laliga',
+    'burgos cf': 'laliga',
+    'eldense': 'laliga',
+    'cd eldense': 'laliga',
+    'mirandes': 'laliga',
+    'cd mirandes': 'laliga',
+    'mirandés': 'laliga',
+    'alcorcon': 'laliga',
+    'ad alcorcon': 'laliga',
+    'lugo': 'laliga',
+    'cd lugo': 'laliga',
+    'fuenlabrada': 'laliga',
+    'cf fuenlabrada': 'laliga',
+    'castellon': 'laliga',
+    'cd castellon': 'laliga',
+    'castellón': 'laliga',
+    'ferrol': 'laliga',
+    'racing ferrol': 'laliga',
+    'andorra': 'laliga',
+    'fc andorra': 'laliga',
+    'amorebieta': 'laliga',
+    'sd amorebieta': 'laliga',
+    'villarreal b': 'laliga',
+    'barcelona b': 'laliga',
+    'barcelona atletic': 'laliga',
+    'real madrid castilla': 'laliga',
+    'castilla': 'laliga',
+    'atletico madrid b': 'laliga',
+    'hercules': 'laliga',
+    'hércules': 'laliga',
+    'recreativo': 'laliga',
+    'recreativo huelva': 'laliga',
+    'xerez': 'laliga',
+    'cordoba': 'laliga',
+    'córdoba': 'laliga',
+    'cordoba cf': 'laliga',
 
 
     'arsenal': 'premier',
@@ -108,8 +256,49 @@ const TEAM_TO_LEAGUE = {
     'leicester': 'premier',
     'ipswich': 'premier',
     'southampton': 'premier',
+    // Championship - Inglaterra
+    'leeds': 'premier',
+    'leeds united': 'premier',
+    'burnley': 'premier',
+    'sheffield united': 'premier',
+    'sheffield': 'premier',
+    'sunderland': 'premier',
+    'middlesbrough': 'premier',
+    'watford': 'premier',
+    'norwich': 'premier',
+    'norwich city': 'premier',
+    'coventry': 'premier',
+    'coventry city': 'premier',
+    'blackburn': 'premier',
+    'blackburn rovers': 'premier',
+    'stoke': 'premier',
+    'stoke city': 'premier',
+    'west brom': 'premier',
+    'west bromwich': 'premier',
+    'west bromwich albion': 'premier',
+    'reading': 'premier',
+    'cardiff': 'premier',
+    'cardiff city': 'premier',
+    'swansea': 'premier',
+    'swansea city': 'premier',
+    'millwall': 'premier',
+    'qpr': 'premier',
+    'queens park rangers': 'premier',
+    'hull': 'premier',
+    'hull city': 'premier',
+    'bristol city': 'premier',
+    'derby': 'premier',
+    'derby county': 'premier',
+    'bolton': 'premier',
+    'bolton wanderers': 'premier',
+    'portsmouth': 'premier',
+    'birmingham': 'premier',
+    'birmingham city': 'premier',
+    'charlton': 'premier',
+    'charlton athletic': 'premier',
 
 
+    // Serie A - Italia
     'juventus': 'seriea',
     'juve': 'seriea',
     'inter': 'seriea',
@@ -130,8 +319,21 @@ const TEAM_TO_LEAGUE = {
     'genoa': 'seriea',
     'sampdoria': 'seriea',
     'verona': 'seriea',
+    'hellas verona': 'seriea',
     'parma': 'seriea',
     'como': 'seriea',
+    'cagliari': 'seriea',
+    'empoli': 'seriea',
+    'lecce': 'seriea',
+    'monza': 'seriea',
+    'frosinone': 'seriea',
+    'salernitana': 'seriea',
+    'spezia': 'seriea',
+    'venezia': 'seriea',
+    'cremonese': 'seriea',
+    'brescia': 'seriea',
+    'palermo': 'seriea',
+    'bari': 'seriea',
 
 
     'bayern': 'bundesliga',
@@ -148,15 +350,44 @@ const TEAM_TO_LEAGUE = {
     'eintracht frankfurt': 'bundesliga',
     'wolfsburg': 'bundesliga',
     'schalke': 'bundesliga',
+    'schalke 04': 'bundesliga',
     'monchengladbach': 'bundesliga',
     'gladbach': 'bundesliga',
+    'borussia monchengladbach': 'bundesliga',
     'hoffenheim': 'bundesliga',
     'mainz': 'bundesliga',
+    'mainz 05': 'bundesliga',
     'freiburg': 'bundesliga',
     'cologne': 'bundesliga',
     'koln': 'bundesliga',
+    'fc koln': 'bundesliga',
     'union berlin': 'bundesliga',
     'stuttgart': 'bundesliga',
+    'vfb stuttgart': 'bundesliga',
+    'hertha': 'bundesliga',
+    'hertha berlin': 'bundesliga',
+    'hertha bsc': 'bundesliga',
+    'hamburg': 'bundesliga',
+    'hamburger': 'bundesliga',
+    'hamburger sv': 'bundesliga',
+    'hsv': 'bundesliga',
+    'werder': 'bundesliga',
+    'werder bremen': 'bundesliga',
+    'bremen': 'bundesliga',
+    'augsburg': 'bundesliga',
+    'fc augsburg': 'bundesliga',
+    'bochum': 'bundesliga',
+    'vfl bochum': 'bundesliga',
+    'heidenheim': 'bundesliga',
+    'darmstadt': 'bundesliga',
+    'darmstadt 98': 'bundesliga',
+    'kaiserslautern': 'bundesliga',
+    'fortuna dusseldorf': 'bundesliga',
+    'dusseldorf': 'bundesliga',
+    'nurnberg': 'bundesliga',
+    'fc nurnberg': 'bundesliga',
+    'hannover': 'bundesliga',
+    'hannover 96': 'bundesliga',
 
 
     'psg': 'ligue1',
@@ -421,6 +652,29 @@ function normalizeForComparison(str) {
         .replace(/[^\w\s]/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
+}
+
+
+// Normaliza el nombre del equipo usando el diccionario TEAM_NAME_NORMALIZATION
+function normalizeTeamNameFromDictionary(teamName) {
+    if (!teamName) return teamName;
+
+    const normalized = normalizeForComparison(teamName);
+
+    // Buscar coincidencia exacta primero
+    if (TEAM_NAME_NORMALIZATION[normalized]) {
+        return TEAM_NAME_NORMALIZATION[normalized];
+    }
+
+    // Buscar coincidencia parcial (el nombre contiene una clave del diccionario)
+    for (const [key, value] of Object.entries(TEAM_NAME_NORMALIZATION)) {
+        if (normalized.includes(key) || key.includes(normalized)) {
+            return value;
+        }
+    }
+
+    // Si no hay coincidencia, devolver el nombre original con formato capitalizado
+    return teamName;
 }
 
 
@@ -951,6 +1205,9 @@ function parseProductTitle(rawTitle) {
             }
         }
     }
+
+    // Aplicar normalización de nombres de equipos (filiales → equipo principal)
+    teamName = normalizeTeamNameFromDictionary(teamName);
 
     result.team = teamName;
 
