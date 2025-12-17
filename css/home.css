@@ -1578,6 +1578,14 @@ a.catalogo-btn:hover,
     background: var(--bg-body);
 }
 
+.equipos-section .section-header {
+    margin-bottom: 0;
+}
+
+.equipos-section .section-title {
+    margin-bottom: 0.25rem;
+}
+
 .equipos-description {
     text-align: center;
     color: var(--text-muted);
