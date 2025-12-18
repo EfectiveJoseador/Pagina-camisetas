@@ -3033,6 +3033,20 @@ const products = [
         ],
         temporada: "25/26",
         tipo: "visitante"
+    },
+    {
+        id: 927903,
+        name: "Bayern Munich 25/26 125 Aniversario",
+        slug: "bayern-munich-2526-125-aniversario",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/927903/1.webp",
+        images: [
+            "/assets/productos/Yupoo/927903/2.webp",
+            "/assets/productos/Yupoo/927903/3.webp",
+            "/assets/productos/Yupoo/927903/4.webp"
+        ],
+        temporada: "25/26"
     }
 ];
 
