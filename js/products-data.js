@@ -3018,6 +3018,21 @@ const products = [
         ],
         temporada: "25/26",
         tipo: "local"
+    },
+    {
+        id: 329742,
+        name: "Schalke 04 25/26 Visitante",
+        slug: "schalke-04-2526-visitante",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/329742/1.webp",
+        images: [
+            "/assets/productos/Yupoo/329742/2.webp",
+            "/assets/productos/Yupoo/329742/3.webp",
+            "/assets/productos/Yupoo/329742/4.webp"
+        ],
+        temporada: "25/26",
+        tipo: "visitante"
     }
 ];
 
