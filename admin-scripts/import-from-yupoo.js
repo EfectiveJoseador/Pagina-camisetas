@@ -103,13 +103,13 @@ ${COLORS.cyan}Ejemplos:${COLORS.reset}
 function parseArgs(args) {
     const options = {
         url: null,
-        dryRun: true, 
+        dryRun: true,
         write: false,
         json: false,
         strictImages: false,
         update: false,
         help: false,
-        imageIndices: null,  
+        imageIndices: null,
         listImages: false
     };
 
@@ -133,10 +133,10 @@ function parseArgs(args) {
         } else if (arg === '--list-images') {
             options.listImages = true;
         } else if (arg === '--images' && args[i + 1]) {
-            
+
             const indicesStr = args[i + 1];
             options.imageIndices = indicesStr.split(',').map(s => parseInt(s.trim(), 10)).filter(n => !isNaN(n));
-            i++; 
+            i++;
         } else if (!arg.startsWith('-') && arg.includes('yupoo.com')) {
             options.url = arg;
         }
@@ -153,15 +153,15 @@ function readProductsFile() {
 
     const content = fs.readFileSync(PRODUCTS_FILE, 'utf-8');
 
-    
-    
+
+
     const match = content.match(/const\s+products\s*=\s*(\[[\s\S]*?\]);/);
 
     if (!match) {
         throw new Error('No se pudo parsear el archivo de productos');
     }
 
-    
+
     const productsArray = eval(match[1]);
 
     return {
@@ -172,9 +172,9 @@ function readProductsFile() {
 
 
 function writeProductsFile(products) {
-    
+
     const productsJson = JSON.stringify(products, null, 4)
-        
+
         .replace(/"([^"]+)":/g, '$1:')
         .replace(/: "([^"]+)"/g, ': "$1"');
 
@@ -235,7 +235,7 @@ function displayProductPreview(product) {
 
     separator();
 
-    
+
     const flags = [];
     if (product.kids) flags.push('👶 Niño');
     if (product.retro) flags.push('🏛️ Retro');
@@ -250,13 +250,13 @@ async function main() {
     const args = process.argv.slice(2);
     const options = parseArgs(args);
 
-    
+
     if (options.help || args.length === 0) {
         showHelp();
         process.exit(0);
     }
 
-    
+
     if (!options.url) {
         error('No se proporcionó una URL de Yupoo válida');
         console.log(`\nUso: node import-from-yupoo.js <url> [opciones]`);
@@ -264,7 +264,7 @@ async function main() {
         process.exit(1);
     }
 
-    
+
     const silent = options.json;
 
     if (!silent) {
@@ -274,7 +274,7 @@ async function main() {
     }
 
     try {
-        
+
         if (options.listImages) {
             const albumData = await fetchYupooAlbum(options.url);
             separator();
@@ -283,12 +283,12 @@ async function main() {
             console.log(`${COLORS.cyan}Título:${COLORS.reset} ${albumData.title}`);
             console.log('');
 
-            
+
             const bigImages = albumData.images.filter(img => {
                 if (!img.url || !img.url.includes('photo.yupoo.com')) return false;
                 const urlLower = img.url.toLowerCase();
                 if (urlLower.includes('whatsapp') || urlLower.includes('wechat') || urlLower.includes('qr')) return false;
-                
+
                 return urlLower.includes('/big.');
             });
 
@@ -307,8 +307,8 @@ async function main() {
             console.log(`${COLORS.dim}Ejemplos: 7,8  ó  4,5,all${COLORS.reset}`);
             console.log('');
 
-            
-            
+
+
             let userInput;
             const lastIdx = bigImages.length - 1;
             const secondLastIdx = bigImages.length - 2;
@@ -340,7 +340,7 @@ async function main() {
                 finalInput = defaultSelection;
             }
 
-            
+
             const inputParts = finalInput.split(',').map(s => s.trim().toLowerCase());
             const hasAll = inputParts.includes('all');
             const selectedIndices = inputParts
@@ -353,7 +353,7 @@ async function main() {
                 process.exit(1);
             }
 
-            
+
             if (hasAll) {
                 const alreadySelected = new Set(selectedIndices);
                 for (let i = 0; i < bigImages.length; i++) {
@@ -363,14 +363,14 @@ async function main() {
                 }
             }
 
-            
+
             options.imageIndices = selectedIndices;
             options.includeAll = hasAll;
             options.write = true;
             options.dryRun = false;
-            options.update = true;  
+            options.update = true;
 
-            
+
             options._bigImages = bigImages;
 
             console.log('');
@@ -382,14 +382,14 @@ async function main() {
             console.log('');
         }
 
-        
+
         let product = await importFromYupoo(options.url, {
             strictImages: options.strictImages
         });
 
-        
+
         if (options.imageIndices && options.imageIndices.length > 0) {
-            
+
             let validImages = options._bigImages;
 
             if (!validImages) {
@@ -398,7 +398,7 @@ async function main() {
                     if (!img.url || !img.url.includes('photo.yupoo.com')) return false;
                     const urlLower = img.url.toLowerCase();
                     if (urlLower.includes('whatsapp') || urlLower.includes('wechat') || urlLower.includes('qr')) return false;
-                    
+
                     return urlLower.includes('/big.');
                 });
             }
@@ -417,47 +417,56 @@ async function main() {
             }
         }
 
-        
+
         if (options.json) {
             console.log(JSON.stringify(product, null, 2));
             process.exit(0);
         }
 
-        
+
         const { products } = readProductsFile();
 
-        
-        
+
+
         const matcher = new TeamMatcher(products);
-        const teamMatch = matcher.findBestMatch(product.name, 0.3); 
+        const teamMatch = matcher.findBestMatch(product.name, 0.6); // Threshold aumentado de 0.3 a 0.6
 
         if (teamMatch && teamMatch.league) {
-            
+
             info(`🔗 Match encontrado: "${teamMatch.name}" (score: ${(teamMatch.score * 100).toFixed(0)}%)`);
 
-            
-            const existingTeamName = teamMatch.name.replace(/\s*\d{2}\/?\d{2}.*$/, '').trim();
-            const currentTeamName = product.name.replace(/\s*\d{2}\/?\d{2}.*$/, '').trim();
+            // Solo reemplazar el nombre si el score es muy alto (>= 0.7)
+            // Esto evita reemplazos incorrectos como "Brasil" → "Marseille"
+            if (teamMatch.score >= 0.7) {
+                const existingTeamName = teamMatch.name.replace(/\s*\d{2}\/?\d{2}.*$/, '').trim();
+                const currentTeamName = product.name.replace(/\s*\d{2}\/?\d{2}.*$/, '').trim();
 
-            if (existingTeamName && existingTeamName !== currentTeamName) {
-                
-                product.name = product.name.replace(currentTeamName, existingTeamName);
-                product.slug = product.slug.replace(
-                    currentTeamName.toLowerCase().replace(/\s+/g, '-'),
-                    existingTeamName.toLowerCase().replace(/\s+/g, '-')
-                );
-                info(`   Nombre normalizado: ${currentTeamName} → ${existingTeamName}`);
+                if (existingTeamName && existingTeamName !== currentTeamName) {
+                    product.name = product.name.replace(currentTeamName, existingTeamName);
+                    product.slug = product.slug.replace(
+                        currentTeamName.toLowerCase().replace(/\s+/g, '-'),
+                        existingTeamName.toLowerCase().replace(/\s+/g, '-')
+                    );
+                    info(`   Nombre normalizado: ${currentTeamName} → ${existingTeamName}`);
+                }
+            } else {
+                info(`   Score bajo (${(teamMatch.score * 100).toFixed(0)}%), manteniendo nombre original`);
             }
 
-            info(`   Liga detectada: ${teamMatch.league}`);
-            product.league = teamMatch.league;
+            // Solo usar la liga del match si la detección original fue "otros"
+            if (product.league === 'otros') {
+                info(`   Liga detectada desde match: ${teamMatch.league}`);
+                product.league = teamMatch.league;
+            } else {
+                info(`   Liga original mantenida: ${product.league}`);
+            }
         } else if (product.league === 'otros') {
-            
+
             warn('⚠️  No se encontró match, liga asignada: otros');
             warn('   Considera revisar manualmente la liga después de importar');
         }
 
-        
+
         displayProductPreview(product);
 
         const existingById = findProductById(products, product.id);
@@ -472,7 +481,7 @@ async function main() {
             }
         }
 
-        
+
         if (!options.write) {
             separator();
             warn('Modo DRY-RUN: No se guardaron cambios');
@@ -481,15 +490,15 @@ async function main() {
             process.exit(0);
         }
 
-        
+
         separator();
 
-        
+
         info('Descargando imágenes...');
         let productWithLocalImages;
         try {
             productWithLocalImages = await downloadProductImages(product, ASSETS_DIR, {
-                referer: options.url  
+                referer: options.url
             });
             success(`Imágenes descargadas: ${[productWithLocalImages.image, ...productWithLocalImages.images].length}`);
         } catch (downloadErr) {
@@ -501,19 +510,19 @@ async function main() {
         info('Guardando producto...');
 
         if (existingById.product && options.update) {
-            
+
             products[existingById.index] = { ...products[existingById.index], ...productWithLocalImages };
             success(`Producto actualizado: ID ${productWithLocalImages.id}`);
         } else if (existingByUrl.product && options.update) {
-            
+
             products[existingByUrl.index] = { ...products[existingByUrl.index], ...productWithLocalImages };
             success(`Producto actualizado: ID ${productWithLocalImages.id}`);
         } else if (existingById.product || existingByUrl.product) {
-            
+
             error('Producto ya existe. Usa --update para sobrescribir');
             process.exit(1);
         } else {
-            
+
             products.push(productWithLocalImages);
             success(`Producto añadido: ID ${productWithLocalImages.id}`);
         }

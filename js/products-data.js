@@ -3047,6 +3047,48 @@ const products = [
             "/assets/productos/Yupoo/927903/4.webp"
         ],
         temporada: "25/26"
+    },
+    {
+        id: 309182,
+        name: "Brasil 2004/06 Local Retro",
+        slug: "brasil-200406-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/309182/1.webp",
+        images: [
+            "/assets/productos/Yupoo/309182/2.webp"
+        ],
+        temporada: "2004/06",
+        tipo: "local",
+        retro: true
+    },
+    {
+        id: 261613,
+        name: "Brasil 2002 Visitante Retro",
+        slug: "brasil-2002-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/261613/1.webp",
+        images: [
+            "/assets/productos/Yupoo/261613/2.webp"
+        ],
+        temporada: "2002",
+        tipo: "visitante",
+        retro: true
+    },
+    {
+        id: 646982,
+        name: "Crystal Palace 96/98 Local Retro",
+        slug: "crystal-palace-9698-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/646982/1.webp",
+        images: [
+            "/assets/productos/Yupoo/646982/2.webp"
+        ],
+        temporada: "96/98",
+        tipo: "local",
+        retro: true
     }
 ];
 
