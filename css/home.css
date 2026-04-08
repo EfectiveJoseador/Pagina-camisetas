@@ -104,7 +104,8 @@ body.low-performance * {
     left: 0;
     width: 100%;
     height: 100vh;
-    background-image: url('/assets/logo/principal.webp');
+    background-image: url('../assets/logo/principal.webp');
+    background-color: #0c0c12; /* Color de respaldo oscuro */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
@@ -168,6 +169,7 @@ body.low-performance * {
     left: 0;
     width: 100%;
     height: 100vh;
+    background-color: #0c0c12; /* Color de respaldo oscuro */
     background-size: cover;
     background-position: center;
     background-repeat: no-repeat;
