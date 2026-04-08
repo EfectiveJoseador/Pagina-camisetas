@@ -4360,6 +4360,1211 @@ const products = [
         temporada: "25/26",
         price: 19.9,
         oldPrice: 25
+    },
+    {
+        id: 375619,
+        name: "Real Madrid 01/02 Visitante Retro",
+        slug: "real-madrid-0102-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/375619/1.webp",
+        images: [
+            "/assets/productos/Yupoo/375619/2.webp"
+        ],
+        temporada: "01/02",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 335092,
+        name: "Athletic Club 25/26 Visitante (Niño)",
+        slug: "athletic-club-2526-visitante-nino",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/335092/1.webp",
+        images: [
+            "/assets/productos/Yupoo/335092/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "visitante",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 464890,
+        name: "Sevilla 25/26 Local (Niño)",
+        slug: "sevilla-2526-local-nino",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/464890/1.webp",
+        images: [
+            "/assets/productos/Yupoo/464890/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "local",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 916354,
+        name: "Athletic Club 25/26 Local (Niño)",
+        slug: "athletic-club-2526-local-nino",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/916354/1.webp",
+        images: [
+            "/assets/productos/Yupoo/916354/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "local",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 166157,
+        name: "Real Madrid 03/04 Local Retro",
+        slug: "real-madrid-0304-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/166157/1.webp",
+        images: [
+            "/assets/productos/Yupoo/166157/2.webp"
+        ],
+        temporada: "03/04",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 913969,
+        name: "Real Betis 25/26 Especial",
+        slug: "real-betis-2526-especial",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/913969/1.webp",
+        images: [
+            "/assets/productos/Yupoo/913969/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 139811,
+        name: "Real Murcia 99/01 Retro",
+        slug: "real-murcia-9901-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/139811/1.webp",
+        images: [
+            "/assets/productos/Yupoo/139811/2.webp"
+        ],
+        temporada: "99/01",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 104722,
+        name: "Sporting Gijon 94/95 Local Retro",
+        slug: "sporting-gijon-9495-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/104722/1.webp",
+        images: [
+            "/assets/productos/Yupoo/104722/2.webp"
+        ],
+        temporada: "94/95",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 867636,
+        name: "Sporting Gijon 08/09 Local Retro",
+        slug: "sporting-gijon-0809-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/867636/1.webp",
+        images: [
+            "/assets/productos/Yupoo/867636/2.webp"
+        ],
+        temporada: "08/09",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 287248,
+        name: "Real Betis Especial Retro",
+        slug: "real-betis-especial-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/287248/1.webp",
+        images: [
+            "/assets/productos/Yupoo/287248/2.webp"
+        ],
+        tipo: "especial",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 607126,
+        name: "Mallorca 01/02 Retro",
+        slug: "mallorca-0102-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/607126/1.webp",
+        images: [
+            "/assets/productos/Yupoo/607126/2.webp"
+        ],
+        temporada: "01/02",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 852968,
+        name: "Atlético Madrid 13/14 Visitante Retro",
+        slug: "atletico-madrid-1314-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/852968/1.webp",
+        images: [
+            "/assets/productos/Yupoo/852968/2.webp"
+        ],
+        temporada: "13/14",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 394589,
+        name: "Mallorca 96/97 Retro",
+        slug: "mallorca-9697-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/394589/1.webp",
+        images: [
+            "/assets/productos/Yupoo/394589/2.webp"
+        ],
+        temporada: "96/97",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 876734,
+        name: "Real Sociedad 00/02 Visitante Retro",
+        slug: "real-sociedad-0002-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/876734/1.webp",
+        images: [
+            "/assets/productos/Yupoo/876734/2.webp"
+        ],
+        temporada: "00/02",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 452233,
+        name: "Real Betis 99/00 Visitante Retro",
+        slug: "real-betis-9900-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/452233/1.webp",
+        images: [
+            "/assets/productos/Yupoo/452233/2.webp"
+        ],
+        temporada: "99/00",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 287367,
+        name: "FC Barcelona 15/16 Tercera Retro",
+        slug: "fc-barcelona-1516-tercera-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/287367/1.webp",
+        images: [
+            "/assets/productos/Yupoo/287367/2.webp"
+        ],
+        temporada: "15/16",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 611733,
+        name: "FC Barcelona 13/14 Visitante Retro",
+        slug: "fc-barcelona-1314-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/611733/1.webp",
+        images: [
+            "/assets/productos/Yupoo/611733/2.webp"
+        ],
+        temporada: "13/14",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 141113,
+        name: "FC Barcelona 04/05 Local Retro",
+        slug: "fc-barcelona-0405-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/141113/1.webp",
+        images: [
+            "/assets/productos/Yupoo/141113/2.webp"
+        ],
+        temporada: "04/05",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 776162,
+        name: "Valencia 95/96 Visitante Retro",
+        slug: "valencia-9596-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/776162/1.webp",
+        images: [
+            "/assets/productos/Yupoo/776162/2.webp"
+        ],
+        temporada: "95/96",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 425592,
+        name: "Espanyol 96/97 Tercera Retro",
+        slug: "espanyol-9697-tercera-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/425592/1.webp",
+        images: [
+            "/assets/productos/Yupoo/425592/2.webp"
+        ],
+        temporada: "96/97",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 179185,
+        name: "Racing Club 99/00 Visitante Retro",
+        slug: "racing-club-9900-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/179185/1.webp",
+        images: [
+            "/assets/productos/Yupoo/179185/2.webp"
+        ],
+        temporada: "99/00",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 599986,
+        name: "Sevilla 91/92 Visitante Retro",
+        slug: "sevilla-9192-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/599986/1.webp",
+        images: [
+            "/assets/productos/Yupoo/599986/2.webp"
+        ],
+        temporada: "91/92",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 191376,
+        name: "Valencia 99/00 Visitante Retro",
+        slug: "valencia-9900-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/191376/1.webp",
+        images: [
+            "/assets/productos/Yupoo/191376/2.webp"
+        ],
+        temporada: "99/00",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 766701,
+        name: "Valencia 99/00 Local Retro",
+        slug: "valencia-9900-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/766701/1.webp",
+        images: [
+            "/assets/productos/Yupoo/766701/2.webp"
+        ],
+        temporada: "99/00",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 161669,
+        name: "Sevilla 91/92 Local Retro",
+        slug: "sevilla-9192-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/161669/1.webp",
+        images: [
+            "/assets/productos/Yupoo/161669/2.webp"
+        ],
+        temporada: "91/92",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 169673,
+        name: "Deportivo La Coruña 03/04 Local Retro",
+        slug: "deportivo-la-coruna-0304-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/169673/1.webp",
+        images: [
+            "/assets/productos/Yupoo/169673/2.webp"
+        ],
+        temporada: "03/04",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 746921,
+        name: "Valencia 99/00 Visitante Retro",
+        slug: "valencia-9900-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/746921/1.webp",
+        images: [
+            "/assets/productos/Yupoo/746921/2.webp"
+        ],
+        temporada: "99/00",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 726662,
+        name: "Real Madrid 06/07 Tercera Retro",
+        slug: "real-madrid-0607-tercera-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/726662/1.webp",
+        images: [
+            "/assets/productos/Yupoo/726662/2.webp"
+        ],
+        temporada: "06/07",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 859362,
+        name: "FC Barcelona 01/02 Local Retro",
+        slug: "fc-barcelona-0102-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/859362/1.webp",
+        images: [
+            "/assets/productos/Yupoo/859362/2.webp"
+        ],
+        temporada: "01/02",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 489145,
+        name: "Málaga CF 05/06 Local Retro",
+        slug: "malaga-cf-0506-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/489145/1.webp",
+        images: [
+            "/assets/productos/Yupoo/489145/2.webp"
+        ],
+        temporada: "05/06",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 440521,
+        name: "FC Barcelona 06/07 Visitante Retro",
+        slug: "fc-barcelona-0607-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/440521/1.webp",
+        images: [
+            "/assets/productos/Yupoo/440521/2.webp"
+        ],
+        temporada: "06/07",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 943783,
+        name: "Real Madrid 04/05 Local Retro",
+        slug: "real-madrid-0405-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/943783/1.webp",
+        images: [
+            "/assets/productos/Yupoo/943783/2.webp"
+        ],
+        temporada: "04/05",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 304790,
+        name: "Real Madrid 84/85 Local Retro",
+        slug: "real-madrid-8485-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/304790/1.webp",
+        images: [
+            "/assets/productos/Yupoo/304790/2.webp"
+        ],
+        temporada: "84/85",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 370729,
+        name: "Athletic Club 99/00 Visitante Retro",
+        slug: "athletic-club-9900-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/370729/1.webp",
+        images: [
+            "/assets/productos/Yupoo/370729/2.webp"
+        ],
+        temporada: "99/00",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 879366,
+        name: "Valencia 80/82 Local Retro",
+        slug: "valencia-8082-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/879366/1.webp",
+        images: [
+            "/assets/productos/Yupoo/879366/2.webp"
+        ],
+        temporada: "80/82",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 817935,
+        name: "Sevilla 87/90 Local Retro",
+        slug: "sevilla-8790-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/817935/1.webp",
+        images: [
+            "/assets/productos/Yupoo/817935/2.webp"
+        ],
+        temporada: "87/90",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 766100,
+        name: "Sevilla 15/16 Local Retro",
+        slug: "sevilla-1516-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/766100/1.webp",
+        images: [
+            "/assets/productos/Yupoo/766100/2.webp"
+        ],
+        temporada: "15/16",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 961239,
+        name: "Sevilla 03/04 Visitante Retro",
+        slug: "sevilla-0304-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/961239/1.webp",
+        images: [
+            "/assets/productos/Yupoo/961239/2.webp"
+        ],
+        temporada: "03/04",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 541195,
+        name: "FC Barcelona 98/99 Tercera Retro",
+        slug: "fc-barcelona-9899-tercera-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/541195/1.webp",
+        images: [
+            "/assets/productos/Yupoo/541195/2.webp"
+        ],
+        temporada: "98/99",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 589281,
+        name: "FC Barcelona 82/84 Visitante Retro",
+        slug: "fc-barcelona-8284-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/589281/1.webp",
+        images: [
+            "/assets/productos/Yupoo/589281/2.webp"
+        ],
+        temporada: "82/84",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 227422,
+        name: "Atlético Madrid 01/02 Visitante Retro",
+        slug: "atletico-madrid-0102-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/227422/1.webp",
+        images: [
+            "/assets/productos/Yupoo/227422/2.webp"
+        ],
+        temporada: "01/02",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 630514,
+        name: "Cadiz 83/84 Local Retro",
+        slug: "cadiz-cf-8384-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/630514/1.webp",
+        images: [
+            "/assets/productos/Yupoo/630514/2.webp"
+        ],
+        temporada: "83/84",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 560588,
+        name: "Valencia 99/00 Retro",
+        slug: "valencia-9900-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/560588/1.webp",
+        images: [
+            "/assets/productos/Yupoo/560588/2.webp"
+        ],
+        temporada: "99/00",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 433590,
+        name: "Valencia 06/07 Retro",
+        slug: "valencia-0607-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/433590/1.webp",
+        images: [
+            "/assets/productos/Yupoo/433590/2.webp"
+        ],
+        temporada: "06/07",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 497234,
+        name: "Rayo Vallecano 01/02 Local Retro",
+        slug: "rayo-vallecano-0102-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/497234/1.webp",
+        images: [
+            "/assets/productos/Yupoo/497234/2.webp"
+        ],
+        temporada: "01/02",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 604843,
+        name: "Valladolid 19/84 Local",
+        slug: "valladolid-1984-local",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/604843/1.webp",
+        images: [
+            "/assets/productos/Yupoo/604843/2.webp"
+        ],
+        temporada: "19/84",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 689431,
+        name: "Zaragoza 95/96 Visitante Retro",
+        slug: "zaragoza-9596-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/689431/1.webp",
+        images: [
+            "/assets/productos/Yupoo/689431/2.webp"
+        ],
+        temporada: "95/96",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 620756,
+        name: "Real Sociedad 02/03 Local Retro",
+        slug: "real-sociedad-0203-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/620756/1.webp",
+        images: [
+            "/assets/productos/Yupoo/620756/2.webp"
+        ],
+        temporada: "02/03",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 577751,
+        name: "Sevilla 93/94 Local Retro",
+        slug: "sevilla-9394-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/577751/1.webp",
+        images: [
+            "/assets/productos/Yupoo/577751/2.webp"
+        ],
+        temporada: "93/94",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 989871,
+        name: "Celta de Vigo 99/00 Local Retro",
+        slug: "celta-de-vigo-9900-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/989871/1.webp",
+        images: [
+            "/assets/productos/Yupoo/989871/2.webp"
+        ],
+        temporada: "99/00",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 177863,
+        name: "Atlético Madrid 96/97 Visitante Retro",
+        slug: "atletico-madrid-9697-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/177863/1.webp",
+        images: [
+            "/assets/productos/Yupoo/177863/2.webp"
+        ],
+        temporada: "96/97",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 807936,
+        name: "Real Oviedo 90/91 Local Retro",
+        slug: "real-oviedo-9091-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/807936/1.webp",
+        images: [
+            "/assets/productos/Yupoo/807936/2.webp"
+        ],
+        temporada: "90/91",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 263214,
+        name: "Real Betis 95/96 Local Retro",
+        slug: "real-betis-9596-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/263214/1.webp",
+        images: [
+            "/assets/productos/Yupoo/263214/2.webp"
+        ],
+        temporada: "95/96",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 197130,
+        name: "Athletic Club Local Retro",
+        slug: "athletic-club-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/197130/1.webp",
+        images: [
+            "/assets/productos/Yupoo/197130/2.webp"
+        ],
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 637180,
+        name: "Athletic Club Local Retro",
+        slug: "athletic-club-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/637180/1.webp",
+        images: [
+            "/assets/productos/Yupoo/637180/2.webp"
+        ],
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 317176,
+        name: "Zaragoza 92/93 Local Retro",
+        slug: "zaragoza-9293-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/317176/1.webp",
+        images: [
+            "/assets/productos/Yupoo/317176/2.webp"
+        ],
+        temporada: "92/93",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 725231,
+        name: "Zaragoza 92/93 Local Retro",
+        slug: "zaragoza-9293-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/725231/1.webp",
+        images: [
+            "/assets/productos/Yupoo/725231/2.webp"
+        ],
+        temporada: "92/93",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 197135,
+        name: "FC Barcelona 07/08 Visitante Retro",
+        slug: "fc-barcelona-0708-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/197135/1.webp",
+        images: [
+            "/assets/productos/Yupoo/197135/2.webp"
+        ],
+        temporada: "07/08",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 868957,
+        name: "FC Barcelona 03/04 Visitante Retro",
+        slug: "fc-barcelona-0304-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/868957/1.webp",
+        images: [
+            "/assets/productos/Yupoo/868957/2.webp"
+        ],
+        temporada: "03/04",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 570309,
+        name: "Real Betis 19/93 Local Retro",
+        slug: "real-betis-1993-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/570309/1.webp",
+        images: [
+            "/assets/productos/Yupoo/570309/2.webp"
+        ],
+        temporada: "19/93",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 188307,
+        name: "Real Betis 93/94 Local Retro",
+        slug: "real-betis-9394-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/188307/1.webp",
+        images: [
+            "/assets/productos/Yupoo/188307/2.webp"
+        ],
+        temporada: "93/94",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 317006,
+        name: "Espanyol 84/89 Local Retro",
+        slug: "espanyol-8489-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/317006/1.webp",
+        images: [
+            "/assets/productos/Yupoo/317006/2.webp"
+        ],
+        temporada: "84/89",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 616348,
+        name: "Real Betis 00/01 Local Retro",
+        slug: "real-betis-0001-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/616348/1.webp",
+        images: [
+            "/assets/productos/Yupoo/616348/2.webp"
+        ],
+        temporada: "00/01",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 287045,
+        name: "Real Betis 98/99 Local Retro",
+        slug: "real-betis-9899-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/287045/1.webp",
+        images: [
+            "/assets/productos/Yupoo/287045/2.webp"
+        ],
+        temporada: "98/99",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 731682,
+        name: "Atlético Madrid 94/95 Local Retro",
+        slug: "atletico-madrid-9495-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/731682/1.webp",
+        images: [
+            "/assets/productos/Yupoo/731682/2.webp"
+        ],
+        temporada: "94/95",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 347048,
+        name: "Real Betis 19/82 Local Retro",
+        slug: "real-betis-1982-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/347048/1.webp",
+        images: [
+            "/assets/productos/Yupoo/347048/2.webp"
+        ],
+        temporada: "19/82",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 555954,
+        name: "Real Madrid 2011 Portero Retro",
+        slug: "real-madrid-2011-portero-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/555954/1.webp",
+        images: [
+            "/assets/productos/Yupoo/555954/2.webp"
+        ],
+        temporada: "2011",
+        tipo: "portero",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 880454,
+        name: "Real Madrid 2011 Portero Retro",
+        slug: "real-madrid-2011-portero-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/880454/1.webp",
+        images: [
+            "/assets/productos/Yupoo/880454/2.webp"
+        ],
+        temporada: "2011",
+        tipo: "portero",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 925722,
+        name: "Real Betis 2001 Local Retro",
+        slug: "real-betis-2001-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/925722/1.webp",
+        images: [
+            "/assets/productos/Yupoo/925722/2.webp"
+        ],
+        temporada: "2001",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 836996,
+        name: "Real Betis 94/95 Local Retro",
+        slug: "real-betis-9495-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/836996/1.webp",
+        images: [
+            "/assets/productos/Yupoo/836996/2.webp"
+        ],
+        temporada: "94/95",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 874744,
+        name: "Real Betis 95/97 Visitante Retro",
+        slug: "real-betis-9597-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/874744/1.webp",
+        images: [
+            "/assets/productos/Yupoo/874744/2.webp"
+        ],
+        temporada: "95/97",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 618215,
+        name: "Celta de Vigo 2002 Local Retro",
+        slug: "celta-de-vigo-2002-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/618215/1.webp",
+        images: [
+            "/assets/productos/Yupoo/618215/2.webp"
+        ],
+        temporada: "2002",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 559147,
+        name: "FC Barcelona 98/99 Local Retro",
+        slug: "fc-barcelona-9899-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/559147/1.webp",
+        images: [
+            "/assets/productos/Yupoo/559147/2.webp"
+        ],
+        temporada: "19/98",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 422685,
+        name: "FC Barcelona 93/94 Retro",
+        slug: "fc-barcelona-9394-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/422685/1.webp",
+        images: [
+            "/assets/productos/Yupoo/422685/2.webp"
+        ],
+        temporada: "93/94",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 514408,
+        name: "Real Madrid 2009 Visitante Retro",
+        slug: "real-madrid-2009-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/514408/1.webp",
+        images: [
+            "/assets/productos/Yupoo/514408/2.webp"
+        ],
+        temporada: "2009",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 563822,
+        name: "Athletic Club 97/98 Visitante Retro",
+        slug: "athletic-club-9798-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/563822/1.webp",
+        images: [
+            "/assets/productos/Yupoo/563822/2.webp"
+        ],
+        temporada: "97/98",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     }
 ];
 
