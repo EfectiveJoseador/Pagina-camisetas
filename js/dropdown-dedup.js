@@ -11,7 +11,7 @@ const DropdownDedup = (function () {
             'uefa', 'champions', 'league', 'ucl', 'fc', 'cf', 'sc', 'ac',
             'club', 'team', 'women', 'u19', 'u21', 'u23', 'ii', 'b',
             'local', 'visitante', 'tercera', 'cuarta', 'home', 'away', 'third',
-            'retro', 'icon', 'classic', 'vintage', 'special', 'edition',
+            'retro', 'icon', 'classic', 'vintage', 'special', 'edition', 'style', 'estilo',
             'black', 'gold', 'golden', 'white', 'pink', 'blue', 'red', 'green',
             'training', 'entrenamiento', 'pre-match', 'stadium', 'authentic',
             'player', 'fan', 'vapor', 'kids', 'niño', 'niños'
@@ -30,6 +30,8 @@ const DropdownDedup = (function () {
             'atleti': 'Atlético Madrid',
             'atletico': 'Atlético Madrid',
             'madrid': 'Real Madrid', 
+            'deportivo': 'Deportivo La Coruña',
+            'depor': 'Deportivo La Coruña'
         }
     };
 

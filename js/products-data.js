@@ -638,7 +638,7 @@ const products = [
     },
     {
         id: 520253,
-        name: "Deportivo La Coruna 25/26 Local",
+        name: "Deportivo La Coruña 25/26 Local",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/207558615/1.webp",
@@ -657,7 +657,7 @@ const products = [
     },
     {
         id: 811678,
-        name: "Deportivo La Coruna 25/26 Tercera",
+        name: "Deportivo La Coruña 25/26 Tercera",
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/Yupoo/207558748/1.webp",
@@ -3089,6 +3089,88 @@ const products = [
         temporada: "96/98",
         tipo: "local",
         retro: true
+    },
+    {
+        id: 198265,
+        name: "PSG 25/26 Cuarta",
+        slug: "psg-2526-cuarta",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/198265/1.webp",
+        images: [
+            "/assets/productos/Yupoo/198265/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "cuarta"
+    },
+    {
+        id: 316527,
+        name: "Brasil 2026 Especial",
+        slug: "brasil-2026-especial",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/316527/1.webp",
+        images: [
+            "/assets/productos/Yupoo/316527/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "especial"
+    },
+    {
+        id: 816004,
+        name: "PSG 25/26 Entrenamiento",
+        slug: "psg-2526-entrenamiento",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/816004/1.webp",
+        images: [
+            "/assets/productos/Yupoo/816004/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "entrenamiento"
+    },
+    {
+        id: 377846,
+        name: "PSG 25/26 Entrenamiento",
+        slug: "psg-2526-entrenamiento",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/377846/1.webp",
+        images: [
+            "/assets/productos/Yupoo/377846/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "entrenamiento"
+    },
+    {
+        id: 793487,
+        name: "Córdoba estilo Retro 25/26",
+        slug: "cordoba-estilo-retro-2526",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/793487/1.webp",
+        images: [
+            "/assets/productos/Yupoo/793487/2.webp"
+        ],
+        temporada: "25/26",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 297890,
+        name: "Deportivo La Coruña estilo Retro 25/26",
+        slug: "deportivo-la-coruna-estilo-retro-2526",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/297890/1.webp",
+        images: [
+            "/assets/productos/Yupoo/297890/2.webp"
+        ],
+        temporada: "25/26",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     }
 ];
 

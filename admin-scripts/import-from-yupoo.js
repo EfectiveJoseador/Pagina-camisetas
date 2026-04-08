@@ -432,24 +432,30 @@ async function main() {
         const teamMatch = matcher.findBestMatch(product.name, 0.6); // Threshold aumentado de 0.3 a 0.6
 
         if (teamMatch && teamMatch.league) {
-
             info(`🔗 Match encontrado: "${teamMatch.name}" (score: ${(teamMatch.score * 100).toFixed(0)}%)`);
 
-            // Solo reemplazar el nombre si el score es muy alto (>= 0.7)
-            // Esto evita reemplazos incorrectos como "Brasil" → "Marseille"
-            if (teamMatch.score >= 0.7) {
-                const existingTeamName = teamMatch.name.replace(/\s*\d{2}\/?\d{2}.*$/, '').trim();
-                const currentTeamName = product.name.replace(/\s*\d{2}\/?\d{2}.*$/, '').trim();
+            // Extraer solo la parte del equipo (sin temporada ni variantes) para comparar
+            const cleanExistingTeam = teamMatch.name
+                .replace(/\s*\d{2}\/?\d{2}.*$/, '')
+                .replace(/\b(estilo|Retro|Local|Visitante|Tercera|Cuarta|Especial|Entrenamiento|Portero|Niño|Kids)\b/gi, '')
+                .trim();
+            
+            const cleanCurrentTeam = product.name
+                .replace(/\s*\d{2}\/?\d{2}.*$/, '')
+                .replace(/\b(estilo|Retro|Local|Visitante|Tercera|Cuarta|Especial|Entrenamiento|Portero|Niño|Kids)\b/gi, '')
+                .trim();
 
-                if (existingTeamName && existingTeamName !== currentTeamName) {
-                    product.name = product.name.replace(currentTeamName, existingTeamName);
-                    product.slug = product.slug.replace(
-                        currentTeamName.toLowerCase().replace(/\s+/g, '-'),
-                        existingTeamName.toLowerCase().replace(/\s+/g, '-')
-                    );
-                    info(`   Nombre normalizado: ${currentTeamName} → ${existingTeamName}`);
-                }
-            } else {
+            if (teamMatch.score >= 0.7 && cleanExistingTeam && cleanExistingTeam !== cleanCurrentTeam) {
+                // Reemplazar el nombre del equipo dentro del nombre completo del producto
+                product.name = product.name.replace(cleanCurrentTeam, cleanExistingTeam);
+                
+                // Regenerar el slug
+                const oldSlugPart = cleanCurrentTeam.toLowerCase().replace(/\s+/g, '-');
+                const newSlugPart = cleanExistingTeam.toLowerCase().replace(/\s+/g, '-');
+                product.slug = product.slug.replace(oldSlugPart, newSlugPart);
+                
+                info(`   Nombre normalizado: ${cleanCurrentTeam} → ${cleanExistingTeam}`);
+            } else if (teamMatch.score < 0.7) {
                 info(`   Score bajo (${(teamMatch.score * 100).toFixed(0)}%), manteniendo nombre original`);
             }
 
@@ -474,7 +480,7 @@ async function main() {
 
         if (existingById.product || existingByUrl.product) {
             const existing = existingById.product || existingByUrl.product;
-            warn(`Producto ya existe con ID ${existing.id}: "${existing.name}"`);
+            warn(`⚠ Producto ya existe con ID ${existing.id}: "${existing.name}"`);
 
             if (!options.update) {
                 info('Usa --update para actualizar el producto existente');

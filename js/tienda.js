@@ -715,6 +715,7 @@ function populateTeamFilter(league) {
         'Portero', 'Goalkeeper', 'GK',
         'Retro', 'Icon', 'Classic', 'Vintage',
         'Especial', 'Special', 'Edici[oó]n.*', 'Limited', 'Commemorative', 'Conmemorativ[ao]',
+        'estilo', 'Style',
         'Black', 'Gold', 'Golden', 'White', 'Pink', 'Blue', 'Red', 'Green', 'Golde', 'cyan',
         'Training', 'Entrenamiento', 'Pre-match', 'Warm-up',
         'Anniversary', 'Aniversario', 'Centemary', 'Centenario',
@@ -747,6 +748,9 @@ function populateTeamFilter(league) {
         'manchester united': 'Manchester United',
         'alaves': 'Alavés',
         'atletico madrid': 'Atlético Madrid',
+        'deportivo': 'Deportivo La Coruña',
+        'deportivo la coruna': 'Deportivo La Coruña',
+        'depor': 'Deportivo La Coruña',
         'atletico mineiro': 'Atlético Mineiro',
         'sao paulo': 'São Paulo',
         'celta': 'Celta de Vigo',
@@ -774,7 +778,9 @@ function populateTeamFilter(league) {
         'celta': 'celta de vigo',
         'athletic': 'athletic club',
         'athletic bilbao': 'athletic club',
-        'brazil': 'brasil'
+        'brazil': 'brasil',
+        'deportivo': 'deportivo la coruna',
+        'depor': 'deportivo la coruna'
     };
 
     
@@ -802,8 +808,10 @@ function populateTeamFilter(league) {
             const displayName = canonicalNames[key] || canonicalNames[normalizeString(name)] || name;
 
             
-            if (!teamMap.has(key)) {
-                teamMap.set(key, displayName);
+            if (key && key.length > 1 && displayName && displayName.trim().length > 1) {
+                if (!teamMap.has(key)) {
+                    teamMap.set(key, displayName);
+                }
             }
         }
     });

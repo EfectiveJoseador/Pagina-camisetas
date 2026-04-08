@@ -8,6 +8,11 @@ const TEXT_NORMALIZATION = {
     'away': 'Visitante',
     'home': 'Local',
     'third': 'Tercera',
+    'fourth': 'Cuarta',
+    '1st': 'Local',
+    '2nd': 'Visitante',
+    '3rd': 'Tercera',
+    '4th': 'Cuarta',
     'retro': 'Retro',
     'kids': 'Niño',
     'goalkeeper': 'Portero',
@@ -21,7 +26,8 @@ const TEXT_NORMALIZATION = {
     'shirt': 'Camiseta',
     'kit': 'Equipación',
     'player': 'Jugador',
-    'fan': 'Aficionado'
+    'fan': 'Aficionado',
+    'style': 'estilo'
 };
 
 
@@ -43,6 +49,9 @@ const TEAM_NAME_NORMALIZATION = {
     'sevilla atletico': 'Sevilla',
     'valencia mestalla': 'Valencia',
     'betis deportivo': 'Real Betis',
+    'deportivo': 'Deportivo La Coruña',
+    'coruna': 'Deportivo La Coruña',
+    'coruña': 'Deportivo La Coruña',
 
     // Inglaterra - Variaciones
     'man utd': 'Manchester United',
@@ -88,9 +97,9 @@ const TEAM_NAME_NORMALIZATION = {
     'hertha bsc': 'Hertha Berlin',
 
     // Francia - Variaciones
-    'psg': 'Paris Saint-Germain',
-    'paris': 'Paris Saint-Germain',
-    'paris saint germain': 'Paris Saint-Germain',
+    'psg': 'PSG',
+    'paris': 'PSG',
+    'paris saint germain': 'PSG',
     'om': 'Olympique Marseille',
     'marseille': 'Olympique Marseille',
     'ol': 'Olympique Lyon',
@@ -110,8 +119,9 @@ const TEAM_NAME_NORMALIZATION = {
     'bilbao': 'Athletic Club',
     'sociedad': 'Real Sociedad',
     'betis': 'Real Betis',
-    'depor': 'Deportivo',
-    'deportivo la coruna': 'Deportivo',
+    'depor': 'Deportivo La Coruña',
+    'deportivo': 'Deportivo La Coruña',
+    'deportivo la coruna': 'Deportivo La Coruña',
     'celta': 'Celta de Vigo',
     'celta vigo': 'Celta de Vigo',
     'rayo': 'Rayo Vallecano',
@@ -832,15 +842,24 @@ const EXCLUDED_URL_PATTERNS = [
 
 
 const TEAM_STOPWORDS = [
-    'fc', 'cf', 'sc', 'ac', 'as', 'rc', 'cd', 'ud', 'rcd', 'sd', 'real',
-    'club', 'sporting', 'deportivo', 'atletico', 'atlético', 'athletic',
-    'united', 'city', 'town', 'rovers', 'wanderers',
+    'fc', 'cf', 'sc', 'ac', 'as', 'rc', 'cd', 'ud', 'rcd', 'sd',
+    'club', 'united', 'city', 'town', 'rovers', 'wanderers',
     'local', 'visitante', 'tercera', 'cuarta', 'home', 'away', 'third', 'fourth',
     'retro', 'special', 'especial', 'edition', 'classic', 'vintage',
     'training', 'entrenamiento', 'portero', 'goalkeeper', 'gk',
     'kids', 'niño', 'niños', 'junior'
 ];
 
+const GENERIC_TOKENS = new Set([
+    'fc', 'cf', 'sc', 'ac', 'deportivo', 'atletico', 'united', 'city', 'club', 'cd', 'ud', 'rcd', 'rc', 'sd', 'de', 'la', 'del', 'real'
+]);
+
+function getTokenWeight(token) {
+    if (GENERIC_TOKENS.has(token.toLowerCase())) {
+        return 1;
+    }
+    return 3;
+}
 
 function normalizeForComparison(str) {
     if (!str) return '';
@@ -848,6 +867,8 @@ function normalizeForComparison(str) {
         .toLowerCase()
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '')
+        .replace(/ñ/g, 'n')
+        .replace(/ç/g, 'c')
         .replace(/[^\w\s]/g, ' ')
         .replace(/\s+/g, ' ')
         .trim();
@@ -861,13 +882,16 @@ function normalizeTeamNameFromDictionary(teamName) {
     const normalized = normalizeForComparison(teamName);
 
     // Buscar coincidencia exacta primero
-    if (TEAM_NAME_NORMALIZATION[normalized]) {
-        return TEAM_NAME_NORMALIZATION[normalized];
+    for (const [key, value] of Object.entries(TEAM_NAME_NORMALIZATION)) {
+        if (normalizeForComparison(key) === normalized) {
+            return value;
+        }
     }
 
-    // Buscar coincidencia parcial (el nombre contiene una clave del diccionario)
+    // Buscar coincidencia parcial (el nombre contiene una clave del diccionario normalizada)
     for (const [key, value] of Object.entries(TEAM_NAME_NORMALIZATION)) {
-        if (normalized.includes(key) || key.includes(normalized)) {
+        const normKey = normalizeForComparison(key);
+        if (normalized.includes(normKey) || normKey.includes(normalized)) {
             return value;
         }
     }
@@ -890,32 +914,42 @@ function extractTeamTokens(name) {
 }
 
 
-function calculateTokenSimilarity(tokens1, tokens2) {
+function calculateWeightedSimilarity(tokens1, tokens2) {
     if (tokens1.length === 0 || tokens2.length === 0) return 0;
 
     const set1 = new Set(tokens1);
     const set2 = new Set(tokens2);
 
+    let commonWeight = 0;
+    let totalWeight1 = 0;
+    let totalWeight2 = 0;
 
-    let exactMatches = 0;
-    for (const t of set1) {
-        if (set2.has(t)) exactMatches++;
-    }
+    set1.forEach(t => { totalWeight1 += getTokenWeight(t); });
+    set2.forEach(t => { totalWeight2 += getTokenWeight(t); });
 
-
-    let partialMatches = 0;
-    for (const t1 of set1) {
-        for (const t2 of set2) {
-            if (t1 !== t2 && (t1.includes(t2) || t2.includes(t1))) {
-                partialMatches += 0.5;
+    set1.forEach(t => {
+        if (set2.has(t)) {
+            commonWeight += getTokenWeight(t);
+        } else {
+            for (const t2 of set2) {
+                if (t.includes(t2) || t2.includes(t)) {
+                    commonWeight += Math.min(getTokenWeight(t), getTokenWeight(t2)) * 0.5;
+                    break;
+                }
             }
         }
-    }
+    });
 
-    const totalMatches = exactMatches + partialMatches;
-    const maxPossible = Math.max(set1.size, set2.size);
+    // Coeficiente de Overlap (Szymkiewicz-Simpson) ponderado
+    const minWeight = Math.min(totalWeight1, totalWeight2);
+    const overlapScore = commonWeight / minWeight;
 
-    return totalMatches / maxPossible;
+    // Jaccard ponderado
+    const maxWeight = Math.max(totalWeight1, totalWeight2);
+    const jaccardScore = commonWeight / maxWeight;
+
+    // Combinación profesional: si es un subconjunto claro, priorizar overlap
+    return overlapScore > 0.9 ? overlapScore : (overlapScore + jaccardScore) / 2;
 }
 
 
@@ -933,8 +967,10 @@ class TeamMatcher {
 
         this.products.forEach(p => {
             if (p.name) {
-
-                const teamPart = p.name.replace(/\d{2}\/?\d{2}.*$/, '').trim();
+                let teamPart = p.name
+                    .replace(/\d{2}\/?\d{2}.*$/, '')
+                    .replace(/\b(estilo|Retro|Local|Visitante|Tercera|Cuarta|Especial|Entrenamiento|Portero|Junior|Kids)\b/gi, '')
+                    .trim();
                 if (teamPart) teamNames.add(teamPart);
             }
         });
@@ -952,10 +988,9 @@ class TeamMatcher {
     }
 
 
-    findBestMatch(newTeamName, threshold = 0.5) {
+    findBestMatch(newTeamName, threshold = 0.4) {
         const newTokens = extractTeamTokens(newTeamName);
         if (newTokens.length === 0) return null;
-
 
         const candidates = new Set();
         newTokens.forEach(token => {
@@ -963,8 +998,9 @@ class TeamMatcher {
                 this.teamIndex.get(token).forEach(name => candidates.add(name));
             }
 
+            // También buscar coincidencias parciales en el índice
             this.teamIndex.forEach((names, indexToken) => {
-                if (token.includes(indexToken) || indexToken.includes(token)) {
+                if (token.length > 3 && (token.includes(indexToken) || indexToken.includes(token))) {
                     names.forEach(name => candidates.add(name));
                 }
             });
@@ -972,13 +1008,20 @@ class TeamMatcher {
 
         if (candidates.size === 0) return null;
 
-
         let bestMatch = null;
         let bestScore = 0;
 
         candidates.forEach(candidateName => {
             const candidateTokens = extractTeamTokens(candidateName);
-            const score = calculateTokenSimilarity(newTokens, candidateTokens);
+            let score = calculateWeightedSimilarity(newTokens, candidateTokens);
+
+            // Bonus si el candidato es un nombre más completo que contiene todos los tokens del input
+            const isSubset = newTokens.every(nt => candidateTokens.includes(nt));
+            if (isSubset) {
+                // Si es un subconjunto de tokens, damos un score muy alto basado en la relevancia
+                const bonusScore = 0.9 + (score * 0.1); 
+                score = Math.max(score, bonusScore);
+            }
 
             if (score > bestScore && score >= threshold) {
                 bestScore = score;
@@ -988,9 +1031,11 @@ class TeamMatcher {
 
         if (!bestMatch) return null;
 
+        console.log(`[Matcher] Match: "${newTeamName}" -> "${bestMatch}" (Score: ${bestScore.toFixed(2)})`);
 
+        // Recuperar metadatos adicionales del producto original si es posible
         const matchingProduct = this.products.find(p =>
-            p.name && p.name.startsWith(bestMatch)
+            p.name && p.name.toLowerCase().includes(bestMatch.toLowerCase())
         );
 
         return {
@@ -1190,7 +1235,11 @@ const TEAM_TRANSLATIONS = {
     'real': 'Real Madrid',
     'inter': 'Inter de Milán',
     'atletico': 'Atlético Madrid',
-    'atlético': 'Atlético Madrid'
+    'atlético': 'Atlético Madrid',
+    'cordoba': 'Córdoba',
+    'córdoba': 'Córdoba',
+    'almeria': 'Almería',
+    'malaga': 'Málaga'
 };
 
 
@@ -1254,7 +1303,13 @@ const TITLE_CLEANUP_PATTERNS = [
     /\bkits?\b/gi,
     /\bsoccer\b/gi,
     /\bfootball\b/gi,
-    /\bbasketball\b/gi
+    /\bbasketball\b/gi,
+
+    // Sufijos de álbum de Yupoo/Proveedores
+    /\|\s*album\s*\|.*$/gi,
+    /\|\s*pandasportjersey\s*\|.*$/gi,
+    /Supplier\s+Product\s+Catalog/gi,
+    /pandasportjersey/gi
 ];
 
 
@@ -1293,7 +1348,8 @@ function parseProductTitle(rawTitle) {
         tipo: null,
         tallas: null,
         isKids: false,
-        isRetro: false
+        isRetro: false,
+        isStyle: false
     };
 
 
@@ -1333,17 +1389,17 @@ function parseProductTitle(rawTitle) {
 
 
     const titleLower = title.toLowerCase();
-    if (titleLower.includes('away') || titleLower.includes('visitante')) {
+    if (titleLower.includes('away') || titleLower.includes('visitante') || titleLower.includes('2nd') || titleLower.includes('2a')) {
         result.tipo = 'visitante';
-    } else if (titleLower.includes('third') || titleLower.includes('tercera')) {
+    } else if (titleLower.includes('third') || titleLower.includes('tercera') || titleLower.includes('3rd') || titleLower.includes('3a')) {
         result.tipo = 'tercera';
-    } else if (titleLower.includes('fourth') || titleLower.includes('cuarta')) {
+    } else if (titleLower.includes('fourth') || titleLower.includes('cuarta') || titleLower.includes('4th') || titleLower.includes('4a')) {
         result.tipo = 'cuarta';
-    } else if (titleLower.includes('home') || titleLower.includes('local')) {
+    } else if (titleLower.includes('home') || titleLower.includes('local') || titleLower.includes('1st') || titleLower.includes('1a')) {
         result.tipo = 'local';
     } else if (titleLower.includes('gk') || titleLower.includes('goalkeeper') || titleLower.includes('portero')) {
         result.tipo = 'portero';
-    } else if (titleLower.includes('special') || titleLower.includes('especial') || titleLower.includes('edition')) {
+    } else if (titleLower.includes('special') || titleLower.includes('especial') || titleLower.includes('edition') || titleLower.includes('limited')) {
         result.tipo = 'especial';
     } else if (titleLower.includes('training') || titleLower.includes('entrenamiento')) {
         result.tipo = 'entrenamiento';
@@ -1360,50 +1416,42 @@ function parseProductTitle(rawTitle) {
 
 
     result.isRetro = /\bretro\b/i.test(titleLower);
+    result.isStyle = /\bstyle\b/i.test(titleLower);
 
 
     let teamName = title;
+    console.log('[DEBUG] Original Title:', title);
 
 
     teamName = teamName
+        .replace(/\|\s*album\s*\|.*$/gi, '')
         .replace(/\b(20\d{2})\b/g, '')
         .replace(/(\d{2})[\/-]?(\d{2})\b/g, '')
         .replace(/\b(away|home|third|fourth|visitante|local|tercera|cuarta|gk|goalkeeper|portero)\b/gi, '')
-        .replace(/\b(special|especial|edition|edici[oó]n)\b/gi, '')
+        .replace(/\b(1st|2nd|3rd|4th|1a|2a|3a|4a)\b/gi, '')
+        .replace(/\b(special|especial|edition|edici[oó]n|limited|limitada)\b/gi, '')
         .replace(/\b(training|entrenamiento|pre-?match|warm-?up)\b/gi, '')
         .replace(/\b(retro|classic|vintage)\b/gi, '')
         .replace(/\b(kids?|niños?|child|children|junior)\b/gi, '')
-        .replace(/\b(S-\d?XL|S-4XL|XS-XXL|S-XXL|M-XXL|S-3XL)\b/gi, '')
-        .replace(/\b(jerseys?|shirts?|camisas?|camisetas?|kits?)\b/gi, '');
+        .replace(/\b(S-\d?XL|S-4XL|XS-XXL|S-XXL|M-XXL|S-3XL|S-XXL2|S-\dXL2)\b/gi, '')
+        .replace(/\b(style|estilo)\b/gi, '')
+        .replace(/\b(jerseys?|shirts?|camisas?|camisetas?|kits?)\b/gi, '')
+        .trim();
+
+    console.log('[DEBUG] After Regex Cleanup:', teamName);
 
 
     TITLE_CLEANUP_PATTERNS.forEach(pattern => {
         teamName = teamName.replace(pattern, '');
     });
 
-
     teamName = teamName
         .replace(/\s+/g, ' ')
         .replace(/^\W+|\W+$/g, '')
         .trim();
 
+    console.log('[DEBUG] After Pattern Cleanup: "' + teamName + '"');
 
-    const lowerTeam = teamName.toLowerCase();
-    if (TEAM_TRANSLATIONS[lowerTeam]) {
-        teamName = TEAM_TRANSLATIONS[lowerTeam];
-    } else {
-
-
-
-
-        for (const [eng, esp] of Object.entries(TEAM_TRANSLATIONS)) {
-            const regex = new RegExp(`\\b${eng}\\b`, 'yi');
-            if (lowerTeam === eng) {
-                teamName = esp;
-                break;
-            }
-        }
-    }
 
     // Aplicar normalización de nombres de equipos (filiales → equipo principal)
     teamName = normalizeTeamNameFromDictionary(teamName);
@@ -1414,13 +1462,17 @@ function parseProductTitle(rawTitle) {
 
     let finalParts = [result.team];
 
-    if (result.temporada) finalParts.push(result.temporada);
-
-    if (result.tipo) {
-        finalParts.push(result.tipo.charAt(0).toUpperCase() + result.tipo.slice(1));
+    if (result.isStyle && result.isRetro) {
+        finalParts.push('estilo Retro');
+        if (result.temporada) finalParts.push(result.temporada);
+    } else {
+        if (result.temporada) finalParts.push(result.temporada);
+        if (result.tipo) {
+            finalParts.push(result.tipo.charAt(0).toUpperCase() + result.tipo.slice(1));
+        }
+        if (result.isRetro) finalParts.push('Retro');
     }
 
-    if (result.isRetro) finalParts.push('Retro');
     if (result.isKids) finalParts.push('(Niño)');
 
     result.name = finalParts.join(' ');
@@ -1896,12 +1948,9 @@ async function importFromYupoo(albumUrl, options = {}) {
     }
 
 
+    const id = generateStableId(albumUrl);
     const league = detectLeague(titleInfo.team, titleInfo.isRetro);
     const category = detectCategory(league);
-
-
-    const id = generateStableId(albumUrl);
-
 
     const product = {
         id,
@@ -1912,7 +1961,6 @@ async function importFromYupoo(albumUrl, options = {}) {
         image: imageData.image,
         images: imageData.images
     };
-
 
     if (titleInfo.temporada) {
         product.temporada = titleInfo.temporada;
@@ -1928,6 +1976,18 @@ async function importFromYupoo(albumUrl, options = {}) {
 
     if (titleInfo.isRetro) {
         product.retro = true;
+    }
+
+    // Asignar precios por defecto según el tipo de producto
+    if (product.retro || product.category === 'nba' || product.league === 'nba') {
+        product.price = 24.90;
+        product.oldPrice = 30.00;
+    } else if (product.kids) {
+        product.price = 21.90;
+        product.oldPrice = 27.00;
+    } else {
+        product.price = 19.90;
+        product.oldPrice = 25.00;
     }
 
     return product;
@@ -2150,7 +2210,7 @@ module.exports = {
     TeamMatcher,
     loadExistingProducts,
     extractTeamTokens,
-    calculateTokenSimilarity,
+    calculateWeightedSimilarity,
     normalizeForComparison,
 
 

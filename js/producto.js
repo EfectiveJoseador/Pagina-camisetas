@@ -89,7 +89,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const teamName = product.name
         .replace(/\s*\d{2}\/?\d{2}.*$/, '')  
         .replace(/\s*\(Niño\).*$/i, '')      
-        .replace(/\s*(Local|Visitante|Tercera|Cuarta|Especial|Retro|Entrenamiento|Portero).*$/i, '')
+        .replace(/\s*(Local|Visitante|Tercera|Cuarta|Especial|Retro|Entrenamiento|Portero|estilo).*$/i, '')
         .trim();
 
     const breadcrumbTeam = document.getElementById('breadcrumb-team');
@@ -673,7 +673,7 @@ function loadRelatedProducts() {
     const getTeamBase = (name) => {
         return name
             .replace(/\d{2}\/\d{2}/, '')
-            .replace(/(Local|Visitante|Tercera|Retro|Icon)/gi, '')
+            .replace(/(Local|Visitante|Tercera|Retro|Icon|estilo)/gi, '')
             .replace(/\(Kids\)/gi, '')
             .trim();
     };
