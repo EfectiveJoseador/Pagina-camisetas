@@ -1,10 +1,7 @@
-
-
 const crypto = require('crypto');
 
-
 const TEXT_NORMALIZATION = {
-
+    // Originales
     'away': 'Visitante',
     'home': 'Local',
     'third': 'Tercera',
@@ -21,68 +18,319 @@ const TEXT_NORMALIZATION = {
     'special': 'Especial',
     'anniversary': 'Aniversario',
     'classic': 'Clásica',
-
     'jersey': 'Camiseta',
     'shirt': 'Camiseta',
     'kit': 'Equipación',
     'player': 'Jugador',
     'fan': 'Aficionado',
-    'style': 'estilo'
+    'style': 'estilo',
+    
+    // Nuevos
+    'authentic': 'Auténtica',
+    'stadium': 'Estadio',
+    'player version': 'Versión Jugador',
+    'fans version': 'Versión Aficionado',
+    'ls': 'Manga Larga',
+    'ss': 'Manga Corta',
+    'long sleeve': 'Manga Larga',
+    'short sleeve': 'Manga Corta',
+    'women': 'Mujer',
+    'womens': 'Mujer',
+    'ladies': 'Mujer',
+    'pre-match': 'Pre-Match',
+    'warm up': 'Calentamiento',
+    'concept': 'Concepto',
+    'limited': 'Limitada'
 };
 
-
-// Normalización de nombres de equipos (filiales y variaciones → equipo principal)
 const TEAM_NAME_NORMALIZATION = {
-    // España - Filiales
+    // === ESPAÑA (La Liga, Segunda, RFEF) ===
     'barcelona b': 'FC Barcelona',
     'barcelona atletic': 'FC Barcelona',
     'barca b': 'FC Barcelona',
     'barca atletic': 'FC Barcelona',
+    'barca': 'FC Barcelona',
+    'fc barcelona': 'FC Barcelona',
+    'barcelona': 'FC Barcelona',
+    'fcb': 'FC Barcelona',
     'real madrid castilla': 'Real Madrid',
     'castilla': 'Real Madrid',
+    'madrid': 'Real Madrid',
+    'rm': 'Real Madrid',
+    'rmcf': 'Real Madrid',
     'atletico madrid b': 'Atlético Madrid',
+    'atletico': 'Atlético Madrid',
+    'atlético': 'Atlético Madrid',
+    'atletico madrid': 'Atlético Madrid',
+    'atlético madrid': 'Atlético Madrid',
+    'atleti': 'Atlético Madrid',
+    'atm': 'Atlético Madrid',
     'villarreal b': 'Villarreal',
+    'villareal': 'Villarreal',
+    'villarreal cf': 'Villarreal',
     'real sociedad b': 'Real Sociedad',
+    'sociedad': 'Real Sociedad',
+    'la real': 'Real Sociedad',
     'athletic bilbao b': 'Athletic Club',
     'bilbao athletic': 'Athletic Club',
+    'athletic': 'Athletic Club',
+    'athletic bilbao': 'Athletic Club',
+    'bilbao': 'Athletic Club',
     'sevilla atlético': 'Sevilla',
     'sevilla atletico': 'Sevilla',
     'valencia mestalla': 'Valencia',
+    'valencia cf': 'Valencia',
     'betis deportivo': 'Real Betis',
+    'betis': 'Real Betis',
+    'real betis balompie': 'Real Betis',
     'deportivo': 'Deportivo La Coruña',
     'coruna': 'Deportivo La Coruña',
     'coruña': 'Deportivo La Coruña',
+    'depor': 'Deportivo La Coruña',
+    'deportivo la coruna': 'Deportivo La Coruña',
+    'rc deportivo': 'Deportivo La Coruña',
+    'celta': 'Celta de Vigo',
+    'celta vigo': 'Celta de Vigo',
+    'rc celta': 'Celta de Vigo',
+    'rayo': 'Rayo Vallecano',
+    'sporting': 'Sporting Gijón',
+    'sporting gijon': 'Sporting Gijón',
+    'real sporting': 'Sporting Gijón',
+    'rcd espanyol': 'Espanyol',
+    'espanyol': 'Espanyol',
+    'espanol': 'Espanyol',
+    'mallorca': 'Mallorca',
+    'rcd mallorca': 'Mallorca',
+    'osasuna': 'Osasuna',
+    'ca osasuna': 'Osasuna',
+    'alaves': 'Deportivo Alavés',
+    'deportivo alaves': 'Deportivo Alavés',
+    'girona': 'Girona FC',
+    'cadiz': 'Cádiz CF',
+    'zaragoza': 'Real Zaragoza',
+    'real zaragoza': 'Real Zaragoza',
+    'oviedo': 'Real Oviedo',
+    'real oviedo': 'Real Oviedo',
+    'malaga': 'Málaga CF',
+    'malaga cf': 'Málaga CF',
+    'málaga': 'Málaga CF',
+    'tenerife': 'CD Tenerife',
+    'cd tenerife': 'CD Tenerife',
+    'levante': 'Levante UD',
+    'levante ud': 'Levante UD',
+    'elche': 'Elche CF',
+    'granada': 'Granada CF',
+    'almeria': 'UD Almería',
+    'almería': 'UD Almería',
+    'ud almeria': 'UD Almería',
+    'leganes': 'CD Leganés',
+    'leganés': 'CD Leganés',
+    'getafe': 'Getafe CF',
+    'las palmas': 'UD Las Palmas',
+    'ud las palmas': 'UD Las Palmas',
+    'racing santander': 'Racing de Santander',
+    'racing de santander': 'Racing de Santander',
+    'burgos': 'Burgos CF',
+    'burgos cf': 'Burgos CF',
+    'eibar': 'SD Eibar',
+    'sd eibar': 'SD Eibar',
+    'huesca': 'SD Huesca',
+    'albacete': 'Albacete Balompié',
+    'albacete balompie': 'Albacete Balompié',
+    'cartagena': 'FC Cartagena',
+    'mirandes': 'CD Mirandés',
+    'mirandés': 'CD Mirandés',
+    'andorra': 'FC Andorra',
+    'valladolid': 'Real Valladolid',
+    'real valladolid': 'Real Valladolid',
+    'pucela': 'Real Valladolid',
+    'cordoba': 'Córdoba CF',
+    'córdoba': 'Córdoba CF',
+    'cordoba cf': 'Córdoba CF',
+    'recreativo': 'Recreativo de Huelva',
+    'recreativo huelva': 'Recreativo de Huelva',
+    'numancia': 'CD Numancia',
+    'ponferradina': 'SD Ponferradina',
+    'lugo': 'CD Lugo',
+    'alcorcon': 'AD Alcorcón',
+    'fuenlabrada': 'CF Fuenlabrada',
+    'castellon': 'CD Castellón',
+    'ferrol': 'Racing de Ferrol',
+    'racing ferrol': 'Racing de Ferrol',
 
-    // Inglaterra - Variaciones
+    // === INGLATERRA (Premier League, Championship, League One) ===
     'man utd': 'Manchester United',
     'man united': 'Manchester United',
     'united': 'Manchester United',
+    'mufc': 'Manchester United',
     'man city': 'Manchester City',
     'city': 'Manchester City',
+    'mcfc': 'Manchester City',
     'spurs': 'Tottenham',
     'tottenham hotspur': 'Tottenham',
     'wolves': 'Wolverhampton',
+    'wolverhampton wanderers': 'Wolverhampton',
     'palace': 'Crystal Palace',
     'villa': 'Aston Villa',
+    'arsenal': 'Arsenal',
+    'arsenal fc': 'Arsenal',
+    'gunners': 'Arsenal',
+    'chelsea': 'Chelsea',
+    'chelsea fc': 'Chelsea',
+    'blues': 'Chelsea',
+    'liverpool': 'Liverpool',
+    'liverpool fc': 'Liverpool',
+    'lfc': 'Liverpool',
+    'newcastle': 'Newcastle United',
+    'newcastle united': 'Newcastle United',
+    'nufc': 'Newcastle United',
+    'west ham': 'West Ham United',
+    'west ham united': 'West Ham United',
+    'whufc': 'West Ham United',
+    'leicester': 'Leicester City',
+    'leicester city': 'Leicester City',
+    'leeds': 'Leeds United',
+    'leeds united': 'Leeds United',
+    'forest': 'Nottingham Forest',
+    'nottingham': 'Nottingham Forest',
+    'nottingham forest': 'Nottingham Forest',
+    'saints': 'Southampton',
+    'southampton': 'Southampton',
+    'everton': 'Everton',
+    'everton fc': 'Everton',
+    'brentford': 'Brentford',
+    'brentford fc': 'Brentford',
+    'brighton': 'Brighton',
+    'brighton hove albion': 'Brighton',
+    'bhafc': 'Brighton',
+    'fulham': 'Fulham',
+    'fulham fc': 'Fulham',
+    'bournemouth': 'Bournemouth',
+    'afc bournemouth': 'Bournemouth',
+    'burnley': 'Burnley',
+    'burnley fc': 'Burnley',
+    'sheffield': 'Sheffield United',
+    'sheffield united': 'Sheffield United',
+    'sheffield wednesday': 'Sheffield Wednesday',
+    'luton': 'Luton Town',
+    'luton town': 'Luton Town',
+    'ipswich': 'Ipswich Town',
+    'ipswich town': 'Ipswich Town',
+    'norwich': 'Norwich City',
+    'norwich city': 'Norwich City',
+    'watford': 'Watford',
+    'watford fc': 'Watford',
+    'sunderland': 'Sunderland',
+    'safc': 'Sunderland',
+    'middlesbrough': 'Middlesbrough',
+    'boro': 'Middlesbrough',
+    'blackburn': 'Blackburn Rovers',
+    'blackburn rovers': 'Blackburn Rovers',
+    'qpr': 'Queens Park Rangers',
+    'queens park rangers': 'Queens Park Rangers',
+    'millwall': 'Millwall',
+    'stoke': 'Stoke City',
+    'stoke city': 'Stoke City',
+    'coventry': 'Coventry City',
+    'coventry city': 'Coventry City',
+    'west brom': 'West Bromwich Albion',
+    'west bromwich': 'West Bromwich Albion',
+    'west bromwich albion': 'West Bromwich Albion',
+    'reading': 'Reading',
+    'cardiff': 'Cardiff City',
+    'cardiff city': 'Cardiff City',
+    'swansea': 'Swansea City',
+    'swansea city': 'Swansea City',
+    'hull': 'Hull City',
+    'hull city': 'Hull City',
+    'bristol city': 'Bristol City',
+    'derby': 'Derby County',
+    'derby county': 'Derby County',
+    'bolton': 'Bolton Wanderers',
+    'bolton wanderers': 'Bolton Wanderers',
+    'portsmouth': 'Portsmouth',
+    'pompey': 'Portsmouth',
+    'birmingham': 'Birmingham City',
+    'birmingham city': 'Birmingham City',
+    'charlton': 'Charlton Athletic',
+    'charlton athletic': 'Charlton Athletic',
+    'wigan': 'Wigan Athletic',
 
-    // Italia - Variaciones
+    // === ITALIA (Serie A, Serie B) ===
     'juve': 'Juventus',
+    'juventus': 'Juventus',
+    'juventus fc': 'Juventus',
     'inter': 'Inter de Milán',
     'inter milan': 'Inter de Milán',
     'internazionale': 'Inter de Milán',
     'milan': 'AC Milan',
     'ac milan': 'AC Milan',
+    'rossoneri': 'AC Milan',
     'hellas verona': 'Verona',
+    'verona': 'Verona',
+    'roma': 'AS Roma',
+    'as roma': 'AS Roma',
+    'lazio': 'SS Lazio',
+    'ss lazio': 'SS Lazio',
+    'napoli': 'Napoli',
+    'ssc napoli': 'Napoli',
+    'fiorentina': 'Fiorentina',
+    'acf fiorentina': 'Fiorentina',
+    'viola': 'Fiorentina',
+    'atalanta': 'Atalanta',
+    'atalanta bc': 'Atalanta',
+    'bergamo': 'Atalanta',
+    'torino': 'Torino',
+    'torino fc': 'Torino',
+    'bologna': 'Bologna',
+    'bologna fc': 'Bologna',
+    'sassuolo': 'Sassuolo',
+    'us sassuolo': 'Sassuolo',
+    'udinese': 'Udinese',
+    'udinese calcio': 'Udinese',
+    'genoa': 'Genoa',
+    'genoa cfc': 'Genoa',
+    'sampdoria': 'Sampdoria',
+    'uc sampdoria': 'Sampdoria',
+    'parma': 'Parma',
+    'parma calcio': 'Parma',
+    'cagliari': 'Cagliari',
+    'cagliari calcio': 'Cagliari',
+    'empoli': 'Empoli',
+    'empoli fc': 'Empoli',
+    'lecce': 'Lecce',
+    'us lecce': 'Lecce',
+    'monza': 'Monza',
+    'ac monza': 'Monza',
+    'frosinone': 'Frosinone',
+    'salernitana': 'Salernitana',
+    'spezia': 'Spezia',
+    'venezia': 'Venezia',
+    'venezia fc': 'Venezia',
+    'como': 'Como',
+    'como 1907': 'Como',
+    'cremonese': 'Cremonese',
+    'brescia': 'Brescia',
+    'palermo': 'Palermo',
+    'palermo fc': 'Palermo',
+    'bari': 'Bari',
+    'pisa': 'Pisa',
+    'ascoli': 'Ascoli',
 
-    // Alemania - Variaciones
+    // === ALEMANIA (Bundesliga, 2. Bundesliga) ===
     'bayern': 'Bayern Munich',
     'bayern munchen': 'Bayern Munich',
     'bayern münchen': 'Bayern Munich',
+    'fc bayern': 'Bayern Munich',
     'bvb': 'Borussia Dortmund',
     'dortmund': 'Borussia Dortmund',
+    'borussia dortmund': 'Borussia Dortmund',
     'gladbach': 'Borussia Mönchengladbach',
     'monchengladbach': 'Borussia Mönchengladbach',
+    'borussia monchengladbach': 'Borussia Mönchengladbach',
     'leverkusen': 'Bayer Leverkusen',
+    'bayer leverkusen': 'Bayer Leverkusen',
+    'bayer 04': 'Bayer Leverkusen',
     'leipzig': 'RB Leipzig',
     'rb leipzig': 'RB Leipzig',
     'hsv': 'Hamburgo',
@@ -90,63 +338,367 @@ const TEAM_NAME_NORMALIZATION = {
     'hamburger sv': 'Hamburgo',
     'werder': 'Werder Bremen',
     'bremen': 'Werder Bremen',
+    'werder bremen': 'Werder Bremen',
     'koln': 'FC Köln',
     'cologne': 'FC Köln',
     'fc koln': 'FC Köln',
     'hertha': 'Hertha Berlin',
     'hertha bsc': 'Hertha Berlin',
+    'hertha berlin': 'Hertha Berlin',
+    'schalke': 'Schalke 04',
+    'schalke 04': 'Schalke 04',
+    's04': 'Schalke 04',
+    'frankfurt': 'Eintracht Frankfurt',
+    'eintracht frankfurt': 'Eintracht Frankfurt',
+    'eintracht': 'Eintracht Frankfurt',
+    'stuttgart': 'VfB Stuttgart',
+    'vfb stuttgart': 'VfB Stuttgart',
+    'wolfsburg': 'VfL Wolfsburg',
+    'vfl wolfsburg': 'VfL Wolfsburg',
+    'hoffenheim': 'TSG Hoffenheim',
+    'tsg hoffenheim': 'TSG Hoffenheim',
+    'mainz': 'Mainz 05',
+    'mainz 05': 'Mainz 05',
+    'fsv mainz': 'Mainz 05',
+    'freiburg': 'SC Freiburg',
+    'sc freiburg': 'SC Freiburg',
+    'union berlin': 'Union Berlin',
+    'fc union berlin': 'Union Berlin',
+    'augsburg': 'FC Augsburg',
+    'fc augsburg': 'FC Augsburg',
+    'bochum': 'VfL Bochum',
+    'vfl bochum': 'VfL Bochum',
+    'heidenheim': 'Heidenheim',
+    'darmstadt': 'Darmstadt 98',
+    'darmstadt 98': 'Darmstadt 98',
+    'kaiserslautern': 'Kaiserslautern',
+    'fc kaiserslautern': 'Kaiserslautern',
+    'dusseldorf': 'Fortuna Düsseldorf',
+    'fortuna dusseldorf': 'Fortuna Düsseldorf',
+    'nurnberg': 'FC Nürnberg',
+    'fc nurnberg': 'FC Nürnberg',
+    'hannover': 'Hannover 96',
+    'hannover 96': 'Hannover 96',
+    'st pauli': 'FC St. Pauli',
+    'fc st pauli': 'FC St. Pauli',
+    'arminia bielefeld': 'Arminia Bielefeld',
+    'paderborn': 'SC Paderborn',
 
-    // Francia - Variaciones
+    // === FRANCIA (Ligue 1, Ligue 2) ===
     'psg': 'PSG',
     'paris': 'PSG',
     'paris saint germain': 'PSG',
+    'paris sg': 'PSG',
+    'paris saint-germain': 'PSG',
     'om': 'Olympique Marseille',
     'marseille': 'Olympique Marseille',
+    'olympique marseille': 'Olympique Marseille',
     'ol': 'Olympique Lyon',
     'lyon': 'Olympique Lyon',
+    'olympique lyon': 'Olympique Lyon',
+    'monaco': 'AS Monaco',
+    'as monaco': 'AS Monaco',
+    'lille': 'Lille OSC',
+    'losc': 'Lille OSC',
+    'lille osc': 'Lille OSC',
+    'nice': 'OGC Nice',
+    'ogc nice': 'OGC Nice',
+    'lens': 'RC Lens',
+    'rc lens': 'RC Lens',
+    'rennes': 'Stade Rennais',
+    'stade rennais': 'Stade Rennais',
+    'strasbourg': 'RC Strasbourg',
+    'rc strasbourg': 'RC Strasbourg',
+    'nantes': 'FC Nantes',
+    'fc nantes': 'FC Nantes',
+    'toulouse': 'Toulouse FC',
+    'toulouse fc': 'Toulouse FC',
+    'montpellier': 'Montpellier',
+    'mhsc': 'Montpellier',
+    'reims': 'Stade de Reims',
+    'stade de reims': 'Stade de Reims',
+    'brest': 'Stade Brestois',
+    'stade brestois': 'Stade Brestois',
+    'metz': 'FC Metz',
+    'fc metz': 'FC Metz',
+    'le havre': 'Le Havre',
+    'hac': 'Le Havre',
+    'bordeaux': 'Girondins de Bordeaux',
+    'girondins de bordeaux': 'Girondins de Bordeaux',
+    'st etienne': 'Saint-Étienne',
+    'saint etienne': 'Saint-Étienne',
+    'asse': 'Saint-Étienne',
+    'lorient': 'FC Lorient',
+    'clermont': 'Clermont Foot',
+    'ajaccio': 'AC Ajaccio',
 
-    // España - Variaciones adicionales
-    'barca': 'FC Barcelona',
-    'fc barcelona': 'FC Barcelona',
-    'barcelona': 'FC Barcelona',
-    'madrid': 'Real Madrid',
-    'atletico': 'Atlético Madrid',
-    'atlético': 'Atlético Madrid',
-    'atletico madrid': 'Atlético Madrid',
-    'atlético madrid': 'Atlético Madrid',
-    'athletic': 'Athletic Club',
-    'athletic bilbao': 'Athletic Club',
-    'bilbao': 'Athletic Club',
-    'sociedad': 'Real Sociedad',
-    'betis': 'Real Betis',
-    'depor': 'Deportivo La Coruña',
-    'deportivo': 'Deportivo La Coruña',
-    'deportivo la coruna': 'Deportivo La Coruña',
-    'celta': 'Celta de Vigo',
-    'celta vigo': 'Celta de Vigo',
-    'rayo': 'Rayo Vallecano',
-    'sporting': 'Sporting Gijón',
-    'sporting gijon': 'Sporting Gijón',
+    // === OTRAS LIGAS EUROPEAS ===
+    'ajax amsterdam': 'Ajax',
+    'ajax': 'Ajax',
+    'psv eindhoven': 'PSV',
+    'psv': 'PSV',
+    'feyenoord rotterdam': 'Feyenoord',
+    'feyenoord': 'Feyenoord',
+    'az alkmaar': 'AZ Alkmaar',
+    'twente': 'FC Twente',
+    'slb': 'Benfica',
+    'benfica': 'Benfica',
+    'sporting cp': 'Sporting Lisboa',
+    'sporting lisbon': 'Sporting Lisboa',
+    'sporting portugal': 'Sporting Lisboa',
+    'fc porto': 'Porto',
+    'porto': 'Porto',
+    'braga': 'SC Braga',
+    'celtic fc': 'Celtic',
+    'celtic': 'Celtic',
+    'rangers fc': 'Rangers',
+    'rangers': 'Rangers',
+    'galatasaray sk': 'Galatasaray',
+    'galatasaray': 'Galatasaray',
+    'fenerbahce': 'Fenerbahçe',
+    'besiktas': 'Beşiktaş',
+    'trabzonspor': 'Trabzonspor',
+    'olympiacos': 'Olympiacos',
+    'panathinaikos': 'Panathinaikos',
+    'aek athens': 'AEK Atenas',
+    'shakhtar': 'Shakhtar Donetsk',
+    'dynamo kyiv': 'Dinamo Kiev',
+    'red bull salzburg': 'RB Salzburg',
+    'club brugge': 'Club Brujas',
+    'anderlecht': 'Anderlecht',
+    'dinamo zagreb': 'Dinamo Zagreb',
+    'slavia praha': 'Slavia Praga',
+    'sparta praha': 'Sparta Praga',
+
+    // === AMÉRICA (MLS, Liga MX, Sudamérica) ===
+    'boca': 'Boca Juniors',
+    'boca juniors': 'Boca Juniors',
+    'cabj': 'Boca Juniors',
+    'river': 'River Plate',
+    'river plate': 'River Plate',
+    'carp': 'River Plate',
+    'racing': 'Racing Club',
+    'racing club': 'Racing Club',
+    'independiente': 'Independiente',
+    'san lorenzo': 'San Lorenzo',
+    'estudiantes': 'Estudiantes',
+    'velez': 'Vélez Sarsfield',
+    'newells': 'Newell\'s Old Boys',
+    'rosario central': 'Rosario Central',
+    'fla': 'Flamengo',
+    'flamengo': 'Flamengo',
+    'mengo': 'Flamengo',
+    'timao': 'Corinthians',
+    'corinthians': 'Corinthians',
+    'verdao': 'Palmeiras',
+    'palmeiras': 'Palmeiras',
+    'spfc': 'Sao Paulo',
+    'sao paulo': 'Sao Paulo',
+    'santos': 'Santos',
+    'gremio': 'Gremio',
+    'internacional': 'Internacional',
+    'fluminense': 'Fluminense',
+    'botafogo': 'Botafogo',
+    'atletico mineiro': 'Atlético Mineiro',
+    'cruzeiro': 'Cruzeiro',
+    'vasco': 'Vasco da Gama',
+    'vasco da gama': 'Vasco da Gama',
+    'bahia': 'Bahia',
+    'colo colo': 'Colo-Colo',
+    'u de chile': 'Universidad de Chile',
+    'u catolica': 'Universidad Católica',
+    'nacional': 'Nacional (URU)',
+    'penarol': 'Peñarol',
+    'olimpia': 'Olimpia',
+    'cerro porteno': 'Cerro Porteño',
+    'atletico nacional': 'Atlético Nacional',
+    'millonarios': 'Millonarios',
+    'america de cali': 'América de Cali',
+    'la galaxy': 'LA Galaxy',
+    'los angeles galaxy': 'LA Galaxy',
+    'lafc': 'LAFC',
+    'los angeles fc': 'LAFC',
+    'inter miami': 'Inter Miami',
+    'inter miami cf': 'Inter Miami',
+    'miami': 'Inter Miami',
+    'nycfc': 'New York City FC',
+    'new york red bulls': 'New York Red Bulls',
+    'seattle sounders': 'Seattle Sounders',
+    'atlanta united': 'Atlanta United',
+    'chicago fire': 'Chicago Fire',
+    'orlando city': 'Orlando City',
+    'toronto fc': 'Toronto FC',
+    'club america': 'América',
+    'america': 'América',
+    'aguilas': 'América',
+    'chivas': 'Chivas Guadalajara',
+    'cd guadalajara': 'Chivas Guadalajara',
+    'guadalajara': 'Chivas Guadalajara',
+    'pumas unam': 'Pumas',
+    'pumas': 'Pumas',
+    'cruz azul': 'Cruz Azul',
+    'tigres': 'Tigres UANL',
+    'tigres uanl': 'Tigres UANL',
+    'monterrey': 'Monterrey',
+    'rayados': 'Monterrey',
+    'pachuca': 'Pachuca',
+    'toluca': 'Toluca',
+    'leon': 'Club León',
+    'atlas': 'Atlas',
+    'tijuana': 'Xolos de Tijuana',
+
+    // === SELECCIONES NACIONALES ===
+    'spain': 'España',
+    'espana': 'España',
+    'españa': 'España',
+    'la roja': 'España',
+    'england': 'Inglaterra',
+    'inglaterra': 'Inglaterra',
+    'three lions': 'Inglaterra',
+    'germany': 'Alemania',
+    'alemania': 'Alemania',
+    'deutschland': 'Alemania',
+    'france': 'Francia',
+    'francia': 'Francia',
+    'les bleus': 'Francia',
+    'italy': 'Italia',
+    'italia': 'Italia',
+    'azzurri': 'Italia',
+    'brazil': 'Brasil',
+    'brasil': 'Brasil',
+    'selecao': 'Brasil',
+    'argentina': 'Argentina',
+    'albiceleste': 'Argentina',
+    'netherlands': 'Holanda',
+    'holanda': 'Holanda',
+    'holland': 'Holanda',
+    'paises bajos': 'Holanda',
+    'portugal': 'Portugal',
+    'belgium': 'Bélgica',
+    'belgica': 'Bélgica',
+    'croatia': 'Croacia',
+    'croacia': 'Croacia',
+    'japan': 'Japón',
+    'japon': 'Japón',
+    'nippon': 'Japón',
+    'japón': 'Japón',
+    'south korea': 'Corea del Sur',
+    'korea': 'Corea del Sur',
+    'corea': 'Corea del Sur',
+    'corea del sur': 'Corea del Sur',
+    'usa': 'Estados Unidos',
+    'united states': 'Estados Unidos',
+    'usmnt': 'Estados Unidos',
+    'eeuu': 'Estados Unidos',
+    'mexico': 'México',
+    'méxico': 'México',
+    'el tri': 'México',
+    'morocco': 'Marruecos',
+    'marruecos': 'Marruecos',
+    'cameroon': 'Camerún',
+    'camerun': 'Camerún',
+    'camerún': 'Camerún',
+    'ivory coast': 'Costa de Marfil',
+    'cote divoire': 'Costa de Marfil',
+    'costa de marfil': 'Costa de Marfil',
+    'turkey': 'Turquía',
+    'turquia': 'Turquía',
+    'turquía': 'Turquía',
+    'turkiye': 'Turquía',
+    'greece': 'Grecia',
+    'grecia': 'Grecia',
+    'sweden': 'Suecia',
+    'suecia': 'Suecia',
+    'switzerland': 'Suiza',
+    'suiza': 'Suiza',
+    'denmark': 'Dinamarca',
+    'dinamarca': 'Dinamarca',
+    'poland': 'Polonia',
+    'polonia': 'Polonia',
+    'scotland': 'Escocia',
+    'escocia': 'Escocia',
+    'wales': 'Gales',
+    'gales': 'Gales',
+    'ireland': 'Irlanda',
+    'irlanda': 'Irlanda',
+    'colombia': 'Colombia',
+    'uruguay': 'Uruguay',
+    'chile': 'Chile',
+    'peru': 'Perú',
+    'perú': 'Perú',
+    'ecuador': 'Ecuador',
+    'venezuela': 'Venezuela',
+    'paraguay': 'Paraguay',
+    'bolivia': 'Bolivia',
+    'canada': 'Canadá',
+    'canadá': 'Canadá',
+    'egypt': 'Egipto',
+    'egipto': 'Egipto',
+    'senegal': 'Senegal',
+    'nigeria': 'Nigeria',
+    'ghana': 'Ghana',
+    'algeria': 'Argelia',
+    'argelia': 'Argelia',
+    'tunisia': 'Túnez',
+    'tunez': 'Túnez',
+    'túnez': 'Túnez',
+    'south africa': 'Sudáfrica',
+    'sudafrica': 'Sudáfrica',
+    'sudáfrica': 'Sudáfrica',
+    'australia': 'Australia',
+    'socceroos': 'Australia',
+    'saudi arabia': 'Arabia Saudita',
+    'arabia saudita': 'Arabia Saudita',
+    'qatar': 'Qatar',
+    'iran': 'Irán',
+    'irán': 'Irán',
+    'ukraine': 'Ucrania',
+    'ucrania': 'Ucrania',
+    'serbia': 'Serbia',
+    'czech republic': 'República Checa',
+    'republica checa': 'República Checa',
+    'república checa': 'República Checa',
+    'chequia': 'República Checa',
+    'czechia': 'República Checa',
+    'austria': 'Austria',
+    'romania': 'Rumania',
+    'rumania': 'Rumania',
+    'hungary': 'Hungría',
+    'hungria': 'Hungría',
+    'hungría': 'Hungría',
+    'slovakia': 'Eslovaquia',
+    'eslovaquia': 'Eslovaquia',
+    'slovenia': 'Eslovenia',
+    'eslovenia': 'Eslovenia',
+    'new zealand': 'Nueva Zelanda',
+    'nueva zelanda': 'Nueva Zelanda',
+    'jamaica': 'Jamaica',
+    'panama': 'Panamá',
+    'panamá': 'Panamá',
+    'costa rica': 'Costa Rica'
 };
-
 
 // Mapeo de categorías de Yupoo a ligas del sistema
 const YUPOO_CATEGORY_TO_LEAGUE = {
-    // Premier League
+    // Premier League & England
     'premier league': 'premier',
     'premier': 'premier',
     'english premier': 'premier',
     'epl': 'premier',
     'england': 'premier',
     'english league': 'premier',
+    'championship': 'premier', // Redirigimos el ascenso inglés
+    'fa cup': 'premier',
 
-    // La Liga
+    // La Liga & Spain
     'la liga': 'laliga',
     'laliga': 'laliga',
     'spanish league': 'laliga',
     'spain': 'laliga',
     'liga española': 'laliga',
     'liga espanola': 'laliga',
+    'copa del rey': 'laliga',
+    'segunda division': 'laliga',
 
     // Serie A
     'serie a': 'seriea',
@@ -180,6 +732,7 @@ const YUPOO_CATEGORY_TO_LEAGUE = {
     'argentine league': 'saf',
     'argentina': 'saf',
     'liga argentina': 'saf',
+    'copa de la liga': 'saf',
 
     // Liga Árabe
     'saudi': 'ligaarabe',
@@ -187,6 +740,14 @@ const YUPOO_CATEGORY_TO_LEAGUE = {
     'saudi pro league': 'ligaarabe',
     'arabian': 'ligaarabe',
     'arab league': 'ligaarabe',
+    'roshn': 'ligaarabe',
+
+    // Competiciones Internacionales Clubes
+    'champions league': 'ucl',
+    'ucl': 'ucl',
+    'europa league': 'uel',
+    'copa libertadores': 'libertadores',
+    'sudamericana': 'sudamericana',
 
     // Selecciones
     'national team': 'selecciones',
@@ -218,22 +779,34 @@ const YUPOO_CATEGORY_TO_LEAGUE = {
     'scottish': 'scottish',
     'scotland': 'scottish',
     'spfl': 'scottish',
+    'spl': 'scottish',
+
+    'super lig': 'superlig',
+    'superlig': 'superlig',
+    'turkish': 'superlig',
+    'turkey': 'superlig',
+
+    'j league': 'jleague',
+    'j-league': 'jleague',
+    'japan league': 'jleague',
+    'k league': 'kleague',
+    
+    'csl': 'csl',
+    'chinese super league': 'csl',
 
     'mls': 'MLS',
     'major league soccer': 'MLS',
     'usa soccer': 'MLS',
-    // NO mapear 'major league' solo porque puede ser 'Major League / Liga MX'
 
     'liga mx': 'Liga MX',
-    'mexican league': 'Liga MX',
-    // NO mapear 'mexico' solo porque puede confundirse con la selección
+    'mexican league': 'Liga MX'
 };
 
 // Equipos MLS (Estados Unidos y Canadá)
 const MLS_TEAMS = [
     'la galaxy', 'galaxy', 'los angeles galaxy',
     'lafc', 'los angeles fc', 'la fc',
-    'inter miami', 'miami',
+    'inter miami', 'miami', 'inter miami cf',
     'new york red bulls', 'red bulls', 'nyrb',
     'new york city', 'nyc fc', 'nycfc',
     'seattle sounders', 'sounders', 'seattle',
@@ -241,22 +814,25 @@ const MLS_TEAMS = [
     'portland timbers', 'timbers', 'portland',
     'philadelphia union', 'union', 'philadelphia',
     'dc united', 'dc',
-    'chicago fire', 'fire', 'chicago',
+    'chicago fire', 'fire', 'chicago', 'chicago fire fc',
     'columbus crew', 'crew', 'columbus',
     'houston dynamo', 'dynamo', 'houston',
     'fc dallas', 'dallas',
     'sporting kansas city', 'kansas city', 'skc',
     'colorado rapids', 'rapids', 'colorado',
     'san jose earthquakes', 'earthquakes', 'san jose',
-    'orlando city', 'orlando',
+    'orlando city', 'orlando', 'orlando city sc',
     'minnesota united', 'minnesota',
     'nashville sc', 'nashville',
     'austin fc', 'austin',
     'charlotte fc', 'charlotte',
     'st louis city', 'st louis',
     'toronto fc', 'toronto',
-    'cf montreal', 'montreal',
-    'vancouver whitecaps', 'whitecaps', 'vancouver'
+    'cf montreal', 'montreal', 'cf montréal',
+    'vancouver whitecaps', 'whitecaps', 'vancouver', 'vancouver whitecaps fc',
+    'fc cincinnati', 'cincinnati',
+    'new england revolution', 'new england', 'revolution',
+    'real salt lake', 'rsl', 'salt lake'
 ];
 
 // Equipos Liga MX (México)
@@ -264,7 +840,7 @@ const LIGA_MX_TEAMS = [
     'america', 'club america', 'aguilas',
     'chivas', 'guadalajara', 'cd guadalajara',
     'cruz azul', 'la maquina',
-    'pumas', 'pumas unam', 'unam',
+    'pumas', 'pumas unam', 'unam', 'club universidad nacional',
     'tigres', 'tigres uanl', 'uanl',
     'monterrey', 'rayados',
     'santos laguna', 'santos',
@@ -274,13 +850,12 @@ const LIGA_MX_TEAMS = [
     'atlas', 'atlas fc',
     'necaxa', 'rayos',
     'puebla', 'la franja',
-    'tijuana', 'xolos', 'club tijuana',
+    'tijuana', 'xolos', 'club tijuana', 'xolos de tijuana',
     'queretaro', 'gallos',
     'mazatlan', 'mazatlan fc',
-    'juarez', 'fc juarez', 'bravos',
+    'juarez', 'fc juarez', 'bravos', 'bravos de juarez',
     'san luis', 'atletico san luis'
 ];
-
 
 // Función para detectar liga desde la categoría de Yupoo
 function detectLeagueFromYupooCategory(categoryPath) {
@@ -290,13 +865,10 @@ function detectLeagueFromYupooCategory(categoryPath) {
         .normalize('NFD')
         .replace(/[\u0300-\u036f]/g, '');
 
-    // Si la categoría es combinada "Major League / Liga MX", retornar null
-    // para que se use el nombre del equipo para determinar la liga
     if (normalized.includes('major league') && normalized.includes('liga mx')) {
-        return null; // Será determinado por el nombre del equipo
+        return null;
     }
 
-    // Buscar coincidencia en el diccionario
     for (const [key, league] of Object.entries(YUPOO_CATEGORY_TO_LEAGUE)) {
         if (normalized.includes(key)) {
             return league;
@@ -306,19 +878,16 @@ function detectLeagueFromYupooCategory(categoryPath) {
     return null;
 }
 
-
 // Función para detectar si es MLS o Liga MX por nombre de equipo
 function detectMLSorLigaMX(teamName) {
     const teamLower = teamName.toLowerCase().trim();
 
-    // Verificar si es equipo de MLS
     for (const mlsTeam of MLS_TEAMS) {
         if (teamLower.includes(mlsTeam) || mlsTeam.includes(teamLower)) {
             return 'MLS';
         }
     }
 
-    // Verificar si es equipo de Liga MX
     for (const mxTeam of LIGA_MX_TEAMS) {
         if (teamLower.includes(mxTeam) || mxTeam.includes(teamLower)) {
             return 'Liga MX';
@@ -328,9 +897,7 @@ function detectMLSorLigaMX(teamName) {
     return null;
 }
 
-
 const TEAM_TO_LEAGUE = {
-
     // La Liga y Segunda División - España
     'athletic': 'laliga',
     'athletic club': 'laliga',
@@ -363,6 +930,7 @@ const TEAM_TO_LEAGUE = {
     'almeria': 'laliga',
     'cadiz': 'laliga',
     'alaves': 'laliga',
+    'deportivo alavés': 'laliga',
     'las palmas': 'laliga',
     'leganes': 'laliga',
     'espanyol': 'laliga',
@@ -378,11 +946,12 @@ const TEAM_TO_LEAGUE = {
     'murcia': 'laliga',
     'deportivo': 'laliga',
     'deportivo la coruna': 'laliga',
+    'deportivo la coruña': 'laliga',
     'depor': 'laliga',
     'racing santander': 'laliga',
+    'racing de santander': 'laliga',
     'zaragoza': 'laliga',
     'real zaragoza': 'laliga',
-    // Segunda División España
     'tenerife': 'laliga',
     'cd tenerife': 'laliga',
     'sporting': 'laliga',
@@ -433,10 +1002,10 @@ const TEAM_TO_LEAGUE = {
     'cordoba': 'laliga',
     'córdoba': 'laliga',
     'cordoba cf': 'laliga',
+    'córdoba cf': 'laliga',
 
-
+    // Premier League & Championship - Inglaterra
     'arsenal': 'premier',
-
     'chelsea': 'premier',
     'liverpool': 'premier',
     'man united': 'premier',
@@ -448,9 +1017,11 @@ const TEAM_TO_LEAGUE = {
     'tottenham': 'premier',
     'spurs': 'premier',
     'newcastle': 'premier',
+    'newcastle united': 'premier',
     'aston villa': 'premier',
     'villa': 'premier',
     'west ham': 'premier',
+    'west ham united': 'premier',
     'brighton': 'premier',
     'crystal palace': 'premier',
     'palace': 'premier',
@@ -463,9 +1034,10 @@ const TEAM_TO_LEAGUE = {
     'bournemouth': 'premier',
     'everton': 'premier',
     'leicester': 'premier',
+    'leicester city': 'premier',
     'ipswich': 'premier',
+    'ipswich town': 'premier',
     'southampton': 'premier',
-    // Championship - Inglaterra
     'leeds': 'premier',
     'leeds united': 'premier',
     'burnley': 'premier',
@@ -505,9 +1077,11 @@ const TEAM_TO_LEAGUE = {
     'birmingham city': 'premier',
     'charlton': 'premier',
     'charlton athletic': 'premier',
+    'wigan': 'premier',
+    'luton': 'premier',
+    'luton town': 'premier',
 
-
-    // Serie A - Italia
+    // Serie A & Serie B - Italia
     'juventus': 'seriea',
     'juve': 'seriea',
     'inter': 'seriea',
@@ -519,6 +1093,7 @@ const TEAM_TO_LEAGUE = {
     'roma': 'seriea',
     'as roma': 'seriea',
     'lazio': 'seriea',
+    'ss lazio': 'seriea',
     'atalanta': 'seriea',
     'fiorentina': 'seriea',
     'torino': 'seriea',
@@ -543,8 +1118,10 @@ const TEAM_TO_LEAGUE = {
     'brescia': 'seriea',
     'palermo': 'seriea',
     'bari': 'seriea',
+    'pisa': 'seriea',
+    'ascoli': 'seriea',
 
-
+    // Bundesliga - Alemania
     'bayern': 'bundesliga',
     'bayern munich': 'bundesliga',
     'bayern munchen': 'bundesliga',
@@ -558,15 +1135,18 @@ const TEAM_TO_LEAGUE = {
     'frankfurt': 'bundesliga',
     'eintracht frankfurt': 'bundesliga',
     'wolfsburg': 'bundesliga',
+    'vfl wolfsburg': 'bundesliga',
     'schalke': 'bundesliga',
     'schalke 04': 'bundesliga',
     'monchengladbach': 'bundesliga',
     'gladbach': 'bundesliga',
     'borussia monchengladbach': 'bundesliga',
     'hoffenheim': 'bundesliga',
+    'tsg hoffenheim': 'bundesliga',
     'mainz': 'bundesliga',
     'mainz 05': 'bundesliga',
     'freiburg': 'bundesliga',
+    'sc freiburg': 'bundesliga',
     'cologne': 'bundesliga',
     'koln': 'bundesliga',
     'fc koln': 'bundesliga',
@@ -597,8 +1177,12 @@ const TEAM_TO_LEAGUE = {
     'fc nurnberg': 'bundesliga',
     'hannover': 'bundesliga',
     'hannover 96': 'bundesliga',
+    'st pauli': 'bundesliga',
+    'fc st. pauli': 'bundesliga',
+    'arminia bielefeld': 'bundesliga',
+    'paderborn': 'bundesliga',
 
-
+    // Ligue 1 - Francia
     'psg': 'ligue1',
     'paris': 'ligue1',
     'paris saint-germain': 'ligue1',
@@ -612,17 +1196,37 @@ const TEAM_TO_LEAGUE = {
     'olympique lyon': 'ligue1',
     'ol': 'ligue1',
     'lille': 'ligue1',
+    'lille osc': 'ligue1',
     'nice': 'ligue1',
+    'ogc nice': 'ligue1',
     'lens': 'ligue1',
+    'rc lens': 'ligue1',
     'rennes': 'ligue1',
+    'stade rennais': 'ligue1',
     'strasbourg': 'ligue1',
+    'rc strasbourg': 'ligue1',
     'nantes': 'ligue1',
+    'fc nantes': 'ligue1',
     'toulouse': 'ligue1',
+    'toulouse fc': 'ligue1',
     'montpellier': 'ligue1',
     'reims': 'ligue1',
+    'stade de reims': 'ligue1',
     'brest': 'ligue1',
+    'stade brestois': 'ligue1',
+    'metz': 'ligue1',
+    'fc metz': 'ligue1',
+    'le havre': 'ligue1',
+    'bordeaux': 'ligue1',
+    'girondins de bordeaux': 'ligue1',
+    'st etienne': 'ligue1',
+    'saint-etienne': 'ligue1',
+    'lorient': 'ligue1',
+    'fc lorient': 'ligue1',
+    'clermont': 'ligue1',
+    'ajaccio': 'ligue1',
 
-
+    // Brasileirao
     'flamengo': 'brasileirao',
     'palmeiras': 'brasileirao',
     'corinthians': 'brasileirao',
@@ -635,18 +1239,25 @@ const TEAM_TO_LEAGUE = {
     'athletico': 'brasileirao',
     'cruzeiro': 'brasileirao',
     'atletico mineiro': 'brasileirao',
+    'vasco': 'brasileirao',
+    'vasco da gama': 'brasileirao',
+    'bahia': 'brasileirao',
 
-
+    // SAF (Argentina)
     'boca': 'saf',
     'boca juniors': 'saf',
     'river': 'saf',
     'river plate': 'saf',
     'racing': 'saf',
+    'racing club': 'saf',
     'independiente': 'saf',
     'san lorenzo': 'saf',
     'estudiantes': 'saf',
+    'velez': 'saf',
+    'newells': 'saf',
+    'rosario central': 'saf',
 
-
+    // Liga Árabe
     'al-nassr': 'ligaarabe',
     'al nassr': 'ligaarabe',
     'al-hilal': 'ligaarabe',
@@ -655,7 +1266,35 @@ const TEAM_TO_LEAGUE = {
     'al ittihad': 'ligaarabe',
     'al-ahli': 'ligaarabe',
 
+    // Otras Ligas (Eredivisie, Liga Portugal, Scottish, Super Lig, etc.)
+    'ajax': 'eredivisie',
+    'psv': 'eredivisie',
+    'feyenoord': 'eredivisie',
+    'az alkmaar': 'eredivisie',
+    'twente': 'eredivisie',
+    
+    'benfica': 'ligaportugal',
+    'porto': 'ligaportugal',
+    'sporting lisboa': 'ligaportugal',
+    'braga': 'ligaportugal',
+    
+    'celtic': 'scottish',
+    'rangers': 'scottish',
+    
+    'galatasaray': 'superlig',
+    'fenerbahçe': 'superlig',
+    'fenerbahce': 'superlig',
+    'beşiktaş': 'superlig',
+    'besiktas': 'superlig',
+    'trabzonspor': 'superlig',
+    
+    'olympiacos': 'otros',
+    'panathinaikos': 'otros',
+    'shakhtar donetsk': 'otros',
+    'dinamo kiev': 'otros',
+    'rb salzburg': 'otros',
 
+    // Selecciones
     'spain': 'selecciones',
     'españa': 'selecciones',
     'france': 'selecciones',
@@ -682,6 +1321,7 @@ const TEAM_TO_LEAGUE = {
     'korea': 'selecciones',
     'south korea': 'selecciones',
     'corea': 'selecciones',
+    'corea del sur': 'selecciones',
     'mexico': 'selecciones',
     'méxico': 'selecciones',
     'usa': 'selecciones',
@@ -692,6 +1332,10 @@ const TEAM_TO_LEAGUE = {
     'chile': 'selecciones',
     'peru': 'selecciones',
     'perú': 'selecciones',
+    'ecuador': 'selecciones',
+    'venezuela': 'selecciones',
+    'paraguay': 'selecciones',
+    'bolivia': 'selecciones',
     'morocco': 'selecciones',
     'marruecos': 'selecciones',
     'senegal': 'selecciones',
@@ -724,14 +1368,21 @@ const TEAM_TO_LEAGUE = {
     'czech': 'selecciones',
     'czech republic': 'selecciones',
     'chequia': 'selecciones',
+    'república checa': 'selecciones',
     'scotland': 'selecciones',
     'escocia': 'selecciones',
     'wales': 'selecciones',
     'gales': 'selecciones',
     'ireland': 'selecciones',
     'irlanda': 'selecciones',
+    'new zealand': 'selecciones',
+    'nueva zelanda': 'selecciones',
+    'jamaica': 'selecciones',
+    'panama': 'selecciones',
+    'panamá': 'selecciones',
+    'costa rica': 'selecciones',
 
-
+    // NBA
     'lakers': 'nba',
     'los angeles lakers': 'nba',
     'celtics': 'nba',
@@ -802,7 +1453,6 @@ const TEAM_TO_LEAGUE = {
     'jordan': 'nba'
 };
 
-
 const EXCLUDED_IMAGE_KEYWORDS = [
     'qr',
     'qrcode',
@@ -821,7 +1471,6 @@ const EXCLUDED_IMAGE_KEYWORDS = [
     'size_chart'
 ];
 
-
 const EXCLUDED_URL_PATTERNS = [
     /whatsapp/i,
     /wechat/i,
@@ -835,11 +1484,6 @@ const EXCLUDED_URL_PATTERNS = [
     /\/logo/i,
     /size[-_]?chart/i
 ];
-
-
-
-
-
 
 const TEAM_STOPWORDS = [
     'fc', 'cf', 'sc', 'ac', 'as', 'rc', 'cd', 'ud', 'rcd', 'sd',
@@ -874,7 +1518,6 @@ function normalizeForComparison(str) {
         .trim();
 }
 
-
 // Normaliza el nombre del equipo usando el diccionario TEAM_NAME_NORMALIZATION
 function normalizeTeamNameFromDictionary(teamName) {
     if (!teamName) return teamName;
@@ -900,11 +1543,9 @@ function normalizeTeamNameFromDictionary(teamName) {
     return teamName;
 }
 
-
 function extractTeamTokens(name) {
     const normalized = normalizeForComparison(name);
     const tokens = normalized.split(' ').filter(t => t.length > 1);
-
 
     return tokens.filter(t =>
         !TEAM_STOPWORDS.includes(t) &&
@@ -912,7 +1553,6 @@ function extractTeamTokens(name) {
         !/^\d{2}\/?\d{2}$/.test(t)
     );
 }
-
 
 function calculateWeightedSimilarity(tokens1, tokens2) {
     if (tokens1.length === 0 || tokens2.length === 0) return 0;
@@ -952,7 +1592,6 @@ function calculateWeightedSimilarity(tokens1, tokens2) {
     return overlapScore > 0.9 ? overlapScore : (overlapScore + jaccardScore) / 2;
 }
 
-
 class TeamMatcher {
     constructor(existingProducts = []) {
         this.products = existingProducts;
@@ -960,10 +1599,8 @@ class TeamMatcher {
         this.buildIndex();
     }
 
-
     buildIndex() {
         const teamNames = new Set();
-
 
         this.products.forEach(p => {
             if (p.name) {
@@ -975,7 +1612,6 @@ class TeamMatcher {
             }
         });
 
-
         teamNames.forEach(name => {
             const tokens = extractTeamTokens(name);
             tokens.forEach(token => {
@@ -986,7 +1622,6 @@ class TeamMatcher {
             });
         });
     }
-
 
     findBestMatch(newTeamName, threshold = 0.4) {
         const newTokens = extractTeamTokens(newTeamName);
@@ -1045,12 +1680,10 @@ class TeamMatcher {
         };
     }
 
-
     normalizeTeamName(newTeamName) {
         const match = this.findBestMatch(newTeamName, 0.6);
 
         if (match && match.score >= 0.8) {
-
             return {
                 name: match.name,
                 league: match.league,
@@ -1058,7 +1691,6 @@ class TeamMatcher {
                 score: match.score
             };
         }
-
 
         return {
             name: newTeamName,
@@ -1069,19 +1701,15 @@ class TeamMatcher {
     }
 }
 
-
 function loadExistingProducts(productsFilePath) {
     try {
-
         const content = fs.readFileSync(productsFilePath, 'utf-8');
-
 
         const match = content.match(/const\s+products\s*=\s*(\[[\s\S]*?\]);/);
         if (!match) {
             console.warn('⚠️  No se pudo parsear products-data.js');
             return [];
         }
-
 
         const products = eval(match[1]);
         return Array.isArray(products) ? products : [];
@@ -1091,28 +1719,20 @@ function loadExistingProducts(productsFilePath) {
     }
 }
 
-
 function generateStableId(albumUrl) {
-
     const albumIdMatch = albumUrl.match(/albums\/(\d+)/);
     const albumId = albumIdMatch ? albumIdMatch[1] : albumUrl;
 
-
     const hash = crypto.createHash('sha256').update(albumId).digest('hex');
-
-
     const numericHash = parseInt(hash.substring(0, 8), 16);
-
 
     return 100000 + (numericHash % 900000);
 }
-
 
 function extractAlbumId(url) {
     const match = url.match(/albums\/(\d+)/);
     return match ? match[1] : null;
 }
-
 
 function generateSlug(name) {
     return name
@@ -1125,7 +1745,6 @@ function generateSlug(name) {
         .replace(/^-|-$/g, '');
 }
 
-
 function generateImageAlt(productName, imageIndex = 0) {
     if (imageIndex === 0) {
         return `${productName} - Vista principal`;
@@ -1133,10 +1752,8 @@ function generateImageAlt(productName, imageIndex = 0) {
     return `${productName} - Vista ${imageIndex + 1}`;
 }
 
-
 function normalizeText(text) {
     let normalized = text;
-
 
     for (const [english, spanish] of Object.entries(TEXT_NORMALIZATION)) {
         const regex = new RegExp(`\\b${english}\\b`, 'gi');
@@ -1146,9 +1763,8 @@ function normalizeText(text) {
     return normalized;
 }
 
-
 const TEAM_TRANSLATIONS = {
-
+    // Originales + Nuevos expandidos
     'germany': 'Alemania',
     'deutschland': 'Alemania',
     'england': 'Inglaterra',
@@ -1183,7 +1799,6 @@ const TEAM_TRANSLATIONS = {
     'slovenia': 'Eslovenia',
     'iceland': 'Islandia',
 
-
     'brazil': 'Brasil',
     'argentina': 'Argentina',
     'mexico': 'México',
@@ -1200,7 +1815,7 @@ const TEAM_TRANSLATIONS = {
     'costa rica': 'Costa Rica',
     'panama': 'Panamá',
     'canada': 'Canadá',
-
+    'jamaica': 'Jamaica',
 
     'morocco': 'Marruecos',
     'egypt': 'Egipto',
@@ -1214,7 +1829,6 @@ const TEAM_TRANSLATIONS = {
     'algeria': 'Argelia',
     'south africa': 'Sudáfrica',
 
-
     'japan': 'Japón',
     'south korea': 'Corea del Sur',
     'korea': 'Corea del Sur',
@@ -1223,7 +1837,7 @@ const TEAM_TRANSLATIONS = {
     'iran': 'Irán',
     'qatar': 'Qatar',
     'australia': 'Australia',
-
+    'new zealand': 'Nueva Zelanda',
 
     'man utd': 'Manchester United',
     'man city': 'Manchester City',
@@ -1242,9 +1856,7 @@ const TEAM_TRANSLATIONS = {
     'malaga': 'Málaga'
 };
 
-
 const TITLE_CLEANUP_PATTERNS = [
-
     /with\s+\w+\s+sponsor/gi,
     /with\s+\w+\s+sponosr/gi,
     /player\s+version/gi,
@@ -1253,12 +1865,10 @@ const TITLE_CLEANUP_PATTERNS = [
     /authentic\s+version/gi,
     /replica\s+version/gi,
 
-
     /black[\s-]?red(\s+line)?/gi,
     /white[\s-]?red(\s+line)?/gi,
     /blue[\s-]?white(\s+line)?/gi,
     /\b(Black|Gold|Blue|White|Pink|Red|Green|Yellow|Purple|Orange|Grey|Gray|Cyan|Navy)\b/gi,
-
 
     /\d+th\s+anniversary/gi,
     /\d+\s+anniversary/gi,
@@ -1269,34 +1879,27 @@ const TITLE_CLEANUP_PATTERNS = [
     /edici[oó]n\s+limitada/gi,
     /aniversario/gi,
 
-
     /\(.*?\)/g,
     /\[.*?\]/g,
 
-
     /\b(Training|Entrenamiento|Pre-match|Warm-up|Prematch|Warmup)\b/gi,
-
 
     /\b(Vapor|Authentic|Fan|Elite|Match|Stadium|Player|Replica)\b/gi,
 
-
     /\b(Nike|Adidas|Puma|New Balance|Kappa|Umbro|Under Armour|Jordan)\b/gi,
-
 
     /\b(Size|Talla)\s*[:=]?\s*[XSMLxsml0-9-]+\b/gi,
 
-
     /\b[A-Z]{2,3}\d{4,}\b/gi,
 
-
     /\bv\d+\.?\d*\b/gi,
-
 
     /\b(AAA|AA|A)\s*quality/gi,
     /\bThai\s*quality/gi,
     /\b1:1\b/gi,
     /\bhigh\s*quality/gi,
-
+    /\btop\s*quality/gi,
+    /\bbest\s*quality/gi,
 
     /\bjerseys?\b/gi,
     /\bshirts?\b/gi,
@@ -1312,11 +1915,8 @@ const TITLE_CLEANUP_PATTERNS = [
     /pandasportjersey/gi
 ];
 
-
 function parseProductTitle(rawTitle) {
-
     let title = rawTitle.trim();
-
 
     title = title
         .replace(/&amp;amp;/gi, '&')
@@ -1327,16 +1927,13 @@ function parseProductTitle(rawTitle) {
         .replace(/&#39;/gi, "'")
         .replace(/&nbsp;/gi, ' ');
 
-
     title = title.replace(/\s*&\s*/g, ' ');
-
 
     const colors = ['black', 'white', 'red', 'blue', 'green', 'yellow', 'pink', 'gold', 'golden',
         'purple', 'orange', 'grey', 'gray', 'navy', 'cyan', 'balck', 'bule', 'whit'];
     colors.forEach(color => {
         title = title.replace(new RegExp(`\\b${color}\\b`, 'gi'), '');
     });
-
 
     title = title.replace(/\s+/g, ' ').trim();
 
@@ -1352,26 +1949,17 @@ function parseProductTitle(rawTitle) {
         isStyle: false
     };
 
-
-
-
-
     const explicitSeasonMatch = title.match(/\b(\d{2})[\/\-](\d{2})\b/);
-
     const fullYearMatch = title.match(/\b(20\d{2})\b/);
-
     const gluedSeasonMatch = title.match(/\b(\d{2})(\d{2})\b(?!\d)/);
 
     if (explicitSeasonMatch) {
-
         const y1 = explicitSeasonMatch[1];
         const y2 = explicitSeasonMatch[2];
         result.temporada = `${y1}/${y2}`;
     } else if (fullYearMatch) {
-
         result.temporada = fullYearMatch[1];
     } else if (gluedSeasonMatch) {
-
         const y1 = gluedSeasonMatch[1];
         const y2 = gluedSeasonMatch[2];
         const n1 = parseInt(y1);
@@ -1382,11 +1970,8 @@ function parseProductTitle(rawTitle) {
         }
     }
 
-
     if (!result.temporada && title.includes('25/26')) result.temporada = '25/26';
     if (!result.temporada && title.includes('24/25')) result.temporada = '24/25';
-
-
 
     const titleLower = title.toLowerCase();
     if (titleLower.includes('away') || titleLower.includes('visitante') || titleLower.includes('2nd') || titleLower.includes('2a')) {
@@ -1405,23 +1990,17 @@ function parseProductTitle(rawTitle) {
         result.tipo = 'entrenamiento';
     }
 
-
     const sizesMatch = title.match(/\b(S-\d?XL|S-4XL|XS-XXL|S-XXL|M-XXL|S-3XL)/i);
     if (sizesMatch) {
         result.tallas = sizesMatch[1].toUpperCase();
     }
 
-
     result.isKids = /\b(kids?|niños?|child|children|junior)\b/i.test(titleLower);
-
-
     result.isRetro = /\bretro\b/i.test(titleLower);
     result.isStyle = /\bstyle\b/i.test(titleLower);
 
-
     let teamName = title;
     console.log('[DEBUG] Original Title:', title);
-
 
     teamName = teamName
         .replace(/\|\s*album\s*\|.*$/gi, '')
@@ -1440,7 +2019,6 @@ function parseProductTitle(rawTitle) {
 
     console.log('[DEBUG] After Regex Cleanup:', teamName);
 
-
     TITLE_CLEANUP_PATTERNS.forEach(pattern => {
         teamName = teamName.replace(pattern, '');
     });
@@ -1452,13 +2030,10 @@ function parseProductTitle(rawTitle) {
 
     console.log('[DEBUG] After Pattern Cleanup: "' + teamName + '"');
 
-
     // Aplicar normalización de nombres de equipos (filiales → equipo principal)
     teamName = normalizeTeamNameFromDictionary(teamName);
 
     result.team = teamName;
-
-
 
     let finalParts = [result.team];
 
@@ -1477,15 +2052,12 @@ function parseProductTitle(rawTitle) {
 
     result.name = finalParts.join(' ');
 
-
     if (!result.name.trim()) result.name = result.raw;
 
     return result;
 }
 
-
 function detectLeague(teamName, isRetro = false, categoryPath = null) {
-
     // Primero intentar detectar desde la categoría de Yupoo (si está disponible)
     if (categoryPath) {
         const leagueFromCategory = detectLeagueFromYupooCategory(categoryPath);
@@ -1496,11 +2068,9 @@ function detectLeague(teamName, isRetro = false, categoryPath = null) {
 
     const teamLower = teamName.toLowerCase().trim();
 
-
     if (TEAM_TO_LEAGUE[teamLower]) {
         return TEAM_TO_LEAGUE[teamLower];
     }
-
 
     const SELECCIONES = [
         'alemania', 'inglaterra', 'españa', 'francia', 'italia', 'portugal',
@@ -1520,7 +2090,6 @@ function detectLeague(teamName, isRetro = false, categoryPath = null) {
         return 'selecciones';
     }
 
-
     const sortedTeams = Object.keys(TEAM_TO_LEAGUE).sort((a, b) => b.length - a.length);
 
     for (const team of sortedTeams) {
@@ -1538,7 +2107,6 @@ function detectLeague(teamName, isRetro = false, categoryPath = null) {
     return 'otros';
 }
 
-
 function detectCategory(league) {
     if (league === 'nba') {
         return 'nba';
@@ -1546,18 +2114,15 @@ function detectCategory(league) {
     return 'futbol';
 }
 
-
 function shouldExcludeImage(url, alt = '') {
     const urlLower = url.toLowerCase();
     const altLower = (alt || '').toLowerCase();
-
 
     for (const pattern of EXCLUDED_URL_PATTERNS) {
         if (pattern.test(urlLower)) {
             return true;
         }
     }
-
 
     for (const keyword of EXCLUDED_IMAGE_KEYWORDS) {
         if (urlLower.includes(keyword) || altLower.includes(keyword)) {
@@ -1568,13 +2133,11 @@ function shouldExcludeImage(url, alt = '') {
     return false;
 }
 
-
 function extractTrailingNumber(url) {
     try {
         const clean = url.split('?')[0];
         const filename = clean.split('/').pop() || '';
         const base = filename.replace(/\.[^.]+$/, '');
-
 
         const m = base.match(/(\d+)(?!.*\d)/);
         return m ? parseInt(m[1], 10) : null;
@@ -1583,30 +2146,23 @@ function extractTrailingNumber(url) {
     }
 }
 
-
 function isHighResImage(url) {
     const u = url.toLowerCase();
     if (!u.includes('photo.yupoo.com')) return false;
-
 
     if (u.includes('square.jpg') || u.includes('/small.') ||
         u.includes('/medium.') || u.includes('/thumb.')) {
         return false;
     }
 
-
     if (/\/big\.jpg(\?.*)?$/i.test(u)) return true;
-
 
     const n = extractTrailingNumber(url);
     return n !== null;
 }
 
-
 function toHighResUrl(url) {
-
     let highRes = url.startsWith('//') ? `https:${url}` : url;
-
 
     highRes = highRes
         .replace(/\/small\./gi, '/big.')
@@ -1616,38 +2172,30 @@ function toHighResUrl(url) {
     return highRes;
 }
 
-
 function processImages(images, strictMode = false) {
     const seen = new Set();
     const validImages = [];
 
     for (const img of images) {
-
         if (!img.url || img.url === 'undefined' || img.url.includes('undefined')) continue;
         if (!img.url.includes('photo.yupoo.com')) continue;
 
         const url = toHighResUrl(img.url);
 
-
         if (seen.has(url)) continue;
         seen.add(url);
 
-
         if (shouldExcludeImage(url, img.alt)) continue;
-
 
         if (!isHighResImage(url)) continue;
 
-
         let fileNumber = null;
         const filename = img.filename || img.alt || '';
-
 
         const numMatch = filename.match(/(\d+)(?=\.[^.]+$)|(\d+)$/);
         if (numMatch) {
             fileNumber = parseInt(numMatch[1] || numMatch[2], 10);
         }
-
 
         if (fileNumber === null) {
             const hashMatch = url.match(/\/([a-f0-9]{8})/);
@@ -1664,7 +2212,6 @@ function processImages(images, strictMode = false) {
         });
     }
 
-
     if (process.env.DEBUG_YUPOO) {
         console.log('\n=== DEBUG: Imágenes válidas para selección ===');
         validImages.forEach((img, i) => {
@@ -1672,14 +2219,11 @@ function processImages(images, strictMode = false) {
         });
     }
 
-
-
     const withNumber = validImages.filter(img => img.fileNumber !== null);
 
     let finalImages = [];
 
     if (withNumber.length >= 2) {
-
         withNumber.sort((a, b) => a.fileNumber - b.fileNumber);
 
         const minImg = withNumber[0];
@@ -1693,7 +2237,6 @@ function processImages(images, strictMode = false) {
     } else if (withNumber.length === 1) {
         finalImages = [withNumber[0]];
     } else if (validImages.length >= 2) {
-
         finalImages = [
             validImages[validImages.length - 1],
             validImages[validImages.length - 2]
@@ -1713,18 +2256,13 @@ function processImages(images, strictMode = false) {
     };
 }
 
-
-
-
 async function fetchYupooJson(albumUrl) {
     try {
         const albumId = extractAlbumId(albumUrl);
         if (!albumId) return null;
 
-
         const urlObj = new URL(albumUrl);
         const subdomain = urlObj.hostname.split('.')[0];
-
 
         const apiUrl = `https://${subdomain}.x.yupoo.com/api/albums/${albumId}?uid=1`;
 
@@ -1741,11 +2279,9 @@ async function fetchYupooJson(albumUrl) {
         const data = await response.json();
         return data;
     } catch (error) {
-
         return null;
     }
 }
-
 
 function parseYupooHtml(html, albumUrl) {
     const result = {
@@ -1753,11 +2289,8 @@ function parseYupooHtml(html, albumUrl) {
         images: []
     };
 
-
-
     const titleMatch = html.match(/<title[^>]*>([^<]+)<\/title>/i);
     if (titleMatch) {
-
         result.title = titleMatch[1]
             .replace(/\s*\|\s*又拍图片管家.*$/i, '')
             .replace(/\s*\|\s*yupoo.*$/i, '')
@@ -1767,14 +2300,6 @@ function parseYupooHtml(html, albumUrl) {
             .replace(/\s+/g, ' ')
             .trim();
     }
-
-
-
-
-
-
-
-
 
     const jsonDataPattern = /(?:photos|images)\s*[:=]\s*(\[[^\]]+\])/gi;
     let jsonMatch;
@@ -1795,20 +2320,15 @@ function parseYupooHtml(html, albumUrl) {
         }
     }
 
-    // Patrón para encontrar bloques de foto con nombre asociado
-    // Buscar patrones como: data-src="URL" ... title="10003.jpg" o similares
     const photoBlockPattern = /<div[^>]*class="[^"]*photo[^"]*"[^>]*>([\s\S]*?)<\/div>/gi;
+    let match;
     while ((match = photoBlockPattern.exec(html)) !== null) {
         const block = match[0];
 
-        // Extraer URL de la imagen
         const urlMatch = block.match(/(?:data-src|src)=["']([^"']+photo\.yupoo\.com[^"']+)["']/i);
         if (!urlMatch) continue;
 
         const url = urlMatch[1];
-
-        // Buscar nombre de archivo asociado en el mismo bloque
-        // Patrones: title="10003.jpg", data-name="10003", texto como "10003.jpg"
         let filename = '';
 
         const titleMatch = block.match(/title=["']([^"']*\d+\.(?:jpg|png|jpeg)[^"']*)["']/i);
@@ -1817,19 +2337,16 @@ function parseYupooHtml(html, albumUrl) {
         const dataNameMatch = block.match(/data-name=["']([^"']*)["']/i);
         if (!filename && dataNameMatch) filename = dataNameMatch[1];
 
-
         const filenameTextMatch = block.match(/>(\d+\.(?:jpg|png|jpeg))</i);
         if (!filename && filenameTextMatch) filename = filenameTextMatch[1];
 
         result.images.push({ url, alt: filename, filename });
     }
 
-
     const dataSrcPattern = /data-src=["']([^"']+)["'][^>]*>/gi;
     while ((match = dataSrcPattern.exec(html)) !== null) {
         const url = match[1];
         if (!url.includes('photo.yupoo.com')) continue;
-
 
         const contextStart = match.index;
         const context = html.substring(contextStart, contextStart + 300);
@@ -1844,12 +2361,10 @@ function parseYupooHtml(html, albumUrl) {
         result.images.push({ url, alt: filename, filename });
     }
 
-
     const srcPattern = /src=["']((?:https?:)?\/\/photo\.yupoo\.com[^"']+)["']/gi;
     while ((match = srcPattern.exec(html)) !== null) {
         result.images.push({ url: match[1], alt: '', filename: '' });
     }
-
 
     const seen = new Map();
     for (const img of result.images) {
@@ -1859,7 +2374,6 @@ function parseYupooHtml(html, albumUrl) {
         }
     }
     result.images = Array.from(seen.values());
-
 
     if (process.env.DEBUG_YUPOO) {
         console.log('\n=== DEBUG: Imágenes extraídas ===');
@@ -1873,14 +2387,12 @@ function parseYupooHtml(html, albumUrl) {
     return result;
 }
 
-
 async function fetchYupooAlbum(albumUrl) {
     const albumId = extractAlbumId(albumUrl);
 
     if (!albumId) {
         throw new Error(`URL de álbum inválida: ${albumUrl}`);
     }
-
 
     const jsonData = await fetchYupooJson(albumUrl);
 
@@ -1894,7 +2406,6 @@ async function fetchYupooAlbum(albumUrl) {
             }))
         };
     }
-
 
     const response = await fetch(albumUrl, {
         headers: {
@@ -1912,15 +2423,12 @@ async function fetchYupooAlbum(albumUrl) {
     return parseYupooHtml(html, albumUrl);
 }
 
-
 async function importFromYupoo(albumUrl, options = {}) {
     const { strictImages = false } = options;
-
 
     if (!albumUrl || !albumUrl.includes('yupoo.com')) {
         throw new Error('URL de Yupoo inválida');
     }
-
 
     const albumData = await fetchYupooAlbum(albumUrl);
 
@@ -1928,10 +2436,7 @@ async function importFromYupoo(albumUrl, options = {}) {
         throw new Error('No se pudo extraer el título del producto');
     }
 
-
     const titleInfo = parseProductTitle(albumData.title);
-
-
     const imageData = processImages(albumData.images, strictImages);
 
     if (strictImages && !imageData.image) {
@@ -1939,14 +2444,12 @@ async function importFromYupoo(albumUrl, options = {}) {
     }
 
     if (!imageData.image && albumData.images.length > 0) {
-
         imageData.image = toHighResUrl(albumData.images[0].url);
     }
 
     if (!imageData.image) {
         throw new Error('No se encontraron imágenes válidas en el álbum');
     }
-
 
     const id = generateStableId(albumUrl);
     const league = detectLeague(titleInfo.team, titleInfo.isRetro);
@@ -1978,8 +2481,9 @@ async function importFromYupoo(albumUrl, options = {}) {
         product.retro = true;
     }
 
-    // Asignar precios por defecto según el tipo de producto
-    if (product.retro || product.category === 'nba' || product.league === 'nba') {
+    const isRetroProduct = product.retro || (product.name && product.name.includes('Retro'));
+
+    if (isRetroProduct || product.category === 'nba' || product.league === 'nba') {
         product.price = 24.90;
         product.oldPrice = 30.00;
     } else if (product.kids) {
@@ -1998,7 +2502,6 @@ const path = require('path');
 const https = require('https');
 const http = require('http');
 
-
 function downloadImage(imageUrl, destPath, referer) {
     return new Promise((resolve, reject) => {
         const url = imageUrl.startsWith('//') ? `https:${imageUrl}` : imageUrl;
@@ -2012,7 +2515,6 @@ function downloadImage(imageUrl, destPath, referer) {
         };
 
         const request = protocol.get(url, options, (response) => {
-
             if (response.statusCode >= 300 && response.statusCode < 400 && response.headers.location) {
                 downloadImage(response.headers.location, destPath, referer)
                     .then(resolve)
@@ -2024,7 +2526,6 @@ function downloadImage(imageUrl, destPath, referer) {
                 reject(new Error(`HTTP ${response.statusCode}`));
                 return;
             }
-
 
             const dir = path.dirname(destPath);
             if (!fs.existsSync(dir)) {
@@ -2053,24 +2554,18 @@ function downloadImage(imageUrl, destPath, referer) {
     });
 }
 
-
 async function downloadAndConvertToWebP(imageUrl, destPath, referer, options = {}) {
     const { quality = 85 } = options;
-
-
     const tempPath = destPath + '.tmp';
     const webpPath = destPath.replace(/\.[^.]+$/, '') + '.webp';
 
     try {
-
         await downloadImage(imageUrl, tempPath, referer);
-
 
         let sharp;
         try {
             sharp = require('sharp');
         } catch (e) {
-
             console.warn('⚠️  sharp no está instalado. Ejecuta: npm install sharp');
             console.warn('    Guardando imagen sin conversión a WebP.');
             const originalExt = path.extname(imageUrl).split('?')[0] || '.jpg';
@@ -2079,24 +2574,20 @@ async function downloadAndConvertToWebP(imageUrl, destPath, referer, options = {
             return finalPath;
         }
 
-
         await sharp(tempPath)
             .webp({ quality })
             .toFile(webpPath);
-
 
         fs.unlinkSync(tempPath);
 
         return webpPath;
     } catch (err) {
-
         if (fs.existsSync(tempPath)) {
             fs.unlinkSync(tempPath);
         }
         throw err;
     }
 }
-
 
 async function downloadProductImages(product, assetsDir, options = {}) {
     const {
@@ -2112,16 +2603,12 @@ async function downloadProductImages(product, assetsDir, options = {}) {
     const productDir = path.join(assetsDir, 'productos', 'Yupoo', albumId);
     const webPath = `/assets/productos/Yupoo/${albumId}`;
 
-
     if (!fs.existsSync(productDir)) {
         fs.mkdirSync(productDir, { recursive: true });
     }
 
     const downloadedImages = [];
-
-
     const allImages = [product.image, ...(product.images || [])].filter(Boolean);
-
 
     let sharp = null;
     if (generateThumbnails) {
@@ -2142,7 +2629,6 @@ async function downloadProductImages(product, assetsDir, options = {}) {
             let finalPath;
 
             if (convertToWebP) {
-
                 finalPath = await downloadAndConvertToWebP(
                     imageUrl,
                     localBasePath + '.tmp',
@@ -2150,16 +2636,13 @@ async function downloadProductImages(product, assetsDir, options = {}) {
                     { quality: webpQuality }
                 );
             } else {
-
                 const ext = path.extname(imageUrl).split('?')[0] || '.jpg';
                 finalPath = localBasePath + ext;
                 await downloadImage(imageUrl, finalPath, referer);
             }
 
-
             const finalFilename = path.basename(finalPath);
             downloadedImages.push(`${webPath}/${finalFilename}`);
-
 
             if (sharp && generateThumbnails && imageNumber <= 2) {
                 try {
@@ -2189,7 +2672,6 @@ async function downloadProductImages(product, assetsDir, options = {}) {
         throw new Error('No se pudieron descargar imágenes');
     }
 
-
     return {
         ...product,
         image: downloadedImages[0],
@@ -2198,22 +2680,15 @@ async function downloadProductImages(product, assetsDir, options = {}) {
 }
 
 module.exports = {
-
     importFromYupoo,
-
-
     downloadProductImages,
     downloadImage,
     downloadAndConvertToWebP,
-
-
     TeamMatcher,
     loadExistingProducts,
     extractTeamTokens,
     calculateWeightedSimilarity,
     normalizeForComparison,
-
-
     generateStableId,
     extractAlbumId,
     generateSlug,
@@ -2227,7 +2702,6 @@ module.exports = {
     isHighResImage,
     toHighResUrl,
     fetchYupooAlbum,
-
 
     TEAM_TO_LEAGUE,
     TEXT_NORMALIZATION,

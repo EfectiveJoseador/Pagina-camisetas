@@ -27,7 +27,9 @@ const products = [
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/La Liga/Athletic0103FR/1.webp",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 105,
@@ -42,7 +44,9 @@ const products = [
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/La Liga/Atletico0203LR/1.webp",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 107,
@@ -64,7 +68,9 @@ const products = [
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/La Liga/Atletico9596TR/1.webp",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 110,
@@ -101,7 +107,9 @@ const products = [
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/La Liga/Barcelona9697LR/1.webp",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 115,
@@ -130,7 +138,9 @@ const products = [
         category: "futbol",
         league: "laliga",
         image: "/assets/productos/La Liga/Espanyol9920LR/1.webp",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 120,
@@ -364,7 +374,9 @@ const products = [
         category: "futbol",
         league: "seriea",
         image: "/assets/productos/Serie A/Milan9798LR/1.webp",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 303,
@@ -430,7 +442,9 @@ const products = [
         category: "futbol",
         league: "selecciones",
         image: "/assets/productos/Internacional/España0809LR/1.webp",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 602,
@@ -445,7 +459,9 @@ const products = [
         category: "futbol",
         league: "selecciones",
         image: "/assets/productos/Internacional/Francia9899LR/1.webp",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 604,
@@ -453,7 +469,9 @@ const products = [
         category: "futbol",
         league: "selecciones",
         image: "/assets/productos/Internacional/Holanda9899LR/1.webp",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 551,
@@ -475,7 +493,9 @@ const products = [
         category: "futbol",
         league: "saf",
         image: "/assets/productos/SAF (Argentina)/Boca0102LR/1.webp",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 572,
@@ -727,7 +747,9 @@ const products = [
             "/assets/productos/Yupoo/201351646/8.webp"
         ],
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 385774,
@@ -783,7 +805,9 @@ const products = [
             "/assets/productos/Yupoo/199217731/8.webp"
         ],
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 891737,
@@ -819,7 +843,9 @@ const products = [
         ],
         temporada: "97/98",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 745212,
@@ -838,7 +864,9 @@ const products = [
         ],
         temporada: "09/10",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 144708,
@@ -856,7 +884,9 @@ const products = [
             "/assets/productos/Yupoo/187757557/8.webp"
         ],
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 294032,
@@ -1180,7 +1210,9 @@ const products = [
         ],
         temporada: "00/01",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 829143,
@@ -1197,7 +1229,9 @@ const products = [
         ],
         temporada: "2008",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 861810,
@@ -1214,7 +1248,9 @@ const products = [
         ],
         temporada: "2004",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 740108,
@@ -1232,7 +1268,9 @@ const products = [
         ],
         temporada: "2004",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 431236,
@@ -1519,7 +1557,9 @@ const products = [
             "/assets/productos/Yupoo/207564422/8.webp"
         ],
         tipo: "tercera",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 553992,
@@ -1538,7 +1578,9 @@ const products = [
         ],
         temporada: "90/91",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 484880,
@@ -1557,7 +1599,9 @@ const products = [
         ],
         temporada: "02/03",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 113368,
@@ -1577,7 +1621,9 @@ const products = [
         ],
         temporada: "10/11",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 497909,
@@ -1665,7 +1711,9 @@ const products = [
         ],
         temporada: "97/98",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 178706,
@@ -1681,7 +1729,9 @@ const products = [
         ],
         temporada: "97/98",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 155990,
@@ -1955,7 +2005,9 @@ const products = [
         ],
         temporada: "17/18",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 608983,
@@ -1970,7 +2022,9 @@ const products = [
         ],
         temporada: "19/20",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 529738,
@@ -1985,7 +2039,9 @@ const products = [
         ],
         temporada: "19/20",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 457426,
@@ -2069,7 +2125,9 @@ const products = [
         ],
         temporada: "99/00",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 592754,
@@ -2111,7 +2169,9 @@ const products = [
         ],
         temporada: "14/15",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 302194,
@@ -2165,7 +2225,9 @@ const products = [
         ],
         temporada: "13/14",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 625429,
@@ -2232,7 +2294,9 @@ const products = [
         ],
         temporada: "00/01",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 833095,
@@ -2246,7 +2310,9 @@ const products = [
             "/assets/productos/Yupoo/192257870/4.webp"
         ],
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 635969,
@@ -2261,7 +2327,9 @@ const products = [
         ],
         temporada: "95/96",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 945452,
@@ -2276,7 +2344,9 @@ const products = [
         ],
         temporada: "13/14",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 588525,
@@ -2289,7 +2359,9 @@ const products = [
             "/assets/productos/Yupoo/189209051/3.webp"
         ],
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 766126,
@@ -2303,7 +2375,9 @@ const products = [
             "/assets/productos/Yupoo/167010565/4.webp"
         ],
         tipo: "tercera",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 523343,
@@ -2318,7 +2392,9 @@ const products = [
         ],
         temporada: "17/18",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 348972,
@@ -2333,7 +2409,9 @@ const products = [
         ],
         temporada: "2000",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 167625,
@@ -2346,7 +2424,9 @@ const products = [
             "/assets/productos/Yupoo/169073222/3.webp"
         ],
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 419589,
@@ -2359,7 +2439,9 @@ const products = [
             "/assets/productos/Yupoo/69556791/3.webp"
         ],
         temporada: "2007",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 938026,
@@ -2374,7 +2456,9 @@ const products = [
         ],
         temporada: "16/17",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 769552,
@@ -2389,7 +2473,9 @@ const products = [
         ],
         temporada: "17/18",
         tipo: "tercera",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 820529,
@@ -2403,7 +2489,9 @@ const products = [
         ],
         temporada: "09/10",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 736040,
@@ -2417,7 +2505,9 @@ const products = [
         ],
         temporada: "13/14",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 497972,
@@ -2431,7 +2521,9 @@ const products = [
         ],
         temporada: "08/09",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 421151,
@@ -2444,7 +2536,9 @@ const products = [
         ],
         temporada: "12/13",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 351350,
@@ -2481,7 +2575,9 @@ const products = [
         ],
         temporada: "88/89",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 379818,
@@ -2494,7 +2590,9 @@ const products = [
         ],
         temporada: "86/87",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 506078,
@@ -2506,7 +2604,9 @@ const products = [
             "/assets/productos/Yupoo/214136150/2.webp"
         ],
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 570007,
@@ -2519,7 +2619,9 @@ const products = [
         ],
         temporada: "12/13",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 835385,
@@ -2532,7 +2634,9 @@ const products = [
         ],
         temporada: "16/17",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 228891,
@@ -2545,7 +2649,9 @@ const products = [
         ],
         temporada: "82/83",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 483007,
@@ -2569,7 +2675,9 @@ const products = [
         ],
         temporada: "14/15",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 552798,
@@ -2582,7 +2690,9 @@ const products = [
         ],
         temporada: "14/15",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 900814,
@@ -2595,7 +2705,9 @@ const products = [
         ],
         temporada: "17/18",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 992598,
@@ -2608,7 +2720,9 @@ const products = [
         ],
         temporada: "13/14",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 422613,
@@ -2621,7 +2735,9 @@ const products = [
         ],
         temporada: "11/12",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 487998,
@@ -2634,7 +2750,9 @@ const products = [
         ],
         temporada: "95/96",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 798155,
@@ -2647,7 +2765,9 @@ const products = [
         ],
         temporada: "17/18",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 804311,
@@ -2660,7 +2780,9 @@ const products = [
         ],
         temporada: "12/13",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 501778,
@@ -2762,7 +2884,9 @@ const products = [
         ],
         tipo: "local",
         retro: true,
-        temporada: "87/89"
+        temporada: "87/89",
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 154366,
@@ -2944,7 +3068,9 @@ const products = [
         ],
         temporada: "94/95",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 333660,
@@ -2958,7 +3084,9 @@ const products = [
         ],
         temporada: "98/99",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 771897,
@@ -2972,7 +3100,9 @@ const products = [
         ],
         temporada: "95/96",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 253296,
@@ -3060,7 +3190,9 @@ const products = [
         ],
         temporada: "2004/06",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 261613,
@@ -3074,7 +3206,9 @@ const products = [
         ],
         temporada: "2002",
         tipo: "visitante",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 646982,
@@ -3088,7 +3222,9 @@ const products = [
         ],
         temporada: "96/98",
         tipo: "local",
-        retro: true
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     },
     {
         id: 198265,
@@ -3168,6 +3304,36 @@ const products = [
             "/assets/productos/Yupoo/297890/2.webp"
         ],
         temporada: "25/26",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 268041,
+        name: "Vasco da Gama 26/27",
+        slug: "vasco-da-gama-2627",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/268041/1.webp",
+        images: [
+            "/assets/productos/Yupoo/268041/2.webp"
+        ],
+        temporada: "26/27",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 396060,
+        name: "Deportivo La Coruña 99/00 Visitante Retro",
+        slug: "deportivo-la-coruna-9900-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/396060/1.webp",
+        images: [
+            "/assets/productos/Yupoo/396060/2.webp"
+        ],
+        temporada: "99/00",
+        tipo: "visitante",
         retro: true,
         price: 24.9,
         oldPrice: 30
