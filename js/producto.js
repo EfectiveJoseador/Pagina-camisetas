@@ -709,13 +709,21 @@ function loadRelatedProducts() {
         return p.image; 
     };
 
+    const getWebp = (url) => url ? url.replace(/\.(png|jpe?g)$/i, '.webp') : url;
+
     const cardsHtml = finalRelated.map(p => `
         <article class="product-card">
             <div class="product-image">
                 <span class="badge-sale">OFERTA</span>
-                <a href="/pages/producto.html?id=${p.id}">
-                    <img class="primary-image" src="${p.image}" alt="${p.name}" loading="lazy" decoding="async">
-                    <img class="secondary-image" src="${getSecondaryImage(p)}" alt="${p.name}" loading="lazy" decoding="async">
+                <a href="/pages/producto.html?id=${p.id}" class="related-link">
+                    <picture>
+                        <source srcset="${getWebp(p.image)}" sizes="(max-width: 480px) 70vw, (max-width: 768px) 58vw, 200px" type="image/webp">
+                        <img class="primary-image" src="${p.image}" alt="${p.name}" loading="lazy" decoding="async">
+                    </picture>
+                    <picture>
+                        <source srcset="${getWebp(getSecondaryImage(p))}" sizes="(max-width: 480px) 70vw, (max-width: 768px) 58vw, 200px" type="image/webp">
+                        <img class="secondary-image" src="${getSecondaryImage(p)}" alt="${p.name}" loading="lazy" decoding="async">
+                    </picture>
                 </a>
             </div>
             <div class="product-info">
@@ -746,10 +754,51 @@ function loadRelatedProducts() {
     `;
     if (isMobileCarousel()) {
         // En móvil: scroll nativo CSS (cero JS lag)
-        // Los clon es no se necesitan y el JS de infinite loop no se inicia
+        initHoverPrefetch();
         return;
     }
     initRelatedCarousel();
+    initHoverPrefetch();
+}
+
+function initHoverPrefetch() {
+    // Evitar precargar más de una vez usando un Set
+    let prefetchMap = new Set();
+
+    document.querySelectorAll('.related-products .product-card').forEach(card => {
+        let hoverTimer;
+        const linkEl = card.querySelector('.related-link');
+        if (!linkEl) return;
+        const link = linkEl.href;
+
+        // Escritorio: prefetch si el usuario hace hover por más de 60ms
+        card.addEventListener('mouseenter', () => {
+            if (prefetchMap.has(link)) return;
+            hoverTimer = setTimeout(() => {
+                prefetchMap.add(link);
+                const tag = document.createElement('link');
+                tag.rel = 'prefetch';
+                tag.href = link;
+                tag.as = 'document';
+                document.head.appendChild(tag);
+            }, 60); // Intencionalidad umbral (hover intent)
+        }, { passive: true });
+
+        card.addEventListener('mouseleave', () => {
+            clearTimeout(hoverTimer);
+        }, { passive: true });
+
+        // Móvil: prefetch inmediato al detectar un toque (antes del click action)
+        card.addEventListener('touchstart', () => {
+            if (prefetchMap.has(link)) return;
+            prefetchMap.add(link);
+            const tag = document.createElement('link');
+            tag.rel = 'prefetch';
+            tag.href = link;
+            tag.as = 'document';
+            document.head.appendChild(tag);
+        }, { passive: true });
+    });
 }
 
 function isMobileCarousel() {

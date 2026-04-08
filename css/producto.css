@@ -515,6 +515,9 @@
     width: 100%;
     max-width: 100%;
     animation: fadeIn 1s ease 0.5s backwards;
+    /* Diferir el renderizado pesado hasta el scroll */
+    content-visibility: auto;
+    contain-intrinsic-size: 800px;
 }
 
 .related-products h2 {
@@ -652,6 +655,8 @@
     /* Equal-height: flex col + height fijo = altura uniforme */
     height: 100%;
     cursor: pointer;
+    /* Aislar el cálculo de estilos/layouts para rendimiento top */
+    contain: layout style;
     /* GPU por tarjeta para animación de hover sin repaint y fluidez extrema */
     will-change: transform;
     transform: translateZ(0); /* Forzar aceleración por hardware */
