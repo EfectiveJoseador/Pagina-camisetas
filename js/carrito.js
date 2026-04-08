@@ -270,29 +270,29 @@ const Cart = {
             const el = document.createElement('div');
             el.className = 'cart-item';
             el.innerHTML = `
-                <a href="/pages/producto.html?id=${product.id}" class="cart-item-img-link">
-                    <div class="cart-item-img-wrapper">
-                        <img src="${product.image}" alt="${product.name}" class="cart-item-img">
-                    </div>
-                </a>
-                <div class="cart-item-content">
+                <div class="cart-item-top">
+                    <a href="/pages/producto.html?id=${product.id}" class="cart-item-img-link">
+                        <div class="cart-item-img-wrapper">
+                            <img src="${product.image}" alt="${product.name}" class="cart-item-img">
+                        </div>
+                    </a>
                     <div class="cart-item-header">
                         <a href="/pages/producto.html?id=${product.id}" class="cart-item-title-link">
                             <h3 class="cart-item-title">${product.name}</h3>
                         </a>
                         <p class="cart-item-meta">${customDetails}</p>
                     </div>
-                    <div class="cart-item-footer">
-                        <div class="cart-item-controls">
-                            <div class="quantity-selector touch-optimized">
-                                <button class="qty-btn-minus touch-target" data-index="${index}" aria-label="Disminuir"><i class="fas fa-minus"></i></button>
-                                <input type="number" value="${qty}" class="qty-input" readonly>
-                                <button class="qty-btn-plus touch-target" data-index="${index}" aria-label="Aumentar"><i class="fas fa-plus"></i></button>
-                            </div>
-                            <button class="btn-remove touch-target" data-index="${index}" aria-label="Eliminar"><i class="fas fa-trash-alt"></i></button>
+                </div>
+                <div class="cart-item-footer">
+                    <div class="cart-item-controls">
+                        <div class="quantity-selector touch-optimized">
+                            <button class="qty-btn-minus touch-target" data-index="${index}" aria-label="Disminuir"><i class="fas fa-minus"></i></button>
+                            <input type="number" value="${qty}" class="qty-input" readonly>
+                            <button class="qty-btn-plus touch-target" data-index="${index}" aria-label="Aumentar"><i class="fas fa-plus"></i></button>
                         </div>
-                        <div class="cart-item-price">€${displayPrice.toFixed(2)}</div>
+                        <button class="btn-remove touch-target" data-index="${index}" aria-label="Eliminar"><i class="fas fa-trash-alt"></i></button>
                     </div>
+                    <div class="cart-item-price">€${displayPrice.toFixed(2)}</div>
                 </div>
             `;
             container.appendChild(el);
