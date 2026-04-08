@@ -29,7 +29,23 @@ const PATCH_DEFINITIONS = {
 };
 
 let product = null;
-let selectedSize = 'L';
+let selectedSize = '';
+
+// Suplemento de precio por talla oversize
+const SIZE_SURCHARGES = {
+    'S':   0,
+    'M':   0,
+    'L':   0,
+    'XL':  0,
+    '2XL': 1,
+    '3XL': 2,
+    '4XL': 2
+};
+
+/** Devuelve el suplemento (€) para la talla indicada */
+function getSizeSurcharge(size) {
+    return SIZE_SURCHARGES[size] || 0;
+}
 
 document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
@@ -197,11 +213,22 @@ document.addEventListener('DOMContentLoaded', () => {
     
     loadProductImages();
 
+    // Selector de talla (dropdown)
+    const sizeSelect = document.getElementById('size-select');
+    if (sizeSelect) {
+        sizeSelect.addEventListener('change', () => {
+            selectedSize = sizeSelect.value;
+            updatePreview();
+        });
+    }
+
+    // Mantener compatibilidad con size-btn por si existen
     document.querySelectorAll('.size-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
             selectedSize = btn.dataset.size;
+            if (sizeSelect) sizeSelect.value = selectedSize;
             updatePreview();
         });
     });
@@ -398,18 +425,35 @@ function updatePreview() {
     const basePrice = product.price;
     let totalPrice = basePrice;
     const details = [];
+
+    // --- Suplemento por talla oversize ---
+    const sizeSurcharge = getSizeSurcharge(selectedSize);
+    if (selectedSize) {
+        if (sizeSurcharge > 0) {
+            totalPrice += sizeSurcharge;
+            details.push(`Talla: ${selectedSize} (+€${sizeSurcharge})`);
+        } else {
+            details.push(`Talla: ${selectedSize}`);
+        }
+    }
+
+    // --- Versión ---
     const version = document.getElementById('version-select').value;
     if (version === 'jugador') {
         totalPrice += 5;
         details.push('Versión Jugador: +€5');
     }
+
+    // --- Parche ---
     const patch = document.getElementById('patch-select').value;
     if (patch && patch !== 'none') {
         const patchCost = patchPrices[patch] || 0;
         totalPrice += patchCost;
         const patchName = document.getElementById('patch-select').selectedOptions[0].text;
-        details.push(patchName);
+        details.push(`Parche ${patchName}: +€${patchCost}`);
     }
+
+    // --- Personalización ---
     const name = document.getElementById('name-input').value.trim();
     const number = document.getElementById('number-input').value;
     if (name && number) {
@@ -422,9 +466,14 @@ function updatePreview() {
     } else if (number) {
         details.push(`Dorsal: ${number}`);
     }
-    if (selectedSize) {
-        details.push(`Talla: ${selectedSize}`);
+
+    // --- Actualizar precio principal mostrado en pantalla ---
+    const productPriceEl = document.getElementById('product-price');
+    if (productPriceEl) {
+        productPriceEl.textContent = `€${totalPrice.toFixed(2)}`;
     }
+
+    // --- Resumen de personalización ---
     document.getElementById('preview-base').textContent = `€${basePrice.toFixed(2)}`;
     document.getElementById('preview-list').innerHTML = details.length > 0
         ? details.map(d => `<span>• ${d}</span>`).join('')
@@ -433,6 +482,26 @@ function updatePreview() {
 }
 
 function addToCart() {
+    // Validar talla seleccionada
+    if (!selectedSize) {
+        const sizeSelect = document.getElementById('size-select');
+        if (sizeSelect) {
+            sizeSelect.focus();
+            sizeSelect.style.borderColor = '#ef4444';
+            sizeSelect.style.boxShadow = '0 0 0 3px rgba(239, 68, 68, 0.2)';
+            setTimeout(() => {
+                sizeSelect.style.borderColor = '';
+                sizeSelect.style.boxShadow = '';
+            }, 2500);
+        }
+        if (window.Toast) {
+            window.Toast.error('Por favor, selecciona una talla antes de continuar');
+        } else {
+            alert('Por favor, selecciona una talla antes de continuar');
+        }
+        return;
+    }
+
     const name = document.getElementById('name-input').value.trim();
     const number = document.getElementById('number-input').value;
     const hasName = name.length > 0;
@@ -453,14 +522,17 @@ function addToCart() {
             return;
         }
     }
+    const sizeSurcharge = getSizeSurcharge(selectedSize);
     const customization = {
         size: selectedSize,
+        sizeSurcharge: sizeSurcharge,
         version: document.getElementById('version-select').value,
         name: name ? name.toUpperCase() : '',
         number: number || '',
         patch: document.getElementById('patch-select').value
     };
     let totalPrice = product.price;
+    totalPrice += sizeSurcharge;                                          // suplemento talla
     if (customization.version === 'jugador') totalPrice += 5;
     if (customization.patch && customization.patch !== 'none') {
         totalPrice += patchPrices[customization.patch] || 0;

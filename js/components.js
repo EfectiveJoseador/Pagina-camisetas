@@ -61,12 +61,11 @@ const Components = {
                     <h4 style="margin-top: 1rem;">Síguenos</h4>
                     <div class="social-links">
                         <a href="https://www.instagram.com/camisetazo._/" target="_blank" rel="noopener" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-                        <a href="https://www.tiktok.com/@camisetazo" target="_blank" rel="noopener" class="social-link" aria-label="TikTok"><i class="fab fa-tiktok"></i></a>
                     </div>
                 </div>
             </div>
             <div class="footer-bottom">
-                <p>&copy; 2025 Camisetazo. Todos los derechos reservados.</p>
+                <p>&copy; 2026 Camisetazo. Todos los derechos reservados.</p>
             </div>
         </footer>
     `,

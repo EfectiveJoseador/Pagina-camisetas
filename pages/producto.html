@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-theme="light">
 
 <head>
@@ -98,19 +98,97 @@
         .select-input {
             width: 100%;
             padding: 0.75rem 1rem;
-            border: 1px solid var(--border);
-            border-radius: var(--radius-sm);
-            background: var(--bg-body);
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg-card);
             color: var(--text-main);
             font-size: 1rem;
-            transition: border-color 0.2s ease, box-shadow 0.2s ease;
+            font-family: var(--font-body, 'Inter', sans-serif);
+            transition: border-color 0.25s ease, box-shadow 0.25s ease, background 0.25s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
         }
 
         .text-input:focus,
         .select-input:focus {
             outline: none;
             border-color: var(--primary);
-            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+            background: var(--bg-body);
+        }
+
+        .text-input:hover,
+        .select-input:hover {
+            border-color: var(--primary);
+        }
+
+        /* Wrapper para select con icono custom */
+        .select-wrapper {
+            position: relative;
+            display: block;
+            width: 100%;
+        }
+
+        .select-wrapper::after {
+            content: '\f078';
+            font-family: 'Font Awesome 6 Free';
+            font-weight: 900;
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--primary);
+            font-size: 0.8rem;
+            pointer-events: none;
+            transition: transform 0.2s ease;
+        }
+
+        .select-wrapper:focus-within::after {
+            transform: translateY(-50%) rotate(180deg);
+        }
+
+        .select-wrapper .select-input {
+            padding-right: 2.5rem;
+        }
+
+        /* Selector de talla especial */
+        #size-select {
+            width: 100%;
+            padding: 0.85rem 2.5rem 0.85rem 1rem;
+            border: 1.5px solid var(--border);
+            border-radius: 10px;
+            background: var(--bg-card);
+            color: var(--text-main);
+            font-size: 1rem;
+            font-weight: 600;
+            font-family: var(--font-body, 'Inter', sans-serif);
+            transition: border-color 0.25s ease, box-shadow 0.25s ease;
+            appearance: none;
+            -webkit-appearance: none;
+            cursor: pointer;
+            letter-spacing: 0.02em;
+        }
+
+        #size-select:focus {
+            outline: none;
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+        }
+
+        #size-select:hover {
+            border-color: var(--primary);
+        }
+
+        @media (max-width: 768px) {
+            #size-select {
+                min-height: 52px;
+                font-size: 1.05rem;
+            }
+            .select-input {
+                min-height: 52px;
+                font-size: 1.05rem;
+            }
         }
 
         .input-hint {
@@ -223,7 +301,7 @@
 
 
             <section class="product-details">
-                <span id="product-category" class="category-tag">Categora</span>
+                <span id="product-category" class="category-tag">Categoría</span>
                 <h1 id="product-name" class="product-title">Nombre del Producto</h1>
 
                 <div class="price-block">
@@ -235,24 +313,36 @@
 
                     <div class="option-group">
                         <div
-                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem;">
-                            <label class="option-label" style="margin-bottom: 0;">Talla *</label>
+                            style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.65rem;">
+                            <label class="option-label" style="margin-bottom: 0;" for="size-select">Talla *</label>
                             <button type="button" id="size-guide-btn" class="size-guide-link">
                                 <i class="fas fa-ruler"></i> Guía de Tallas
                             </button>
                         </div>
-                        <div class="size-selector" id="size-selector">
-
+                        <div class="select-wrapper">
+                            <select id="size-select" name="talla" aria-label="Selecciona tu talla" required>
+                                <option value="" disabled selected>— Elige tu talla —</option>
+                                <option value="S">S</option>
+                                <option value="M">M</option>
+                                <option value="L">L</option>
+                                <option value="XL">XL</option>
+                                <option value="2XL">2XL (+1€)</option>
+                                <option value="3XL">3XL (+2€)</option>
+                                <option value="4XL">4XL (+2€)</option>
+                            </select>
                         </div>
+                        <div class="size-selector" id="size-selector" style="display:none;"></div>
                     </div>
 
 
                     <div class="option-group">
-                        <label class="option-label" for="version-select">Versin</label>
+                        <label class="option-label" for="version-select">Versión</label>
+                        <div class="select-wrapper">
                         <select id="version-select" class="select-input">
-                            <option value="aficionado">Version Fan</option>
-                            <option value="jugador">Version Jugador (+5)</option>
+                            <option value="aficionado">Versión Fan</option>
+                            <option value="jugador">Versión Jugador (+5)</option>
                         </select>
+                        </div>
                     </div>
 
 
@@ -287,6 +377,7 @@
                         <label class="option-label" for="patch-select">Parches <span
                                 style="color: var(--text-muted); font-weight: 400; font-size: 0.9rem;">Opcional
                                 (+1)</span></label>
+                        <div class="select-wrapper">
                         <select id="patch-select" class="select-input">
                             <option value="none">Sin parches</option>
                             <option value="liga">Parche Liga</option>
@@ -298,6 +389,7 @@
                             <option value="copamundo">Parche Copa del Mundo</option>
                             <option value="conmemorativo">Parche Conmemorativo</option>
                         </select>
+                        </div>
                     </div>
 
 
@@ -324,7 +416,7 @@
                         <button id="qty-plus">+</button>
                     </div>
                     <button id="add-to-cart-btn" class="btn-add-cart-lg">
-                        Aadir al Carrito
+                        <i class="fas fa-cart-plus" style="margin-right: 0.5rem;"></i>Añadir al carrito
                     </button>
                 </div>
 
