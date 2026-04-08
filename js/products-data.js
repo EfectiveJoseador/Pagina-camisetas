@@ -3250,7 +3250,9 @@ const products = [
             "/assets/productos/Yupoo/316527/2.webp"
         ],
         temporada: "2026",
-        tipo: "especial"
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
     },
     {
         id: 816004,
@@ -3337,6 +3339,1027 @@ const products = [
         retro: true,
         price: 24.9,
         oldPrice: 30
+    },
+    {
+        id: 533758,
+        name: "Granada estilo Retro 25/26",
+        slug: "granada-estilo-retro-2526",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/533758/1.webp",
+        images: [
+            "/assets/productos/Yupoo/533758/2.webp"
+        ],
+        temporada: "25/26",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 180045,
+        name: "Brasil 26/27 Especial (Niño)",
+        slug: "brasil-2627-especial-nino",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/180045/1.webp",
+        images: [
+            "/assets/productos/Yupoo/180045/2.webp"
+        ],
+        temporada: "26/27",
+        tipo: "especial",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 847286,
+        name: "Chile 2026 Visitante",
+        slug: "chile-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/847286/1.webp",
+        images: [
+            "/assets/productos/Yupoo/847286/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 625093,
+        name: "Estados Unidos 2026 Local",
+        slug: "estados-unidos-2026-local",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/625093/1.webp",
+        images: [
+            "/assets/productos/Yupoo/625093/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 496971,
+        name: "Argentina 2026 Visitante",
+        slug: "argentina-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/496971/1.webp",
+        images: [
+            "/assets/productos/Yupoo/496971/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 323995,
+        name: "Porto 25/26 Especial",
+        slug: "porto-2526-especial",
+        category: "futbol",
+        league: "ligaportugal",
+        image: "/assets/productos/Yupoo/323995/1.webp",
+        images: [
+            "/assets/productos/Yupoo/323995/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 561018,
+        name: "Corea del Sur 2026 Visitante",
+        slug: "corea-del-sur-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/561018/1.webp",
+        images: [
+            "/assets/productos/Yupoo/561018/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 723725,
+        name: "Jamaica 2026 Visitante (Niño)",
+        slug: "jamaica-2026-visitante-nino",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/723725/1.webp",
+        images: [
+            "/assets/productos/Yupoo/723725/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 317637,
+        name: "Francia 2026 Local",
+        slug: "francia-2026-local",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/317637/1.webp",
+        images: [
+            "/assets/productos/Yupoo/317637/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 283825,
+        name: "Ecuador 2026 Visitante",
+        slug: "ecuador-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/283825/1.webp",
+        images: [
+            "/assets/productos/Yupoo/283825/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 548956,
+        name: "Ecuador 2026 Local",
+        slug: "ecuador-2026-local",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/548956/1.webp",
+        images: [
+            "/assets/productos/Yupoo/548956/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 791467,
+        name: "Brasil 2026 Portero",
+        slug: "brasil-2026-portero",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/791467/1.webp",
+        images: [
+            "/assets/productos/Yupoo/791467/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "portero",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 640573,
+        name: "España 2026 Visitante",
+        slug: "espana-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/640573/1.webp",
+        images: [
+            "/assets/productos/Yupoo/640573/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 971378,
+        name: "Estados Unidos 2026 Visitante",
+        slug: "estados-unidos-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/971378/1.webp",
+        images: [
+            "/assets/productos/Yupoo/971378/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 569825,
+        name: "Uruguay 26/27 Especial",
+        slug: "uruguay-2627-especial",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/569825/1.webp",
+        images: [
+            "/assets/productos/Yupoo/569825/2.webp"
+        ],
+        temporada: "26/27",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 394410,
+        name: "Holanda 2026 Local",
+        slug: "holanda-2026-local",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/394410/1.webp",
+        images: [
+            "/assets/productos/Yupoo/394410/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 953993,
+        name: "Holanda 2026 Visitante",
+        slug: "holanda-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/953993/1.webp",
+        images: [
+            "/assets/productos/Yupoo/953993/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 864159,
+        name: "México 2026 Tercera",
+        slug: "mexico-2026-tercera",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/864159/1.webp",
+        images: [
+            "/assets/productos/Yupoo/864159/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "tercera",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 588206,
+        name: "Francia 2026 Visitante",
+        slug: "francia-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/588206/1.webp",
+        images: [
+            "/assets/productos/Yupoo/588206/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 469039,
+        name: "Inglaterra 2026 Visitante",
+        slug: "inglaterra-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/469039/1.webp",
+        images: [
+            "/assets/productos/Yupoo/469039/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 984407,
+        name: "Brasil 2026 Local",
+        slug: "brasil-2026-local",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/984407/1.webp",
+        images: [
+            "/assets/productos/Yupoo/984407/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 194611,
+        name: "Brasil 2026 Visitante",
+        slug: "brasil-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/194611/1.webp",
+        images: [
+            "/assets/productos/Yupoo/194611/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 355131,
+        name: "Fluminense 26/27 Visitante",
+        slug: "fluminense-2627-visitante",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/355131/1.webp",
+        images: [
+            "/assets/productos/Yupoo/355131/2.webp"
+        ],
+        temporada: "26/27",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 973390,
+        name: "Olympique Lyon 26/27 Entrenamiento",
+        slug: "olympique-lyon-2627-entrenamiento",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/973390/1.webp",
+        images: [
+            "/assets/productos/Yupoo/973390/2.webp"
+        ],
+        temporada: "26/27",
+        tipo: "entrenamiento",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 151471,
+        name: "Flamengo 26/27 Local",
+        slug: "flamengo-2627-local",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/151471/1.webp",
+        images: [
+            "/assets/productos/Yupoo/151471/2.webp"
+        ],
+        temporada: "26/27",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 334789,
+        name: "Atlético Mineiro 26/27 Local",
+        slug: "atletico-mineiro-2627-local",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/334789/1.webp",
+        images: [
+            "/assets/productos/Yupoo/334789/2.webp"
+        ],
+        temporada: "26/27",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 188349,
+        name: "Real Madrid 26/27 Especial",
+        slug: "real-madrid-2627-especial",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/188349/1.webp",
+        images: [
+            "/assets/productos/Yupoo/188349/2.webp"
+        ],
+        temporada: "26/27",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 684221,
+        name: "Uruguay 2026 Visitante",
+        slug: "uruguay-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/684221/1.webp",
+        images: [
+            "/assets/productos/Yupoo/684221/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 642494,
+        name: "Suiza 2026 Visitante",
+        slug: "suiza-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/642494/1.webp",
+        images: [
+            "/assets/productos/Yupoo/642494/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 636705,
+        name: "Marruecos 2026 Local",
+        slug: "marruecos-2026-local",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/636705/1.webp",
+        images: [
+            "/assets/productos/Yupoo/636705/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 889014,
+        name: "México 2026 Portero",
+        slug: "mexico-2026-portero",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/889014/1.webp",
+        images: [
+            "/assets/productos/Yupoo/889014/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "portero",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 341528,
+        name: "Alemania 2026 Portero",
+        slug: "alemania-2026-portero",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/341528/1.webp",
+        images: [
+            "/assets/productos/Yupoo/341528/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "portero",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 701294,
+        name: "Argelia 2026",
+        slug: "argelia-2026",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/701294/1.webp",
+        images: [
+            "/assets/productos/Yupoo/701294/2.webp"
+        ],
+        temporada: "2026",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 347591,
+        name: "Bélgica 2026 Visitante",
+        slug: "belgica-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/347591/1.webp",
+        images: [
+            "/assets/productos/Yupoo/347591/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 232684,
+        name: "Zaragoza 25/26 Cuarta",
+        slug: "zaragoza-2526-cuarta",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/232684/1.webp",
+        images: [
+            "/assets/productos/Yupoo/232684/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "cuarta",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 894978,
+        name: "Torino 25/26 Tercera",
+        slug: "torino-2526-tercera",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/894978/1.webp",
+        images: [
+            "/assets/productos/Yupoo/894978/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "tercera",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 169125,
+        name: "Sevilla 25/26 Entrenamiento",
+        slug: "sevilla-2526-entrenamiento",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/169125/1.webp",
+        images: [
+            "/assets/productos/Yupoo/169125/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "entrenamiento",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 101590,
+        name: "Sevilla 25/26",
+        slug: "sevilla-2526",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/101590/1.webp",
+        images: [
+            "/assets/productos/Yupoo/101590/2.webp"
+        ],
+        temporada: "25/26",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 869540,
+        name: "Valladolid 25/26 Especial",
+        slug: "valladolid-2526-especial",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/869540/1.webp",
+        images: [
+            "/assets/productos/Yupoo/869540/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 852761,
+        name: "Brasil 2026 Local (Niño)",
+        slug: "brasil-2026-local-nino",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/852761/1.webp",
+        images: [
+            "/assets/productos/Yupoo/852761/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "local",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 563901,
+        name: "Crystal Palace 25/26 Local (Niño)",
+        slug: "crystal-palace-2526-local-nino",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/563901/1.webp",
+        images: [
+            "/assets/productos/Yupoo/563901/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "local",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 523499,
+        name: "Brasil 2026 Visitante (Niño)",
+        slug: "brasil-2026-visitante-nino",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/523499/1.webp",
+        images: [
+            "/assets/productos/Yupoo/523499/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 990675,
+        name: "Ajax 25/26 Tercera (Niño)",
+        slug: "ajax-2526-tercera-nino",
+        category: "futbol",
+        league: "eredivisie",
+        image: "/assets/productos/Yupoo/990675/1.webp",
+        images: [
+            "/assets/productos/Yupoo/990675/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "tercera",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 814013,
+        name: "Norway 2026 Local",
+        slug: "norway-2026-local",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/814013/1.webp",
+        images: [
+            "/assets/productos/Yupoo/814013/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 862583,
+        name: "Bayern Munich 25/26 Tercera (Niño)",
+        slug: "bayern-munich-2526-tercera-nino",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/862583/1.webp",
+        images: [
+            "/assets/productos/Yupoo/862583/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "tercera",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 252503,
+        name: "Celta de Vigo 25/26 Tercera (Niño)",
+        slug: "celta-de-vigo-2526-tercera-nino",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/252503/1.webp",
+        images: [
+            "/assets/productos/Yupoo/252503/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "tercera",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 377650,
+        name: "FC Barcelona 25/26 Especial (Niño)",
+        slug: "fc-barcelona-2526-especial-nino",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/377650/1.webp",
+        images: [
+            "/assets/productos/Yupoo/377650/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "especial",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 706760,
+        name: "FC Barcelona 25/26 Especial",
+        slug: "fc-barcelona-2526-especial",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/706760/1.webp",
+        images: [
+            "/assets/productos/Yupoo/706760/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 302686,
+        name: "FC Barcelona 05/06 Local Retro",
+        slug: "fc-barcelona-0506-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/302686/1.webp",
+        images: [
+            "/assets/productos/Yupoo/302686/2.webp"
+        ],
+        temporada: "05/06",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 147598,
+        name: "FC Barcelona 91/92 Local Retro",
+        slug: "fc-barcelona-9192-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/147598/1.webp",
+        images: [
+            "/assets/productos/Yupoo/147598/2.webp"
+        ],
+        temporada: "91/92",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 969981,
+        name: "FC Barcelona 13/14 Visitante Retro",
+        slug: "fc-barcelona-1314-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/969981/1.webp",
+        images: [
+            "/assets/productos/Yupoo/969981/2.webp"
+        ],
+        temporada: "13/14",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 759888,
+        name: "FC Barcelona 16/17 Tercera Retro",
+        slug: "fc-barcelona-1617-tercera-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/759888/1.webp",
+        images: [
+            "/assets/productos/Yupoo/759888/2.webp"
+        ],
+        temporada: "16/17",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 158326,
+        name: "FC Barcelona 15/16 Local Retro",
+        slug: "fc-barcelona-1516-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/158326/1.webp",
+        images: [
+            "/assets/productos/Yupoo/158326/2.webp"
+        ],
+        temporada: "15/16",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 549819,
+        name: "FC Barcelona 88/89 Visitante Retro",
+        slug: "fc-barcelona-8889-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/549819/1.webp",
+        images: [
+            "/assets/productos/Yupoo/549819/2.webp"
+        ],
+        temporada: "88/89",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 641466,
+        name: "FC Barcelona 100 Años",
+        slug: "fc-barcelona-100-anos",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/641466/1.webp",
+        images: [
+            "/assets/productos/Yupoo/641466/2.webp"
+        ],
+        temporada: "100 Años",
+        tipo: "especial",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 236719,
+        name: "Real Madrid 2012",
+        slug: "real-madrid-2012",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/236719/1.webp",
+        images: [
+            "/assets/productos/Yupoo/236719/2.webp"
+        ],
+        temporada: "2012",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 439096,
+        name: "Real Madrid 2006",
+        slug: "real-madrid-2006",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/439096/1.webp",
+        images: [
+            "/assets/productos/Yupoo/439096/2.webp"
+        ],
+        temporada: "2006",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 681430,
+        name: "Real Madrid 03/04 Visitante Retro",
+        slug: "real-madrid-0304-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/681430/1.webp",
+        images: [
+            "/assets/productos/Yupoo/681430/2.webp"
+        ],
+        temporada: "03/04",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 801872,
+        name: "Real Madrid 02/03 Local Retro",
+        slug: "real-madrid-0203-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/801872/1.webp",
+        images: [
+            "/assets/productos/Yupoo/801872/2.webp"
+        ],
+        temporada: "02/03",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 230310,
+        name: "Real Madrid 08/09 Local Retro",
+        slug: "real-madrid-0809-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/230310/1.webp",
+        images: [
+            "/assets/productos/Yupoo/230310/2.webp"
+        ],
+        temporada: "08/09",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 625043,
+        name: "Real Madrid 17/18 Tercera Retro",
+        slug: "real-madrid-1718-tercera-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/625043/1.webp",
+        images: [
+            "/assets/productos/Yupoo/625043/2.webp"
+        ],
+        temporada: "17/18",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 107803,
+        name: "Real Madrid Especial Retro",
+        slug: "real-madrid-especial-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/107803/1.webp",
+        images: [
+            "/assets/productos/Yupoo/107803/2.webp"
+        ],
+        tipo: "especial",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 433942,
+        name: "Real Madrid 25/26",
+        slug: "real-madrid-2526",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/433942/1.webp",
+        images: [
+            "/assets/productos/Yupoo/433942/2.webp"
+        ],
+        temporada: "25/26",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 810848,
+        name: "Real Madrid 13/14 Local Retro",
+        slug: "real-madrid-1314-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/810848/1.webp",
+        images: [
+            "/assets/productos/Yupoo/810848/2.webp"
+        ],
+        temporada: "13/14",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 324452,
+        name: "Real Madrid 16/17 Local Retro",
+        slug: "real-madrid-1617-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/324452/1.webp",
+        images: [
+            "/assets/productos/Yupoo/324452/2.webp"
+        ],
+        temporada: "16/17",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 248925,
+        name: "Real Madrid 25/26",
+        slug: "real-madrid-2526",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/248925/1.webp",
+        images: [
+            "/assets/productos/Yupoo/248925/2.webp"
+        ],
+        temporada: "25/26",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 267899,
+        name: "Real Madrid 25/26",
+        slug: "real-madrid-2526",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/267899/1.webp",
+        images: [
+            "/assets/productos/Yupoo/267899/2.webp"
+        ],
+        temporada: "25/26",
+        price: 19.9,
+        oldPrice: 25
     }
 ];
 
