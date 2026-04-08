@@ -1389,15 +1389,18 @@ const products = [
     },
     {
         id: 935379,
-        name: "Wales 2026 Local",
+        name: "Gales 2026 Local",
         category: "futbol",
         league: "selecciones",
-        image: "/assets/productos/Yupoo/219464881/1.webp",
+        image: "/assets/productos/Yupoo/935379/1.webp",
         images: [
-            "/assets/productos/Yupoo/219464881/2.webp"
+            "/assets/productos/Yupoo/935379/2.webp"
         ],
         temporada: "2026",
-        tipo: "local"
+        tipo: "local",
+        slug: "gales-2026-local",
+        price: 19.9,
+        oldPrice: 25
     },
     {
         id: 938860,
@@ -5565,6 +5568,1513 @@ const products = [
         retro: true,
         price: 24.9,
         oldPrice: 30
+    },
+    {
+        id: 992702,
+        name: "España 2026 Portero",
+        slug: "espana-2026-portero",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/992702/1.webp",
+        images: [
+            "/assets/productos/Yupoo/992702/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "portero",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 235473,
+        name: "España 2026 Local (Niño)",
+        slug: "espana-2026-local-nino",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/235473/1.webp",
+        images: [
+            "/assets/productos/Yupoo/235473/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "local",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 294234,
+        name: "Italia 2026 Visitante (Niño)",
+        slug: "italia-2026-visitante-nino",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/294234/1.webp",
+        images: [
+            "/assets/productos/Yupoo/294234/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 925637,
+        name: "Finlandia 2026 Local",
+        slug: "finlandia-2026-local",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/925637/1.webp",
+        images: [
+            "/assets/productos/Yupoo/925637/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 822262,
+        name: "Finlandia 2026 Visitante",
+        slug: "finlandia-2026-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/822262/1.webp",
+        images: [
+            "/assets/productos/Yupoo/822262/2.webp"
+        ],
+        temporada: "2026",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 210914,
+        name: "Croacia 2010 Visitante Retro",
+        slug: "croacia-2010-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/210914/1.webp",
+        images: [
+            "/assets/productos/Yupoo/210914/2.webp"
+        ],
+        temporada: "2010",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 411202,
+        name: "Brasil 19/98 Portero Retro",
+        slug: "brasil-1998-portero-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/411202/1.webp",
+        images: [
+            "/assets/productos/Yupoo/411202/2.webp"
+        ],
+        temporada: "19/98",
+        tipo: "portero",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 373336,
+        name: "Granada 05/06 Local Retro",
+        slug: "granada-0506-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/373336/1.webp",
+        images: [
+            "/assets/productos/Yupoo/373336/2.webp"
+        ],
+        temporada: "05/06",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 590091,
+        name: "Rumania 2000 Local Retro",
+        slug: "rumania-2000-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/590091/1.webp",
+        images: [
+            "/assets/productos/Yupoo/590091/2.webp"
+        ],
+        temporada: "2000",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 242200,
+        name: "Nigeria 19/94 Local Retro",
+        slug: "nigeria-1994-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/242200/1.webp",
+        images: [
+            "/assets/productos/Yupoo/242200/2.webp"
+        ],
+        temporada: "19/94",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 225756,
+        name: "Portugal 2006 Visitante Retro",
+        slug: "portugal-2006-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/225756/1.webp",
+        images: [
+            "/assets/productos/Yupoo/225756/2.webp"
+        ],
+        temporada: "2006",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 709296,
+        name: "Inglaterra 19/98 Visitante Retro",
+        slug: "inglaterra-1998-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/709296/1.webp",
+        images: [
+            "/assets/productos/Yupoo/709296/2.webp"
+        ],
+        temporada: "19/98",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 633640,
+        name: "Francia 2014 Local Retro",
+        slug: "francia-2014-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/633640/1.webp",
+        images: [
+            "/assets/productos/Yupoo/633640/2.webp"
+        ],
+        temporada: "2014",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 322496,
+        name: "Nigeria 19/98 Visitante Retro",
+        slug: "nigeria-1998-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/322496/1.webp",
+        images: [
+            "/assets/productos/Yupoo/322496/2.webp"
+        ],
+        temporada: "19/98",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 719782,
+        name: "Holanda 2014 Local Retro",
+        slug: "holanda-2014-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/719782/1.webp",
+        images: [
+            "/assets/productos/Yupoo/719782/2.webp"
+        ],
+        temporada: "2014",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 207729,
+        name: "Holanda 2000 Local Retro",
+        slug: "holanda-2000-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/207729/1.webp",
+        images: [
+            "/assets/productos/Yupoo/207729/2.webp"
+        ],
+        temporada: "2000",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 631464,
+        name: "Estados Unidos 2004 Visitante Retro",
+        slug: "estados-unidos-2004-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/631464/1.webp",
+        images: [
+            "/assets/productos/Yupoo/631464/2.webp"
+        ],
+        temporada: "2004",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 415446,
+        name: "España 2000 Local Retro",
+        slug: "espana-2000-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/415446/1.webp",
+        images: [
+            "/assets/productos/Yupoo/415446/2.webp"
+        ],
+        temporada: "2000",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 871038,
+        name: "España 2000 Visitante Retro",
+        slug: "espana-2000-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/871038/1.webp",
+        images: [
+            "/assets/productos/Yupoo/871038/2.webp"
+        ],
+        temporada: "2000",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 983832,
+        name: "Francia 2006 Visitante Retro",
+        slug: "francia-2006-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/983832/1.webp",
+        images: [
+            "/assets/productos/Yupoo/983832/2.webp"
+        ],
+        temporada: "2006",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 412045,
+        name: "Suecia 19/94 Local Retro",
+        slug: "suecia-1994-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/412045/1.webp",
+        images: [
+            "/assets/productos/Yupoo/412045/2.webp"
+        ],
+        temporada: "19/94",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 299474,
+        name: "Suecia 19/94 Visitante Retro",
+        slug: "suecia-1994-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/299474/1.webp",
+        images: [
+            "/assets/productos/Yupoo/299474/2.webp"
+        ],
+        temporada: "19/94",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 624473,
+        name: "Sevilla 12/13 Local Retro",
+        slug: "sevilla-1213-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/624473/1.webp",
+        images: [
+            "/assets/productos/Yupoo/624473/2.webp"
+        ],
+        temporada: "12/13",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 211338,
+        name: "Rumania 19/94 Local Retro",
+        slug: "rumania-1994-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/211338/1.webp",
+        images: [
+            "/assets/productos/Yupoo/211338/2.webp"
+        ],
+        temporada: "19/94",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 221335,
+        name: "Nigeria 94/95 Local Retro",
+        slug: "nigeria-9495-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/221335/1.webp",
+        images: [
+            "/assets/productos/Yupoo/221335/2.webp"
+        ],
+        temporada: "94/95",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 124272,
+        name: "Sevilla 87/90 Local Retro",
+        slug: "sevilla-8790-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/124272/1.webp",
+        images: [
+            "/assets/productos/Yupoo/124272/2.webp"
+        ],
+        temporada: "87/90",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 552224,
+        name: "Argentina 2014 Local Retro",
+        slug: "argentina-2014-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/552224/1.webp",
+        images: [
+            "/assets/productos/Yupoo/552224/2.webp"
+        ],
+        temporada: "2014",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 889010,
+        name: "México 2010 Local Retro",
+        slug: "mexico-2010-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/889010/1.webp",
+        images: [
+            "/assets/productos/Yupoo/889010/2.webp"
+        ],
+        temporada: "2010",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 121449,
+        name: "Real Madrid 19/86 Local Retro",
+        slug: "real-madrid-1986-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/121449/1.webp",
+        images: [
+            "/assets/productos/Yupoo/121449/2.webp"
+        ],
+        temporada: "19/86",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 891639,
+        name: "Alemania 02/03 Local Retro",
+        slug: "alemania-0203-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/891639/1.webp",
+        images: [
+            "/assets/productos/Yupoo/891639/2.webp"
+        ],
+        temporada: "02/03",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 614133,
+        name: "Olympique Lyon 2014 Local",
+        slug: "olympique-lyon-2014-local",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/614133/1.webp",
+        images: [
+            "/assets/productos/Yupoo/614133/2.webp"
+        ],
+        temporada: "2014",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 973754,
+        name: "España 19/96 Visitante Retro",
+        slug: "espana-1996-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/973754/1.webp",
+        images: [
+            "/assets/productos/Yupoo/973754/2.webp"
+        ],
+        temporada: "19/96",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 455063,
+        name: "Alemania 2006 Local Retro",
+        slug: "alemania-2006-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/455063/1.webp",
+        images: [
+            "/assets/productos/Yupoo/455063/2.webp"
+        ],
+        temporada: "2006",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 171234,
+        name: "Turquía 1996 Local Retro",
+        slug: "turquia-1996-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/171234/1.webp",
+        images: [
+            "/assets/productos/Yupoo/171234/2.webp"
+        ],
+        temporada: "1996",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 403136,
+        name: "Turquía 1996 Visitante Retro",
+        slug: "turquia-1996-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/403136/1.webp",
+        images: [
+            "/assets/productos/Yupoo/403136/2.webp"
+        ],
+        temporada: "1996",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 624089,
+        name: "Escocia 91/93 Visitante Retro",
+        slug: "escocia-9193-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/624089/1.webp",
+        images: [
+            "/assets/productos/Yupoo/624089/2.webp"
+        ],
+        temporada: "91/93",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 578790,
+        name: "Escocia 12/14 Local Retro",
+        slug: "escocia-1214-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/578790/1.webp",
+        images: [
+            "/assets/productos/Yupoo/578790/2.webp"
+        ],
+        temporada: "12/14",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 629676,
+        name: "Polonia 2012 Local Retro",
+        slug: "polonia-2012-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/629676/1.webp",
+        images: [
+            "/assets/productos/Yupoo/629676/2.webp"
+        ],
+        temporada: "2012",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 722433,
+        name: "Japón 1998 Local Retro",
+        slug: "japon-1998-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/722433/1.webp",
+        images: [
+            "/assets/productos/Yupoo/722433/2.webp"
+        ],
+        temporada: "1998",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 419969,
+        name: "Japón 1998 Visitante Retro",
+        slug: "japon-1998-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/419969/1.webp",
+        images: [
+            "/assets/productos/Yupoo/419969/2.webp"
+        ],
+        temporada: "1998",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 570745,
+        name: "Alemania 2010 Visitante Retro",
+        slug: "alemania-2010-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/570745/1.webp",
+        images: [
+            "/assets/productos/Yupoo/570745/2.webp"
+        ],
+        temporada: "2010",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 724691,
+        name: "Francia 1996 Local Retro",
+        slug: "francia-1996-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/724691/1.webp",
+        images: [
+            "/assets/productos/Yupoo/724691/2.webp"
+        ],
+        temporada: "1996",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 504827,
+        name: "Inglaterra 1992 Visitante Retro",
+        slug: "inglaterra-1992-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/504827/1.webp",
+        images: [
+            "/assets/productos/Yupoo/504827/2.webp"
+        ],
+        temporada: "1992",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 274175,
+        name: "Inglaterra 1982 Visitante Retro",
+        slug: "inglaterra-1982-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/274175/1.webp",
+        images: [
+            "/assets/productos/Yupoo/274175/2.webp"
+        ],
+        temporada: "1982",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 652877,
+        name: "Dinamarca 1988 Local Retro",
+        slug: "dinamarca-1988-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/652877/1.webp",
+        images: [
+            "/assets/productos/Yupoo/652877/2.webp"
+        ],
+        temporada: "1988",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 907207,
+        name: "Escocia 2002 Visitante Retro",
+        slug: "escocia-2002-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/907207/1.webp",
+        images: [
+            "/assets/productos/Yupoo/907207/2.webp"
+        ],
+        temporada: "2002",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 143604,
+        name: "Portugal 1998 Local Retro",
+        slug: "portugal-1998-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/143604/1.webp",
+        images: [
+            "/assets/productos/Yupoo/143604/2.webp"
+        ],
+        temporada: "1998",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 175661,
+        name: "Inglaterra 1992 Tercera Retro",
+        slug: "inglaterra-1992-tercera-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/175661/1.webp",
+        images: [
+            "/assets/productos/Yupoo/175661/2.webp"
+        ],
+        temporada: "1992",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 243056,
+        name: "Inglaterra 1992 Local Retro",
+        slug: "inglaterra-1992-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/243056/1.webp",
+        images: [
+            "/assets/productos/Yupoo/243056/2.webp"
+        ],
+        temporada: "1992",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 238016,
+        name: "Portugal 97/98 Local Retro",
+        slug: "portugal-9798-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/238016/1.webp",
+        images: [
+            "/assets/productos/Yupoo/238016/2.webp"
+        ],
+        temporada: "97/98",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 793524,
+        name: "Portugal 2012 Local Retro",
+        slug: "portugal-2012-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/793524/1.webp",
+        images: [
+            "/assets/productos/Yupoo/793524/2.webp"
+        ],
+        temporada: "2012",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 525598,
+        name: "Chile 15/16 Local Retro",
+        slug: "chile-1516-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/525598/1.webp",
+        images: [
+            "/assets/productos/Yupoo/525598/2.webp"
+        ],
+        temporada: "15/16",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 816728,
+        name: "Portugal 1992 Local Retro",
+        slug: "portugal-1992-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/816728/1.webp",
+        images: [
+            "/assets/productos/Yupoo/816728/2.webp"
+        ],
+        temporada: "1992",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 847420,
+        name: "Portugal 1992 Visitante Retro",
+        slug: "portugal-1992-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/847420/1.webp",
+        images: [
+            "/assets/productos/Yupoo/847420/2.webp"
+        ],
+        temporada: "1992",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 458786,
+        name: "México Especial Retro",
+        slug: "mexico-especial-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/458786/1.webp",
+        images: [
+            "/assets/productos/Yupoo/458786/2.webp"
+        ],
+        tipo: "especial",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 945961,
+        name: "España 2010 Portero Retro",
+        slug: "espana-2010-portero-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/945961/1.webp",
+        images: [
+            "/assets/productos/Yupoo/945961/2.webp"
+        ],
+        temporada: "2010",
+        tipo: "portero",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 237158,
+        name: "España 2010 Local Retro",
+        slug: "espana-2010-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/237158/1.webp",
+        images: [
+            "/assets/productos/Yupoo/237158/2.webp"
+        ],
+        temporada: "2010",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 508708,
+        name: "Portugal 19/72 Local Retro",
+        slug: "portugal-1972-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/508708/1.webp",
+        images: [
+            "/assets/productos/Yupoo/508708/2.webp"
+        ],
+        temporada: "19/72",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 205573,
+        name: "Colombia 19/90 Visitante Retro",
+        slug: "colombia-1990-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/205573/1.webp",
+        images: [
+            "/assets/productos/Yupoo/205573/2.webp"
+        ],
+        temporada: "19/90",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 909022,
+        name: "Irlanda 19/98 Local Retro",
+        slug: "irlanda-1998-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/909022/1.webp",
+        images: [
+            "/assets/productos/Yupoo/909022/2.webp"
+        ],
+        temporada: "19/98",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 938172,
+        name: "Portugal 96/97 Visitante Retro",
+        slug: "portugal-9697-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/938172/1.webp",
+        images: [
+            "/assets/productos/Yupoo/938172/2.webp"
+        ],
+        temporada: "96/97",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 900073,
+        name: "España 92/94 Local Retro",
+        slug: "espana-9294-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/900073/1.webp",
+        images: [
+            "/assets/productos/Yupoo/900073/2.webp"
+        ],
+        temporada: "92/94",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 846528,
+        name: "Finland 19/82 Local Retro",
+        slug: "finland-1982-local-retro",
+        category: "futbol",
+        league: "otros",
+        image: "/assets/productos/Yupoo/846528/1.webp",
+        images: [
+            "/assets/productos/Yupoo/846528/2.webp"
+        ],
+        temporada: "19/82",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 247102,
+        name: "Escocia 19/98 Local Retro",
+        slug: "escocia-1998-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/247102/1.webp",
+        images: [
+            "/assets/productos/Yupoo/247102/2.webp"
+        ],
+        temporada: "19/98",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 140041,
+        name: "España 88/91 Local Retro",
+        slug: "espana-8891-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/140041/1.webp",
+        images: [
+            "/assets/productos/Yupoo/140041/2.webp"
+        ],
+        temporada: "88/91",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 431932,
+        name: "Inglaterra 2002 Local Retro",
+        slug: "inglaterra-2002-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/431932/1.webp",
+        images: [
+            "/assets/productos/Yupoo/431932/2.webp"
+        ],
+        temporada: "2002",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 784592,
+        name: "Holanda 19/88 Local Retro",
+        slug: "holanda-1988-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/784592/1.webp",
+        images: [
+            "/assets/productos/Yupoo/784592/2.webp"
+        ],
+        temporada: "19/88",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 885507,
+        name: "Brasil 19/84 Local Retro",
+        slug: "brasil-1984-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/885507/1.webp",
+        images: [
+            "/assets/productos/Yupoo/885507/2.webp"
+        ],
+        temporada: "19/84",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 454795,
+        name: "Francia 92/94 Local Retro",
+        slug: "francia-9294-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/454795/1.webp",
+        images: [
+            "/assets/productos/Yupoo/454795/2.webp"
+        ],
+        temporada: "92/94",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 512773,
+        name: "Argentina 2014 Visitante Retro",
+        slug: "argentina-2014-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/512773/1.webp",
+        images: [
+            "/assets/productos/Yupoo/512773/2.webp"
+        ],
+        temporada: "2014",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 394340,
+        name: "Brasil 13/14 Retro",
+        slug: "brasil-1314-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/394340/1.webp",
+        images: [
+            "/assets/productos/Yupoo/394340/2.webp"
+        ],
+        temporada: "13/14",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 792752,
+        name: "Argentina 2004 Local Retro",
+        slug: "argentina-2004-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/792752/1.webp",
+        images: [
+            "/assets/productos/Yupoo/792752/2.webp"
+        ],
+        temporada: "2004",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 443170,
+        name: "Brasil 19/97 Visitante Retro",
+        slug: "brasil-1997-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/443170/1.webp",
+        images: [
+            "/assets/productos/Yupoo/443170/2.webp"
+        ],
+        temporada: "19/97",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 594929,
+        name: "Brasil 2010 Visitante Retro",
+        slug: "brasil-2010-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/594929/1.webp",
+        images: [
+            "/assets/productos/Yupoo/594929/2.webp"
+        ],
+        temporada: "2010",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 599601,
+        name: "Brasil 2006 Visitante Retro",
+        slug: "brasil-2006-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/599601/1.webp",
+        images: [
+            "/assets/productos/Yupoo/599601/2.webp"
+        ],
+        temporada: "2006",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 598668,
+        name: "Brasil 19/88 Local Retro",
+        slug: "brasil-1988-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/598668/1.webp",
+        images: [
+            "/assets/productos/Yupoo/598668/2.webp"
+        ],
+        temporada: "19/88",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 498910,
+        name: "Portugal 2006 Local Retro",
+        slug: "portugal-2006-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/498910/1.webp",
+        images: [
+            "/assets/productos/Yupoo/498910/2.webp"
+        ],
+        temporada: "2006",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 119268,
+        name: "Brasil 19/98 Portero Retro",
+        slug: "brasil-1998-portero-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/119268/1.webp",
+        images: [
+            "/assets/productos/Yupoo/119268/2.webp"
+        ],
+        temporada: "19/98",
+        tipo: "portero",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 508413,
+        name: "Alemania 2014 Local Retro",
+        slug: "alemania-2014-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/508413/1.webp",
+        images: [
+            "/assets/productos/Yupoo/508413/2.webp"
+        ],
+        temporada: "2014",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 426072,
+        name: "Norway 19/98 Local Retro",
+        slug: "norway-1998-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/426072/1.webp",
+        images: [
+            "/assets/productos/Yupoo/426072/2.webp"
+        ],
+        temporada: "19/98",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 255475,
+        name: "Argentina 19/93 Local Retro",
+        slug: "argentina-1993-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/255475/1.webp",
+        images: [
+            "/assets/productos/Yupoo/255475/2.webp"
+        ],
+        temporada: "19/93",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 573019,
+        name: "Brasil 19/70 Local Retro",
+        slug: "brasil-1970-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/573019/1.webp",
+        images: [
+            "/assets/productos/Yupoo/573019/2.webp"
+        ],
+        temporada: "19/70",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 447311,
+        name: "Portugal 2012 Visitante Retro",
+        slug: "portugal-2012-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/447311/1.webp",
+        images: [
+            "/assets/productos/Yupoo/447311/2.webp"
+        ],
+        temporada: "2012",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 872891,
+        name: "Argentina 2020 Local",
+        slug: "argentina-2020-local",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/872891/1.webp",
+        images: [
+            "/assets/productos/Yupoo/872891/2.webp"
+        ],
+        temporada: "2020",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 145975,
+        name: "Inglaterra 19/82 Local Retro",
+        slug: "inglaterra-1982-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/145975/1.webp",
+        images: [
+            "/assets/productos/Yupoo/145975/2.webp"
+        ],
+        temporada: "19/82",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 747146,
+        name: "Inglaterra 19/84 Local Retro",
+        slug: "inglaterra-1984-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/747146/1.webp",
+        images: [
+            "/assets/productos/Yupoo/747146/2.webp"
+        ],
+        temporada: "19/84",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 771245,
+        name: "Inglaterra 19/96 Retro",
+        slug: "inglaterra-1996-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/771245/1.webp",
+        images: [
+            "/assets/productos/Yupoo/771245/2.webp"
+        ],
+        temporada: "19/96",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 603168,
+        name: "Inglaterra 19/96 Local Retro",
+        slug: "inglaterra-1996-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/603168/1.webp",
+        images: [
+            "/assets/productos/Yupoo/603168/2.webp"
+        ],
+        temporada: "19/96",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 313032,
+        name: "Brasil 2020 Visitante",
+        slug: "brasil-2020-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/313032/1.webp",
+        images: [
+            "/assets/productos/Yupoo/313032/2.webp"
+        ],
+        temporada: "2020",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 355150,
+        name: "Brasil 2020 Local",
+        slug: "brasil-2020-local",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/355150/1.webp",
+        images: [
+            "/assets/productos/Yupoo/355150/2.webp"
+        ],
+        temporada: "2020",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 238609,
+        name: "Holanda 19/91 Local Retro",
+        slug: "holanda-1991-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/238609/1.webp",
+        images: [
+            "/assets/productos/Yupoo/238609/2.webp"
+        ],
+        temporada: "19/91",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 851563,
+        name: "España 19/94 Local Retro",
+        slug: "espana-1994-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/851563/1.webp",
+        images: [
+            "/assets/productos/Yupoo/851563/2.webp"
+        ],
+        temporada: "19/94",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 694647,
+        name: "Alemania 1996 Local Retro",
+        slug: "alemania-1996-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/694647/1.webp",
+        images: [
+            "/assets/productos/Yupoo/694647/2.webp"
+        ],
+        temporada: "1996",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 620494,
+        name: "Holanda 2020 Local",
+        slug: "holanda-2020-local",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/620494/1.webp",
+        images: [
+            "/assets/productos/Yupoo/620494/2.webp"
+        ],
+        temporada: "2020",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 675793,
+        name: "Portugal Local",
+        slug: "portugal-local",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/675793/1.webp",
+        images: [
+            "/assets/productos/Yupoo/675793/2.webp"
+        ],
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
     }
 ];
 
