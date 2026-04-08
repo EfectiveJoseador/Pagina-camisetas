@@ -9,7 +9,7 @@
 
     <title>Sobre Camisetazo | Tu Tienda de Camisetas de Fútbol</title>
     <meta name="description"
-        content="?? Conoce Camisetazo: tu tienda de camisetas de fútbol desde 2020. +300 clientes satisfechos, envíos rpidos y calidad garantizada. Descubre nuestra historia!">
+        content="?? Conoce Camisetazo: tu tienda de camisetas de fútbol desde 2021. +300 clientes satisfechos, envíos rpidos y calidad garantizada. Descubre nuestra historia!">
     <meta name="keywords"
         content="camisetazo, tienda camisetas fútbol, quines somos camisetazo, camisetas fútbol confianza">
     <meta name="robots" content="index, follow">
@@ -40,7 +40,7 @@
         href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
         rel="stylesheet">
 
-    
+
     <link rel="stylesheet" href="/assets/fonts/fontawesome/css/all.min.css">
     <link rel="stylesheet" href="/css/variables.css">
     <link rel="stylesheet" href="/css/reset.css">
@@ -292,9 +292,9 @@
             .carousel-container {
                 padding: 0 1rem;
                 padding-right: 0;
-                
+
                 overflow: hidden;
-                
+
             }
 
             .carousel-container::-webkit-scrollbar {
@@ -302,10 +302,10 @@
             }
 
             .carousel-track {
-                
+
                 scroll-snap-align: start;
                 padding-right: 1rem;
-                
+
             }
 
             .carousel-track .client-card {
@@ -322,7 +322,7 @@
                 width: 45vw;
             }
 
-            
+
             .clients-carousel {
                 position: relative;
             }
@@ -341,7 +341,7 @@
                 transition: opacity 0.3s ease;
             }
 
-            
+
             .clients-carousel.scrolled::after {
                 opacity: 0;
             }
@@ -599,22 +599,22 @@
             const cardWidth = 220 + 24;
             const totalCards = originalCards.length;
 
-            
+
             originalCards.forEach(card => {
                 const cloneEnd = card.cloneNode(true);
                 cloneEnd.classList.add('carousel-clone');
-                
+
                 const img = cloneEnd.querySelector('img');
                 if (img) img.loading = 'eager';
                 track.appendChild(cloneEnd);
             });
 
-            
+
             const allCards = Array.from(track.querySelectorAll('.client-card')).filter(c => !c.classList.contains('carousel-clone'));
             [...allCards].reverse().forEach(card => {
                 const cloneStart = card.cloneNode(true);
                 cloneStart.classList.add('carousel-clone');
-                
+
                 const img = cloneStart.querySelector('img');
                 if (img) img.loading = 'eager';
                 track.insertBefore(cloneStart, track.firstChild);
@@ -629,13 +629,13 @@
             });
 
 
-            let currentPosition = totalCards * cardWidth; 
+            let currentPosition = totalCards * cardWidth;
             let isJumping = false;
             let animationId = null;
             let isPaused = false;
 
-            const SCROLL_SPEED = 0.3; 
-            const PAUSE_DURATION = 3000; 
+            const SCROLL_SPEED = 0.3;
+            const PAUSE_DURATION = 3000;
 
             function setPosition(position, animate = true) {
                 if (animate) {
@@ -647,10 +647,10 @@
             }
 
             function checkBoundary(e) {
-                
+
                 if (e && e.target !== track) return;
 
-                
+
                 if (currentPosition >= totalCards * 2 * cardWidth) {
                     isJumping = true;
                     track.style.transition = 'none';
@@ -659,7 +659,7 @@
                     void track.offsetHeight;
                     isJumping = false;
                 }
-                
+
                 if (currentPosition < totalCards * cardWidth) {
                     isJumping = true;
                     track.style.transition = 'none';
@@ -670,7 +670,7 @@
                 }
             }
 
-            
+
             function smoothScroll() {
                 if (isPaused || isJumping) {
                     animationId = requestAnimationFrame(smoothScroll);
@@ -679,7 +679,7 @@
 
                 currentPosition += SCROLL_SPEED;
 
-                
+
                 if (currentPosition >= totalCards * 2 * cardWidth) {
                     currentPosition -= totalCards * cardWidth;
                     track.style.transition = 'none';
@@ -740,10 +740,10 @@
 
             track.addEventListener('transitionend', checkBoundary);
 
-            
+
             const carouselContainer = grid?.querySelector('.carousel-container');
 
-            
+
             if (carouselContainer) {
                 carouselContainer.addEventListener('mouseenter', pauseAutoScroll);
                 carouselContainer.addEventListener('mouseleave', () => {
@@ -752,14 +752,14 @@
                 });
             }
 
-            
+
             setPosition(currentPosition, false);
             track.offsetHeight;
 
-            
+
             startAutoScroll();
 
-            
+
             let isDragging = false;
             let startPos = 0;
             let lastPos = 0;
@@ -767,18 +767,18 @@
             let velocity = 0;
             let inertiaId = null;
 
-            
+
             track.style.touchAction = 'pan-y';
             track.style.userSelect = 'none';
             track.style.webkitUserSelect = 'none';
 
             function touchStart(event) {
-                
+
                 if (inertiaId) {
                     cancelAnimationFrame(inertiaId);
                     inertiaId = null;
                 }
-                
+
                 if (animationId) {
                     cancelAnimationFrame(animationId);
                     animationId = null;
@@ -797,7 +797,7 @@
             function touchMove(event) {
                 if (!isDragging) return;
 
-                
+
                 event.preventDefault();
 
                 const currentX = event.touches[0].clientX;
@@ -805,7 +805,7 @@
                 const now = performance.now();
                 const dt = now - lastTime;
 
-                
+
                 if (dt > 0) {
                     velocity = diff / dt * 16;
                 }
@@ -814,10 +814,10 @@
                 lastPos = currentX;
                 lastTime = now;
 
-                
+
                 track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
 
-                
+
                 if (currentPosition >= totalCards * 2 * cardWidth) {
                     currentPosition -= totalCards * cardWidth;
                     track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
@@ -832,11 +832,11 @@
                 isDragging = false;
                 track.classList.remove('dragging');
 
-                
+
                 if (Math.abs(velocity) > 0.5) {
                     applyInertia();
                 } else {
-                    
+
                     if (resumeTimeout) clearTimeout(resumeTimeout);
                     resumeTimeout = setTimeout(() => {
                         isPaused = false;
@@ -853,7 +853,7 @@
                 function inertiaStep() {
                     if (Math.abs(velocity) < 0.1) {
                         inertiaId = null;
-                        
+
                         if (resumeTimeout) clearTimeout(resumeTimeout);
                         resumeTimeout = setTimeout(() => {
                             isPaused = false;
@@ -867,7 +867,7 @@
                     currentPosition -= velocity;
                     velocity *= friction;
 
-                    
+
                     if (currentPosition >= totalCards * 2 * cardWidth) {
                         currentPosition -= totalCards * cardWidth;
                     } else if (currentPosition < totalCards * cardWidth) {
@@ -886,14 +886,14 @@
             track.addEventListener('touchmove', touchMove, { passive: false });
             track.addEventListener('touchend', touchEnd, { passive: true });
 
-            
+
             const addScrolledClass = () => {
                 carouselContainer.classList.add('scrolled');
                 grid.closest('.clients-carousel')?.classList.add('scrolled');
             };
 
             track.addEventListener('touchstart', addScrolledClass, { once: true, passive: true });
-            carouselContainer.addEventListener('scroll', addScrolledClass, { once: true }); 
+            carouselContainer.addEventListener('scroll', addScrolledClass, { once: true });
 
             if (carouselContainer) {
                 carouselContainer.addEventListener('scroll', () => {
@@ -903,19 +903,19 @@
         }
 
 
-        
-        
-        
+
+
+
         function initLightbox() {
             const lightbox = document.getElementById('image-lightbox');
             const wrapper = document.getElementById('lightbox-wrapper');
             const zoomSlider = document.getElementById('zoom-slider');
 
-            
+
             document.getElementById('lightbox-close')?.addEventListener('click', closeLightbox);
             document.getElementById('lightbox-overlay')?.addEventListener('click', closeLightbox);
 
-            
+
             document.addEventListener('keydown', (e) => {
                 if (!lightbox.classList.contains('active')) return;
                 if (e.key === 'Escape') closeLightbox();
@@ -923,11 +923,11 @@
                 if (e.key === 'ArrowRight') navigateLightbox(1);
             });
 
-            
+
             document.getElementById('lightbox-prev')?.addEventListener('click', () => navigateLightbox(-1));
             document.getElementById('lightbox-next')?.addEventListener('click', () => navigateLightbox(1));
 
-            
+
             if (zoomSlider) {
                 zoomSlider.addEventListener('input', (e) => {
                     zoomLevel = parseInt(e.target.value) / 100;
@@ -937,7 +937,7 @@
                 });
             }
 
-            
+
             document.getElementById('zoom-in-btn')?.addEventListener('click', () => {
                 setZoomLevel(Math.min(2, zoomLevel + 0.05));
             });
@@ -946,7 +946,7 @@
                 setZoomLevel(Math.max(1, zoomLevel - 0.05));
             });
 
-            
+
             if (wrapper) {
                 wrapper.addEventListener('wheel', (e) => {
                     e.preventDefault();
@@ -954,12 +954,12 @@
                     setZoomLevel(Math.min(2, Math.max(1, zoomLevel + delta)));
                 }, { passive: false });
 
-                
+
                 wrapper.addEventListener('dblclick', () => {
                     setZoomLevel(zoomLevel > 1 ? 1 : 1.5);
                 });
 
-                
+
                 wrapper.addEventListener('mousedown', (e) => {
                     e.preventDefault();
                     isDragging = true;
@@ -984,7 +984,7 @@
                     wrapper.classList.remove('dragging');
                 });
 
-                
+
                 wrapper.addEventListener('touchstart', handleTouchStart, { passive: false });
                 wrapper.addEventListener('touchmove', handleTouchMove, { passive: false });
                 wrapper.addEventListener('touchend', () => { isDragging = false; lastTouchDistance = 0; });
@@ -1052,12 +1052,12 @@
             const image = document.getElementById('lightbox-image');
             if (!image || zoomLevel <= 1) { translateX = 0; translateY = 0; return; }
 
-            
+
             const displayedWidth = image.offsetWidth;
             const displayedHeight = image.offsetHeight;
 
-            
-            
+
+
             const maxPanX = (displayedWidth * (zoomLevel - 1)) / 2;
             const maxPanY = (displayedHeight * (zoomLevel - 1)) / 2;
 
@@ -1081,10 +1081,10 @@
             const image = document.getElementById('lightbox-image');
             const watermark = document.getElementById('lightbox-watermark-overlay');
             if (image) {
-                
+
                 const transformValue = `scale(${zoomLevel}) translate(${translateX / zoomLevel}px, ${translateY / zoomLevel}px)`;
                 image.style.transform = transformValue;
-                
+
                 if (watermark) {
                     watermark.style.transform = transformValue;
                 }
@@ -1098,7 +1098,7 @@
 
             currentLightboxIndex = index;
 
-            
+
             if (thumbsContainer) {
                 thumbsContainer.innerHTML = lightboxImages.map((src, i) => `
                     <div class="lightbox-thumb ${i === currentLightboxIndex ? 'active' : ''}" data-index="${i}">
