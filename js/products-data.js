@@ -1484,9 +1484,9 @@ const products = [
         name: "México 2026 Visitante",
         category: "futbol",
         league: "selecciones",
-        image: "/assets/productos/Yupoo/216442511/1.webp",
+        image: "/assets/productos/Yupoo/216442511/2.webp",
         images: [
-            "/assets/productos/Yupoo/216442511/2.webp"
+            "/assets/productos/Yupoo/216442511/1.webp"
         ],
         temporada: "2026",
         tipo: "visitante"

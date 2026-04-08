@@ -703,26 +703,35 @@ function loadRelatedProducts() {
 
     
     const getSecondaryImage = (p) => {
-        if (p.images && p.images.length > 0) {
-            return p.images[0];
-        }
+        if (p.images && p.images.length > 0) return p.images[0];
         return p.image; 
     };
 
     const getWebp = (url) => url ? url.replace(/\.(png|jpe?g)$/i, '.webp') : url;
 
-    const cardsHtml = finalRelated.map(p => `
+    const cardsHtml = finalRelated.map((p, index) => {
+        // Carga Inteligente (Smart Loading)
+        // Las 2 primeras tarjetas son visibles en viewport casi de inmediato. Las priorizamos.
+        const isPriority = index < 2;
+        const loadAttr = isPriority ? '' : 'loading="lazy"';
+        const decodeAttr = isPriority ? 'decoding="sync"' : 'decoding="async"';
+        const priorityAttr = isPriority ? 'fetchpriority="high"' : '';
+        
+        return `
         <article class="product-card">
-            <div class="product-image">
+            <!-- Skeleton genérico durante la carga para evitar vacío (LCP fix) -->
+            <div class="product-image skeleton-wrap">
                 <span class="badge-sale">OFERTA</span>
                 <a href="/pages/producto.html?id=${p.id}" class="related-link">
                     <picture>
-                        <source srcset="${getWebp(p.image)}" sizes="(max-width: 480px) 70vw, (max-width: 768px) 58vw, 200px" type="image/webp">
-                        <img class="primary-image" src="${p.image}" alt="${p.name}" loading="lazy" decoding="async">
+                        <!-- Forzamos thumbnail de 400px para drástica mejora de network -->
+                        <source srcset="${getWebp(p.image)}?w=400 400w" sizes="(max-width: 768px) 58vw, 200px" type="image/webp">
+                        <img class="primary-image" src="${p.image}?w=400" alt="${p.name}" ${loadAttr} ${decodeAttr} ${priorityAttr} onload="this.closest('.product-image').classList.remove('skeleton-wrap')" onerror="this.closest('.product-image').classList.remove('skeleton-wrap')">
                     </picture>
                     <picture>
-                        <source srcset="${getWebp(getSecondaryImage(p))}" sizes="(max-width: 480px) 70vw, (max-width: 768px) 58vw, 200px" type="image/webp">
-                        <img class="secondary-image" src="${getSecondaryImage(p)}" alt="${p.name}" loading="lazy" decoding="async">
+                        <!-- La imagen secundaria siempre es lazy porque requiere hover manual del usuario -->
+                        <source srcset="${getWebp(getSecondaryImage(p))}?w=400 400w" sizes="(max-width: 768px) 58vw, 200px" type="image/webp">
+                        <img class="secondary-image" src="${getSecondaryImage(p)}?w=400" alt="${p.name}" loading="lazy" decoding="async">
                     </picture>
                 </a>
             </div>
@@ -735,7 +744,8 @@ function loadRelatedProducts() {
                 </div>
             </div>
         </article>
-    `).join('');
+        `;
+    }).join('');
 
     grid.innerHTML = `
         <div class="carousel-container">
