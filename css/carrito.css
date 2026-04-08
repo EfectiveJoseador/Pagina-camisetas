@@ -32,32 +32,40 @@
     gap: 1.5rem;
     background: var(--bg-card);
     padding: 1.5rem;
-    border-radius: var(--radius-md);
+    border-radius: var(--radius-lg);
     border: 1px solid var(--border);
     align-items: center;
     transition: transform 0.3s ease, border-color 0.3s, box-shadow 0.3s;
 }
 
 .cart-item:hover {
-
-    transform: translateX(8px) translateY(-3px);
+    transform: translateY(-4px);
     border-color: rgba(99, 102, 241, 0.4);
-    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12),
-        0 0 20px rgba(99, 102, 241, 0.15);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1),
+        0 0 20px rgba(99, 102, 241, 0.1);
 }
 
 .cart-item-img {
-    width: 80px;
-    height: 80px;
-    object-fit: cover;
-
+    width: 90px;
+    height: 90px;
+    object-fit: contain;
     background: var(--bg-body);
-    border-radius: var(--radius-sm);
+    border-radius: 12px;
+    padding: 5px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
 
+.cart-item-content {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    justify-content: space-between;
+    gap: 0.5rem;
 }
 
 .cart-item-info {
-    flex: 1;
+    display: flex;
+    flex-direction: column;
 }
 
 .cart-item-title {
@@ -87,39 +95,49 @@
 }
 
 .cart-item-meta {
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     color: var(--text-muted);
+    line-height: 1.4;
     margin-bottom: 0.5rem;
 }
 
-.cart-item-price {
-    font-weight: 700;
+.cart-item-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 0.5rem;
 }
 
-.cart-item-actions {
+.cart-item-controls {
     display: flex;
-    flex-direction: column;
-    align-items: flex-end;
-    gap: 1rem;
+    gap: 1.25rem;
+    align-items: center;
+}
+
+.cart-item-price {
+    font-weight: 800;
+    font-size: 1.2rem;
+    color: var(--text-main);
 }
 
 .btn-remove {
-    color: #ef4444;
-    font-size: 0.9rem;
-    text-decoration: underline;
+    color: var(--text-muted);
+    font-size: 1.1rem;
     background: none;
     border: none;
     cursor: pointer;
-    padding: 0;
-    transition: color 0.2s;
+    padding: 0.4rem;
+    transition: all 0.2s ease;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .btn-remove:hover {
-    color: #dc2626;
-
+    color: #ef4444;
+    background: rgba(239, 68, 68, 0.1);
     animation: shakeSubtle 0.4s ease;
-    text-decoration: underline;
-    font-weight: 700;
 }
 
 

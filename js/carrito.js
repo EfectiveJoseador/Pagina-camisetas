@@ -273,22 +273,26 @@ const Cart = {
                 <a href="/pages/producto.html?id=${product.id}" class="cart-item-link">
                     <img src="${product.image}" alt="${product.name}" class="cart-item-img">
                 </a>
-                <div class="cart-item-info">
-                    <a href="/pages/producto.html?id=${product.id}" class="cart-item-title-link">
-                        <h3 class="cart-item-title">${product.name}</h3>
-                    </a>
-                    <div class="cart-item-meta">
-                        ${customDetails}
+                <div class="cart-item-content">
+                    <div class="cart-item-info">
+                        <a href="/pages/producto.html?id=${product.id}" class="cart-item-title-link">
+                            <h3 class="cart-item-title">${product.name}</h3>
+                        </a>
+                        <div class="cart-item-meta">
+                            ${customDetails}
+                        </div>
                     </div>
-                    <div class="cart-item-price">€${displayPrice.toFixed(2)}</div>
-                </div>
-                <div class="cart-item-actions">
-                    <div class="quantity-selector">
-                        <button class="qty-btn-minus" data-index="${index}">-</button>
-                        <input type="number" value="${qty}" readonly>
-                        <button class="qty-btn-plus" data-index="${index}">+</button>
+                    <div class="cart-item-footer">
+                        <div class="cart-item-controls">
+                            <div class="quantity-selector">
+                                <button class="qty-btn-minus" data-index="${index}" aria-label="Disminuir cantidad"><i class="fas fa-minus" style="font-size: 0.8rem"></i></button>
+                                <input type="number" value="${qty}" readonly>
+                                <button class="qty-btn-plus" data-index="${index}" aria-label="Aumentar cantidad"><i class="fas fa-plus" style="font-size: 0.8rem"></i></button>
+                            </div>
+                            <button class="btn-remove" data-index="${index}" title="Eliminar del carrito"><i class="fas fa-trash-alt"></i></button>
+                        </div>
+                        <div class="cart-item-price">€${displayPrice.toFixed(2)}</div>
                     </div>
-                    <button class="btn-remove" data-index="${index}">Eliminar</button>
                 </div>
             `;
             container.appendChild(el);
