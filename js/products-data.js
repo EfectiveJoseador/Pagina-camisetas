@@ -5079,7 +5079,7 @@ const products = [
     },
     {
         id: 604843,
-        name: "Valladolid 19/84 Local",
+        name: "Valladolid 1984 Local",
         slug: "valladolid-1984-local",
         category: "futbol",
         league: "laliga",
@@ -5087,7 +5087,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/604843/2.webp"
         ],
-        temporada: "19/84",
+        temporada: "1984",
         tipo: "local",
         price: 19.9,
         oldPrice: 25
@@ -5300,7 +5300,7 @@ const products = [
     },
     {
         id: 570309,
-        name: "Real Betis 19/93 Local Retro",
+        name: "Real Betis 1993 Local Retro",
         slug: "real-betis-1993-local-retro",
         category: "futbol",
         league: "laliga",
@@ -5308,7 +5308,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/570309/2.webp"
         ],
-        temporada: "19/93",
+        temporada: "1993",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -5396,7 +5396,7 @@ const products = [
     },
     {
         id: 347048,
-        name: "Real Betis 19/82 Local Retro",
+        name: "Real Betis 1982 Local Retro",
         slug: "real-betis-1982-local-retro",
         category: "futbol",
         league: "laliga",
@@ -5404,7 +5404,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/347048/2.webp"
         ],
-        temporada: "19/82",
+        temporada: "1982",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -5516,7 +5516,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/559147/2.webp"
         ],
-        temporada: "19/98",
+        temporada: "1998",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -5664,7 +5664,7 @@ const products = [
     },
     {
         id: 411202,
-        name: "Brasil 19/98 Portero Retro",
+        name: "Brasil 1998 Portero Retro",
         slug: "brasil-1998-portero-retro",
         category: "futbol",
         league: "selecciones",
@@ -5672,7 +5672,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/411202/2.webp"
         ],
-        temporada: "19/98",
+        temporada: "1998",
         tipo: "portero",
         retro: true,
         price: 24.9,
@@ -5712,7 +5712,7 @@ const products = [
     },
     {
         id: 242200,
-        name: "Nigeria 19/94 Local Retro",
+        name: "Nigeria 1994 Local Retro",
         slug: "nigeria-1994-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -5720,7 +5720,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/242200/2.webp"
         ],
-        temporada: "19/94",
+        temporada: "1994",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -5744,7 +5744,7 @@ const products = [
     },
     {
         id: 709296,
-        name: "Inglaterra 19/98 Visitante Retro",
+        name: "Inglaterra 1998 Visitante Retro",
         slug: "inglaterra-1998-visitante-retro",
         category: "futbol",
         league: "selecciones",
@@ -5752,7 +5752,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/709296/2.webp"
         ],
-        temporada: "19/98",
+        temporada: "1998",
         tipo: "visitante",
         retro: true,
         price: 24.9,
@@ -5776,7 +5776,7 @@ const products = [
     },
     {
         id: 322496,
-        name: "Nigeria 19/98 Visitante Retro",
+        name: "Nigeria 1998 Visitante Retro",
         slug: "nigeria-1998-visitante-retro",
         category: "futbol",
         league: "selecciones",
@@ -5784,7 +5784,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/322496/2.webp"
         ],
-        temporada: "19/98",
+        temporada: "1998",
         tipo: "visitante",
         retro: true,
         price: 24.9,
@@ -5888,7 +5888,7 @@ const products = [
     },
     {
         id: 412045,
-        name: "Suecia 19/94 Local Retro",
+        name: "Suecia 1994 Local Retro",
         slug: "suecia-1994-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -5896,7 +5896,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/412045/2.webp"
         ],
-        temporada: "19/94",
+        temporada: "1994",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -5904,7 +5904,7 @@ const products = [
     },
     {
         id: 299474,
-        name: "Suecia 19/94 Visitante Retro",
+        name: "Suecia 1994 Visitante Retro",
         slug: "suecia-1994-visitante-retro",
         category: "futbol",
         league: "selecciones",
@@ -5912,7 +5912,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/299474/2.webp"
         ],
-        temporada: "19/94",
+        temporada: "1994",
         tipo: "visitante",
         retro: true,
         price: 24.9,
@@ -5936,7 +5936,7 @@ const products = [
     },
     {
         id: 211338,
-        name: "Rumania 19/94 Local Retro",
+        name: "Rumania 1994 Local Retro",
         slug: "rumania-1994-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -5944,7 +5944,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/211338/2.webp"
         ],
-        temporada: "19/94",
+        temporada: "1994",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6016,7 +6016,7 @@ const products = [
     },
     {
         id: 121449,
-        name: "Real Madrid 19/86 Local Retro",
+        name: "Real Madrid 1986 Local Retro",
         slug: "real-madrid-1986-local-retro",
         category: "futbol",
         league: "laliga",
@@ -6024,7 +6024,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/121449/2.webp"
         ],
-        temporada: "19/86",
+        temporada: "1986",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6063,7 +6063,7 @@ const products = [
     },
     {
         id: 973754,
-        name: "España 19/96 Visitante Retro",
+        name: "España 1996 Visitante Retro",
         slug: "espana-1996-visitante-retro",
         category: "futbol",
         league: "selecciones",
@@ -6071,7 +6071,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/973754/2.webp"
         ],
-        temporada: "19/96",
+        temporada: "1996",
         tipo: "visitante",
         retro: true,
         price: 24.9,
@@ -6478,7 +6478,7 @@ const products = [
     },
     {
         id: 508708,
-        name: "Portugal 19/72 Local Retro",
+        name: "Portugal 1972 Local Retro",
         slug: "portugal-1972-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -6486,7 +6486,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/508708/2.webp"
         ],
-        temporada: "19/72",
+        temporada: "1972",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6494,7 +6494,7 @@ const products = [
     },
     {
         id: 205573,
-        name: "Colombia 19/90 Visitante Retro",
+        name: "Colombia 1990 Visitante Retro",
         slug: "colombia-1990-visitante-retro",
         category: "futbol",
         league: "selecciones",
@@ -6502,7 +6502,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/205573/2.webp"
         ],
-        temporada: "19/90",
+        temporada: "1990",
         tipo: "visitante",
         retro: true,
         price: 24.9,
@@ -6510,7 +6510,7 @@ const products = [
     },
     {
         id: 909022,
-        name: "Irlanda 19/98 Local Retro",
+        name: "Irlanda 1998 Local Retro",
         slug: "irlanda-1998-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -6518,7 +6518,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/909022/2.webp"
         ],
-        temporada: "19/98",
+        temporada: "1998",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6558,7 +6558,7 @@ const products = [
     },
     {
         id: 846528,
-        name: "Finland 19/82 Local Retro",
+        name: "Finland 1982 Local Retro",
         slug: "finland-1982-local-retro",
         category: "futbol",
         league: "otros",
@@ -6566,7 +6566,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/846528/2.webp"
         ],
-        temporada: "19/82",
+        temporada: "1982",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6574,7 +6574,7 @@ const products = [
     },
     {
         id: 247102,
-        name: "Escocia 19/98 Local Retro",
+        name: "Escocia 1998 Local Retro",
         slug: "escocia-1998-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -6582,7 +6582,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/247102/2.webp"
         ],
-        temporada: "19/98",
+        temporada: "1998",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6622,7 +6622,7 @@ const products = [
     },
     {
         id: 784592,
-        name: "Holanda 19/88 Local Retro",
+        name: "Holanda 1988 Local Retro",
         slug: "holanda-1988-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -6630,7 +6630,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/784592/2.webp"
         ],
-        temporada: "19/88",
+        temporada: "1988",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6638,7 +6638,7 @@ const products = [
     },
     {
         id: 885507,
-        name: "Brasil 19/84 Local Retro",
+        name: "Brasil 1984 Local Retro",
         slug: "brasil-1984-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -6646,7 +6646,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/885507/2.webp"
         ],
-        temporada: "19/84",
+        temporada: "1984",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6717,7 +6717,7 @@ const products = [
     },
     {
         id: 443170,
-        name: "Brasil 19/97 Visitante Retro",
+        name: "Brasil 1997 Visitante Retro",
         slug: "brasil-1997-visitante-retro",
         category: "futbol",
         league: "selecciones",
@@ -6725,7 +6725,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/443170/2.webp"
         ],
-        temporada: "19/97",
+        temporada: "1997",
         tipo: "visitante",
         retro: true,
         price: 24.9,
@@ -6765,7 +6765,7 @@ const products = [
     },
     {
         id: 598668,
-        name: "Brasil 19/88 Local Retro",
+        name: "Brasil 1988 Local Retro",
         slug: "brasil-1988-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -6773,7 +6773,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/598668/2.webp"
         ],
-        temporada: "19/88",
+        temporada: "1988",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6797,7 +6797,7 @@ const products = [
     },
     {
         id: 119268,
-        name: "Brasil 19/98 Portero Retro",
+        name: "Brasil 1998 Portero Retro",
         slug: "brasil-1998-portero-retro",
         category: "futbol",
         league: "selecciones",
@@ -6805,7 +6805,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/119268/2.webp"
         ],
-        temporada: "19/98",
+        temporada: "1998",
         tipo: "portero",
         retro: true,
         price: 24.9,
@@ -6829,7 +6829,7 @@ const products = [
     },
     {
         id: 426072,
-        name: "Norway 19/98 Local Retro",
+        name: "Norway 1998 Local Retro",
         slug: "norway-1998-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -6837,7 +6837,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/426072/2.webp"
         ],
-        temporada: "19/98",
+        temporada: "1998",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6845,7 +6845,7 @@ const products = [
     },
     {
         id: 255475,
-        name: "Argentina 19/93 Local Retro",
+        name: "Argentina 1993 Local Retro",
         slug: "argentina-1993-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -6853,7 +6853,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/255475/2.webp"
         ],
-        temporada: "19/93",
+        temporada: "1993",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6861,7 +6861,7 @@ const products = [
     },
     {
         id: 573019,
-        name: "Brasil 19/70 Local Retro",
+        name: "Brasil 1970 Local Retro",
         slug: "brasil-1970-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -6869,7 +6869,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/573019/2.webp"
         ],
-        temporada: "19/70",
+        temporada: "1970",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6908,7 +6908,7 @@ const products = [
     },
     {
         id: 145975,
-        name: "Inglaterra 19/82 Local Retro",
+        name: "Inglaterra 1982 Local Retro",
         slug: "inglaterra-1982-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -6916,7 +6916,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/145975/2.webp"
         ],
-        temporada: "19/82",
+        temporada: "1982",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6924,7 +6924,7 @@ const products = [
     },
     {
         id: 747146,
-        name: "Inglaterra 19/84 Local Retro",
+        name: "Inglaterra 1984 Local Retro",
         slug: "inglaterra-1984-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -6932,7 +6932,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/747146/2.webp"
         ],
-        temporada: "19/84",
+        temporada: "1984",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -6940,7 +6940,7 @@ const products = [
     },
     {
         id: 771245,
-        name: "Inglaterra 19/96 Retro",
+        name: "Inglaterra 1996 Retro",
         slug: "inglaterra-1996-retro",
         category: "futbol",
         league: "selecciones",
@@ -6948,14 +6948,14 @@ const products = [
         images: [
             "/assets/productos/Yupoo/771245/2.webp"
         ],
-        temporada: "19/96",
+        temporada: "1996",
         retro: true,
         price: 24.9,
         oldPrice: 30
     },
     {
         id: 603168,
-        name: "Inglaterra 19/96 Local Retro",
+        name: "Inglaterra 1996 Local Retro",
         slug: "inglaterra-1996-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -6963,7 +6963,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/603168/2.webp"
         ],
-        temporada: "19/96",
+        temporada: "1996",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -7001,7 +7001,7 @@ const products = [
     },
     {
         id: 238609,
-        name: "Holanda 19/91 Local Retro",
+        name: "Holanda 1991 Local Retro",
         slug: "holanda-1991-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -7009,7 +7009,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/238609/2.webp"
         ],
-        temporada: "19/91",
+        temporada: "1991",
         tipo: "local",
         retro: true,
         price: 24.9,
@@ -7017,7 +7017,7 @@ const products = [
     },
     {
         id: 851563,
-        name: "España 19/94 Local Retro",
+        name: "España 1994 Local Retro",
         slug: "espana-1994-local-retro",
         category: "futbol",
         league: "selecciones",
@@ -7025,7 +7025,7 @@ const products = [
         images: [
             "/assets/productos/Yupoo/851563/2.webp"
         ],
-        temporada: "19/94",
+        temporada: "1994",
         tipo: "local",
         retro: true,
         price: 24.9,
