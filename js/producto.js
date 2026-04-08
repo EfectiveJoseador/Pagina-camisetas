@@ -102,7 +102,10 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('breadcrumb-name').textContent = product.name;
     document.getElementById('product-category').textContent = product.category;
     document.getElementById('product-name').textContent = product.name;
-    document.getElementById('product-price').textContent = `€${product.price.toFixed(2)}`;
+    // Eliminar skeleton del precio antes de mostrar el valor real (CLS fix)
+    const priceEl = document.getElementById('product-price');
+    priceEl.classList.remove('skeleton');
+    priceEl.textContent = `€${product.price.toFixed(2)}`;
 
 
     if (product.oldPrice) {
@@ -115,7 +118,19 @@ document.addEventListener('DOMContentLoaded', () => {
     mainImg.src = product.image;
     mainImg.alt = product.imageAlt || product.name;
 
-    
+    // Eliminar skeleton de imagen cuando cargue (CLS fix)
+    const mainImageContainer = document.querySelector('.main-image');
+    const removeSkeleton = () => {
+        mainImageContainer?.classList.remove('skeleton-wrap');
+        mainImg.style.opacity = '1';
+        mainImg.style.transition = 'opacity 0.25s ease';
+    };
+    if (mainImg.complete && mainImg.naturalWidth > 0) {
+        removeSkeleton();
+    } else {
+        mainImg.addEventListener('load', removeSkeleton, { once: true });
+        mainImg.addEventListener('error', removeSkeleton, { once: true });
+    }
     mainImg.onerror = function () {
         this.onerror = null;
         this.src = '/assets/images/placeholder-jersey.webp';
@@ -222,16 +237,10 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // Mantener compatibilidad con size-btn por si existen
-    document.querySelectorAll('.size-btn').forEach(btn => {
-        btn.addEventListener('click', () => {
-            document.querySelectorAll('.size-btn').forEach(b => b.classList.remove('active'));
-            btn.classList.add('active');
-            selectedSize = btn.dataset.size;
-            if (sizeSelect) sizeSelect.value = selectedSize;
-            updatePreview();
-        });
-    });
+    // --- Dead code: size-btn (botones físicos). No se usan en producción
+    // (el selector activo es #size-select). Se mantiene por compatibilidad.
+    // document.querySelectorAll('.size-btn').forEach(btn => { ... });
+
     const qtyInput = document.getElementById('qty-input');
     document.getElementById('qty-minus').addEventListener('click', () => {
         const currentValue = parseInt(qtyInput.value);
@@ -502,6 +511,13 @@ function addToCart() {
         return;
     }
 
+    // Feedback inmediato: bloquear doble-tap y dar respuesta visual (INP fix)
+    const cartBtn = document.getElementById('add-to-cart-btn');
+    if (cartBtn) {
+        cartBtn.classList.add('adding');
+        setTimeout(() => cartBtn.classList.remove('adding'), 600);
+    }
+
     const name = document.getElementById('name-input').value.trim();
     const number = document.getElementById('number-input').value;
     const hasName = name.length > 0;
@@ -698,16 +714,16 @@ function loadRelatedProducts() {
             <div class="product-image">
                 <span class="badge-sale">OFERTA</span>
                 <a href="/pages/producto.html?id=${p.id}">
-                    <img class="primary-image" src="${p.image}" alt="${p.name}" loading="lazy">
-                    <img class="secondary-image" src="${getSecondaryImage(p)}" alt="${p.name}" loading="lazy">
+                    <img class="primary-image" src="${p.image}" alt="${p.name}" loading="lazy" decoding="async">
+                    <img class="secondary-image" src="${getSecondaryImage(p)}" alt="${p.name}" loading="lazy" decoding="async">
                 </a>
             </div>
             <div class="product-info">
                 <span class="product-category">${p.category}</span>
                 <h3 class="product-title">${p.name}</h3>
                 <div class="product-price">
-                    <span class="price-old">€${p.oldPrice.toFixed(2)}</span>
                     <span class="price">€${p.price.toFixed(2)}</span>
+                    <span class="price-old">€${p.oldPrice.toFixed(2)}</span>
                 </div>
             </div>
         </article>
@@ -728,7 +744,16 @@ function loadRelatedProducts() {
             </button>
         </div>
     `;
+    if (isMobileCarousel()) {
+        // En móvil: scroll nativo CSS (cero JS lag)
+        // Los clon es no se necesitan y el JS de infinite loop no se inicia
+        return;
+    }
     initRelatedCarousel();
+}
+
+function isMobileCarousel() {
+    return window.matchMedia('(max-width: 768px)').matches;
 }
 
 function initRelatedCarousel() {
@@ -742,7 +767,8 @@ function initRelatedCarousel() {
     const originalCards = Array.from(track.querySelectorAll('.product-card'));
     if (originalCards.length === 0) return;
 
-    const cardWidth = 220 + 24;
+    // Ancho de tarjeta actualizado: 200px card + 16px gap (1rem)
+    const cardWidth = 200 + 16;
     const totalCards = originalCards.length;
 
     

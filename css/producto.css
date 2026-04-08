@@ -146,6 +146,8 @@
     gap: 0.75rem;
     justify-content: flex-start;
     padding: 0.5rem 0;
+    /* Reservar espacio (82px = thumb 70px + padding) → evita CLS cuando se generan dinámicamente */
+    min-height: 82px;
     animation: slideUp 0.8s cubic-bezier(0.22, 1, 0.36, 1) 0.2s backwards;
 }
 
@@ -365,6 +367,17 @@
     margin-bottom: 2rem;
 }
 
+/* touch-action en todos los controles táctiles para eliminar 300ms delay */
+.actions-block button,
+.quantity-selector button,
+.btn-add-cart-lg,
+.size-guide-link,
+.gallery-arrow,
+.thumb,
+.carousel-arrow {
+    touch-action: manipulation;
+}
+
 .quantity-selector {
     display: flex;
     align-items: center;
@@ -405,17 +418,18 @@
 
 .btn-add-cart-lg {
     flex: 1;
-    background: var(--primary);
-    color: white;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #ffffff;
     font-weight: 700;
     border-radius: 10px;
     font-size: 1.1rem;
-    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+    /* 0.18s: punto óptimo de feedback percibido (INP) */
+    transition: all 0.18s cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
     overflow: hidden;
     border: none;
     cursor: pointer;
-    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.35);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -424,6 +438,8 @@
     padding: 0.85rem 1.5rem;
     letter-spacing: 0.01em;
     white-space: nowrap;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 
@@ -444,9 +460,22 @@
 
 .btn-add-cart-lg:hover {
     transform: scale(1.02);
-
     box-shadow: 0 10px 35px rgba(99, 102, 241, 0.6),
         0 0 50px rgba(99, 102, 241, 0.4);
+}
+
+/* Micro-interacción: press feedback inmediato en móvil */
+.btn-add-cart-lg:active {
+    transform: scale(0.97);
+    box-shadow: 0 2px 10px rgba(99, 102, 241, 0.3);
+    transition: transform 0.08s ease, box-shadow 0.08s ease;
+}
+
+/* Feedback visual mientras se procesa la adición al carrito */
+.btn-add-cart-lg.adding {
+    opacity: 0.85;
+    pointer-events: none;
+    transform: scale(0.98);
 }
 
 
@@ -510,12 +539,10 @@
 
 .carousel-track {
     display: flex;
-    gap: 1.5rem;
-    
+    gap: 1rem;
     transition: none;
-    padding-top: 15px;
-    margin-top: -15px;
-    
+    padding: 8px 4px 16px;
+    /* GPU layer dedicada: cero compositing overhead */
     will-change: transform;
     transform: translate3d(0, 0, 0);
     -webkit-backface-visibility: hidden;
@@ -602,113 +629,148 @@
 }
 
 
+/* ================================================
+   TARJETAS RELATED PRODUCTS — Rediseño profesional
+   ================================================ */
 .related-products .product-card {
-    min-width: 220px;
-    max-width: 220px;
-    width: 220px;
+    min-width: 200px;
+    max-width: 200px;
+    width: 200px;
     flex-shrink: 0;
     display: flex;
     flex-direction: column;
     position: relative;
     z-index: 1;
     animation: none;
+    /* Card container */
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1); /* Sombra optimizada para rendimiento */
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    /* Equal-height: flex col + height fijo = altura uniforme */
+    height: 100%;
+    cursor: pointer;
+    /* GPU por tarjeta para animación de hover sin repaint y fluidez extrema */
+    will-change: transform;
+    transform: translateZ(0); /* Forzar aceleración por hardware */
 }
 
 .related-products .product-card:hover {
+    transform: translateY(-4px) scale(1.02);
+    box-shadow:
+        0 8px 30px rgba(0, 0, 0, 0.25),
+        0 0 0 1px rgba(99, 102, 241, 0.2);
+    border-color: rgba(99, 102, 241, 0.3);
     z-index: 10;
 }
 
 .related-products .product-image {
     position: relative;
     width: 100%;
-    padding-top: 100%;
+    /* aspect-ratio reserva espacio sin padding-top hack */
+    aspect-ratio: 1 / 1;
     overflow: hidden;
     background: var(--bg-body);
+    /* Sin border-radius: el card ya tiene overflow:hidden + radius */
 }
-
 
 .related-products .product-image a {
     position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
+    inset: 0;
     display: block;
 }
 
-
 .related-products .product-image img.primary-image {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.3s ease, transform 0.3s ease;
     z-index: 2;
 }
 
-
 .related-products .product-image img.secondary-image {
     position: absolute;
-    top: 0;
-    left: 0;
+    inset: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
     object-position: center;
     opacity: 0;
-    transition: opacity 0.4s ease;
+    transition: opacity 0.3s ease;
     z-index: 1;
 }
 
-
 .related-products .product-card:hover .product-image img.primary-image {
     opacity: 0;
+    transform: scale(1.04);
 }
 
 .related-products .product-card:hover .product-image img.secondary-image {
     opacity: 1;
 }
 
-
 @media (hover: none) {
-
     .related-products .product-image img.primary-image,
     .related-products .product-image img.secondary-image {
         transition: none;
     }
-
     .related-products .product-card:hover .product-image img.primary-image {
         opacity: 1;
+        transform: none;
     }
-
     .related-products .product-card:hover .product-image img.secondary-image {
         opacity: 0;
     }
-
-    .related-products .product-card:hover .product-image img {
-        transform: none;
-    }
 }
 
+/* Badge OFERTA: esquina superior derecha dentro del card */
+.related-products .badge-sale {
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    z-index: 5;
+    padding: 0.2rem 0.5rem;
+    font-size: 0.68rem;
+    font-weight: 700;
+    letter-spacing: 0.04em;
+    border-radius: 5px;
+}
+
+/* Info block: dentro del card, fondo del card, alineación central como en tienda */
 .related-products .product-info {
-    padding: 0.75rem;
+    padding: 1rem;
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
     text-align: center;
     flex-grow: 1;
+    background: var(--bg-card);
+}
+
+.related-products .product-category {
+    font-size: 0.75rem;
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    color: var(--text-muted);
+    font-weight: 500;
+    display: none; /* Oculto como en el index para más limpieza visual */
 }
 
 .related-products .product-title {
-    font-size: 0.85rem;
+    font-family: var(--font-main);
+    font-size: 0.9rem;
     font-weight: 600;
     margin: 0;
-    line-height: 1.3;
-    min-height: 2.6em;
-    max-height: 2.6em;
+    color: var(--text-main);
+    line-height: 1.35;
+    /* Clamp a 2 líneas: garantiza equal-height */
+    min-height: 2.7em;
+    max-height: 2.7em;
     display: -webkit-box;
     -webkit-line-clamp: 2;
     line-clamp: 2;
@@ -717,18 +779,40 @@
 }
 
 .related-products .product-price {
-    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: auto;
+    padding-top: 0.35rem;
     font-weight: 700;
+    font-size: 1.1rem;
+}
+
+.related-products .price {
+    color: #a855f7;
+    font-weight: 800;
+    font-size: 1.15rem;
+    animation: priceGlow 2.5s ease-in-out infinite;
 }
 
 .related-products .price-old {
-    font-size: 0.8rem;
-    margin-right: 0.5rem;
+    font-size: 0.85rem;
+    font-weight: 400;
+    color: var(--text-muted);
+    text-decoration: line-through;
+    opacity: 0.7;
+    margin-right: 0;
 }
 
-.related-products .badge-sale {
-    padding: 0.2rem 0.4rem;
-    font-size: 0.7rem;
+@keyframes priceGlow {
+    0%,
+    100% {
+        text-shadow: 0 0 5px rgba(168, 85, 247, 0.2);
+    }
+    50% {
+        text-shadow: 0 0 12px rgba(168, 85, 247, 0.5);
+    }
 }
 
 
@@ -771,7 +855,6 @@
         flex-direction: column;
     }
 
-
     .quantity-selector {
         width: 100%;
         justify-content: space-between;
@@ -795,13 +878,18 @@
         width: 100%;
     }
 
-
+    /* Móvil: carrusel nativo con scroll-snap */
     .carousel-container {
-        padding: 0 1rem;
-        padding-right: 0;
-        
-        overflow: hidden;
-        
+        /* scroll nativo: cero JS lag */
+        overflow-x: auto;
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch;
+        scroll-snap-type: x mandatory;
+        scroll-behavior: smooth;
+        padding: 0 1rem 0.5rem;
+        /* Esconde scrollbar visualmente */
+        scrollbar-width: none;
+        -ms-overflow-style: none;
     }
 
     .carousel-container::-webkit-scrollbar {
@@ -809,37 +897,37 @@
     }
 
     .carousel-track {
-        
-        scroll-snap-align: start;
-        padding-right: 1rem;
-        
+        /* En móvil no usamos JS infinite loop — usamos scroll nativo */
+        gap: 0.75rem;
+        padding: 4px 0 12px;
     }
 
     .carousel-track .product-card {
-        scroll-snap-align: start;
+        scroll-snap-align: center;
     }
 
     .carousel-arrow {
         display: none;
     }
 
+    /* 1.5 tarjetas visibles en móvil (invita al scroll) */
     .related-products .product-card {
-        min-width: 45vw;
-        max-width: 45vw;
-        width: 45vw;
+        min-width: 58vw;
+        max-width: 58vw;
+        width: 58vw;
     }
 
-    
     .related-products {
         position: relative;
     }
 
+    /* Gradiente lateral derecho — indica que hay más contenido */
     .related-products::after {
         content: '';
         position: absolute;
         top: 60px;
         right: 0;
-        width: 50px;
+        width: 48px;
         height: calc(100% - 60px);
         background: linear-gradient(to left, var(--bg-body) 0%, transparent 100%);
         pointer-events: none;
@@ -848,7 +936,6 @@
         transition: opacity 0.3s ease;
     }
 
-    
     .related-products.scrolled::after {
         opacity: 0;
     }
@@ -860,13 +947,14 @@
 
 @media (max-width: 480px) {
     .carousel-container {
-        padding: 0 0.75rem;
+        padding: 0 0.75rem 0.5rem;
     }
 
+    /* En pantallas muy pequeñas: 1.25 tarjetas visibles */
     .related-products .product-card {
-        min-width: 45vw;
-        max-width: 45vw;
-        width: 45vw;
+        min-width: 70vw;
+        max-width: 70vw;
+        width: 70vw;
     }
 }
 
@@ -912,12 +1000,16 @@
     font-size: 0.85rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.18s ease;
     padding: 0.25rem 0.5rem;
     border-radius: var(--radius-sm);
     display: flex;
     align-items: center;
     gap: 0.35rem;
+    /* Touch target mínimo 44px (WCAG 2.5.8) */
+    min-height: 44px;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .size-guide-link:hover {
@@ -990,16 +1082,19 @@
     right: 1rem;
     background: var(--bg-body);
     border: 1px solid var(--border);
-    width: 35px;
-    height: 35px;
+    /* Touch target mínimo 44x44px */
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
     color: var(--text-main);
-    transition: all 0.2s ease;
+    transition: all 0.18s ease;
     z-index: 10;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .size-guide-close:hover {
@@ -1245,8 +1340,9 @@
 }
 
 .zoom-btn {
-    width: 28px;
-    height: 28px;
+    /* Touch target mínimo 44x44px (WCAG 2.5.8) */
+    width: 44px;
+    height: 44px;
     border-radius: 50%;
     background: rgba(255, 255, 255, 0.15);
     border: none;
@@ -1255,8 +1351,10 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 0.75rem;
-    transition: all 0.2s ease;
+    font-size: 0.9rem;
+    transition: all 0.18s ease;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .zoom-btn:hover {
