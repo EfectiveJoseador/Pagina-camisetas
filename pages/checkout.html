@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-theme="light">
 
 <head>
@@ -198,40 +198,6 @@
                 </div>
 
 
-                <div id="payment-section" class="checkout-section" style="display: none;">
-                    <h2>Método de Pago</h2>
-
-                    <div class="payment-methods">
-                        <label class="payment-option">
-                            <input type="radio" name="payment" value="paypal" checked>
-                            <span>PayPal</span>
-                            <i class="fab fa-paypal"></i>
-                        </label>
-
-                        <label class="payment-option">
-                            <input type="radio" name="payment" value="bizum">
-                            <span>Bizum</span>
-                            <i class="fas fa-mobile-alt"></i>
-                        </label>
-                    </div>
-
-
-                    <div id="bizum-form" style="display:none; margin-top:1.5rem;">
-                        <div
-                            style="background: linear-gradient(135deg, rgba(0, 150, 136, 0.1), rgba(0, 191, 165, 0.05)); border: 1px solid rgba(0, 191, 165, 0.3); border-radius: 12px; padding: 1.25rem; margin-bottom: 1rem;">
-                            <p style="color: var(--text-main); margin: 0 0 0.75rem 0; font-size: 0.9rem;">
-                                <i class="fas fa-info-circle" style="color: #00bfa5;"></i>
-                                Te contactaremos por Instagram para enviarte el número de Bizum y confirmar el pago.
-                            </p>
-                        </div>
-                    </div>
-
-
-                    <button type="button" id="confirm-order-btn" class="btn btn-block btn-primary"
-                        style="margin-top: 1.5rem;">
-                        <i class="fas fa-check-circle"></i> Confirmar Pedido
-                    </button>
-                </div>
             </section>
 
 
@@ -305,8 +271,42 @@
                     </div>
                 </div>
 
-                <div class="secure-badge" style="margin-top: 1rem;">
+                <div class="secure-badge" style="margin-top: 1rem; margin-bottom: 2rem;">
                     <i class="fas fa-lock"></i> Pago 100% Seguro
+                </div>
+
+                <div id="payment-section" class="checkout-section" style="display: none; box-shadow: none; border: none; padding: 0; background: transparent;">
+                    <h3 style="margin-bottom: 1rem;">Método de Pago</h3>
+
+                    <div class="payment-methods">
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="paypal" checked>
+                            <span>PayPal</span>
+                            <i class="fab fa-paypal"></i>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="bizum">
+                            <span>Bizum</span>
+                            <i class="fas fa-mobile-alt"></i>
+                        </label>
+                    </div>
+
+                    <div id="bizum-form" style="display:none; margin-top:1rem;">
+                        <div
+                            style="background: linear-gradient(135deg, rgba(0, 150, 136, 0.1), rgba(0, 191, 165, 0.05)); border: 1px solid rgba(0, 191, 165, 0.3); border-radius: 12px; padding: 1.25rem;">
+                            <p style="color: var(--text-main); margin: 0; font-size: 0.9rem;">
+                                <i class="fas fa-info-circle" style="color: #00bfa5;"></i>
+                                Te contactaremos por Instragram para enviarte el número de Bizum y confirmar el pago.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="checkout-action-wrapper">
+                        <button type="button" id="confirm-order-btn" class="btn btn-block btn-primary btn-sticky-mobile">
+                            <i class="fas fa-check-circle"></i> Confirmar Pedido
+                        </button>
+                    </div>
                 </div>
             </aside>
         </div>
