@@ -161,6 +161,8 @@ body.low-performance * {
     position: relative;
     z-index: 1;
     background-color: var(--bg-body);
+    padding-top: var(--section-gap);
+    padding-bottom: var(--section-gap);
 }
 
 .parallax-bg {
@@ -538,14 +540,14 @@ body.low-performance * {
 
 .catalogo-card {
     background: var(--bg-card);
-    border-radius: 12px;
+    border-radius: var(--radius-md);
     overflow: hidden;
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08); /* Sombra tenue */
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
     position: relative;
     display: flex;
     flex-direction: column;
-    border: 1px solid var(--border);
+    border: var(--card-border);
 }
 
 .catalogo-card-clickable {
@@ -617,13 +619,14 @@ body.low-performance * {
 
 
 .catalogo-info {
-    padding: 1rem 1.1rem 1.1rem;
+    padding: 1.25rem;
     display: flex;
     flex-direction: column;
     gap: 0.35rem;
     position: relative;
     background: var(--bg-card);
     flex-grow: 1;
+    text-align: left;
 }
 
 .catalogo-info h3 {
@@ -1119,12 +1122,12 @@ a.catalogo-btn:hover,
 
 .product-card {
     background: var(--bg-card);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-md);
     overflow: hidden;
     transition: all 0.4s cubic-bezier(0.22, 1, 0.36, 1);
-    box-shadow: var(--shadow-sm);
+    box-shadow: var(--shadow-sm); /* Sombra tenue basica */
     position: relative;
-    border: 1px solid var(--border);
+    border: var(--card-border);
     display: flex;
     flex-direction: column;
 }
@@ -1260,10 +1263,11 @@ a.catalogo-btn:hover,
 }
 
 .product-info {
-    padding: 1.5rem;
+    padding: 1.25rem;
     display: flex;
     flex-direction: column;
     flex-grow: 1;
+    text-align: left;
 }
 
 .product-category {
