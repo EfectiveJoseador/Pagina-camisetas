@@ -3691,16 +3691,16 @@ const products = [
     },
     {
         id: 973390,
-        name: "Olympique Lyon 26/27 Entrenamiento",
-        slug: "olympique-lyon-2627-entrenamiento",
+        name: "Flamengo 26/27 Polo",
+        slug: "flamengo-2627-polo",
         category: "futbol",
-        league: "ligue1",
+        league: "brasileirao",
         image: "/assets/productos/Yupoo/973390/1.webp",
         images: [
             "/assets/productos/Yupoo/973390/2.webp"
         ],
         temporada: "26/27",
-        tipo: "entrenamiento",
+        tipo: "polo",
         price: 19.9,
         oldPrice: 25
     },
@@ -6047,10 +6047,10 @@ const products = [
     },
     {
         id: 614133,
-        name: "Olympique Lyon 2014 Local",
-        slug: "olympique-lyon-2014-local",
+        name: "Colombia 2014 Local",
+        slug: "colombia-2014-local",
         category: "futbol",
-        league: "ligue1",
+        league: "selecciones",
         image: "/assets/productos/Yupoo/614133/1.webp",
         images: [
             "/assets/productos/Yupoo/614133/2.webp"
@@ -8875,6 +8875,266 @@ const products = [
         ],
         temporada: "1989",
         tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 379123,
+        name: "Paris FC 2025/26 Local",
+        slug: "paris-fc-202526-local",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/379123/1.webp",
+        images: [
+            "/assets/productos/Yupoo/379123/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 869302,
+        name: "PSG 1974 Local Retro",
+        slug: "psg-1974-local-retro",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/869302/1.webp",
+        images: [
+            "/assets/productos/Yupoo/869302/2.webp"
+        ],
+        temporada: "1974",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 782056,
+        name: "RC Lens 2025/26 Local",
+        slug: "rc-lens-202526-local",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/782056/1.webp",
+        images: [
+            "/assets/productos/Yupoo/782056/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 224898,
+        name: "RC Lens 2025/26 Visitante",
+        slug: "rc-lens-202526-visitante",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/224898/1.webp",
+        images: [
+            "/assets/productos/Yupoo/224898/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 995223,
+        name: "Paris FC 2025/26 Especial (Niño)",
+        slug: "paris-fc-202526-especial-nino",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/995223/1.webp",
+        images: [
+            "/assets/productos/Yupoo/995223/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "especial",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 504985,
+        name: "Lille OSC 2025/26",
+        slug: "lille-osc-202526",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/504985/1.webp",
+        images: [
+            "/assets/productos/Yupoo/504985/2.webp"
+        ],
+        temporada: "2025/26",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 816317,
+        name: "Lille OSC 2025/26 Local",
+        slug: "lille-osc-202526-local",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/816317/1.webp",
+        images: [
+            "/assets/productos/Yupoo/816317/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 941039,
+        name: "PSG 2025/26 Especial",
+        slug: "psg-202526-especial",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/941039/1.webp",
+        images: [
+            "/assets/productos/Yupoo/941039/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 401321,
+        name: "Paris FC 2025/26 Especial",
+        slug: "paris-fc-202526-especial",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/401321/1.webp",
+        images: [
+            "/assets/productos/Yupoo/401321/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 957446,
+        name: "Japón 2025/26",
+        slug: "japon-202526",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/957446/1.webp",
+        images: [
+            "/assets/productos/Yupoo/957446/2.webp"
+        ],
+        temporada: "2025/26",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 818274,
+        name: "Marseille 2011/12 Tercera Retro",
+        slug: "marseille-201112-tercera-retro",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/818274/1.webp",
+        images: [
+            "/assets/productos/Yupoo/818274/2.webp"
+        ],
+        temporada: "2011/12",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 980644,
+        name: "Olympique Lyon 2010/11 Local Retro",
+        slug: "olympique-lyon-201011-local-retro",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/980644/1.webp",
+        images: [
+            "/assets/productos/Yupoo/980644/2.webp"
+        ],
+        temporada: "2010/11",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 805946,
+        name: "PSG 1999/00 Visitante Retro",
+        slug: "psg-199900-visitante-retro",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/805946/1.webp",
+        images: [
+            "/assets/productos/Yupoo/805946/2.webp"
+        ],
+        temporada: "1999/00",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 444381,
+        name: "PSG 2017/18 Local Retro",
+        slug: "psg-201718-local-retro",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/444381/1.webp",
+        images: [
+            "/assets/productos/Yupoo/444381/2.webp"
+        ],
+        temporada: "2017/18",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 915572,
+        name: "PSG 2018/19 Retro",
+        slug: "psg-201819-retro",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/915572/1.webp",
+        images: [
+            "/assets/productos/Yupoo/915572/2.webp"
+        ],
+        temporada: "2018/19",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 708029,
+        name: "PSG 2019/20 Local Retro",
+        slug: "psg-201920-local-retro",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/708029/1.webp",
+        images: [
+            "/assets/productos/Yupoo/708029/2.webp"
+        ],
+        temporada: "2019/20",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 706695,
+        name: "PSG 2018/19 Retro",
+        slug: "psg-201819-retro",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/706695/1.webp",
+        images: [
+            "/assets/productos/Yupoo/706695/2.webp"
+        ],
+        temporada: "2018/19",
         retro: true,
         price: 24.9,
         oldPrice: 30
