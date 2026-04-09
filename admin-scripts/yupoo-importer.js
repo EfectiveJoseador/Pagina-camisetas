@@ -1487,7 +1487,7 @@ const EXCLUDED_URL_PATTERNS = [
 
 const TEAM_STOPWORDS = [
     'fc', 'cf', 'sc', 'ac', 'as', 'rc', 'cd', 'ud', 'rcd', 'sd',
-    'club', 'united', 'city', 'town', 'rovers', 'wanderers',
+    'club', 'town', 'rovers', 'wanderers',
     'local', 'visitante', 'tercera', 'cuarta', 'home', 'away', 'third', 'fourth',
     'retro', 'special', 'especial', 'edition', 'classic', 'vintage',
     'training', 'entrenamiento', 'portero', 'goalkeeper', 'gk',
@@ -1495,14 +1495,14 @@ const TEAM_STOPWORDS = [
 ];
 
 const GENERIC_TOKENS = new Set([
-    'fc', 'cf', 'sc', 'ac', 'deportivo', 'atletico', 'united', 'city', 'club', 'cd', 'ud', 'rcd', 'rc', 'sd', 'de', 'la', 'del', 'real'
+    'fc', 'cf', 'sc', 'ac', 'deportivo', 'atletico', 'club', 'cd', 'ud', 'rcd', 'rc', 'sd', 'de', 'la', 'del', 'real'
 ]);
 
 function getTokenWeight(token) {
     if (GENERIC_TOKENS.has(token.toLowerCase())) {
         return 1;
     }
-    return 3;
+    return 5;
 }
 
 function normalizeForComparison(str) {
@@ -1953,20 +1953,36 @@ function parseProductTitle(rawTitle) {
     const fullYearMatch = title.match(/\b(20\d{2})\b/);
     const gluedSeasonMatch = title.match(/\b(\d{2})(\d{2})\b(?!\d)/);
 
+    const processYearLogic = (y1, y2) => {
+        const n1 = parseInt(y1, 10);
+        const n2 = parseInt(y2, 10);
+        
+        if (y1 === '19') {
+            if (y2 === '20') {
+                return '2019/20';
+            } else if (n2 > 30) {
+                return `19${y2}`;
+            } else {
+                return `2019/${y2}`;
+            }
+        }
+        
+        const prefix = n1 > 30 ? '19' : '20';
+        return `${prefix}${y1}/${y2}`;
+    };
+
     if (explicitSeasonMatch) {
-        const y1 = explicitSeasonMatch[1];
-        const y2 = explicitSeasonMatch[2];
-        result.temporada = `${y1}/${y2}`;
+        result.temporada = processYearLogic(explicitSeasonMatch[1], explicitSeasonMatch[2]);
     } else if (fullYearMatch) {
         result.temporada = fullYearMatch[1];
     } else if (gluedSeasonMatch) {
         const y1 = gluedSeasonMatch[1];
         const y2 = gluedSeasonMatch[2];
-        const n1 = parseInt(y1);
-        const n2 = parseInt(y2);
+        const n1 = parseInt(y1, 10);
+        const n2 = parseInt(y2, 10);
 
-        if (n2 > n1 || (n1 >= 90 && n2 < 10)) {
-            result.temporada = `${y1}/${y2}`;
+        if (n2 > n1 || (n1 >= 90 && n2 < 10) || y1 === '19') {
+            result.temporada = processYearLogic(y1, y2);
         }
     }
 

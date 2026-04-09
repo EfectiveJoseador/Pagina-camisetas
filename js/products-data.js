@@ -2031,20 +2031,19 @@ const products = [
     },
     {
         id: 529738,
-        name: "Manchester United 19/20 Visitante Retro",
+        name: "Manchester United 2019/20 Visitante Retro",
         category: "futbol",
         league: "premier",
-        image: "/assets/productos/Yupoo/202657093/1.webp",
+        image: "/assets/productos/Yupoo/529738/1.webp",
         images: [
-            "/assets/productos/Yupoo/202657093/2.webp",
-            "/assets/productos/Yupoo/202657093/3.webp",
-            "/assets/productos/Yupoo/202657093/4.webp"
+            "/assets/productos/Yupoo/529738/2.webp"
         ],
-        temporada: "19/20",
+        temporada: "2019/20",
         tipo: "visitante",
         retro: true,
         price: 24.9,
-        oldPrice: 30
+        oldPrice: 30,
+        slug: "manchester-united-201920-visitante-retro"
     },
     {
         id: 457426,
@@ -7073,6 +7072,1296 @@ const products = [
             "/assets/productos/Yupoo/675793/2.webp"
         ],
         tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 362657,
+        name: "España 19/98 Visitante Retro",
+        slug: "espana-1998-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/362657/1.webp",
+        images: [
+            "/assets/productos/Yupoo/362657/2.webp"
+        ],
+        temporada: "19/98",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 254067,
+        name: "España 19/94 Visitante Retro",
+        slug: "espana-1994-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/254067/1.webp",
+        images: [
+            "/assets/productos/Yupoo/254067/2.webp"
+        ],
+        temporada: "19/94",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 241359,
+        name: "España 2012 Visitante Retro",
+        slug: "espana-2012-visitante-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/241359/1.webp",
+        images: [
+            "/assets/productos/Yupoo/241359/2.webp"
+        ],
+        temporada: "2012",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 820850,
+        name: "España 2012 Local Retro",
+        slug: "espana-2012-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/820850/1.webp",
+        images: [
+            "/assets/productos/Yupoo/820850/2.webp"
+        ],
+        temporada: "2012",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 106101,
+        name: "Leeds United 25/26 Local",
+        slug: "leeds-united-2526-local",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/106101/1.webp",
+        images: [
+            "/assets/productos/Yupoo/106101/2.webp"
+        ],
+        temporada: "25/26",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 149953,
+        name: "Tottenham Hotspur 95/97 Visitante Retro",
+        slug: "tottenham-hotspur-9597-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/149953/1.webp",
+        images: [
+            "/assets/productos/Yupoo/149953/2.webp"
+        ],
+        temporada: "95/97",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 771224,
+        name: "Tottenham Hotspur 09/10 Local Retro",
+        slug: "tottenham-hotspur-0910-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/771224/1.webp",
+        images: [
+            "/assets/productos/Yupoo/771224/2.webp"
+        ],
+        temporada: "09/10",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 506582,
+        name: "Manchester United 1992/94 Local Retro",
+        slug: "manchester-united-199294-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/506582/1.webp",
+        images: [
+            "/assets/productos/Yupoo/506582/2.webp"
+        ],
+        temporada: "1992/94",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 577477,
+        name: "Manchester United 2013/14 Local Retro",
+        slug: "manchester-united-201314-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/577477/1.webp",
+        images: [
+            "/assets/productos/Yupoo/577477/2.webp"
+        ],
+        temporada: "2013/14",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 130927,
+        name: "Arsenal 2011/12 Visitante Retro",
+        slug: "arsenal-201112-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/130927/1.webp",
+        images: [
+            "/assets/productos/Yupoo/130927/2.webp"
+        ],
+        temporada: "2011/12",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 634309,
+        name: "Arsenal 2014/15 Local Retro",
+        slug: "arsenal-201415-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/634309/1.webp",
+        images: [
+            "/assets/productos/Yupoo/634309/2.webp"
+        ],
+        temporada: "2014/15",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 448421,
+        name: "Manchester United 2025/26 Visitante",
+        slug: "manchester-united-202526-visitante",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/448421/1.webp",
+        images: [
+            "/assets/productos/Yupoo/448421/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 329778,
+        name: "Manchester United 1991 Visitante Retro",
+        slug: "manchester-united-1991-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/329778/1.webp",
+        images: [
+            "/assets/productos/Yupoo/329778/2.webp"
+        ],
+        temporada: "1991",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 714190,
+        name: "Tottenham Hotspur 2025/26 Visitante",
+        slug: "tottenham-hotspur-202526-visitante",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/714190/1.webp",
+        images: [
+            "/assets/productos/Yupoo/714190/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 460942,
+        name: "Manchester City 2013/14 Tercera Retro",
+        slug: "manchester-city-201314-tercera-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/460942/1.webp",
+        images: [
+            "/assets/productos/Yupoo/460942/2.webp"
+        ],
+        temporada: "2013/14",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 979898,
+        name: "Manchester United 2008/09 Visitante Retro",
+        slug: "manchester-united-200809-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/979898/1.webp",
+        images: [
+            "/assets/productos/Yupoo/979898/2.webp"
+        ],
+        temporada: "2008/09",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 169102,
+        name: "Tottenham Hotspur 1997/99 Local Retro",
+        slug: "tottenham-hotspur-199799-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/169102/1.webp",
+        images: [
+            "/assets/productos/Yupoo/169102/2.webp"
+        ],
+        temporada: "1997/99",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 506403,
+        name: "Manchester City 2025/26 Visitante",
+        slug: "manchester-city-202526-visitante",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/506403/1.webp",
+        images: [
+            "/assets/productos/Yupoo/506403/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 637682,
+        name: "Manchester City 2025/26 Local",
+        slug: "manchester-city-202526-local",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/637682/1.webp",
+        images: [
+            "/assets/productos/Yupoo/637682/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 191075,
+        name: "Tottenham Hotspur 2025/26 Pre-partido",
+        slug: "tottenham-hotspur-202526-pre-partido",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/191075/1.webp",
+        images: [
+            "/assets/productos/Yupoo/191075/2.webp"
+        ],
+        temporada: "2025/26",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 848481,
+        name: "Manchester United 2000/01 Visitante Retro",
+        slug: "manchester-united-200001-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/848481/1.webp",
+        images: [
+            "/assets/productos/Yupoo/848481/2.webp"
+        ],
+        temporada: "2000/01",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 525604,
+        name: "Manchester United 2025/26 Especial",
+        slug: "manchester-united-202526-especial",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/525604/1.webp",
+        images: [
+            "/assets/productos/Yupoo/525604/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 383658,
+        name: "Chelsea 2025/26 Tercera",
+        slug: "chelsea-202526-tercera",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/383658/1.webp",
+        images: [
+            "/assets/productos/Yupoo/383658/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "tercera",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 224170,
+        name: "Manchester United 1998/99 Retro",
+        slug: "manchester-united-199899-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/224170/1.webp",
+        images: [
+            "/assets/productos/Yupoo/224170/2.webp"
+        ],
+        temporada: "1998/99",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 232764,
+        name: "Tottenham Hotspur 2025/26 Local",
+        slug: "tottenham-hotspur-202526-local",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/232764/1.webp",
+        images: [
+            "/assets/productos/Yupoo/232764/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 951781,
+        name: "Arsenal 1994/95 Visitante Retro",
+        slug: "arsenal-199495-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/951781/1.webp",
+        images: [
+            "/assets/productos/Yupoo/951781/2.webp"
+        ],
+        temporada: "1994/95",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 951692,
+        name: "Arsenal 2025/26 Especial",
+        slug: "arsenal-202526-especial",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/951692/1.webp",
+        images: [
+            "/assets/productos/Yupoo/951692/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 163247,
+        name: "Manchester City 2013/14 Visitante Retro",
+        slug: "manchester-city-201314-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/163247/1.webp",
+        images: [
+            "/assets/productos/Yupoo/163247/2.webp"
+        ],
+        temporada: "2013/14",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 888468,
+        name: "Manchester City 2012/13 Visitante Retro",
+        slug: "manchester-city-201213-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/888468/1.webp",
+        images: [
+            "/assets/productos/Yupoo/888468/2.webp"
+        ],
+        temporada: "2012/13",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 966059,
+        name: "Manchester United 2003/05 Visitante Retro",
+        slug: "manchester-united-200305-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/966059/1.webp",
+        images: [
+            "/assets/productos/Yupoo/966059/2.webp"
+        ],
+        temporada: "2003/05",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 365910,
+        name: "Manchester United 2011/12 Local Retro",
+        slug: "manchester-united-201112-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/365910/1.webp",
+        images: [
+            "/assets/productos/Yupoo/365910/2.webp"
+        ],
+        temporada: "2011/12",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 332673,
+        name: "Arsenal 2019/20 Local Retro",
+        slug: "arsenal-201920-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/332673/1.webp",
+        images: [
+            "/assets/productos/Yupoo/332673/2.webp"
+        ],
+        temporada: "2019/20",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 984286,
+        name: "Arsenal 2013/14 Visitante Retro",
+        slug: "arsenal-201314-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/984286/1.webp",
+        images: [
+            "/assets/productos/Yupoo/984286/2.webp"
+        ],
+        temporada: "2013/14",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 496970,
+        name: "Manchester United 1998/99 Retro",
+        slug: "manchester-united-199899-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/496970/1.webp",
+        images: [
+            "/assets/productos/Yupoo/496970/2.webp"
+        ],
+        temporada: "1998/99",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 643977,
+        name: "Manchester United 2007/08 Retro",
+        slug: "manchester-united-200708-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/643977/1.webp",
+        images: [
+            "/assets/productos/Yupoo/643977/2.webp"
+        ],
+        temporada: "2007/08",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 808409,
+        name: "Arsenal 1993/94 Visitante Retro",
+        slug: "arsenal-199394-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/808409/1.webp",
+        images: [
+            "/assets/productos/Yupoo/808409/2.webp"
+        ],
+        temporada: "1993/94",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 667330,
+        name: "Arsenal 1986/88 Visitante Retro",
+        slug: "arsenal-198688-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/667330/1.webp",
+        images: [
+            "/assets/productos/Yupoo/667330/2.webp"
+        ],
+        temporada: "1986/88",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 104529,
+        name: "Arsenal 1997/99 Visitante Retro",
+        slug: "arsenal-199799-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/104529/1.webp",
+        images: [
+            "/assets/productos/Yupoo/104529/2.webp"
+        ],
+        temporada: "1997/99",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 111918,
+        name: "Arsenal 1996/97 Visitante Retro",
+        slug: "arsenal-199697-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/111918/1.webp",
+        images: [
+            "/assets/productos/Yupoo/111918/2.webp"
+        ],
+        temporada: "1996/97",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 593024,
+        name: "West Ham United 1999/01 Tercera Retro",
+        slug: "west-ham-united-199901-tercera-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/593024/1.webp",
+        images: [
+            "/assets/productos/Yupoo/593024/2.webp"
+        ],
+        temporada: "1999/01",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 695788,
+        name: "Newcastle 1998/99 Visitante Retro",
+        slug: "newcastle-199899-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/695788/1.webp",
+        images: [
+            "/assets/productos/Yupoo/695788/2.webp"
+        ],
+        temporada: "1998/99",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 887286,
+        name: "Manchester City 2015/16 Visitante Retro",
+        slug: "manchester-city-201516-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/887286/1.webp",
+        images: [
+            "/assets/productos/Yupoo/887286/2.webp"
+        ],
+        temporada: "2015/16",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 299162,
+        name: "Chelsea 2005/06 Local Retro",
+        slug: "chelsea-200506-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/299162/1.webp",
+        images: [
+            "/assets/productos/Yupoo/299162/2.webp"
+        ],
+        temporada: "2005/06",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 147842,
+        name: "Arsenal 1995/96 Visitante Retro",
+        slug: "arsenal-199596-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/147842/1.webp",
+        images: [
+            "/assets/productos/Yupoo/147842/2.webp"
+        ],
+        temporada: "1995/96",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 564599,
+        name: "Arsenal 2002/04 Local Retro",
+        slug: "arsenal-200204-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/564599/1.webp",
+        images: [
+            "/assets/productos/Yupoo/564599/2.webp"
+        ],
+        temporada: "2002/04",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 682260,
+        name: "Arsenal 2001/02 Local Retro",
+        slug: "arsenal-200102-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/682260/1.webp",
+        images: [
+            "/assets/productos/Yupoo/682260/2.webp"
+        ],
+        temporada: "2001/02",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 655408,
+        name: "Manchester United 2007/08 Local Retro",
+        slug: "manchester-united-200708-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/655408/1.webp",
+        images: [
+            "/assets/productos/Yupoo/655408/2.webp"
+        ],
+        temporada: "2007/08",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 689929,
+        name: "Manchester United 1992/94 Tercera Retro",
+        slug: "manchester-united-199294-tercera-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/689929/1.webp",
+        images: [
+            "/assets/productos/Yupoo/689929/2.webp"
+        ],
+        temporada: "1992/94",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 432269,
+        name: "Manchester United 1986/88 Local Retro",
+        slug: "manchester-united-198688-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/432269/1.webp",
+        images: [
+            "/assets/productos/Yupoo/432269/2.webp"
+        ],
+        temporada: "1986/88",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 945315,
+        name: "Arsenal 1991/93 Visitante Retro",
+        slug: "arsenal-199193-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/945315/1.webp",
+        images: [
+            "/assets/productos/Yupoo/945315/2.webp"
+        ],
+        temporada: "1991/93",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 313759,
+        name: "Manchester United 1993/95 Visitante Retro",
+        slug: "manchester-united-199395-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/313759/1.webp",
+        images: [
+            "/assets/productos/Yupoo/313759/2.webp"
+        ],
+        temporada: "1993/95",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 520481,
+        name: "Chelsea 2012/13 Local Retro",
+        slug: "chelsea-201213-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/520481/1.webp",
+        images: [
+            "/assets/productos/Yupoo/520481/2.webp"
+        ],
+        temporada: "2012/13",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 538089,
+        name: "Manchester United 2003/04 Visitante Retro",
+        slug: "manchester-united-200304-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/538089/1.webp",
+        images: [
+            "/assets/productos/Yupoo/538089/2.webp"
+        ],
+        temporada: "2003/04",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 662165,
+        name: "Manchester United 2003/04 Local Retro",
+        slug: "manchester-united-200304-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/662165/1.webp",
+        images: [
+            "/assets/productos/Yupoo/662165/2.webp"
+        ],
+        temporada: "2003/04",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 488442,
+        name: "Arsenal 2006/08 Local Retro",
+        slug: "arsenal-200608-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/488442/1.webp",
+        images: [
+            "/assets/productos/Yupoo/488442/2.webp"
+        ],
+        temporada: "2006/08",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 200593,
+        name: "Manchester United 2002/03 Visitante Retro",
+        slug: "manchester-united-200203-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/200593/1.webp",
+        images: [
+            "/assets/productos/Yupoo/200593/2.webp"
+        ],
+        temporada: "2002/03",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 960920,
+        name: "Arsenal 2011/12 Local Retro",
+        slug: "arsenal-201112-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/960920/1.webp",
+        images: [
+            "/assets/productos/Yupoo/960920/2.webp"
+        ],
+        temporada: "2011/12",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 508529,
+        name: "Manchester City 2002/03 Local Retro",
+        slug: "manchester-city-200203-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/508529/1.webp",
+        images: [
+            "/assets/productos/Yupoo/508529/2.webp"
+        ],
+        temporada: "2002/03",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 897301,
+        name: "Leicester City 1984 Visitante Retro",
+        slug: "leicester-city-1984-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/897301/1.webp",
+        images: [
+            "/assets/productos/Yupoo/897301/2.webp"
+        ],
+        temporada: "1984",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 694324,
+        name: "Leicester City 1992/94 Local Retro",
+        slug: "leicester-city-199294-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/694324/1.webp",
+        images: [
+            "/assets/productos/Yupoo/694324/2.webp"
+        ],
+        temporada: "1992/94",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 792182,
+        name: "Everton 1988/90 Visitante Retro",
+        slug: "everton-198890-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/792182/1.webp",
+        images: [
+            "/assets/productos/Yupoo/792182/2.webp"
+        ],
+        temporada: "1988/90",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 783279,
+        name: "Manchester City 2015/16 Local Retro",
+        slug: "manchester-city-201516-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/783279/1.webp",
+        images: [
+            "/assets/productos/Yupoo/783279/2.webp"
+        ],
+        temporada: "2015/16",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 105046,
+        name: "Manchester City 1997/98 Visitante Retro",
+        slug: "manchester-city-199798-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/105046/1.webp",
+        images: [
+            "/assets/productos/Yupoo/105046/2.webp"
+        ],
+        temporada: "1997/98",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 274981,
+        name: "Chelsea 1990 Retro",
+        slug: "chelsea-1990-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/274981/1.webp",
+        images: [
+            "/assets/productos/Yupoo/274981/2.webp"
+        ],
+        temporada: "1990",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 322859,
+        name: "Chelsea 1990 Retro",
+        slug: "chelsea-1990-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/322859/1.webp",
+        images: [
+            "/assets/productos/Yupoo/322859/2.webp"
+        ],
+        temporada: "1990",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 648236,
+        name: "Manchester United 2001/02 Especial Retro",
+        slug: "manchester-united-200102-especial-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/648236/1.webp",
+        images: [
+            "/assets/productos/Yupoo/648236/2.webp"
+        ],
+        temporada: "2001/02",
+        tipo: "especial",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 194556,
+        name: "Manchester City 2001/02 Local Retro",
+        slug: "manchester-city-200102-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/194556/1.webp",
+        images: [
+            "/assets/productos/Yupoo/194556/2.webp"
+        ],
+        temporada: "2001/02",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 717509,
+        name: "Arsenal 2006/08 Local Retro",
+        slug: "arsenal-200608-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/717509/1.webp",
+        images: [
+            "/assets/productos/Yupoo/717509/2.webp"
+        ],
+        temporada: "2006/08",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 466233,
+        name: "Arsenal 2004/05 Local Retro",
+        slug: "arsenal-200405-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/466233/1.webp",
+        images: [
+            "/assets/productos/Yupoo/466233/2.webp"
+        ],
+        temporada: "2004/05",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 634816,
+        name: "Newcastle 2000 Local Retro",
+        slug: "newcastle-2000-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/634816/1.webp",
+        images: [
+            "/assets/productos/Yupoo/634816/2.webp"
+        ],
+        temporada: "2000",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 996052,
+        name: "Chelsea 2008/09 Local Retro",
+        slug: "chelsea-200809-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/996052/1.webp",
+        images: [
+            "/assets/productos/Yupoo/996052/2.webp"
+        ],
+        temporada: "2008/09",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 907180,
+        name: "Leicester City 2015/16 Visitante Retro",
+        slug: "leicester-city-201516-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/907180/1.webp",
+        images: [
+            "/assets/productos/Yupoo/907180/2.webp"
+        ],
+        temporada: "2015/16",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 190955,
+        name: "Real Madrid 1997 Tercera Retro",
+        slug: "real-madrid-1997-tercera-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/190955/1.webp",
+        images: [
+            "/assets/productos/Yupoo/190955/2.webp"
+        ],
+        temporada: "1997",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 966282,
+        name: "Tottenham Hotspur 2006/07 Local Retro",
+        slug: "tottenham-hotspur-200607-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/966282/1.webp",
+        images: [
+            "/assets/productos/Yupoo/966282/2.webp"
+        ],
+        temporada: "2006/07",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 613671,
+        name: "Arsenal 2005/06 Local Retro",
+        slug: "arsenal-200506-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/613671/1.webp",
+        images: [
+            "/assets/productos/Yupoo/613671/2.webp"
+        ],
+        temporada: "2005/06",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 825149,
+        name: "Manchester United 2006 Visitante Retro",
+        slug: "manchester-united-2006-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/825149/1.webp",
+        images: [
+            "/assets/productos/Yupoo/825149/2.webp"
+        ],
+        temporada: "2006",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 982262,
+        name: "Manchester City 2008/09 Local Retro",
+        slug: "manchester-city-200809-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/982262/1.webp",
+        images: [
+            "/assets/productos/Yupoo/982262/2.webp"
+        ],
+        temporada: "2008/09",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 770598,
+        name: "Arsenal 2002 Visitante Retro",
+        slug: "arsenal-2002-visitante-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/770598/1.webp",
+        images: [
+            "/assets/productos/Yupoo/770598/2.webp"
+        ],
+        temporada: "2002",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 852225,
+        name: "Manchester City 1981 Local Retro",
+        slug: "manchester-city-1981-local-retro",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/852225/1.webp",
+        images: [
+            "/assets/productos/Yupoo/852225/2.webp"
+        ],
+        temporada: "1981",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 988344,
+        name: "Manchester United Local",
+        slug: "manchester-united-local",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/988344/1.webp",
+        images: [
+            "/assets/productos/Yupoo/988344/2.webp"
+        ],
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 818879,
+        name: "Arsenal 1998",
+        slug: "arsenal-1998",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/818879/1.webp",
+        images: [
+            "/assets/productos/Yupoo/818879/2.webp"
+        ],
+        temporada: "1998",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 985690,
+        name: "Arsenal 2000",
+        slug: "arsenal-2000",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/985690/1.webp",
+        images: [
+            "/assets/productos/Yupoo/985690/2.webp"
+        ],
+        temporada: "2000",
         price: 19.9,
         oldPrice: 25
     }

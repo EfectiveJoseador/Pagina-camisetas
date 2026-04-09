@@ -274,6 +274,23 @@ async function main() {
     }
 
     try {
+        const generatedId = generateStableId(options.url);
+        const { products } = readProductsFile();
+
+        const existingById = findProductById(products, generatedId);
+        const existingByUrl = findProductBySourceUrl(products, options.url);
+
+        if (existingById.product || existingByUrl.product) {
+            const existing = existingById.product || existingByUrl.product;
+            warn(`⚠ Producto ya existe con ID ${existing.id}: "${existing.name}"`);
+
+            if (!options.update) {
+                info('Aviso: Para modificar este producto, ejecuta el comando con el flag --update. Abortando para ahorrar tiempo.');
+                process.exit(0);
+            } else {
+                info('Modo actualización detectado, procediendo...');
+            }
+        }
 
         if (options.listImages) {
             const albumData = await fetchYupooAlbum(options.url);
@@ -424,10 +441,6 @@ async function main() {
         }
 
 
-        const { products } = readProductsFile();
-
-
-
         const matcher = new TeamMatcher(products);
         const teamMatch = matcher.findBestMatch(product.name, 0.6); // Threshold aumentado de 0.3 a 0.6
 
@@ -474,18 +487,6 @@ async function main() {
 
 
         displayProductPreview(product);
-
-        const existingById = findProductById(products, product.id);
-        const existingByUrl = findProductBySourceUrl(products, options.url);
-
-        if (existingById.product || existingByUrl.product) {
-            const existing = existingById.product || existingByUrl.product;
-            warn(`⚠ Producto ya existe con ID ${existing.id}: "${existing.name}"`);
-
-            if (!options.update) {
-                info('Usa --update para actualizar el producto existente');
-            }
-        }
 
 
         if (!options.write) {
