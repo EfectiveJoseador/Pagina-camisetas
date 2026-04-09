@@ -9138,6 +9138,1548 @@ const products = [
         retro: true,
         price: 24.9,
         oldPrice: 30
+    },
+    {
+        id: 588199,
+        name: "AC Milan 2011/12 Local Retro",
+        slug: "ac-milan-201112-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/588199/1.webp",
+        images: [
+            "/assets/productos/Yupoo/588199/2.webp"
+        ],
+        temporada: "2011/12",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 733133,
+        name: "OGC Nice 2025/26 Local",
+        slug: "ogc-nice-202526-local",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/733133/1.webp",
+        images: [
+            "/assets/productos/Yupoo/733133/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 231946,
+        name: "OGC Nice 2025/26 Visitante",
+        slug: "ogc-nice-202526-visitante",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/231946/1.webp",
+        images: [
+            "/assets/productos/Yupoo/231946/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 519837,
+        name: "Napoli 2025/26 Entrenamiento",
+        slug: "napoli-202526-entrenamiento",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/519837/1.webp",
+        images: [
+            "/assets/productos/Yupoo/519837/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "entrenamiento",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 743064,
+        name: "Fiorentina 1999/00 Visitante Retro",
+        slug: "fiorentina-199900-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/743064/1.webp",
+        images: [
+            "/assets/productos/Yupoo/743064/2.webp"
+        ],
+        temporada: "1999/00",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 757098,
+        name: "AS Roma 2025/26 Tercera",
+        slug: "as-roma-202526-tercera",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/757098/1.webp",
+        images: [
+            "/assets/productos/Yupoo/757098/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "tercera",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 124024,
+        name: "Lazio 2025/26 Visitante",
+        slug: "lazio-202526-visitante",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/124024/1.webp",
+        images: [
+            "/assets/productos/Yupoo/124024/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 112113,
+        name: "Inter Milan 2025/26 Visitante (Niño)",
+        slug: "inter-de-milan-202526-visitante-nino",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/112113/1.webp",
+        images: [
+            "/assets/productos/Yupoo/112113/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "visitante",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 547123,
+        name: "Napoli 2025/26 Visitante",
+        slug: "napoli-202526-visitante",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/547123/1.webp",
+        images: [
+            "/assets/productos/Yupoo/547123/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 150591,
+        name: "Atlanta United 2025/26 Local",
+        slug: "atlanta-united-202526-local",
+        category: "futbol",
+        league: "premier",
+        image: "/assets/productos/Yupoo/150591/1.webp",
+        images: [
+            "/assets/productos/Yupoo/150591/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 552681,
+        name: "AS Roma 2017/18 Local Retro",
+        slug: "as-roma-201718-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/552681/1.webp",
+        images: [
+            "/assets/productos/Yupoo/552681/2.webp"
+        ],
+        temporada: "2017/18",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 614010,
+        name: "Napoli 1987/88 Local Retro",
+        slug: "napoli-198788-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/614010/1.webp",
+        images: [
+            "/assets/productos/Yupoo/614010/2.webp"
+        ],
+        temporada: "1987/88",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 153190,
+        name: "Inter Milan 2004/05 Local Retro",
+        slug: "inter-de-milan-200405-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/153190/1.webp",
+        images: [
+            "/assets/productos/Yupoo/153190/2.webp"
+        ],
+        temporada: "2004/05",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 710307,
+        name: "AC Milan 1999/00 Visitante Retro",
+        slug: "ac-milan-199900-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/710307/1.webp",
+        images: [
+            "/assets/productos/Yupoo/710307/2.webp"
+        ],
+        temporada: "1999/00",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 632663,
+        name: "AC Milan 1997/98 Local Retro",
+        slug: "ac-milan-199798-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/632663/1.webp",
+        images: [
+            "/assets/productos/Yupoo/632663/2.webp"
+        ],
+        temporada: "1997/98",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 829257,
+        name: "AC Milan 2015/16 Local Retro",
+        slug: "ac-milan-201516-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/829257/1.webp",
+        images: [
+            "/assets/productos/Yupoo/829257/2.webp"
+        ],
+        temporada: "2015/16",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 480878,
+        name: "Inter Milan 2025/26 Local (Niño)",
+        slug: "inter-de-milan-202526-local-nino",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/480878/1.webp",
+        images: [
+            "/assets/productos/Yupoo/480878/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "local",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 756955,
+        name: "Fiorentina 2025/26 Local",
+        slug: "fiorentina-202526-local",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/756955/1.webp",
+        images: [
+            "/assets/productos/Yupoo/756955/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 165984,
+        name: "AC Milan 1998/99 Visitante Retro",
+        slug: "ac-milan-199899-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/165984/1.webp",
+        images: [
+            "/assets/productos/Yupoo/165984/2.webp"
+        ],
+        temporada: "1998/99",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 281244,
+        name: "Inter Milan 2025/26",
+        slug: "inter-de-milan-202526",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/281244/1.webp",
+        images: [
+            "/assets/productos/Yupoo/281244/2.webp"
+        ],
+        temporada: "2025/26",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 744295,
+        name: "AC Milan 2025/26 Portero",
+        slug: "ac-milan-202526-portero",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/744295/1.webp",
+        images: [
+            "/assets/productos/Yupoo/744295/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "portero",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 437711,
+        name: "Inter Milan 2009/10 Local Retro",
+        slug: "inter-de-milan-200910-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/437711/1.webp",
+        images: [
+            "/assets/productos/Yupoo/437711/2.webp"
+        ],
+        temporada: "2009/10",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 455822,
+        name: "Lazio 1991/92 Local Retro",
+        slug: "lazio-199192-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/455822/1.webp",
+        images: [
+            "/assets/productos/Yupoo/455822/2.webp"
+        ],
+        temporada: "1991/92",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 836993,
+        name: "AS Roma 1999/00 Visitante Retro",
+        slug: "as-roma-199900-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/836993/1.webp",
+        images: [
+            "/assets/productos/Yupoo/836993/2.webp"
+        ],
+        temporada: "1999/00",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 830971,
+        name: "AS Roma 1997/98 Local Retro",
+        slug: "as-roma-199798-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/830971/1.webp",
+        images: [
+            "/assets/productos/Yupoo/830971/2.webp"
+        ],
+        temporada: "1997/98",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 631299,
+        name: "AS Roma 1991/92 Local Retro",
+        slug: "as-roma-199192-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/631299/1.webp",
+        images: [
+            "/assets/productos/Yupoo/631299/2.webp"
+        ],
+        temporada: "1991/92",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 284274,
+        name: "AS Roma 1991/92 Visitante Retro",
+        slug: "as-roma-199192-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/284274/1.webp",
+        images: [
+            "/assets/productos/Yupoo/284274/2.webp"
+        ],
+        temporada: "1991/92",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 858937,
+        name: "AS Roma 1989/90 Local Retro",
+        slug: "as-roma-198990-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/858937/1.webp",
+        images: [
+            "/assets/productos/Yupoo/858937/2.webp"
+        ],
+        temporada: "1989/90",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 720071,
+        name: "AC Milan 2025/26 (Niño)",
+        slug: "ac-milan-202526-nino",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/720071/1.webp",
+        images: [
+            "/assets/productos/Yupoo/720071/2.webp"
+        ],
+        temporada: "2025/26",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 475910,
+        name: "AC Milan 2025/26 (Niño)",
+        slug: "ac-milan-202526-nino",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/475910/1.webp",
+        images: [
+            "/assets/productos/Yupoo/475910/2.webp"
+        ],
+        temporada: "2025/26",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 836058,
+        name: "AS Roma 1998/99 Visitante Retro",
+        slug: "as-roma-199899-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/836058/1.webp",
+        images: [
+            "/assets/productos/Yupoo/836058/2.webp"
+        ],
+        temporada: "1998/99",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 941070,
+        name: "Inter Milan 1992/94 Tercera Retro",
+        slug: "inter-de-milan-199294-tercera-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/941070/1.webp",
+        images: [
+            "/assets/productos/Yupoo/941070/2.webp"
+        ],
+        temporada: "1992/94",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 801758,
+        name: "Lazio 1998/99 Retro",
+        slug: "lazio-199899-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/801758/1.webp",
+        images: [
+            "/assets/productos/Yupoo/801758/2.webp"
+        ],
+        temporada: "1998/99",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 694601,
+        name: "AS Roma 1992/94 Retro",
+        slug: "as-roma-199294-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/694601/1.webp",
+        images: [
+            "/assets/productos/Yupoo/694601/2.webp"
+        ],
+        temporada: "1992/94",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 869204,
+        name: "AS Roma 1992/94 Visitante Retro",
+        slug: "as-roma-199294-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/869204/1.webp",
+        images: [
+            "/assets/productos/Yupoo/869204/2.webp"
+        ],
+        temporada: "1992/94",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 851145,
+        name: "AS Roma 1991/92 Retro",
+        slug: "as-roma-199192-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/851145/1.webp",
+        images: [
+            "/assets/productos/Yupoo/851145/2.webp"
+        ],
+        temporada: "1991/92",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 818851,
+        name: "AC Milan 2025/26 Especial",
+        slug: "ac-milan-202526-especial",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/818851/1.webp",
+        images: [
+            "/assets/productos/Yupoo/818851/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 430768,
+        name: "AC Milan 2025/26 Especial",
+        slug: "ac-milan-202526-especial",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/430768/1.webp",
+        images: [
+            "/assets/productos/Yupoo/430768/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 377114,
+        name: "AS Roma 1999/00 Local Retro",
+        slug: "as-roma-199900-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/377114/1.webp",
+        images: [
+            "/assets/productos/Yupoo/377114/2.webp"
+        ],
+        temporada: "1999/00",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 658480,
+        name: "Inter Milan 1994/95 Visitante Retro",
+        slug: "inter-de-milan-199495-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/658480/1.webp",
+        images: [
+            "/assets/productos/Yupoo/658480/2.webp"
+        ],
+        temporada: "1994/95",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 797208,
+        name: "Inter Milan 2002/03 Local Retro",
+        slug: "inter-de-milan-200203-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/797208/1.webp",
+        images: [
+            "/assets/productos/Yupoo/797208/2.webp"
+        ],
+        temporada: "2002/03",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 271778,
+        name: "AC Milan 2012/13 Retro",
+        slug: "ac-milan-201213-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/271778/1.webp",
+        images: [
+            "/assets/productos/Yupoo/271778/2.webp"
+        ],
+        temporada: "2012/13",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 521748,
+        name: "AC Milan 2003/04 Local Retro",
+        slug: "ac-milan-200304-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/521748/1.webp",
+        images: [
+            "/assets/productos/Yupoo/521748/2.webp"
+        ],
+        temporada: "2003/04",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 194004,
+        name: "AC Milan Especial",
+        slug: "ac-milan-especial",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/194004/1.webp",
+        images: [
+            "/assets/productos/Yupoo/194004/2.webp"
+        ],
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 473925,
+        name: "AS Roma 2004/05 Local Retro",
+        slug: "as-roma-200405-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/473925/1.webp",
+        images: [
+            "/assets/productos/Yupoo/473925/2.webp"
+        ],
+        temporada: "2004/05",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 722607,
+        name: "Lazio 1999/00 Local Retro",
+        slug: "lazio-199900-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/722607/1.webp",
+        images: [
+            "/assets/productos/Yupoo/722607/2.webp"
+        ],
+        temporada: "1999/00",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 851723,
+        name: "Inter Milan 1990/91 Local Retro",
+        slug: "inter-de-milan-199091-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/851723/1.webp",
+        images: [
+            "/assets/productos/Yupoo/851723/2.webp"
+        ],
+        temporada: "1990/91",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 374894,
+        name: "AC Milan 2001/02 Local Retro",
+        slug: "ac-milan-200102-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/374894/1.webp",
+        images: [
+            "/assets/productos/Yupoo/374894/2.webp"
+        ],
+        temporada: "2001/02",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 100075,
+        name: "AC Milan 2000/01 Tercera Retro",
+        slug: "ac-milan-200001-tercera-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/100075/1.webp",
+        images: [
+            "/assets/productos/Yupoo/100075/2.webp"
+        ],
+        temporada: "2000/01",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 957207,
+        name: "AS Roma 1998/99 Local Retro",
+        slug: "as-roma-199899-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/957207/1.webp",
+        images: [
+            "/assets/productos/Yupoo/957207/2.webp"
+        ],
+        temporada: "1998/99",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 590985,
+        name: "Inter Milan 2004/05 Visitante Retro",
+        slug: "inter-de-milan-200405-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/590985/1.webp",
+        images: [
+            "/assets/productos/Yupoo/590985/2.webp"
+        ],
+        temporada: "2004/05",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 183881,
+        name: "AC Milan 2000/02 Local Retro",
+        slug: "ac-milan-200002-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/183881/1.webp",
+        images: [
+            "/assets/productos/Yupoo/183881/2.webp"
+        ],
+        temporada: "2000/02",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 354193,
+        name: "AC Milan 2000/01 Local Retro",
+        slug: "ac-milan-200001-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/354193/1.webp",
+        images: [
+            "/assets/productos/Yupoo/354193/2.webp"
+        ],
+        temporada: "2000/01",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 666398,
+        name: "AC Milan 1998 Tercera Retro",
+        slug: "ac-milan-1998-tercera-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/666398/1.webp",
+        images: [
+            "/assets/productos/Yupoo/666398/2.webp"
+        ],
+        temporada: "1998",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 651234,
+        name: "AS Roma 2000/01 Tercera Retro",
+        slug: "as-roma-200001-tercera-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/651234/1.webp",
+        images: [
+            "/assets/productos/Yupoo/651234/2.webp"
+        ],
+        temporada: "2000/01",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 438813,
+        name: "Inter Milan 1998/99 Tercera Retro",
+        slug: "inter-de-milan-199899-tercera-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/438813/1.webp",
+        images: [
+            "/assets/productos/Yupoo/438813/2.webp"
+        ],
+        temporada: "1998/99",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 575163,
+        name: "AC Milan 1990/91 Local Retro",
+        slug: "ac-milan-199091-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/575163/1.webp",
+        images: [
+            "/assets/productos/Yupoo/575163/2.webp"
+        ],
+        temporada: "1990/91",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 275252,
+        name: "Inter Milan 2000 Local Retro",
+        slug: "inter-de-milan-2000-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/275252/1.webp",
+        images: [
+            "/assets/productos/Yupoo/275252/2.webp"
+        ],
+        temporada: "2000",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 141219,
+        name: "AC Milan Local Retro",
+        slug: "ac-milan-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/141219/1.webp",
+        images: [
+            "/assets/productos/Yupoo/141219/2.webp"
+        ],
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 875492,
+        name: "Inter Milan 2009/10 Local Retro",
+        slug: "inter-de-milan-200910-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/875492/1.webp",
+        images: [
+            "/assets/productos/Yupoo/875492/2.webp"
+        ],
+        temporada: "2009/10",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 540489,
+        name: "Inter Milan 2007/08 Visitante Retro",
+        slug: "inter-de-milan-200708-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/540489/1.webp",
+        images: [
+            "/assets/productos/Yupoo/540489/2.webp"
+        ],
+        temporada: "2007/08",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 310665,
+        name: "Inter Milan 2009/10 Visitante Retro",
+        slug: "inter-de-milan-200910-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/310665/1.webp",
+        images: [
+            "/assets/productos/Yupoo/310665/2.webp"
+        ],
+        temporada: "2009/10",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 167471,
+        name: "Inter Milan 1995/96 Local Retro",
+        slug: "inter-de-milan-199596-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/167471/1.webp",
+        images: [
+            "/assets/productos/Yupoo/167471/2.webp"
+        ],
+        temporada: "1995/96",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 983088,
+        name: "AC Milan 1988/89 Local Retro",
+        slug: "ac-milan-198889-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/983088/1.webp",
+        images: [
+            "/assets/productos/Yupoo/983088/2.webp"
+        ],
+        temporada: "1988/89",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 396805,
+        name: "AC Milan 2012/13 Local Retro",
+        slug: "ac-milan-201213-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/396805/1.webp",
+        images: [
+            "/assets/productos/Yupoo/396805/2.webp"
+        ],
+        temporada: "2012/13",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 932106,
+        name: "AC Milan 2017/18 Local Retro",
+        slug: "ac-milan-201718-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/932106/1.webp",
+        images: [
+            "/assets/productos/Yupoo/932106/2.webp"
+        ],
+        temporada: "2017/18",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 185753,
+        name: "AC Milan 2019/20 Local Retro",
+        slug: "ac-milan-201920-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/185753/1.webp",
+        images: [
+            "/assets/productos/Yupoo/185753/2.webp"
+        ],
+        temporada: "2019/20",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 631281,
+        name: "AS Roma 1990/91 Visitante Retro",
+        slug: "as-roma-199091-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/631281/1.webp",
+        images: [
+            "/assets/productos/Yupoo/631281/2.webp"
+        ],
+        temporada: "1990/91",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 491576,
+        name: "Napoli 1990/91 Visitante Retro",
+        slug: "napoli-199091-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/491576/1.webp",
+        images: [
+            "/assets/productos/Yupoo/491576/2.webp"
+        ],
+        temporada: "1990/91",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 785743,
+        name: "AC Milan 2008/09 Local Retro",
+        slug: "ac-milan-200809-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/785743/1.webp",
+        images: [
+            "/assets/productos/Yupoo/785743/2.webp"
+        ],
+        temporada: "2008/09",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 912839,
+        name: "AC Milan 2009/10 Local Retro",
+        slug: "ac-milan-200910-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/912839/1.webp",
+        images: [
+            "/assets/productos/Yupoo/912839/2.webp"
+        ],
+        temporada: "2009/10",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 459658,
+        name: "AC Milan 2008/09 Local Retro",
+        slug: "ac-milan-200809-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/459658/1.webp",
+        images: [
+            "/assets/productos/Yupoo/459658/2.webp"
+        ],
+        temporada: "2008/09",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 947402,
+        name: "AS Roma 2001/02 Visitante Retro",
+        slug: "as-roma-200102-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/947402/1.webp",
+        images: [
+            "/assets/productos/Yupoo/947402/2.webp"
+        ],
+        temporada: "2001/02",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 614067,
+        name: "Napoli 1993/94 Local Retro",
+        slug: "napoli-199394-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/614067/1.webp",
+        images: [
+            "/assets/productos/Yupoo/614067/2.webp"
+        ],
+        temporada: "1993/94",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 304772,
+        name: "AC Milan 1989/90 Local Retro",
+        slug: "ac-milan-198990-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/304772/1.webp",
+        images: [
+            "/assets/productos/Yupoo/304772/2.webp"
+        ],
+        temporada: "1989/90",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 653948,
+        name: "AS Roma 2005/06 Local Retro",
+        slug: "as-roma-200506-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/653948/1.webp",
+        images: [
+            "/assets/productos/Yupoo/653948/2.webp"
+        ],
+        temporada: "2005/06",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 714853,
+        name: "AC Milan 2009/10 Visitante Retro",
+        slug: "ac-milan-200910-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/714853/1.webp",
+        images: [
+            "/assets/productos/Yupoo/714853/2.webp"
+        ],
+        temporada: "2009/10",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 620785,
+        name: "AC Milan 2007/08 Local Retro",
+        slug: "ac-milan-200708-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/620785/1.webp",
+        images: [
+            "/assets/productos/Yupoo/620785/2.webp"
+        ],
+        temporada: "2007/08",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 460209,
+        name: "AC Milan 2007/08 Visitante Retro",
+        slug: "ac-milan-200708-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/460209/1.webp",
+        images: [
+            "/assets/productos/Yupoo/460209/2.webp"
+        ],
+        temporada: "2007/08",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 464751,
+        name: "AC Milan 1998/99 Local Retro",
+        slug: "ac-milan-199899-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/464751/1.webp",
+        images: [
+            "/assets/productos/Yupoo/464751/2.webp"
+        ],
+        temporada: "1998/99",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 309814,
+        name: "Inter Milan 2002/03 Tercera Retro",
+        slug: "inter-de-milan-200203-tercera-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/309814/1.webp",
+        images: [
+            "/assets/productos/Yupoo/309814/2.webp"
+        ],
+        temporada: "2002/03",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 949822,
+        name: "Marseille 2005/06 Local Retro",
+        slug: "marseille-200506-local-retro",
+        category: "futbol",
+        league: "ligue1",
+        image: "/assets/productos/Yupoo/949822/1.webp",
+        images: [
+            "/assets/productos/Yupoo/949822/2.webp"
+        ],
+        temporada: "2005/06",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 874472,
+        name: "Lazio 2000 Local",
+        slug: "lazio-2000-local",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/874472/1.webp",
+        images: [
+            "/assets/productos/Yupoo/874472/2.webp"
+        ],
+        temporada: "2000",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 172570,
+        name: "Lazio 1999/00 Local Retro",
+        slug: "lazio-199900-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/172570/1.webp",
+        images: [
+            "/assets/productos/Yupoo/172570/2.webp"
+        ],
+        temporada: "1999/00",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 604961,
+        name: "AC Milan 2000 Local Retro",
+        slug: "ac-milan-2000-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/604961/1.webp",
+        images: [
+            "/assets/productos/Yupoo/604961/2.webp"
+        ],
+        temporada: "2000",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 781835,
+        name: "AC Milan 2011 Tercera Retro",
+        slug: "ac-milan-2011-tercera-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/781835/1.webp",
+        images: [
+            "/assets/productos/Yupoo/781835/2.webp"
+        ],
+        temporada: "2011",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 454700,
+        name: "Lazio 2018/19 Local Retro",
+        slug: "lazio-201819-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/454700/1.webp",
+        images: [
+            "/assets/productos/Yupoo/454700/2.webp"
+        ],
+        temporada: "2018/19",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 172864,
+        name: "Lazio 2015/16 Visitante Retro",
+        slug: "lazio-201516-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/172864/1.webp",
+        images: [
+            "/assets/productos/Yupoo/172864/2.webp"
+        ],
+        temporada: "2015/16",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 252261,
+        name: "AC Milan 2011 Visitante Retro",
+        slug: "ac-milan-2011-visitante-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/252261/1.webp",
+        images: [
+            "/assets/productos/Yupoo/252261/2.webp"
+        ],
+        temporada: "2011",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 860526,
+        name: "AC Milan 2013 Tercera Retro",
+        slug: "ac-milan-2013-tercera-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/860526/1.webp",
+        images: [
+            "/assets/productos/Yupoo/860526/2.webp"
+        ],
+        temporada: "2013",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 711016,
+        name: "Inter Milan 1994 Entrenamiento Retro",
+        slug: "inter-de-milan-1994-entrenamiento-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/711016/1.webp",
+        images: [
+            "/assets/productos/Yupoo/711016/2.webp"
+        ],
+        temporada: "1994",
+        tipo: "entrenamiento",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 806868,
+        name: "Inter Milan 2004 Tercera Retro",
+        slug: "inter-de-milan-2004-tercera-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/806868/1.webp",
+        images: [
+            "/assets/productos/Yupoo/806868/2.webp"
+        ],
+        temporada: "2004",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 757165,
+        name: "Lazio 2000 Tercera Retro",
+        slug: "lazio-2000-tercera-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/757165/1.webp",
+        images: [
+            "/assets/productos/Yupoo/757165/2.webp"
+        ],
+        temporada: "2000",
+        tipo: "tercera",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 714874,
+        name: "Italia 1990 Local Retro",
+        slug: "italia-1990-local-retro",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/714874/1.webp",
+        images: [
+            "/assets/productos/Yupoo/714874/2.webp"
+        ],
+        temporada: "1990",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 318846,
+        name: "Italia 2020 Visitante",
+        slug: "italia-2020-visitante",
+        category: "futbol",
+        league: "selecciones",
+        image: "/assets/productos/Yupoo/318846/1.webp",
+        images: [
+            "/assets/productos/Yupoo/318846/2.webp"
+        ],
+        temporada: "2020",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 164973,
+        name: "AS Roma 2001 Local Retro",
+        slug: "as-roma-2001-local-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/164973/1.webp",
+        images: [
+            "/assets/productos/Yupoo/164973/2.webp"
+        ],
+        temporada: "2001",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 151623,
+        name: "Fiorentina 1998 Local",
+        slug: "fiorentina-1998-local",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/151623/1.webp",
+        images: [
+            "/assets/productos/Yupoo/151623/2.webp"
+        ],
+        temporada: "1998",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 979519,
+        name: "AC Milan 2008 Retro",
+        slug: "ac-milan-2008-retro",
+        category: "futbol",
+        league: "seriea",
+        image: "/assets/productos/Yupoo/979519/1.webp",
+        images: [
+            "/assets/productos/Yupoo/979519/2.webp"
+        ],
+        temporada: "2008",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     }
 ];
 
