@@ -8364,6 +8364,520 @@ const products = [
         temporada: "2000",
         price: 19.9,
         oldPrice: 25
+    },
+    {
+        id: 765291,
+        name: "Bayern Munich 2025/26 Portero",
+        slug: "bayern-munich-202526-portero",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/765291/1.webp",
+        images: [
+            "/assets/productos/Yupoo/765291/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "portero",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 296568,
+        name: "Bayern Munich 2025/26 Portero",
+        slug: "bayern-munich-202526-portero",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/296568/1.webp",
+        images: [
+            "/assets/productos/Yupoo/296568/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "portero",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 527161,
+        name: "Bayern Munich 2025/26 Tercera",
+        slug: "bayern-munich-202526-tercera",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/527161/1.webp",
+        images: [
+            "/assets/productos/Yupoo/527161/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "tercera",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 224973,
+        name: "Bayern Munich 2001/02 Local Retro",
+        slug: "bayern-munich-200102-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/224973/1.webp",
+        images: [
+            "/assets/productos/Yupoo/224973/2.webp"
+        ],
+        temporada: "2001/02",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 246623,
+        name: "Dortmund 2019/20 Local Retro",
+        slug: "dortmund-201920-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/246623/1.webp",
+        images: [
+            "/assets/productos/Yupoo/246623/2.webp"
+        ],
+        temporada: "2019/20",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 288583,
+        name: "Bayern Munich 2000/01 Local Retro",
+        slug: "bayern-munich-200001-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/288583/1.webp",
+        images: [
+            "/assets/productos/Yupoo/288583/2.webp"
+        ],
+        temporada: "2000/01",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 444908,
+        name: "Werder Bremen 2025/26 Local",
+        slug: "werder-bremen-202526-local",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/444908/1.webp",
+        images: [
+            "/assets/productos/Yupoo/444908/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 226621,
+        name: "Bayern Munich 2025/26 Local (Niño)",
+        slug: "bayern-munich-202526-local-nino",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/226621/1.webp",
+        images: [
+            "/assets/productos/Yupoo/226621/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "local",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 915628,
+        name: "Bayern Munich 2000/02 Visitante Retro",
+        slug: "bayern-munich-200002-visitante-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/915628/1.webp",
+        images: [
+            "/assets/productos/Yupoo/915628/2.webp"
+        ],
+        temporada: "2000/02",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 393514,
+        name: "Schalke 04 2001/02 Local Retro",
+        slug: "schalke-04-200102-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/393514/1.webp",
+        images: [
+            "/assets/productos/Yupoo/393514/2.webp"
+        ],
+        temporada: "2001/02",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 468167,
+        name: "Dortmund 2025/26",
+        slug: "dortmund-202526",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/468167/1.webp",
+        images: [
+            "/assets/productos/Yupoo/468167/2.webp"
+        ],
+        temporada: "2025/26",
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 324827,
+        name: "Bayern Munich 2025/26 Especial",
+        slug: "bayern-munich-202526-especial",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/324827/1.webp",
+        images: [
+            "/assets/productos/Yupoo/324827/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 470010,
+        name: "FC Salzburg 2025/26",
+        slug: "fc-salzburg-202526",
+        category: "futbol",
+        league: "otros",
+        image: "/assets/productos/Yupoo/470010/1.webp",
+        images: [
+            "/assets/productos/Yupoo/470010/2.webp"
+        ],
+        temporada: "2025/26",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 278688,
+        name: "Dortmund 1994/95 Local Retro",
+        slug: "dortmund-199495-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/278688/1.webp",
+        images: [
+            "/assets/productos/Yupoo/278688/2.webp"
+        ],
+        temporada: "1994/95",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 679609,
+        name: "Dortmund 1996/97 Local Retro",
+        slug: "dortmund-199697-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/679609/1.webp",
+        images: [
+            "/assets/productos/Yupoo/679609/2.webp"
+        ],
+        temporada: "1996/97",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 383710,
+        name: "Dortmund 1995/96 Local Retro",
+        slug: "dortmund-199596-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/383710/1.webp",
+        images: [
+            "/assets/productos/Yupoo/383710/2.webp"
+        ],
+        temporada: "1995/96",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 480272,
+        name: "Dortmund 1995/96 Visitante Retro",
+        slug: "dortmund-199596-visitante-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/480272/1.webp",
+        images: [
+            "/assets/productos/Yupoo/480272/2.webp"
+        ],
+        temporada: "1995/96",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 554262,
+        name: "Dortmund 2011/12 Local Retro",
+        slug: "dortmund-201112-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/554262/1.webp",
+        images: [
+            "/assets/productos/Yupoo/554262/2.webp"
+        ],
+        temporada: "2011/12",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 237555,
+        name: "RB Leipzig 2025/26 Local",
+        slug: "rb-leipzig-202526-local",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/237555/1.webp",
+        images: [
+            "/assets/productos/Yupoo/237555/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 309412,
+        name: "Bayern Munich 2025/26",
+        slug: "bayern-munich-202526",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/309412/1.webp",
+        images: [
+            "/assets/productos/Yupoo/309412/2.webp"
+        ],
+        temporada: "2025/26",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 877272,
+        name: "Bayer Leverkusen 2001/02 Local Retro",
+        slug: "bayer-leverkusen-200102-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/877272/1.webp",
+        images: [
+            "/assets/productos/Yupoo/877272/2.webp"
+        ],
+        temporada: "2001/02",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 598032,
+        name: "Bayern Munich 2007/08 Local Retro",
+        slug: "bayern-munich-200708-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/598032/1.webp",
+        images: [
+            "/assets/productos/Yupoo/598032/2.webp"
+        ],
+        temporada: "2007/08",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 856518,
+        name: "Bayern Munich 2005/06 Local Retro",
+        slug: "bayern-munich-200506-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/856518/1.webp",
+        images: [
+            "/assets/productos/Yupoo/856518/2.webp"
+        ],
+        temporada: "2005/06",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 397064,
+        name: "Bayern Munich 2025/26",
+        slug: "bayern-munich-202526",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/397064/1.webp",
+        images: [
+            "/assets/productos/Yupoo/397064/2.webp"
+        ],
+        temporada: "2025/26",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 872188,
+        name: "Bayern Munich 2014/15 Local Retro",
+        slug: "bayern-munich-201415-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/872188/1.webp",
+        images: [
+            "/assets/productos/Yupoo/872188/2.webp"
+        ],
+        temporada: "2014/15",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 180360,
+        name: "Bayern Munich 2013/14 Local Retro",
+        slug: "bayern-munich-201314-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/180360/1.webp",
+        images: [
+            "/assets/productos/Yupoo/180360/2.webp"
+        ],
+        temporada: "2013/14",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 361792,
+        name: "Bayern Munich 2003/04 Local Retro",
+        slug: "bayern-munich-200304-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/361792/1.webp",
+        images: [
+            "/assets/productos/Yupoo/361792/2.webp"
+        ],
+        temporada: "2003/04",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 665319,
+        name: "Bayern Munich 1993/95 Visitante Retro",
+        slug: "bayern-munich-199395-visitante-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/665319/1.webp",
+        images: [
+            "/assets/productos/Yupoo/665319/2.webp"
+        ],
+        temporada: "1993/95",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 680946,
+        name: "Dortmund 1996/97 Visitante Retro",
+        slug: "dortmund-199697-visitante-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/680946/1.webp",
+        images: [
+            "/assets/productos/Yupoo/680946/2.webp"
+        ],
+        temporada: "1996/97",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 533979,
+        name: "Bayern Munich 1996/98 Visitante Retro",
+        slug: "bayern-munich-199698-visitante-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/533979/1.webp",
+        images: [
+            "/assets/productos/Yupoo/533979/2.webp"
+        ],
+        temporada: "1996/98",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 887430,
+        name: "Bayern Munich 1993/95 Local Retro",
+        slug: "bayern-munich-199395-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/887430/1.webp",
+        images: [
+            "/assets/productos/Yupoo/887430/2.webp"
+        ],
+        temporada: "1993/95",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 926710,
+        name: "Eintracht Frankfurt 1998/00 Local Retro",
+        slug: "eintracht-frankfurt-199800-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/926710/1.webp",
+        images: [
+            "/assets/productos/Yupoo/926710/2.webp"
+        ],
+        temporada: "1998/00",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 499986,
+        name: "Dortmund 1989 Local Retro",
+        slug: "dortmund-1989-local-retro",
+        category: "futbol",
+        league: "bundesliga",
+        image: "/assets/productos/Yupoo/499986/1.webp",
+        images: [
+            "/assets/productos/Yupoo/499986/2.webp"
+        ],
+        temporada: "1989",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     }
 ];
 
