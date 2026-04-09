@@ -283,13 +283,7 @@ async function main() {
         if (existingById.product || existingByUrl.product) {
             const existing = existingById.product || existingByUrl.product;
             warn(`⚠ Producto ya existe con ID ${existing.id}: "${existing.name}"`);
-
-            if (!options.update) {
-                info('Aviso: Para modificar este producto, ejecuta el comando con el flag --update. Abortando para ahorrar tiempo.');
-                process.exit(0);
-            } else {
-                info('Modo actualización detectado, procediendo...');
-            }
+            options.update = true;
         }
 
         if (options.listImages) {

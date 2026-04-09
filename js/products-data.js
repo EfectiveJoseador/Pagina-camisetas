@@ -3724,7 +3724,7 @@ const products = [
         name: "Atlético Mineiro 26/27 Local",
         slug: "atletico-mineiro-2627-local",
         category: "futbol",
-        league: "laliga",
+        league: "brasileirao",
         image: "/assets/productos/Yupoo/334789/1.webp",
         images: [
             "/assets/productos/Yupoo/334789/2.webp"
@@ -10680,6 +10680,292 @@ const products = [
         retro: true,
         price: 24.9,
         oldPrice: 30
+    },
+    {
+        id: 392687,
+        name: "Santos 2026/27 Entrenamiento",
+        slug: "santos-202627-entrenamiento",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/392687/1.webp",
+        images: [
+            "/assets/productos/Yupoo/392687/2.webp"
+        ],
+        temporada: "2026/27",
+        tipo: "entrenamiento",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 379597,
+        name: "Internacional 2026/27 Local (Niño)",
+        slug: "internacional-202627-local-nino",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/379597/1.webp",
+        images: [
+            "/assets/productos/Yupoo/379597/2.webp"
+        ],
+        temporada: "2026/27",
+        tipo: "local",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 660227,
+        name: "Fluminense 2026/27 Entrenamiento",
+        slug: "fluminense-202627-entrenamiento",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/660227/1.webp",
+        images: [
+            "/assets/productos/Yupoo/660227/2.webp"
+        ],
+        temporada: "2026/27",
+        tipo: "entrenamiento",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 121632,
+        name: "Fluminense 2026/27 Local",
+        slug: "fluminense-202627-local",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/121632/1.webp",
+        images: [
+            "/assets/productos/Yupoo/121632/2.webp"
+        ],
+        temporada: "2026/27",
+        tipo: "local",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 356434,
+        name: "Botafogo 2025/26 Tercera",
+        slug: "botafogo-202526-tercera",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/356434/1.webp",
+        images: [
+            "/assets/productos/Yupoo/356434/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "tercera",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 597937,
+        name: "Bahia 2025/26 Especial",
+        slug: "bahia-202526-especial",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/597937/1.webp",
+        images: [
+            "/assets/productos/Yupoo/597937/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "especial",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 483142,
+        name: "Bahia 2025/26 (Niño)",
+        slug: "bahia-202526-nino",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/483142/1.webp",
+        images: [
+            "/assets/productos/Yupoo/483142/2.webp"
+        ],
+        temporada: "2025/26",
+        kids: true,
+        price: 21.9,
+        oldPrice: 27
+    },
+    {
+        id: 552502,
+        name: "Cruzeiro 2025/26 Portero",
+        slug: "cruzeiro-202526-portero",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/552502/1.webp",
+        images: [
+            "/assets/productos/Yupoo/552502/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "portero",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 937906,
+        name: "Vasco da Gama 2025/26 Entrenamiento",
+        slug: "vasco-da-gama-202526-entrenamiento",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/937906/1.webp",
+        images: [
+            "/assets/productos/Yupoo/937906/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "entrenamiento",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 458381,
+        name: "Vasco da Gama 2025/26 Portero",
+        slug: "vasco-da-gama-202526-portero",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/458381/1.webp",
+        images: [
+            "/assets/productos/Yupoo/458381/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "portero",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 238997,
+        name: "Recife 2025/26 Tercera",
+        slug: "recife-202526-tercera",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/238997/1.webp",
+        images: [
+            "/assets/productos/Yupoo/238997/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "tercera",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 611664,
+        name: "Recife 2025/26 Visitante",
+        slug: "recife-202526-visitante",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/611664/1.webp",
+        images: [
+            "/assets/productos/Yupoo/611664/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 413341,
+        name: "Paysandu 2025/26 Tercera",
+        slug: "paysandu-202526-tercera",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/413341/1.webp",
+        images: [
+            "/assets/productos/Yupoo/413341/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "tercera",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 651005,
+        name: "Gremio 2025/26 Tercera",
+        slug: "gremio-202526-tercera",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/651005/1.webp",
+        images: [
+            "/assets/productos/Yupoo/651005/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "tercera",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 357591,
+        name: "Fluminense 2025/26 Tercera",
+        slug: "fluminense-202526-tercera",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/357591/1.webp",
+        images: [
+            "/assets/productos/Yupoo/357591/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "tercera",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 326030,
+        name: "Vitória 2025/26 Tercera",
+        slug: "vitoria-202526-tercera",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/326030/1.webp",
+        images: [
+            "/assets/productos/Yupoo/326030/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "tercera",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 147569,
+        name: "Internacional 2025/26 Entrenamiento",
+        slug: "internacional-202526-entrenamiento",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/147569/1.webp",
+        images: [
+            "/assets/productos/Yupoo/147569/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "entrenamiento",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 657794,
+        name: "Internacional 2025/26 Entrenamiento",
+        slug: "internacional-202526-entrenamiento",
+        category: "futbol",
+        league: "brasileirao",
+        image: "/assets/productos/Yupoo/657794/1.webp",
+        images: [
+            "/assets/productos/Yupoo/657794/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "entrenamiento",
+        price: 19.9,
+        oldPrice: 25
+    },
+    {
+        id: 391444,
+        name: "Victoria 2025/26 Visitante",
+        slug: "victoria-202526-visitante",
+        category: "futbol",
+        league: "otros",
+        image: "/assets/productos/Yupoo/391444/1.webp",
+        images: [
+            "/assets/productos/Yupoo/391444/2.webp"
+        ],
+        temporada: "2025/26",
+        tipo: "visitante",
+        price: 19.9,
+        oldPrice: 25
     }
 ];
 
