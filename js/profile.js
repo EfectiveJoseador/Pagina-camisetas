@@ -221,7 +221,7 @@ function renderOrders(orders) {
                             gap: 0.35rem;
                         ">
                             <i class="fas fa-circle-notch fa-spin" style="font-size: 0.6rem; color: #f59e0b;"></i>
-                            Verificando que el pago se ha realizado correctamente (Manualmente así que tardará un poco, disculpa la espera)
+                            Verificando que el pago se ha realizado correctamente (Manualmente así que tardará entre 0-8h, disculpa la espera)
                         </span>
                     ` : ''}
                 </div>
