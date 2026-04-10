@@ -1,4 +1,4 @@
-﻿import { auth, db, onAuthStateChanged, ref, get, push, set } from './firebase-config.js';
+import { auth, db, onAuthStateChanged, ref, get, push, set } from './firebase-config.js';
 import Cart from './carrito.js';
 import products from './products-data.js';
 import { getUserCoupons, useCoupon, addPendingPoints } from './points.js';
@@ -580,6 +580,33 @@ async function loadUserCoupons() {
     }
 }
 
+// ── Helper: total de artículos en el carrito ────────────────────────────
+function getTotalCartItems() {
+    return Cart.items.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
+}
+
+// ── Helper: mostrar/ocultar mensaje de error del cupón ──────────────────
+function setCouponError(message) {
+    let el = document.getElementById('coupon-restriction-msg');
+    if (!el) {
+        // Crear el elemento si no existe y anclarlo después del select
+        const couponSelect = document.getElementById('apply-coupon');
+        if (couponSelect) {
+            el = document.createElement('p');
+            el.id = 'coupon-restriction-msg';
+            el.style.cssText = 'margin:6px 0 0; font-size:0.82rem; color:#f87171; display:flex; align-items:center; gap:5px;';
+            couponSelect.parentNode.insertBefore(el, couponSelect.nextSibling);
+        }
+    }
+    if (el) {
+        el.innerHTML = message
+            ? `<i class="fas fa-circle-exclamation"></i> ${message}`
+            : '';
+        el.style.display = message ? 'flex' : 'none';
+    }
+}
+
+// ── Lógica principal de cupón ───────────────────────────────────────────
 function applyCouponDiscount() {
     const couponSelect = document.getElementById('apply-coupon');
     const couponId = couponSelect?.value;
@@ -588,6 +615,7 @@ function applyCouponDiscount() {
     const totalEl = document.getElementById('checkout-total');
     selectedCoupon = null;
     appliedDiscount = 0;
+    setCouponError('');
 
     const calculations = Cart.calculateTotal();
     let finalTotal = calculations.total - promoDiscount;
@@ -595,6 +623,18 @@ function applyCouponDiscount() {
     if (couponId) {
         const coupon = userCoupons.find(c => c.id === couponId);
         if (coupon) {
+            // ── RESTRICCIÓN: Camiseta Gratis solo con 2+ artículos ──────────
+            const isFreeShirtCoupon = coupon.type === 'fixed' && Number(coupon.value) === 19.90;
+            if (isFreeShirtCoupon && getTotalCartItems() <= 1) {
+                setCouponError('Este cupón solo es válido para pedidos de 2 o más camisetas');
+                // Resetear select
+                if (couponSelect) couponSelect.value = '';
+                if (discountApplied) discountApplied.style.display = 'none';
+                if (totalEl) totalEl.textContent = `€${finalTotal.toFixed(2)}`;
+                return;
+            }
+            // ─────────────────────────────────────────────────────────────────
+
             selectedCoupon = coupon;
 
             if (coupon.type === 'percentage') {
@@ -606,7 +646,6 @@ function applyCouponDiscount() {
             }
 
             finalTotal = Math.max(0, finalTotal - appliedDiscount);
-
             if (discountApplied) discountApplied.style.display = 'block';
         }
     } else {
@@ -615,6 +654,29 @@ function applyCouponDiscount() {
 
     if (totalEl) {
         totalEl.textContent = `€${finalTotal.toFixed(2)}`;
+    }
+}
+
+// ── Revalidar cupón cuando cambia el carrito ────────────────────────────
+// Se llama cada vez que se actualice la cantidad de artículos.
+export function revalidateCouponAfterCartChange() {
+    if (!selectedCoupon) return;
+    const isFreeShirtCoupon = selectedCoupon.type === 'fixed' && Number(selectedCoupon.value) === 19.90;
+    if (isFreeShirtCoupon && getTotalCartItems() <= 1) {
+        // Eliminar el cupón aplicado silenciosamente y avisar
+        selectedCoupon = null;
+        appliedDiscount = 0;
+        const couponSelect = document.getElementById('apply-coupon');
+        if (couponSelect) couponSelect.value = '';
+        const discountApplied = document.getElementById('discount-applied');
+        if (discountApplied) discountApplied.style.display = 'none';
+        setCouponError(
+            'El cupón de Camiseta Gratis fue eliminado: necesitas 2 o más artículos'
+        );
+        // Recalcular total
+        const calculations = Cart.calculateTotal();
+        const totalEl = document.getElementById('checkout-total');
+        if (totalEl) totalEl.textContent = `€${(calculations.total - promoDiscount).toFixed(2)}`;
     }
 }
 

@@ -4,10 +4,9 @@ import { db, ref, get, set, push, update, runTransaction } from './firebase-conf
 const POINTS_PER_SHIRT = 10;
 const MAX_POINTS_PER_TRANSACTION = 1000;
 const REWARDS = [
-    { id: 'discount_10', name: '10% Descuento', type: 'percentage', value: 10, cost: 20, description: '10% de descuento en tu próxima compra' },
-    { id: 'discount_15', name: '15% Descuento', type: 'percentage', value: 15, cost: 40, description: '15% de descuento en tu próxima compra' },
-    { id: 'discount_20', name: '20% Descuento', type: 'percentage', value: 20, cost: 60, description: '20% de descuento en tu próxima compra' },
-    { id: 'free_shirt', name: 'Camiseta Gratis', type: 'fixed', value: 19.90, cost: 100, description: 'Camiseta gratis (19,90€). Extras se pagan aparte.' }
+    { id: 'discount_10', name: '10% Descuento',    type: 'percentage', value: 10,    cost: 30,  description: '10% de descuento en tu próxima compra' },
+    { id: 'discount_15', name: '15% Descuento',    type: 'percentage', value: 15,    cost: 60,  description: '15% de descuento en tu próxima compra' },
+    { id: 'free_shirt',  name: 'Camiseta Gratis',  type: 'fixed',      value: 19.90, cost: 100, description: 'Camiseta gratis (19,90€). Debe ir con otro pedido de pago. Extras aparte.' }
 ];
 
 
