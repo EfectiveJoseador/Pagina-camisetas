@@ -181,17 +181,24 @@ async function saveNewAddress(e) {
 
 function initPaymentMethods() {
     const paymentRadios = document.querySelectorAll('input[name="payment"]');
-    const bizumForm = document.getElementById('bizum-form');
+    const bizumForm     = document.getElementById('bizum-form');
+    const revtagForm    = document.getElementById('revtag-form');
+    const transferForm  = document.getElementById('transfer-form');
 
     if (!paymentRadios || paymentRadios.length === 0) return;
 
+    const allForms = [bizumForm, revtagForm, transferForm];
+
     paymentRadios.forEach(radio => {
         radio.addEventListener('change', (e) => {
-            if (e.target.value === 'bizum') {
-                if (bizumForm) bizumForm.style.display = 'block';
-            } else {
-                if (bizumForm) bizumForm.style.display = 'none';
-            }
+            // Ocultar todos los formularios de instrucción
+            allForms.forEach(f => { if (f) f.style.display = 'none'; });
+
+            // Mostrar el formulario correspondiente al método elegido
+            if (e.target.value === 'bizum'        && bizumForm)    bizumForm.style.display    = 'block';
+            if (e.target.value === 'revtag'        && revtagForm)   revtagForm.style.display   = 'block';
+            if (e.target.value === 'transferencia' && transferForm) transferForm.style.display = 'block';
+
             if (window.Analytics) {
                 window.Analytics.trackAddPaymentInfo(e.target.value);
             }
@@ -623,17 +630,31 @@ function applyCouponDiscount() {
     if (couponId) {
         const coupon = userCoupons.find(c => c.id === couponId);
         if (coupon) {
-            // ── RESTRICCIÓN: Camiseta Gratis solo con 2+ artículos ──────────
+            // ── Aviso exclusividad: código promo activo ───────────────────
+            if (appliedPromoCode) {
+                setCouponError('⚠️ El código de descuento ha sido eliminado para aplicar tu cupón');
+                appliedPromoCode = null;
+                promoDiscount = 0;
+                finalTotal = calculations.total; // recalcular sin promo
+                const promoInput  = document.getElementById('promo-code-input');
+                const promoBtn    = document.getElementById('apply-promo-btn');
+                const promoResult = document.getElementById('promo-result');
+                const promoRemoveRow = document.getElementById('promo-remove-row');
+                if (promoInput)  { promoInput.value = ''; promoInput.disabled = false; }
+                if (promoBtn)    { promoBtn.disabled = false; promoBtn.innerHTML = 'Aplicar código'; promoBtn.style.background = '#6366f1'; }
+                if (promoResult) { promoResult.style.display = 'none'; }
+                if (promoRemoveRow) promoRemoveRow.style.display = 'none';
+            }
+
+            // ── RESTRICCIÓN: Camiseta Gratis solo con 2+ artículos ──────
             const isFreeShirtCoupon = coupon.type === 'fixed' && Number(coupon.value) === 19.90;
             if (isFreeShirtCoupon && getTotalCartItems() <= 1) {
                 setCouponError('Este cupón solo es válido para pedidos de 2 o más camisetas');
-                // Resetear select
                 if (couponSelect) couponSelect.value = '';
                 if (discountApplied) discountApplied.style.display = 'none';
                 if (totalEl) totalEl.textContent = `€${finalTotal.toFixed(2)}`;
                 return;
             }
-            // ─────────────────────────────────────────────────────────────────
 
             selectedCoupon = coupon;
 
@@ -733,13 +754,13 @@ async function applyPromoCode() {
                 return;
             }
             promoDiscount = calculations.shipping;
-            showPromoResult('Â¡Envío gratis aplicado!', 'success');
+            showPromoResult('¡Envío gratis aplicado!', 'success');
         } else if (promo.type === 'percentage') {
             promoDiscount = (calculations.subtotal * promo.value) / 100;
-            showPromoResult(`Â¡${promo.value}% de descuento aplicado! (-€${promoDiscount.toFixed(2)})`, 'success');
+            showPromoResult(`¡${promo.value}% de descuento aplicado! (-€${promoDiscount.toFixed(2)})`, 'success');
         } else {
             promoDiscount = Math.min(promo.value, calculations.subtotal);
-            showPromoResult(`Â¡€${promo.value} de descuento aplicado!`, 'success');
+            showPromoResult(`¡€${promo.value} de descuento aplicado!`, 'success');
         }
         let finalTotal = calculations.total - promoDiscount - appliedDiscount;
         finalTotal = Math.max(0, finalTotal);
@@ -754,8 +775,44 @@ async function applyPromoCode() {
         } catch (err) {
             console.warn('Could not increment usage count:', err);
         }
+        // ── Exclusividad mutua: aviso + desactivar cupones ──────────────
+        const couponSelect    = document.getElementById('apply-coupon');
+        const discountApplied = document.getElementById('discount-applied');
+        if (couponSelect) {
+            if (couponSelect.value) {
+                selectedCoupon  = null;
+                appliedDiscount = 0;
+                couponSelect.value = '';
+                if (discountApplied) discountApplied.style.display = 'none';
+            }
+            couponSelect.disabled = true;
+            couponSelect.style.opacity = '0.45';
+            couponSelect.style.pointerEvents = 'none';
+        }
+        // Mostrar aviso de exclusividad bajo el cupón
+        setCouponError('ℹ️ Código de descuento activo — quita el código para usar un cupón');
+
+        // Mostrar botón "Quitar código" junto al resultado
+        let removeRow = document.getElementById('promo-remove-row');
+        if (!removeRow) {
+            removeRow = document.createElement('div');
+            removeRow.id = 'promo-remove-row';
+            removeRow.style.cssText = 'margin-top:0.5rem; display:flex; justify-content:flex-end;';
+            removeRow.innerHTML = `<button id="remove-promo-btn" type="button"
+                style="background:none; border:none; color:#f87171; font-size:0.78rem; cursor:pointer; display:flex; align-items:center; gap:4px; padding:0;">
+                <i class="fas fa-times-circle"></i> Quitar código
+            </button>`;
+            // Insertar después del div promo-result
+            const resultDiv = document.getElementById('promo-result');
+            if (resultDiv && resultDiv.parentNode) {
+                resultDiv.parentNode.insertBefore(removeRow, resultDiv.nextSibling);
+            }
+        }
+        removeRow.style.display = 'flex';
+        document.getElementById('remove-promo-btn')?.addEventListener('click', removePromoCode);
+
         if (btn) {
-            btn.textContent = '? Aplicado';
+            btn.innerHTML = '<i class="fas fa-check"></i> Aplicado';
             btn.style.background = '#10b981';
         }
         if (input) {
@@ -769,6 +826,36 @@ async function applyPromoCode() {
         showPromoResult('Error al validar el código', 'error');
         resetPromoButton();
     }
+}
+
+// ── Quitar código promo (restaura cupones) ───────────────────────────────
+function removePromoCode() {
+    appliedPromoCode = null;
+    promoDiscount    = 0;
+
+    const input     = document.getElementById('promo-code-input');
+    const btn       = document.getElementById('apply-promo-btn');
+    const resultDiv = document.getElementById('promo-result');
+    const removeRow = document.getElementById('promo-remove-row');
+
+    if (input)     { input.value = ''; input.disabled = false; }
+    if (btn)       { btn.disabled = false; btn.innerHTML = 'Aplicar código'; btn.style.background = '#6366f1'; }
+    if (resultDiv) { resultDiv.style.display = 'none'; }
+    if (removeRow) { removeRow.style.display = 'none'; }
+
+    // Reactivar selector de cupones
+    const couponSelect = document.getElementById('apply-coupon');
+    if (couponSelect) {
+        couponSelect.disabled            = false;
+        couponSelect.style.opacity       = '1';
+        couponSelect.style.pointerEvents = 'auto';
+    }
+    setCouponError(''); // limpiar aviso de exclusividad
+
+    // Recalcular total (solo descuento de cupón activo si existe)
+    const calculations = Cart.calculateTotal();
+    const totalEl = document.getElementById('checkout-total');
+    if (totalEl) totalEl.textContent = `€${Math.max(0, calculations.total - appliedDiscount).toFixed(2)}`;
 }
 
 function showPromoResult(message, type) {

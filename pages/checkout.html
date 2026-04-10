@@ -290,6 +290,18 @@
                             <span>Bizum</span>
                             <i class="fas fa-mobile-alt"></i>
                         </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="revtag">
+                            <span>Revtag (Revolut)</span>
+                            <i class="fas fa-bolt"></i>
+                        </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="transferencia">
+                            <span>Transferencia Bancaria</span>
+                            <i class="fas fa-university"></i>
+                        </label>
                     </div>
 
                     <div id="bizum-form" style="display:none; margin-top:1rem;">
@@ -297,7 +309,27 @@
                             style="background: linear-gradient(135deg, rgba(0, 150, 136, 0.1), rgba(0, 191, 165, 0.05)); border: 1px solid rgba(0, 191, 165, 0.3); border-radius: 12px; padding: 1.25rem;">
                             <p style="color: var(--text-main); margin: 0; font-size: 0.9rem;">
                                 <i class="fas fa-info-circle" style="color: #00bfa5;"></i>
-                                Te contactaremos por Instragram para enviarte el número de Bizum y confirmar el pago.
+                                Te contactaremos por Instagram para enviarte el número de Bizum y confirmar el pago.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="revtag-form" style="display:none; margin-top:1rem;">
+                        <div
+                            style="background: linear-gradient(135deg, rgba(97, 21, 255, 0.08), rgba(97, 21, 255, 0.03)); border: 1px solid rgba(97, 21, 255, 0.25); border-radius: 12px; padding: 1.25rem;">
+                            <p style="color: var(--text-main); margin: 0; font-size: 0.9rem;">
+                                <i class="fas fa-info-circle" style="color: #6115ff;"></i>
+                                Te contactaremos por Instagram para enviarte nuestro Revtag de Revolut y confirmar el pago.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="transfer-form" style="display:none; margin-top:1rem;">
+                        <div
+                            style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(59, 130, 246, 0.03)); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 12px; padding: 1.25rem;">
+                            <p style="color: var(--text-main); margin: 0; font-size: 0.9rem;">
+                                <i class="fas fa-info-circle" style="color: #3b82f6;"></i>
+                                Te contactaremos por Instagram con los datos de la cuenta bancaria para realizar la transferencia y confirmar el pago.
                             </p>
                         </div>
                     </div>

@@ -193,7 +193,7 @@ function renderOrders() {
         const truncatedProducts = products.length > 50 ? products.substring(0, 50) + '...' : products;
         const isPaid = order.payment?.paid === true;
         const paymentMethod = order.paymentMethod || 'N/A';
-        const needsConfirmation = (paymentMethod === 'bizum' || paymentMethod === 'paypal') && !isPaid;
+        const needsConfirmation = (['bizum', 'revtag', 'transferencia'].includes(paymentMethod)) && !isPaid;
 
         return `
             <tr data-order-path="${order.path}">

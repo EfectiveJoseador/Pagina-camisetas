@@ -211,6 +211,19 @@ function renderOrders(orders) {
                     <span style="color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
                         <i class="far fa-calendar-alt"></i>${orderDateTime}
                     </span>
+                    ${normalizedStatus === 'pendiente' ? `
+                        <span style="
+                            margin-top: 0.4rem;
+                            font-size: 0.72rem;
+                            color: #9ca3af;
+                            display: flex;
+                            align-items: center;
+                            gap: 0.35rem;
+                        ">
+                            <i class="fas fa-circle-notch fa-spin" style="font-size: 0.6rem; color: #f59e0b;"></i>
+                            Verificando que el pago se ha realizado correctamente (Manualmente así que tardará un poco, disculpa la espera)
+                        </span>
+                    ` : ''}
                 </div>
                 
                 <!-- Status Badge - Premium Style -->
