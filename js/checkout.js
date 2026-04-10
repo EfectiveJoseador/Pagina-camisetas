@@ -226,14 +226,6 @@ function confirmOrder() {
 
     const paymentMethod = selectedPayment.value;
 
-    if (paymentMethod === 'bizum') {
-        const bizumInstagram = document.getElementById('bizum-instagram').value.trim();
-        if (!bizumInstagram) {
-            alert('Por favor, introduce tu usuario de Instagram para Bizum');
-            return;
-        }
-    }
-
     const selectedAddress = addresses.find(a => a.id === selectedAddressId);
     const calculations = Cart.calculateTotal();
     const orderId = 'ORD-' + Date.now();
@@ -283,9 +275,7 @@ function confirmOrder() {
         pointsToEarn: totalShirtQuantity * 10
     };
 
-    if (paymentMethod === 'bizum') {
-        orderData.bizumInstagram = document.getElementById('bizum-instagram').value.trim().replace(/^@/, '');
-    } else if (paymentMethod === 'paypal') {
+    if (paymentMethod === 'paypal') {
         orderData.paypalLink = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${finalTotal.toFixed(2)}`;
     }
 
@@ -302,58 +292,31 @@ function confirmOrder() {
         }
 
         const originalText = confirmBtn.innerHTML;
-        confirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Pago en proceso...';
+        confirmBtn.innerHTML = '<i class="fas fa-external-link-alt"></i> PayPal abierto...';
         confirmBtn.disabled = true;
 
-        let elapsed = 0;
-        const intervalMs = 500;
-        const timeoutMs = 120000;
+        // Botón de confirmación manual — el usuario lo pulsa tras pagar
+        let manualBtn = document.getElementById('paypal-manual-confirm-btn');
+        if (!manualBtn) {
+            manualBtn = document.createElement('button');
+            manualBtn.id   = 'paypal-manual-confirm-btn';
+            manualBtn.type = 'button';
+            manualBtn.style.cssText = 'width:100%;margin-top:0.75rem;padding:0.9rem 1.5rem;background:linear-gradient(135deg,#0070ba,#003087);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;box-shadow:0 4px 14px rgba(0,112,186,0.35);transition:all 0.2s ease';
+            manualBtn.innerHTML = '<i class="fab fa-paypal"></i> Ya he pagado &mdash; Confirmar pedido';
+            confirmBtn.parentNode.appendChild(manualBtn);
+        }
+        manualBtn.style.display = 'flex';
 
-        const checkClosed = setInterval(() => {
-            elapsed += intervalMs;
-            if (!paypalWindow || paypalWindow.closed) {
-                clearInterval(checkClosed);
-
-                confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finalizando...';
-                (async () => {
-                    try {
-                        await saveOrder(orderData);
-                        await sendOrderViaWeb3Forms(orderData);
-                        if (orderData.pointsToEarn > 0) {
-                            await addPendingPoints(currentUser.uid, orderData.orderId, totalShirtQuantity);
-                        }
-                        if (selectedCoupon) {
-                            await useCoupon(currentUser.uid, selectedCoupon.id, orderData.orderId);
-                        }
-                        localStorage.removeItem('cart');
-                        localStorage.removeItem('appliedPacks');
-                        window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
-                    } catch (error) {
-                        console.error('Error procesando pedido:', error);
-                        alert('Error al procesar el pedido. Por favor, inténtalo de nuevo.');
-                        confirmBtn.innerHTML = originalText;
-                        confirmBtn.disabled = false;
-                    }
-                })();
-
-                return;
-            }
-            if (elapsed >= timeoutMs) {
-                clearInterval(checkClosed);
-                alert('No se ha podido detectar el cierre de PayPal. Si has completado el pago, revisa tu correo.');
-                confirmBtn.innerHTML = originalText;
-                confirmBtn.disabled = false;
-            }
-        }, intervalMs);
-
-    } else {
-        const originalText = confirmBtn.innerHTML;
-        confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
-        confirmBtn.disabled = true;
-        (async () => {
+        manualBtn.onclick = async () => {
+            manualBtn.style.display = 'none';
+            confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finalizando...';
+            confirmBtn.disabled = true;
             try {
                 await saveOrder(orderData);
                 await sendOrderViaWeb3Forms(orderData);
+                if (appliedPromoCode) {
+                    await incrementPromoUsage(appliedPromoCode.id, appliedPromoCode);
+                }
                 if (orderData.pointsToEarn > 0) {
                     await addPendingPoints(currentUser.uid, orderData.orderId, totalShirtQuantity);
                 }
@@ -365,7 +328,37 @@ function confirmOrder() {
                 window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
             } catch (error) {
                 console.error('Error procesando pedido:', error);
-                alert('Error al procesar el pedido. Por favor, inténtalo de nuevo.');
+                alert('Error al procesar el pedido: ' + (error.message || 'Intentalo de nuevo.'));
+                confirmBtn.innerHTML = originalText;
+                confirmBtn.disabled = false;
+                manualBtn.style.display = 'flex';
+            }
+        };
+
+    } else {
+        const originalText = confirmBtn.innerHTML;
+        confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+        confirmBtn.disabled = true;
+        (async () => {
+            try {
+                await saveOrder(orderData);
+                await sendOrderViaWeb3Forms(orderData);
+                // Incrementar uso del código promo solo si el pedido se guardó con éxito
+                if (appliedPromoCode) {
+                    await incrementPromoUsage(appliedPromoCode.id, appliedPromoCode);
+                }
+                if (orderData.pointsToEarn > 0) {
+                    await addPendingPoints(currentUser.uid, orderData.orderId, totalShirtQuantity);
+                }
+                if (selectedCoupon) {
+                    await useCoupon(currentUser.uid, selectedCoupon.id, orderData.orderId);
+                }
+                localStorage.removeItem('cart');
+                localStorage.removeItem('appliedPacks');
+                window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
+            } catch (error) {
+                console.error('Error procesando pedido:', error);
+                alert('Error al procesar el pedido: ' + (error.message || 'Inténtalo de nuevo.'));
                 confirmBtn.innerHTML = originalText;
                 confirmBtn.disabled = false;
             }
@@ -375,7 +368,6 @@ function confirmOrder() {
 
 async function sendOrderViaWeb3Forms(orderData) {
     const sa = orderData.shippingAddress || {};
-    const instagramUser = orderData.bizumInstagram || sa.instagram || '';
     const customerInfo = `Contact Name: ${sa.name || ''}
 Address Line: ${sa.street || ''}
 City: ${sa.city || ''}
@@ -383,14 +375,17 @@ Province: ${sa.province || ''}
 Country: España
 Postal Code: ${sa.zip || ''}
 Phone Number: ${sa.phone || ''}
-Instagram: @${instagramUser.replace('@', '')}${orderData.bizumInstagram ? ' (Bizum)' : ''}`;
+Instagram: @${(sa.instagram || '').replace('@', '')}`;
     let productsText = '';
     orderData.items.forEach((item) => {
         const qty = item.quantity || 1;
         const size = item.size || 'M';
-        const version = item.version || 'fan';
+        let version = item.version || 'fan';
+        if (version.toLowerCase() === 'aficionado') {
+            version = 'fan';
+        }
         const price = (item.price * qty).toFixed(2);
-        productsText += qty + 'x ' + item.name + ' Â· ' + size + ' Â· ' + version + ' Â €' + price + '\n';
+        productsText += qty + 'x ' + item.name + ' - ' + size + ' - ' + version + ' - €' + price + '\n';
     });
     let totalInfo = `Subtotal: €${orderData.subtotal.toFixed(2)}\n`;
 
@@ -433,8 +428,8 @@ Instagram: @${instagramUser.replace('@', '')}${orderData.bizumInstagram ? ' (Biz
 
 async function saveOrder(orderData) {
     if (!currentUser) {
-        console.error('? Cannot save order: No user authenticated');
-        return false;
+        console.error('⚠️ Cannot save order: No user authenticated');
+        throw new Error('Usuario no autenticado');
     }
 
     try {
@@ -451,14 +446,12 @@ async function saveOrder(orderData) {
         await set(orderRef, orderToSave);
         return true;
     } catch (error) {
-        console.error('? Error saving order to Firebase:', error);
-        console.error('Error code:', error.code);
-        console.error('Error message:', error.message);
+        console.error('❌ Error saving order to Firebase:', error);
         if (error.code === 'PERMISSION_DENIED') {
-            console.error('?? Firebase permission denied. Check if email is verified or rules are too restrictive.');
+            console.error('⚠️ Firebase permission denied. Check if email is verified or rules are too restrictive.');
         }
-
-        return false;
+        // Relanzar para que el bloque try/catch del caller lo capture
+        throw error;
     }
 }
 
@@ -701,7 +694,29 @@ export function revalidateCouponAfterCartChange() {
     }
 }
 
+// ── Helper: incrementa contadores de uso del código promo ───────────────
+// Se llama SOLO después de que saveOrder() tenga éxito.
+async function incrementPromoUsage(code, promo) {
+    try {
+        const usageRef = ref(db, `promoCodes/${code}/usageCount`);
+        const snap = await get(usageRef);
+        const currentCount = snap.exists() ? (snap.val() || 0) : (promo.usageCount || 0);
+        await set(usageRef, currentCount + 1);
+
+        if (promo.maxUsesPerUser && currentUser) {
+            const userUsageRef = ref(db, `promoCodes/${code}/userUsages/${currentUser.uid}`);
+            const userSnap = await get(userUsageRef);
+            const userCount = userSnap.exists() ? (userSnap.val() || 0) : 0;
+            await set(userUsageRef, userCount + 1);
+        }
+    } catch (err) {
+        // No bloqueante: si falla el contador el pedido ya está guardado
+        console.warn('Could not increment promo usage count:', err);
+    }
+}
+
 async function applyPromoCode() {
+
     const input = document.getElementById('promo-code-input');
     const resultDiv = document.getElementById('promo-result');
     const totalEl = document.getElementById('checkout-total');
@@ -785,22 +800,7 @@ async function applyPromoCode() {
         if (totalEl) {
             totalEl.textContent = `€${finalTotal.toFixed(2)}`;
         }
-        // ── Incrementar contadores: global y por usuario ─────────────────────
-        try {
-            const usageRef = ref(db, `promoCodes/${code}/usageCount`);
-            const currentCount = promo.usageCount || 0;
-            await set(usageRef, currentCount + 1);
-
-            // Contador personal del usuario
-            if (promo.maxUsesPerUser) {
-                const userUsageRef = ref(db, `promoCodes/${code}/userUsages/${currentUser.uid}`);
-                const userUsageSnap = await get(userUsageRef);
-                const userUsageCount = userUsageSnap.exists() ? (userUsageSnap.val() || 0) : 0;
-                await set(userUsageRef, userUsageCount + 1);
-            }
-        } catch (err) {
-            console.warn('Could not increment usage count:', err);
-        }
+        // El contador de usos se incrementa solo al confirmar el pedido (ver incrementPromoUsage).
         // ── Exclusividad mutua: aviso + desactivar cupones ──────────────
         const couponSelect    = document.getElementById('apply-coupon');
         const discountApplied = document.getElementById('discount-applied');

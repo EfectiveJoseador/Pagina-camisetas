@@ -380,14 +380,15 @@ window.viewOrderDetails = async function (path) {
                 <p>${address.street || 'N/A'}</p>
                 <p>${address.city || ''}, ${address.postalCode || ''}</p>
                 <p>${address.province || ''}, ${address.country || ''}</p>
+                <p><strong><i class="fab fa-instagram" style="color: #E1306C;"></i> Instagram:</strong> ${address.instagram || 'N/A'}</p>
                 <p><strong>Tel:</strong> ${address.phone || 'N/A'}</p>
             </div>
 
             <div class="detail-section">
                 <h3><i class="fas fa-credit-card"></i> Pago</h3>
                 <p><strong>Método:</strong> ${order.paymentMethod || 'N/A'}</p>
-                ${order.paymentMethod === 'bizum' ? `
-                    <p><strong><i class="fab fa-instagram" style="color: #E1306C;"></i> Instagram:</strong> ${order.bizumInstagram || 'N/A'}</p>
+                ${order.paymentMethod === 'bizum' && order.bizumInstagram ? `
+                    <p><strong><i class="fab fa-instagram" style="color: #E1306C;"></i> (Legacy) Instagram Bizum:</strong> ${order.bizumInstagram}</p>
                 ` : ''}
                 ${order.payment?.confirmedBy ? `<p><strong>Confirmado por:</strong> ${order.payment.confirmedBy}</p>` : ''}
             </div>
