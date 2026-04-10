@@ -1,6 +1,6 @@
 
 
-import { auth, db, onAuthStateChanged, signOut, ref, onValue, update, get, remove, push } from './firebase-config.js';
+import { auth, db, onAuthStateChanged, signOut, ref, onValue, update, get, remove, push, set } from './firebase-config.js';
 import { convertToAvailable } from './points.js';
 let isAdmin = false;
 let allOrders = [];
