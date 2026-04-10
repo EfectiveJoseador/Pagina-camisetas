@@ -221,7 +221,7 @@ function renderOrders(orders) {
                             gap: 0.35rem;
                         ">
                             <i class="fas fa-circle-notch fa-spin" style="font-size: 0.6rem; color: #f59e0b;"></i>
-                            Verificando que el pago se ha realizado correctamente (Manualmente así que tardará entre 0-8h, disculpa la espera)
+                            Verificando que el pago se haya realizado correctamente (Manualmente así que tardará entre 0-8h, sentimos la espera)
                         </span>
                     ` : ''}
                 </div>
@@ -275,6 +275,12 @@ function renderOrders(orders) {
                             <div style="display: flex; align-items: center; gap: 0.4rem; margin-top: 0.5rem; color: var(--primary);">
                                 <i class="fas fa-phone-alt" style="font-size: 0.8rem;"></i>
                                 <span>${shipping.phone}</span>
+                            </div>
+                        ` : ''}
+                        ${shipping.instagram ? `
+                            <div style="display: flex; align-items: center; gap: 0.4rem; margin-top: 0.3rem; color: #E1306C; font-weight: 600;">
+                                <i class="fab fa-instagram" style="font-size: 0.85rem;"></i>
+                                <span>@${shipping.instagram.replace(/^@/, '')}</span>
                             </div>
                         ` : ''}
                     </div>
@@ -623,6 +629,7 @@ function renderAddresses(addresses) {
             <p>${addr.street}</p>
             <p>${addr.zip}, ${addr.city}${addr.province ? ' (' + addr.province + ')' : ''}</p>
             <p><i class="fas fa-phone"></i> ${addr.phone}</p>
+            <p><i class="fab fa-instagram" style="color: #E1306C;"></i> @${(addr.instagram || '').replace(/^@/, '')}</p>
             <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
                 <button class="btn-text edit-address" data-id="${addr.id}">
                     <i class="fas fa-edit"></i> Editar
@@ -683,6 +690,7 @@ async function loadAddressData(addressId) {
             document.getElementById('address-zip').value = addr.zip || '';
             document.getElementById('address-province').value = addr.province || '';
             document.getElementById('address-phone').value = addr.phone || '';
+            document.getElementById('address-instagram').value = addr.instagram || '';
         }
     } catch (error) {
         console.error('Error loading address data:', error);
@@ -700,7 +708,8 @@ async function saveAddress(e) {
         city: document.getElementById('address-city').value.trim(),
         zip: document.getElementById('address-zip').value.trim(),
         province: document.getElementById('address-province').value,
-        phone: document.getElementById('address-phone').value.trim()
+        phone: document.getElementById('address-phone').value.trim(),
+        instagram: document.getElementById('address-instagram').value.trim()
     };
 
     try {
@@ -1154,7 +1163,7 @@ async function handleOrderAddressSubmit(e) {
         zip: document.getElementById('order-address-zip').value.trim(),
         province: document.getElementById('order-address-province').value,
         phone: document.getElementById('order-address-phone').value.trim(),
-        instagram: document.getElementById('order-address-instagram').value.trim().replace(/^@/, '')
+        instagram: document.getElementById('order-address-instagram').value.trim()
     };
 
     try {
@@ -1204,7 +1213,7 @@ Province: ${sa.province || ''}
 Country: España
 Postal Code: ${sa.zip || ''}
 Phone Number: ${sa.phone || ''}
-Instagram: @${(sa.instagram || '').replace('@', '')}`;
+Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
     let productsText = '';
     const items = orderData.items || orderData.products || [];
     items.forEach((item) => {

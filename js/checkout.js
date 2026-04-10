@@ -71,6 +71,7 @@ function renderAddresses(addressArray) {
                 <p>${addr.street}</p>
                 <p>${addr.zip}, ${addr.city}${addr.province ? ' (' + addr.province + ')' : ''}</p>
                 <p><i class="fas fa-phone" style="font-size: 0.85em;"></i> ${addr.phone}</p>
+                <p><i class="fab fa-instagram" style="color: #E1306C; font-size: 0.85em;"></i> @${(addr.instagram || '').replace(/^@/, '')}</p>
             </div>
         </label>
     `).join('');
@@ -160,7 +161,7 @@ async function saveNewAddress(e) {
         zip: document.getElementById('new-address-zip').value.trim(),
         province: provinceInput ? provinceInput.value : '',
         phone: document.getElementById('new-address-phone').value.trim(),
-        instagram: instagramInput ? instagramInput.value.trim().replace(/^@/, '') : ''
+        instagram: instagramInput ? instagramInput.value.trim() : ''
     };
 
     try {
@@ -375,7 +376,7 @@ Province: ${sa.province || ''}
 Country: España
 Postal Code: ${sa.zip || ''}
 Phone Number: ${sa.phone || ''}
-Instagram: @${(sa.instagram || '').replace('@', '')}`;
+Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
     let productsText = '';
     orderData.items.forEach((item) => {
         const qty = item.quantity || 1;
