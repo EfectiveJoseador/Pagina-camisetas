@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="es" data-theme="dark">
 
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <link rel="icon" type="image/x-icon" href="assets/logo/logo.png">
   <title>Acceso | Camisetazo</title>
+  <meta name="description" content="Inicia sesión o crea tu cuenta en Camisetazo para gestionar pedidos, recompensas y más.">
+  <meta name="robots" content="noindex, nofollow">
 
-
+  <!-- Google Analytics -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -16,527 +18,1100 @@
     gtag('config', 'G-GS53GWE2Z0');
   </script>
 
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="/assets/fonts/fontawesome/css/all.min.css">
+
+  <!-- hCaptcha -->
+  <script src="https://js.hcaptcha.com/1/api.js" async defer></script>
+
   <style>
+    /* ===================================
+       DESIGN TOKENS — Dark Mode Premium
+       =================================== */
     :root {
-      --bg: #071735;
-      --card: #0b2346;
-      --muted: #a8c3ff;
-      --text: #dbeeff;
-      --accent: #3b82f6;
-      --danger: #ef4444;
-      --ok: #22c55e;
+      --bg:            #071422;
+      --bg-card:       #0c1e35;
+      --bg-input:      #0f2440;
+      --bg-input-hover:#132a4e;
+
+      --border-subtle: rgba(255, 255, 255, 0.05);
+      --border-field:  rgba(99, 143, 211, 0.22);
+      --border-focus:  #6366f1;
+
+      --text-main:     #dbeeff;
+      --text-label:    #cde2ff;
+      --text-muted:    #7ba8d4;
+      --text-error:    #fca5a5;
+      --text-ok:       #86efac;
+
+      --accent-purple:  #8b5cf6;
+      --accent-purple2: #6366f1;
+      --accent-blue:    #3b82f6;
+
+      --danger-bg:     rgba(239, 68,  68,  0.10);
+      --danger-border: rgba(239, 68,  68,  0.35);
+      --ok-bg:         rgba(34,  197, 94,  0.10);
+      --ok-border:     rgba(34,  197, 94,  0.35);
+
+      --radius-sm:  8px;
+      --radius-md:  12px;
+      --radius-lg:  16px;
+      --safe:       clamp(16px, 5vw, 24px);
+
+      --transition: 0.22s cubic-bezier(0.22, 1, 0.36, 1);
     }
 
-    * {
-      box-sizing: border-box;
-    }
+    /* ===================================
+       RESET & BASE
+       =================================== */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html { scroll-behavior: smooth; }
 
     body {
-      margin: 0;
-      font-family: system-ui, -apple-system, Segoe UI, Roboto, Ubuntu, Cantarell, Noto Sans, Helvetica, Arial, "Apple Color Emoji", "Segoe UI Emoji";
+      font-family: 'Inter', system-ui, -apple-system, sans-serif;
       background: var(--bg);
-      color: var(--text);
-    }
-
-    .container {
+      color: var(--text-main);
       min-height: 100dvh;
-      display: grid;
-      place-items: center;
-      padding: 24px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
     }
 
-    .panel {
-      width: 100%;
-      max-width: 960px;
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 24px;
-      background: #071b36;
-      border: 1px solid rgba(63, 106, 173, .2);
-      border-radius: 14px;
-      box-shadow: 0 20px 60px rgba(0, 0, 0, .35);
-      padding: 24px;
+    /* ===================================
+       BACKGROUND GLOW FX
+       =================================== */
+    .auth-bg {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      z-index: 0;
+      overflow: hidden;
+    }
+    .auth-bg::before {
+      content: '';
+      position: absolute;
+      top: -20%;
+      left: -10%;
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(ellipse, rgba(99, 102, 241, 0.12) 0%, transparent 70%);
+      animation: glowPulse 8s ease-in-out infinite alternate;
+    }
+    .auth-bg::after {
+      content: '';
+      position: absolute;
+      bottom: -15%;
+      right: -10%;
+      width: 50%;
+      height: 55%;
+      background: radial-gradient(ellipse, rgba(139, 92, 246, 0.10) 0%, transparent 70%);
+      animation: glowPulse 10s ease-in-out infinite alternate-reverse;
+    }
+    @keyframes glowPulse {
+      from { opacity: 0.6; transform: scale(1); }
+      to   { opacity: 1;   transform: scale(1.15); }
     }
 
-    @media (max-width: 860px) {
-      .panel {
-        grid-template-columns: 1fr;
-        max-width: 560px;
-      }
+    /* ===================================
+       LAYOUT WRAPPER
+       =================================== */
+    .auth-wrapper {
+      position: relative;
+      z-index: 1;
+      min-height: 100dvh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: var(--safe);
     }
 
-    .brand {
+    /* ===================================
+       TOP BRAND BAR
+       =================================== */
+    .auth-brand {
       display: flex;
       align-items: center;
-      gap: 12px;
-      margin-bottom: 8px;
+      gap: 10px;
+      margin-bottom: 28px;
+      text-decoration: none;
     }
-
-    .brand img {
-      width: 40px;
-      height: 40px;
-      border-radius: 8px;
+    .auth-brand img {
+      width: 38px;
+      height: 38px;
+      border-radius: var(--radius-sm);
       object-fit: cover;
     }
-
-    .brand h1 {
-      margin: 0;
-      font-size: 1.25rem;
-      letter-spacing: .3px;
-      color: #9fe0ff;
+    .auth-brand span {
+      font-family: 'Outfit', sans-serif;
+      font-size: 1.3rem;
+      font-weight: 800;
+      letter-spacing: -0.5px;
+      background: linear-gradient(135deg, #9fe0ff 0%, #a78bfa 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
     }
 
-    .muted {
-      color: var(--muted);
-      font-size: .95rem;
+    /* ===================================
+       PANEL (CARD)
+       =================================== */
+    .auth-panel {
+      width: 100%;
+      max-width: 460px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: clamp(24px, 6vw, 40px);
+      box-shadow:
+        0 0 0 1px rgba(99, 102, 241, 0.06),
+        0 24px 64px rgba(0, 0, 0, 0.45),
+        0 4px 16px rgba(0, 0, 0, 0.3);
+      animation: panelIn 0.55s cubic-bezier(0.16, 1, 0.3, 1) both;
+    }
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.97); }
+      to   { opacity: 1; transform: translateY(0)    scale(1); }
     }
 
-    .card {
-      background: var(--card);
-      border: 1px solid rgba(42, 91, 168, .22);
-      border-radius: 12px;
-      padding: 18px;
-    }
-
+    /* ===================================
+       TABS
+       =================================== */
     .tabs {
       display: flex;
-      gap: 6px;
-      background: rgba(10, 31, 61, .6);
-      padding: 6px;
-      border-radius: 10px;
-      border: 1px solid rgba(42, 91, 168, .18);
+      gap: 4px;
+      background: rgba(10, 20, 40, 0.7);
+      border: 1px solid var(--border-field);
+      border-radius: var(--radius-sm);
+      padding: 4px;
+      margin-bottom: 28px;
     }
-
-    .tab {
+    .tab-btn {
       flex: 1;
-      text-align: center;
       padding: 10px 12px;
-      border-radius: 8px;
+      border: none;
+      border-radius: 6px;
+      background: transparent;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 600;
       cursor: pointer;
-      user-select: none;
-      font-weight: 700;
-      color: #bfe4ff;
+      transition: var(--transition);
+      font-family: inherit;
+      letter-spacing: 0.2px;
+    }
+    .tab-btn[aria-selected="true"] {
+      background: linear-gradient(135deg, rgba(99,102,241,0.22) 0%, rgba(139,92,246,0.18) 100%);
+      color: #c4b5fd;
+      border: 1px solid rgba(139, 92, 246, 0.3);
+    }
+    .tab-btn:hover:not([aria-selected="true"]) {
+      color: var(--text-main);
+      background: rgba(255,255,255,0.04);
     }
 
-    .tab[aria-selected="true"] {
-      background: #123161;
-      color: #fff;
-      border: 1px solid rgba(99, 143, 211, .35);
+    /* ===================================
+       SECTION HEADING
+       =================================== */
+    .form-heading {
+      margin-bottom: 24px;
+    }
+    .form-heading h1,
+    .form-heading h2 {
+      font-family: 'Outfit', sans-serif;
+      font-weight: 800;
+      font-size: clamp(1.25rem, 4vw, 1.6rem);
+      line-height: 1.2;
+      color: var(--text-main);
+      margin-bottom: 4px;
+    }
+    .form-heading p {
+      font-size: 0.875rem;
+      color: var(--text-muted);
     }
 
+    /* ===================================
+       FORM STRUCTURE
+       =================================== */
     form {
-      display: grid;
-      gap: 12px;
-      margin-top: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
     }
 
     label {
+      font-size: 0.875rem;
       font-weight: 600;
-      font-size: .95rem;
-      color: #cde2ff;
+      color: var(--text-label);
+      letter-spacing: 0.1px;
     }
 
-    input {
+    /* ===================================
+       INPUT — Password toggle wrapper
+       =================================== */
+    .input-wrap {
+      position: relative;
+    }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="password"] {
       width: 100%;
-      padding: 12px;
-      border-radius: 10px;
-      border: 1px solid rgba(99, 143, 211, .25);
-      background: #081a36;
-      color: #fff;
+      min-height: 48px;
+      padding: 0 16px;
+      background: var(--bg-input);
+      border: 1px solid var(--border-field);
+      border-radius: var(--radius-sm);
+      color: var(--text-main);
+      font-size: 1rem;
+      font-family: inherit;
       outline: none;
+      transition: border-color var(--transition), box-shadow var(--transition), background var(--transition);
+      -webkit-appearance: none;
     }
-
+    input[type="text"]::placeholder,
+    input[type="email"]::placeholder,
+    input[type="password"]::placeholder {
+      color: rgba(123, 168, 212, 0.45);
+    }
     input:focus {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 3px rgba(59, 130, 246, .18);
+      border-color: var(--border-focus);
+      background: var(--bg-input-hover);
+      box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.18), 0 0 0 1px rgba(99,102,241,0.35);
+    }
+    input.is-invalid {
+      border-color: rgba(239, 68, 68, 0.7) !important;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.12) !important;
+    }
+    input.is-valid {
+      border-color: rgba(34, 197, 94, 0.6) !important;
+      box-shadow: 0 0 0 3px rgba(34, 197, 94, 0.10) !important;
     }
 
-    .row {
-      display: grid;
-      gap: 12px;
-      grid-template-columns: 1fr 1fr;
+    /* password-in-use: make room for eye icon */
+    .input-wrap input {
+      padding-right: 48px;
     }
 
-    @media (max-width:560px) {
-      .row {
-        grid-template-columns: 1fr;
+    .toggle-eye {
+      position: absolute;
+      right: 14px;
+      top: 50%;
+      transform: translateY(-50%);
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      padding: 4px;
+      line-height: 1;
+      font-size: 1rem;
+      transition: color var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .toggle-eye:hover { color: var(--text-main); }
+
+    /* ===================================
+       INLINE FIELD MESSAGES
+       =================================== */
+    .field-msg {
+      font-size: 0.78rem;
+      font-weight: 500;
+      min-height: 18px;
+      transition: opacity var(--transition), color var(--transition);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .field-msg.error { color: var(--text-error); }
+    .field-msg.ok    { color: var(--text-ok); }
+    .field-msg.hint  { color: var(--text-muted); }
+    .field-msg.hidden { visibility: hidden; }
+
+    /* ===================================
+       PASSWORD STRENGTH BAR
+       =================================== */
+    .strength-bar-wrap {
+      display: flex;
+      gap: 4px;
+      margin-top: 2px;
+    }
+    .strength-segment {
+      flex: 1;
+      height: 3px;
+      border-radius: 99px;
+      background: rgba(255,255,255,0.08);
+      transition: background 0.35s ease;
+    }
+    .strength-segment.weak   { background: #ef4444; }
+    .strength-segment.medium { background: #f59e0b; }
+    .strength-segment.strong { background: #22c55e; }
+
+    /* ===================================
+       HCAPTCHA CONTAINER
+       =================================== */
+    .captcha-wrap {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .captcha-label {
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .captcha-label i { color: #60a5fa; }
+
+    /* Scaler for ≤420px so hcaptcha doesn't overflow */
+    .hcaptcha-scaler {
+      width: 100%;
+      overflow: hidden;
+    }
+    @media (max-width: 420px) {
+      .hcaptcha-scaler {
+        transform-origin: top left;
+        /* hCaptcha iframe is 303px wide; scale to fit */
+        transform: scale(calc(min(100vw - 80px, 303px) / 303));
+        height: 78px; /* keep the space after scaling */
       }
     }
 
-    .actions {
-      display: flex;
-      gap: 10px;
-      align-items: center;
-      justify-content: space-between;
-      margin-top: 4px;
-    }
-
-    .btn {
-      background: var(--accent);
+    /* ===================================
+       CTA BUTTON — Purple brand
+       =================================== */
+    .btn-cta {
+      width: 100%;
+      min-height: 52px;
+      background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
       color: #fff;
       border: none;
-      padding: 12px 16px;
-      border-radius: 10px;
+      border-radius: var(--radius-md);
+      font-family: 'Outfit', sans-serif;
+      font-size: 1rem;
       font-weight: 800;
+      letter-spacing: 0.3px;
       cursor: pointer;
-      letter-spacing: .2px;
+      transition: all var(--transition);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 20px rgba(99, 102, 241, 0.35);
+      position: relative;
+      overflow: hidden;
     }
-
-    .btn[disabled] {
-      opacity: .6;
+    .btn-cta::before {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to bottom, rgba(255,255,255,0.08), transparent);
+      pointer-events: none;
+    }
+    .btn-cta:hover:not(:disabled) {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 28px rgba(139, 92, 246, 0.50);
+      filter: brightness(1.08);
+    }
+    .btn-cta:active:not(:disabled) {
+      transform: translateY(0);
+    }
+    .btn-cta:disabled {
+      opacity: 0.55;
       cursor: not-allowed;
+      transform: none;
     }
 
-    .btn.secondary {
-      background: transparent;
-      border: 1px solid rgba(99, 143, 211, .35);
-      color: #cfe7ff;
+    /* Login button uses blue accent */
+    #btn-login.btn-cta {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      box-shadow: 0 4px 20px rgba(59, 130, 246, 0.35);
+    }
+    #btn-login.btn-cta:hover:not(:disabled) {
+      box-shadow: 0 8px 28px rgba(59, 130, 246, 0.50);
     }
 
-    .err {
-      background: rgba(239, 68, 68, .12);
-      border: 1px solid rgba(239, 68, 68, .35);
-      color: #fecaca;
-      padding: 10px;
-      border-radius: 10px;
-      font-size: .95rem;
-    }
-
-    .ok {
-      background: rgba(34, 197, 94, .12);
-      border: 1px solid rgba(34, 197, 94, .35);
-      color: #bbf7d0;
-      padding: 10px;
-      border-radius: 10px;
-      font-size: .95rem;
-    }
-
-    .help {
-      color: #9cc6ff;
-      font-size: .9rem;
-    }
-
-    a.help {
-      color: #9cc6ff;
-      text-decoration: underline;
+    /* ===================================
+       FORGOT / HELP LINK
+       =================================== */
+    .link-subtle {
+      background: none;
+      border: none;
+      color: var(--text-muted);
+      font-size: 0.82rem;
+      font-weight: 500;
       cursor: pointer;
+      font-family: inherit;
+      text-decoration: underline;
+      text-underline-offset: 3px;
+      padding: 0;
+      transition: color var(--transition);
+    }
+    .link-subtle:hover { color: var(--accent-blue); }
+
+    /* ===================================
+       GLOBAL FEEDBACK MESSAGE
+       =================================== */
+    .feedback-msg {
+      padding: 11px 14px;
+      border-radius: var(--radius-sm);
+      font-size: 0.875rem;
+      line-height: 1.5;
+      display: none;
+      animation: fadeSlideIn 0.3s ease-out;
+    }
+    .feedback-msg.danger {
+      background: var(--danger-bg);
+      border: 1px solid var(--danger-border);
+      color: var(--text-error);
+    }
+    .feedback-msg.success {
+      background: var(--ok-bg);
+      border: 1px solid var(--ok-border);
+      color: var(--text-ok);
+    }
+    .feedback-msg.visible { display: block; }
+    @keyframes fadeSlideIn {
+      from { opacity: 0; transform: translateY(-5px); }
+      to   { opacity: 1; transform: translateY(0); }
     }
 
-    .small {
-      font-size: .85rem;
-      color: #a8c3ff;
+    /* ===================================
+       DIVIDER
+       =================================== */
+    .divider-line {
+      height: 1px;
+      background: var(--border-field);
+      margin: 4px 0;
     }
 
-    .hidden {
-      display: none !important;
+    /* ===================================
+       FOOTER COPY
+       =================================== */
+    .auth-footer {
+      margin-top: 24px;
+      font-size: 0.78rem;
+      color: var(--text-muted);
+      text-align: center;
+      line-height: 1.6;
     }
+    .auth-footer a {
+      color: var(--text-muted);
+      text-decoration: underline;
+      text-underline-offset: 2px;
+    }
+    .auth-footer a:hover { color: var(--text-main); }
+
+    /* ===================================
+       HIDDEN UTILITY
+       =================================== */
+    .hidden { display: none !important; }
   </style>
 </head>
 
 <body>
-  <div class="container">
-    <div class="panel">
-      <section>
-        <div class="brand">
-          <img src="assets/logos/logo.png" alt="Camisetazo" />
-          <h1>Camisetazo</h1>
+  <!-- Background glow -->
+  <div class="auth-bg" aria-hidden="true"></div>
+
+  <div class="auth-wrapper">
+
+    <!-- Brand Logo -->
+    <a href="/" class="auth-brand" aria-label="Ir a la página principal de Camisetazo">
+      <img src="assets/logo/logo.png" alt="Logo Camisetazo" />
+      <span>Camisetazo</span>
+    </a>
+
+    <!-- Main panel -->
+    <div class="auth-panel" role="main">
+
+      <!-- Tab switcher -->
+      <div class="tabs" role="tablist" aria-label="Modo de autenticación">
+        <button
+          id="tab-login"
+          class="tab-btn"
+          role="tab"
+          aria-selected="true"
+          aria-controls="panel-login"
+        >Iniciar sesión</button>
+        <button
+          id="tab-register"
+          class="tab-btn"
+          role="tab"
+          aria-selected="false"
+          aria-controls="panel-register"
+        >Crear cuenta</button>
+      </div>
+
+      <!-- ========================
+           PANEL LOGIN
+           ======================== -->
+      <div id="panel-login" role="tabpanel" aria-labelledby="tab-login">
+
+        <div class="form-heading">
+          <h1>Bienvenido de nuevo</h1>
+          <p>Accede a tu cuenta para gestionar pedidos y recompensas.</p>
         </div>
-        <p class="muted">Accede a tu cuenta o crea una nueva para gestionar pedidos y recompensas.</p>
 
-        <div class="card">
-          <div class="tabs" role="tablist" aria-label="Autenticación">
-            <button id="tab-login" class="tab" role="tab" aria-selected="true" aria-controls="panel-login">Iniciar
-              sesión</button>
-            <button id="tab-register" class="tab" role="tab" aria-selected="false" aria-controls="panel-register">Crear
-              cuenta</button>
+        <form id="form-login" novalidate>
+
+          <!-- Email -->
+          <div class="field">
+            <label for="login-email">Email</label>
+            <div class="input-wrap">
+              <input
+                id="login-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                required
+                placeholder="tucorreo@ejemplo.com"
+              />
+            </div>
+            <span id="login-email-msg" class="field-msg hidden" aria-live="polite"></span>
           </div>
 
-          <div id="panel-login" role="tabpanel" aria-labelledby="tab-login">
-            <form id="form-login" novalidate>
-              <div>
-                <label for="login-email">Email</label>
-                <input id="login-email" name="email" type="email" autocomplete="email" required />
-                <div id="login-email-error" class="small hidden"></div>
-              </div>
-              <div>
-                <label for="login-password">Contraseña</label>
-                <input id="login-password" name="password" type="password" autocomplete="current-password" required
-                  minlength="6" />
-                <div id="login-password-error" class="small hidden"></div>
-              </div>
-              <div class="actions">
-                <button id="btn-login" class="btn" type="submit">Entrar</button>
-                <a id="btn-forgot" class="help">¿Olvidaste tu contraseña?</a>
-              </div>
-              <div id="login-msg" class="hidden"></div>
-            </form>
+          <!-- Password with eye toggle -->
+          <div class="field">
+            <label for="login-password">Contraseña</label>
+            <div class="input-wrap">
+              <input
+                id="login-password"
+                name="password"
+                type="password"
+                autocomplete="current-password"
+                required
+                minlength="6"
+                placeholder="Mínimo 6 caracteres"
+              />
+              <button
+                type="button"
+                class="toggle-eye"
+                aria-label="Mostrar u ocultar contraseña"
+                data-target="login-password"
+              ><i class="fa-solid fa-eye"></i></button>
+            </div>
+            <span id="login-password-msg" class="field-msg hidden" aria-live="polite"></span>
           </div>
 
-          <div id="panel-register" class="hidden" role="tabpanel" aria-labelledby="tab-register">
-            <form id="form-register" novalidate>
-              <div class="row">
-                <div>
-                  <label for="reg-email">Email</label>
-                  <input id="reg-email" name="email" type="email" autocomplete="email" required />
-                  <div id="reg-email-error" class="small hidden"></div>
-                </div>
-                <div>
-                  <label for="reg-password">Contraseña</label>
-                  <input id="reg-password" name="password" type="password" autocomplete="new-password" required
-                    minlength="6" />
-                  <div class="small">Mínimo 6 caracteres</div>
-                  <div id="reg-password-error" class="small hidden"></div>
-                </div>
-              </div>
-              <div>
-                <label for="reg-password2">Confirmar contraseña</label>
-                <input id="reg-password2" name="password2" type="password" autocomplete="new-password" required
-                  minlength="6" />
-                <div id="reg-password2-error" class="small hidden"></div>
-              </div>
-              <div class="actions">
-                <button id="btn-register" class="btn" type="submit">Crear cuenta</button>
-                <button id="btn-clear-reg" class="btn secondary" type="button">Limpiar</button>
-              </div>
-              <div id="reg-msg" class="hidden"></div>
-            </form>
+          <!-- Actions -->
+          <div style="display:flex; align-items:center; justify-content:space-between; gap:8px; margin-top:-4px;">
+            <button type="button" id="btn-forgot" class="link-subtle">¿Olvidaste tu contraseña?</button>
           </div>
+
+          <!-- Feedback global -->
+          <div id="login-feedback" class="feedback-msg" role="alert" aria-live="assertive"></div>
+
+          <button id="btn-login" class="btn-cta" type="submit">
+            <i class="fa-solid fa-arrow-right-to-bracket"></i>
+            Entrar
+          </button>
+        </form>
+      </div>
+
+      <!-- ========================
+           PANEL REGISTER
+           ======================== -->
+      <div id="panel-register" class="hidden" role="tabpanel" aria-labelledby="tab-register">
+
+        <div class="form-heading">
+          <h2>Crea tu cuenta</h2>
+          <p>Únete a Camisetazo y empieza a acumular puntos en cada pedido.</p>
         </div>
-      </section>
 
-      <aside class="card">
-        <h3 style="margin-top:0">Consejos de seguridad</h3>
-        <ul class="small">
-          <li>No compartas tu contraseña.</li>
-          <li>Usa una contraseña única y robusta.</li>
-          <li>Te mantendremos autenticado de forma segura en este dispositivo.</li>
-        </ul>
-        <p class="small">Al crear una cuenta aceptas nuestra política de privacidad.</p>
-      </aside>
-    </div>
-  </div>
+        <form id="form-register" novalidate>
 
+          <!-- Name -->
+          <div class="field">
+            <label for="reg-name">Nombre</label>
+            <div class="input-wrap">
+              <input
+                id="reg-name"
+                name="displayName"
+                type="text"
+                autocomplete="given-name"
+                required
+                placeholder="¿Cómo te llamamos?"
+              />
+            </div>
+            <span id="reg-name-msg" class="field-msg hidden" aria-live="polite"></span>
+          </div>
+
+          <!-- Email -->
+          <div class="field">
+            <label for="reg-email">Email</label>
+            <div class="input-wrap">
+              <input
+                id="reg-email"
+                name="email"
+                type="email"
+                autocomplete="email"
+                required
+                placeholder="tucorreo@ejemplo.com"
+              />
+            </div>
+            <span id="reg-email-msg" class="field-msg hidden" aria-live="polite"></span>
+          </div>
+
+          <!-- Password with eye + strength -->
+          <div class="field">
+            <label for="reg-password">Contraseña</label>
+            <div class="input-wrap">
+              <input
+                id="reg-password"
+                name="password"
+                type="password"
+                autocomplete="new-password"
+                required
+                minlength="6"
+                placeholder="Mínimo 6 caracteres"
+              />
+              <button
+                type="button"
+                class="toggle-eye"
+                aria-label="Mostrar u ocultar contraseña"
+                data-target="reg-password"
+              ><i class="fa-solid fa-eye"></i></button>
+            </div>
+            <!-- Strength bar -->
+            <div class="strength-bar-wrap" id="strength-bar" aria-hidden="true">
+              <div class="strength-segment" id="seg-1"></div>
+              <div class="strength-segment" id="seg-2"></div>
+              <div class="strength-segment" id="seg-3"></div>
+            </div>
+            <span id="reg-password-msg" class="field-msg hint" aria-live="polite">Mínimo 6 caracteres</span>
+          </div>
+
+          <!-- Confirm Password -->
+          <div class="field">
+            <label for="reg-password2">Confirmar contraseña</label>
+            <div class="input-wrap">
+              <input
+                id="reg-password2"
+                name="password2"
+                type="password"
+                autocomplete="new-password"
+                required
+                minlength="6"
+                placeholder="Repite la contraseña"
+              />
+              <button
+                type="button"
+                class="toggle-eye"
+                aria-label="Mostrar u ocultar confirmación"
+                data-target="reg-password2"
+              ><i class="fa-solid fa-eye"></i></button>
+            </div>
+            <span id="reg-password2-msg" class="field-msg hidden" aria-live="polite"></span>
+          </div>
+
+          <div class="divider-line"></div>
+
+          <!-- hCaptcha widget -->
+          <div class="captcha-wrap">
+            <span class="captcha-label">
+              <i class="fa-solid fa-shield-halved"></i>
+              Verificación anti-bots requerida
+            </span>
+            <div class="hcaptcha-scaler">
+              <div
+                id="hcaptcha-reg"
+                class="h-captcha"
+                data-sitekey="10000000-ffff-ffff-ffff-000000000001"
+                data-theme="dark"
+                data-callback="onCaptchaSuccess"
+                data-expired-callback="onCaptchaExpired"
+              ></div>
+            </div>
+            <span id="captcha-msg" class="field-msg hidden" aria-live="polite"></span>
+          </div>
+
+          <!-- Feedback global -->
+          <div id="reg-feedback" class="feedback-msg" role="alert" aria-live="assertive"></div>
+
+          <!-- CTA Button — Purple brand -->
+          <button id="btn-register" class="btn-cta" type="submit">
+            <i class="fa-solid fa-user-plus"></i>
+            Crear Cuenta Gratis
+          </button>
+        </form>
+      </div>
+
+    </div><!-- /.auth-panel -->
+
+    <!-- Footer -->
+    <footer class="auth-footer">
+      Al crear una cuenta aceptas nuestra
+      <a href="/pages/privacidad.html">Política de privacidad</a>
+      y <a href="/pages/terminos.html">Términos de uso</a>.
+    </footer>
+
+  </div><!-- /.auth-wrapper -->
+
+  <!-- ================================================
+       FIREBASE SDK
+       ================================================ -->
   <script type="module">
-    import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
-    import { getAuth, setPersistence, browserLocalPersistence, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, sendPasswordResetEmail, sendEmailVerification } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
-    import { getDatabase, ref, set } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
+    import { initializeApp }            from "https://www.gstatic.com/firebasejs/11.0.1/firebase-app.js";
+    import {
+      getAuth,
+      setPersistence,
+      browserLocalPersistence,
+      createUserWithEmailAndPassword,
+      signInWithEmailAndPassword,
+      onAuthStateChanged,
+      sendPasswordResetEmail,
+      sendEmailVerification,
+      updateProfile
+    } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
+    import { getDatabase, ref, set }    from "https://www.gstatic.com/firebasejs/11.0.1/firebase-database.js";
 
-    
-    
+    /* ─── Firebase Config ─── */
     const defaultConfig = {
-      apiKey: "AIzaSyBYPvmvzzNxtTFOVpPXKRvUhoHBjBTCVBE",
-      authDomain: "camisetazo-puntos.firebaseapp.com",
-      databaseURL: "https://camisetazo-puntos-default-rtdb.europe-west1.firebasedatabase.app/",
-      projectId: "camisetazo-puntos",
-      storageBucket: "camisetazo-puntos.firebasestorage.app",
+      apiKey:            "AIzaSyBYPvmvzzNxtTFOVpPXKRvUhoHBjBTCVBE",
+      authDomain:        "camisetazo-puntos.firebaseapp.com",
+      databaseURL:       "https://camisetazo-puntos-default-rtdb.europe-west1.firebasedatabase.app/",
+      projectId:         "camisetazo-puntos",
+      storageBucket:     "camisetazo-puntos.firebasestorage.app",
       messagingSenderId: "652477026185",
-      appId: "1:652477026185:web:4a05e015da74d4541d1b58",
-      measurementId: "G-GS53GWE2Z0"
+      appId:             "1:652477026185:web:4a05e015da74d4541d1b58",
+      measurementId:     "G-GS53GWE2Z0"
     };
     const firebaseConfig = window.FIREBASE_CONFIG || defaultConfig;
 
-    const app = initializeApp(firebaseConfig);
+    const app  = initializeApp(firebaseConfig);
     const auth = getAuth(app);
-    const db = getDatabase(app, window.FIREBASE_DB_URL || firebaseConfig.databaseURL);
+    const db   = getDatabase(app, window.FIREBASE_DB_URL || firebaseConfig.databaseURL);
     await setPersistence(auth, browserLocalPersistence);
 
-    
-    const $ = (sel) => document.querySelector(sel);
-    const show = (el) => el.classList.remove('hidden');
-    const hide = (el) => el.classList.add('hidden');
+    /* ─── Helpers ─── */
+    const $  = (sel) => document.querySelector(sel);
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
+    const isValidEmail = (v) => emailRe.test(String(v || '').trim());
 
-    function emailValido(email) {
-      const re = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/i;
-      return re.test(String(email || '').trim());
+    function setFeedback(el, type, msg) {
+      el.textContent = msg;
+      el.className   = `feedback-msg ${type} ${msg ? 'visible' : ''}`;
+    }
+
+    function setFieldMsg(el, type, msg) {
+      el.textContent = msg;
+      el.className   = `field-msg ${msg ? type : 'hidden'}`;
+    }
+
+    function setInputState(input, state) {
+      input.classList.remove('is-invalid', 'is-valid');
+      if (state) input.classList.add(state);
     }
 
     function mapAuthError(code) {
-      switch (code) {
-        case 'auth/email-already-in-use': return 'Este email ya está registrado.';
-        case 'auth/invalid-email': return 'El email no es válido.';
-        case 'auth/operation-not-allowed': return 'Operación no permitida. Contacta soporte.';
-        case 'auth/weak-password': return 'La contraseña es demasiado débil (mínimo 6 caracteres).';
-        case 'auth/user-disabled': return 'Esta cuenta fue deshabilitada.';
-        case 'auth/user-not-found': return 'No existe una cuenta con ese email.';
-        case 'auth/wrong-password': return 'Contraseña incorrecta.';
-        case 'auth/too-many-requests': return 'Demasiados intentos. Inténtalo más tarde.';
-        case 'auth/network-request-failed': return 'No hay conexión o fue interrumpida. Verifica tu red.';
-        case 'auth/internal-error': return 'Error interno de autenticación. Intenta más tarde.';
-        case 'auth/invalid-credential': return 'Las credenciales no son válidas o han expirado.';
-        case 'auth/invalid-continue-uri': return 'URL de retorno no válida. Revisa dominios autorizados.';
-        case 'auth/unauthorized-continue-uri': return 'El dominio de retorno no está autorizado en Firebase.';
-        default: return `Ocurrió un error inesperado. Código: ${code || 'desconocido'}.`;
-      }
+      const map = {
+        'auth/email-already-in-use':    'Este email ya está registrado.',
+        'auth/invalid-email':           'El email no es válido.',
+        'auth/operation-not-allowed':   'Operación no permitida. Contacta soporte.',
+        'auth/weak-password':           'La contraseña es demasiado débil (mínimo 6 caracteres).',
+        'auth/user-disabled':           'Esta cuenta fue deshabilitada.',
+        'auth/user-not-found':          'No existe una cuenta con ese email.',
+        'auth/wrong-password':          'Contraseña incorrecta.',
+        'auth/too-many-requests':       'Demasiados intentos. Inténtalo más tarde.',
+        'auth/network-request-failed':  'Sin conexión a internet. Verifica tu red.',
+        'auth/internal-error':          'Error interno. Intenta de nuevo más tarde.',
+        'auth/invalid-credential':      'Credenciales no válidas o caducadas.',
+      };
+      return map[code] || `Error inesperado. Código: ${code || 'desconocido'}.`;
     }
 
-    
-    const tabLogin = $('#tab-login');
+    /* ─── Toggle Password Visibility ─── */
+    document.querySelectorAll('.toggle-eye').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const input = document.getElementById(btn.dataset.target);
+        const icon  = btn.querySelector('i');
+        if (input.type === 'password') {
+          input.type = 'text';
+          icon.className = 'fa-solid fa-eye-slash';
+          btn.setAttribute('aria-label', 'Ocultar contraseña');
+        } else {
+          input.type = 'password';
+          icon.className = 'fa-solid fa-eye';
+          btn.setAttribute('aria-label', 'Mostrar contraseña');
+        }
+      });
+    });
+
+    /* ─── Tab Navigation ─── */
+    const tabLogin    = $('#tab-login');
     const tabRegister = $('#tab-register');
-    const panelLogin = $('#panel-login');
-    const panelRegister = $('#panel-register');
+    const panelLogin  = $('#panel-login');
+    const panelReg    = $('#panel-register');
 
     function selectTab(which) {
-      const loginSelected = which === 'login';
-      tabLogin.setAttribute('aria-selected', String(loginSelected));
-      tabRegister.setAttribute('aria-selected', String(!loginSelected));
-      if (loginSelected) { hide(panelRegister); show(panelLogin); }
-      else { hide(panelLogin); show(panelRegister); }
+      const isLogin = which === 'login';
+      tabLogin.setAttribute('aria-selected',    String(isLogin));
+      tabRegister.setAttribute('aria-selected', String(!isLogin));
+      panelLogin.classList.toggle('hidden',  !isLogin);
+      panelReg.classList.toggle('hidden',     isLogin);
     }
-    tabLogin.addEventListener('click', () => selectTab('login'));
+    tabLogin.addEventListener('click',    () => selectTab('login'));
     tabRegister.addEventListener('click', () => selectTab('register'));
 
-    
-    const loginForm = $('#form-login');
-    const loginEmail = $('#login-email');
-    const loginPass = $('#login-password');
-    const loginMsg = $('#login-msg');
+    /* ─── hCaptcha state ─── */
+    let captchaSolved = false;
+    window.onCaptchaSuccess = () => {
+      captchaSolved = true;
+      setFieldMsg($('#captcha-msg'), 'ok', '✓ Verificación completada');
+    };
+    window.onCaptchaExpired = () => {
+      captchaSolved = false;
+      setFieldMsg($('#captcha-msg'), 'error', 'La verificación ha caducado. Por favor, repítela.');
+    };
 
-    loginForm.addEventListener('submit', async (e) => {
+    /* ─── Password Strength ─── */
+    const regPass = $('#reg-password');
+    regPass.addEventListener('input', () => {
+      const v   = regPass.value;
+      const len = v.length;
+      const s1  = $('#seg-1'), s2 = $('#seg-2'), s3 = $('#seg-3');
+      s1.className = 'strength-segment';
+      s2.className = 'strength-segment';
+      s3.className = 'strength-segment';
+      if (len === 0) return;
+      const hasUpper  = /[A-Z]/.test(v);
+      const hasNum    = /[0-9]/.test(v);
+      const hasSymbol = /[^A-Za-z0-9]/.test(v);
+      const score = (len >= 6 ? 1 : 0) + (len >= 10 ? 1 : 0) + ((hasUpper && hasNum) || hasSymbol ? 1 : 0);
+      if (score === 1) { s1.classList.add('weak'); }
+      else if (score === 2) { s1.classList.add('medium'); s2.classList.add('medium'); }
+      else { s1.classList.add('strong'); s2.classList.add('strong'); s3.classList.add('strong'); }
+
+      const msgEl = $('#reg-password-msg');
+      if (len < 6) {
+        setInputState(regPass, 'is-invalid');
+        setFieldMsg(msgEl, 'error', 'Mínimo 6 caracteres');
+      } else {
+        setInputState(regPass, 'is-valid');
+        setFieldMsg(msgEl, 'ok', score === 1 ? 'Contraseña débil — prueba añadir números o símbolos' :
+                                  score === 2 ? 'Contraseña aceptable' : '✓ Contraseña fuerte');
+      }
+      // Also re-check confirm
+      validateConfirm();
+    });
+
+    /* ─── Real-time: confirm password ─── */
+    const regPass2 = $('#reg-password2');
+    function validateConfirm() {
+      if (!regPass2.value) return;
+      const match = regPass.value === regPass2.value;
+      setInputState(regPass2, match ? 'is-valid' : 'is-invalid');
+      setFieldMsg($('#reg-password2-msg'), match ? 'ok' : 'error',
+        match ? '✓ Contraseñas coinciden' : 'Las contraseñas no coinciden');
+    }
+    regPass2.addEventListener('input', validateConfirm);
+
+    /* ─── Real-time: email (register) ─── */
+    const regEmailEl = $('#reg-email');
+    regEmailEl.addEventListener('blur', () => {
+      if (!regEmailEl.value) return;
+      const valid = isValidEmail(regEmailEl.value);
+      setInputState(regEmailEl, valid ? 'is-valid' : 'is-invalid');
+      setFieldMsg($('#reg-email-msg'), valid ? 'ok' : 'error',
+        valid ? '✓ Email válido' : 'Introduce un email con formato válido');
+    });
+
+    /* ─── Real-time: name ─── */
+    const regNameEl = $('#reg-name');
+    regNameEl.addEventListener('blur', () => {
+      if (!regNameEl.value) return;
+      const ok = regNameEl.value.trim().length >= 2;
+      setInputState(regNameEl, ok ? 'is-valid' : 'is-invalid');
+      setFieldMsg($('#reg-name-msg'), ok ? 'ok' : 'error',
+        ok ? '✓ Nombre válido' : 'El nombre debe tener al menos 2 caracteres');
+    });
+
+    /* ─── LOGIN FORM ─── */
+    $('#form-login').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
-      loginMsg.className = 'hidden'; loginMsg.textContent = '';
-      $('#login-email-error').className = 'small hidden'; $('#login-password-error').className = 'small hidden';
+      const feedbackEl = $('#login-feedback');
+      setFeedback(feedbackEl, '', '');
 
-      
-      const email = loginEmail.value.trim();
-      const pass = loginPass.value;
+      const email = $('#login-email').value.trim();
+      const pass  = $('#login-password').value;
       let ok = true;
-      if (!emailValido(email)) { ok = false; const el = $('#login-email-error'); el.textContent = 'Introduce un email válido.'; el.className = 'small'; }
-      if (!pass || pass.length < 6) { ok = false; const el = $('#login-password-error'); el.textContent = 'La contraseña debe tener al menos 6 caracteres.'; el.className = 'small'; }
+
+      if (!isValidEmail(email)) {
+        ok = false;
+        setInputState($('#login-email'), 'is-invalid');
+        setFieldMsg($('#login-email-msg'), 'error', 'Introduce un email válido');
+      } else {
+        setInputState($('#login-email'), 'is-valid');
+        setFieldMsg($('#login-email-msg'), '', '');
+      }
+      if (!pass || pass.length < 6) {
+        ok = false;
+        setInputState($('#login-password'), 'is-invalid');
+        setFieldMsg($('#login-password-msg'), 'error', 'La contraseña debe tener al menos 6 caracteres');
+      } else {
+        setFieldMsg($('#login-password-msg'), '', '');
+      }
       if (!ok) return;
 
-      
-      const btn = $('#btn-login'); const prev = btn.textContent; btn.disabled = true; btn.textContent = 'Accediendo...';
+      const btn = $('#btn-login');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Accediendo...';
       try {
         await signInWithEmailAndPassword(auth, email, pass);
-        loginMsg.className = 'ok'; loginMsg.textContent = 'Sesión iniciada correctamente.';
+        setFeedback(feedbackEl, 'success', '✓ Sesión iniciada correctamente. Redirigiendo…');
       } catch (err) {
         console.error('Login error:', err);
-        loginMsg.className = 'err'; loginMsg.textContent = mapAuthError(err?.code);
+        setFeedback(feedbackEl, 'danger', mapAuthError(err?.code));
       } finally {
-        btn.disabled = false; btn.textContent = prev;
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar';
       }
     });
 
-    
+    /* ─── FORGOT PASSWORD ─── */
     $('#btn-forgot').addEventListener('click', async () => {
-      const email = (loginEmail.value || '').trim();
-      loginMsg.className = 'hidden'; loginMsg.textContent = '';
-      if (!emailValido(email)) {
-        const el = $('#login-email-error'); el.textContent = 'Introduce un email válido para recuperar tu contraseña.'; el.className = 'small';
+      const feedbackEl = $('#login-feedback');
+      const email = $('#login-email').value.trim();
+      setFeedback(feedbackEl, '', '');
+      if (!isValidEmail(email)) {
+        setInputState($('#login-email'), 'is-invalid');
+        setFieldMsg($('#login-email-msg'), 'error', 'Introduce tu email para recuperar la contraseña');
         return;
       }
-      const btn = $('#btn-login'); const prev = btn.textContent; btn.disabled = true; btn.textContent = 'Enviando email...';
+      const btn = $('#btn-login');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Enviando…';
       try {
         await sendPasswordResetEmail(auth, email);
-        loginMsg.className = 'ok'; loginMsg.textContent = 'Hemos enviado un correo para restablecer tu contraseña.';
+        setFeedback(feedbackEl, 'success', '✓ Correo de recuperación enviado. Revisa tu bandeja de entrada y spam.');
       } catch (err) {
         console.error('Password reset error:', err);
-        loginMsg.className = 'err'; loginMsg.textContent = mapAuthError(err?.code);
-      } finally { btn.disabled = false; btn.textContent = prev; }
+        setFeedback(feedbackEl, 'danger', mapAuthError(err?.code));
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-arrow-right-to-bracket"></i> Entrar';
+      }
     });
 
-    
-    const regForm = $('#form-register');
-    const regEmail = $('#reg-email');
-    const regPass = $('#reg-password');
-    const regPass2 = $('#reg-password2');
-    const regMsg = $('#reg-msg');
-
-    $('#btn-clear-reg').addEventListener('click', () => { regForm.reset(); regMsg.className = 'hidden'; regMsg.textContent = '';['#reg-email-error', '#reg-password-error', '#reg-password2-error'].forEach(s => { const el = $(s); el.textContent = ''; el.className = 'small hidden'; }); });
-
-    regForm.addEventListener('submit', async (e) => {
+    /* ─── REGISTER FORM ─── */
+    $('#form-register').addEventListener('submit', async (e) => {
       e.preventDefault();
-      
-      regMsg.className = 'hidden'; regMsg.textContent = '';
-      ['#reg-email-error', '#reg-password-error', '#reg-password2-error'].forEach(s => { const el = $(s); el.textContent = ''; el.className = 'small hidden'; });
+      const feedbackEl = $('#reg-feedback');
+      setFeedback(feedbackEl, '', '');
 
-      
-      const email = regEmail.value.trim();
-      const p1 = regPass.value; const p2 = regPass2.value;
+      const name  = regNameEl.value.trim();
+      const email = regEmailEl.value.trim();
+      const p1    = regPass.value;
+      const p2    = regPass2.value;
       let ok = true;
-      if (!emailValido(email)) { ok = false; const el = $('#reg-email-error'); el.textContent = 'Introduce un email válido.'; el.className = 'small'; }
-      if (!p1 || p1.length < 6) { ok = false; const el = $('#reg-password-error'); el.textContent = 'La contraseña debe tener al menos 6 caracteres.'; el.className = 'small'; }
-      if (p1 !== p2) { ok = false; const el = $('#reg-password2-error'); el.textContent = 'Las contraseñas no coinciden.'; el.className = 'small'; }
+
+      if (!name || name.length < 2) {
+        ok = false;
+        setInputState(regNameEl, 'is-invalid');
+        setFieldMsg($('#reg-name-msg'), 'error', 'El nombre debe tener al menos 2 caracteres');
+      }
+      if (!isValidEmail(email)) {
+        ok = false;
+        setInputState(regEmailEl, 'is-invalid');
+        setFieldMsg($('#reg-email-msg'), 'error', 'Introduce un email con formato válido');
+      }
+      if (!p1 || p1.length < 6) {
+        ok = false;
+        setInputState(regPass, 'is-invalid');
+        setFieldMsg($('#reg-password-msg'), 'error', 'Mínimo 6 caracteres');
+      }
+      if (p1 !== p2) {
+        ok = false;
+        setInputState(regPass2, 'is-invalid');
+        setFieldMsg($('#reg-password2-msg'), 'error', 'Las contraseñas no coinciden');
+      }
+      // hCaptcha check
+      if (!captchaSolved) {
+        ok = false;
+        setFieldMsg($('#captcha-msg'), 'error', 'Completa la verificación anti-bots para continuar');
+      }
       if (!ok) return;
 
-      
-      const btn = $('#btn-register'); const prev = btn.textContent; btn.disabled = true; btn.textContent = 'Creando cuenta...';
+      const btn = $('#btn-register');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Creando cuenta…';
       try {
         const cred = await createUserWithEmailAndPassword(auth, email, p1);
-        
-        const uid = cred.user.uid;
+        const uid  = cred.user.uid;
+
+        // Update display name
+        await updateProfile(cred.user, { displayName: name });
+
+        // Save user in Realtime DB
         await set(ref(db, `users/${uid}`), {
+          displayName: name,
           email,
           createdAt: new Date().toISOString(),
           puntosCliente: 0
         });
-        
+
+        // Send verification email
         let verifOk = false;
         try {
           await sendEmailVerification(cred.user, { url: window.location.origin + '/' });
           verifOk = true;
-        } catch (e) {
-          if (e?.code === 'auth/invalid-continue-uri' || e?.code === 'auth/unauthorized-continue-uri') {
+        } catch (eVerif) {
+          if (eVerif?.code === 'auth/invalid-continue-uri' || eVerif?.code === 'auth/unauthorized-continue-uri') {
             try { await sendEmailVerification(cred.user); verifOk = true; }
             catch (e2) { console.error('Fallback sendEmailVerification error:', e2); }
           } else {
-            console.error('sendEmailVerification error:', e);
+            console.error('sendEmailVerification error:', eVerif);
           }
         }
-        if (verifOk) {
-          regMsg.className = 'ok'; regMsg.textContent = 'Cuenta creada correctamente. Te hemos enviado un correo de verificación. Revisa tu bandeja de entrada y el spam.';
-        } else {
-          regMsg.className = 'ok'; regMsg.textContent = 'Cuenta creada correctamente. No pudimos enviar el correo de verificación ahora; podrás reenviarlo más tarde.';
-        }
-        selectTab('login');
+
+        setFeedback(feedbackEl, 'success',
+          verifOk
+            ? '✓ ¡Cuenta creada! Hemos enviado un correo de verificación. Revisa tu bandeja y el spam.'
+            : '✓ ¡Cuenta creada! (El correo de verificación falló; puedes reenviarlo desde tu perfil.)'
+        );
+
+        // Switch to login after a moment
+        setTimeout(() => selectTab('login'), 2500);
       } catch (err) {
         console.error('Register error:', err);
-        regMsg.className = 'err'; regMsg.textContent = mapAuthError(err?.code);
-      } finally { btn.disabled = false; btn.textContent = prev; }
+        setFeedback(feedbackEl, 'danger', mapAuthError(err?.code));
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-user-plus"></i> Crear Cuenta Gratis';
+      }
     });
 
-    
-    
-    const urlParams = new URLSearchParams(window.location.search);
-    const redirectParam = urlParams.get('redirect');
+    /* ─── Auth state redirect ─── */
+    const urlParams      = new URLSearchParams(window.location.search);
+    const redirectParam  = urlParams.get('redirect');
 
     onAuthStateChanged(auth, async (user) => {
-      if (user) {
-        console.log('Usuario autenticado', { uid: user.uid, email: user.email });
-
-        
-        try {
-          const idTokenResult = await user.getIdTokenResult(true); 
-          const isAdmin = idTokenResult.claims.admin === true;
-
-          console.log('🔍 Admin claim:', isAdmin);
-
-          if (isAdmin) {
-            
-            console.log('✅ Usuario es admin - redirigiendo a admin.html');
-            window.location.href = '/pages/admin.html';
-          } else {
-            
-            if (redirectParam === 'checkout') {
-              console.log('🛒 Redirigiendo al checkout después de login');
-              window.location.href = '/pages/checkout.html';
-            } else {
-              console.log('👤 Usuario normal - redirigiendo al perfil');
-              window.location.href = '/pages/perfil.html';
-            }
-          }
-        } catch (error) {
-          console.error('Error verificando claims:', error);
-          
-          if (redirectParam === 'checkout') {
-            window.location.href = '/pages/checkout.html';
-          } else {
-            window.location.href = '/pages/perfil.html';
-          }
+      if (!user) return;
+      try {
+        const token   = await user.getIdTokenResult(true);
+        const isAdmin = token.claims.admin === true;
+        if (isAdmin) {
+          window.location.href = '/pages/admin.html';
+        } else if (redirectParam === 'checkout') {
+          window.location.href = '/pages/checkout.html';
+        } else {
+          window.location.href = '/pages/perfil.html';
         }
-      } else {
-        console.log('No autenticado');
+      } catch {
+        window.location.href = redirectParam === 'checkout' ? '/pages/checkout.html' : '/pages/perfil.html';
       }
     });
   </script>
