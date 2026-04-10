@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-theme="dark">
 
 <head>
@@ -221,8 +221,12 @@
                             <input type="number" id="promo-value" placeholder="Ej: 10" min="1" max="100">
                         </div>
                         <div class="form-group">
-                            <label for="promo-max-uses">Usos mx. (vaco = ilimitado)</label>
-                            <input type="number" id="promo-max-uses" placeholder="Ilimitado" min="1">
+                            <label for="promo-max-uses">Usos totales <small style="color:var(--text-muted);font-weight:400">(vacío = ∞)</small></label>
+                            <input type="number" id="promo-max-uses" placeholder="Ej: 10" min="1">
+                        </div>
+                        <div class="form-group">
+                            <label for="promo-max-uses-per-user">Uso por usuario <small style="color:var(--text-muted);font-weight:400">(vacío = ∞)</small></label>
+                            <input type="number" id="promo-max-uses-per-user" placeholder="Ej: 1" min="1">
                         </div>
                         <button class="btn-create-promo" id="btn-create-promo">
                             <i class="fas fa-plus"></i> Crear Cdigo
@@ -235,10 +239,11 @@
                     <table class="promo-codes-table">
                         <thead>
                             <tr>
-                                <th>Cdigo</th>
+                                <th>Código</th>
                                 <th>Tipo</th>
                                 <th>Valor</th>
-                                <th>Usos</th>
+                                <th>Usos totales</th>
+                                <th>Por usuario</th>
                                 <th>Estado</th>
                                 <th>Acciones</th>
                             </tr>

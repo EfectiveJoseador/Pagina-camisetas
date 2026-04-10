@@ -164,6 +164,16 @@
                 "maxUses": {
                     ".validate": "newData.isNumber() || newData.val() === null"
                 },
+                "maxUsesPerUser": {
+                    ".validate": "newData.isNumber() && newData.val() >= 1 || newData.val() === null"
+                },
+                "userUsages": {
+                    "$uid": {
+                        ".read": "$uid === auth.uid || auth.token.admin === true",
+                        ".write": "$uid === auth.uid || auth.token.admin === true",
+                        ".validate": "newData.isNumber() && newData.val() >= 0"
+                    }
+                },
                 "createdAt": {
                     ".validate": "newData.isString()"
                 },

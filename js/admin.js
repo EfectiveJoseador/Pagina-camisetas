@@ -517,7 +517,14 @@ function renderPromoCodes() {
             typeLabel = `€${code.value}`;
             typeText = 'Fijo';
         }
-        const usageText = code.maxUses ? `${code.usageCount || 0}/${code.maxUses}` : `${code.usageCount || 0}/∞`;
+        // Columna "Usos totales": usado / límite
+        const usageText = code.maxUses
+            ? `${code.usageCount || 0}/${code.maxUses}`
+            : `${code.usageCount || 0}/∞`;
+        // Columna "Por usuario": límite de usos por usuario
+        const perUserText = code.maxUsesPerUser
+            ? `${code.maxUsesPerUser} por usuario`
+            : '∞';
         const statusClass = code.active ? 'active' : 'inactive';
         const statusText = code.active ? 'Activo' : 'Inactivo';
 
@@ -527,6 +534,7 @@ function renderPromoCodes() {
                 <td>${typeText}</td>
                 <td class="promo-value-cell">${typeLabel}</td>
                 <td>${usageText}</td>
+                <td>${perUserText}</td>
                 <td>
                     <span class="promo-status ${statusClass}">${statusText}</span>
                 </td>
@@ -551,15 +559,18 @@ window.createPromoCode = async function () {
         return;
     }
 
-    const codeInput = document.getElementById('promo-code');
-    const typeSelect = document.getElementById('promo-type');
-    const valueInput = document.getElementById('promo-value');
-    const maxUsesInput = document.getElementById('promo-max-uses');
+    const codeInput          = document.getElementById('promo-code');
+    const typeSelect         = document.getElementById('promo-type');
+    const valueInput         = document.getElementById('promo-value');
+    const maxUsesInput       = document.getElementById('promo-max-uses');
+    const maxUsesPerUserInput = document.getElementById('promo-max-uses-per-user');
 
-    const code = codeInput.value.trim().toUpperCase();
-    const type = typeSelect.value;
-    let value = parseFloat(valueInput.value) || 0;
-    const maxUses = maxUsesInput.value ? parseInt(maxUsesInput.value) : null;
+    const code   = codeInput.value.trim().toUpperCase();
+    const type   = typeSelect.value;
+    let value    = parseFloat(valueInput.value) || 0;
+    const maxUses         = maxUsesInput.value       ? parseInt(maxUsesInput.value)       : null;
+    const maxUsesPerUser  = maxUsesPerUserInput.value ? parseInt(maxUsesPerUserInput.value) : null;
+
     if (type === 'free_shipping') {
         value = 0;
     }
@@ -596,12 +607,14 @@ window.createPromoCode = async function () {
             active: true,
             usageCount: 0,
             maxUses: maxUses,
+            maxUsesPerUser: maxUsesPerUser,
             createdAt: new Date().toISOString(),
             createdBy: auth.currentUser.email
         });
         codeInput.value = '';
         valueInput.value = '';
         maxUsesInput.value = '';
+        maxUsesPerUserInput.value = '';
 
         showToast(`Código "${code}" creado correctamente`);
     } catch (error) {

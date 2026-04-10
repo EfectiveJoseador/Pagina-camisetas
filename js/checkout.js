@@ -738,11 +738,28 @@ async function applyPromoCode() {
             resetPromoButton();
             return;
         }
+        // ── Validar límite global de usos ───────────────────────────────────
         if (promo.maxUses && promo.usageCount >= promo.maxUses) {
             showPromoResult('Este código ha alcanzado el límite de usos', 'error');
             resetPromoButton();
             return;
         }
+
+        // ── Validar límite de usos por usuario (maxUsesPerUser) ─────────────
+        if (promo.maxUsesPerUser) {
+            const userUsageRef = ref(db, `promoCodes/${code}/userUsages/${currentUser.uid}`);
+            const userUsageSnap = await get(userUsageRef);
+            const userUsageCount = userUsageSnap.exists() ? (userUsageSnap.val() || 0) : 0;
+            if (userUsageCount >= promo.maxUsesPerUser) {
+                showPromoResult(
+                    `Ya has usado este código el máximo permitido (${promo.maxUsesPerUser} ${promo.maxUsesPerUser === 1 ? 'vez' : 'veces'} por usuario)`,
+                    'error'
+                );
+                resetPromoButton();
+                return;
+            }
+        }
+
         appliedPromoCode = { ...promo, id: code };
         const calculations = Cart.calculateTotal();
 
@@ -768,10 +785,19 @@ async function applyPromoCode() {
         if (totalEl) {
             totalEl.textContent = `€${finalTotal.toFixed(2)}`;
         }
+        // ── Incrementar contadores: global y por usuario ─────────────────────
         try {
             const usageRef = ref(db, `promoCodes/${code}/usageCount`);
             const currentCount = promo.usageCount || 0;
             await set(usageRef, currentCount + 1);
+
+            // Contador personal del usuario
+            if (promo.maxUsesPerUser) {
+                const userUsageRef = ref(db, `promoCodes/${code}/userUsages/${currentUser.uid}`);
+                const userUsageSnap = await get(userUsageRef);
+                const userUsageCount = userUsageSnap.exists() ? (userUsageSnap.val() || 0) : 0;
+                await set(userUsageRef, userUsageCount + 1);
+            }
         } catch (err) {
             console.warn('Could not increment usage count:', err);
         }
