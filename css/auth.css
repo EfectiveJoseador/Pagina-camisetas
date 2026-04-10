@@ -286,16 +286,24 @@
 }
 
 .nav-item.logout {
-    color: #ef4444;
-    margin-top: 1rem;
-    border-top: 1px solid var(--border);
-    padding-top: 1.5rem;
-    border-radius: 0;
+    color: #f87171;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(239, 68, 68, 0.15);
+    border-radius: var(--radius-sm);
+    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
 .nav-item.logout:hover {
-    background: transparent;
-    color: #dc2626;
+    background: rgba(239, 68, 68, 0.10);
+    color: #ef4444;
+    transform: translateX(6px);
+    box-shadow: inset 3px 0 0 #ef4444, 0 0 12px rgba(239, 68, 68, 0.08);
+}
+
+.nav-item.logout:active {
+    transform: translateX(3px);
+    background: rgba(239, 68, 68, 0.15);
 }
 
 .content-section {
