@@ -145,8 +145,15 @@ document.addEventListener('DOMContentLoaded', () => {
     async function loadProductImages() {
         
         if (product.images && Array.isArray(product.images) && product.images.length > 0) {
-            
-            const allImages = [product.image, ...product.images];
+            // ─── Regla de Galería Simétrica (2×2 Mobile-First) ──────────────────
+            // Si hay 5 o más imágenes secundarias la cuadrícula queda desequilibrada
+            // (una imagen "huérfana" al final). Para garantizar siempre un grid perfecto
+            // de 2x2 en móvil, limitamos las secundarias a un máximo de 4.
+            const secondaryImages = product.images.length >= 5
+                ? product.images.slice(0, 4)
+                : product.images;
+
+            const allImages = [product.image, ...secondaryImages];
 
             
             const imagePromises = allImages.map((imgUrl, index) => {

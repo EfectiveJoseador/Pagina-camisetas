@@ -141,6 +141,7 @@
     right: 1rem;
 }
 
+/* ─── Galería de miniaturas — Layout Desktop (fila horizontal) ─── */
 .thumbnails {
     display: flex;
     gap: 0.75rem;
@@ -166,7 +167,6 @@
     padding: 0;
 }
 
-.thumb.active,
 .thumb:hover {
     opacity: 1;
     border-color: var(--primary);
@@ -174,8 +174,12 @@
     box-shadow: 0 4px 12px rgba(99, 102, 241, 0.25);
 }
 
+/* Efecto de selección: borde morado fino sobre la imagen activa */
 .thumb.active {
-    border-width: 2px;
+    opacity: 1;
+    border: 2px solid #a855f7;
+    box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.25);
+    transform: none;
 }
 
 .thumb img {
@@ -822,10 +826,11 @@
 
 
 @media (max-width: 768px) {
+    /* ── Safe Zone: nunca tocar los bordes ── */
     .product-container {
         overflow-x: hidden;
-        padding-left: 1rem;
-        padding-right: 1rem;
+        padding-left: var(--safe-padding);
+        padding-right: var(--safe-padding);
     }
 
     .product-layout {
@@ -839,10 +844,12 @@
         max-width: 100%;
     }
 
+    /* ── Imagen principal: ancho completo + radio de 12px ── */
     .main-image {
         width: 100%;
         max-width: 100%;
         aspect-ratio: 1;
+        border-radius: 12px;
     }
 
     .main-image img {
@@ -850,6 +857,56 @@
         height: 100% !important;
         max-width: 100% !important;
         object-fit: cover;
+    }
+
+    /* ─────────────────────────────────────────────────────────────────
+       GALERÍA SECUNDARIA — Tira compacta de 4 miniaturas (Mobile-First)
+       4 thumbs en una sola fila, pequeños y uniformes debajo de la
+       imagen principal. Máximo 4 garantizado por la lógica JS.
+    ─────────────────────────────────────────────────────────────────── */
+    .thumbnails {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        padding: 0;
+        /* Resetear min-height fija del desktop (CLS ya gestionado por JS) */
+        min-height: unset;
+        width: 100%;
+    }
+
+    /* Celda cuadrada con bordes redondeados sutiles */
+    .thumb {
+        width: 100%;
+        height: auto;
+        min-width: unset;
+        aspect-ratio: 1 / 1;
+        border-radius: 8px;
+        flex-shrink: unset;
+    }
+
+    /* En grid no tiene sentido el translateY hover — usar solo opacidad */
+    .thumb:hover {
+        transform: none;
+        opacity: 0.9;
+    }
+
+    /* Borde morado de selección activa (thumb activo) */
+    .thumb.active {
+        border: 2px solid #a855f7;
+        box-shadow: 0 0 0 2px rgba(168, 85, 247, 0.25);
+        opacity: 1;
+        transform: none;
+    }
+
+    /* ── Jerarquía de información: alineación izquierda ── */
+    .product-details {
+        text-align: left;
+    }
+
+    .category-tag,
+    .product-title,
+    .price-block {
+        text-align: left;
     }
 
     .product-title {
@@ -876,11 +933,14 @@
         text-align: center;
     }
 
+    /* ── Botón Añadir al Carrito: ancho total, thumb-friendly ── */
     .btn-add-cart-lg {
         padding: 1rem 1.5rem;
         min-height: 56px;
         font-size: 1.15rem;
         width: 100%;
+        /* Garantía extra de ancho completo en flex column */
+        align-self: stretch;
     }
 
     /* Móvil: carrusel nativo con scroll-snap */
