@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applySpecialPricing(product);
     products.forEach(p => applySpecialPricing(p));
     document.title = `${product.name} - Camisetazo`;
+    initPlayerVersionListener();
 
     
     const leagueNames = {
@@ -265,10 +266,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('version-select').addEventListener('change', updatePreview);
     document.getElementById('name-input').addEventListener('input', handleNameInput);
     document.getElementById('number-input').addEventListener('input', handleDorsalInput);
-    document.getElementById('patch-select').addEventListener('change', updatePreview);
+    document.getElementById('patch-input').addEventListener('input', updatePreview);
     document.getElementById('add-to-cart-btn').addEventListener('click', addToCart);
     loadRelatedProducts();
-    renderPatchOptions();
     applyProductRestrictions();
     updatePreview();
     if (window.Analytics) {
@@ -359,36 +359,15 @@ function getAllowedPatches(product) {
     return allowed;
 }
 
-function renderPatchOptions() {
-    const patchSelect = document.getElementById('patch-select');
-    if (!patchSelect || !product) return;
-
-    patchSelect.innerHTML = '';
-
-    const defaultOption = document.createElement('option');
-    defaultOption.value = 'none';
-    defaultOption.textContent = 'Sin parches';
-    patchSelect.appendChild(defaultOption);
-
-    const allowedPatches = getAllowedPatches(product);
-
-    allowedPatches.forEach(patchKey => {
-        if (PATCH_DEFINITIONS[patchKey]) {
-            const option = document.createElement('option');
-            option.value = patchKey;
-            option.textContent = PATCH_DEFINITIONS[patchKey];
-            patchSelect.appendChild(option);
-        }
-    });
-}
+// Removido renderPatchOptions ya que ahora se usa un input de texto libre
 
 function applyProductRestrictions() {
     const { isRestricted, isNBA } = isRestrictedCategory();
 
     const versionSelect = document.getElementById('version-select');
     const versionGroup = versionSelect?.closest('.option-group');
-    const patchSelect = document.getElementById('patch-select');
-    const patchGroup = patchSelect?.closest('.option-group');
+    const patchInput = document.getElementById('patch-input');
+    const patchGroup = patchInput?.closest('.option-group');
     const numberInput = document.getElementById('number-input');
     const numberLabel = numberInput?.previousElementSibling;
     const nameInput = document.getElementById('name-input');
@@ -403,8 +382,8 @@ function applyProductRestrictions() {
         if (patchGroup) {
             patchGroup.style.display = 'none';
         }
-        if (patchSelect) {
-            patchSelect.value = 'none';
+        if (patchInput) {
+            patchInput.value = '';
         }
     }
 }
@@ -461,12 +440,11 @@ function updatePreview() {
     }
 
     // --- Parche ---
-    const patch = document.getElementById('patch-select').value;
-    if (patch && patch !== 'none') {
-        const patchCost = patchPrices[patch] || 0;
+    const patch = document.getElementById('patch-input').value.trim();
+    if (patch) {
+        const patchCost = 1;
         totalPrice += patchCost;
-        const patchName = document.getElementById('patch-select').selectedOptions[0].text;
-        details.push(`Parche ${patchName}: +€${patchCost}`);
+        details.push(`Parche ${patch}: +€${patchCost.toFixed(2)}`);
     }
 
     // --- Personalización ---
@@ -495,6 +473,45 @@ function updatePreview() {
         ? details.map(d => `<span>• ${d}</span>`).join('')
         : '<span style="color: var(--text-muted); font-style: italic;">Sin personalizaciones</span>';
     document.getElementById('preview-total').textContent = `€${totalPrice.toFixed(2)}`;
+}
+
+// ── Lógica de Alerta Versión Jugador ─────────────────────────────────────
+function showPlayerVersionModal() {
+    const modal = document.getElementById('pv-modal');
+    if (modal) {
+        modal.style.display = 'flex';
+        setTimeout(() => modal.classList.add('active'), 10);
+    }
+}
+
+function closePlayerVersionModal() {
+    const modal = document.getElementById('pv-modal');
+    if (modal) {
+        modal.classList.remove('active');
+        setTimeout(() => modal.style.display = 'none', 300);
+    }
+}
+
+function initPlayerVersionListener() {
+    const versionSelect = document.getElementById('version-select');
+    const closeBtn = document.getElementById('pv-close-btn');
+    const overlay = document.querySelector('.pv-overlay');
+
+    if (versionSelect) {
+        versionSelect.addEventListener('change', (e) => {
+            if (e.target.value === 'jugador') {
+                showPlayerVersionModal();
+            }
+        });
+    }
+
+    if (closeBtn) {
+        closeBtn.addEventListener('click', closePlayerVersionModal);
+    }
+
+    if (overlay) {
+        overlay.addEventListener('click', closePlayerVersionModal);
+    }
 }
 
 function addToCart() {
@@ -552,13 +569,13 @@ function addToCart() {
         version: document.getElementById('version-select').value,
         name: name ? name.toUpperCase() : '',
         number: number || '',
-        patch: document.getElementById('patch-select').value
+        patch: document.getElementById('patch-input').value.trim()
     };
     let totalPrice = product.price;
     totalPrice += sizeSurcharge;                                          // suplemento talla
     if (customization.version === 'jugador') totalPrice += 5;
-    if (customization.patch && customization.patch !== 'none') {
-        totalPrice += patchPrices[customization.patch] || 0;
+    if (customization.patch) {
+        totalPrice += 1;
     }
     if (customization.name && customization.number) {
         totalPrice += 2;

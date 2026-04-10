@@ -313,6 +313,128 @@
             color: transparent;
             pointer-events: none;
         }
+
+        /* Modal de Alerta de Versión Jugador */
+        .pv-modal {
+            position: fixed;
+            inset: 0;
+            z-index: 10000;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .pv-modal.active {
+            display: flex;
+            opacity: 1;
+        }
+
+        .pv-overlay {
+            position: absolute;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+        }
+
+        .pv-card {
+            position: relative;
+            width: 100%;
+            max-width: 440px;
+            background: var(--bg-card);
+            border-radius: 20px;
+            padding: 2rem;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            transform: scale(0.9);
+            transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        .pv-modal.active .pv-card {
+            transform: scale(1);
+        }
+
+        .pv-icon {
+            width: 64px;
+            height: 64px;
+            background: rgba(99, 102, 241, 0.15);
+            color: var(--primary);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.75rem;
+            margin: 0 auto 1.5rem;
+        }
+
+        .pv-title {
+            font-family: var(--font-heading);
+            font-size: 1.25rem;
+            font-weight: 800;
+            margin-bottom: 0.75rem;
+            color: var(--text-main);
+        }
+
+        .pv-text {
+            font-size: 0.95rem;
+            line-height: 1.6;
+            color: var(--text-muted);
+            margin-bottom: 1.75rem;
+        }
+
+        .pv-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--primary);
+            text-decoration: none;
+            font-weight: 700;
+            font-size: 0.9rem;
+            margin-bottom: 2rem;
+            padding-bottom: 2px;
+            border-bottom: 2px solid rgba(99, 102, 241, 0.2);
+            transition: all 0.2s ease;
+        }
+
+        .pv-link:hover {
+            color: #818cf8;
+            border-color: #818cf8;
+        }
+
+        .pv-btn {
+            width: 100%;
+            padding: 0.85rem;
+            background: var(--gradient-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+        }
+
+        .pv-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(99, 102, 241, 0.35);
+        }
+
+        @media (max-width: 480px) {
+            .pv-card {
+                padding: 1.75rem 1.25rem;
+            }
+            .pv-title {
+                font-size: 1.15rem;
+            }
+            .pv-text {
+                font-size: 0.9rem;
+            }
+        }
     </style>
 </head>
 
@@ -427,21 +549,11 @@
 
 
                     <div class="option-group">
-                        <label class="option-label" for="patch-select">Parches <span
+                        <label class="option-label" for="patch-input">Parches <span
                                 style="color: var(--text-muted); font-weight: 400; font-size: 0.9rem;">Opcional
                                 (+1)</span></label>
-                        <div class="select-wrapper">
-                        <select id="patch-select" class="select-input">
-                            <option value="none">Sin parches</option>
-                            <option value="liga">Parche Liga</option>
-                            <option value="champions">Parche Champions League</option>
-                            <option value="europa">Parche Europa League</option>
-                            <option value="premier">Parche Premier League</option>
-                            <option value="seriea">Parche Serie A</option>
-                            <option value="mundial">Parche Mundial de Clubes</option>
-                            <option value="copamundo">Parche Copa del Mundo</option>
-                            <option value="conmemorativo">Parche Conmemorativo</option>
-                        </select>
+                        <div class="input-wrapper">
+                            <input type="text" id="patch-input" class="text-input" placeholder="Ej: Champions, Liga, etc." maxlength="15">
                         </div>
                     </div>
 
@@ -547,6 +659,24 @@
 
     <div id="footer-placeholder"></div>
 
+
+    <!-- Modal Versión Jugador -->
+    <div id="pv-modal" class="pv-modal">
+        <div class="pv-overlay"></div>
+        <div class="pv-card">
+            <div class="pv-icon">
+                <i class="fas fa-search"></i>
+            </div>
+            <h3 class="pv-title">Verificar Disponibilidad</h3>
+            <p class="pv-text">
+                Has seleccionado la <strong>Versión Jugador</strong>. Por favor, asegúrate de que el diseño específico esté disponible para esta versión en nuestro catálogo oficial antes de continuar.
+            </p>
+            <a href="https://www.yupoo.store/search?uid=1&q=player%20version&page=1" target="_blank" rel="noopener" class="pv-link">
+                <i class="fas fa-external-link-alt"></i> Abrir Catálogo de Jugador
+            </a>
+            <button id="pv-close-btn" class="pv-btn">Entendido, continuar</button>
+        </div>
+    </div>
 
     <script src="/js/theme.js" defer></script>
     <script src="/js/components.js" defer></script>
