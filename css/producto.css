@@ -975,11 +975,11 @@
         display: none;
     }
 
-    /* 1.5 tarjetas visibles en móvil (invita al scroll) */
+    /* ~2.3 tarjetas visibles en móvil (más compactas, invitan al scroll) */
     .related-products .product-card {
-        min-width: 58vw;
-        max-width: 58vw;
-        width: 58vw;
+        min-width: 42vw;
+        max-width: 42vw;
+        width: 42vw;
     }
 
     .related-products {
@@ -1015,11 +1015,11 @@
         padding: 0 0.75rem 0.5rem;
     }
 
-    /* En pantallas muy pequeñas: 1.25 tarjetas visibles */
+    /* En pantallas muy pequeñas: ~2 tarjetas visibles */
     .related-products .product-card {
-        min-width: 70vw;
-        max-width: 70vw;
-        width: 70vw;
+        min-width: 52vw;
+        max-width: 52vw;
+        width: 52vw;
     }
 }
 
