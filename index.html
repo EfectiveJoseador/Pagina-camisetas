@@ -36,8 +36,12 @@
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
+        console.log('%c[Analytics] TAG DETECTADO - Iniciando...', 'color: #6366f1; font-weight: bold; font-size: 14px;');
         window.dataLayer = window.dataLayer || [];
-        function gtag() { dataLayer.push(arguments); }
+        function gtag() { 
+            if (arguments[0] === 'config') console.log('[Analytics] Configurando ID:', arguments[1]);
+            dataLayer.push(arguments); 
+        }
         gtag('js', new Date());
         gtag('config', 'G-GS53GWE2Z0');
     </script>
