@@ -10966,6 +10966,54 @@ const products = [
         tipo: "visitante",
         price: 19.9,
         oldPrice: 25
+    },
+    {
+        id: 170875,
+        name: "Alavés 1999/00 Local Retro",
+        slug: "deportivo-alaves-199900-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/170875/1.webp",
+        images: [
+            "/assets/productos/Yupoo/170875/2.webp"
+        ],
+        temporada: "1999/00",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 451851,
+        name: "Alavés 1998/99 Local Retro",
+        slug: "deportivo-alaves-199899-local-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/451851/1.webp",
+        images: [
+            "/assets/productos/Yupoo/451851/2.webp"
+        ],
+        temporada: "1998/99",
+        tipo: "local",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
+    },
+    {
+        id: 557301,
+        name: "Alavés 2000/01 Visitante Retro",
+        slug: "deportivo-alaves-200001-visitante-retro",
+        category: "futbol",
+        league: "laliga",
+        image: "/assets/productos/Yupoo/557301/1.webp",
+        images: [
+            "/assets/productos/Yupoo/557301/2.webp"
+        ],
+        temporada: "2000/01",
+        tipo: "visitante",
+        retro: true,
+        price: 24.9,
+        oldPrice: 30
     }
 ];
 

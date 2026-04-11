@@ -1533,15 +1533,35 @@ function normalizeTeamNameFromDictionary(teamName) {
         }
     }
 
-    // Buscar coincidencia parcial (el nombre contiene una clave del diccionario normalizada)
+    // Buscar todas las coincidencias parciales y elegir la mejor (la más larga)
+    let bestMatch = null;
+    let longestKeyLength = 0;
+
     for (const [key, value] of Object.entries(TEAM_NAME_NORMALIZATION)) {
         const normKey = normalizeForComparison(key);
-        if (normalized.includes(normKey) || normKey.includes(normalized)) {
-            return value;
+        
+        // Si el título contiene la clave del diccionario
+        if (normalized.includes(normKey)) {
+            // Un token genérico como "deportivo" solo debe contar si es un token completo
+            // para evitar falsos positivos si hay otros tokens más específicos
+            const isGeneric = ['deportivo', 'real', 'atletico', 'club', 'sporting'].includes(normKey);
+            const isStandalone = new RegExp(`\\b${normKey}\\b`, 'i').test(normalized);
+            
+            if (key.length > longestKeyLength) {
+                // Si es genérico, solo lo aceptamos si no hay otra cosa mejor o si es standalone
+                if (!isGeneric || isStandalone) {
+                    bestMatch = value;
+                    longestKeyLength = key.length;
+                }
+            }
         }
     }
 
-    // Si no hay coincidencia, devolver el nombre original con formato capitalizado
+    if (bestMatch) {
+        return bestMatch;
+    }
+
+    // Si no hay coincidencia, devolver el nombre original
     return teamName;
 }
 
@@ -1918,7 +1938,12 @@ const TITLE_CLEANUP_PATTERNS = [
 ];
 
 function parseProductTitle(rawTitle) {
-    let title = rawTitle.trim();
+    if (!rawTitle) return null;
+    let title = rawTitle
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/\$nbsp/gi, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
 
     title = title
         .replace(/&amp;amp;/gi, '&')
@@ -1951,26 +1976,21 @@ function parseProductTitle(rawTitle) {
         isStyle: false
     };
 
-    const explicitSeasonMatch = title.match(/\b(\d{2})[\/\-](\d{2})\b/);
-    const fullYearMatch = title.match(/\b(20\d{2})\b/);
+    // Detectar temporada (ej: 1999/00, 2024/25, 23/24, 2024)
+    // Buscamos primero rangos de años (temporadas)
+    const explicitSeasonMatch = title.match(/\b(\d{2,4})[\/\-](\d{2})\b/);
+    const fullYearMatch = title.match(/\b(19\d{2}|20\d{2})\b/);
     const gluedSeasonMatch = title.match(/\b(\d{2})(\d{2})\b(?!\d)/);
 
     const processYearLogic = (y1, y2) => {
-        const n1 = parseInt(y1, 10);
-        const n2 = parseInt(y2, 10);
-        
-        if (y1 === '19') {
-            if (y2 === '20') {
-                return '2019/20';
-            } else if (n2 > 30) {
-                return `19${y2}`;
-            } else {
-                return `2019/${y2}`;
-            }
+        // Normalizar y1 a 2 o 4 dígitos
+        let year1 = y1;
+        if (y1.length === 2) {
+            const n1 = parseInt(y1, 10);
+            year1 = (n1 > 30 ? '19' : '20') + y1;
         }
-        
-        const prefix = n1 > 30 ? '19' : '20';
-        return `${prefix}${y1}/${y2}`;
+
+        return `${year1}/${y2}`;
     };
 
     if (explicitSeasonMatch) {
@@ -2022,8 +2042,8 @@ function parseProductTitle(rawTitle) {
 
     teamName = teamName
         .replace(/\|\s*album\s*\|.*$/gi, '')
-        .replace(/\b(20\d{2})\b/g, '')
-        .replace(/(\d{2})[\/-]?(\d{2})\b/g, '')
+        .replace(/(\d{2,4})[\/-]?(\d{2,4})\b/g, '') // Rangos primero (ej: 1999/00)
+        .replace(/\b(19\d{2}|20\d{2})\b/g, '')     // Años sueltos después
         .replace(/\b(away|home|third|fourth|visitante|local|tercera|cuarta|gk|goalkeeper|portero)\b/gi, '')
         .replace(/\b(1st|2nd|3rd|4th|1a|2a|3a|4a)\b/gi, '')
         .replace(/\b(special|especial|edition|edici[oó]n|limited|limitada)\b/gi, '')
@@ -2032,7 +2052,8 @@ function parseProductTitle(rawTitle) {
         .replace(/\b(kids?|niños?|child|children|junior)\b/gi, '')
         .replace(/\b(S-\d?XL|S-4XL|XS-XXL|S-XXL|M-XXL|S-3XL|S-XXL2|S-\dXL2)\b/gi, '')
         .replace(/\b(style|estilo)\b/gi, '')
-        .replace(/\b(jerseys?|shirts?|camisas?|camisetas?|kits?)\b/gi, '')
+        .replace(/\b(jerseys?|shirts?|camisas?|camisetas?|kits?|soccer|football)\b/gi, '')
+        .replace(/[\/\-]\d{2,4}\b/g, '') // Limpiar restos
         .trim();
 
     console.log('[DEBUG] After Regex Cleanup:', teamName);
@@ -2607,6 +2628,39 @@ async function downloadAndConvertToWebP(imageUrl, destPath, referer, options = {
     }
 }
 
+async function downloadAndConvertToWebPWithFallback(imageUrl, destPath, referer, options = {}) {
+    const urlsToTry = [imageUrl];
+
+    // Fallbacks lógicos para Yupoo
+    if (imageUrl.includes('/big.png')) urlsToTry.push(imageUrl.replace('/big.png', '/big.jpg'));
+    else if (imageUrl.includes('/big.jpg')) urlsToTry.push(imageUrl.replace('/big.jpg', '/big.png'));
+
+    // Si es big, probar medium como último recurso
+    if (imageUrl.includes('/big.')) {
+        const mediumUrl = imageUrl.replace('/big.', '/medium.');
+        urlsToTry.push(mediumUrl);
+        // También probar medium con cambio de extensión si aplica
+        if (mediumUrl.includes('.png')) urlsToTry.push(mediumUrl.replace('.png', '.jpg'));
+        else if (mediumUrl.includes('.jpg')) urlsToTry.push(mediumUrl.replace('.jpg', '.png'));
+    }
+
+    const uniqueUrls = [...new Set(urlsToTry)];
+    let lastError = null;
+
+    for (const urlToTry of uniqueUrls) {
+        try {
+            return await downloadAndConvertToWebP(urlToTry, destPath, referer, options);
+        } catch (err) {
+            lastError = err;
+            if (uniqueUrls.length > 1) {
+                console.warn(`  ⚠️ Falló descarga de ${path.basename(urlToTry)}: ${err.message}. Probando fallback...`);
+            }
+        }
+    }
+
+    throw lastError || new Error('Fallo total en descarga de imagen');
+}
+
 async function downloadProductImages(product, assetsDir, options = {}) {
     const {
         convertToWebP = true,
@@ -2625,7 +2679,6 @@ async function downloadProductImages(product, assetsDir, options = {}) {
         fs.mkdirSync(productDir, { recursive: true });
     }
 
-    const downloadedImages = [];
     const allImages = [product.image, ...(product.images || [])].filter(Boolean);
 
     let sharp = null;
@@ -2637,8 +2690,7 @@ async function downloadProductImages(product, assetsDir, options = {}) {
         }
     }
 
-    for (let i = 0; i < allImages.length; i++) {
-        const imageUrl = allImages[i];
+    const downloadPromises = allImages.map(async (imageUrl, i) => {
         const imageNumber = i + 1;
         const baseFilename = `${imageNumber}`;
         const localBasePath = path.join(productDir, baseFilename);
@@ -2647,7 +2699,7 @@ async function downloadProductImages(product, assetsDir, options = {}) {
             let finalPath;
 
             if (convertToWebP) {
-                finalPath = await downloadAndConvertToWebP(
+                finalPath = await downloadAndConvertToWebPWithFallback(
                     imageUrl,
                     localBasePath + '.tmp',
                     referer,
@@ -2660,7 +2712,7 @@ async function downloadProductImages(product, assetsDir, options = {}) {
             }
 
             const finalFilename = path.basename(finalPath);
-            downloadedImages.push(`${webPath}/${finalFilename}`);
+            const webImageUrl = `${webPath}/${finalFilename}`;
 
             if (sharp && generateThumbnails && imageNumber <= 2) {
                 try {
@@ -2681,10 +2733,15 @@ async function downloadProductImages(product, assetsDir, options = {}) {
                 }
             }
 
+            return webImageUrl;
         } catch (err) {
-            console.warn(`Warning: Failed to download image ${imageNumber}: ${err.message}`);
+            console.error(`Error descargando imagen ${imageNumber}: ${err.message}`);
+            // Relanzar el error para que Promise.all falle
+            throw err;
         }
-    }
+    });
+
+    const downloadedImages = await Promise.all(downloadPromises);
 
     if (downloadedImages.length === 0) {
         throw new Error('No se pudieron descargar imágenes');
