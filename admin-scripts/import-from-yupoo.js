@@ -161,8 +161,16 @@ function readProductsFile() {
         throw new Error('No se pudo parsear el archivo de productos');
     }
 
+    let productsArray;
+    const jsonStr = match[1];
 
-    const productsArray = eval(match[1]);
+    try {
+        // Intentar parseo rápido si es JSON válido
+        productsArray = JSON.parse(jsonStr);
+    } catch (e) {
+        // Fallback a eval para compatibilidad con formato antiguo (sin comillas en claves)
+        productsArray = eval(jsonStr);
+    }
 
     return {
         products: productsArray,
@@ -173,10 +181,7 @@ function readProductsFile() {
 
 function writeProductsFile(products) {
 
-    const productsJson = JSON.stringify(products, null, 4)
-
-        .replace(/"([^"]+)":/g, '$1:')
-        .replace(/: "([^"]+)"/g, ': "$1"');
+    const productsJson = JSON.stringify(products, null, 4);
 
     const content = `
 const products = ${productsJson};
@@ -274,20 +279,26 @@ async function main() {
     }
 
     try {
+        // Carga inicial optimizada (Paralela)
         const generatedId = generateStableId(options.url);
+        
+        // Empezamos a descargar el álbum mientras leemos el archivo local
+        const albumDataPromise = fetchYupooAlbum(options.url);
         const { products } = readProductsFile();
+        const albumData = await albumDataPromise;
 
         const existingById = findProductById(products, generatedId);
         const existingByUrl = findProductBySourceUrl(products, options.url);
 
-        if (existingById.product || existingByUrl.product) {
-            const existing = existingById.product || existingByUrl.product;
+        const isExisting = !!(existingById.product || existingByUrl.product);
+        let existing = isExisting ? (existingById.product || existingByUrl.product) : null;
+
+        if (isExisting) {
             warn(`⚠ Producto ya existe con ID ${existing.id}: "${existing.name}"`);
             options.update = true;
         }
 
         if (options.listImages) {
-            const albumData = await fetchYupooAlbum(options.url);
             separator();
             console.log(`${COLORS.bright}IMÁGENES DISPONIBLES EN EL ÁLBUM${COLORS.reset}`);
             separator();
@@ -395,7 +406,8 @@ async function main() {
 
 
         let product = await importFromYupoo(options.url, {
-            strictImages: options.strictImages
+            strictImages: options.strictImages,
+            albumData: albumData // Reutilizar datos para evitar doble fetch
         });
 
 
@@ -435,48 +447,58 @@ async function main() {
         }
 
 
-        const matcher = new TeamMatcher(products);
-        const teamMatch = matcher.findBestMatch(product.name, 0.6); // Threshold aumentado de 0.3 a 0.6
+        // Optimización: Si el producto ya existe y no hay cambios drásticos, 
+        // podemos saltarnos el Matcher que es lo más lento (escanea 11k productos).
+        const needsMatching = !isExisting || product.league === 'otros';
 
-        if (teamMatch && teamMatch.league) {
-            info(`🔗 Match encontrado: "${teamMatch.name}" (score: ${(teamMatch.score * 100).toFixed(0)}%)`);
+        if (needsMatching) {
+            const matcher = new TeamMatcher(products);
+            const teamMatch = matcher.findBestMatch(product.name, 0.6);
 
-            // Extraer solo la parte del equipo (sin temporada ni variantes) para comparar
-            const cleanExistingTeam = teamMatch.name
-                .replace(/\s*\d{2}\/?\d{2}.*$/, '')
-                .replace(/\b(estilo|Retro|Local|Visitante|Tercera|Cuarta|Especial|Entrenamiento|Portero|Niño|Kids)\b/gi, '')
-                .trim();
-            
-            const cleanCurrentTeam = product.name
-                .replace(/\s*\d{2}\/?\d{2}.*$/, '')
-                .replace(/\b(estilo|Retro|Local|Visitante|Tercera|Cuarta|Especial|Entrenamiento|Portero|Niño|Kids)\b/gi, '')
-                .trim();
+            if (teamMatch && teamMatch.league) {
+                info(`🔗 Match encontrado: "${teamMatch.name}" (score: ${(teamMatch.score * 100).toFixed(0)}%)`);
 
-            if (teamMatch.score >= 0.7 && cleanExistingTeam && cleanExistingTeam !== cleanCurrentTeam) {
-                // Reemplazar el nombre del equipo dentro del nombre completo del producto
-                product.name = product.name.replace(cleanCurrentTeam, cleanExistingTeam);
+                // Extraer solo la parte del equipo (sin temporada ni variantes) para comparar
+                const cleanExistingTeam = teamMatch.name
+                    .replace(/\s*\d{2}\/?\d{2}.*$/, '')
+                    .replace(/\b(estilo|Retro|Local|Visitante|Tercera|Cuarta|Especial|Entrenamiento|Portero|Niño|Kids)\b/gi, '')
+                    .trim();
                 
-                // Regenerar el slug
-                const oldSlugPart = cleanCurrentTeam.toLowerCase().replace(/\s+/g, '-');
-                const newSlugPart = cleanExistingTeam.toLowerCase().replace(/\s+/g, '-');
-                product.slug = product.slug.replace(oldSlugPart, newSlugPart);
-                
-                info(`   Nombre normalizado: ${cleanCurrentTeam} → ${cleanExistingTeam}`);
-            } else if (teamMatch.score < 0.7) {
-                info(`   Score bajo (${(teamMatch.score * 100).toFixed(0)}%), manteniendo nombre original`);
-            }
+                const cleanCurrentTeam = product.name
+                    .replace(/\s*\d{2}\/?\d{2}.*$/, '')
+                    .replace(/\b(estilo|Retro|Local|Visitante|Tercera|Cuarta|Especial|Entrenamiento|Portero|Niño|Kids)\b/gi, '')
+                    .trim();
 
-            // Solo usar la liga del match si la detección original fue "otros"
-            if (product.league === 'otros') {
-                info(`   Liga detectada desde match: ${teamMatch.league}`);
-                product.league = teamMatch.league;
-            } else {
-                info(`   Liga original mantenida: ${product.league}`);
-            }
-        } else if (product.league === 'otros') {
+                if (teamMatch.score >= 0.7 && cleanExistingTeam && cleanExistingTeam !== cleanCurrentTeam) {
+                    // Reemplazar el nombre del equipo dentro del nombre completo del producto
+                    product.name = product.name.replace(cleanCurrentTeam, cleanExistingTeam);
+                    
+                    // Regenerar el slug
+                    const oldSlugPart = cleanCurrentTeam.toLowerCase().replace(/\s+/g, '-');
+                    const newSlugPart = cleanExistingTeam.toLowerCase().replace(/\s+/g, '-');
+                    product.slug = product.slug.replace(oldSlugPart, newSlugPart);
+                    
+                    info(`   Nombre normalizado: ${cleanCurrentTeam} → ${cleanExistingTeam}`);
+                } else if (teamMatch.score < 0.7) {
+                    info(`   Score bajo (${(teamMatch.score * 100).toFixed(0)}%), manteniendo nombre original`);
+                }
 
-            warn('⚠️  No se encontró match, liga asignada: otros');
-            warn('   Considera revisar manualmente la liga después de importar');
+                // Solo usar la liga del match si la detección original fue "otros"
+                if (product.league === 'otros') {
+                    info(`   Liga detectada desde match: ${teamMatch.league}`);
+                    product.league = teamMatch.league;
+                } else {
+                    info(`   Liga original mantenida: ${product.league}`);
+                }
+            } else if (product.league === 'otros') {
+                warn('⚠️  No se encontró match, liga asignada: otros');
+                warn('   Considera revisar manualmente la liga después de importar');
+            }
+        } else {
+            // Reutilizar metadatos del producto existente si no necesitamos matching
+            info(`ℹ Reutilizando metadatos de liga/categoría de ID ${existing.id}`);
+            product.league = existing.league;
+            product.category = existing.category;
         }
 
 

@@ -2463,13 +2463,13 @@ async function fetchYupooAlbum(albumUrl) {
 }
 
 async function importFromYupoo(albumUrl, options = {}) {
-    const { strictImages = false } = options;
+    const { strictImages = false, albumData: providedAlbumData = null } = options;
 
     if (!albumUrl || !albumUrl.includes('yupoo.com')) {
         throw new Error('URL de Yupoo inválida');
     }
 
-    const albumData = await fetchYupooAlbum(albumUrl);
+    const albumData = providedAlbumData || await fetchYupooAlbum(albumUrl);
 
     if (!albumData.title) {
         throw new Error('No se pudo extraer el título del producto');
@@ -2549,7 +2549,7 @@ function downloadImage(imageUrl, destPath, referer) {
         const options = {
             headers: {
                 'Referer': referer,
-                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36'
+                'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36'
             }
         };
 
