@@ -5,174 +5,244 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="../assets/logo/logo.png">
-    <title>¡Pedido Realizado! - Camisetazo</title>
-
+    <title>Pedido Confirmado - Camisetazo</title>
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         gtag('js', new Date());
-        gtag('config', 'G-GS53GWE2Z0');
+        gtag('config', 'G-GS53GWE2Z0', { 'send_page_view': false });
     </script>
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
-        rel="stylesheet">
-    <link rel="stylesheet" href="/assets/fonts/fontawesome/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
 
-    <link rel="stylesheet" href="/css/variables.css">
-    <link rel="stylesheet" href="/css/reset.css">
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/auth.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <style>
+        .success-page {
+            min-height: 80vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2rem 1rem;
+            background-color: var(--bg-body);
+        }
+
+        .zen-card {
+            background: var(--bg-card);
+            padding: 3.5rem 2rem;
+            border-radius: 24px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.04);
+            max-width: 550px;
+            width: 100%;
+            text-align: center;
+            border: 1px solid var(--border);
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .check-icon {
+            width: 80px;
+            height: 80px;
+            background: #f0fdf4;
+            color: #16a34a;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.5rem;
+            margin: 0 auto 2rem;
+            border: 1px solid #dcfce7;
+        }
+
+        .zen-title {
+            font-family: 'Outfit', sans-serif;
+            font-size: 2.25rem;
+            color: var(--text-main);
+            margin-bottom: 1rem;
+            letter-spacing: -0.02em;
+        }
+
+        .zen-subtitle {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.6;
+            margin-bottom: 2.5rem;
+        }
+
+        .order-badge {
+            background: var(--bg-body);
+            padding: 0.75rem 1.5rem;
+            border-radius: 12px;
+            font-family: 'Courier New', monospace;
+            font-weight: 700;
+            color: var(--primary);
+            display: inline-block;
+            margin-bottom: 2.5rem;
+            border: 1px solid var(--border);
+        }
+
+        .next-steps-minimal {
+            text-align: left;
+            margin: 0 auto 3rem;
+            max-width: 400px;
+        }
+
+        .step-item {
+            display: flex;
+            gap: 1.25rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .step-item i {
+            color: var(--primary);
+            font-size: 1.1rem;
+            margin-top: 0.2rem;
+        }
+
+        .step-content h4 {
+            font-size: 1rem;
+            color: var(--text-main);
+            margin-bottom: 0.25rem;
+        }
+
+        .step-content p {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            line-height: 1.4;
+        }
+
+        .zen-actions {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .btn-zen-primary {
+            background: var(--text-main);
+            color: var(--bg-body);
+            padding: 1rem 2rem;
+            border-radius: 14px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+
+        .btn-zen-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+
+        .btn-zen-secondary {
+            background: transparent;
+            color: var(--text-muted);
+            padding: 1rem 2rem;
+            border-radius: 14px;
+            font-weight: 500;
+            text-decoration: none;
+            border: 1px solid var(--border);
+            transition: all 0.3s ease;
+        }
+
+        .btn-zen-secondary:hover {
+            border-color: var(--text-main);
+            color: var(--text-main);
+        }
+
+        @media (max-width: 480px) {
+            .zen-card { padding: 2.5rem 1.5rem; }
+            .zen-title { font-size: 1.8rem; }
+        }
+    </style>
 </head>
 
 <body>
     <div id="header-placeholder"></div>
 
-    <main class="auth-container">
-        <div class="auth-card" style="max-width: 600px; text-align: center;">
-            <div style="font-size: 5rem; color: #28a745; margin-bottom: 1rem;">
-                <i class="fas fa-check-circle"></i>
+    <main class="success-page">
+        <div class="zen-card">
+            <div class="check-icon">
+                <i class="fas fa-check"></i>
             </div>
-            <h1 style="color: var(--text-main); margin-bottom: 1rem; font-size: 2rem;">¡Pedido Realizado con Éxito!</h1>
-            <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 1.1rem;">
-                Gracias por tu compra. Hemos recibido tu pedido y comenzaremos a procesarlo de inmediato.
-            </p>
+            
+            <h1 class="zen-title">¡Todo listo!</h1>
+            <p class="zen-subtitle">Tu pedido ha sido confirmado. Hemos enviado los detalles a tu perfil.</p>
 
-            <div
-                style="background: var(--bg-body); padding: 1.5rem; border-radius: var(--radius-md); margin: 2rem 0; border: 1px solid var(--border);">
-                <p style="color: var(--text-muted); margin-bottom: 0.5rem;">ID de Pedido:</p>
-                <p id="order-id"
-                    style="font-family: 'Courier New', monospace; font-size: 1.2rem; color: var(--primary); font-weight: bold;">
-                </p>
+            <div class="order-badge">
+                <span id="order-id">ORD-XXXXXXXX</span>
             </div>
 
-            <div
-                style="background: rgba(var(--primary-rgb), 0.1); padding: 1.5rem; border-radius: var(--radius-md); margin-bottom: 2rem; border-left: 4px solid var(--primary);">
-                <h3 style="color: var(--text-main); margin-bottom: 1rem;">
-                    <i class="fas fa-info-circle" style="color: var(--primary);"></i>
-                    Próximos Pasos
-                </h3>
-                <ul style="text-align: left; color: var(--text-muted); list-style: none; padding: 0;">
-                    <li style="margin-bottom: 0.7rem;">
-                        <i class="fas fa-envelope" style="color: var(--primary); margin-right: 0.5rem;"></i>
-                        Recibirás un mensaje de confirmación por instagram
-                    </li>
-                    <li style="margin-bottom: 0.7rem;">
-                        <i class="fas fa-box" style="color: var(--primary); margin-right: 0.5rem;"></i>
-                        Después de confirmar el pago, procesaremos tu pedido en 48-72 horas (En ese tiempo te enviaremos las fotos de tu pedido por instagram)
-                    </li>
-                    <li style="margin-bottom: 0.7rem;">
-                        <i class="fas fa-shipping-fast" style="color: var(--primary); margin-right: 0.5rem;"></i>
-                        Tiempo de entrega estimado: 1-2 semanas
-                    </li>
-                    <li>
-                        <i class="fas fa-headset" style="color: var(--primary); margin-right: 0.5rem;"></i>
-                        Contacta con nosotros si tienes dudas
-                    </li>
-                </ul>
+            <div class="next-steps-minimal">
+                <div class="step-item">
+                    <i class="fas fa-camera"></i>
+                    <div class="step-content">
+                        <h4>Fotos de tu pedido</h4>
+                        <p>Te enviaremos fotos de tus camisetas via Instagram en las próximas 48-72h trás confirmar que el pago se ha realizado correctamente.</p>
+                    </div>
+                </div>
+                <div class="step-item">
+                    <i class="fas fa-truck-fast"></i>
+                    <div class="step-content">
+                        <h4>Envío Asegurado</h4>
+                        <p>El tiempo estimado de entrega es de 1 a 2 semanas con seguimiento en tiempo real.</p>
+                    </div>
+                </div>
             </div>
 
-            <style>
-                .success-actions {
-                    display: flex;
-                    gap: 0.75rem;
-                    justify-content: center;
-                    flex-wrap: wrap;
-                    margin-top: 0.5rem;
-                }
-                .btn-success-primary {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    padding: 0.85rem 1.5rem;
-                    border-radius: 10px;
-                    font-weight: 700;
-                    font-size: 0.95rem;
-                    text-decoration: none;
-                    transition: all 0.2s ease;
-                    cursor: pointer;
-                    border: none;
-                    white-space: nowrap;
-                    /* Morado principal */
-                    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
-                    color: #ffffff;
-                    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
-                }
-                .btn-success-primary:hover {
-                    transform: translateY(-2px);
-                    box-shadow: 0 8px 22px rgba(99, 102, 241, 0.5);
-                }
-                .btn-success-secondary {
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    padding: 0.85rem 1.5rem;
-                    border-radius: 10px;
-                    font-weight: 600;
-                    font-size: 0.95rem;
-                    text-decoration: none;
-                    transition: all 0.2s ease;
-                    cursor: pointer;
-                    white-space: nowrap;
-                    /* Outline neutro */
-                    background: transparent;
-                    color: var(--text-main);
-                    border: 1.5px solid var(--border);
-                }
-                .btn-success-secondary:hover {
-                    border-color: #8b5cf6;
-                    color: #8b5cf6;
-                    transform: translateY(-2px);
-                }
-                /* Mobile: botones a columna */
-                @media (max-width: 480px) {
-                    .success-actions {
-                        flex-direction: column;
-                        align-items: stretch;
-                    }
-                    .btn-success-primary,
-                    .btn-success-secondary {
-                        justify-content: center;
-                    }
-                }
-            </style>
-
-            <div class="success-actions">
-                <!-- Ver pedido → perfil (sesión ya iniciada) -->
-                <a href="/pages/perfil.html" class="btn-success-primary" id="btn-ver-pedido">
-                    <i class="fas fa-receipt"></i>
-                    Ver mi Pedido
+            <div class="zen-actions">
+                <a href="/pages/perfil.html" class="btn-zen-primary">
+                    <i class="fas fa-user"></i> Ver mi Pedido
                 </a>
-                <!-- Volver al inicio -->
-                <a href="/index.html" class="btn-success-secondary">
-                    <i class="fas fa-home"></i>
-                    Volver al Inicio
-                </a>
-                <!-- Soporte -->
-                <a href="/pages/contacto.html" class="btn-success-secondary">
-                    <i class="fas fa-headset"></i>
-                    Contactar Soporte
-                </a>
+                <a href="/pages/tienda.html" class="btn-zen-secondary">Seguir Comprando</a>
             </div>
         </div>
     </main>
 
     <div id="footer-placeholder"></div>
 
-    <script src="/js/theme.js"></script>
-    <script src="/js/components.js"></script>
-    <script type="module" src="/js/firebase-global.js"></script>
-    <script>
-        
-        const params = new URLSearchParams(window.location.search);
-        const orderId = params.get('order') || 'N/A';
-        document.getElementById('order-id').textContent = orderId;
+    <script src="../js/theme.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="../js/ux-feedback.js"></script>
+    <script type="module">
+        import { auth, db, ref, get, onAuthStateChanged } from '../js/firebase-config.js';
+        import Analytics from '../js/analytics.js';
 
-        
+        const params = new URLSearchParams(window.location.search);
+        const orderId = params.get('order');
+
+        if (orderId) {
+            document.getElementById('order-id').textContent = orderId;
+            
+            // Esperar a que el usuario esté autenticado para recuperar el pedido
+            onAuthStateChanged(auth, async (user) => {
+                if (user && orderId) {
+                    try {
+                        const orderRef = ref(db, `ordersByUser/${user.uid}/${orderId}`);
+                        const snapshot = await get(orderRef);
+                        
+                        if (snapshot.exists()) {
+                            const orderData = snapshot.val();
+                            if (Analytics) {
+                                Analytics.trackPurchase(orderData);
+                            }
+                        }
+                    } catch (error) {
+                        console.error("[Health] Error recovering order for telemetry:", error);
+                    }
+                }
+            });
+        }
+
+        // Limpiar carrito
         localStorage.removeItem('cart');
         localStorage.removeItem('appliedPacks');
     </script>

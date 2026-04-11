@@ -3,6 +3,7 @@ import Cart from './carrito.js';
 import products from './products-data.js';
 import { getUserCoupons, useCoupon, addPendingPoints } from './points.js';
 import { sanitizeHTML } from './security.js';
+import Analytics from './analytics.js';
 let currentUser = null;
 let selectedAddressId = null;
 let addresses = [];
@@ -108,11 +109,11 @@ function selectAddress(addressId) {
 
     initPaymentMethods();
     const calculations = Cart.calculateTotal();
-    if (window.Analytics && Cart.items.length > 0) {
-        window.Analytics.trackBeginCheckout(Cart.items, calculations.total);
+    if (Analytics && Cart.items.length > 0) {
+        Analytics.trackBeginCheckout(Cart.items, calculations.total);
         const selectedAddr = addresses.find(a => a.id === addressId);
         if (selectedAddr) {
-            window.Analytics.trackAddShippingInfo(selectedAddr);
+            Analytics.trackAddShippingInfo(selectedAddr);
         }
     }
 }
@@ -605,6 +606,11 @@ function setCouponError(message) {
             ? `<i class="fas fa-circle-exclamation"></i> ${message}`
             : '';
         el.style.display = message ? 'flex' : 'none';
+
+        if (message && Analytics) {
+            const couponSelect = document.getElementById('apply-coupon');
+            Analytics.trackCouponError(couponSelect?.value || 'unknown', message);
+        }
     }
 }
 

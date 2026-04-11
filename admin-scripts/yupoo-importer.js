@@ -2459,7 +2459,15 @@ async function fetchYupooAlbum(albumUrl) {
     }
 
     const html = await response.text();
-    return parseYupooHtml(html, albumUrl);
+    const result = parseYupooHtml(html, albumUrl);
+    
+    // Health Check: Detección de cambios estructurales
+    if (!result || !result.title || result.images.length === 0) {
+        console.warn(`[HealthCheck] [YupooScraper] Posible cambio de estructura detectado en: ${albumUrl}`);
+        // En un entorno Node real podríamos registrar esto en un log centralizado
+    }
+
+    return result;
 }
 
 async function importFromYupoo(albumUrl, options = {}) {

@@ -1,4 +1,6 @@
 import products from './products-data.js';
+import Analytics from './analytics.js';
+import Health from './health-check.js';
 const patchPrices = {
     none: 0,
     liga: 1,
@@ -59,6 +61,7 @@ document.addEventListener('DOMContentLoaded', () => {
     applySpecialPricing(product);
     products.forEach(p => applySpecialPricing(p));
     document.title = `${product.name} - Camisetazo`;
+    if (Analytics) Analytics.trackViewItem(product);
     initPlayerVersionListener();
 
     
@@ -271,15 +274,6 @@ document.addEventListener('DOMContentLoaded', () => {
     loadRelatedProducts();
     applyProductRestrictions();
     updatePreview();
-    if (window.Analytics) {
-        window.Analytics.trackProductView({
-            id: product.id,
-            name: product.name,
-            price: product.price,
-            category: product.category,
-            team: product.team || product.league
-        });
-    }
     updateProductSchema();
 });
 
@@ -665,16 +659,24 @@ function addToCart() {
         cart.push(cartItem);
     }
 
+    if (Analytics) Analytics.trackAddToCart(cartItem);
+    
+    // El closeModal() disparaba error si no existía, lo quitamos o rodeamos
+    // en este contexto no hay modal de "añadir", hay toast.
+    
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
+
     if (window.Toast) {
         window.Toast.success(`${product.name} añadido al carrito`);
     } else {
         showToast(`${product.name} añadido al carrito`);
     }
+
     if (window.CartBadge) {
         window.CartBadge.animate();
     }
+
     if (window.Analytics) {
         window.Analytics.trackAddToCart(product, quantity, customization);
     }
@@ -1471,6 +1473,7 @@ function applyTransform() {
 }
 
 function openLightbox() {
+    if (Analytics && product) Analytics.trackImageInteraction(product.name, 'open_lightbox');
     const lightbox = document.getElementById('image-lightbox');
     const lightboxImage = document.getElementById('lightbox-image');
     const thumbsContainer = document.getElementById('lightbox-thumbnails');
@@ -1567,6 +1570,8 @@ function initStickyCTA() {
 
     // Acción del botón sticky
     stickyAddBtn.addEventListener('click', () => {
+        if (Analytics) Analytics.trackStickyCTAClick(product.name);
+        
         if (!selectedSize) {
             const optionsSection = document.querySelector('.options-block');
             if (optionsSection) {
@@ -1583,5 +1588,8 @@ function initStickyCTA() {
 document.addEventListener('DOMContentLoaded', () => {
     initLightbox();
     // Delay sticky init to ensure product data is rendered
-    setTimeout(initStickyCTA, 100);
+    setTimeout(() => {
+        initStickyCTA();
+        if (Health && product) Health.verifyJsonLd(product.id);
+    }, 100);
 });

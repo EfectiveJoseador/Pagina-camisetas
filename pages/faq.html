@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../assets/logo/logo.png">
+
+    <title>Preguntas Frecuentes (FAQ) | Camisetazo</title>
+    <meta name="description" content="¿Tienes dudas? Consulta nuestras preguntas frecuentes sobre envíos, métodos de pago, devoluciones y calidad de nuestras camisetas de fútbol.">
+    <meta name="keywords" content="faq camisetazo, preguntas frecuentes, ayuda camisetazo, envíos fútbol, pagos bizum">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap" rel="stylesheet">
+    
+    <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/ux-feedback.css">
+
+    <style>
+        .faq-page {
+            padding: 4rem 1.5rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-header {
+            text-align: center;
+            margin-bottom: 4rem;
+        }
+
+        .faq-header h1 {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .faq-header p {
+            color: var(--text-muted);
+            font-size: 1.1rem;
+        }
+
+        /* Accordion Container */
+        .faq-container {
+            display: flex;
+            flex-direction: column;
+            gap: 1rem;
+        }
+
+        .faq-item {
+            background: var(--bg-card);
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            overflow: hidden;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        .faq-item:hover {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-md);
+        }
+
+        .faq-item.active {
+            border-color: var(--primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .faq-question {
+            padding: 1.5rem;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            cursor: pointer;
+            background: none;
+            border: none;
+            text-align: left;
+            color: var(--text-main);
+            font-family: var(--font-body);
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+
+        .faq-question i {
+            font-size: 0.9rem;
+            color: var(--text-muted);
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+            color: var(--primary);
+        }
+
+        .faq-answer {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: rgba(99, 102, 241, 0.02);
+        }
+
+        .faq-answer-content {
+            padding: 0 1.5rem 1.5rem 1.5rem;
+            color: var(--text-secondary);
+            line-height: 1.7;
+            font-size: 1rem;
+        }
+
+        .faq-answer ul {
+            margin-left: 1.25rem;
+            margin-top: 0.5rem;
+        }
+
+        .faq-answer li {
+            margin-bottom: 0.5rem;
+        }
+
+        .faq-cta {
+            margin-top: 4rem;
+            text-align: center;
+            padding: 3rem;
+            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-body) 100%);
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+        }
+
+        .faq-cta h2 {
+            font-size: 1.5rem;
+            margin-bottom: 1rem;
+            color: var(--text-main);
+        }
+
+        .faq-cta .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-top: 1rem;
+        }
+
+        @media (max-width: 768px) {
+            .faq-header h1 {
+                font-size: 2rem;
+            }
+            .faq-question {
+                font-size: 1rem;
+                padding: 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div id="header-placeholder"></div>
+
+    <main class="faq-page">
+        <header class="faq-header">
+            <span class="badge" style="margin-bottom: 1rem;">Centro de Ayuda</span>
+            <h1>Preguntas Frecuentes</h1>
+            <p>Todo lo que necesitas saber sobre tus pedidos en Camisetazo</p>
+        </header>
+
+        <section class="faq-container">
+            <!-- Pregunta 1: Envíos -->
+            <div class="faq-item">
+                <button class="faq-question">
+                    ¿Cuánto tarda en llegar mi pedido?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        El tiempo total de entrega se divide en dos fases:
+                        <ul>
+                            <li><strong>Preparación:</strong> Entre 1 y 3 días laborables para procesar y empaquetar tu pedido.</li>
+                            <li><strong>Envío:</strong> Una vez entregado a la empresa de transporte (CTT Express), el plazo es de 7 a 14 días laborables.</li>
+                        </ul>
+                        Recibirás un número de seguimiento tan pronto como el paquete esté en camino.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 2: Pagos -->
+            <div class="faq-item">
+                <button class="faq-question">
+                    ¿Qué métodos de pago aceptáis?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Ofrecemos varios métodos de pago seguros para tu comodidad:
+                        <ul>
+                            <li><strong>Bizum:</strong> El método más rápido y sencillo en España.</li>
+                            <li><strong>Transferencia Bancaria:</strong> Recibirás los datos al finalizar tu pedido.</li>
+                            <li><strong>PayPal:</strong> Para una capa extra de protección en tu compra.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 3: Devoluciones -->
+            <div class="faq-item">
+                <button class="faq-question">
+                    ¿Puedo cambiar o devolver mi camiseta?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Debido a la naturaleza personalizada de nuestros productos y los costes de importación, <strong>todas las ventas son finales</strong>. No admitimos cambios por error de talla o arrepentimiento.
+                        <br><br>
+                        <strong>Excepciones:</strong> Solo aceptamos reclamaciones si el producto llega defectuoso o dañado. En ese caso, debes contactarnos en un plazo de 48 horas tras la recepción con fotos del daño.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 4: Calidad -->
+            <div class="faq-item">
+                <button class="faq-question">
+                    ¿Qué calidad tienen las camisetas?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Trabajamos con calidad <strong>Thai AAA / Premium</strong>. Son las versiones más fieles posibles a las que usan los jugadores, fabricadas con 100% poliéster reciclado, escudos bordados de alta calidad y tejidos transpirables con tecnología de absorción de humedad.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 5: Tallas -->
+            <div class="faq-item">
+                <button class="faq-question">
+                    ¿Cómo elijo mi talla correctamente?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        Recomendamos encarecidamente revisar nuestra <strong>Guía de Tallas</strong> disponible en la página de cada producto. 
+                        <ul>
+                            <li>Las versiones "Fan" tienen un corte estándar.</li>
+                            <li>Las versiones "Player" son más ajustadas (entalladas), por lo que solemos recomendar pedir una talla más de la habitual.</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Pregunta 6: Personalización -->
+            <div class="faq-item">
+                <button class="faq-question">
+                    ¿Puedo personalizar la camiseta con parches o nombres?
+                    <i class="fas fa-chevron-down"></i>
+                </button>
+                <div class="faq-answer">
+                    <div class="faq-answer-content">
+                        ¡Claro! En la ficha de cada producto puedes añadir:
+                        <ul>
+                            <li><strong>Personalización (+2€):</strong> Nombre y dorsal de tu jugador favorito o el tuyo propio.</li>
+                            <li><strong>Parches (+1€):</strong> Añade los parches de liga (LFP, Premier, etc.) o competiciones europeas (Champions League).</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section class="faq-cta">
+            <h2>¿Aún tienes dudas?</h2>
+            <p>Nuestro equipo de soporte está listo para ayudarte con cualquier otra consulta.</p>
+            <a href="contacto.html" class="btn btn-primary">
+                <i class="fas fa-envelope"></i> Contactar Soporte
+            </a>
+        </section>
+    </main>
+
+    <div id="footer-placeholder"></div>
+
+    <script src="../js/theme.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="../js/ux-feedback.js"></script>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const faqItems = document.querySelectorAll('.faq-item');
+
+            faqItems.forEach(item => {
+                const question = item.querySelector('.faq-question');
+                
+                question.addEventListener('click', () => {
+                    const isActive = item.classList.contains('active');
+                    
+                    // Solo una respuesta desplegada a la vez
+                    faqItems.forEach(otherItem => {
+                        otherItem.classList.remove('active');
+                        otherItem.querySelector('.faq-answer').style.maxHeight = null;
+                    });
+
+                    if (!isActive) {
+                        item.classList.add('active');
+                        const answer = item.querySelector('.faq-answer');
+                        answer.style.maxHeight = answer.scrollHeight + "px";
+                    }
+                });
+            });
+        });
+    </script>
+</body>
+
+</html>

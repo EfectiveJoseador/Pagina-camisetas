@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-theme="light">
 
 <head>
@@ -41,11 +41,12 @@
         rel="stylesheet">
 
 
-    <link rel="stylesheet" href="/assets/fonts/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="/css/variables.css">
-    <link rel="stylesheet" href="/css/reset.css">
-    <link rel="stylesheet" href="/css/styles.css">
-    <link rel="stylesheet" href="/css/producto.css">
+    <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../css/variables.css">
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/producto.css">
+    <link rel="stylesheet" href="../css/ux-feedback.css">
 
 
     <script type="application/ld+json">
@@ -515,11 +516,12 @@
     <div id="footer-placeholder"></div>
 
 
-    <script src="/js/theme.js"></script>
-    <script src="/js/components.js"></script>
-    <script type="module" src="/js/firebase-global.js"></script>
-    <script type="module" src="/js/carrito.js"></script>
-    <script src="/js/image-protection.js"></script>
+    <script src="../js/theme.js"></script>
+    <script src="../js/components.js"></script>
+    <script src="../js/ux-feedback.js"></script>
+    <script type="module" src="../js/firebase-global.js"></script>
+    <script type="module" src="../js/carrito.js"></script>
+    <script src="../js/image-protection.js"></script>
 
     <script>
 
@@ -541,7 +543,7 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const response = await fetch('/assets/clientes/clientes.json');
+                const response = await fetch('../assets/clientes/clientes.json');
                 const data = await response.json();
                 CLIENT_IMAGES = data.images || [];
                 console.log(`? Cargadas ${CLIENT_IMAGES.length} imgenes de clientes`);
@@ -567,7 +569,7 @@
                 <article class="client-card" data-index="${index}">
                     <div class="client-image">
                         <img 
-                            src="/assets/clientes/${img}" 
+                            src="../assets/clientes/${img}" 
                             alt="Cliente Satisfecho de Camisetazo"
                             loading="${index < 6 ? 'eager' : 'lazy'}"
                         >

@@ -1,6 +1,7 @@
 
 
 import products from './products-data.js';
+import Analytics from './analytics.js';
 const CONFIG = {
     PRODUCTS_PER_PAGE: 20,
     LAZY_LOAD_THRESHOLD: '200px',
@@ -883,6 +884,14 @@ function applyURLFilters() {
     const team = params.get('team');
     const kids = params.get('kids');
     const sort = params.get('sort');
+    const utmCampaign = params.get('utm_campaign');
+
+    // Campaign Logic: If utm_campaign is retro, auto-filter
+    if (utmCampaign && utmCampaign.toLowerCase().includes('retro')) {
+        selectedRetro = true;
+        const retroCheckbox = document.getElementById('filter-retro');
+        if (retroCheckbox) retroCheckbox.checked = true;
+    }
 
     if (search) {
         const searchInput = document.getElementById('search-input');
@@ -1092,21 +1101,21 @@ function applyFilters(updateURL = true) {
     } else if (sortBy === 'price-desc') {
         filteredProducts.sort((a, b) => b.price - a.price);
     }
-    if (window.Analytics) {
+    if (Analytics) {
         if (searchTerm && searchTerm.length >= 2) {
-            window.Analytics.trackSearch(searchTerm, filteredProducts.length);
+            Analytics.trackSearch(searchTerm, filteredProducts.length);
         }
         if (selectedLeague) {
-            window.Analytics.trackFilterUse('league', selectedLeague);
+            Analytics.trackFilterUse('league', selectedLeague);
         }
         if (selectedTeam) {
-            window.Analytics.trackFilterUse('team', selectedTeam);
+            Analytics.trackFilterUse('team', selectedTeam);
         }
         if (selectedKids) {
-            window.Analytics.trackFilterUse('kids', selectedKids);
+            Analytics.trackFilterUse('kids', selectedKids);
         }
         if (sortBy !== 'default') {
-            window.Analytics.trackFilterUse('sort', sortBy);
+            Analytics.trackFilterUse('sort', sortBy);
         }
     }
 
@@ -1228,6 +1237,7 @@ function updatePreview() {
         customization: customization
     };
     addToCart(cartItem);
+    if (Analytics) Analytics.trackAddToCart(cartItem);
     closeModal();
     if (window.Toast) {
         window.Toast.success(`${currentProduct.name} añadido al carrito`);

@@ -100,10 +100,13 @@
         const overlay = document.createElement('div');
         overlay.className = 'product-image-overlay';
         overlay.setAttribute('aria-hidden', 'true');
+        
+        // Fix: Insert overlay into the immediate parent of the image to avoid NotFoundError
+        const parent = img.parentNode;
         if (img.nextSibling) {
-            container.insertBefore(overlay, img.nextSibling);
+            parent.insertBefore(overlay, img.nextSibling);
         } else {
-            container.appendChild(overlay);
+            parent.appendChild(overlay);
         }
     }
     function injectProtectionCSS() {
