@@ -1,15 +1,18 @@
-const CACHE_NAME = 'camisetazo-cache-v3';
+const CACHE_NAME = 'camisetazo-cache-v4';
 
 const ASSETS_TO_CACHE = [
   './',
   './index.html',
-  './styles/styles.css',
-  './scripts/scripts.js',
-  './scripts/cart-persistence.js',
-  './scripts/schema-org.js',
-  './scripts/performance-optimizations.js',
+  './css/styles.css',
+  './css/variables.css',
+  './css/reset.css',
+  './css/ux-feedback.css',
+  './js/theme.js',
+  './js/components.js',
+  './js/ux-feedback.js',
+  './js/analytics.js',
   './manifest.json',
-  './assets/logos/logo.png'
+  './assets/logo/logo.png'
 ];
 
 self.addEventListener('install', (event) => {
