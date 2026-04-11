@@ -2,6 +2,7 @@ import { auth, db, onAuthStateChanged, ref, get, push, set } from './firebase-co
 import Cart from './carrito.js';
 import products from './products-data.js';
 import { getUserCoupons, useCoupon, addPendingPoints } from './points.js';
+import { sanitizeHTML } from './security.js';
 let currentUser = null;
 let selectedAddressId = null;
 let addresses = [];
@@ -61,17 +62,17 @@ function renderAddresses(addressArray) {
     }
 
     addressList.innerHTML = addressArray.map(addr => `
-        <label class="address-option ${selectedAddressId === addr.id ? 'selected' : ''}" data-id="${addr.id}">
-            <input type="radio" name="shipping-address" value="${addr.id}" ${selectedAddressId === addr.id ? 'checked' : ''}>
+        <label class="address-option ${selectedAddressId === addr.id ? 'selected' : ''}" data-id="${sanitizeHTML(addr.id)}">
+            <input type="radio" name="shipping-address" value="${sanitizeHTML(addr.id)}" ${selectedAddressId === addr.id ? 'checked' : ''}>
             <div class="address-content">
                 <div class="address-header">
-                    <strong>${addr.name}</strong>
+                    <strong>${sanitizeHTML(addr.name)}</strong>
                     ${selectedAddressId === addr.id ? '<span class="selected-badge"><i class="fas fa-check-circle"></i> Seleccionada</span>' : ''}
                 </div>
-                <p>${addr.street}</p>
-                <p>${addr.zip}, ${addr.city}${addr.province ? ' (' + addr.province + ')' : ''}</p>
-                <p><i class="fas fa-phone" style="font-size: 0.85em;"></i> ${addr.phone}</p>
-                <p><i class="fab fa-instagram" style="color: #E1306C; font-size: 0.85em;"></i> @${(addr.instagram || '').replace(/^@/, '')}</p>
+                <p>${sanitizeHTML(addr.street)}</p>
+                <p>${sanitizeHTML(addr.zip)}, ${sanitizeHTML(addr.city)}${addr.province ? ' (' + sanitizeHTML(addr.province) + ')' : ''}</p>
+                <p><i class="fas fa-phone" style="font-size: 0.85em;"></i> ${sanitizeHTML(addr.phone)}</p>
+                <p><i class="fab fa-instagram" style="color: #E1306C; font-size: 0.85em;"></i> @${sanitizeHTML((addr.instagram || '').replace(/^@/, ''))}</p>
             </div>
         </label>
     `).join('');

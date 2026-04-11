@@ -1,5 +1,6 @@
 import { auth, db, onAuthStateChanged, signOut, sendPasswordResetEmail, updateProfile, ref, set, get, update, remove, push, onValue } from './firebase-config.js';
 import { loadUserPoints, loadPointsHistory, redeemCoupon, getUserCoupons, REWARDS } from './points.js';
+import { sanitizeHTML } from './security.js';
 let currentUser = null;
 let currentAddressId = null;
 
@@ -206,7 +207,7 @@ function renderOrders(orders) {
             <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
                 <div>
                     <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 0.25rem 0; color: var(--text-main);">
-                        Pedido <span style="background: linear-gradient(135deg, var(--primary), #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">#${order.orderId || order.id}</span>
+                        Pedido <span style="background: linear-gradient(135deg, var(--primary), #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">#${sanitizeHTML(order.orderId || order.id)}</span>
                     </h3>
                     <span style="color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
                         <i class="far fa-calendar-alt"></i>${orderDateTime}
@@ -262,25 +263,23 @@ function renderOrders(orders) {
                         display: flex;
                         align-items: center;
                         gap: 0.5rem;
-                        font-weight: 600;
-                    ">
                         <i class="fas fa-map-marker-alt" style="color: var(--primary);"></i>
                         Dirección de Envío
                     </h4>
                     <div style="font-size: 0.95rem; line-height: 1.7; color: var(--text-main);">
-                        <div style="font-weight: 600; margin-bottom: 0.25rem;">${shipping.name || shipping.fullName || ''}</div>
-                        <div style="opacity: 0.9;">${shipping.address || shipping.street || ''}</div>
-                        <div style="opacity: 0.9;">${shipping.postalCode || shipping.zip || ''} ${shipping.city || ''}${shipping.province ? ` (${shipping.province})` : ''}</div>
+                        <div style="font-weight: 600; margin-bottom: 0.25rem;">${sanitizeHTML(shipping.name || shipping.fullName || '')}</div>
+                        <div style="opacity: 0.9;">${sanitizeHTML(shipping.address || shipping.street || '')}</div>
+                        <div style="opacity: 0.9;">${sanitizeHTML(shipping.postalCode || shipping.zip || '')} ${sanitizeHTML(shipping.city || '')}${shipping.province ? ` (${sanitizeHTML(shipping.province)})` : ''}</div>
                         ${shipping.phone ? `
                             <div style="display: flex; align-items: center; gap: 0.4rem; margin-top: 0.5rem; color: var(--primary);">
                                 <i class="fas fa-phone-alt" style="font-size: 0.8rem;"></i>
-                                <span>${shipping.phone}</span>
+                                <span>${sanitizeHTML(shipping.phone)}</span>
                             </div>
                         ` : ''}
                         ${shipping.instagram ? `
                             <div style="display: flex; align-items: center; gap: 0.4rem; margin-top: 0.3rem; color: #E1306C; font-weight: 600;">
                                 <i class="fab fa-instagram" style="font-size: 0.85rem;"></i>
-                                <span>@${shipping.instagram.replace(/^@/, '')}</span>
+                                <span>@${sanitizeHTML(shipping.instagram.replace(/^@/, ''))}</span>
                             </div>
                         ` : ''}
                     </div>
@@ -334,14 +333,14 @@ function renderOrders(orders) {
                         <!-- Product Details -->
                         <div style="flex: 1; min-width: 0;">
                             <p style="font-weight: 600; font-size: 0.95rem; margin: 0 0 0.4rem 0; color: var(--text-main);">
-                                ${p.name || p.productName || 'Producto'}
+                                ${sanitizeHTML(p.name || p.productName || 'Producto')}
                             </p>
                             <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.8rem;">
                                 <span style="background: rgba(var(--primary-rgb), 0.1); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 50px;">
-                                    Talla: ${p.size || 'M'}
+                                    Talla: ${sanitizeHTML(p.size || 'M')}
                                 </span>
                                 <span style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; padding: 0.2rem 0.6rem; border-radius: 50px;">
-                                    ${p.version || p.customization?.version || 'Aficionado'}
+                                    ${sanitizeHTML(p.version || p.customization?.version || 'Aficionado')}
                                 </span>
                                 <span style="background: rgba(var(--text-rgb), 0.08); color: var(--text-muted); padding: 0.2rem 0.6rem; border-radius: 50px;">
                                     ×${p.quantity || p.qty || 1}
@@ -416,11 +415,11 @@ function renderOrders(orders) {
                         </div>
                         <div>
                             <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Nº de Seguimiento</span>
-                            <strong style="color: var(--text-main); font-size: 1.05rem; font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: 0.5px;">${order.trackingNumber}</strong>
+                            <strong style="color: var(--text-main); font-size: 1.05rem; font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: 0.5px;">${sanitizeHTML(order.trackingNumber)}</strong>
                         </div>
                     </div>
                     <button 
-                        onclick="navigator.clipboard.writeText('${order.trackingNumber}'); this.querySelector('span').textContent='¡Copiado!'; this.style.background='#22c55e'; this.style.color='white'; setTimeout(() => { this.querySelector('span').textContent='Copiar'; this.style.background='linear-gradient(135deg, #1a1a2e, #8b5cf6)'; this.style.color='white'; }, 2000);"
+                        onclick="navigator.clipboard.writeText('${sanitizeHTML(order.trackingNumber)}'); this.querySelector('span').textContent='¡Copiado!'; this.style.background='#22c55e'; this.style.color='white'; setTimeout(() => { this.querySelector('span').textContent='Copiar'; this.style.background='linear-gradient(135deg, #1a1a2e, #8b5cf6)'; this.style.color='white'; }, 2000);"
                         style="
                             background: linear-gradient(135deg, #1a1a2e, #8b5cf6);
                             color: white;
@@ -454,7 +453,7 @@ function renderOrders(orders) {
                 ">
                     <button 
                         class="edit-order-address-btn"
-                        data-order-id="${order.orderId || order.id}"
+                        data-order-id="${sanitizeHTML(order.orderId || order.id)}"
                         style="
                             background: linear-gradient(135deg, #6366f1, #8b5cf6);
                             color: white;
@@ -624,17 +623,17 @@ function renderAddresses(addresses) {
     }
 
     addressList.innerHTML = addressesArray.map(addr => `
-        <div class="address-card" data-id="${addr.id}">
-            <h3>${addr.name}</h3>
-            <p>${addr.street}</p>
-            <p>${addr.zip}, ${addr.city}${addr.province ? ' (' + addr.province + ')' : ''}</p>
-            <p><i class="fas fa-phone"></i> ${addr.phone}</p>
-            <p><i class="fab fa-instagram" style="color: #E1306C;"></i> @${(addr.instagram || '').replace(/^@/, '')}</p>
+        <div class="address-card" data-id="${sanitizeHTML(addr.id)}">
+            <h3>${sanitizeHTML(addr.name)}</h3>
+            <p>${sanitizeHTML(addr.street)}</p>
+            <p>${sanitizeHTML(addr.zip)}, ${sanitizeHTML(addr.city)}${addr.province ? ' (' + sanitizeHTML(addr.province) + ')' : ''}</p>
+            <p><i class="fas fa-phone"></i> ${sanitizeHTML(addr.phone)}</p>
+            <p><i class="fab fa-instagram" style="color: #E1306C;"></i> @${sanitizeHTML((addr.instagram || '').replace(/^@/, ''))}</p>
             <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
-                <button class="btn-text edit-address" data-id="${addr.id}">
+                <button class="btn-text edit-address" data-id="${sanitizeHTML(addr.id)}">
                     <i class="fas fa-edit"></i> Editar
                 </button>
-                <button class="btn-text delete-address" data-id="${addr.id}" style="color: #ef4444;">
+                <button class="btn-text delete-address" data-id="${sanitizeHTML(addr.id)}" style="color: #ef4444;">
                     <i class="fas fa-trash"></i> Eliminar
                 </button>
             </div>

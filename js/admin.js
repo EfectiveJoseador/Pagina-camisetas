@@ -2,6 +2,7 @@
 
 import { auth, db, onAuthStateChanged, signOut, ref, onValue, update, get, remove, push, set } from './firebase-config.js';
 import { convertToAvailable } from './points.js';
+import { sanitizeHTML } from './security.js';
 let isAdmin = false;
 let allOrders = [];
 let currentFilters = {
@@ -195,17 +196,22 @@ function renderOrders() {
         const paymentMethod = order.paymentMethod || 'N/A';
         const needsConfirmation = (['bizum', 'revtag', 'transferencia'].includes(paymentMethod)) && !isPaid;
 
+        const sOrderId = sanitizeHTML(order.orderId || '-');
+        const sCustomerName = sanitizeHTML(order.customerName || 'N/A');
+        const sUserEmail = sanitizeHTML(order.userEmail || '-');
+        const sTracking = sanitizeHTML(order.trackingNumber || '');
+
         return `
             <tr data-order-path="${order.path}">
-                <td class="order-id">${order.orderId || '-'}</td>
+                <td class="order-id">${sOrderId}</td>
                 <td class="order-date">${date}</td>
                 <td class="order-customer">
                     <div class="customer-info">
-                        <span class="customer-name">${order.customerName || 'N/A'}</span>
-                        <span class="customer-email">${order.userEmail || '-'}</span>
+                        <span class="customer-name">${sCustomerName}</span>
+                        <span class="customer-email">${sUserEmail}</span>
                     </div>
                 </td>
-                <td class="order-products" title="${products}">${truncatedProducts}</td>
+                <td class="order-products" title="${sanitizeHTML(products)}">${sanitizeHTML(truncatedProducts)}</td>
                 <td class="order-total">€${order.total?.toFixed(2) || '0.00'}</td>
                 <td class="order-payment">
                     <span class="payment-method ${paymentMethod.toLowerCase()}">${paymentMethod}</span>
@@ -231,7 +237,7 @@ function renderOrders() {
                 <td class="order-tracking">
                     <div class="tracking-input">
                         <input type="text" 
-                               value="${order.trackingNumber || ''}" 
+                               value="${sTracking}" 
                                placeholder="Añadir tracking..."
                                onchange="updateTracking('${order.path}', this.value)">
                     </div>
@@ -361,7 +367,7 @@ window.viewOrderDetails = async function (path) {
     const modalBody = document.getElementById('modal-body');
     const modalOrderId = document.getElementById('modal-order-id');
 
-    modalOrderId.textContent = '#' + (order.orderId || '');
+    modalOrderId.textContent = '#' + sanitizeHTML(order.orderId || '');
 
     const address = order.shippingAddress || {};
     const items = order.items || [];
@@ -370,35 +376,35 @@ window.viewOrderDetails = async function (path) {
         <div class="order-detail-grid">
             <div class="detail-section">
                 <h3><i class="fas fa-user"></i> Cliente</h3>
-                <p><strong>Nombre:</strong> ${order.customerName || 'N/A'}</p>
-                <p><strong>Email:</strong> ${order.userEmail || 'N/A'}</p>
-                <p><strong>UID:</strong> <code>${order.uid}</code></p>
+                <p><strong>Nombre:</strong> ${sanitizeHTML(order.customerName || 'N/A')}</p>
+                <p><strong>Email:</strong> ${sanitizeHTML(order.userEmail || 'N/A')}</p>
+                <p><strong>UID:</strong> <code>${sanitizeHTML(order.uid)}</code></p>
             </div>
 
             <div class="detail-section">
                 <h3><i class="fas fa-map-marker-alt"></i> Dirección de Envío</h3>
-                <p>${address.street || 'N/A'}</p>
-                <p>${address.city || ''}, ${address.postalCode || ''}</p>
-                <p>${address.province || ''}, ${address.country || ''}</p>
-                <p><strong><i class="fab fa-instagram" style="color: #E1306C;"></i> Instagram:</strong> ${address.instagram || 'N/A'}</p>
-                <p><strong>Tel:</strong> ${address.phone || 'N/A'}</p>
+                <p>${sanitizeHTML(address.street || 'N/A')}</p>
+                <p>${sanitizeHTML(address.city || '')}, ${sanitizeHTML(address.postalCode || '')}</p>
+                <p>${sanitizeHTML(address.province || '')}, ${sanitizeHTML(address.country || '')}</p>
+                <p><strong><i class="fab fa-instagram" style="color: #E1306C;"></i> Instagram:</strong> @${sanitizeHTML((address.instagram || '').replace(/^@/, ''))}</p>
+                <p><strong>Tel:</strong> ${sanitizeHTML(address.phone || 'N/A')}</p>
             </div>
 
             <div class="detail-section">
                 <h3><i class="fas fa-credit-card"></i> Pago</h3>
-                <p><strong>Método:</strong> ${order.paymentMethod || 'N/A'}</p>
+                <p><strong>Método:</strong> ${sanitizeHTML(order.paymentMethod || 'N/A')}</p>
                 ${order.paymentMethod === 'bizum' && order.bizumInstagram ? `
-                    <p><strong><i class="fab fa-instagram" style="color: #E1306C;"></i> (Legacy) Instagram Bizum:</strong> ${order.bizumInstagram}</p>
+                    <p><strong><i class="fab fa-instagram" style="color: #E1306C;"></i> (Legacy) Instagram Bizum:</strong> ${sanitizeHTML(order.bizumInstagram)}</p>
                 ` : ''}
-                ${order.payment?.confirmedBy ? `<p><strong>Confirmado por:</strong> ${order.payment.confirmedBy}</p>` : ''}
+                ${order.payment?.confirmedBy ? `<p><strong>Confirmado por:</strong> ${sanitizeHTML(order.payment.confirmedBy)}</p>` : ''}
             </div>
 
             <div class="detail-section">
                 <h3><i class="fas fa-info-circle"></i> Estado</h3>
                 <p><strong>Estado actual:</strong> <span class="status-badge status-${order.status}">${order.status}</span></p>
-                <p><strong>Tracking:</strong> ${order.trackingNumber || 'Sin asignar'}</p>
+                <p><strong>Tracking:</strong> ${sanitizeHTML(order.trackingNumber || 'Sin asignar')}</p>
                 <p><strong>Fecha:</strong> ${order.dateFormatted || new Date(order.date).toLocaleString('es-ES')}</p>
-                ${order.updatedBy ? `<p><strong>Última edición:</strong> ${order.updatedBy}</p>` : ''}
+                ${order.updatedBy ? `<p><strong>Última edición:</strong> ${sanitizeHTML(order.updatedBy)}</p>` : ''}
             </div>
         </div>
 
@@ -419,12 +425,12 @@ window.viewOrderDetails = async function (path) {
                         <tr>
                             <td>
                                 <div class="item-info">
-                                    <img src="${item.image || '/assets/placeholder.webp'}" alt="${item.name}">
-                                    <span>${item.name}</span>
+                                    <img src="${item.image || '/assets/placeholder.webp'}" alt="${sanitizeHTML(item.name)}">
+                                    <span>${sanitizeHTML(item.name)}</span>
                                 </div>
                             </td>
-                            <td>${item.size || '-'}</td>
-                            <td>${item.version || '-'}</td>
+                            <td>${sanitizeHTML(item.size || '-')}</td>
+                            <td>${sanitizeHTML(item.version || '-')}</td>
                             <td>${item.quantity}</td>
                             <td>€${(item.price || 0).toFixed(2)}</td>
                         </tr>

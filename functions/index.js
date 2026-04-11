@@ -168,23 +168,4 @@ exports.checkAdmin = functions.https.onCall(async (data, context) => {
 
 
 
-
-exports.initSuperAdmin = functions.https.onRequest(async (req, res) => {
-    
-    
-    const secretKey = req.query.key;
-
-    if (secretKey !== 'CAMISETAZO_INIT_2024') {
-        res.status(403).send('Acceso denegado');
-        return;
-    }
-
-    try {
-        const user = await admin.auth().getUserByEmail(SUPER_ADMIN_EMAIL);
-        await admin.auth().setCustomUserClaims(user.uid, { admin: true });
-
-        res.status(200).send(`✅ Super admin configurado: ${SUPER_ADMIN_EMAIL}`);
-    } catch (error) {
-        res.status(500).send(`Error: ${error.message}`);
-    }
-});
+// End of file

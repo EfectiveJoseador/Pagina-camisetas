@@ -1,4 +1,5 @@
 import products from './products-data.js';
+import { sanitizeHTML } from './security.js';
 function applySpecialPricing() {
     products.forEach(product => {
         const nameLower = product.name.toLowerCase();
@@ -246,10 +247,10 @@ const Cart = {
                 customDetails += ' | Versión: Aficionado';
             }
             if (name) {
-                customDetails += ` | Nombre: ${name}`;
+                customDetails += ` | Nombre: ${sanitizeHTML(name)}`;
             }
             if (number) {
-                customDetails += ` | Dorsal: ${number}`;
+                customDetails += ` | Dorsal: ${sanitizeHTML(number)}`;
             }
             if (patch && patch !== 'none') {
                 const patchNames = {
@@ -273,12 +274,12 @@ const Cart = {
                 <div class="cart-item-top">
                     <a href="/pages/producto.html?id=${product.id}" class="cart-item-img-link">
                         <div class="cart-item-img-wrapper">
-                            <img src="${product.image}" alt="${product.name}" class="cart-item-img">
+                            <img src="${product.image}" alt="${sanitizeHTML(product.name)}" class="cart-item-img">
                         </div>
                     </a>
                     <div class="cart-item-header">
                         <a href="/pages/producto.html?id=${product.id}" class="cart-item-title-link">
-                            <h3 class="cart-item-title">${product.name}</h3>
+                            <h3 class="cart-item-title">${sanitizeHTML(product.name)}</h3>
                         </a>
                         <p class="cart-item-meta">${customDetails}</p>
                     </div>
@@ -333,10 +334,10 @@ const Cart = {
             const el = document.createElement('div');
             el.className = 'checkout-item-mini';
             el.innerHTML = `
-                <img src="${product.image}" alt="${product.name}">
+                <img src="${product.image}" alt="${sanitizeHTML(product.name)}">
                 <div>
-                    <h4>${product.name} x${qty}</h4>
-                    <p>${size} / ${version === 'jugador' ? 'Jugador' : 'Aficionado'}</p>
+                    <h4>${sanitizeHTML(product.name)} x${qty}</h4>
+                    <p>${sanitizeHTML(size)} / ${version === 'jugador' ? 'Jugador' : 'Aficionado'}</p>
                 </div>
                 <span>€${(basePrice * qty).toFixed(2)}</span>
             `;

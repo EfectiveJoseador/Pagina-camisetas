@@ -1,22 +1,25 @@
 
 
 
+/**
+ * Escapes HTML special characters to prevent XSS.
+ * This is a basic sanitizer for plain text data injected into HTML contexts.
+ * @param {string} str - The string to sanitize
+ * @returns {string} - The escaped string
+ */
 export function sanitizeHTML(str) {
     if (str === null || str === undefined) return '';
     if (typeof str !== 'string') str = String(str);
 
-    const escapeMap = {
-        '&': '&amp;',
-        '<': '&lt;',
-        '>': '&gt;',
-        '"': '&quot;',
-        "'": '&#x27;',
-        '/': '&#x2F;',
-        '`': '&#x60;',
-        '=': '&#x3D;'
-    };
-
-    return str.replace(/[&<>"'`=/]/g, char => escapeMap[char]);
+    return str
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;')
+        .replace(/\//g, '&#47;')
+        .replace(/`/g, '&#96;')
+        .replace(/=/g, '&#61;');
 }
 
 
