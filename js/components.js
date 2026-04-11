@@ -238,19 +238,44 @@ const CookieConsent = {
 
     init() {
         const consent = localStorage.getItem('cookieConsent');
+        
+        // Si ya aceptó antes, informamos a Google de inmediato
+        if (consent === 'accepted') {
+            this.updateGoogleConsent(true);
+        } else if (consent === 'rejected') {
+            this.updateGoogleConsent(false);
+        }
+
         if (consent) return;
+
         document.head.insertAdjacentHTML('beforeend', this.styles);
         document.body.insertAdjacentHTML('beforeend', this.banner);
         const banner = document.getElementById('cookie-consent');
         setTimeout(() => banner.classList.add('show'), 100);
+
         document.getElementById('cookie-accept').addEventListener('click', () => {
             this.setConsent('accepted');
+            this.updateGoogleConsent(true);
             this.hideBanner();
         });
+
         document.getElementById('cookie-reject').addEventListener('click', () => {
             this.setConsent('rejected');
+            this.updateGoogleConsent(false);
             this.hideBanner();
         });
+    },
+
+    updateGoogleConsent(isAccepted) {
+        if (typeof gtag === 'function') {
+            console.log(`[Analytics] Actualizando consentimiento: ${isAccepted ? 'ACEPTADO' : 'RECHAZADO'}`);
+            gtag('consent', 'update', {
+                'analytics_storage': isAccepted ? 'granted' : 'denied',
+                'ad_storage': isAccepted ? 'granted' : 'denied',
+                'ad_user_data': isAccepted ? 'granted' : 'denied',
+                'ad_personalization': isAccepted ? 'granted' : 'denied'
+            });
+        }
     },
 
     setConsent(value) {
@@ -260,8 +285,10 @@ const CookieConsent = {
 
     hideBanner() {
         const banner = document.getElementById('cookie-consent');
-        banner.classList.remove('show');
-        setTimeout(() => banner.remove(), 400);
+        if (banner) {
+            banner.classList.remove('show');
+            setTimeout(() => banner.remove(), 400);
+        }
     }
 };
 
