@@ -8,6 +8,26 @@ body {
     flex-direction: column;
     min-height: 100vh;
     overflow-x: hidden;
+    -webkit-tap-highlight-color: transparent;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+}
+
+body.content-ready {
+    opacity: 1;
+}
+
+/* Global Haptic Interaction (Apple-like feel) */
+.btn-premium:active,
+.product-card:active,
+.catalogo-card:active,
+.logo-link:active,
+.icon-btn:active,
+.btn:active,
+.btn-primary:active,
+.btn-secondary:active {
+    transform: scale(var(--tap-scale, 0.96));
+    transition: transform var(--haptic-timing, 0.1s ease);
 }
 
 [data-theme="dark"] body::before {

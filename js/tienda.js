@@ -347,6 +347,31 @@ function renderProducts() {
     observeLazyImages();
     renderPagination();
     setupQuickAddListeners();
+    updateItemListSchema(productsToShow);
+}
+
+function updateItemListSchema(productsToShow) {
+    let schemaEl = document.getElementById('itemlist-schema');
+    if (!schemaEl) {
+        schemaEl = document.createElement('script');
+        schemaEl.id = 'itemlist-schema';
+        schemaEl.type = 'application/ld+json';
+        document.head.appendChild(schemaEl);
+    }
+
+    const schema = {
+        "@context": "https://schema.org",
+        "@type": "ItemList",
+        "itemListElement": productsToShow.map((p, index) => ({
+            "@type": "ListItem",
+            "position": index + 1,
+            "url": `https://camisetazo.shop/pages/producto.html?id=${p.id}`,
+            "name": p.name,
+            "image": p.image
+        }))
+    };
+
+    schemaEl.textContent = JSON.stringify(schema, null, 2);
 }
 
 

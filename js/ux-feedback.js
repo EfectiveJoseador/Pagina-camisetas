@@ -196,14 +196,32 @@ const FormFeedback = {
         });
     }
 };
+const PageTransition = {
+    init() {
+        if (document.readyState === 'complete') {
+            this.show();
+        } else {
+            window.addEventListener('load', () => this.show());
+        }
+        // Fallback for slow fonts or blocked resources
+        setTimeout(() => this.show(), 1000);
+    },
+    show() {
+        document.body.classList.add('content-ready');
+    }
+};
+
 document.addEventListener('DOMContentLoaded', () => {
     Toast.init();
+    PageTransition.init();
 });
 window.addEventListener('components:ready', () => {
     NavActiveState.init();
 });
+
 window.Toast = Toast;
 window.ButtonStates = ButtonStates;
 window.CartBadge = CartBadge;
 window.NavActiveState = NavActiveState;
 window.FormFeedback = FormFeedback;
+window.PageTransition = PageTransition;

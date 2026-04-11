@@ -280,7 +280,69 @@ document.addEventListener('DOMContentLoaded', () => {
             team: product.team || product.league
         });
     }
+    updateProductSchema();
 });
+
+function updateProductSchema() {
+    const schemaEl = document.getElementById('product-schema');
+    if (!schemaEl || !product) return;
+
+    const schema = {
+        "@context": "https://schema.org/",
+        "@type": "Product",
+        "name": product.name,
+        "image": product.image,
+        "description": `${product.name} - Camiseta de fútbol de alta calidad. Categoría: ${product.category}. Disponible en varias tallas y personalizable.`,
+        "sku": `JER-${product.id}`,
+        "brand": {
+            "@type": "Brand",
+            "name": "Camisetazo"
+        },
+        "offers": {
+            "@type": "Offer",
+            "url": window.location.href,
+            "priceCurrency": "EUR",
+            "price": product.price.toFixed(2),
+            "availability": "https://schema.org/InStock",
+            "itemCondition": "https://schema.org/NewCondition",
+            "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
+            "shippingDetails": {
+                "@type": "OfferShippingDetails",
+                "shippingRate": {
+                    "@type": "MonetaryAmount",
+                    "value": "0",
+                    "currency": "EUR"
+                },
+                "deliveryTime": {
+                    "@type": "ShippingDeliveryTime",
+                    "handlingTime": {
+                        "@type": "QuantitativeValue",
+                        "minValue": 1,
+                        "maxValue": 2,
+                        "unitCode": "DAY"
+                    },
+                    "transitTime": {
+                        "@type": "QuantitativeValue",
+                        "minValue": 7,
+                        "maxValue": 12,
+                        "unitCode": "DAY"
+                    }
+                }
+            },
+            "seller": {
+                "@type": "Organization",
+                "name": "Camisetazo"
+            }
+        },
+        "aggregateRating": {
+            "@type": "AggregateRating",
+            "ratingValue": "4.9",
+            "reviewCount": "320"
+        }
+    };
+
+    schemaEl.textContent = JSON.stringify(schema, null, 2);
+}
 function applySpecialPricing(p) {
     const nameLower = p.name.toLowerCase();
     const imageLower = (p.image || '').toLowerCase();
@@ -1472,4 +1534,54 @@ function updateLightboxImage() {
     });
     resetZoom();
 }
-document.addEventListener('DOMContentLoaded', initLightbox);
+function initStickyCTA() {
+    const stickyBar = document.getElementById('sticky-cta');
+    const mainAddBtn = document.querySelector('.btn-add-cart-lg');
+    const stickyAddBtn = document.getElementById('sticky-add-btn');
+    
+    if (!stickyBar || !mainAddBtn) return;
+
+    // Sincronizar datos básicos
+    const sImg = document.getElementById('sticky-img');
+    const sTitle = document.getElementById('sticky-title');
+    const sPrice = document.getElementById('sticky-price');
+    
+    if (sImg) sImg.src = product.image;
+    if (sTitle) sTitle.textContent = product.name;
+    if (sPrice) sPrice.textContent = `€${product.price.toFixed(2)}`;
+
+    // Observer para mostrar/ocultar
+    const observer = new IntersectionObserver((entries) => {
+        const [entry] = entries;
+        if (!entry.isIntersecting) {
+            stickyBar.classList.add('active');
+        } else {
+            stickyBar.classList.remove('active');
+        }
+    }, {
+        threshold: 0,
+        rootMargin: '-50px 0px 0px 0px'
+    });
+
+    observer.observe(mainAddBtn);
+
+    // Acción del botón sticky
+    stickyAddBtn.addEventListener('click', () => {
+        if (!selectedSize) {
+            const optionsSection = document.querySelector('.options-block');
+            if (optionsSection) {
+                optionsSection.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                optionsSection.classList.add('highlight-error');
+                setTimeout(() => optionsSection.classList.remove('highlight-error'), 1000);
+            }
+        } else {
+            mainAddBtn.click();
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+    initLightbox();
+    // Delay sticky init to ensure product data is rendered
+    setTimeout(initStickyCTA, 100);
+});

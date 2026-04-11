@@ -36,8 +36,12 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    
+    <!-- LCP Optimizado: Preload de fuentes críticas -->
+    <link rel="preload" as="font" href="https://fonts.gstatic.com/s/inter/v18/UcCO3FwrK3iLTeHuS_fvQtMwCp50KnMw2boKoduKmMEVuGkyMZhrib2Bg-4.woff2" type="font/woff2" crossorigin>
+    
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family:Outfit:wght@700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
         rel="stylesheet">
     
     <link rel="stylesheet" href="/assets/fonts/fontawesome/css/all.min.css">
@@ -462,6 +466,7 @@
                     </button>
                     <img id="main-img" src="" alt="Producto"
                          fetchpriority="high"
+                         loading="eager"
                          decoding="async"
                          width="600"
                          height="600">
@@ -659,6 +664,22 @@
 
     <div id="footer-placeholder"></div>
 
+
+    <!-- Sticky CTA Bar (Mobile Optimization) -->
+    <div id="sticky-cta" class="sticky-cta-bar">
+        <div class="sticky-cta-content">
+            <div class="sticky-cta-product">
+                <img id="sticky-img" src="" alt="" class="sticky-cta-image">
+                <div class="sticky-cta-info">
+                    <span id="sticky-title" class="sticky-cta-title">Nombre del Producto</span>
+                    <span id="sticky-price" class="sticky-cta-price">€0.00</span>
+                </div>
+            </div>
+            <button id="sticky-add-btn" class="btn-sticky-add">
+                <i class="fas fa-cart-plus"></i> <span class="btn-text">Añadir</span>
+            </button>
+        </div>
+    </div>
 
     <!-- Modal Versión Jugador -->
     <div id="pv-modal" class="pv-modal">
