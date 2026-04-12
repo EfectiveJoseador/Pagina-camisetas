@@ -36,12 +36,18 @@
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
-        console.log('%c[Analytics] TAG DETECTADO - Iniciando...', 'color: #6366f1; font-weight: bold; font-size: 14px;');
         window.dataLayer = window.dataLayer || [];
-        function gtag() { 
-            if (arguments[0] === 'config') console.log('[Analytics] Configurando ID:', arguments[1]);
-            dataLayer.push(arguments); 
-        }
+        function gtag(){dataLayer.push(arguments);}
+        
+        // Configuración de privacidad (Modo Avanzado)
+        gtag('consent', 'default', {
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'analytics_storage': 'denied',
+            'ads_data_redaction': true
+        });
+
         gtag('js', new Date());
         gtag('config', 'G-GS53GWE2Z0');
     </script>
