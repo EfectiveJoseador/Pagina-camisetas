@@ -36,8 +36,12 @@
 
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
+        console.log('%c[Analytics] TAG DETECTADO v2 (Sin esperas)', 'color: #6366f1; font-weight: bold;');
         window.dataLayer = window.dataLayer || [];
-        function gtag(){dataLayer.push(arguments);}
+        function gtag(){
+            console.log('[Analytics] Comando:', arguments[0], arguments[1]);
+            dataLayer.push(arguments);
+        }
         
         // Configuración de privacidad (Modo Avanzado)
         gtag('consent', 'default', {
