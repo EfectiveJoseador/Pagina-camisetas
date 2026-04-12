@@ -219,32 +219,60 @@
         const params = new URLSearchParams(window.location.search);
         const orderId = params.get('order');
 
+        // Función para copiar el ID del pedido
+        const orderBadge = document.querySelector('.order-badge');
+        if (orderBadge) {
+            orderBadge.style.cursor = 'copy';
+            orderBadge.title = 'Clic para copiar ID';
+            orderBadge.addEventListener('click', () => {
+                navigator.clipboard.writeText(orderId).then(() => {
+                    const originalText = document.getElementById('order-id').innerText;
+                    document.getElementById('order-id').innerText = '¡Copiado!';
+                    setTimeout(() => {
+                        document.getElementById('order-id').innerText = originalText;
+                    }, 1500);
+                });
+            });
+        }
+
         if (orderId) {
             document.getElementById('order-id').textContent = orderId;
             
-            // Esperar a que el usuario esté autenticado para recuperar el pedido
             onAuthStateChanged(auth, async (user) => {
                 if (user && orderId) {
                     try {
+                        // 1. Verificar si ya hemos trackeado este pedido para evitar duplicados en GA4
+                        const trackedOrders = JSON.parse(localStorage.getItem('ga4_tracked_orders') || '[]');
+                        if (trackedOrders.includes(orderId)) {
+                            console.log("[Analytics] Pedido ya trackeado previamente:", orderId);
+                            return;
+                        }
+
                         const orderRef = ref(db, `ordersByUser/${user.uid}/${orderId}`);
                         const snapshot = await get(orderRef);
                         
                         if (snapshot.exists()) {
                             const orderData = snapshot.val();
                             if (Analytics) {
+                                // 2. Enviar evento de compra a GA4
                                 Analytics.trackPurchase(orderData);
+                                
+                                // 3. Registrar como trackeado localmente
+                                trackedOrders.push(orderId);
+                                localStorage.setItem('ga4_tracked_orders', JSON.stringify(trackedOrders));
+
+                                // 4. Limpiar carrito solo después de asegurar el rastreo
+                                localStorage.removeItem('cart');
+                                localStorage.removeItem('appliedPacks');
+                                console.log("[Analytics] Flujo de éxito de telemetría completado.");
                             }
                         }
                     } catch (error) {
-                        console.error("[Health] Error recovering order for telemetry:", error);
+                        console.error("[Health] Error en el flujo de telemetría post-venta:", error);
                     }
                 }
             });
         }
-
-        // Limpiar carrito
-        localStorage.removeItem('cart');
-        localStorage.removeItem('appliedPacks');
     </script>
 </body>
 

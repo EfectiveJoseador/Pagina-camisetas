@@ -69,18 +69,31 @@ class AnalyticsManager {
     }
 
     trackPurchase(orderData) {
-        this.trackEvent('purchase', {
-            transaction_id: orderData.orderId,
-            value: orderData.total,
+        if (!orderData || !orderData.orderId) {
+            console.error("[Analytics] Cannot track purchase: Missing order data");
+            return;
+        }
+
+        const purchaseData = {
+            transaction_id: String(orderData.orderId),
+            value: Number(orderData.total || 0),
             currency: 'EUR',
-            shipping: orderData.shipping || 0,
-            items: orderData.items.map(item => ({
-                item_id: item.id,
+            tax: 0,
+            shipping: Number(orderData.shipping || 0),
+            items: (orderData.items || []).map(item => ({
+                item_id: String(item.id),
                 item_name: item.name,
-                price: item.price,
-                quantity: item.quantity
+                price: Number(item.price || 0),
+                quantity: Number(item.quantity || item.qty || 1),
+                item_category: item.version || 'aficionado'
             }))
-        });
+        };
+
+        this.trackEvent('purchase', purchaseData);
+        
+        if (window.DEBUG_ANALYTICS || true) {
+            console.log(`%c[Analytics] PURCHASE TRACKED: ${purchaseData.transaction_id}`, 'color: #10b981; font-weight: bold;', purchaseData);
+        }
     }
 
     /**
