@@ -105,14 +105,14 @@ class AnalyticsManager {
 
         const purchaseData = {
             transaction_id: String(orderData.orderId),
-            value: Number(orderData.total || 0),
+            value: Number(Number(orderData.total || 0).toFixed(2)),
             currency: 'EUR',
             tax: 0,
-            shipping: Number(orderData.shipping || 0),
+            shipping: Number(Number(orderData.shipping || 0).toFixed(2)),
             items: (orderData.items || []).map(item => ({
                 item_id: String(item.id),
                 item_name: item.name,
-                price: Number(item.price || 0),
+                price: Number(Number(item.price || 0).toFixed(2)),
                 quantity: Number(item.quantity || item.qty || 1),
                 item_category: item.version || 'aficionado'
             }))
