@@ -58,13 +58,42 @@ class AnalyticsManager {
     trackBeginCheckout(items, totalValue) {
         this.trackEvent('begin_checkout', {
             currency: 'EUR',
-            value: totalValue,
+            value: Number(totalValue),
             items: items.map(item => ({
-                item_id: item.id,
+                item_id: String(item.id),
                 item_name: item.name,
-                price: item.price,
-                quantity: item.quantity
+                price: Number(item.price || 0),
+                quantity: Number(item.quantity || 1)
             }))
+        });
+    }
+
+    trackAddShippingInfo(addressData) {
+        this.trackEvent('add_shipping_info', {
+            currency: 'EUR',
+            shipping_tier: 'Standard',
+            items: [] // Opcional en este paso, pero requerido para funnel completo en GA4 si se desea
+        });
+    }
+
+    trackAddPaymentInfo(paymentType) {
+        this.trackEvent('add_payment_info', {
+            currency: 'EUR',
+            payment_type: paymentType,
+            items: []
+        });
+    }
+
+    trackRemoveFromCart(product, quantity = 1) {
+        this.trackEvent('remove_from_cart', {
+            currency: 'EUR',
+            value: Number(product.price * quantity),
+            items: [{
+                item_id: String(product.id),
+                item_name: product.name,
+                price: Number(product.price),
+                quantity: Number(quantity)
+            }]
         });
     }
 
