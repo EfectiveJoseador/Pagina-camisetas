@@ -254,17 +254,18 @@
                         if (snapshot.exists()) {
                             const orderData = snapshot.val();
                             if (Analytics) {
-                                // 2. Enviar evento de compra a GA4
+                                // 2. Enviar evento de compra a GA4 (Paso crítico para el Revenue)
+                                console.log("[Analytics] Iniciando trackPurchase para ingreso:", orderData.total);
                                 Analytics.trackPurchase(orderData);
                                 
-                                // 3. Registrar como trackeado localmente
+                                // 3. Bloqueo de de-duplicación para proteger las estadísticas
                                 trackedOrders.push(orderId);
                                 localStorage.setItem('ga4_tracked_orders', JSON.stringify(trackedOrders));
 
-                                // 4. Limpiar carrito solo después de asegurar el rastreo
+                                // 4. Limpieza de carrito SINCRONIZADA post-rastreo
                                 localStorage.removeItem('cart');
                                 localStorage.removeItem('appliedPacks');
-                                console.log("[Analytics] Flujo de éxito de telemetría completado.");
+                                console.log("[Analytics] ✅ Conversión reportada e integridad de datos asegurada.");
                             }
                         }
                     } catch (error) {

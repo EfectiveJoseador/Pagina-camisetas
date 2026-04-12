@@ -105,16 +105,18 @@ class AnalyticsManager {
 
         const purchaseData = {
             transaction_id: String(orderData.orderId),
-            value: Number(Number(orderData.total || 0).toFixed(2)),
+            value: parseFloat(Number(orderData.total || 0).toFixed(2)),
             currency: 'EUR',
             tax: 0,
-            shipping: Number(Number(orderData.shipping || 0).toFixed(2)),
+            shipping: parseFloat(Number(orderData.shipping || 0).toFixed(2)),
+            coupon: orderData.promoCodeUsed || orderData.couponUsed || '',
             items: (orderData.items || []).map(item => ({
                 item_id: String(item.id),
                 item_name: item.name,
-                price: Number(Number(item.price || 0).toFixed(2)),
-                quantity: Number(item.quantity || item.qty || 1),
-                item_category: item.version || 'aficionado'
+                price: parseFloat(Number(item.price || 0).toFixed(2)),
+                quantity: parseInt(item.quantity || item.qty || 1),
+                item_category: item.version || 'aficionado',
+                coupon: orderData.promoCodeUsed || orderData.couponUsed || ''
             }))
         };
 
