@@ -140,19 +140,10 @@ function generatePatchOptionsHTML(product) {
         return ''; 
     }
 
-    let options = '<option value="none">Sin parche</option>';
-    allowedPatches.forEach(patchKey => {
-        if (PATCH_DEFINITIONS[patchKey]) {
-            options += `<option value="${patchKey}">${PATCH_DEFINITIONS[patchKey]}</option>`;
-        }
-    });
-
     return `
         <div class="form-group">
             <label>Parche (+€1)</label>
-            <select class="quick-patch">
-                ${options}
-            </select>
+            <input type="text" class="quick-patch-input" placeholder="Ej: Champions League" maxlength="30">
         </div>
     `;
 }
@@ -448,7 +439,7 @@ function setupQuickAddListeners() {
             const sizeSelect = form.querySelector('.quick-size');
             const nameInput = form.querySelector('.quick-name');
             const numberInput = form.querySelector('.quick-number');
-            const patchSelect = form.querySelector('.quick-patch');
+            const patchInput = form.querySelector('.quick-patch-input');
             const priceValue = form.querySelector('.price-value');
 
             let total = product.price;
@@ -467,8 +458,8 @@ function setupQuickAddListeners() {
             }
 
             
-            const patch = patchSelect?.value;
-            if (patch && patch !== 'none') {
+            const patch = patchInput?.value?.trim();
+            if (patch) {
                 total += 1;
             }
 
@@ -515,6 +506,10 @@ function setupQuickAddListeners() {
         form.querySelectorAll('select').forEach(input => {
             input.addEventListener('change', updatePrice);
         });
+        const patchInput = form.querySelector('.quick-patch-input');
+        if (patchInput) {
+            patchInput.addEventListener('input', updatePrice);
+        }
 
         
         form.addEventListener('submit', (e) => {
@@ -570,7 +565,7 @@ function handleQuickAddSubmit(form, product) {
     const sizeSelect = form.querySelector('.quick-size');
     const nameInput = form.querySelector('.quick-name');
     const numberInput = form.querySelector('.quick-number');
-    const patchSelect = form.querySelector('.quick-patch');
+    const patchInput = form.querySelector('.quick-patch-input');
 
     
     const size = sizeSelect?.value;
@@ -607,9 +602,9 @@ function handleQuickAddSubmit(form, product) {
         totalPrice += 2;
     }
 
-    const patch = patchSelect?.value || 'none';
-    if (patch !== 'none') {
-        totalPrice += patchPrices[patch] || 1;
+    const patch = patchInput?.value?.trim() || '';
+    if (patch) {
+        totalPrice += 1;
     }
 
     
