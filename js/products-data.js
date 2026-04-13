@@ -6557,8 +6557,8 @@ const products = [
     },
     {
         "id": 846528,
-        "name": "Finland 1982 Local Retro",
-        "slug": "finland-1982-local-retro",
+        "name": "Finlandia 1982 Local Retro",
+        "slug": "finlandia-1982-local-retro",
         "category": "futbol",
         "league": "selecciones",
         "image": "/assets/productos/Yupoo/846528/1.webp",
