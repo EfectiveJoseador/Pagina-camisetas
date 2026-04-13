@@ -6560,7 +6560,7 @@ const products = [
         "name": "Finland 1982 Local Retro",
         "slug": "finland-1982-local-retro",
         "category": "futbol",
-        "league": "otros",
+        "league": "selecciones",
         "image": "/assets/productos/Yupoo/846528/1.webp",
         "images": [
             "/assets/productos/Yupoo/846528/2.webp"
@@ -8555,7 +8555,7 @@ const products = [
         "name": "FC Salzburg 2025/26",
         "slug": "fc-salzburg-202526",
         "category": "futbol",
-        "league": "otros",
+        "league": "bundesliga",
         "image": "/assets/productos/Yupoo/470010/1.webp",
         "images": [
             "/assets/productos/Yupoo/470010/2.webp"
@@ -10949,21 +10949,6 @@ const products = [
         ],
         "temporada": "2025/26",
         "tipo": "entrenamiento",
-        "price": 19.9,
-        "oldPrice": 25
-    },
-    {
-        "id": 391444,
-        "name": "Victoria 2025/26 Visitante",
-        "slug": "victoria-202526-visitante",
-        "category": "futbol",
-        "league": "otros",
-        "image": "/assets/productos/Yupoo/391444/1.webp",
-        "images": [
-            "/assets/productos/Yupoo/391444/2.webp"
-        ],
-        "temporada": "2025/26",
-        "tipo": "visitante",
         "price": 19.9,
         "oldPrice": 25
     },
