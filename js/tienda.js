@@ -17,6 +17,34 @@ let selectedRetro = false;
 let currentPage = 1;
 let totalPages = 1;
 let imageObserver = null;
+const LEAGUE_NORMALIZATION_MAP = {
+    'eredivise': 'eredivisie',
+    'eredivisie': 'eredivisie',
+    'ligaportugal': 'ligaportugal',
+    'primeira liga': 'ligaportugal',
+    'primeira_liga': 'ligaportugal',
+    'mls': 'mls',
+    'liga mx': 'ligamx',
+    'ligamx': 'ligamx'
+};
+
+const LEAGUE_DISPLAY_MAP = {
+    'laliga': 'La Liga',
+    'premier': 'Premier League',
+    'seriea': 'Serie A',
+    'bundesliga': 'Bundesliga',
+    'ligue1': 'Ligue 1',
+    'retro': 'Retro',
+    'selecciones': 'Selecciones',
+    'brasileirao': 'Brasileirao',
+    'ligaarabe': 'Liga Arabe',
+    'saf': 'SAF (Argentina)',
+    'nba': 'NBA',
+    'eredivisie': 'Eredivisie',
+    'ligaportugal': 'Liga Portugal',
+    'mls': 'MLS',
+    'ligamx': 'Liga MX'
+};
 const patchPrices = {
     none: 0,
     liga: 1,
@@ -640,6 +668,11 @@ function init() {
         console.log('Generated and cached new product order');
     }
 
+    allProducts = allProducts.map(product => ({
+        ...product,
+        league: normalizeLeagueKey(product.league)
+    }));
+
     applySpecialPricing();
 
     filteredProducts = allProducts;
@@ -722,6 +755,26 @@ function populateLeagueFilter() {
             leagueSelect.appendChild(option);
         });
     }
+}
+function normalizeLeagueKey(league) {
+    if (!league) return league;
+
+    const raw = String(league).trim();
+    const normalized = raw
+        .toLowerCase()
+        .replace(/[_-]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    return LEAGUE_NORMALIZATION_MAP[normalized] || normalized.replace(/\s+/g, '');
+}
+
+function toTitleCaseLeague(text) {
+    return text
+        .split(' ')
+        .filter(Boolean)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
 }
 function populateTeamFilter(league) {
     const teamSelect = document.getElementById('filter-team');
@@ -941,20 +994,17 @@ function populateTeamFilter(league) {
     }
 }
 function formatLeagueName(league) {
-    const map = {
-        'laliga': 'La Liga',
-        'premier': 'Premier League',
-        'seriea': 'Serie A',
-        'bundesliga': 'Bundesliga',
-        'ligue1': 'Ligue 1',
-        'retro': 'Retro',
-        'selecciones': 'Selecciones',
-        'brasileirao': 'Brasileirão',
-        'ligaarabe': 'Liga Árabe',
-        'saf': 'SAF (Argentina)',
-        'nba': 'NBA',
-    };
-    return map[league] || league;
+    const normalizedLeague = normalizeLeagueKey(league);
+    if (LEAGUE_DISPLAY_MAP[normalizedLeague]) {
+        return LEAGUE_DISPLAY_MAP[normalizedLeague];
+    }
+
+    const pretty = String(league || '')
+        .replace(/[_-]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    return toTitleCaseLeague(pretty);
 }
 function applyURLFilters() {
     const params = new URLSearchParams(window.location.search);
@@ -980,11 +1030,11 @@ function applyURLFilters() {
     }
 
     if (league) {
-        selectedLeague = league;
+        selectedLeague = normalizeLeagueKey(league);
         const leagueSelect = document.getElementById('filter-league');
         if (leagueSelect) {
-            leagueSelect.value = league;
-            populateTeamFilter(league);
+            leagueSelect.value = selectedLeague;
+            populateTeamFilter(selectedLeague);
         }
     }
 

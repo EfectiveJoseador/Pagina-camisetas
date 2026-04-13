@@ -32,6 +32,21 @@ const PATCH_DEFINITIONS = {
 
 let product = null;
 let selectedSize = '';
+const LEAGUE_NORMALIZATION_MAP = {
+    'eredivise': 'eredivisie',
+    'eredivisie': 'eredivisie',
+    'ligaportugal': 'ligaportugal',
+    'primeira liga': 'ligaportugal',
+    'primeira_liga': 'ligaportugal',
+    'mls': 'mls',
+    'liga mx': 'ligamx',
+    'ligamx': 'ligamx'
+};
+
+function normalizeLeagueKey(league) {
+    if (!league) return league;
+    return LEAGUE_NORMALIZATION_MAP[String(league).toLowerCase().trim()] || String(league).toLowerCase().trim();
+}
 
 // Suplemento de precio por talla oversize
 const SIZE_SURCHARGES = {
@@ -77,15 +92,17 @@ document.addEventListener('DOMContentLoaded', () => {
         'ligaarabe': 'Liga Árabe',
         'saf': 'SAF (Argentina)',
         'nba': 'NBA',
+        'eredivisie': 'Eredivisie',
         'ligaportugal': 'Liga Portugal',
-        'Primeira Liga': 'Primeira Liga',
-        'MLS': 'MLS'
+        'mls': 'MLS',
+        'ligamx': 'Liga MX'
     };
-    const leagueName = leagueNames[product.league] || product.league;
+    const normalizedLeague = normalizeLeagueKey(product.league);
+    const leagueName = leagueNames[normalizedLeague] || product.league;
     const breadcrumbLeague = document.getElementById('breadcrumb-league');
     if (breadcrumbLeague) {
         breadcrumbLeague.textContent = leagueName;
-        breadcrumbLeague.href = `/pages/tienda.html?league=${product.league}`;
+        breadcrumbLeague.href = `/pages/tienda.html?league=${normalizedLeague}`;
     }
 
     
@@ -100,7 +117,7 @@ document.addEventListener('DOMContentLoaded', () => {
     if (breadcrumbTeam && teamName) {
         breadcrumbTeam.textContent = teamName;
         
-        breadcrumbTeam.href = `/pages/tienda.html?league=${product.league}&team=${encodeURIComponent(teamName)}`;
+        breadcrumbTeam.href = `/pages/tienda.html?league=${normalizedLeague}&team=${encodeURIComponent(teamName)}`;
     }
 
     document.getElementById('breadcrumb-name').textContent = product.name;
