@@ -17,6 +17,34 @@ let selectedRetro = false;
 let currentPage = 1;
 let totalPages = 1;
 let imageObserver = null;
+const LEAGUE_NORMALIZATION_MAP = {
+    'eredivise': 'eredivisie',
+    'eredivisie': 'eredivisie',
+    'ligaportugal': 'ligaportugal',
+    'primeira liga': 'ligaportugal',
+    'primeira_liga': 'ligaportugal',
+    'mls': 'mls',
+    'liga mx': 'ligamx',
+    'ligamx': 'ligamx'
+};
+
+const LEAGUE_DISPLAY_MAP = {
+    'laliga': 'La Liga',
+    'premier': 'Premier League',
+    'seriea': 'Serie A',
+    'bundesliga': 'Bundesliga',
+    'ligue1': 'Ligue 1',
+    'retro': 'Retro',
+    'selecciones': 'Selecciones',
+    'brasileirao': 'Brasileirao',
+    'ligaarabe': 'Liga Arabe',
+    'saf': 'SAF (Argentina)',
+    'nba': 'NBA',
+    'eredivisie': 'Eredivisie',
+    'ligaportugal': 'Liga Portugal',
+    'mls': 'MLS',
+    'ligamx': 'Liga MX'
+};
 const patchPrices = {
     none: 0,
     liga: 1,
@@ -112,19 +140,10 @@ function generatePatchOptionsHTML(product) {
         return ''; 
     }
 
-    let options = '<option value="none">Sin parche</option>';
-    allowedPatches.forEach(patchKey => {
-        if (PATCH_DEFINITIONS[patchKey]) {
-            options += `<option value="${patchKey}">${PATCH_DEFINITIONS[patchKey]}</option>`;
-        }
-    });
-
     return `
         <div class="form-group">
             <label>Parche (+€1)</label>
-            <select class="quick-patch">
-                ${options}
-            </select>
+            <input type="text" class="quick-patch-input" placeholder="Ej: Champions League" maxlength="30">
         </div>
     `;
 }
@@ -420,7 +439,7 @@ function setupQuickAddListeners() {
             const sizeSelect = form.querySelector('.quick-size');
             const nameInput = form.querySelector('.quick-name');
             const numberInput = form.querySelector('.quick-number');
-            const patchSelect = form.querySelector('.quick-patch');
+            const patchInput = form.querySelector('.quick-patch-input');
             const priceValue = form.querySelector('.price-value');
 
             let total = product.price;
@@ -439,8 +458,8 @@ function setupQuickAddListeners() {
             }
 
             
-            const patch = patchSelect?.value;
-            if (patch && patch !== 'none') {
+            const patch = patchInput?.value?.trim();
+            if (patch) {
                 total += 1;
             }
 
@@ -487,6 +506,10 @@ function setupQuickAddListeners() {
         form.querySelectorAll('select').forEach(input => {
             input.addEventListener('change', updatePrice);
         });
+        const patchInput = form.querySelector('.quick-patch-input');
+        if (patchInput) {
+            patchInput.addEventListener('input', updatePrice);
+        }
 
         
         form.addEventListener('submit', (e) => {
@@ -542,7 +565,7 @@ function handleQuickAddSubmit(form, product) {
     const sizeSelect = form.querySelector('.quick-size');
     const nameInput = form.querySelector('.quick-name');
     const numberInput = form.querySelector('.quick-number');
-    const patchSelect = form.querySelector('.quick-patch');
+    const patchInput = form.querySelector('.quick-patch-input');
 
     
     const size = sizeSelect?.value;
@@ -579,9 +602,9 @@ function handleQuickAddSubmit(form, product) {
         totalPrice += 2;
     }
 
-    const patch = patchSelect?.value || 'none';
-    if (patch !== 'none') {
-        totalPrice += patchPrices[patch] || 1;
+    const patch = patchInput?.value?.trim() || '';
+    if (patch) {
+        totalPrice += 1;
     }
 
     
@@ -639,6 +662,11 @@ function init() {
         saveProductOrderToSession(allProducts.map(p => p.id));
         console.log('Generated and cached new product order');
     }
+
+    allProducts = allProducts.map(product => ({
+        ...product,
+        league: normalizeLeagueKey(product.league)
+    }));
 
     applySpecialPricing();
 
@@ -723,6 +751,26 @@ function populateLeagueFilter() {
         });
     }
 }
+function normalizeLeagueKey(league) {
+    if (!league) return league;
+
+    const raw = String(league).trim();
+    const normalized = raw
+        .toLowerCase()
+        .replace(/[_-]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    return LEAGUE_NORMALIZATION_MAP[normalized] || normalized.replace(/\s+/g, '');
+}
+
+function toTitleCaseLeague(text) {
+    return text
+        .split(' ')
+        .filter(Boolean)
+        .map(word => word.charAt(0).toUpperCase() + word.slice(1))
+        .join(' ');
+}
 function populateTeamFilter(league) {
     const teamSelect = document.getElementById('filter-team');
     const teamStep = document.getElementById('team-step');
@@ -735,63 +783,126 @@ function populateTeamFilter(league) {
 
     const leagueProducts = allProducts.filter(p => p.league === league);
 
-    
+    // Dynamic common artifacts/suffixes to clean from team names
     const variants = [
         'Local', 'Visitante', 'Tercera', 'Cuarta', 'Fourth', 'Home', 'Away', 'Third',
         'Portero', 'Goalkeeper', 'GK',
         'Retro', 'Icon', 'Classic', 'Vintage',
         'Especial', 'Special', 'Edici[oó]n.*', 'Limited', 'Commemorative', 'Conmemorativ[ao]',
         'estilo', 'Style',
-        'Black', 'Gold', 'Golden', 'White', 'Pink', 'Blue', 'Red', 'Green', 'Golde', 'cyan',
-        'Training', 'Entrenamiento', 'Pre-match', 'Warm-up',
-        'Anniversary', 'Aniversario', 'Centemary', 'Centenario',
+        'Black', 'Gold', 'Golden', 'White', 'Pink', 'Blue', 'Red', 'Green', 'Golde', 'cyan', 'Negra',
+        'Training', 'Entrenamiento', 'Pre-match', 'Pre-partido', 'Warm-up',
+        'Anniversary', 'Aniversario', 'Centemary', 'Centenario', '100 Años', '125',
         'Player', 'Fan', 'Vapor', 'Authentic',
-        'Stadium', 'Women', 'Edition'
+        'Stadium', 'Women', 'Edition', 'Polo', 'Dorada', 'Juese'
     ];
     const variantRegex = new RegExp(`\\b(${variants.join('|')})\\b`, 'gi');
 
-    
-    const sizePattern = /\bS-[X\d]+L?\b/gi;
-
-    
-    
+    // Mappings for proper display names
     const canonicalNames = {
-        'mexico': 'México',
-        'newcastle': 'Newcastle United',
-        'newcastle united': 'Newcastle United',
-        'barcelona': 'FC Barcelona',
-        'fc barcelona': 'FC Barcelona',
-        'sporting lisboa': 'Sporting de Lisboa',
-        'sporting de lisboa': 'Sporting de Lisboa',
-        'sporting lisbon': 'Sporting de Lisboa',
-        'boca juniors': 'Boca Juniors',
-        'boca juniors stadium': 'Boca Juniors',
-        'flamengo': 'Flamengo',
-        'inter miami': 'Inter Miami',
-        'miami': 'Inter Miami',
-        'man utd': 'Manchester United',
-        'man united': 'Manchester United',
-        'manchester united': 'Manchester United',
+        'ac milan': 'AC Milan',
+        'ajax': 'Ajax',
+        'al ahli': 'Al Ahli',
+        'al-hilal': 'Al-Hilal',
+        'al-nassr': 'Al-Nassr',
         'alaves': 'Alavés',
-        'atletico madrid': 'Atlético Madrid',
-        'deportivo': 'Deportivo La Coruña',
-        'deportivo la coruna': 'Deportivo La Coruña',
-        'depor': 'Deportivo La Coruña',
-        'atletico mineiro': 'Atlético Mineiro',
-        'sao paulo': 'São Paulo',
-        'celta': 'Celta de Vigo',
-        'celta de vigo': 'Celta de Vigo',
-        'athletic': 'Athletic Club',
+        'albacete': 'Albacete',
+        'alemania': 'Alemania',
+        'argelia': 'Argelia',
+        'argentina': 'Argentina',
+        'arsenal': 'Arsenal',
+        'as roma': 'AS Roma',
+        'aston villa': 'Aston Villa',
         'athletic club': 'Athletic Club',
-        'athletic bilbao': 'Athletic Club',
-        'real sociedad': 'Real Sociedad',
+        'atletico madrid': 'Atlético Madrid',
+        'atletico mineiro': 'Atlético Mineiro',
+        'bayern munich': 'Bayern Munich',
+        'belgica': 'Bélgica',
+        'benfica': 'Benfica',
+        'boca juniors': 'Boca Juniors',
         'brasil': 'Brasil',
-        'brazil': 'Brasil'
+        'chelsea': 'Chelsea',
+        'chile': 'Chile',
+        'chivas': 'Chivas',
+        'colombia': 'Colombia',
+        'corea del sur': 'Corea del Sur',
+        'costa rica': 'Costa Rica',
+        'croacia': 'Croacia',
+        'deportivo la coruna': 'Deportivo La Coruña',
+        'dortmund': 'Dortmund',
+        'ecuador': 'Ecuador',
+        'elche': 'Elche',
+        'escocia': 'Escocia',
+        'espana': 'España',
+        'espanyol': 'Espanyol',
+        'estados unidos': 'Estados Unidos',
+        'everton': 'Everton',
+        'fc barcelona': 'FC Barcelona',
+        'feyenoord': 'Feyenoord',
+        'finlandia': 'Finlandia',
+        'fiorentina': 'Fiorentina',
+        'flamengo': 'Flamengo',
+        'fluminense': 'Fluminense',
+        'francia': 'Francia',
+        'gales': 'Gales',
+        'getafe': 'Getafe',
+        'girona': 'Girona',
+        'granada': 'Granada',
+        'holanda': 'Holanda',
+        'inglaterra': 'Inglaterra',
+        'inter miami': 'Inter Miami',
+        'inter milan': 'Inter Milan',
+        'internacional': 'Internacional',
+        'italia': 'Italia',
+        'jamaica': 'Jamaica',
+        'japon': 'Japón',
+        'las palmas': 'Las Palmas',
+        'lazio': 'Lazio',
+        'leeds united': 'Leeds United',
+        'leganes': 'Leganés',
+        'leicester city': 'Leicester City',
+        'levante': 'Levante',
+        'malaga cf': 'Málaga CF',
+        'mallorca': 'Mallorca',
+        'manchester city': 'Manchester City',
+        'manchester united': 'Manchester United',
+        'marruecos': 'Marruecos',
+        'marseille': 'Marseille',
+        'mexico': 'México',
+        'monaco': 'Monaco',
+        'monterrey': 'Monterrey',
+        'napoli': 'Napoli',
+        'newcastle united': 'Newcastle United',
+        'nigeria': 'Nigeria',
+        'noruega': 'Noruega',
+        'osasuna': 'Osasuna',
+        'palmeiras': 'Palmeiras',
+        'peru': 'Perú',
+        'polonia': 'Polonia',
+        'porto': 'Porto',
+        'portugal': 'Portugal',
+        'psg': 'PSG',
+        'real betis': 'Real Betis',
+        'real madrid': 'Real Madrid',
+        'real sociedad': 'Real Sociedad',
+        'river plate': 'River Plate',
+        'rumania': 'Rumania',
+        'santos': 'Santos',
+        'sao paulo': 'São Paulo',
+        'sevilla': 'Sevilla',
+        'sporting de lisboa': 'Sporting de Lisboa',
+        'sporting gijon': 'Sporting de Gijón',
+        'valencia': 'Valencia',
+        'valladolid': 'Valladolid',
+        'venezuela': 'Venezuela',
+        'villarreal': 'Villarreal'
     };
 
-    
+    // Index mappings to group variations into a single key
     const canonicalKeys = {
         'barcelona': 'fc barcelona',
+        'milan': 'ac milan',
+        'ac milan': 'ac milan',
         'newcastle': 'newcastle united',
         'sporting lisboa': 'sporting de lisboa',
         'sporting lisbon': 'sporting de lisboa',
@@ -800,40 +911,56 @@ function populateTeamFilter(league) {
         'man utd': 'manchester united',
         'man united': 'manchester united',
         'boca juniors stadium': 'boca juniors',
-        'alaves': 'alaves',
         'celta': 'celta de vigo',
         'athletic': 'athletic club',
         'athletic bilbao': 'athletic club',
         'brazil': 'brasil',
+        'deportivo la coruna': 'deportivo la coruna',
+        'depor': 'deportivo la coruna',
         'deportivo': 'deportivo la coruna',
-        'depor': 'deportivo la coruna'
+        'portugal': 'portugal',
+        'norway': 'noruega',
+        'sweden': 'suecia',
+        'brazil juese': 'brasil',
+        'finland': 'finlandia',
+        'vicenza': 'victoria',
+        'vitoria': 'victoria',
+        'vicenza': 'victoria'
     };
 
-    
     const teamMap = new Map();
 
     leagueProducts.forEach(p => {
         let name = p.name;
         
         name = name.replace(/&amp;/g, '&').replace(/&[a-z]+;/gi, ' ');
-        name = name.replace(/\d{2}\/\d{2}/, '');
-        name = name.replace(/\b20\d{2}\b/, ''); 
+        
+        // 1. Remove year ranges (e.g., 2025/26, 99/00, /01)
+        name = name.replace(/\b\d{2,4}\/\d{2,4}\b/g, '');
+        name = name.replace(/\/\d{2,4}\b/g, ''); 
+        
+        // 2. Remove 4-digit years (e.g., 2024, 1998)
+        name = name.replace(/\b(19|20)\d{2}\b/g, ''); 
+        
+        // 3. Remove standalone 2-digit "years" appearing as suffixes (e.g., "Alaves 19")
+        // Protect Schalke 04, Mainz 05, etc.
+        name = name.replace(/(?<!Schalke|Mainz|Pumas|CA)\s+\b(19|20|21|22|23|24|25|26|7\d|8\d|9\d)\b/gi, '');
+
+        // 4. Clean up leftovers
         name = name.replace(/\(.*\)/g, ''); 
         name = name.replace(variantRegex, '');
-        name = name.replace(sizePattern, ''); 
+        name = name.replace(/\bS-[X\d]+L?\b/gi, ''); // Size patterns
         name = name.replace(/\s+/g, ' ').trim();
 
         if (name) {
-            
             let key = normalizeString(name);
-
             
+            // Apply canonical key mapping
             key = canonicalKeys[key] || key;
-
             
+            // Get final display name
             const displayName = canonicalNames[key] || canonicalNames[normalizeString(name)] || name;
 
-            
             if (key && key.length > 1 && displayName && displayName.trim().length > 1) {
                 if (!teamMap.has(key)) {
                     teamMap.set(key, displayName);
@@ -862,20 +989,17 @@ function populateTeamFilter(league) {
     }
 }
 function formatLeagueName(league) {
-    const map = {
-        'laliga': 'La Liga',
-        'premier': 'Premier League',
-        'seriea': 'Serie A',
-        'bundesliga': 'Bundesliga',
-        'ligue1': 'Ligue 1',
-        'retro': 'Retro',
-        'selecciones': 'Selecciones',
-        'brasileirao': 'Brasileirão',
-        'ligaarabe': 'Liga Árabe',
-        'saf': 'SAF (Argentina)',
-        'nba': 'NBA',
-    };
-    return map[league] || league;
+    const normalizedLeague = normalizeLeagueKey(league);
+    if (LEAGUE_DISPLAY_MAP[normalizedLeague]) {
+        return LEAGUE_DISPLAY_MAP[normalizedLeague];
+    }
+
+    const pretty = String(league || '')
+        .replace(/[_-]+/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
+
+    return toTitleCaseLeague(pretty);
 }
 function applyURLFilters() {
     const params = new URLSearchParams(window.location.search);
@@ -901,11 +1025,11 @@ function applyURLFilters() {
     }
 
     if (league) {
-        selectedLeague = league;
+        selectedLeague = normalizeLeagueKey(league);
         const leagueSelect = document.getElementById('filter-league');
         if (leagueSelect) {
-            leagueSelect.value = league;
-            populateTeamFilter(league);
+            leagueSelect.value = selectedLeague;
+            populateTeamFilter(selectedLeague);
         }
     }
 
@@ -1035,11 +1159,14 @@ function normalizeString(str) {
 
 function applyFilters(updateURL = true) {
     const searchInput = document.getElementById('search-input');
-    const searchTerm = searchInput ? normalizeString(searchInput.value) : '';
+    const rawSearch = searchInput ? searchInput.value.trim() : '';
+    const searchTerm = normalizeString(rawSearch);
     const sortBy = document.getElementById('sort-select').value;
     currentPage = 1;
 
-    
+    // Split search into words for multi-word matching
+    const searchWords = searchTerm.split(/\s+/).filter(word => word.length > 0);
+
     const teamSearchAliases = {
         'sporting de lisboa': ['sporting lisboa', 'sporting lisbon', 'sporting de lisboa'],
         'fc barcelona': ['fc barcelona', 'barcelona'],
@@ -1059,25 +1186,33 @@ function applyFilters(updateURL = true) {
 
     filteredProducts = allProducts.filter(product => {
         const productName = normalizeString(product.name);
-        const matchesSearch = productName.includes(searchTerm);
+        const productLeague = normalizeString(formatLeagueName(product.league));
+        const productCategory = normalizeString(product.category || '');
+        
+        // Full searchable text for this product
+        const searchableText = `${productName} ${productLeague} ${productCategory}`;
+
+        // Multi-word match: ALL search words must be present in searchableText
+        const matchesSearch = searchWords.every(word => searchableText.includes(word));
+        
         const matchesLeague = selectedLeague === '' || product.league === selectedLeague;
+        
         let matchesTeam = true;
         if (selectedTeam !== '') {
             const teamKey = normalizeString(selectedTeam);
             const aliases = teamSearchAliases[teamKey] || [teamKey];
-            
             matchesTeam = aliases.some(alias => productName.includes(normalizeString(alias)));
         }
-        let matchesKids = true;
+
         const nameLower = product.name.toLowerCase();
         const imageLower = (product.image || '').toLowerCase();
         const isKidsProduct = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
 
+        let matchesKids = true;
         if (selectedKids) {
             matchesKids = isKidsProduct;
         }
 
-        
         let matchesRetro = true;
         if (selectedRetro) {
             matchesRetro = nameLower.includes('retro');
@@ -1085,45 +1220,56 @@ function applyFilters(updateURL = true) {
 
         return matchesSearch && matchesLeague && matchesTeam && matchesKids && matchesRetro;
     });
+
+    // Sorting logic
     function getProductTypeOrder(name) {
         const nameLower = name.toLowerCase();
         const isKids = nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños');
-
         if (isKids) return 4;
         if (nameLower.includes('tercera')) return 3;
         if (nameLower.includes('visitante') || name.includes(' F')) return 2;
         if (nameLower.includes('local') || name.includes(' L')) return 1;
         return 5;
     }
+
     filteredProducts.sort((a, b) => getProductTypeOrder(a.name) - getProductTypeOrder(b.name));
+    
     if (sortBy === 'price-asc') {
         filteredProducts.sort((a, b) => a.price - b.price);
     } else if (sortBy === 'price-desc') {
         filteredProducts.sort((a, b) => b.price - a.price);
     }
-    if (Analytics) {
-        if (searchTerm && searchTerm.length >= 2) {
-            Analytics.trackSearch(searchTerm, filteredProducts.length);
-        }
-        if (selectedLeague) {
-            Analytics.trackFilterUse('league', selectedLeague);
-        }
-        if (selectedTeam) {
-            Analytics.trackFilterUse('team', selectedTeam);
-        }
-        if (selectedKids) {
-            Analytics.trackFilterUse('kids', selectedKids);
-        }
-        if (sortBy !== 'default') {
-            Analytics.trackFilterUse('sort', sortBy);
-        }
-    }
 
+    // CRITICAL: Update URL and Render UI BEFORE optional Analytics
+    // This prevents any analytics error from breaking the core site functionality
     if (updateURL) {
-        updateURLWithFilters(searchTerm, sortBy);
+        updateURLWithFilters(rawSearch, sortBy);
     }
 
     renderProducts();
+
+    // Optional Analytics
+    if (window.Analytics) {
+        try {
+            if (searchTerm && searchTerm.length >= 2) {
+                window.Analytics.trackSearch(searchTerm, filteredProducts.length);
+            }
+            if (selectedLeague) {
+                window.Analytics.trackFilterUse('league', selectedLeague);
+            }
+            if (selectedTeam) {
+                window.Analytics.trackFilterUse('team', selectedTeam);
+            }
+            if (selectedKids) {
+                window.Analytics.trackFilterUse('kids', selectedKids);
+            }
+            if (sortBy !== 'default') {
+                window.Analytics.trackFilterUse('sort', sortBy);
+            }
+        } catch (e) {
+            console.warn('[Analytics Error]', e);
+        }
+    }
 }
 function setupModal() {
     const modal = document.getElementById('customization-modal');

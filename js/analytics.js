@@ -159,6 +159,16 @@ class AnalyticsManager {
             filter_value: value
         });
     }
+
+    trackSearch(searchTerm, resultsCount) {
+        this.trackEvent('search', {
+            search_term: searchTerm,
+            results_count: resultsCount
+        });
+        if (window.DEBUG_ANALYTICS) {
+            console.log(`[Analytics] Track Search: "${searchTerm}" (${resultsCount} results)`);
+        }
+    }
 }
 
 // Export singleton

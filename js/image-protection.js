@@ -87,8 +87,8 @@
     function addOverlay(img) {
         const container = img.closest(
             '.product-image, .product-card, .main-image, .client-card, ' +
-            '.thumbnails, .thumb, .lightbox-content, .lightbox-thumbnails, ' +
-            '.image-lightbox, .client-image, .testimonial-image'
+            '.thumbnails, .thumb, .lightbox-image-wrapper, ' +
+            '.client-image, .testimonial-image'
         );
 
         if (!container) return;
@@ -166,9 +166,7 @@
             .client-card,
             .thumbnails,
             .thumb,
-            .lightbox-content,
-            .lightbox-thumbnails,
-            .image-lightbox,
+            .lightbox-image-wrapper,
             .client-image,
             .testimonial-image {
                 position: relative;
