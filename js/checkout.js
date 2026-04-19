@@ -387,8 +387,27 @@ Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
         if (version.toLowerCase() === 'aficionado') {
             version = 'fan';
         }
+        
+        const custom = item.customization || {};
+        let extras = [];
+        if (custom.patch) {
+            extras.push('Parche: ' + custom.patch);
+        } else if (custom.patches && custom.patches.length > 0) {
+            extras.push('Parches: ' + custom.patches.join(', '));
+        }
+
+        if (custom.name && custom.number) {
+            extras.push('Personalización: ' + custom.name + ' - ' + custom.number);
+        } else if (custom.name) {
+            extras.push('Personalización: ' + custom.name);
+        } else if (custom.number) {
+            extras.push('Personalización: ' + custom.number);
+        }
+        
+        let extrasStr = extras.length > 0 ? (' [' + extras.join(' | ') + ']') : '';
+        
         const price = (item.price * qty).toFixed(2);
-        productsText += qty + 'x ' + item.name + ' - ' + size + ' - ' + version + ' - €' + price + '\n';
+        productsText += qty + 'x ' + item.name + ' - ' + size + ' - ' + version + extrasStr + ' - €' + price + '\n';
     });
     let totalInfo = `Subtotal: €${orderData.subtotal.toFixed(2)}\n`;
 
@@ -401,7 +420,11 @@ Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
     if (orderData.discount > 0) {
         totalInfo += `Descuento total: -€${orderData.discount.toFixed(2)}\n`;
     }
+    
+    const paymentMethodText = orderData.paymentMethod ? orderData.paymentMethod.toUpperCase() : 'NO ESPECIFICADO';
+    totalInfo += `Método de pago: ${paymentMethodText}\n`;
     totalInfo += `TOTAL A PAGAR: €${orderData.total.toFixed(2)}`;
+    
     const formData = new FormData();
     formData.append("access_key", WEB3FORMS_KEY);
     formData.append("subject", "Nuevo pedido con pago confirmado - " + orderData.orderId);

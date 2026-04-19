@@ -1219,8 +1219,27 @@ Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
         const qty = item.quantity || 1;
         const size = item.size || 'M';
         const version = item.version || 'fan';
+        
+        const custom = item.customization || {};
+        let extras = [];
+        if (custom.patch) {
+            extras.push('Parche: ' + custom.patch);
+        } else if (custom.patches && custom.patches.length > 0) {
+            extras.push('Parches: ' + custom.patches.join(', '));
+        }
+
+        if (custom.name && custom.number) {
+            extras.push('Personalización: ' + custom.name + ' - ' + custom.number);
+        } else if (custom.name) {
+            extras.push('Personalización: ' + custom.name);
+        } else if (custom.number) {
+            extras.push('Personalización: ' + custom.number);
+        }
+        
+        let extrasStr = extras.length > 0 ? (' [' + extras.join(' | ') + ']') : '';
+        
         const price = ((item.price || 0) * qty).toFixed(2);
-        productsText += qty + 'x ' + (item.name || 'Producto') + ' · ' + size + ' · ' + version + ' — €' + price + '\n';
+        productsText += qty + 'x ' + (item.name || 'Producto') + ' · ' + size + ' · ' + version + extrasStr + ' — €' + price + '\n';
     });
     let totalInfo = `TOTAL: €${orderData.total ? Number(orderData.total).toFixed(2) : '0.00'}`;
 
