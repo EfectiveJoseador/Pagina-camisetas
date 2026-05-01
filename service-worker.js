@@ -1,4 +1,4 @@
-const CACHE_NAME = 'camisetazo-cache-v6';
+const CACHE_NAME = 'camisetazo-cache-v7';
 
 const ASSETS_TO_CACHE = [
   './',
@@ -77,10 +77,16 @@ self.addEventListener('fetch', (event) => {
     url.includes('gstatic.com') ||
     url.includes('firebaseio.com') ||
     url.includes('firebasedatabase.app') ||
-    url.includes('googleapis.com')
+    url.includes('googleapis.com') ||
+    // Google Auth — Firebase signInWithPopup necesita estos dominios sin interceptar
+    url.includes('apis.google.com') ||
+    url.includes('accounts.google.com') ||
+    url.includes('securetoken.google.com') ||
+    url.includes('identitytoolkit.googleapis.com') ||
+    url.includes('firebase.googleapis.com')
   ) {
+    // Dejar pasar directamente sin cachear — fetch o silencio si falla
     event.respondWith(fetch(event.request).catch(() => {
-      
       return new Response('', { status: 503 });
     }));
     return;
