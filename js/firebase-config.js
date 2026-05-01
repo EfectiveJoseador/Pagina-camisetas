@@ -5,6 +5,7 @@ import {
     setPersistence,
     browserLocalPersistence,
     GoogleAuthProvider,
+    EmailAuthProvider,
     onAuthStateChanged,
     signOut,
     signInWithEmailAndPassword,
@@ -13,7 +14,9 @@ import {
     updateProfile,
     signInWithPopup,
     sendEmailVerification,
-    RecaptchaVerifier
+    RecaptchaVerifier,
+    linkWithCredential,
+    fetchSignInMethodsForEmail
 } from "https://www.gstatic.com/firebasejs/11.0.1/firebase-auth.js";
 import {
     getDatabase,
@@ -70,6 +73,9 @@ export {
     signInWithPopup,
     sendEmailVerification,
     RecaptchaVerifier,
+    EmailAuthProvider,
+    linkWithCredential,
+    fetchSignInMethodsForEmail,
 
     
     ref,

@@ -4,6 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Inicia sesión en Camisetazo con tu cuenta de Google o con tu email y contraseña. Accede a tus pedidos, perfil y más.">
     <link rel="icon" type="image/x-icon" href="../assets/logo/logo.png">
     <title>Iniciar Sesión - Camisetazo</title>
 
@@ -45,7 +46,26 @@
             </div>
 
 
+            <!-- ── FORMULARIO DE LOGIN ── -->
             <form id="login-form" class="auth-form active">
+
+                <!-- Botón de Google Sign-In (usa signInWithPopup de Firebase) -->
+                <button type="button" id="btn-google-signin" class="btn-google">
+                    <!-- Logo oficial de Google en SVG inline (sin dependencias externas) -->
+                    <svg class="btn-google__icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20" height="20">
+                        <path fill="#4285F4" d="M45.12 24.5c0-1.56-.14-3.06-.4-4.5H24v8.51h11.84c-.51 2.75-2.06 5.08-4.39 6.64v5.52h7.11c4.16-3.83 6.56-9.47 6.56-16.17z"/>
+                        <path fill="#34A853" d="M24 46c5.94 0 10.92-1.97 14.56-5.33l-7.11-5.52c-1.97 1.32-4.49 2.1-7.45 2.1-5.73 0-10.58-3.87-12.31-9.07H4.34v5.7C7.96 41.07 15.4 46 24 46z"/>
+                        <path fill="#FBBC05" d="M11.69 28.18C11.25 26.86 11 25.45 11 24s.25-2.86.69-4.18v-5.7H4.34C2.85 17.09 2 20.45 2 24c0 3.55.85 6.91 2.34 9.88l7.35-5.7z"/>
+                        <path fill="#EA4335" d="M24 10.75c3.23 0 6.13 1.11 8.41 3.29l6.31-6.31C34.91 4.18 29.93 2 24 2 15.4 2 7.96 6.93 4.34 14.12l7.35 5.7c1.73-5.2 6.58-9.07 12.31-9.07z"/>
+                    </svg>
+                    <span>Continuar con Google</span>
+                </button>
+
+                <!-- Divisor visual entre Google y email/contraseña -->
+                <div class="auth-divider">
+                    <span>o inicia con tu email</span>
+                </div>
+
                 <div class="form-group">
                     <label>Email</label>
                     <div class="input-icon">
@@ -61,7 +81,6 @@
                     </div>
                 </div>
                 <div class="form-options">
-
                     <a href="#" class="forgot-password">¿Olvidaste tu contraseña?</a>
                 </div>
                 <div id="login-error" class="error-message"
@@ -70,6 +89,7 @@
             </form>
 
 
+            <!-- ── FORMULARIO DE REGISTRO ── -->
             <form id="register-form" class="auth-form">
                 <div class="form-group">
                     <label>Nombre Completo</label>
@@ -102,6 +122,7 @@
             </form>
 
 
+            <!-- ── FORMULARIO DE RECUPERACIÓN DE CONTRASEÑA ── -->
             <form id="reset-form" class="auth-form">
                 <div style="margin-bottom: 1.5rem;">
                     <h2 style="font-size: 1.5rem; font-weight: 700; color: var(--text-main); margin-bottom: 0.5rem;">
@@ -131,6 +152,153 @@
 
 
     <div id="footer-placeholder"></div>
+
+
+    <!-- ════════════════════════════════════════════════════════════════
+         MODAL DE CONTRASEÑA DE RESPALDO
+         Se activa automáticamente después del login con Google
+         si el usuario NO tiene contraseña de respaldo configurada.
+         El fondo oscuro bloquea la UI — no se puede cerrar haciendo
+         clic fuera: el usuario debe configurar o posponer explícitamente.
+    ═══════════════════════════════════════════════════════════════════ -->
+    <div id="modal-backup-password"
+         class="backup-modal-overlay"
+         role="dialog"
+         aria-modal="true"
+         aria-labelledby="modal-backup-title"
+         style="display: none;">
+
+        <div class="backup-modal-card">
+
+            <!-- Cabecera del modal con icono animado -->
+            <div class="backup-modal-header">
+                <div class="backup-modal-icon">
+                    <i class="fas fa-shield-halved"></i>
+                </div>
+                <h2 id="modal-backup-title" class="backup-modal-title">
+                    Configura tu contraseña de respaldo
+                </h2>
+                <p class="backup-modal-subtitle">
+                    Has iniciado sesión con Google. Crea una contraseña de respaldo para poder acceder a tu cuenta
+                    en caso de que Google no esté disponible.
+                </p>
+            </div>
+
+            <!-- Alerta informativa de seguridad -->
+            <div class="backup-modal-info">
+                <i class="fas fa-circle-info"></i>
+                <span>
+                    Esta contraseña se cifra con <strong>bcrypt (factor 12)</strong> antes de guardarse.
+                    Google sigue siendo tu método de acceso principal.
+                </span>
+            </div>
+
+            <!-- Formulario de contraseña de respaldo -->
+            <form id="form-backup-password" novalidate>
+
+                <!-- Campo: nueva contraseña -->
+                <div class="form-group">
+                    <label for="backup-password-input">Nueva contraseña de respaldo</label>
+                    <div class="input-icon input-password-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input
+                            type="password"
+                            id="backup-password-input"
+                            name="backupPassword"
+                            placeholder="Mínimo 8 caracteres"
+                            autocomplete="new-password"
+                            maxlength="72"
+                            required>
+                        <!-- Botón de mostrar/ocultar contraseña -->
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            id="toggle-backup-pw"
+                            aria-label="Mostrar u ocultar contraseña">
+                            <i class="fas fa-eye" id="toggle-backup-pw-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Campo: confirmar contraseña -->
+                <div class="form-group">
+                    <label for="backup-password-confirm">Confirmar contraseña</label>
+                    <div class="input-icon input-password-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input
+                            type="password"
+                            id="backup-password-confirm"
+                            name="backupPasswordConfirm"
+                            placeholder="Repite la contraseña"
+                            autocomplete="new-password"
+                            maxlength="72"
+                            required>
+                        <button
+                            type="button"
+                            class="toggle-password"
+                            id="toggle-backup-confirm"
+                            aria-label="Mostrar u ocultar confirmación">
+                            <i class="fas fa-eye" id="toggle-backup-confirm-icon"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Indicadores de requisitos en tiempo real -->
+                <div class="pw-requirements" id="pw-requirements" aria-live="polite">
+                    <p class="pw-req-title">La contraseña debe contener:</p>
+                    <ul class="pw-req-list">
+                        <li id="req-length" class="pw-req-item">
+                            <i class="fas fa-circle"></i>
+                            <span>Mínimo 8 caracteres</span>
+                        </li>
+                        <li id="req-upper" class="pw-req-item">
+                            <i class="fas fa-circle"></i>
+                            <span>Una letra mayúscula (A-Z)</span>
+                        </li>
+                        <li id="req-lower" class="pw-req-item">
+                            <i class="fas fa-circle"></i>
+                            <span>Una letra minúscula (a-z)</span>
+                        </li>
+                        <li id="req-number" class="pw-req-item">
+                            <i class="fas fa-circle"></i>
+                            <span>Un número (0-9)</span>
+                        </li>
+                        <li id="req-symbol" class="pw-req-item">
+                            <i class="fas fa-circle"></i>
+                            <span>Un símbolo (!@#$%^&*...)</span>
+                        </li>
+                        <li id="req-match" class="pw-req-item">
+                            <i class="fas fa-circle"></i>
+                            <span>Las contraseñas coinciden</span>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Barra de fortaleza de la contraseña -->
+                <div class="pw-strength-bar" id="pw-strength-bar" aria-label="Nivel de fortaleza de la contraseña">
+                    <div class="pw-strength-fill" id="pw-strength-fill"></div>
+                </div>
+                <p class="pw-strength-label" id="pw-strength-label" aria-live="polite"></p>
+
+                <!-- Mensaje de error o éxito del modal -->
+                <div id="backup-pw-error" class="error-message" style="display: none;"></div>
+
+                <!-- Botones de acción -->
+                <div class="backup-modal-actions">
+                    <button type="submit" id="btn-save-backup-pw" class="btn-backup-save" disabled>
+                        <i class="fas fa-shield-check"></i>
+                        <span>Guardar contraseña segura</span>
+                    </button>
+                    <button type="button" id="btn-skip-backup-pw" class="btn-backup-skip">
+                        Configurar más tarde
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+    <!-- /FIN MODAL CONTRASEÑA DE RESPALDO -->
 
 
     <script src="../js/theme.js"></script>
