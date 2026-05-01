@@ -1,8 +1,8 @@
-const CACHE_NAME = 'camisetazo-cache-v8';
+const CACHE_NAME = 'camisetazo-cache-v9';
 
 // Solo cachear assets estáticos (JS, CSS, imágenes, fuentes).
 // NUNCA cachear HTML — los documentos HTML llevan headers de seguridad
-// (CSP, etc.) que deben venir siempre frescos del servidor.
+// (CSP, Cache-Control, etc.) que deben venir siempre frescos del servidor.
 const ASSETS_TO_CACHE = [
   './css/styles.css',
   './css/variables.css',
@@ -29,8 +29,6 @@ self.addEventListener('install', (event) => {
           )
         );
       })
-      // skipWaiting: activar el nuevo SW inmediatamente sin esperar a que
-      // se cierren todas las pestañas con el SW anterior.
       .then(() => self.skipWaiting())
   );
 });
@@ -46,7 +44,6 @@ self.addEventListener('activate', (event) => {
           }
         })
       );
-    // clients.claim: tomar control de todas las pestañas abiertas inmediatamente
     }).then(() => self.clients.claim())
   );
 });
@@ -54,30 +51,26 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
 
-  // Solo interceptar peticiones GET
   if (event.request.method !== 'GET') return;
-
-  // Solo HTTP/HTTPS
   if (!url.startsWith('http://') && !url.startsWith('https://')) return;
-
-  // Ignorar source maps
   if (url.includes('.map')) return;
 
-  // ── Regla 1: NUNCA cachear documentos HTML ──────────────────────────────
-  // Los documentos HTML llevan headers CSP y otros headers de seguridad que
-  // DEBEN venir del servidor en cada petición. Cachearlos congela la política
-  // de seguridad con valores antiguos.
+  // ── Regla 1: HTML → SIEMPRE red con cache: 'no-store' ─────────────────
+  // Forzar bypass del HTTP cache del navegador para que los headers CSP
+  // lleguen siempre frescos desde el servidor (Vercel/Firebase Hosting).
   const isHtml = url.endsWith('.html') ||
                  url.endsWith('/') ||
-                 (!url.includes('.') && !url.includes('?')) ||
+                 event.request.mode === 'navigate' ||
                  event.request.headers.get('Accept')?.includes('text/html');
 
   if (isHtml) {
-    // Siempre red → si falla, nada (no servir HTML obsoleto)
     event.respondWith(
-      fetch(event.request).catch(() => {
+      fetch(new Request(event.request, {
+        cache: 'no-store',   // ← bypass HTTP cache del navegador
+        redirect: 'follow'
+      })).catch(() => {
         return new Response('<h1>Sin conexión</h1>', {
-          headers: { 'Content-Type': 'text/html' }
+          headers: { 'Content-Type': 'text/html; charset=utf-8' }
         });
       })
     );
