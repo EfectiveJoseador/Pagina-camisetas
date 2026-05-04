@@ -254,15 +254,16 @@ function confirmOrder() {
         trackingNumber: null,
         items: Cart.items.map(item => {
             const product = products.find(p => p.id === item.id);
+            const custom = item.customization || {};
             return {
                 id: item.id,
                 name: item.name || product?.name || `Producto ${item.id}`,
                 image: item.image || product?.image || '/assets/placeholder.webp',
                 quantity: item.quantity || item.qty || 1,
-                size: item.size || 'M',
-                version: item.version || 'aficionado',
+                size: custom.size || item.size || 'N/A',
+                version: custom.version || item.version || 'aficionado',
                 price: item.price || product?.price || 0,
-                customization: item.customization || {}
+                customization: custom
             };
         }),
         total: finalTotal,
@@ -382,13 +383,13 @@ Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
     let productsText = '';
     orderData.items.forEach((item) => {
         const qty = item.quantity || 1;
-        const size = item.size || 'M';
-        let version = item.version || 'fan';
+        const custom = item.customization || {};
+        const size = custom.size || item.size || 'N/A';
+        let version = custom.version || item.version || 'fan';
         if (version.toLowerCase() === 'aficionado') {
             version = 'fan';
         }
         
-        const custom = item.customization || {};
         let extras = [];
         if (custom.patch) {
             extras.push('Parche: ' + custom.patch);

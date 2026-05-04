@@ -106,8 +106,12 @@ const Cart = {
         this.items.forEach(item => {
             const qty = item.quantity || item.qty || 1;
             totalQty += qty;
-            const itemPrice = item.price || item.basePrice || 0;
-            const surcharge = Math.max(0, itemPrice - 19.90);
+            const baseProductPrice = item.basePrice || 0;
+            const itemPrice = item.price || baseProductPrice;
+            // El suplemento es la diferencia entre el precio guardado y el precio base
+            const surcharge = baseProductPrice > 0
+                ? Math.max(0, itemPrice - baseProductPrice)
+                : Math.max(0, itemPrice - 19.90);
             surcharges += surcharge * qty;
         });
 
@@ -233,9 +237,16 @@ const Cart = {
         this.items.forEach((item, index) => {
             const product = products.find(p => p.id === item.id);
             if (!product) return;
-            const displayPrice = product.price;
+            const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 1, '3XL': 2, '4XL': 2 };
             const custom = item.customization || {};
-            const size = custom.size || item.size || 'N/A';
+            const size = custom.size || item.size || '';
+            const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
+            let displayPrice;
+            if (item.price != null) {
+                displayPrice = item.price;
+            } else {
+                displayPrice = (item.basePrice || product.price) + sizeSurcharge;
+            }
             const version = custom.version || item.version || 'aficionado';
             const name = custom.name || '';
             const number = custom.number || '';
@@ -325,7 +336,7 @@ const Cart = {
         this.items.forEach(item => {
             const product = products.find(p => p.id === item.id);
             if (!product) return;
-            const basePrice = product.price;
+            const basePrice = item.price || item.basePrice || product.price;
             const qty = item.quantity || item.qty || 1;
             const custom = item.customization || {};
             const size = custom.size || item.size || 'N/A';
