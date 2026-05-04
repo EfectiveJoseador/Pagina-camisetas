@@ -272,7 +272,7 @@ function renderProducts() {
         const productType = getProductType(product);
         const sizes = SIZE_CONFIGS[productType];
         const sizeOptions = sizes.map(size => {
-            const sizeLabel = (size === '3XL' || size === '4XL') ? `${size} (+€2)` : size;
+            const sizeLabel = (size === '2XL') ? `${size} (+€1)` : (size === '3XL' || size === '4XL') ? `${size} (+€2)` : size;
             return `<option value="${size}">${sizeLabel}</option>`;
         }).join('');
         return `
@@ -444,10 +444,11 @@ function setupQuickAddListeners() {
 
             let total = product.price;
 
-            
-            const size = sizeSelect?.value;
-            if (size === '3XL' || size === '4XL') {
-                total += 2;
+            // Suplemento por talla oversize
+            const size = sizeSelect?.value || '';
+            const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+            if (SIZE_SURCHARGES[size]) {
+                total += SIZE_SURCHARGES[size];
             }
 
             
@@ -591,12 +592,9 @@ function handleQuickAddSubmit(form, product) {
         return;
     }
 
-    
-    let totalPrice = product.price;
-
-    if (size === '3XL' || size === '4XL') {
-        totalPrice += 2;
-    }
+    const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+    const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
+    let totalPrice = product.price + sizeSurcharge;
 
     if (name && number) {
         totalPrice += 2;
@@ -1325,7 +1323,7 @@ function populateSizeOptions() {
     sizes.forEach(size => {
         const option = document.createElement('option');
         option.value = size;
-        const sizeLabel = (size === '3XL' || size === '4XL') ? `${size} (+€2)` : size;
+        const sizeLabel = (size === '2XL') ? `${size} (+€1)` : (size === '3XL' || size === '4XL') ? `${size} (+€2)` : size;
         option.textContent = sizeLabel;
         sizeSelect.appendChild(option);
     });
@@ -1365,7 +1363,9 @@ function updatePreview() {
         patch: document.getElementById('modal-patch').value,
         extras: []
     };
-    let totalPrice = currentProduct.price;
+    const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+    const sizeSurcharge = SIZE_SURCHARGES[customization.size] || 0;
+    let totalPrice = currentProduct.price + sizeSurcharge;
     if (customization.version === 'jugador') totalPrice += 5;
     if (customization.patch && customization.patch !== 'none') {
         totalPrice += patchPrices[customization.patch] || 0;

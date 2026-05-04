@@ -50,15 +50,25 @@ const Cart = {
     },
 
     add(id, qty = 1, size = 'M', version = 'aficionado', customizations = {}) {
+        const product = products.find(p => p.id === id);
+        const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+        const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
+        const basePrice = product ? product.price : 0;
+        const itemPrice = basePrice + sizeSurcharge + (version === 'jugador' ? 5 : 0);
+
         const existing = this.items.find(i => i.id === id && i.size === size && i.version === version);
         if (existing) {
             existing.qty += qty;
         } else {
-            this.items.push({ id, qty, size, version });
+            this.items.push({
+                id, qty, size, version,
+                basePrice,
+                price: itemPrice,
+                customization: { size, version, ...customizations }
+            });
         }
         this.save();
         this.render();
-        const product = products.find(p => p.id === id);
         if (product && window.Toast) {
             window.Toast.success(`${product.name} añadido al carrito`);
         }
