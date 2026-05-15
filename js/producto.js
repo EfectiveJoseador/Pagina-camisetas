@@ -259,6 +259,25 @@ document.addEventListener('DOMContentLoaded', () => {
     // Selector de talla (dropdown)
     const sizeSelect = document.getElementById('size-select');
     if (sizeSelect) {
+        // Si es producto de niño, sustituir las tallas de adulto por tallas infantiles (16-28)
+        const _nameLower = (product.name || '').toLowerCase();
+        const _imgLower  = (product.image || '').toLowerCase();
+        const _isKids = product.kids === true
+            || _nameLower.includes('niño')
+            || _nameLower.includes('niños')
+            || _nameLower.includes('kids')
+            || _imgLower.includes('kids');
+
+        if (_isKids) {
+            sizeSelect.innerHTML = '<option value="" disabled selected>— Elige la talla —</option>';
+            for (let t = 16; t <= 28; t += 2) {
+                const opt = document.createElement('option');
+                opt.value = String(t);
+                opt.textContent = String(t);
+                sizeSelect.appendChild(opt);
+            }
+        }
+
         sizeSelect.addEventListener('change', () => {
             selectedSize = sizeSelect.value;
             updatePreview();
@@ -283,7 +302,10 @@ document.addEventListener('DOMContentLoaded', () => {
             qtyInput.value = currentValue + 1;
         }
     });
-    document.getElementById('version-select').addEventListener('change', updatePreview);
+    document.getElementById('version-select').addEventListener('change', () => {
+        applyPlayerVersionSizeRestriction();
+        updatePreview();
+    });
     document.getElementById('name-input').addEventListener('input', handleNameInput);
     document.getElementById('number-input').addEventListener('input', handleDorsalInput);
     document.getElementById('patch-input').addEventListener('input', updatePreview);
@@ -435,7 +457,7 @@ function getAllowedPatches(product) {
 // Removido renderPatchOptions ya que ahora se usa un input de texto libre
 
 function applyProductRestrictions() {
-    const { isRestricted, isNBA } = isRestrictedCategory();
+    const { isRestricted, isNBA, isKids } = isRestrictedCategory();
 
     const versionSelect = document.getElementById('version-select');
     const versionGroup = versionSelect?.closest('.option-group');
@@ -445,6 +467,19 @@ function applyProductRestrictions() {
     const numberLabel = numberInput?.previousElementSibling;
     const nameInput = document.getElementById('name-input');
     const nameLabel = nameInput?.previousElementSibling;
+
+    // Tallas infantiles: sustituir el desplegable cuando el producto es de niño
+    const sizeSelect = document.getElementById('size-select');
+    if (isKids && sizeSelect) {
+        sizeSelect.innerHTML = '<option value="" disabled selected>— Elige la talla —</option>';
+        for (let t = 16; t <= 28; t += 2) {
+            const opt = document.createElement('option');
+            opt.value = String(t);
+            opt.textContent = String(t);
+            sizeSelect.appendChild(opt);
+        }
+    }
+
     if (isRestricted && versionGroup) {
         versionGroup.style.display = 'none';
         if (versionSelect) {
@@ -562,6 +597,41 @@ function closePlayerVersionModal() {
     if (modal) {
         modal.classList.remove('active');
         setTimeout(() => modal.style.display = 'none', 300);
+    }
+}
+
+/**
+ * Oculta/muestra las opciones 3XL y 4XL del selector de talla
+ * dependiendo de si la versión jugador está activa.
+ * Si la talla seleccionada queda inválida, resetea al placeholder.
+ */
+function applyPlayerVersionSizeRestriction() {
+    const versionSelect = document.getElementById('version-select');
+    const sizeSelect   = document.getElementById('size-select');
+    if (!versionSelect || !sizeSelect) return;
+
+    const isJugador = versionSelect.value === 'jugador';
+    const RESTRICTED = ['3XL', '4XL'];
+
+    RESTRICTED.forEach(size => {
+        const opt = sizeSelect.querySelector(`option[value="${size}"]`);
+        if (!opt) return;
+        if (isJugador) {
+            opt.disabled = true;
+            opt.hidden   = true;
+        } else {
+            opt.disabled = false;
+            opt.hidden   = false;
+        }
+    });
+
+    // Si la talla actualmente seleccionada ya no está disponible, resetear
+    if (isJugador && RESTRICTED.includes(sizeSelect.value)) {
+        sizeSelect.value = '';
+        selectedSize = '';
+        if (window.Toast) {
+            window.Toast.error('La talla 3XL/4XL no está disponible en Versión Jugador');
+        }
     }
 }
 
