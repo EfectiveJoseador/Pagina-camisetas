@@ -645,6 +645,21 @@ function setCouponError(message) {
     }
 }
 
+// ── Helper: muestra el total con precio tachado si hay descuento ────────
+function setTotalDisplay(originalTotal, finalTotal) {
+    const totalEl = document.getElementById('checkout-total');
+    if (!totalEl) return;
+    const saving = Math.round((originalTotal - finalTotal) * 100) / 100;
+    if (saving > 0.005) {
+        totalEl.innerHTML = `
+            <span style="text-decoration: line-through; color: var(--text-muted); font-size: 0.88em; margin-right: 0.4em;">€${originalTotal.toFixed(2)}</span>
+            <span style="color: #10b981; font-weight: 700;">€${finalTotal.toFixed(2)}</span>
+        `;
+    } else {
+        totalEl.textContent = `€${finalTotal.toFixed(2)}`;
+    }
+}
+
 // ── Lógica principal de cupón ───────────────────────────────────────────
 function applyCouponDiscount() {
     const couponSelect = document.getElementById('apply-coupon');
@@ -705,9 +720,7 @@ function applyCouponDiscount() {
         if (discountApplied) discountApplied.style.display = 'none';
     }
 
-    if (totalEl) {
-        totalEl.textContent = `€${finalTotal.toFixed(2)}`;
-    }
+    setTotalDisplay(calculations.total, Math.max(0, finalTotal));
 }
 
 // ── Revalidar cupón cuando cambia el carrito ────────────────────────────
@@ -726,10 +739,9 @@ export function revalidateCouponAfterCartChange() {
         setCouponError(
             'El cupón de Camiseta Gratis fue eliminado: necesitas 2 o más artículos'
         );
-        // Recalcular total
         const calculations = Cart.calculateTotal();
-        const totalEl = document.getElementById('checkout-total');
-        if (totalEl) totalEl.textContent = `€${(calculations.total - promoDiscount).toFixed(2)}`;
+        const finalTotal = Math.max(0, calculations.total - promoDiscount);
+        setTotalDisplay(calculations.total, finalTotal);
     }
 }
 
@@ -836,9 +848,7 @@ async function applyPromoCode() {
         let finalTotal = calculations.total - promoDiscount - appliedDiscount;
         finalTotal = Math.max(0, finalTotal);
 
-        if (totalEl) {
-            totalEl.textContent = `€${finalTotal.toFixed(2)}`;
-        }
+        setTotalDisplay(calculations.total, finalTotal);
         // El contador de usos se incrementa solo al confirmar el pedido (ver incrementPromoUsage).
         // ── Exclusividad mutua: aviso + desactivar cupones ──────────────
         const couponSelect    = document.getElementById('apply-coupon');
@@ -919,8 +929,8 @@ function removePromoCode() {
 
     // Recalcular total (solo descuento de cupón activo si existe)
     const calculations = Cart.calculateTotal();
-    const totalEl = document.getElementById('checkout-total');
-    if (totalEl) totalEl.textContent = `€${Math.max(0, calculations.total - appliedDiscount).toFixed(2)}`;
+    const finalTotal = Math.max(0, calculations.total - appliedDiscount);
+    setTotalDisplay(calculations.total, finalTotal);
 }
 
 function showPromoResult(message, type) {
