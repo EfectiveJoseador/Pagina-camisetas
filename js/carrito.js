@@ -133,19 +133,40 @@ const Cart = {
         });
 
         if (totalQty === 0) return { subtotal: 0, shipping: 0, total: 0 };
-        const fullCycles = Math.floor(totalQty / 5);
-        const remainder = totalQty % 5;
 
-        let packBasePrice = fullCycles * 85.90;
-        if (remainder === 1) {
-            packBasePrice += 19.90;
-        } else if (remainder === 2) {
-            packBasePrice += 19.90 * 2;
-        } else if (remainder === 3) {
-            packBasePrice += 56.90;
-        } else if (remainder === 4) {
-            packBasePrice += 56.90 + 19.90;
+        // Calcular precio base real sumando el basePrice de cada ítem
+        // Los packs (3x56.90, 5x85.90) solo aplican si TODOS los ítems son camisetas normales (19.90)
+        const NORMAL_PRICE = 19.90;
+        const allNormal = this.items.every(item => {
+            const bp = item.basePrice;
+            return !bp || Math.abs(bp - NORMAL_PRICE) < 0.01;
+        });
+
+        let packBasePrice = 0;
+        if (allNormal) {
+            // Lógica de packs: 5 camisetas por 85.90, 3 por 56.90, resto a precio normal
+            const fullCycles = Math.floor(totalQty / 5);
+            const remainder = totalQty % 5;
+            packBasePrice = fullCycles * 85.90;
+            if (remainder === 1) {
+                packBasePrice += 19.90;
+            } else if (remainder === 2) {
+                packBasePrice += 19.90 * 2;
+            } else if (remainder === 3) {
+                packBasePrice += 56.90;
+            } else if (remainder === 4) {
+                packBasePrice += 56.90 + 19.90;
+            }
+        } else {
+            // Si hay camisetas de precio distinto (retro, NBA, kids), sumar el basePrice real de cada una
+            this.items.forEach(item => {
+                const qty = item.quantity || item.qty || 1;
+                const product = products.find(p => p.id === item.id);
+                const basePrice = item.basePrice || product?.price || NORMAL_PRICE;
+                packBasePrice += basePrice * qty;
+            });
         }
+
         const subtotal = packBasePrice + surcharges;
         let shipping = 0;
         if (totalQty === 1) {
@@ -352,14 +373,24 @@ const Cart = {
 
     renderCheckoutPage(container) {
         container.innerHTML = '';
+        const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 1, '3XL': 2, '4XL': 2 };
         this.items.forEach(item => {
             const product = products.find(p => p.id === item.id);
             if (!product) return;
-            const basePrice = item.price || item.basePrice || product.price;
             const qty = item.quantity || item.qty || 1;
             const custom = item.customization || {};
             const size = custom.size || item.size || 'N/A';
             const version = custom.version || item.version || 'aficionado';
+            // Recalcular precio completo desde datos de customization
+            const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
+            const versionSurcharge = version === 'jugador' ? 5 : 0;
+            const patch = custom.patch || '';
+            const patchSurcharge = patch ? 1 : 0;
+            const hasName = !!(custom.name || '');
+            const hasNumber = !!(custom.number || '');
+            const personSurcharge = (hasName && hasNumber) ? 2 : 0;
+            const baseProductPrice = item.basePrice || product.price;
+            const displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
 
             const el = document.createElement('div');
             el.className = 'checkout-item-mini';
@@ -369,7 +400,7 @@ const Cart = {
                     <h4>${sanitizeHTML(product.name)} x${qty}</h4>
                     <p>${sanitizeHTML(size)} / ${version === 'jugador' ? 'Jugador' : 'Aficionado'}</p>
                 </div>
-                <span>€${(basePrice * qty).toFixed(2)}</span>
+                <span>€${(displayPrice * qty).toFixed(2)}</span>
             `;
             container.appendChild(el);
         });
