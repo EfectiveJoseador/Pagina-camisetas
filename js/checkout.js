@@ -565,7 +565,14 @@ document.addEventListener('DOMContentLoaded', () => {
         shippingEl.textContent = calculations.shipping === 0 ? 'Gratis' : `€${calculations.shipping.toFixed(2)}`;
     }
     if (subtotalEl) {
-        subtotalEl.textContent = `€${calculations.subtotal.toFixed(2)}`;
+        if (calculations.packSaving > 0) {
+            subtotalEl.innerHTML = `
+                <span style="text-decoration: line-through; color: var(--text-muted); font-size: 0.88em; margin-right: 0.4em;">€${calculations.originalSubtotal.toFixed(2)}</span>
+                <span style="color: var(--accent, #6366f1); font-weight: 700;">€${calculations.subtotal.toFixed(2)}</span>
+            `;
+        } else {
+            subtotalEl.textContent = `€${calculations.subtotal.toFixed(2)}`;
+        }
     }
     if (totalEl) {
         totalEl.textContent = `€${calculations.total.toFixed(2)}`;

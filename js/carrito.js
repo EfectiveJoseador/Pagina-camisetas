@@ -132,11 +132,21 @@ const Cart = {
             surcharges += surcharge * qty;
         });
 
-        if (totalQty === 0) return { subtotal: 0, shipping: 0, total: 0 };
+        if (totalQty === 0) return { subtotal: 0, originalSubtotal: 0, shipping: 0, total: 0, packSaving: 0 };
 
-        // Calcular precio base real sumando el basePrice de cada ítem
-        // Los packs (3x56.90, 5x85.90) solo aplican si TODOS los ítems son camisetas normales (19.90)
+        // Precio sin descuento: suma real de basePrice × qty de cada ítem
         const NORMAL_PRICE = 19.90;
+        let originalSubtotal = 0;
+        this.items.forEach(item => {
+            const qty = item.quantity || item.qty || 1;
+            const product = products.find(p => p.id === item.id);
+            const basePrice = item.basePrice || product?.price || NORMAL_PRICE;
+            originalSubtotal += basePrice * qty;
+        });
+        originalSubtotal += surcharges;
+
+        // Calcular precio base con posibles descuentos de pack
+        // Los packs (3x56.90, 5x85.90) solo aplican si TODOS los ítems son camisetas normales (19.90)
         const allNormal = this.items.every(item => {
             const bp = item.basePrice;
             return !bp || Math.abs(bp - NORMAL_PRICE) < 0.01;
@@ -168,6 +178,7 @@ const Cart = {
         }
 
         const subtotal = packBasePrice + surcharges;
+        const packSaving = Math.max(0, Math.round((originalSubtotal - subtotal) * 100) / 100);
         let shipping = 0;
         if (totalQty === 1) {
             shipping = 1.90;
@@ -179,7 +190,7 @@ const Cart = {
         }
         this.renderPackIndicators(totalQty);
 
-        return { subtotal, shipping, total };
+        return { subtotal, originalSubtotal, packSaving, shipping, total };
     },
 
     renderPackIndicators(totalQty) {
@@ -367,7 +378,17 @@ const Cart = {
             btn.addEventListener('click', () => this.remove(btn.dataset.index));
         });
         const calculations = this.calculateTotal();
-        document.getElementById('subtotal-price').textContent = `€${calculations.subtotal.toFixed(2)}`;
+        const subtotalEl = document.getElementById('subtotal-price');
+        if (subtotalEl) {
+            if (calculations.packSaving > 0) {
+                subtotalEl.innerHTML = `
+                    <span style="text-decoration: line-through; color: var(--text-muted); font-size: 0.88em; margin-right: 0.4em;">€${calculations.originalSubtotal.toFixed(2)}</span>
+                    <span style="color: var(--accent, #6366f1); font-weight: 700;">€${calculations.subtotal.toFixed(2)}</span>
+                `;
+            } else {
+                subtotalEl.textContent = `€${calculations.subtotal.toFixed(2)}`;
+            }
+        }
         document.getElementById('total-price').textContent = `€${calculations.total.toFixed(2)}`;
     },
 
@@ -408,7 +429,16 @@ const Cart = {
         const calculations = this.calculateTotal();
         const subtotalEl = document.getElementById('checkout-subtotal');
         const totalEl = document.getElementById('checkout-total');
-        if (subtotalEl) subtotalEl.textContent = `€${calculations.subtotal.toFixed(2)}`;
+        if (subtotalEl) {
+            if (calculations.packSaving > 0) {
+                subtotalEl.innerHTML = `
+                    <span style="text-decoration: line-through; color: var(--text-muted); font-size: 0.88em; margin-right: 0.4em;">€${calculations.originalSubtotal.toFixed(2)}</span>
+                    <span style="color: var(--accent, #6366f1); font-weight: 700;">€${calculations.subtotal.toFixed(2)}</span>
+                `;
+            } else {
+                subtotalEl.textContent = `€${calculations.subtotal.toFixed(2)}`;
+            }
+        }
         if (totalEl) totalEl.textContent = `€${calculations.total.toFixed(2)}`;
     }
 };
