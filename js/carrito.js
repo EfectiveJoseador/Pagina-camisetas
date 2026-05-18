@@ -113,15 +113,22 @@ const Cart = {
     calculateTotal() {
         let totalQty = 0;
         let surcharges = 0;
+        const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 1, '3XL': 2, '4XL': 2 };
         this.items.forEach(item => {
             const qty = item.quantity || item.qty || 1;
             totalQty += qty;
-            const baseProductPrice = item.basePrice || 0;
-            const itemPrice = item.price || baseProductPrice;
-            // El suplemento es la diferencia entre el precio guardado y el precio base
-            const surcharge = baseProductPrice > 0
-                ? Math.max(0, itemPrice - baseProductPrice)
-                : Math.max(0, itemPrice - 19.90);
+            // Recalcular surcharges siempre desde customization (no confiar en item.price)
+            const custom = item.customization || {};
+            const size = custom.size || item.size || '';
+            const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
+            const version = custom.version || item.version || 'aficionado';
+            const versionSurcharge = version === 'jugador' ? 5 : 0;
+            const patch = custom.patch || '';
+            const patchSurcharge = patch ? 1 : 0;
+            const hasName = !!(custom.name || '');
+            const hasNumber = !!(custom.number || '');
+            const personSurcharge = (hasName && hasNumber) ? 2 : 0;
+            const surcharge = sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
             surcharges += surcharge * qty;
         });
 
@@ -251,16 +258,18 @@ const Cart = {
             const custom = item.customization || {};
             const size = custom.size || item.size || '';
             const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
-            let displayPrice;
-            if (item.price != null) {
-                displayPrice = item.price;
-            } else {
-                displayPrice = (item.basePrice || product.price) + sizeSurcharge;
-            }
             const version = custom.version || item.version || 'aficionado';
+            const versionSurcharge = version === 'jugador' ? 5 : 0;
+            const patch = custom.patch || '';
+            const patchSurcharge = patch ? 1 : 0;
+            const hasName = !!(custom.name || '');
+            const hasNumber = !!(custom.number || '');
+            const personSurcharge = (hasName && hasNumber) ? 2 : 0;
+            const baseProductPrice = item.basePrice || product.price;
+            const displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
             const name = custom.name || '';
             const number = custom.number || '';
-            const patch = custom.patch || 'none';
+            const patchDisplay = patch || 'none';
             let customDetails = `Talla: ${size}`;
             if (version === 'jugador') {
                 customDetails += ' | Versión: Jugador';
@@ -273,7 +282,7 @@ const Cart = {
             if (number) {
                 customDetails += ` | Dorsal: ${sanitizeHTML(number)}`;
             }
-            if (patch && patch !== 'none') {
+            if (patchDisplay && patchDisplay !== 'none') {
                 const patchNames = {
                     liga: 'Parche Liga',
                     champions: 'Parche Champions',
@@ -284,7 +293,7 @@ const Cart = {
                     copamundo: 'Parche Copa del Mundo',
                     conmemorativo: 'Parche Conmemorativo'
                 };
-                customDetails += ` | ${patchNames[patch] || patch}`;
+                customDetails += ` | ${patchNames[patchDisplay] || patchDisplay}`;
             }
 
             const qty = item.quantity || item.qty || 1;
