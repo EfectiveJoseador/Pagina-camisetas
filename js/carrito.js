@@ -124,7 +124,7 @@ const Cart = {
             const version = custom.version || item.version || 'aficionado';
             const versionSurcharge = version === 'jugador' ? 5 : 0;
             const patch = custom.patch || '';
-            const patchSurcharge = patch ? 1 : 0;
+            const patchSurcharge = patch ? 1.5 : 0;
             const hasName = !!(custom.name || '');
             const hasNumber = !!(custom.number || '');
             const personSurcharge = (hasName && hasNumber) ? 2 : 0;
@@ -293,7 +293,7 @@ const Cart = {
             const version = custom.version || item.version || 'aficionado';
             const versionSurcharge = version === 'jugador' ? 5 : 0;
             const patch = custom.patch || '';
-            const patchSurcharge = patch ? 1 : 0;
+            const patchSurcharge = patch ? 1.5 : 0;
             const hasName = !!(custom.name || '');
             const hasNumber = !!(custom.number || '');
             const personSurcharge = (hasName && hasNumber) ? 2 : 0;
@@ -406,7 +406,7 @@ const Cart = {
             const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
             const versionSurcharge = version === 'jugador' ? 5 : 0;
             const patch = custom.patch || '';
-            const patchSurcharge = patch ? 1 : 0;
+            const patchSurcharge = patch ? 1.5 : 0;
             const hasName = !!(custom.name || '');
             const hasNumber = !!(custom.number || '');
             const personSurcharge = (hasName && hasNumber) ? 2 : 0;

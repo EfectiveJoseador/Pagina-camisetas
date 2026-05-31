@@ -47,14 +47,14 @@ const LEAGUE_DISPLAY_MAP = {
 };
 const patchPrices = {
     none: 0,
-    liga: 1,
-    champions: 1,
-    europa: 1,
-    premier: 1,
-    seriea: 1,
-    mundial: 1,
-    copamundo: 1,
-    conmemorativo: 1
+    liga: 1.5,
+    champions: 1.5,
+    europa: 1.5,
+    premier: 1.5,
+    seriea: 1.5,
+    mundial: 1.5,
+    copamundo: 1.5,
+    conmemorativo: 1.5
 };
 const SIZE_CONFIGS = {
     kids: ['16', '18', '20', '22', '24', '26', '28'],
@@ -142,7 +142,7 @@ function generatePatchOptionsHTML(product) {
 
     return `
         <div class="form-group">
-            <label>Parche (+€1)</label>
+            <label>Parche (+€1.50)</label>
             <input type="text" class="quick-patch-input" placeholder="Ej: Champions League" maxlength="30">
         </div>
     `;
@@ -461,7 +461,7 @@ function setupQuickAddListeners() {
             
             const patch = patchInput?.value?.trim();
             if (patch) {
-                total += 1;
+                total += 1.5;
             }
 
             if (priceValue) {
@@ -602,7 +602,7 @@ function handleQuickAddSubmit(form, product) {
 
     const patch = patchInput?.value?.trim() || '';
     if (patch) {
-        totalPrice += 1;
+        totalPrice += 1.5;
     }
 
     

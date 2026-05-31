@@ -3,17 +3,17 @@ import Analytics from './analytics.js';
 import Health from './health-check.js';
 const patchPrices = {
     none: 0,
-    liga: 1,
-    premier: 1,
-    seriea: 1,
-    bundesliga: 1,
-    ligue1: 1,
-    champions: 1,
-    europa: 1,
-    mundial_clubes: 1,
-    copamundo: 1,
-    eurocopa: 1,
-    copa_america: 1
+    liga: 1.5,
+    premier: 1.5,
+    seriea: 1.5,
+    bundesliga: 1.5,
+    ligue1: 1.5,
+    champions: 1.5,
+    europa: 1.5,
+    mundial_clubes: 1.5,
+    copamundo: 1.5,
+    eurocopa: 1.5,
+    copa_america: 1.5
 };
 
 const PATCH_DEFINITIONS = {
@@ -550,7 +550,7 @@ function updatePreview() {
     // --- Parche ---
     const patch = document.getElementById('patch-input').value.trim();
     if (patch) {
-        const patchCost = 1;
+        const patchCost = 1.5;
         totalPrice += patchCost;
         details.push(`Parche ${patch}: +€${patchCost.toFixed(2)}`);
     }
@@ -718,7 +718,7 @@ function addToCart() {
     totalPrice += sizeSurcharge;                                          // suplemento talla
     if (customization.version === 'jugador') totalPrice += 5;
     if (customization.patch) {
-        totalPrice += 1;
+        totalPrice += 1.5;
     }
     if (customization.name && customization.number) {
         totalPrice += 2;
