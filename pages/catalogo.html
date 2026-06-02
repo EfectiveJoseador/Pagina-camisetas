@@ -45,7 +45,7 @@
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/home.css">
+    <link rel="stylesheet" href="../css/home.css?v=2">
     <link rel="stylesheet" href="../css/catalogo.css">
     <link rel="stylesheet" href="../css/badges.css">
     <link rel="stylesheet" href="../css/ux-feedback.css">
@@ -85,120 +85,107 @@
             </p>
         </section>
 
-        <section class="catalog-grid-section" style="padding: 2rem;">
-            <h2 class="section-title" style="text-align: center; margin-bottom: 2rem;">
-            </h2>
-            <div class="grid-catalogo">
+        <section class="catalog-grid-section" style="padding: 2rem; max-width: 1400px; margin: 0 auto;">
 
+            <div class="catalogo-grid" id="catalogo-grid">
 
-                <div class="catalogo-card catalogo-card-clickable has-dropdown"
-                    data-link="/pages/tienda.html?category=futbol">
-                    <div class="catalogo-img-wrap">
+                <!-- Tarjeta grande: Fútbol (destaca con subcategorías visibles) -->
+                <div class="cat-card cat-card--featured" id="cat-futbol">
+                    <div class="cat-card__bg">
                         <img src="/assets/colecciones/futbol.png"
                             alt="Camisetas de fútbol Real Madrid Barcelona Atlético temporada 2025-2026"
-                            class="catalogo-img" loading="lazy">
+                            class="cat-card__img" loading="lazy">
+                        <div class="cat-card__overlay"></div>
                     </div>
-                    <div class="catalogo-info">
-                        <h3>Camisetas Fútbol</h3>
-                        <p>La Liga, Serie A, Bundesliga y más</p>
-                        <button class="catalogo-btn dropdown-btn">
-                            Ver opciones <i class="fas fa-chevron-down"></i>
-                        </button>
-                        <div class="dropdown-menu">
-                            <a href="https://2020soccer.x.yupoo.com/albums">General <i
-                                    class="fas fa-arrow-right"></i></a>
-                            <a href="https://classic-football-fhirts052.x.yupoo.com/"
-                                title="Camisetas retro fútbol clásicas">Camisetas Retro <i
-                                    class="fas fa-arrow-right"></i></a>
-                            <a href="https://yongfa1688.x.yupoo.com/">Nueva Temporada <i
-                                    class="fas fa-arrow-right"></i></a>
-                            <a href="https://aosendi.x.yupoo.com/albums">Conjuntos 1 <i
-                                    class="fas fa-arrow-right"></i></a>
-                            <a href="https://dongshanstore.x.yupoo.com/">Conjuntos 2 <i
-                                    class="fas fa-arrow-right"></i></a>
+                    <div class="cat-card__body">
+                        <span class="cat-card__badge"><i class="fas fa-fire"></i> Más popular</span>
+                        <h3 class="cat-card__title">Camisetas Fútbol</h3>
+                        <p class="cat-card__desc">La Liga, Premier League, Serie A, Bundesliga y selecciones</p>
+                        <div class="cat-card__links">
+                            <a href="https://2020soccer.x.yupoo.com/albums" class="cat-link" target="_blank" rel="noopener">
+                                <i class="fas fa-futbol"></i> General
+                            </a>
+                            <a href="https://yongfa1688.x.yupoo.com/" class="cat-link" target="_blank" rel="noopener">
+                                <i class="fas fa-star"></i> Nueva Temporada
+                            </a>
+                            <a href="https://classic-football-fhirts052.x.yupoo.com/" class="cat-link" target="_blank" rel="noopener">
+                                <i class="fas fa-history"></i> Retro
+                            </a>
+                            <a href="https://dongshanstore.x.yupoo.com/" class="cat-link" target="_blank" rel="noopener">
+                                <i class="fas fa-tshirt"></i> Conjuntos
+                            </a>
                         </div>
                     </div>
                 </div>
 
-
-                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=nba">
-                    <div class="catalogo-img-wrap">
+                <!-- NBA -->
+                <div class="cat-card" id="cat-nba">
+                    <div class="cat-card__bg">
                         <img src="/assets/colecciones/nba.png"
-                            alt="Camisetas NBA baloncesto Lakers Bulls Warriors Celtics" class="catalogo-img"
-                            loading="lazy">
+                            alt="Camisetas NBA baloncesto Lakers Bulls Warriors Celtics"
+                            class="cat-card__img" loading="lazy">
+                        <div class="cat-card__overlay"></div>
                     </div>
-                    <div class="catalogo-info">
-                        <h3>NBA</h3>
-                        <p>Camisetas oficiales de todos los equipos</p>
-                        <a href="https://x.yupoo.com/photos/05941188/albums" class="catalogo-btn"
-                            onclick="event.stopPropagation()">
+                    <div class="cat-card__body">
+                        <h3 class="cat-card__title">NBA</h3>
+                        <p class="cat-card__desc">Camisetas oficiales de todos los equipos</p>
+                        <a href="https://x.yupoo.com/photos/05941188/albums" class="cat-card__btn" target="_blank" rel="noopener">
                             Ver colección <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
 
-
-                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=zapatillas">
-                    <div class="catalogo-img-wrap">
+                <!-- Zapatillas -->
+                <div class="cat-card" id="cat-zapas">
+                    <div class="cat-card__bg">
                         <img src="/assets/colecciones/zapas.png"
-                            alt="Zapatillas deportivas Nike Adidas Jordan calidad premium" class="catalogo-img"
-                            loading="lazy">
+                            alt="Zapatillas deportivas Nike Adidas Jordan calidad premium"
+                            class="cat-card__img" loading="lazy">
+                        <div class="cat-card__overlay"></div>
                     </div>
-                    <div class="catalogo-info">
-                        <h3>Zapatillas</h3>
-                        <p>Las mejores marcas al mejor precio</p>
-                        <a href="/pages/tienda.html?category=zapatillas" class="catalogo-btn"
-                            onclick="event.stopPropagation()">
+                    <div class="cat-card__body">
+                        <h3 class="cat-card__title">Zapatillas</h3>
+                        <p class="cat-card__desc">Las mejores marcas al mejor precio</p>
+                        <a href="https://eu1688.x.yupoo.com/albums" class="cat-card__btn" target="_blank" rel="noopener">
                             Ver colección <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
 
-
-                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=nfl">
-                    <div class="catalogo-img-wrap">
-                        <img src="/assets/colecciones/nfl.png" alt="Camisetas NFL football americano equipos oficiales"
-                            class="catalogo-img" loading="lazy">
+                <!-- NFL -->
+                <div class="cat-card" id="cat-nfl">
+                    <div class="cat-card__bg">
+                        <img src="/assets/colecciones/nfl.png"
+                            alt="Camisetas NFL football americano equipos oficiales"
+                            class="cat-card__img" loading="lazy">
+                        <div class="cat-card__overlay"></div>
                     </div>
-                    <div class="catalogo-info">
-                        <h3>NFL</h3>
-                        <p>Football americano oficial</p>
-                        <a href="https://eu1688.x.yupoo.com/albums" class="catalogo-btn"
-                            onclick="event.stopPropagation()">
+                    <div class="cat-card__body">
+                        <h3 class="cat-card__title">NFL</h3>
+                        <p class="cat-card__desc">Football americano oficial</p>
+                        <a href="https://eu1688.x.yupoo.com/albums" class="cat-card__btn" target="_blank" rel="noopener">
                             Ver colección <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
 
-
-                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=f1">
-                    <div class="catalogo-img-wrap">
+                <!-- F1 -->
+                <div class="cat-card" id="cat-f1">
+                    <div class="cat-card__bg">
                         <img src="/assets/colecciones/f1.png"
-                            alt="Ropa Fórmula 1 equipos Ferrari Red Bull Mercedes McLaren" class="catalogo-img"
-                            loading="lazy">
+                            alt="Ropa Fórmula 1 equipos Ferrari Red Bull Mercedes McLaren"
+                            class="cat-card__img" loading="lazy">
+                        <div class="cat-card__overlay"></div>
                     </div>
-                    <div class="catalogo-info">
-                        <h3>F1</h3>
-                        <p>Equipos y pilotos de Fórmula 1</p>
-                        <a href="/pages/tienda.html?category=f1" class="catalogo-btn" onclick="event.stopPropagation()">
+                    <div class="cat-card__body">
+                        <h3 class="cat-card__title">Fórmula 1</h3>
+                        <p class="cat-card__desc">Equipos y pilotos de Fórmula 1</p>
+                        <a href="https://x.yupoo.com/photos/yiyisports2016/collections/3551571" class="cat-card__btn" target="_blank" rel="noopener">
                             Ver colección <i class="fas fa-arrow-right"></i>
                         </a>
                     </div>
                 </div>
-                <div class="catalogo-card catalogo-card-clickable" data-link="/pages/tienda.html?category=f1">
-                    <div class="catalogo-img-wrap">
-                        <img src="/assets/colecciones/mando.png" alt="Mandos PS4 DualShock 4 calidad premium gaming"
-                            class="catalogo-img" loading="lazy">
-                    </div>
-                    <div class="catalogo-info">
-                        <h3>Mandos PS4</h3>
-                        <p>Dualshock 4 calidad 1.1</p>
-                        <a href="https://docs.google.com/document/d/15vg3VeVf8gs3R7r6JEaG8_mdgA05hKDKg9mMsdKFVWc/edit?tab=t.0"
-                            class="catalogo-btn" onclick="event.stopPropagation()">
-                            Ver colección <i class="fas fa-arrow-right"></i>
-                        </a>
-                    </div>
-                </div>
+
             </div>
         </section>
     </main>
@@ -211,51 +198,6 @@
     <script type="module" src="../js/firebase-global.js"></script>
     <script type="module" src="../js/carrito.js"></script>
 
-
-    <script>
-        document.addEventListener('DOMContentLoaded', () => {
-
-            document.querySelectorAll('.dropdown-btn').forEach(btn => {
-                btn.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                    const card = btn.closest('.catalogo-card');
-
-                    document.querySelectorAll('.catalogo-card.dropdown-open').forEach(openCard => {
-                        if (openCard !== card) openCard.classList.remove('dropdown-open');
-                    });
-
-                    card.classList.toggle('dropdown-open');
-                });
-            });
-
-
-            document.querySelectorAll('.catalogo-card-clickable').forEach(card => {
-                card.addEventListener('click', (e) => {
-                    if (e.target.closest('.dropdown-menu') || e.target.closest('.dropdown-btn') || e.target.closest('.catalogo-btn')) {
-                        return;
-                    }
-                    const link = card.dataset.link;
-                    if (link) window.location.href = link;
-                });
-            });
-
-
-            document.querySelectorAll('.dropdown-menu a').forEach(link => {
-                link.addEventListener('click', (e) => {
-                    e.stopPropagation();
-                });
-            });
-
-
-            document.addEventListener('click', (e) => {
-                if (!e.target.closest('.catalogo-card')) {
-                    document.querySelectorAll('.catalogo-card.dropdown-open').forEach(card => {
-                        card.classList.remove('dropdown-open');
-                    });
-                }
-            });
-        });
-    </script>
 </body>
 
 </html>

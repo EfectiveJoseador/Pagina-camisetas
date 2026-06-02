@@ -475,9 +475,6 @@ body.low-performance * {
     transition: padding-bottom 0.3s ease;
 }
 
-.collections-section:has(.dropdown-open) {
-    padding-bottom: 12rem;
-}
 
 .section-title {
     font-family: var(--font-heading);
@@ -1445,189 +1442,294 @@ a.catalogo-btn:hover,
 
 
 
-.catalogo-carousel {
+/* =============================================
+   CATÁLOGO GRID — nuevo diseño sin carrusel
+   ============================================= */
+
+.catalogo-grid {
+    display: grid;
+    grid-template-columns: 1.6fr 1fr 1fr;
+    grid-template-rows: auto auto;
+    gap: 1.25rem;
+    animation: fadeIn 0.7s ease;
+}
+
+/* La tarjeta destacada ocupa las 2 filas de la 1ª columna */
+.cat-card--featured {
+    grid-row: 1 / 3;
+}
+
+/* ---------- Tarjeta base ---------- */
+.cat-card {
     position: relative;
-    width: 100%;
-    max-width: 100%;
-    animation: fadeIn 1s ease 0.5s backwards;
-    overflow-x: clip;
-    overflow-y: visible;
-    padding-bottom: 220px;
-    margin-bottom: -220px;
-}
-
-.catalogo-carousel .carousel-container {
-    position: relative;
-    overflow: visible;
-    padding: 0 1rem;
-    width: 100%;
-}
-
-.catalogo-carousel .carousel-track {
-    display: flex;
-    gap: 1.5rem;
-
-    transform: translate3d(0, 0, 0);
-    will-change: transform;
-}
-
-
-.catalogo-carousel .carousel-track.dragging {
-    will-change: transform;
-
-}
-
-.catalogo-carousel .carousel-track.dragging,
-.catalogo-carousel .carousel-track.dragging * {
-    transition: none !important;
-}
-
-.catalogo-carousel .carousel-track.dragging .catalogo-card,
-.catalogo-carousel .carousel-track.dragging .catalogo-card * {
-    pointer-events: none;
-    animation: none !important;
-}
-
-
-@media (hover: none) {
-    .catalogo-card:hover {
-        transform: none;
-    }
-
-    .catalogo-card:hover .catalogo-img {
-        transform: none;
-    }
-
-    .catalogo-img {
-        transition: none;
-    }
-
-    .catalogo-card {
-        transition: none;
-    }
-}
-
-.catalogo-carousel .carousel-arrows {
-    display: flex;
-    justify-content: center;
-    gap: 1rem;
-    margin-top: 1.5rem;
-}
-
-.catalogo-carousel:has(.dropdown-open) .carousel-arrows {
-    opacity: 0;
-    pointer-events: none;
-}
-
-.catalogo-carousel .carousel-arrow {
-    position: relative;
-    top: auto;
-    left: auto;
-    right: auto;
-    transform: none;
+    border-radius: 18px;
+    overflow: hidden;
     background: var(--bg-card);
-    border: 2px solid var(--border);
-    width: 45px;
-    height: 45px;
-    border-radius: 50%;
+    border: var(--card-border);
+    box-shadow: 0 4px 24px rgba(0,0,0,0.10);
+    transition: transform 0.38s cubic-bezier(0.22,1,0.36,1),
+                box-shadow 0.38s cubic-bezier(0.22,1,0.36,1),
+                border-color 0.3s ease;
+    display: flex;
+    flex-direction: column;
+    min-height: 240px;
+    /* Forzar que la altura sea suficiente para el fondo absoluto */
+    height: auto;
+}
+
+.cat-card:hover {
+    transform: translateY(-6px) scale(1.015);
+    box-shadow: 0 18px 48px rgba(0,0,0,0.16),
+                0 0 0 1.5px rgba(99,102,241,0.22),
+                0 0 32px rgba(99,102,241,0.10);
+    border-color: rgba(99,102,241,0.28);
+}
+
+/* Borde superior brillante al hover */
+.cat-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, #6366f1, #8b5cf6, #a78bfa);
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    z-index: 5;
+}
+
+.cat-card:hover::before { opacity: 1; }
+
+/* ---------- Fondo con imagen ---------- */
+.cat-card__bg {
+    position: absolute;
+    inset: 0;
+    overflow: hidden;
+}
+
+.cat-card__img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+    transition: transform 0.55s cubic-bezier(0.22,1,0.36,1);
+    opacity: 0.18;
+}
+
+[data-theme="dark"] .cat-card__img { opacity: 0.12; }
+
+.cat-card:hover .cat-card__img { transform: scale(1.08); opacity: 0.25; }
+[data-theme="dark"] .cat-card:hover .cat-card__img { opacity: 0.18; }
+
+.cat-card__overlay {
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(160deg,
+        rgba(99,102,241,0.06) 0%,
+        transparent 60%,
+        rgba(139,92,246,0.04) 100%);
+    pointer-events: none;
+}
+
+/* ---------- Cuerpo del texto ---------- */
+.cat-card__body {
+    position: relative;
+    z-index: 2;
+    display: flex;
+    flex-direction: column;
+    padding: 1.6rem 1.75rem;
+    height: 100%;
+    flex-grow: 1;
+}
+
+.cat-card--featured .cat-card__body { padding: 2rem 2.25rem; }
+
+/* Badge */
+.cat-card__badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: linear-gradient(135deg, rgba(245,158,11,0.15), rgba(245,158,11,0.08));
+    border: 1px solid rgba(245,158,11,0.3);
+    color: #f59e0b;
+    font-size: 0.72rem;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    padding: 0.3rem 0.75rem;
+    border-radius: 50px;
+    width: fit-content;
+    margin-bottom: 0.9rem;
+}
+
+/* Título */
+.cat-card__title {
+    font-family: var(--font-heading);
+    font-size: 1.45rem;
+    font-weight: 800;
+    color: var(--text-main);
+    margin: 0 0 0.45rem;
+    line-height: 1.2;
+    letter-spacing: -0.02em;
+}
+
+.cat-card--featured .cat-card__title { font-size: 1.9rem; }
+
+/* Descripción */
+.cat-card__desc {
+    color: var(--text-muted);
+    font-size: 0.88rem;
+    line-height: 1.5;
+    margin: 0 0 1.2rem;
+    flex-grow: 1;
+}
+
+.cat-card--featured .cat-card__desc { font-size: 0.95rem; max-width: 340px; }
+
+/* Botón simple (tarjetas normales) */
+.cat-card__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+    color: #fff !important;
+    padding: 0.65rem 1.25rem;
+    border-radius: 10px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    width: fit-content;
+    transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+    position: relative;
+    overflow: hidden;
+    margin-top: auto;
+}
+
+.cat-card__btn::before {
+    content: '';
+    position: absolute;
+    top: 0; left: -100%;
+    width: 100%; height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.22), transparent);
+    transition: left 0.5s;
+}
+
+.cat-card__btn:hover::before { left: 100%; }
+
+.cat-card__btn:hover {
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 22px rgba(99,102,241,0.42), 0 0 14px rgba(139,92,246,0.22);
+}
+
+.cat-card__btn i {
+    font-size: 0.72rem;
+    transition: transform 0.3s ease;
+}
+
+.cat-card__btn:hover i { transform: translateX(3px); }
+
+/* ---------- Links directos (tarjeta fútbol) ---------- */
+.cat-card__links {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.55rem;
+    margin-top: auto;
+}
+
+.cat-link {
     display: flex;
     align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    z-index: 5;
-    transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
-    color: var(--text-main);
-    box-shadow: var(--shadow-sm);
-}
-
-.catalogo-carousel .carousel-arrow:hover {
+    gap: 0.55rem;
+    padding: 0.65rem 1rem;
     background: var(--bg-body);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    color: var(--text-main);
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.22,1,0.36,1);
+    white-space: nowrap;
+}
+
+.cat-link i {
+    font-size: 0.8rem;
     color: var(--primary);
-    border-color: var(--primary);
-    transform: scale(1.15);
-    box-shadow: 0 4px 20px rgba(99, 102, 241, 0.25), 0 0 15px rgba(99, 102, 241, 0.15);
-}
-
-.catalogo-carousel .carousel-arrow.disabled {
-    opacity: 0.3;
-    cursor: not-allowed;
-    pointer-events: none;
-}
-
-
-.catalogo-carousel .catalogo-card {
-    min-width: 220px;
-    max-width: 220px;
-    width: 220px;
     flex-shrink: 0;
+    transition: transform 0.25s ease;
 }
 
-@media (max-width: 768px) {
-    .catalogo-carousel .carousel-container {
-        position: relative;
-        padding: 0 1rem;
-        padding-right: 0;
-        overflow: visible;
+.cat-link:hover {
+    background: linear-gradient(135deg, rgba(99,102,241,0.10), rgba(139,92,246,0.07));
+    border-color: rgba(99,102,241,0.35);
+    color: var(--primary);
+    transform: translateX(2px);
+}
+
+.cat-link:hover i { transform: scale(1.2) rotate(-5deg); }
+
+/* ---------- Responsive ---------- */
+@media (max-width: 1024px) {
+    .catalogo-grid {
+        grid-template-columns: 1fr 1fr;
+        grid-template-rows: auto;
     }
 
-    .catalogo-carousel .carousel-container::-webkit-scrollbar {
-        display: none;
-    }
-
-    .catalogo-carousel .carousel-track {
-
-        gap: 1rem;
-        padding-right: 1rem;
-
-    }
-
-    .catalogo-carousel .catalogo-card {
-        scroll-snap-align: start;
-        min-width: 45vw;
-        max-width: 45vw;
-        width: 45vw;
-    }
-
-    .catalogo-carousel .carousel-arrow {
-        display: none;
-    }
-
-
-    .catalogo-carousel::after {
-        content: '';
-        position: absolute;
-        top: 0;
-        right: 0;
-        width: 50px;
-        height: 100%;
-        background: linear-gradient(to left, var(--bg-body) 0%, transparent 100%);
-        pointer-events: none;
-        z-index: 5;
-        opacity: 0.8;
-        transition: opacity 0.3s ease;
-    }
-
-
-    .catalogo-carousel.scrolled::after {
-        opacity: 0;
+    .cat-card--featured {
+        grid-column: 1 / 3;
+        grid-row: auto;
     }
 }
 
-@media (max-width: 480px) {
-    .catalogo-carousel .carousel-container {
-        padding: 0 0.75rem;
+@media (max-width: 640px) {
+    .catalogo-grid {
+        grid-template-columns: 1fr;
     }
 
-    .catalogo-carousel .carousel-track {
-        gap: 0.75rem;
+    .cat-card--featured {
+        grid-column: 1;
     }
 
-    .catalogo-carousel .catalogo-card {
-        min-width: 160px;
-        max-width: 160px;
-        width: 160px;
-    }
+    .cat-card { min-height: 160px; }
+    .cat-card__body { padding: 1.25rem 1.4rem; }
+    .cat-card--featured .cat-card__body { padding: 1.5rem 1.6rem; }
+    .cat-card__title { font-size: 1.25rem; }
+    .cat-card--featured .cat-card__title { font-size: 1.5rem; }
+    .cat-card__links { grid-template-columns: 1fr 1fr; gap: 0.45rem; }
+    .cat-link { font-size: 0.78rem; padding: 0.55rem 0.75rem; }
 }
+
+@media (max-width: 400px) {
+    .cat-card__links { grid-template-columns: 1fr; }
+}
+
+/* ── Overrides anti-conflicto con reglas globales ── */
+/* Prevenir que el hyphens:auto global corte texto en los links */
+.cat-link,
+.cat-card__title,
+.cat-card__desc,
+.cat-card__badge {
+    hyphens: none !important;
+    -webkit-hyphens: none !important;
+    overflow-wrap: normal !important;
+    word-break: normal !important;
+}
+
+/* Prevenir que .btn global (width:100%) afecte al botón de la tarjeta */
+.cat-card__btn {
+    width: fit-content !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+}
+
+/* La tarjeta featured debe ser bastante alta para el efecto de fondo */
+.cat-card--featured {
+    min-height: 380px;
+}
+
+
 
 
 .collections-section .section-header {
