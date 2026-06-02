@@ -1364,6 +1364,8 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 let lightboxImages = [];
 let currentLightboxIndex = 0;
+let currentLightboxKeyIndex = 0;
+let jumpTimeout = null;
 let zoomLevel = 1;
 let isDragging = false;
 let startX = 0, startY = 0;
@@ -1578,16 +1580,29 @@ function openLightbox() {
     currentLightboxIndex = lightboxImages.findIndex(src => src === currentMainSrc);
     if (currentLightboxIndex === -1) currentLightboxIndex = 0;
 
+    const N = lightboxImages.length;
+    currentLightboxKeyIndex = N + currentLightboxIndex;
+
     if (thumbsContainer) {
-        thumbsContainer.innerHTML = lightboxImages.map((src, i) => `
-            <div class="lightbox-thumb ${i === currentLightboxIndex ? 'active' : ''}" data-index="${i}">
-                <img src="${src}" alt="Miniatura ${i + 1}">
+        const paddedThumbs = [
+            ...lightboxImages.map((src, i) => ({ src, i, k: i })),
+            ...lightboxImages.map((src, i) => ({ src, i, k: N + i })),
+            ...lightboxImages.map((src, i) => ({ src, i, k: 2 * N + i }))
+        ];
+
+        thumbsContainer.innerHTML = paddedThumbs.map(item => `
+            <div class="lightbox-thumb ${item.k === currentLightboxKeyIndex ? 'active' : ''}" 
+                 data-index="${item.i}" 
+                 data-key="${item.k}">
+                <img src="${item.src}" alt="Miniatura ${item.i + 1}">
             </div>
         `).join('');
 
         thumbsContainer.querySelectorAll('.lightbox-thumb').forEach(thumb => {
             thumb.addEventListener('click', () => {
+                const clickedKey = parseInt(thumb.dataset.key);
                 currentLightboxIndex = parseInt(thumb.dataset.index);
+                currentLightboxKeyIndex = clickedKey;
                 updateLightboxImage();
             });
         });
@@ -1597,6 +1612,9 @@ function openLightbox() {
     lightboxImage.src = lightboxImages[currentLightboxIndex];
     lightbox.classList.add('active');
     document.body.style.overflow = 'hidden';
+    setTimeout(() => {
+        scrollActiveThumbIntoView(currentLightboxKeyIndex, false);
+    }, 50);
 }
 
 function closeLightbox() {
@@ -1609,9 +1627,59 @@ function closeLightbox() {
 }
 
 function navigateLightbox(direction) {
-    currentLightboxIndex = (currentLightboxIndex + direction + lightboxImages.length) % lightboxImages.length;
+    const N = lightboxImages.length;
+    currentLightboxIndex = (currentLightboxIndex + direction + N) % N;
+
+    const targets = [currentLightboxIndex, N + currentLightboxIndex, 2 * N + currentLightboxIndex];
+    let closestKey = targets[0];
+    let minDiff = Math.abs(closestKey - currentLightboxKeyIndex);
+    for (let j = 1; j < targets.length; j++) {
+        const diff = Math.abs(targets[j] - currentLightboxKeyIndex);
+        if (diff < minDiff) {
+            minDiff = diff;
+            closestKey = targets[j];
+        }
+    }
+    currentLightboxKeyIndex = closestKey;
+
     updateLightboxImage();
     resetZoom();
+}
+
+function scrollActiveThumbIntoView(keyIndex, animate = true) {
+    const container = document.getElementById('lightbox-thumbnails');
+    if (!container) return;
+    const activeThumb = container.querySelector(`.lightbox-thumb[data-key="${keyIndex}"]`);
+    if (!activeThumb) return;
+
+    const containerWidth = container.clientWidth;
+    const thumbWidth = activeThumb.offsetWidth;
+    const thumbLeft = activeThumb.offsetLeft;
+
+    const targetScrollLeft = thumbLeft - (containerWidth / 2) + (thumbWidth / 2);
+
+    container.scrollTo({
+        left: targetScrollLeft,
+        behavior: animate ? 'smooth' : 'auto'
+    });
+
+    if (animate) {
+        const N = lightboxImages.length;
+        if (keyIndex < N || keyIndex >= 2 * N) {
+            if (jumpTimeout) clearTimeout(jumpTimeout);
+            jumpTimeout = setTimeout(() => {
+                const middleKey = N + (keyIndex % N);
+                currentLightboxKeyIndex = middleKey;
+
+                document.querySelectorAll('.lightbox-thumb').forEach((thumb) => {
+                    const key = parseInt(thumb.dataset.key);
+                    thumb.classList.toggle('active', key === middleKey);
+                });
+
+                scrollActiveThumbIntoView(middleKey, false);
+            }, 300);
+        }
+    }
 }
 
 function updateLightboxImage() {
@@ -1619,10 +1687,12 @@ function updateLightboxImage() {
     if (lightboxImage) {
         lightboxImage.src = lightboxImages[currentLightboxIndex];
     }
-    document.querySelectorAll('.lightbox-thumb').forEach((thumb, i) => {
-        thumb.classList.toggle('active', i === currentLightboxIndex);
+    document.querySelectorAll('.lightbox-thumb').forEach((thumb) => {
+        const key = parseInt(thumb.dataset.key);
+        thumb.classList.toggle('active', key === currentLightboxKeyIndex);
     });
     resetZoom();
+    scrollActiveThumbIntoView(currentLightboxKeyIndex, true);
 }
 function initStickyCTA() {
     const stickyBar = document.getElementById('sticky-cta');

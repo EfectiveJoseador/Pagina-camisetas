@@ -4429,8 +4429,8 @@ const products = [
     },
     {
         "id": 166157,
-        "name": "Real Madrid 03/04 Local Retro",
-        "slug": "real-madrid-0304-local-retro",
+        "name": "Atlético Madrid 03/04 Local Retro",
+        "slug": "atletico-madrid-0304-local-retro",
         "category": "futbol",
         "league": "laliga",
         "image": "/assets/productos/Yupoo/166157/1.webp",
@@ -4856,8 +4856,8 @@ const products = [
     },
     {
         "id": 943783,
-        "name": "Real Madrid 04/05 Local Retro",
-        "slug": "real-madrid-0405-local-retro",
+        "name": "Atlético Madrid 04/05 Local Retro",
+        "slug": "atletico-madrid-0405-local-retro",
         "category": "futbol",
         "league": "laliga",
         "image": "/assets/productos/Yupoo/943783/1.webp",
