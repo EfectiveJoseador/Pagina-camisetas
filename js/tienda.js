@@ -2,6 +2,7 @@
 
 import products from './products-data.js';
 import Analytics from './analytics.js';
+import { showUpsellModal } from './upsell-modal.js';
 const CONFIG = {
     PRODUCTS_PER_PAGE: 20,
     LAZY_LOAD_THRESHOLD: '200px',
@@ -170,7 +171,14 @@ function goToPage(page) {
     if (page < 1 || page > totalPages) return;
     currentPage = page;
     renderProducts();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    const targetElement = document.querySelector('#product-grid .product-card') || document.getElementById('product-grid');
+    if (targetElement) {
+        const headerHeight = document.querySelector('.main-header')?.offsetHeight || 70;
+        const top = targetElement.getBoundingClientRect().top + window.scrollY - headerHeight - 16;
+        window.scrollTo({ top, behavior: 'smooth' });
+    } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
 }
 
 function renderPagination() {
@@ -568,7 +576,6 @@ function handleQuickAddSubmit(form, product) {
     const numberInput = form.querySelector('.quick-number');
     const patchInput = form.querySelector('.quick-patch-input');
 
-    
     const size = sizeSelect?.value;
     if (!size) {
         if (window.Toast) {
@@ -582,7 +589,6 @@ function handleQuickAddSubmit(form, product) {
     const name = nameInput?.value?.trim().toUpperCase() || '';
     const number = numberInput?.value?.trim() || '';
 
-    
     if ((name && !number) || (!name && number)) {
         if (window.Toast) {
             window.Toast.error('El nombre y dorsal deben ir juntos');
@@ -605,7 +611,6 @@ function handleQuickAddSubmit(form, product) {
         totalPrice += 1.5;
     }
 
-    
     const customization = {
         size: size,
         version: 'aficionado', 
@@ -625,27 +630,19 @@ function handleQuickAddSubmit(form, product) {
         customization: customization
     };
 
-    
     addToCart(cartItem);
 
-    
     closeQuickAddPanel(product.id.toString());
 
-    
     form.reset();
     const optionalFields = form.querySelector('.optional-fields');
     const optionalToggle = form.querySelector('.optional-toggle');
     if (optionalFields) optionalFields.classList.remove('show');
     if (optionalToggle) optionalToggle.classList.remove('expanded');
 
-    
-    if (window.Toast) {
-        window.Toast.success(`${product.name} añadido al carrito`);
-    }
-    if (window.CartBadge) {
-        window.CartBadge.animate();
-    }
+    showUpsellModal(product, size, totalPrice);
 }
+
 function init() {
     
     const cachedOrder = getProductOrderFromSession();
@@ -1384,13 +1381,11 @@ function updatePreview() {
     };
     addToCart(cartItem);
     if (Analytics) Analytics.trackAddToCart(cartItem);
+    const addedProduct = currentProduct;
+    const addedSize = customization.size;
+    const addedPrice = totalPrice;
     closeModal();
-    if (window.Toast) {
-        window.Toast.success(`${currentProduct.name} añadido al carrito`);
-    }
-    if (window.CartBadge) {
-        window.CartBadge.animate();
-    }
+    showUpsellModal(addedProduct, addedSize, addedPrice);
 }
 function addToCart(item) {
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');

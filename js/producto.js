@@ -1,5 +1,6 @@
 import products from './products-data.js';
 import Analytics from './analytics.js';
+import { showUpsellModal } from './upsell-modal.js';
 import Health from './health-check.js';
 const patchPrices = {
     none: 0,
@@ -754,12 +755,6 @@ function addToCart() {
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
 
-    if (window.Toast) {
-        window.Toast.success(`${product.name} añadido al carrito`);
-    } else {
-        showToast(`${product.name} añadido al carrito`);
-    }
-
     if (window.CartBadge) {
         window.CartBadge.animate();
     }
@@ -767,6 +762,8 @@ function addToCart() {
     if (window.Analytics) {
         window.Analytics.trackAddToCart(product, quantity, customization);
     }
+
+    showUpsellModal(product, selectedSize, totalPrice);
 }
 function showToast(message) {
     const existingToast = document.querySelector('.cart-toast');
