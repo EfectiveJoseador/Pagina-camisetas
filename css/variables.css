@@ -83,6 +83,22 @@
     --sticky-cta-height: 85px;
 }
 
+/* System Dark Mode Fallback */
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg-body: var(--bg-body-dark);
+        --bg-card: var(--bg-card-dark);
+        --text-main: var(--text-main-dark);
+        --text-muted: var(--text-muted-dark);
+        --border: var(--border-dark);
+        --primary: var(--primary-dark);
+        --accent: var(--accent-dark);
+    }
+}
+
+/* Manual Dark Theme Override */
+body.dark-theme,
+html.dark-theme,
 [data-theme="dark"] {
     --bg-body: var(--bg-body-dark);
     --bg-card: var(--bg-card-dark);
@@ -91,4 +107,17 @@
     --border: var(--border-dark);
     --primary: var(--primary-dark);
     --accent: var(--accent-dark);
+}
+
+/* Manual Light Theme Override */
+body.light-theme,
+html.light-theme,
+[data-theme="light"] {
+    --bg-body: var(--bg-body-light);
+    --bg-card: var(--bg-card-light);
+    --text-main: var(--text-main-light);
+    --text-muted: var(--text-muted-light);
+    --border: var(--border-light);
+    --primary: var(--primary-light);
+    --accent: var(--accent-light);
 }

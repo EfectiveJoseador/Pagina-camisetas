@@ -637,7 +637,7 @@
 #related-grid {
     position: relative;
     width: 100%;
-    display: block;
+    display: flex;
 }
 
 .carousel-container {

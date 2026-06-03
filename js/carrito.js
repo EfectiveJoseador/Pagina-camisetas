@@ -47,6 +47,7 @@ const Cart = {
     save() {
         localStorage.setItem('cart', JSON.stringify(this.items));
         this.updateHeaderCount();
+        window.dispatchEvent(new CustomEvent('cart:updated'));
     },
 
     add(id, qty = 1, size = 'M', version = 'aficionado', customizations = {}) {
@@ -283,67 +284,69 @@ const Cart = {
         if (emptyMsg) emptyMsg.classList.add('hidden');
         if (checkoutBtn) checkoutBtn.classList.remove('hidden');
 
+        const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 1, '3XL': 2, '4XL': 2 };
+
         this.items.forEach((item, index) => {
             const product = products.find(p => p.id === item.id);
-            if (!product) return;
-            const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 1, '3XL': 2, '4XL': 2 };
-            const custom = item.customization || {};
-            const size = custom.size || item.size || '';
-            const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
-            const version = custom.version || item.version || 'aficionado';
-            const versionSurcharge = version === 'jugador' ? 5 : 0;
-            const patch = custom.patch || '';
-            const patchSurcharge = patch ? 1.5 : 0;
-            const hasName = !!(custom.name || '');
-            const hasNumber = !!(custom.number || '');
-            const personSurcharge = (hasName && hasNumber) ? 2 : 0;
-            const baseProductPrice = item.basePrice || product.price;
-            const displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
-            const name = custom.name || '';
-            const number = custom.number || '';
-            const patchDisplay = patch || 'none';
-            let customDetails = `Talla: ${size}`;
-            if (version === 'jugador') {
-                customDetails += ' | Versión: Jugador';
-            } else {
-                customDetails += ' | Versión: Aficionado';
-            }
-            if (name) {
-                customDetails += ` | Nombre: ${sanitizeHTML(name)}`;
-            }
-            if (number) {
-                customDetails += ` | Dorsal: ${sanitizeHTML(number)}`;
-            }
-            if (patchDisplay && patchDisplay !== 'none') {
-                const patchNames = {
-                    liga: 'Parche Liga',
-                    champions: 'Parche Champions',
-                    europa: 'Parche Europa League',
-                    premier: 'Parche Premier',
-                    seriea: 'Parche Serie A',
-                    mundial: 'Parche Mundial de Clubes',
-                    copamundo: 'Parche Copa del Mundo',
-                    conmemorativo: 'Parche Conmemorativo'
-                };
-                customDetails += ` | ${patchNames[patchDisplay] || patchDisplay}`;
-            }
+            if (!product && !item.isAccessory) return;
 
             const qty = item.quantity || item.qty || 1;
+            let displayName = '';
+            let displayPrice = 0;
+            let displayDetails = '';
+            let imgUrl = '';
+
+            if (item.isAccessory) {
+                displayName = item.name;
+                displayPrice = item.price;
+                displayDetails = 'Accesorio adicional';
+                imgUrl = '/assets/logo/logo.png';
+            } else {
+                displayName = product.name;
+                const custom = item.customization || {};
+                const size = custom.size || item.size || '';
+                const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
+                const version = custom.version || item.version || 'aficionado';
+                const versionSurcharge = version === 'jugador' ? 5 : 0;
+                const patch = custom.patch || '';
+                const patchSurcharge = patch ? 1.5 : 0;
+                const hasName = !!(custom.name || '');
+                const hasNumber = !!(custom.number || '');
+                const personSurcharge = (hasName && hasNumber) ? 2 : 0;
+                const baseProductPrice = item.basePrice || product.price;
+                displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
+                
+                displayDetails = `Talla: ${size} / ${version === 'jugador' ? 'Jugador' : 'Aficionado'}`;
+                if (custom.name) displayDetails += ` | Nombre: ${sanitizeHTML(custom.name)}`;
+                if (custom.number) displayDetails += ` | Dorsal: ${sanitizeHTML(custom.number)}`;
+                if (patch && patch !== 'none') displayDetails += ` | Parche: ${sanitizeHTML(patch)}`;
+                imgUrl = product.image;
+            }
 
             const el = document.createElement('div');
             el.className = 'cart-item';
             el.innerHTML = `
                 <div class="cart-item-top">
-                    <a href="/pages/producto.html?id=${product.id}" class="cart-item-img-link">
+                    ${item.isAccessory ? `
                         <div class="cart-item-img-wrapper">
-                            <img src="${product.image}" alt="${sanitizeHTML(product.name)}" class="cart-item-img">
+                            <img src="${imgUrl}" alt="${sanitizeHTML(displayName)}" class="cart-item-img">
                         </div>
-                    </a>
-                    <div class="cart-item-header">
-                        <a href="/pages/producto.html?id=${product.id}" class="cart-item-title-link">
-                            <h3 class="cart-item-title">${sanitizeHTML(product.name)}</h3>
+                    ` : `
+                        <a href="/pages/producto.html?id=${product.id}" class="cart-item-img-link">
+                            <div class="cart-item-img-wrapper">
+                                <img src="${imgUrl}" alt="${sanitizeHTML(displayName)}" class="cart-item-img">
+                            </div>
                         </a>
-                        <p class="cart-item-meta">${customDetails}</p>
+                    `}
+                    <div class="cart-item-header">
+                        ${item.isAccessory ? `
+                            <h3 class="cart-item-title">${sanitizeHTML(displayName)}</h3>
+                        ` : `
+                            <a href="/pages/producto.html?id=${product.id}" class="cart-item-title-link">
+                                <h3 class="cart-item-title">${sanitizeHTML(displayName)}</h3>
+                            </a>
+                        `}
+                        <p class="cart-item-meta">${displayDetails}</p>
                     </div>
                 </div>
                 <div class="cart-item-footer">
@@ -355,7 +358,7 @@ const Cart = {
                         </div>
                         <button class="btn-remove touch-target" data-index="${index}" aria-label="Eliminar"><i class="fas fa-trash-alt"></i></button>
                     </div>
-                    <div class="cart-item-price">€${displayPrice.toFixed(2)}</div>
+                    <div class="cart-item-price">€${(displayPrice * qty).toFixed(2)}</div>
                 </div>
             `;
             container.appendChild(el);
@@ -395,35 +398,88 @@ const Cart = {
     renderCheckoutPage(container) {
         container.innerHTML = '';
         const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 1, '3XL': 2, '4XL': 2 };
-        this.items.forEach(item => {
+        this.items.forEach((item, index) => {
             const product = products.find(p => p.id === item.id);
-            if (!product) return;
+            if (!product && !item.isAccessory) return;
+
             const qty = item.quantity || item.qty || 1;
-            const custom = item.customization || {};
-            const size = custom.size || item.size || 'N/A';
-            const version = custom.version || item.version || 'aficionado';
-            // Recalcular precio completo desde datos de customization
-            const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
-            const versionSurcharge = version === 'jugador' ? 5 : 0;
-            const patch = custom.patch || '';
-            const patchSurcharge = patch ? 1.5 : 0;
-            const hasName = !!(custom.name || '');
-            const hasNumber = !!(custom.number || '');
-            const personSurcharge = (hasName && hasNumber) ? 2 : 0;
-            const baseProductPrice = item.basePrice || product.price;
-            const displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
+            let displayName = '';
+            let displayPrice = 0;
+            let displayDetails = '';
+            let imgUrl = '';
+
+            if (item.isAccessory) {
+                displayName = item.name;
+                displayPrice = item.price;
+                displayDetails = 'Accesorio adicional';
+                imgUrl = '/assets/logo/logo.png';
+            } else {
+                displayName = product.name;
+                const custom = item.customization || {};
+                const size = custom.size || item.size || 'N/A';
+                const version = custom.version || item.version || 'aficionado';
+                const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
+                const versionSurcharge = version === 'jugador' ? 5 : 0;
+                const patch = custom.patch || '';
+                const patchSurcharge = patch ? 1.5 : 0;
+                const hasName = !!(custom.name || '');
+                const hasNumber = !!(custom.number || '');
+                const personSurcharge = (hasName && hasNumber) ? 2 : 0;
+                const baseProductPrice = item.basePrice || product.price;
+                displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
+                
+                displayDetails = `Talla: ${size} / ${version === 'jugador' ? 'Jugador' : 'Aficionado'}`;
+                if (custom.name) displayDetails += ` | Nombre: ${sanitizeHTML(custom.name)}`;
+                if (custom.number) displayDetails += ` | Dorsal: ${sanitizeHTML(custom.number)}`;
+                if (patch && patch !== 'none') displayDetails += ` | Parche: ${sanitizeHTML(patch)}`;
+                imgUrl = product.image;
+            }
 
             const el = document.createElement('div');
             el.className = 'checkout-item-mini';
+            el.style.cssText = 'display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid var(--border);';
             el.innerHTML = `
-                <img src="${product.image}" alt="${sanitizeHTML(product.name)}">
-                <div>
-                    <h4>${sanitizeHTML(product.name)} x${qty}</h4>
-                    <p>${sanitizeHTML(size)} / ${version === 'jugador' ? 'Jugador' : 'Aficionado'}</p>
+                <div style="display:flex; align-items:center; gap:0.75rem; flex:1; min-width:0;">
+                    <img src="${imgUrl}" alt="${sanitizeHTML(displayName)}" style="width:44px; height:44px; object-fit:contain; border:1px solid var(--border); border-radius:8px; padding:2px; background:#fff; flex-shrink:0;">
+                    <div style="min-width:0; flex:1;">
+                        <h4 style="font-size:0.85rem; font-weight:600; margin:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:left;">${sanitizeHTML(displayName)}</h4>
+                        <p style="font-size:0.75rem; color:var(--text-muted); margin:2px 0 0 0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:left;">${displayDetails}</p>
+                    </div>
                 </div>
-                <span>€${(displayPrice * qty).toFixed(2)}</span>
+                <div style="display:flex; align-items:center; gap:0.5rem; flex-shrink:0;">
+                    <!-- Editable Controls in Checkout (Mejora 3) -->
+                    <div class="quantity-selector touch-optimized" style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden; background:var(--bg-body); height:28px;">
+                        <button class="qty-btn-minus-checkout touch-target" data-index="${index}" style="border:none; background:transparent; width:24px; height:24px; cursor:pointer; color:var(--text-main); display:flex; align-items:center; justify-content:center;"><i class="fas fa-minus" style="font-size:0.7rem;"></i></button>
+                        <input type="number" value="${qty}" style="width:18px; border:none; text-align:center; background:transparent; font-size:0.8rem; font-weight:600; color:var(--text-main); pointer-events:none; padding:0;" readonly>
+                        <button class="qty-btn-plus-checkout touch-target" data-index="${index}" style="border:none; background:transparent; width:24px; height:24px; cursor:pointer; color:var(--text-main); display:flex; align-items:center; justify-content:center;"><i class="fas fa-plus" style="font-size:0.7rem;"></i></button>
+                    </div>
+                    <button class="btn-remove-checkout" data-index="${index}" style="border:none; background:transparent; color:var(--text-muted); cursor:pointer; font-size:0.9rem; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:6px; transition:all 0.2s;"><i class="fas fa-trash-alt"></i></button>
+                    <span style="font-size:0.85rem; font-weight:700; min-width:55px; text-align:right;">€${(displayPrice * qty).toFixed(2)}</span>
+                </div>
             `;
             container.appendChild(el);
+        });
+
+        // Event listeners for checkout controls
+        container.querySelectorAll('.qty-btn-minus-checkout').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const index = parseInt(btn.dataset.index);
+                const currentQty = this.items[index].quantity || this.items[index].qty || 1;
+                this.updateQty(index, currentQty - 1);
+            });
+        });
+        container.querySelectorAll('.qty-btn-plus-checkout').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const index = parseInt(btn.dataset.index);
+                const currentQty = this.items[index].quantity || this.items[index].qty || 1;
+                this.updateQty(index, currentQty + 1);
+            });
+        });
+        container.querySelectorAll('.btn-remove-checkout').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const index = parseInt(btn.dataset.index);
+                this.remove(index);
+            });
         });
 
         const calculations = this.calculateTotal();
@@ -443,11 +499,103 @@ const Cart = {
     }
 };
 
+function showShareModal(shareUrl) {
+    let overlay = document.getElementById('share-modal-overlay');
+    if (!overlay) {
+        overlay = document.createElement('div');
+        overlay.id = 'share-modal-overlay';
+        overlay.className = 'share-modal-overlay';
+        document.body.appendChild(overlay);
+    }
+    
+    const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(shareUrl)}`;
+    
+    overlay.innerHTML = `
+        <div class="share-modal-content">
+            <button class="share-modal-close">&times;</button>
+            <h3 style="margin-top:0.5rem; font-family:var(--font-heading); font-weight:800; font-size:1.25rem; display:flex; align-items:center; justify-content:center; gap:0.5rem;"><i class="fas fa-share-alt" style="color:var(--accent);"></i>Compartir Carrito</h3>
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.5rem;">Cualquiera con este enlace o QR podrá abrir y fusionar tu carrito en otro dispositivo.</p>
+            
+            <img src="${qrApiUrl}" alt="Código QR del Carrito" class="share-qr-img">
+            
+            <div class="share-input-group">
+                <input type="text" class="share-link-input" value="${shareUrl}" readonly>
+                <button class="btn-share-copy">Copiar</button>
+            </div>
+        </div>
+    `;
+    
+    overlay.classList.add('active');
+    
+    const closeBtn = overlay.querySelector('.share-modal-close');
+    if (closeBtn) {
+        closeBtn.onclick = () => {
+            overlay.classList.remove('active');
+        };
+    }
+    overlay.onclick = (e) => {
+        if (e.target === overlay) {
+            overlay.classList.remove('active');
+        }
+    };
+    
+    const copyBtn = overlay.querySelector('.btn-share-copy');
+    const input = overlay.querySelector('.share-link-input');
+    if (copyBtn && input) {
+        copyBtn.onclick = () => {
+            input.select();
+            input.setSelectionRange(0, 99999);
+            navigator.clipboard.writeText(input.value).then(() => {
+                copyBtn.textContent = '¡Copiado!';
+                copyBtn.style.background = '#10b981';
+                setTimeout(() => {
+                    copyBtn.textContent = 'Copiar';
+                    copyBtn.style.background = '';
+                }, 2000);
+            }).catch(err => {
+                console.error('Failed to copy link:', err);
+            });
+        };
+    }
+}
+
 document.addEventListener('DOMContentLoaded', () => {
     Cart.init();
     window.addEventListener('components:ready', () => {
         Cart.updateHeaderCount();
     });
+
+    // Mejora 5: Compartir / Guardar Carrito
+    const shareBtn = document.getElementById('share-cart-btn');
+    if (shareBtn) {
+        shareBtn.addEventListener('click', () => {
+            if (Cart.items.length === 0) {
+                if (window.Toast) {
+                    window.Toast.error('El carrito está vacío');
+                } else {
+                    alert('El carrito está vacío');
+                }
+                return;
+            }
+
+            const simplifiedCart = Cart.items.map(item => ({
+                id: item.id,
+                qty: item.quantity || item.qty || 1,
+                size: item.customization?.size || item.size || 'M',
+                version: item.customization?.version || item.version || 'aficionado',
+                customization: item.customization || {}
+            }));
+            const cartJson = JSON.stringify(simplifiedCart);
+            const base64Cart = btoa(unescape(encodeURIComponent(cartJson)));
+            
+            const randomId = Math.floor(1000 + Math.random() * 9000);
+            localStorage.setItem('savedCart_' + randomId, cartJson);
+
+            const shareUrl = window.location.href.split('pages/carrito.html')[0] + 'index.html?cart=' + base64Cart;
+            
+            showShareModal(shareUrl);
+        });
+    }
 });
 
 export default Cart;

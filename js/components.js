@@ -16,7 +16,15 @@ const Components = {
                     <a href="/pages/quienes-somos.html" class="nav-link">Quiénes Somos</a>
                 </nav>
 
+                <!-- Mejora 1: Búsqueda Predictiva Global -->
+                <div class="header-search-container" id="headerSearchContainer">
+                    <input id="global-search" class="header-search-input" type="text" placeholder="Buscar camiseta, equipo o liga...">
+                    <i class="fas fa-search header-search-icon"></i>
+                    <div id="search-predictive-results" class="search-predictive-results hidden"></div>
+                </div>
+
                 <div class="header-actions">
+                    <button class="icon-btn mobile-search-toggle" id="mobileSearchToggle" aria-label="Buscar" style="background: transparent; border: none; cursor: pointer;"><i class="fas fa-search"></i></button>
                     <a href="/pages/carrito.html" class="icon-btn" aria-label="Carrito">
                         <i class="fas fa-shopping-cart"></i>
                         <span class="cart-badge" id="cart-count">0</span>
@@ -101,6 +109,181 @@ const Components = {
         if (window.ThemeManager) {
             window.ThemeManager.init();
         }
+
+        // Toggle Mobile Search (Mejora 1 / 8)
+        const mobileSearchBtn = document.getElementById('mobileSearchToggle');
+        const searchContainer = document.getElementById('headerSearchContainer');
+        if (mobileSearchBtn && searchContainer) {
+            mobileSearchBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                searchContainer.classList.toggle('active');
+                if (searchContainer.classList.contains('active')) {
+                    document.getElementById('global-search')?.focus();
+                }
+            });
+            // Hide on outside click
+            document.addEventListener('click', (e) => {
+                if (!e.target.closest('#headerSearchContainer') && !e.target.closest('#mobileSearchToggle')) {
+                    searchContainer.classList.remove('active');
+                }
+            });
+        }
+
+        // --- Dynamic import of products-data.js & features hook up ---
+        const inPagesDir = window.location.pathname.includes('/pages/');
+        const productsPath = inPagesDir ? '../js/products-data.js' : './js/products-data.js';
+        
+        import(productsPath).then((module) => {
+            const productsList = module.default;
+            
+            // 1. Predictive Search Setup (Mejora 1)
+            const searchInput = document.getElementById('global-search');
+            const resultsBox = document.getElementById('search-predictive-results');
+            if (searchInput && resultsBox) {
+                let debounceTimer;
+                searchInput.addEventListener('input', (e) => {
+                    clearTimeout(debounceTimer);
+                    const q = e.target.value.toLowerCase().trim();
+                    if (q.length < 2) {
+                        resultsBox.innerHTML = '';
+                        resultsBox.classList.add('hidden');
+                        return;
+                    }
+                    debounceTimer = setTimeout(() => {
+                        const matches = productsList.filter(p => 
+                            p.name.toLowerCase().includes(q) || 
+                            (p.league && p.league.toLowerCase().includes(q))
+                        ).slice(0, 5);
+
+                        if (matches.length === 0) {
+                            resultsBox.innerHTML = '<div style="padding:0.75rem; text-align:center; font-size:0.85rem; color:var(--text-muted);">No se encontraron camisetas</div>';
+                        } else {
+                            resultsBox.innerHTML = matches.map(p => {
+                                const prices = getProductPrice(p);
+                                const miniImg = p.image.replace(/\/(\d+)\.(webp|jpg|png|jpeg)$/i, '/$1_mini.$2');
+                                return `
+                                    <a href="#" class="search-result-item" data-id="${p.id}" data-name="${p.name}">
+                                        <img src="${miniImg}" alt="${p.name}" class="search-result-img">
+                                        <div class="search-result-info">
+                                            <span class="search-result-title">${p.name}</span>
+                                            <span class="search-result-category">${p.league ? p.league.toUpperCase() : ''}</span>
+                                        </div>
+                                        <span class="search-result-price">€${prices.toFixed(2)}</span>
+                                    </a>
+                                `;
+                            }).join('');
+
+                            // Attach click events
+                            resultsBox.querySelectorAll('.search-result-item').forEach(item => {
+                                item.addEventListener('click', (ev) => {
+                                    ev.preventDefault();
+                                    const pId = parseInt(item.dataset.id);
+                                    const pName = item.dataset.name;
+                                    const isList = window.location.pathname.includes('tienda') || window.location.pathname.includes('catalogo');
+                                    
+                                    resultsBox.classList.add('hidden');
+                                    searchInput.value = '';
+
+                                    if (isList) {
+                                        const pageSearchInput = document.getElementById('search-input');
+                                        if (pageSearchInput) {
+                                            pageSearchInput.value = pName;
+                                            pageSearchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                                            const target = document.getElementById('product-grid') || document.querySelector('.catalog-container');
+                                            if (target) {
+                                                target.scrollIntoView({ behavior: 'smooth' });
+                                            }
+                                        }
+                                    } else {
+                                        window.location.href = inPagesDir ? `producto.html?id=${pId}` : `pages/producto.html?id=${pId}`;
+                                    }
+                                });
+                            });
+                        }
+                        resultsBox.classList.remove('hidden');
+                    }, 150);
+                });
+
+                // Hide results box when clicking outside
+                document.addEventListener('click', (e) => {
+                    if (!e.target.closest('.header-search-container')) {
+                        resultsBox.classList.add('hidden');
+                    }
+                });
+            }
+
+            // Helper to get prices
+            function getProductPrice(prod) {
+                const nameLower = prod.name.toLowerCase();
+                const imageLower = (prod.image || '').toLowerCase();
+                const isKids = prod.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
+                const isRetro = prod.retro === true || nameLower.includes('retro') || prod.league === 'retro';
+                const isNBA = prod.category === 'nba' || prod.league === 'nba';
+
+                if (isNBA || isRetro) return 24.90;
+                if (isKids) return 21.90;
+                return 19.90;
+            }
+
+
+        }).catch(err => {
+            console.error('Error preloading products in components:', err);
+        });
+
+        // 3. Share URL Cart Import Check (Mejora 5)
+        const urlParams = new URLSearchParams(window.location.search);
+        const cartParam = urlParams.get('cart');
+        if (cartParam) {
+            try {
+                const cartStr = decodeURIComponent(escape(atob(cartParam)));
+                const importedItems = JSON.parse(cartStr);
+                if (Array.isArray(importedItems)) {
+                    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+                    importedItems.forEach(item => {
+                        const matchIndex = cart.findIndex(i => 
+                            i.id === item.id && 
+                            i.size === item.size && 
+                            i.version === item.version &&
+                            JSON.stringify(i.customization) === JSON.stringify(item.customization)
+                        );
+                        if (matchIndex > -1) {
+                            cart[matchIndex].qty = (cart[matchIndex].qty || 1) + (item.qty || item.quantity || 1);
+                            cart[matchIndex].quantity = cart[matchIndex].qty;
+                        } else {
+                            cart.push(item);
+                        }
+                    });
+                    localStorage.setItem('cart', JSON.stringify(cart));
+                    
+                    // Dispatch updates
+                    window.dispatchEvent(new CustomEvent('cart:updated'));
+                    
+                    // Update count in header
+                    const totalItems = cart.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
+                    const cartBadge = document.getElementById('cart-count');
+                    if (cartBadge) {
+                        cartBadge.textContent = totalItems;
+                    }
+
+                    setTimeout(() => {
+                        if (window.Toast) {
+                            window.Toast.success('¡Carrito importado y fusionado con éxito!');
+                        } else {
+                            alert('¡Carrito importado y fusionado con éxito!');
+                        }
+                    }, 500);
+                }
+                
+                // Clean URL params
+                urlParams.delete('cart');
+                const newSearch = urlParams.toString();
+                const newUrl = newSearch ? `${window.location.pathname}?${newSearch}` : window.location.pathname;
+                window.history.replaceState({}, '', newUrl);
+            } catch (e) {
+                console.error('Failed to import cart from URL:', e);
+            }
+        }
+
         window.dispatchEvent(new CustomEvent('components:ready'));
         CookieConsent.init();
     }

@@ -109,9 +109,10 @@
                                 <label>Ciudad</label>
                                 <input type="text" id="new-address-city" required placeholder="Madrid">
                             </div>
-                            <div class="form-group">
+                            <div class="form-group" style="position: relative;">
                                 <label>Código Postal</label>
                                 <input type="text" id="new-address-zip" required placeholder="28001">
+                                <div id="zip-spinner" class="zip-loader hidden"><i class="fas fa-spinner fa-spin"></i></div>
                             </div>
                         </div>
 
@@ -281,64 +282,36 @@
                     <div class="payment-methods">
                         <label class="payment-option">
                             <input type="radio" name="payment" value="paypal" checked>
-                            <span>PayPal</span>
+                            <span>PayPal (Serás redirigido para completar el pago)</span>
                             <i class="fab fa-paypal"></i>
                         </label>
-                        <p style="font-size:0.78rem; color:#f59e0b; margin:-0.25rem 0 0.75rem 0.5rem; display:block;">
-                            <i class="fas fa-exclamation-triangle" style="margin-right: 0.2rem;"></i>
-                            Solo se aceptarán pagos como <strong>Amigos y Familiares</strong> en <strong>PayPal</strong>.
-                        </p>
 
                         <label class="payment-option">
                             <input type="radio" name="payment" value="bizum">
-                            <span>Bizum</span>
+                            <span>Bizum (Te contactaremos para completar el pago)</span>
                             <i class="fas fa-mobile-alt"></i>
-                        </label>
-
-                        <label class="payment-option">
-                            <input type="radio" name="payment" value="revtag">
-                            <span>Revtag (Revolut)</span>
-                            <i class="fas fa-bolt"></i>
-                        </label>
-
-                        <label class="payment-option">
-                            <input type="radio" name="payment" value="transferencia">
-                            <span>Transferencia Bancaria</span>
-                            <i class="fas fa-university"></i>
                         </label>
                     </div>
 
-                    <div id="bizum-form" style="display:none; margin-top:1rem;">
-                        <div
-                            style="background: linear-gradient(135deg, rgba(0, 150, 136, 0.1), rgba(0, 191, 165, 0.05)); border: 1px solid rgba(0, 191, 165, 0.3); border-radius: 12px; padding: 1.25rem;">
+                    <div id="paypal-info" class="payment-info-box" style="margin-top: 1rem;">
+                        <div style="background: rgba(99, 102, 241, 0.05); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;">
                             <p style="color: var(--text-main); margin: 0; font-size: 0.9rem;">
-                                <i class="fas fa-info-circle" style="color: #00bfa5;"></i>
+                                <i class="fab fa-paypal" style="color: #003087; margin-right: 0.4rem;"></i>
+                                Al realizar el pedido serás redirigido a PayPal. Por favor, asegúrate de realizar el pago como <strong>Amigos y Familiares</strong>.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div id="bizum-info" class="payment-info-box" style="display:none; margin-top:1rem;">
+                        <div style="background: rgba(0, 150, 136, 0.05); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;">
+                            <p style="color: var(--text-main); margin: 0; font-size: 0.9rem;">
+                                <i class="fas fa-info-circle" style="color: #00bfa5; margin-right: 0.4rem;"></i>
                                 Te contactaremos por Instagram para enviarte el número de Bizum y confirmar el pago.
                             </p>
                         </div>
                     </div>
 
-                    <div id="revtag-form" style="display:none; margin-top:1rem;">
-                        <div
-                            style="background: linear-gradient(135deg, rgba(97, 21, 255, 0.08), rgba(97, 21, 255, 0.03)); border: 1px solid rgba(97, 21, 255, 0.25); border-radius: 12px; padding: 1.25rem;">
-                            <p style="color: var(--text-main); margin: 0; font-size: 0.9rem;">
-                                <i class="fas fa-info-circle" style="color: #6115ff;"></i>
-                                Te contactaremos por Instagram para enviarte nuestro Revtag de Revolut y confirmar el pago.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div id="transfer-form" style="display:none; margin-top:1rem;">
-                        <div
-                            style="background: linear-gradient(135deg, rgba(59, 130, 246, 0.08), rgba(59, 130, 246, 0.03)); border: 1px solid rgba(59, 130, 246, 0.25); border-radius: 12px; padding: 1.25rem;">
-                            <p style="color: var(--text-main); margin: 0; font-size: 0.9rem;">
-                                <i class="fas fa-info-circle" style="color: #3b82f6;"></i>
-                                Te contactaremos por Instagram con los datos de la cuenta bancaria para realizar la transferencia y confirmar el pago.
-                            </p>
-                        </div>
-                    </div>
-
-                    <div class="checkout-action-wrapper">
+                    <div class="checkout-action-wrapper" style="margin-top: 1.5rem;">
                         <button type="button" id="confirm-order-btn" class="btn btn-block btn-primary btn-sticky-mobile">
                             <i class="fas fa-check-circle"></i> Confirmar Pedido
                         </button>

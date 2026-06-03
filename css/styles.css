@@ -1130,3 +1130,396 @@ html {
 .btn-upsell-secondary:hover {
     background-color: #2a2a38;
 }
+
+/* ==========================================================================
+   premium enhancements (predictive search, fomo toast, skeletons, qr share)
+   ========================================================================== */
+
+/* --- CSS Transition Smoothness (Mejora 8) --- */
+body, header, .product-card, .cart-summary, .checkout-section, input, select, button {
+    transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* --- Búsqueda Predictiva Visual (Mejora 1) --- */
+.header-search-container {
+    position: relative;
+    flex: 0 1 260px;
+    margin: 0 1rem;
+}
+@media (max-width: 900px) {
+    .header-search-container {
+        display: none; /* hidden on small mobile navs, toggled by button */
+    }
+    .header-search-container.active {
+        display: block;
+        position: absolute;
+        top: var(--header-height);
+        left: 0;
+        right: 0;
+        margin: 0;
+        padding: 0.75rem 1rem;
+        background: var(--bg-card);
+        border-bottom: 1px solid var(--border);
+        z-index: 999;
+    }
+}
+.header-search-input {
+    width: 100%;
+    padding: 0.55rem 1rem 0.55rem 2.25rem;
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    background: var(--bg-body);
+    color: var(--text-main);
+    font-size: 0.88rem;
+    outline: none;
+    transition: all 0.3s;
+}
+.header-search-input:focus {
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.15);
+}
+.header-search-icon {
+    position: absolute;
+    left: 0.85rem;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 0.85rem;
+    pointer-events: none;
+}
+@media (max-width: 900px) {
+    .header-search-container.active .header-search-icon {
+        left: 1.85rem;
+    }
+}
+
+.search-predictive-results {
+    position: absolute;
+    top: calc(100% + 8px);
+    left: 0;
+    right: 0;
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    box-shadow: var(--shadow-xl);
+    z-index: 2000;
+    max-height: 380px;
+    overflow-y: auto;
+    padding: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+.search-predictive-results.hidden {
+    display: none;
+}
+.search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.5rem;
+    border-radius: 8px;
+    text-decoration: none;
+    color: var(--text-main);
+    transition: background 0.2s;
+}
+.search-result-item:hover {
+    background: rgba(99, 102, 241, 0.08);
+}
+.search-result-img {
+    width: 40px;
+    height: 40px;
+    object-fit: contain;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: #fff;
+    padding: 2px;
+}
+.search-result-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+}
+.search-result-title {
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-align: left;
+}
+.search-result-category {
+    font-size: 0.75rem;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    text-align: left;
+}
+.search-result-price {
+    font-size: 0.85rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+
+/* --- Related Products Horizontal Scroll (Mejora 7) --- */
+.related-products {
+    margin-top: 3rem;
+    padding-bottom: 2rem;
+}
+.related-products h2 {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.5rem;
+    margin-bottom: 1.5rem;
+    color: var(--text-main);
+}
+.related-products .product-grid {
+    display: flex;
+    gap: 1.25rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding-bottom: 1.25rem;
+    scrollbar-width: thin;
+}
+.related-products .product-grid::-webkit-scrollbar {
+    height: 6px;
+}
+.related-products .product-grid .product-card {
+    flex: 0 0 240px; /* Ancho fijo para scroll horizontal */
+    scroll-snap-align: start;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.04);
+}
+@media (max-width: 480px) {
+    .related-products .product-grid .product-card {
+        flex: 0 0 185px; /* Más compacto en pantallas pequeñas */
+    }
+}
+
+/* --- Skeleton Shimmer Animation (Mejora 4) --- */
+@keyframes skeleton-shimmer {
+    0% { background-position: 200% 0; }
+    100% { background-position: -200% 0; }
+}
+
+/* --- Spinner CSS for Add Button --- */
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+.fa-spinner.fa-spin {
+    animation: spin 0.8s linear infinite;
+}
+
+/* --- Share Cart Modal Styles (Mejora 5) --- */
+.share-modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.75);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.3s ease;
+}
+.share-modal-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+.share-modal-content {
+    background: var(--bg-card);
+    padding: 2rem;
+    border-radius: 20px;
+    width: 90%;
+    max-width: 420px;
+    text-align: center;
+    border: 1px solid var(--border);
+    transform: translateY(20px);
+    transition: transform 0.3s ease;
+}
+.share-modal-overlay.active .share-modal-content {
+    transform: translateY(0);
+}
+.share-modal-close {
+    float: right;
+    background: transparent;
+    border: none;
+    font-size: 1.25rem;
+    cursor: pointer;
+    color: var(--text-muted);
+}
+.share-modal-close:hover {
+    color: var(--text-main);
+}
+.share-qr-img {
+    margin: 1.5rem auto;
+    padding: 8px;
+    background: #fff;
+    border-radius: 12px;
+    border: 1px solid var(--border);
+    display: block;
+}
+.share-input-group {
+    display: flex;
+    gap: 8px;
+    margin-top: 1rem;
+}
+.share-link-input {
+    flex: 1;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: var(--bg-body);
+    color: var(--text-main);
+    font-size: 0.85rem;
+}
+.btn-share-copy {
+    padding: 0.6rem 1rem;
+    background: var(--accent);
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+}
+.btn-share-copy:hover {
+    filter: brightness(1.1);
+}
+
+/* --- ZIP Loader Visual (Mejora 3) --- */
+.zip-loader {
+    position: absolute;
+    right: 12px;
+    bottom: 12px;
+    color: var(--text-muted);
+}
+.zip-loader.hidden {
+    display: none;
+}
+
+/* --- Skeleton Card Styles (Mejora 4) --- */
+.skeleton-card {
+    background: var(--bg-card);
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--border);
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    position: relative;
+    overflow: hidden;
+}
+.skeleton-image {
+    width: 100%;
+    aspect-ratio: 1;
+    background: linear-gradient(90deg, var(--bg-body) 25%, var(--border) 50%, var(--bg-body) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite linear;
+    border-radius: var(--radius-md);
+}
+.skeleton-text {
+    height: 14px;
+    background: linear-gradient(90deg, var(--bg-body) 25%, var(--border) 50%, var(--bg-body) 75%);
+    background-size: 200% 100%;
+    animation: skeleton-shimmer 1.5s infinite linear;
+    border-radius: 4px;
+}
+.skeleton-title {
+    width: 70%;
+    height: 18px;
+}
+.skeleton-price {
+    width: 40%;
+}
+
+/* --- Flying Cart Item (Mejora 4) --- */
+.cart-fly-item {
+    position: fixed;
+    z-index: 10000;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+    border-radius: 50%;
+    border: 2px solid var(--accent);
+    box-shadow: 0 4px 15px rgba(99, 102, 241, 0.4);
+    object-fit: cover;
+}
+
+/* --- Checkout Cross Selling Checkboxes (Mejora 6) --- */
+.checkout-cross-sell {
+    margin: 1.5rem 0;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-body);
+}
+.checkout-cross-sell h4 {
+    margin-top: 0;
+    margin-bottom: 0.75rem;
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--text-main);
+}
+.cross-sell-options {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+}
+.cross-sell-option {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    cursor: pointer;
+    font-size: 0.85rem;
+    color: var(--text-main);
+}
+.cross-sell-option input[type="checkbox"] {
+    width: 16px;
+    height: 16px;
+    accent-color: var(--accent);
+    cursor: pointer;
+}
+.cross-sell-price {
+    margin-left: auto;
+    font-weight: 700;
+    color: var(--accent);
+}
+
+/* --- Card Details Section in Checkout (Mejora 3) --- */
+.card-details-form {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding: 1.25rem;
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    background: var(--bg-body);
+    animation: fadeIn 0.3s ease;
+}
+.card-form-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.75rem;
+}
+
+/* --- Save Cart Button in Cart Page (Mejora 5) --- */
+.btn-share-cart {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.5rem;
+    width: 100%;
+    margin-top: 0.5rem;
+    padding: 0.8rem 1rem;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    color: var(--text-main);
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+.btn-share-cart:hover {
+    background: rgba(99, 102, 241, 0.08);
+    border-color: var(--accent);
+    color: var(--accent);
+}

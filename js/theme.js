@@ -36,7 +36,13 @@
 window.ThemeManager = {
     init() {
         this.themeToggleBtn = document.getElementById('theme-toggle');
-        this.currentTheme = localStorage.getItem('theme') || 'dark';
+        
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            this.currentTheme = savedTheme;
+        } else {
+            this.currentTheme = window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
 
         this.applyTheme(this.currentTheme);
 
@@ -58,6 +64,17 @@ window.ThemeManager = {
 
     applyTheme(theme) {
         document.documentElement.setAttribute('data-theme', theme);
+        if (theme === 'dark') {
+            document.body.classList.add('dark-theme');
+            document.body.classList.remove('light-theme');
+            document.documentElement.classList.add('dark-theme');
+            document.documentElement.classList.remove('light-theme');
+        } else {
+            document.body.classList.add('light-theme');
+            document.body.classList.remove('dark-theme');
+            document.documentElement.classList.add('light-theme');
+            document.documentElement.classList.remove('dark-theme');
+        }
         localStorage.setItem('theme', theme);
     },
 
@@ -65,8 +82,7 @@ window.ThemeManager = {
         if (!this.themeToggleBtn) return;
         const icon = this.themeToggleBtn.querySelector('i');
         if (icon) {
-
-            icon.className = this.currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-lightbulb';
+            icon.className = this.currentTheme === 'light' ? 'fas fa-moon' : 'fas fa-sun';
         }
     }
 };

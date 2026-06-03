@@ -658,6 +658,36 @@ function initPlayerVersionListener() {
     }
 }
 
+function animateFlyToCart() {
+    const img = document.getElementById('main-img');
+    const cartIcon = document.querySelector('.fa-shopping-cart') || document.getElementById('cart-count');
+    if (!img || !cartIcon) return;
+
+    const startRect = img.getBoundingClientRect();
+    const endRect = cartIcon.getBoundingClientRect();
+
+    const flyer = document.createElement('img');
+    flyer.src = img.src;
+    flyer.className = 'cart-fly-item';
+    flyer.style.left = `${startRect.left}px`;
+    flyer.style.top = `${startRect.top}px`;
+    flyer.style.width = `${startRect.width}px`;
+    flyer.style.height = `${startRect.height}px`;
+    document.body.appendChild(flyer);
+
+    setTimeout(() => {
+        flyer.style.left = `${endRect.left + endRect.width / 2 - 15}px`;
+        flyer.style.top = `${endRect.top + endRect.height / 2 - 15}px`;
+        flyer.style.width = '30px';
+        flyer.style.height = '30px';
+        flyer.style.opacity = '0.2';
+    }, 50);
+
+    setTimeout(() => {
+        flyer.remove();
+    }, 700);
+}
+
 function addToCart() {
     // Validar talla seleccionada
     if (!selectedSize) {
@@ -677,13 +707,6 @@ function addToCart() {
             alert('Por favor, selecciona una talla antes de continuar');
         }
         return;
-    }
-
-    // Feedback inmediato: bloquear doble-tap y dar respuesta visual (INP fix)
-    const cartBtn = document.getElementById('add-to-cart-btn');
-    if (cartBtn) {
-        cartBtn.classList.add('adding');
-        setTimeout(() => cartBtn.classList.remove('adding'), 600);
     }
 
     const name = document.getElementById('name-input').value.trim();
@@ -734,36 +757,56 @@ function addToCart() {
         quantity: quantity,
         customization: customization
     };
-    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
-    const existingIndex = cart.findIndex(item =>
-        item.id === cartItem.id &&
-        JSON.stringify(item.customization) === JSON.stringify(cartItem.customization)
-    );
+    // Microinteracción en botón (Spinner + Checkmark + Vuelo) (Mejora 4)
+    const cartBtn = document.getElementById('add-to-cart-btn');
+    const originalHTML = cartBtn ? cartBtn.innerHTML : 'Añadir al carrito';
 
-    if (existingIndex > -1) {
-        cart[existingIndex].quantity += quantity;
-    } else {
-        cart.push(cartItem);
+    if (cartBtn) {
+        cartBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Añadiendo...';
+        cartBtn.disabled = true;
     }
 
-    if (Analytics) Analytics.trackAddToCart(cartItem);
-    
-    // El closeModal() disparaba error si no existía, lo quitamos o rodeamos
-    // en este contexto no hay modal de "añadir", hay toast.
-    
-    localStorage.setItem('cart', JSON.stringify(cart));
-    updateCartCount();
+    // Ejecutar vuelo
+    animateFlyToCart();
 
-    if (window.CartBadge) {
-        window.CartBadge.animate();
-    }
+    setTimeout(() => {
+        if (cartBtn) {
+            cartBtn.innerHTML = '<i class="fas fa-check"></i> ¡Añadido!';
+        }
 
-    if (window.Analytics) {
-        window.Analytics.trackAddToCart(product, quantity, customization);
-    }
+        // Agregar al carrito real
+        let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+        const existingIndex = cart.findIndex(item =>
+            item.id === cartItem.id &&
+            JSON.stringify(item.customization) === JSON.stringify(cartItem.customization)
+        );
 
-    showUpsellModal(product, selectedSize, totalPrice);
+        if (existingIndex > -1) {
+            cart[existingIndex].quantity += quantity;
+        } else {
+            cart.push(cartItem);
+        }
+
+        localStorage.setItem('cart', JSON.stringify(cart));
+        updateCartCount();
+
+        if (window.CartBadge) {
+            window.CartBadge.animate();
+        }
+
+        if (window.Analytics) {
+            window.Analytics.trackAddToCart(product, quantity, customization);
+        }
+
+        setTimeout(() => {
+            if (cartBtn) {
+                cartBtn.innerHTML = originalHTML;
+                cartBtn.disabled = false;
+            }
+            showUpsellModal(product, selectedSize, totalPrice);
+        }, 1000);
+    }, 500);
 }
 function showToast(message) {
     const existingToast = document.querySelector('.cart-toast');
@@ -1741,9 +1784,67 @@ function initStickyCTA() {
 
 document.addEventListener('DOMContentLoaded', () => {
     initLightbox();
+    renderRelatedProducts();
     // Delay sticky init to ensure product data is rendered
     setTimeout(() => {
         initStickyCTA();
         if (Health && product) Health.verifyJsonLd(product.id);
     }, 100);
 });
+
+function getTeamBase(name) {
+    return name
+        .replace(/\d{2}\/\d{2}/, '')
+        .replace(/(Local|Visitante|Tercera|Retro|Icon|estilo)/gi, '')
+        .replace(/\(Kids\)/gi, '')
+        .replace(/\(Niño\)/gi, '')
+        .replace(/\(Niños\)/gi, '')
+        .trim();
+}
+
+function renderRelatedProducts() {
+    const relatedGrid = document.getElementById('related-grid');
+    if (!relatedGrid || !product) return;
+
+    const currentTeam = getTeamBase(product.name);
+    
+    const sameTeam = products.filter(p => 
+        p.id !== product.id && getTeamBase(p.name) === currentTeam
+    );
+    const sameLeague = products.filter(p => 
+        p.id !== product.id && 
+        p.league === product.league && 
+        getTeamBase(p.name) !== currentTeam
+    );
+    const otherProducts = products.filter(p => 
+        p.id !== product.id && 
+        p.league !== product.league && 
+        getTeamBase(p.name) !== currentTeam
+    );
+
+    // Sort: same team, then same league, then others
+    const related = [...sameTeam, ...sameLeague, ...otherProducts].slice(0, 8);
+
+    relatedGrid.innerHTML = related.map(p => {
+        const priceStr = p.price ? p.price.toFixed(2) : '19.90';
+        const oldPriceStr = p.oldPrice ? `€${p.oldPrice.toFixed(2)}` : '';
+        return `
+            <article class="product-card" data-id="${p.id}">
+                <div class="product-image">
+                    ${p.sale ? '<span class="badge-sale">OFERTA</span>' : ''}
+                    <a href="/pages/producto.html?id=${p.id}">
+                        <img src="${p.image}" alt="${p.name}" loading="lazy">
+                    </a>
+                </div>
+                <div class="product-info">
+                    <span class="product-category">${p.category || ''}</span>
+                    <h3 class="product-title"><a href="/pages/producto.html?id=${p.id}">${p.name}</a></h3>
+                    <div class="product-price">
+                        ${oldPriceStr ? `<span class="price-old">${oldPriceStr}</span>` : ''}
+                        <span class="price">€${priceStr}</span>
+                    </div>
+                </div>
+            </article>
+        `;
+    }).join('');
+}

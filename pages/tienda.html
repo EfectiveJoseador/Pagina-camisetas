@@ -382,49 +382,65 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h3>Personalizar Producto</h3>
-                <option value="jugador">Jugador (Premium +5)</option>
-                </select>
+                <button class="close-modal">&times;</button>
             </div>
 
-            <div class="form-group">
-                <label>Nombre (Opcional)</label>
-                <input type="text" id="modal-name" placeholder="Ej: MESSI" maxlength="15">
-            </div>
-
-            <div class="form-group">
-                <label>Dorsal (Opcional)</label>
-                <input type="number" id="modal-number" placeholder="Ej: 10" min="0" max="99">
-            </div>
-
-            <div class="form-group">
-                <label>Parches <span style="color: var(--text-muted); font-weight: 400; font-size: 0.85rem;">(+1.50€ cada
-                        uno)</span></label>
-                <select id="modal-patch">
-                    <option value="none">Sin parches</option>
-                    <option value="liga">Parche Liga</option>
-                    <option value="champions">Parche Champions League</option>
-                    <option value="europa">Parche Europa League</option>
-                    <option value="premier">Parche Premier League</option>
-                    <option value="seriea">Parche Serie A</option>
-                    <option value="mundial">Parche Mundial de Clubes</option>
-                    <option value="copamundo">Parche Copa del Mundo</option>
-                    <option value="conmemorativo">Parche Conmemorativo</option>
-                </select>
-            </div>
-
-            <div class="preview-box">
-                <div class="preview-row">
-                    <span>Precio Base:</span>
-                    <span id="preview-base-price">0.00</span>
+            <form id="customization-form">
+                <input type="hidden" id="modal-product-id">
+                
+                <div class="form-group">
+                    <label for="modal-size">Talla *</label>
+                    <select id="modal-size" required>
+                        <option value="">Seleccionar Talla</option>
+                    </select>
                 </div>
-                <div id="preview-details"></div>
-                <div class="preview-total">
-                    <span>Total:</span>
-                    <span id="preview-total-price">0.00</span>
-                </div>
-            </div>
 
-            <button type="submit" class="btn-submit">Aadir al Carrito</button>
+                <div class="form-group">
+                    <label for="modal-version">Versión *</label>
+                    <select id="modal-version" required>
+                        <option value="aficionado">Aficionado</option>
+                        <option value="jugador">Jugador (Premium +5€)</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="modal-name">Nombre (Opcional)</label>
+                    <input type="text" id="modal-name" placeholder="Ej: MESSI" maxlength="15">
+                </div>
+
+                <div class="form-group">
+                    <label for="modal-number">Dorsal (Opcional)</label>
+                    <input type="number" id="modal-number" placeholder="Ej: 10" min="0" max="99">
+                </div>
+
+                <div class="form-group">
+                    <label for="modal-patch">Parches (+1.50€)</label>
+                    <select id="modal-patch">
+                        <option value="none">Sin parches</option>
+                        <option value="liga">Parche Liga</option>
+                        <option value="champions">Parche Champions League</option>
+                        <option value="europa">Parche Europa League</option>
+                        <option value="premier">Parche Premier League</option>
+                        <option value="seriea">Parche Serie A</option>
+                        <option value="mundial">Parche Mundial de Clubes</option>
+                        <option value="copamundo">Parche Copa del Mundo</option>
+                        <option value="conmemorativo">Parche Conmemorativo</option>
+                    </select>
+                </div>
+
+                <div class="preview-box">
+                    <div class="preview-row">
+                        <span>Precio Base:</span>
+                        <span>€<span id="preview-base-price">0.00</span></span>
+                    </div>
+                    <div id="preview-details"></div>
+                    <div class="preview-total">
+                        <span>Total:</span>
+                        <span>€<span id="preview-total-price">0.00</span></span>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn-submit">Añadir al Carrito</button>
             </form>
         </div>
     </div>

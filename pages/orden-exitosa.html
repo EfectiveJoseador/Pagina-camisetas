@@ -239,38 +239,68 @@
             document.getElementById('order-id').textContent = orderId;
             
             onAuthStateChanged(auth, async (user) => {
-                if (user && orderId) {
-                    try {
-                        // 1. Verificar si ya hemos trackeado este pedido para evitar duplicados en GA4
-                        const trackedOrders = JSON.parse(localStorage.getItem('ga4_tracked_orders') || '[]');
-                        if (trackedOrders.includes(orderId)) {
-                            console.log("[Analytics] Pedido ya trackeado previamente:", orderId);
-                            return;
-                        }
+                let orderData = null;
+                const trackedOrders = JSON.parse(localStorage.getItem('ga4_tracked_orders') || '[]');
+                if (trackedOrders.includes(orderId)) {
+                    console.log("[Analytics] Pedido ya trackeado previamente:", orderId);
+                    return;
+                }
 
+                // Si es invitado, adaptamos el botón principal para permitirle registrarse
+                if (!user) {
+                    const primaryBtn = document.querySelector('.btn-zen-primary');
+                    if (primaryBtn) {
+                        primaryBtn.href = '/pages/login.html';
+                        primaryBtn.innerHTML = '<i class="fas fa-user-plus"></i> Crear Cuenta';
+                    }
+                }
+
+                if (user) {
+                    try {
                         const orderRef = ref(db, `ordersByUser/${user.uid}/${orderId}`);
                         const snapshot = await get(orderRef);
                         
                         if (snapshot.exists()) {
-                            const orderData = snapshot.val();
-                            if (Analytics) {
-                                // 2. Enviar evento de compra a GA4 (Paso crítico para el Revenue)
-                                console.log("[Analytics] Iniciando trackPurchase para ingreso:", orderData.total);
-                                Analytics.trackPurchase(orderData);
-                                
-                                // 3. Bloqueo de de-duplicación para proteger las estadísticas
-                                trackedOrders.push(orderId);
-                                localStorage.setItem('ga4_tracked_orders', JSON.stringify(trackedOrders));
+                            orderData = snapshot.val();
+                        }
+                    } catch (error) {
+                        console.error("[Health] Error cargando pedido desde Firebase:", error);
+                    }
+                }
 
-                                // 4. Limpieza de carrito SINCRONIZADA post-rastreo
-                                localStorage.removeItem('cart');
-                                localStorage.removeItem('appliedPacks');
-                                console.log("[Analytics] ✅ Conversión reportada e integridad de datos asegurada.");
+                // Fallback para invitados si no hay usuario autenticado o no se encontró en Firebase
+                if (!orderData) {
+                    try {
+                        const lastOrderStr = localStorage.getItem('lastOrder');
+                        if (lastOrderStr) {
+                            const lastOrder = JSON.parse(lastOrderStr);
+                            if (lastOrder && lastOrder.orderId === orderId) {
+                                orderData = lastOrder;
+                                console.log("[Analytics] Pedido de invitado cargado de localStorage para tracking.");
                             }
                         }
                     } catch (error) {
-                        console.error("[Health] Error en el flujo de telemetría post-venta:", error);
+                        console.error("[Health] Error cargando pedido desde localStorage:", error);
                     }
+                }
+
+                if (orderData) {
+                    if (Analytics) {
+                        // 2. Enviar evento de compra a GA4 (Paso crítico para el Revenue)
+                        console.log("[Analytics] Iniciando trackPurchase para ingreso:", orderData.total);
+                        Analytics.trackPurchase(orderData);
+                        
+                        // 3. Bloqueo de de-duplicación para proteger las estadísticas
+                        trackedOrders.push(orderId);
+                        localStorage.setItem('ga4_tracked_orders', JSON.stringify(trackedOrders));
+
+                        // 4. Limpieza de carrito SINCRONIZADA post-rastreo
+                        localStorage.removeItem('cart');
+                        localStorage.removeItem('appliedPacks');
+                        console.log("[Analytics] ✅ Conversión reportada e integridad de datos asegurada.");
+                    }
+                } else {
+                    console.warn("[Analytics] No se encontró el pedido para trackear:", orderId);
                 }
             });
         }

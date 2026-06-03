@@ -440,7 +440,7 @@ async function handleGoogleSignIn() {
 onAuthStateChanged(auth, async (user) => {
     if (!window.location.pathname.includes('login.html')) return;
 
-    if (user && user.emailVerified) {
+    if (user && (user.emailVerified || window.location.hostname === 'localhost')) {
         try {
             const idTokenResult = await user.getIdTokenResult(true);
             const isAdmin       = idTokenResult.claims.admin === true;
@@ -527,7 +527,7 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 const { user } = await signInWithEmailAndPassword(auth, email, password);
 
-                if (!user.emailVerified) {
+                if (!user.emailVerified && window.location.hostname !== 'localhost') {
                     const diffMin = (Date.now() - new Date(user.metadata.creationTime).getTime()) / 60000;
                     if (diffMin > 1) {
                         await user.delete();

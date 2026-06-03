@@ -170,6 +170,13 @@ function getProductsForCurrentPage() {
 function goToPage(page) {
     if (page < 1 || page > totalPages) return;
     currentPage = page;
+    
+    // Reset skeleton flag so skeletons show for the new page
+    const grid = document.getElementById('product-grid');
+    if (grid) {
+        delete grid.dataset.loadingSkeletons;
+    }
+
     renderProducts();
     const targetElement = document.querySelector('#product-grid .product-card') || document.getElementById('product-grid');
     if (targetElement) {
@@ -241,6 +248,28 @@ function renderPagination() {
             goToPage(page);
         });
     });
+
+    // Prefetching inteligente en paginación (Mejora 7)
+    const nextBtn = container.querySelector('.pagination-next');
+    if (nextBtn && currentPage < totalPages) {
+        nextBtn.addEventListener('mouseenter', () => {
+            const nextPage = currentPage + 1;
+            const start = (nextPage - 1) * CONFIG.PRODUCTS_PER_PAGE;
+            const end = start + CONFIG.PRODUCTS_PER_PAGE;
+            const nextProducts = filteredProducts.slice(start, end);
+            nextProducts.forEach(p => {
+                if (p.image) {
+                    const img1 = new Image();
+                    img1.src = getMiniImagePath(p.image);
+                }
+                const secImg = getSecondaryMiniImagePath(p);
+                if (secImg) {
+                    const img2 = new Image();
+                    img2.src = secImg;
+                }
+            });
+        }, { once: true });
+    }
 }
 
 function getMiniImagePath(imagePath) {
@@ -271,6 +300,23 @@ function renderProducts() {
     }
 
     noResults.classList.add('hidden');
+
+    // Muestra tarjetas esqueleto para simular la carga (Mejora 4)
+    if (grid && grid.dataset.loadingSkeletons !== 'loaded' && grid.dataset.loadingSkeletons !== 'loading') {
+        grid.dataset.loadingSkeletons = 'loading';
+        grid.innerHTML = Array(8).fill(0).map(() => `
+            <div class="skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-text skeleton-title"></div>
+                <div class="skeleton-text skeleton-price"></div>
+            </div>
+        `).join('');
+        setTimeout(() => {
+            grid.dataset.loadingSkeletons = 'loaded';
+            renderProducts();
+        }, 300);
+        return;
+    }
 
     const productsToShow = getProductsForCurrentPage();
     const fragment = document.createDocumentFragment();
@@ -570,6 +616,36 @@ function closeAllQuickAddPanels() {
     });
 }
 
+function animateFlyToCart(cardElement) {
+    const img = cardElement.querySelector('.primary-image');
+    const cartIcon = document.querySelector('.fa-shopping-cart') || document.getElementById('cart-count');
+    if (!img || !cartIcon) return;
+
+    const startRect = img.getBoundingClientRect();
+    const endRect = cartIcon.getBoundingClientRect();
+
+    const flyer = document.createElement('img');
+    flyer.src = img.src;
+    flyer.className = 'cart-fly-item';
+    flyer.style.left = `${startRect.left}px`;
+    flyer.style.top = `${startRect.top}px`;
+    flyer.style.width = `${startRect.width}px`;
+    flyer.style.height = `${startRect.height}px`;
+    document.body.appendChild(flyer);
+
+    setTimeout(() => {
+        flyer.style.left = `${endRect.left + endRect.width / 2 - 15}px`;
+        flyer.style.top = `${endRect.top + endRect.height / 2 - 15}px`;
+        flyer.style.width = '30px';
+        flyer.style.height = '30px';
+        flyer.style.opacity = '0.2';
+    }, 50);
+
+    setTimeout(() => {
+        flyer.remove();
+    }, 700);
+}
+
 function handleQuickAddSubmit(form, product) {
     const sizeSelect = form.querySelector('.quick-size');
     const nameInput = form.querySelector('.quick-name');
@@ -630,17 +706,43 @@ function handleQuickAddSubmit(form, product) {
         customization: customization
     };
 
-    addToCart(cartItem);
+    // Microinteracción en botón (Spinner + Checkmark + Vuelo) (Mejora 4)
+    const submitBtn = form.querySelector('.btn-add-quick');
+    const originalHTML = submitBtn ? submitBtn.innerHTML : 'Añadir';
 
-    closeQuickAddPanel(product.id.toString());
+    if (submitBtn) {
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        submitBtn.disabled = true;
+    }
 
-    form.reset();
-    const optionalFields = form.querySelector('.optional-fields');
-    const optionalToggle = form.querySelector('.optional-toggle');
-    if (optionalFields) optionalFields.classList.remove('show');
-    if (optionalToggle) optionalToggle.classList.remove('expanded');
+    // Ejecutar vuelo
+    const card = form.closest('.product-card');
+    if (card) {
+        animateFlyToCart(card);
+    }
 
-    showUpsellModal(product, size, totalPrice);
+    setTimeout(() => {
+        if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-check"></i>';
+        
+        // Agregar al carrito real
+        addToCart(cartItem);
+
+        setTimeout(() => {
+            closeQuickAddPanel(product.id.toString());
+            form.reset();
+            const optionalFields = form.querySelector('.optional-fields');
+            const optionalToggle = form.querySelector('.optional-toggle');
+            if (optionalFields) optionalFields.classList.remove('show');
+            if (optionalToggle) optionalToggle.classList.remove('expanded');
+
+            if (submitBtn) {
+                submitBtn.innerHTML = originalHTML;
+                submitBtn.disabled = false;
+            }
+
+            showUpsellModal(product, size, totalPrice);
+        }, 400);
+    }, 500);
 }
 
 function init() {
@@ -1331,45 +1433,105 @@ function closeModal() {
     currentProduct = null;
 }
 function updatePreview() {
-    const size = document.getElementById('modal-size').value;
+    if (!currentProduct) return;
+
+    const sizeSelect = document.getElementById('modal-size');
+    const versionSelect = document.getElementById('modal-version');
+    const nameInput = document.getElementById('modal-name');
+    const numberInput = document.getElementById('modal-number');
+    const patchSelect = document.getElementById('modal-patch');
+
+    const size = sizeSelect ? sizeSelect.value : '';
+    const version = versionSelect ? versionSelect.value : 'aficionado';
+    const name = nameInput ? nameInput.value.trim().toUpperCase() : '';
+    const number = numberInput ? numberInput.value : '';
+    const patch = patchSelect ? patchSelect.value : 'none';
+
+    // Precio base
+    const basePrice = currentProduct.price;
+    let total = basePrice;
+
+    // Recargos
+    const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+    const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
+    total += sizeSurcharge;
+
+    if (version === 'jugador') total += 5;
+
+    if (patch && patch !== 'none') total += 1.5;
+
+    if (name && number) total += 2;
+
+    // Actualizar elementos HTML en el modal
+    const basePriceEl = document.getElementById('preview-base-price');
+    const totalPriceEl = document.getElementById('preview-total-price');
+    const detailsEl = document.getElementById('preview-details');
+
+    if (basePriceEl) basePriceEl.textContent = basePrice.toFixed(2);
+    if (totalPriceEl) totalPriceEl.textContent = total.toFixed(2);
+
+    if (detailsEl) {
+        let detailsText = '';
+        if (size) detailsText += `Talla: ${size}`;
+        if (version) detailsText += ` | Versión: ${version === 'jugador' ? 'Jugador' : 'Aficionado'}`;
+        if (name && number) detailsText += ` | Personalización: ${name} (${number})`;
+        if (patch && patch !== 'none') detailsText += ` | Parche: ${PATCH_DEFINITIONS[patch] || patch}`;
+        detailsEl.textContent = detailsText;
+    }
+}
+
+function handleFormSubmit(e) {
+    e.preventDefault();
+    if (!currentProduct) return;
+
+    const sizeSelect = document.getElementById('modal-size');
+    const versionSelect = document.getElementById('modal-version');
+    const nameInput = document.getElementById('modal-name');
+    const numberInput = document.getElementById('modal-number');
+    const patchSelect = document.getElementById('modal-patch');
+
+    const size = sizeSelect ? sizeSelect.value : '';
     if (!size) {
         alert('Por favor, selecciona una talla');
         return;
     }
 
-    const name = document.getElementById('modal-name').value.trim();
+    const version = versionSelect ? versionSelect.value : 'aficionado';
+    const name = nameInput ? nameInput.value.trim().toUpperCase() : '';
+    const number = numberInput ? numberInput.value : '';
+    const patch = patchSelect ? patchSelect.value : 'none';
+
+    if ((name && !number) || (!name && number)) {
+        alert('⚠️ El nombre y el dorsal deben ir juntos.\n\nSi quieres personalizar la camiseta, debes escribir AMBOS campos.');
+        return;
+    }
+
     if (name && !/^[A-Za-zÀ-ÿ\s]+$/.test(name)) {
         alert('El nombre solo puede contener letras y espacios');
         return;
     }
 
-    const number = document.getElementById('modal-number').value;
     if (number && (number < 0 || number > 99)) {
         alert('El dorsal debe estar entre 0 y 99');
         return;
     }
-    if ((name && !number) || (!name && number)) {
-        alert('⚠️ El nombre y el dorsal deben ir juntos.\n\nSi quieres personalizar la camiseta, debes escribir AMBOS campos:\n• Nombre (ej: MESSI)\n• Dorsal (ej: 10)');
-        return;
-    }
+
+    const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+    const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
+    let totalPrice = currentProduct.price + sizeSurcharge;
+    if (version === 'jugador') totalPrice += 5;
+    if (patch && patch !== 'none') totalPrice += 1.5;
+    if (name && number) totalPrice += 2;
+
     const customization = {
         size: size,
-        version: document.getElementById('modal-version').value,
-        name: name ? name.toUpperCase() : '',
-        number: number || '',
-        patch: document.getElementById('modal-patch').value,
+        version: version,
+        name: name,
+        number: number,
+        patch: patch,
         extras: []
     };
-    const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
-    const sizeSurcharge = SIZE_SURCHARGES[customization.size] || 0;
-    let totalPrice = currentProduct.price + sizeSurcharge;
-    if (customization.version === 'jugador') totalPrice += 5;
-    if (customization.patch && customization.patch !== 'none') {
-        totalPrice += patchPrices[customization.patch] || 0;
-    }
-    if (customization.name && customization.number) {
-        totalPrice += 2;
-    }
+
     const cartItem = {
         id: currentProduct.id,
         name: currentProduct.name,
@@ -1379,13 +1541,38 @@ function updatePreview() {
         quantity: 1,
         customization: customization
     };
-    addToCart(cartItem);
-    if (Analytics) Analytics.trackAddToCart(cartItem);
-    const addedProduct = currentProduct;
-    const addedSize = customization.size;
-    const addedPrice = totalPrice;
-    closeModal();
-    showUpsellModal(addedProduct, addedSize, addedPrice);
+
+    // Microinteracción del botón (Spinner + Checkmark + Vuelo) (Mejora 4)
+    const submitBtn = document.querySelector('#customization-form .btn-submit');
+    const originalHTML = submitBtn ? submitBtn.innerHTML : 'Añadir al Carrito';
+    
+    if (submitBtn) {
+        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+        submitBtn.disabled = true;
+    }
+
+    // Encontrar tarjeta del producto para animar
+    const productCard = document.querySelector(`.product-card[data-id="${currentProduct.id}"]`);
+    if (productCard) {
+        animateFlyToCart(productCard);
+    }
+
+    setTimeout(() => {
+        if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-check"></i>';
+        
+        // Agregar al carrito real
+        addToCart(cartItem);
+        if (Analytics) Analytics.trackAddToCart(cartItem);
+
+        setTimeout(() => {
+            if (submitBtn) {
+                submitBtn.innerHTML = originalHTML;
+                submitBtn.disabled = false;
+            }
+            closeModal();
+            showUpsellModal(currentProduct, size, totalPrice);
+        }, 400);
+    }, 500);
 }
 function addToCart(item) {
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
