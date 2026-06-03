@@ -505,10 +505,10 @@ function setupQuickAddListeners() {
                 total += SIZE_SURCHARGES[size];
             }
 
-            
+            // Personalización: nombre O dorsal = +€2
             const name = nameInput?.value?.trim();
             const number = numberInput?.value?.trim();
-            if (name && number) {
+            if (name || number) {
                 total += 2;
             }
 
@@ -665,20 +665,12 @@ function handleQuickAddSubmit(form, product) {
     const name = nameInput?.value?.trim().toUpperCase() || '';
     const number = numberInput?.value?.trim() || '';
 
-    if ((name && !number) || (!name && number)) {
-        if (window.Toast) {
-            window.Toast.error('El nombre y dorsal deben ir juntos');
-        } else {
-            alert('El nombre y dorsal deben ir juntos');
-        }
-        return;
-    }
-
     const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
     const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
     let totalPrice = product.price + sizeSurcharge;
 
-    if (name && number) {
+    // Personalización: nombre O dorsal = +€2 (no es necesario tener ambos)
+    if (name || number) {
         totalPrice += 2;
     }
 

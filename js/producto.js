@@ -556,18 +556,14 @@ function updatePreview() {
         details.push(`Parche ${patch}: +€${patchCost.toFixed(2)}`);
     }
 
-    // --- Personalización ---
+    // --- Personalización (nombre O dorsal = +€2) ---
     const name = document.getElementById('name-input').value.trim();
     const number = document.getElementById('number-input').value;
-    if (name && number) {
+    if (name || number) {
         totalPrice += 2;
-        details.push(`Nombre: ${name.toUpperCase()}`);
-        details.push(`Dorsal: ${number}`);
+        if (name) details.push(`Nombre: ${name.toUpperCase()}`);
+        if (number) details.push(`Dorsal: ${number}`);
         details.push('Personalización: +€2');
-    } else if (name) {
-        details.push(`Nombre: ${name.toUpperCase()}`);
-    } else if (number) {
-        details.push(`Dorsal: ${number}`);
     }
 
     // --- Actualizar precio principal mostrado en pantalla ---
@@ -714,21 +710,6 @@ function addToCart() {
     const hasName = name.length > 0;
     const hasNumber = number.length > 0;
 
-    if (hasName !== hasNumber) {
-        alert('Debes completar tanto el nombre como el dorsal, o dejar ambos vacíos');
-        return;
-    }
-    if (name && !/^[A-Za-zÀ-ÿ\s]+$/.test(name)) {
-        alert('El nombre solo puede contener letras y espacios');
-        return;
-    }
-    if (number) {
-        const numValue = parseInt(number);
-        if (number.length > 2 || numValue < 0 || numValue > 99 || isNaN(numValue)) {
-            alert('El dorsal debe ser un número entre 0 y 99 (máximo 2 dígitos)');
-            return;
-        }
-    }
     const sizeSurcharge = getSizeSurcharge(selectedSize);
     const customization = {
         size: selectedSize,
@@ -739,12 +720,13 @@ function addToCart() {
         patch: document.getElementById('patch-input').value.trim()
     };
     let totalPrice = product.price;
-    totalPrice += sizeSurcharge;                                          // suplemento talla
+    totalPrice += sizeSurcharge;
     if (customization.version === 'jugador') totalPrice += 5;
     if (customization.patch) {
         totalPrice += 1.5;
     }
-    if (customization.name && customization.number) {
+    // Personalización: nombre O dorsal = +€2 (no hace falta tener los dos)
+    if (customization.name || customization.number) {
         totalPrice += 2;
     }
     const quantity = parseInt(document.getElementById('qty-input').value) || 1;

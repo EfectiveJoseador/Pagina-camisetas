@@ -357,6 +357,7 @@ const Cart = {
                             <button class="qty-btn-plus touch-target" data-index="${index}" aria-label="Aumentar"><i class="fas fa-plus"></i></button>
                         </div>
                         <button class="btn-remove touch-target" data-index="${index}" aria-label="Eliminar"><i class="fas fa-trash-alt"></i></button>
+                        <button class="btn-cart-edit" data-index="${index}" title="Editar producto" aria-label="Editar ${sanitizeHTML(displayName)}"><i class="fas fa-pen"></i></button>
                     </div>
                     <div class="cart-item-price">€${(displayPrice * qty).toFixed(2)}</div>
                 </div>
@@ -379,6 +380,9 @@ const Cart = {
         });
         container.querySelectorAll('.btn-remove').forEach(btn => {
             btn.addEventListener('click', () => this.remove(btn.dataset.index));
+        });
+        container.querySelectorAll('.btn-cart-edit').forEach(btn => {
+            btn.addEventListener('click', () => openCartItemEditModal(parseInt(btn.dataset.index), this));
         });
         const calculations = this.calculateTotal();
         const subtotalEl = document.getElementById('subtotal-price');
@@ -499,6 +503,264 @@ const Cart = {
         if (totalEl) totalEl.textContent = `€${calculations.total.toFixed(2)}`;
     }
 };
+
+// ---------------------------------------------------------------------------
+// Edit item modal — opens when clicking the pencil button on a cart item
+// Mirrors the validation and pricing logic from producto.js exactly.
+// ---------------------------------------------------------------------------
+function getCartItemTypeName(item) {
+    const n   = (item.name  || '').toLowerCase();
+    const img = (item.image || '').toLowerCase();
+    if (n.includes('kids') || n.includes('niño') || n.includes('niños') || img.includes('kids')) return 'kids';
+    if (n.includes('retro')) return 'retro';
+    if (n.includes('nba')   || img.includes('nba')) return 'nba';
+    return 'normal';
+}
+
+const CART_SIZE_CONFIGS = {
+    kids:   ['16', '18', '20', '22', '24', '26', '28'],
+    retro:  ['S', 'M', 'L', 'XL', '2XL'],
+    normal: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+    nba:    ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL']
+};
+
+const CART_SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+
+function calcEditPrice(basePrice, custom) {
+    let total = basePrice;
+    total += CART_SIZE_SURCHARGES[custom.size] || 0;
+    if (custom.version === 'jugador') total += 5;
+    if (custom.patch) total += 1.5;
+    // Nombre O dorsal = +€2 (no hace falta tener los dos)
+    if (custom.name || custom.number) total += 2;
+    return total;
+}
+
+function openCartItemEditModal(cartIndex, cartRef) {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const item = cart[cartIndex];
+    if (!item || item.isAccessory) return;
+
+    const type      = getCartItemTypeName(item);
+    const sizes     = CART_SIZE_CONFIGS[type] || CART_SIZE_CONFIGS.normal;
+    const basePrice = item.basePrice || 19.90;
+    const custom    = { ...(item.customization || {}) };
+
+    // Same restrictions as isRestrictedCategory() in producto.js
+    const isNBA        = type === 'nba';
+    const isKids       = type === 'kids';
+    const isRetro      = type === 'retro';
+    const isRestricted = isNBA || isKids || isRetro;
+    const showVersion  = !isRestricted;   // version hidden for kids / retro / NBA
+    const showPatch    = !isNBA;           // patch hidden only for NBA
+
+    const currentVersion = custom.version || 'aficionado';
+
+    // Size options — 3XL/4XL will be hidden dynamically when Jugador
+    const sizeOptions = sizes.map(sz => {
+        const sel   = custom.size === sz ? 'selected' : '';
+        const extra = CART_SIZE_SURCHARGES[sz] ? ` (+€${CART_SIZE_SURCHARGES[sz]})` : '';
+        return `<option value="${sz}" ${sel}>${sz}${extra}</option>`;
+    }).join('');
+
+    const versionBlock = showVersion ? `
+        <div class="upsell-edit-field" id="ce-version-group">
+            <label>Versión <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€5 Jugador)</span></label>
+            <select id="ce-version">
+                <option value="aficionado" ${currentVersion === 'aficionado' ? 'selected' : ''}>Aficionado</option>
+                <option value="jugador"    ${currentVersion === 'jugador'    ? 'selected' : ''}>Jugador (+€5)</option>
+            </select>
+        </div>` : '';
+
+    const patchBlock = showPatch ? `
+        <div class="upsell-edit-field" id="ce-patch-group">
+            <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€1.50 si rellenas)</span></label>
+            <input type="text" id="ce-patch" placeholder="Ej. Champions League" maxlength="30" autocomplete="off" value="${custom.patch || ''}">
+        </div>` : '';
+
+    const overlay = document.createElement('div');
+    overlay.id = 'cart-edit-overlay';
+    overlay.className = 'upsell-edit-overlay';
+    overlay.innerHTML = `
+        <div class="upsell-edit-panel" role="dialog" aria-modal="true" aria-labelledby="ce-title">
+            <div class="upsell-edit-header">
+                <h3 id="ce-title">Editar producto</h3>
+                <button class="upsell-edit-close" aria-label="Cerrar">&times;</button>
+            </div>
+
+            <div class="upsell-edit-product-preview">
+                <img src="${item.image}" alt="${item.name}">
+                <span class="upsell-edit-product-preview-name">${item.name}</span>
+            </div>
+
+            <div class="upsell-edit-field">
+                <label>Talla</label>
+                <select id="ce-size">${sizeOptions}</select>
+            </div>
+
+            ${versionBlock}
+
+            <div class="upsell-edit-field">
+                <label>Nombre <span style="color:#6b7280;text-transform:none;font-weight:400;">(solo letras · máx 15 · +€2 con nombre o dorsal)</span></label>
+                <input type="text" id="ce-name" placeholder="Ej. PEDRI" maxlength="15" autocomplete="off" value="${custom.name || ''}">
+            </div>
+
+            <div class="upsell-edit-field">
+                <label>Dorsal <span style="color:#6b7280;text-transform:none;font-weight:400;">(0–99)</span></label>
+                <input type="text" id="ce-number" placeholder="Ej. 10" maxlength="2" inputmode="numeric" autocomplete="off" value="${custom.number || ''}">
+            </div>
+
+            ${patchBlock}
+
+            <div class="upsell-edit-price-summary">
+                <span>Total por unidad</span>
+                <span class="upsell-edit-price-total" id="ce-total">€${calcEditPrice(basePrice, custom).toFixed(2)}</span>
+            </div>
+
+            <div class="upsell-edit-actions">
+                <button class="btn-upsell-edit-cancel">Cancelar</button>
+                <button class="btn-upsell-edit-save" id="ce-save-btn">Guardar cambios</button>
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('active')));
+
+    // ── Field accessors ──────────────────────────────────────────────────────
+    const getSize    = () => overlay.querySelector('#ce-size')?.value    || '';
+    const getVersion = () => overlay.querySelector('#ce-version')?.value || 'aficionado';
+    const getName    = () => overlay.querySelector('#ce-name')?.value    || '';
+    const getNumber  = () => overlay.querySelector('#ce-number')?.value  || '';
+    const getPatch   = () => overlay.querySelector('#ce-patch')?.value   || '';
+
+    // ── Live price — mirrors updatePreview() in producto.js ─────────────────
+    function updatePrice() {
+        const el = overlay.querySelector('#ce-total');
+        if (!el) return;
+        const c = { size: getSize(), version: getVersion(), name: getName().trim(), number: getNumber().trim(), patch: getPatch() };
+        el.textContent = `€${calcEditPrice(basePrice, c).toFixed(2)}`;
+    }
+
+    // ── Version → disable 3XL/4XL (mirrors applyPlayerVersionSizeRestriction) ──
+    function applyVersionSizeRestriction() {
+        if (!showVersion) return;
+        const sizeSelect = overlay.querySelector('#ce-size');
+        if (!sizeSelect) return;
+        const isJugador = getVersion() === 'jugador';
+        ['3XL', '4XL'].forEach(sz => {
+            const opt = sizeSelect.querySelector(`option[value="${sz}"]`);
+            if (!opt) return;
+            opt.disabled = isJugador;
+            opt.hidden   = isJugador;
+        });
+        if (isJugador && ['3XL', '4XL'].includes(sizeSelect.value)) {
+            sizeSelect.value = 'XL';
+            if (window.Toast) window.Toast.error('La talla 3XL/4XL no está disponible en Versión Jugador');
+        }
+        updatePrice();
+    }
+
+    // ── Name input: letters/spaces only, max 15 (mirrors handleNameInput) ───
+    overlay.querySelector('#ce-name')?.addEventListener('input', e => {
+        let v = e.target.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+        if (v.length > 15) v = v.slice(0, 15);
+        e.target.value = v;
+        // Hide hint while typing
+        const h = overlay.querySelector('#ce-name-hint');
+        if (h) h.style.display = 'none';
+        updatePrice();
+    });
+
+    // ── Number input: digits only, 0-99, max 2 (mirrors handleDorsalInput) ──
+    overlay.querySelector('#ce-number')?.addEventListener('input', e => {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 2) v = v.slice(0, 2);
+        if (v !== '' && parseInt(v) > 99) v = '99';
+        e.target.value = v;
+        updatePrice();
+    });
+
+    // ── Version change ───────────────────────────────────────────────────────
+    overlay.querySelector('#ce-version')?.addEventListener('change', applyVersionSizeRestriction);
+
+    // ── Size / patch change ──────────────────────────────────────────────────
+    overlay.querySelector('#ce-size')?.addEventListener('change', updatePrice);
+    overlay.querySelector('#ce-patch')?.addEventListener('input',  updatePrice);
+
+    // Apply initial restriction (in case item was saved as jugador with 3XL/4XL)
+    applyVersionSizeRestriction();
+
+    // ── Close ────────────────────────────────────────────────────────────────
+    function closeOverlay() {
+        overlay.classList.remove('active');
+        setTimeout(() => overlay.remove(), 220);
+    }
+    overlay.querySelector('.upsell-edit-close').addEventListener('click', closeOverlay);
+    overlay.querySelector('.btn-upsell-edit-cancel').addEventListener('click', closeOverlay);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeOverlay(); });
+    const escHandler = e => {
+        if (e.key === 'Escape') { closeOverlay(); document.removeEventListener('keydown', escHandler); }
+    };
+    document.addEventListener('keydown', escHandler);
+
+    overlay.querySelector('#ce-save-btn').addEventListener('click', () => {
+        const nameVal    = getName().trim();
+        const numberVal  = getNumber().trim();
+        const sizeVal    = getSize();
+        const patchVal   = getPatch();
+        const versionVal = getVersion();
+
+        const hasName   = nameVal.length > 0;
+        const hasNumber = numberVal.length > 0;
+
+        // Validation: name — letters and spaces only
+        if (hasName && !/^[A-Za-z\u00C0-\u00FF\s]+$/.test(nameVal)) {
+            if (window.Toast) window.Toast.error('El nombre solo puede contener letras y espacios');
+            else alert('El nombre solo puede contener letras y espacios');
+            return;
+        }
+
+        // Validation: dorsal — numeric 0-99, max 2 digits
+        if (hasNumber) {
+            const numValue = parseInt(numberVal);
+            if (numberVal.length > 2 || numValue < 0 || numValue > 99 || isNaN(numValue)) {
+                if (window.Toast) window.Toast.error('El dorsal debe ser un número entre 0 y 99 (máximo 2 dígitos)');
+                else alert('El dorsal debe ser un número entre 0 y 99 (máximo 2 dígitos)');
+                return;
+            }
+        }
+
+        const newCustom = {
+            ...custom,
+            size:          sizeVal,
+            sizeSurcharge: CART_SIZE_SURCHARGES[sizeVal] || 0,
+            version:       versionVal,
+            name:          hasName   ? nameVal.toUpperCase() : '',
+            number:        hasNumber ? numberVal             : '',
+            patch:         patchVal,
+        };
+        const newPrice = calcEditPrice(basePrice, newCustom);
+
+        const updatedCart = JSON.parse(localStorage.getItem('cart') || '[]');
+        if (updatedCart[cartIndex]) {
+            updatedCart[cartIndex].customization = newCustom;
+            updatedCart[cartIndex].price         = newPrice;
+            localStorage.setItem('cart', JSON.stringify(updatedCart));
+        }
+
+        if (cartRef) {
+            cartRef.load();
+            cartRef.render();
+            cartRef.updateHeaderCount();
+        }
+
+        closeOverlay();
+
+        if (window.Toast?.success) window.Toast.success('Producto actualizado');
+    });
+
+}
 
 function showShareModal(shareUrl) {
     let overlay = document.getElementById('share-modal-overlay');

@@ -40,12 +40,15 @@ function getProductType(product) {
     return 'normal';
 }
 
+
 const SIZE_CONFIGS = {
     kids: ['16', '18', '20', '22', '24', '26', '28'],
     retro: ['S', 'M', 'L', 'XL', '2XL'],
     normal: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
     nba: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL']
 };
+
+const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
 
 function getProductPrices(product) {
     const nameLower = product.name.toLowerCase();
@@ -87,31 +90,30 @@ function getRecommendations(addedProduct, allProducts) {
         getTeamBase(p.name) !== currentTeam
     );
 
-    // Shuffle sameLeague and sameCategory for variety
     const shuffledLeague = sameLeague.sort(() => Math.random() - 0.5);
     const shuffledCategory = sameCategory.sort(() => Math.random() - 0.5);
 
-    const combined = [...sameTeam, ...shuffledLeague, ...shuffledCategory];
-    return combined;
+    return [...sameTeam, ...shuffledLeague, ...shuffledCategory];
 }
 
+// ---------------------------------------------------------------------------
+// Pack promo logic
+// ---------------------------------------------------------------------------
 function getPackPromoHTML() {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     if (cart.length === 0) return '';
 
     const totalQty = cart.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
 
-    // Filtramos las camisetas normales (de €19.90) para el cálculo de los packs
     const normalItems = cart.filter(item => {
         const bp = item.basePrice;
         return !bp || Math.abs(bp - 19.90) < 0.01;
     });
     const normalQty = normalItems.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
 
-    // 1. Envío gratis si la cantidad total de artículos es 1 (independientemente del tipo de camiseta)
     if (totalQty === 1) {
         return `
-            <div class="pack-promo-card">
+            <div class="pack-promo-card promo-entering">
                 <div class="pack-promo-icon">🎁</div>
                 <div class="pack-promo-text">
                     <span class="pack-promo-title">¡Envío Gratis!</span>
@@ -121,18 +123,13 @@ function getPackPromoHTML() {
         `;
     }
 
-    // 2. Promociones de pack — basadas en normalQty EXACTO (igual que totalQty===1 arriba)
-    //    normalQty === 2 → falta 1 para el Pack 3  → mostrar
-    //    normalQty === 3 → Pack 3 ya conseguido    → ocultar (return '')
-    //    normalQty === 4 → falta 1 para Megapack 5 → mostrar
-    //    cualquier otro  → sin mensaje
     if (normalQty === 2) {
         return `
-            <div class="pack-promo-card popular">
+            <div class="pack-promo-card popular promo-entering">
                 <div class="pack-promo-icon">🔥</div>
                 <div class="pack-promo-text">
                     <span class="pack-promo-title">¡Ahorro Pack Popular!</span>
-                    <span class="pack-promo-desc">Con <strong>1 camiseta más</strong>, consigues el <strong>Pack 3 por €56.90</strong> (¡Ahorras 5%!).</span>
+                    <span class="pack-promo-desc">Con <strong>1 camiseta más</strong>, consigues el <strong>Pack 3 por €56.90</strong> (¡Ahorrarás un 5%!).</span>
                 </div>
             </div>
         `;
@@ -140,11 +137,11 @@ function getPackPromoHTML() {
 
     if (normalQty === 4) {
         return `
-            <div class="pack-promo-card mega">
+            <div class="pack-promo-card mega promo-entering">
                 <div class="pack-promo-icon">⚡</div>
                 <div class="pack-promo-text">
                     <span class="pack-promo-title">¡Ahorro Megapack!</span>
-                    <span class="pack-promo-desc">Con <strong>1 camiseta más</strong>, consigues el <strong>Megapack 5 por €85.90</strong> (¡Ahorras 15%!).</span>
+                    <span class="pack-promo-desc">Con <strong>1 camiseta más</strong>, consigues el <strong>Megapack 5 por €85.90</strong> (¡Ahorrarás 15€!).</span>
                 </div>
             </div>
         `;
@@ -153,9 +150,38 @@ function getPackPromoHTML() {
     return '';
 }
 
+// ---------------------------------------------------------------------------
+// Mejora 1: updatePackPromoMessage — animated update of the promo banner
+// ---------------------------------------------------------------------------
+function updatePackPromoMessage() {
+    const promoContainer = document.getElementById('upsell-pack-promo');
+    if (!promoContainer) return;
+
+    const newHTML = getPackPromoHTML();
+    const hasCurrentContent = promoContainer.innerHTML.trim() !== '';
+    const hasNewContent = newHTML.trim() !== '';
+
+    if (hasCurrentContent) {
+        // Fade out existing card first, then swap
+        promoContainer.classList.add('promo-hiding');
+        setTimeout(() => {
+            promoContainer.classList.remove('promo-hiding');
+            promoContainer.innerHTML = newHTML;
+            // The new card already has .promo-entering so it animates in
+        }, 200);
+    } else {
+        // Nothing was there before — just insert with entry animation
+        promoContainer.innerHTML = newHTML;
+    }
+}
+
+
+
+// ---------------------------------------------------------------------------
+// addToCartDirectly — adds a recommended product and refreshes the modal
+// ---------------------------------------------------------------------------
 function addToCartDirectly(product, size, btnElement) {
     const prices = getProductPrices(product);
-    const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
     const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
 
     const customization = {
@@ -210,11 +236,8 @@ function addToCartDirectly(product, size, btnElement) {
         window.showToast(`${product.name} (${size}) añadido`);
     }
 
-    // Update the pack promotion text dynamically
-    const promoContainer = document.getElementById('upsell-pack-promo');
-    if (promoContainer) {
-        promoContainer.innerHTML = getPackPromoHTML();
-    }
+    // Update pack promo with animation
+    updatePackPromoMessage();
 
     // Simple temporary animation on the "+" button
     if (btnElement) {
@@ -228,6 +251,9 @@ function addToCartDirectly(product, size, btnElement) {
     }
 }
 
+// ---------------------------------------------------------------------------
+// Recommendation item rendering
+// ---------------------------------------------------------------------------
 function renderProductItemHTML(prod) {
     const prices = getProductPrices(prod);
     const type = getProductType(prod);
@@ -279,11 +305,13 @@ function attachRecItemListeners(parentElement) {
     });
 }
 
+// ---------------------------------------------------------------------------
+// showUpsellModal — main export
+// ---------------------------------------------------------------------------
 export function showUpsellModal(addedProduct, selectedSize = 'M', addedProductPrice = null) {
     // If addedProductPrice is not passed, calculate it
     if (addedProductPrice === null) {
         const prices = getProductPrices(addedProduct);
-        const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
         addedProductPrice = prices.price + (SIZE_SURCHARGES[selectedSize] || 0);
     }
 
@@ -328,11 +356,7 @@ export function showUpsellModal(addedProduct, selectedSize = 'M', addedProductPr
             <div class="upsell-recommendations">
                 <h4>También te puede gustar...</h4>
                 <div class="upsell-recommendations-grid" id="upsell-recs-grid">
-                    <!-- Recommendations will be loaded dynamically here -->
-                    <div class="upsell-loader hidden" id="upsell-loader-indicator">
-                        <div class="upsell-loader-spinner"></div>
-                        <span>Cargando más productos...</span>
-                    </div>
+                    <!-- Recommendations loaded dynamically -->
                 </div>
             </div>
 
@@ -344,7 +368,19 @@ export function showUpsellModal(addedProduct, selectedSize = 'M', addedProductPr
     `;
 
     const recsGrid = modalOverlay.querySelector('#upsell-recs-grid');
-    const loaderIndicator = modalOverlay.querySelector('#upsell-loader-indicator');
+
+    // ── Create loader and sentinel programmatically (correct DOM order) ──────
+    // Order inside recsGrid: [items...] → loader → sentinel
+    const loaderIndicator = document.createElement('div');
+    loaderIndicator.className = 'upsell-loader hidden';
+    loaderIndicator.id = 'upsell-loader-indicator';
+    loaderIndicator.innerHTML = '<div class="upsell-loader-spinner"></div><span>Cargando más productos...</span>';
+    recsGrid.appendChild(loaderIndicator);
+
+    const sentinel = document.createElement('div');
+    sentinel.className = 'upsell-sentinel';
+    sentinel.style.cssText = 'height:1px;width:100%;flex-shrink:0;';
+    recsGrid.appendChild(sentinel); // always last
 
     const BATCH_SIZE = 6;
     let loadedCount = 0;
@@ -353,70 +389,60 @@ export function showUpsellModal(addedProduct, selectedSize = 'M', addedProductPr
     let observer = null;
     let scrollTimeout = null;
 
-    // Create a sentinel element at the absolute bottom of the grid
-    const sentinel = document.createElement('div');
-    sentinel.className = 'upsell-sentinel';
-    sentinel.style.height = '1px';
-    sentinel.style.width = '100%';
-    recsGrid.appendChild(sentinel);
-
     function loadMoreRecs() {
         if (isLoading || loadedCount >= allRecs.length) return;
         isLoading = true;
-
-        // Show loader indicator
         loaderIndicator.classList.remove('hidden');
 
-        // Simulate a minor network loading state (600ms) for professional visual transition
         loadTimeout = setTimeout(() => {
             const batch = allRecs.slice(loadedCount, loadedCount + BATCH_SIZE);
             const batchHTML = batch.map(prod => renderProductItemHTML(prod)).join('');
 
-            // Insert newly loaded elements before the loader
+            // Insert items before the loader (loader stays above sentinel)
             loaderIndicator.insertAdjacentHTML('beforebegin', batchHTML);
-
-            // Attach event listeners to the new button elements
             attachRecItemListeners(recsGrid);
 
             loadedCount += batch.length;
             isLoading = false;
-
-            // Hide loader
             loaderIndicator.classList.add('hidden');
-        }, 600);
+
+            // Reconnect observer to sentinel after DOM change so it re-evaluates
+            if (observer) {
+                observer.unobserve(sentinel);
+                observer.observe(sentinel);
+            }
+        }, 400);
     }
 
-    // Load initial batch of recommendations
-    loadMoreRecs();
-
-    // Scroll fallback handler (with 50ms debounce)
+    // ── Scroll fallback — always active as belt-and-suspenders ──────────────
     const handleScrollFallback = () => {
         if (scrollTimeout) clearTimeout(scrollTimeout);
         scrollTimeout = setTimeout(() => {
             if (isLoading || loadedCount >= allRecs.length) return;
-            const scrollTop = recsGrid.scrollTop;
-            const scrollHeight = recsGrid.scrollHeight;
-            const clientHeight = recsGrid.clientHeight;
-            if (scrollHeight - scrollTop - clientHeight < 200) {
+            const { scrollTop, scrollHeight, clientHeight } = recsGrid;
+            if (scrollHeight - scrollTop - clientHeight < 150) {
                 loadMoreRecs();
             }
-        }, 50);
+        }, 80);
     };
+    recsGrid.addEventListener('scroll', handleScrollFallback);
 
-    // Setup progressive loading behavior
+    // ── IntersectionObserver — fires when sentinel enters the scrollable area ─
     if (typeof IntersectionObserver !== 'undefined') {
         observer = new IntersectionObserver((entries) => {
             if (entries[0].isIntersecting && !isLoading && loadedCount < allRecs.length) {
                 loadMoreRecs();
             }
         }, {
-            root: recsGrid,
-            rootMargin: '0px 0px 200px 0px'
+            root: recsGrid,          // the scrollable container is the viewport
+            rootMargin: '0px 0px 100px 0px',
+            threshold: 0
         });
         observer.observe(sentinel);
-    } else {
-        recsGrid.addEventListener('scroll', handleScrollFallback);
     }
+
+    // Load the first batch immediately on open
+    loadMoreRecs();
 
     // Event listeners
     const closeModal = () => {
