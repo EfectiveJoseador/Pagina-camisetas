@@ -97,18 +97,18 @@ function getRecommendations(addedProduct, allProducts) {
 
 function getPackPromoHTML() {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    if (cart.length === 0) return '';
+
     const totalQty = cart.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
 
-    const allNormal = cart.every(item => {
+    // Filtramos las camisetas normales (de €19.90) para el cálculo de los packs
+    const normalItems = cart.filter(item => {
         const bp = item.basePrice;
         return !bp || Math.abs(bp - 19.90) < 0.01;
     });
+    const normalQty = normalItems.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
 
-    if (!allNormal || totalQty === 0) {
-        return '';
-    }
-
-    const remainder = totalQty % 5;
+    // 1. Envío gratis si la cantidad total de artículos es 1 (independientemente del tipo de camiseta)
     if (totalQty === 1) {
         return `
             <div class="pack-promo-card">
@@ -119,7 +119,14 @@ function getPackPromoHTML() {
                 </div>
             </div>
         `;
-    } else if (remainder === 2) {
+    }
+
+    // 2. Promociones de pack — basadas en normalQty EXACTO (igual que totalQty===1 arriba)
+    //    normalQty === 2 → falta 1 para el Pack 3  → mostrar
+    //    normalQty === 3 → Pack 3 ya conseguido    → ocultar (return '')
+    //    normalQty === 4 → falta 1 para Megapack 5 → mostrar
+    //    cualquier otro  → sin mensaje
+    if (normalQty === 2) {
         return `
             <div class="pack-promo-card popular">
                 <div class="pack-promo-icon">🔥</div>
@@ -129,7 +136,9 @@ function getPackPromoHTML() {
                 </div>
             </div>
         `;
-    } else if (remainder === 4) {
+    }
+
+    if (normalQty === 4) {
         return `
             <div class="pack-promo-card mega">
                 <div class="pack-promo-icon">⚡</div>
@@ -140,6 +149,7 @@ function getPackPromoHTML() {
             </div>
         `;
     }
+
     return '';
 }
 
@@ -223,7 +233,7 @@ function renderProductItemHTML(prod) {
     const type = getProductType(prod);
     const sizes = SIZE_CONFIGS[type] || SIZE_CONFIGS.normal;
     const defaultRecSize = type === 'kids' ? '24' : 'M';
-    
+
     const sizeOptionsHTML = sizes.map(sz => {
         const isSel = sz === defaultRecSize ? 'selected' : '';
         return `<option value="${sz}" ${isSel}>${sz}</option>`;
@@ -353,7 +363,7 @@ export function showUpsellModal(addedProduct, selectedSize = 'M', addedProductPr
     function loadMoreRecs() {
         if (isLoading || loadedCount >= allRecs.length) return;
         isLoading = true;
-        
+
         // Show loader indicator
         loaderIndicator.classList.remove('hidden');
 
@@ -361,16 +371,16 @@ export function showUpsellModal(addedProduct, selectedSize = 'M', addedProductPr
         loadTimeout = setTimeout(() => {
             const batch = allRecs.slice(loadedCount, loadedCount + BATCH_SIZE);
             const batchHTML = batch.map(prod => renderProductItemHTML(prod)).join('');
-            
+
             // Insert newly loaded elements before the loader
             loaderIndicator.insertAdjacentHTML('beforebegin', batchHTML);
-            
+
             // Attach event listeners to the new button elements
             attachRecItemListeners(recsGrid);
-            
+
             loadedCount += batch.length;
             isLoading = false;
-            
+
             // Hide loader
             loaderIndicator.classList.add('hidden');
         }, 600);
@@ -413,7 +423,7 @@ export function showUpsellModal(addedProduct, selectedSize = 'M', addedProductPr
         modalOverlay.classList.remove('active');
         document.body.style.overflow = '';
         document.removeEventListener('keydown', handleEsc);
-        
+
         // Disconnect observer & clear timers to avoid leaks or state residues
         if (observer) {
             observer.disconnect();
