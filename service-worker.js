@@ -59,9 +59,9 @@ self.addEventListener('fetch', (event) => {
   // Forzar bypass del HTTP cache del navegador para que los headers CSP
   // lleguen siempre frescos desde el servidor (Vercel/Firebase Hosting).
   const isHtml = url.endsWith('.html') ||
-                 url.endsWith('/') ||
-                 event.request.mode === 'navigate' ||
-                 event.request.headers.get('Accept')?.includes('text/html');
+    url.endsWith('/') ||
+    event.request.mode === 'navigate' ||
+    event.request.headers.get('Accept')?.includes('text/html');
 
   if (isHtml) {
     event.respondWith(
@@ -129,9 +129,9 @@ self.addEventListener('fetch', (event) => {
           if (response && response.status === 200) {
             const url = event.request.url;
             const isAsset = url.includes('/css/') ||
-                            url.includes('/js/') ||
-                            url.includes('/assets/') ||
-                            url.match(/\.(woff2?|ttf|eot|svg|png|jpg|jpeg|gif|webp|ico)(\?|$)/);
+              url.includes('/js/') ||
+              url.includes('/assets/') ||
+              url.match(/\.(woff2?|ttf|eot|svg|png|jpg|jpeg|gif|webp|ico)(\?|$)/);
 
             if (isAsset) {
               const responseToCache = response.clone();

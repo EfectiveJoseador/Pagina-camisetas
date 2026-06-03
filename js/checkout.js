@@ -201,6 +201,19 @@ function initPaymentMethods() {
             if (paypalInfo) paypalInfo.style.display = e.target.value === 'paypal' ? 'block' : 'none';
             if (bizumInfo) bizumInfo.style.display = e.target.value === 'bizum' ? 'block' : 'none';
 
+            // Reset checkout button state if payment method changes
+            const confirmBtn = document.getElementById('confirm-order-btn');
+            if (confirmBtn) {
+                confirmBtn.innerHTML = '<i class="fas fa-check-circle"></i> Confirmar Pedido';
+                confirmBtn.disabled = false;
+                confirmBtn.classList.remove('paypal-opened');
+                delete confirmBtn.dataset.paypalUrl;
+            }
+            const manualBtn = document.getElementById('paypal-manual-confirm-btn');
+            if (manualBtn) {
+                manualBtn.style.display = 'none';
+            }
+
             if (window.Analytics) {
                 window.Analytics.trackAddPaymentInfo(e.target.value);
             }
@@ -225,7 +238,7 @@ function setupZipCodeLookup() {
             zipSpinner?.classList.remove('hidden');
             setTimeout(() => {
                 zipSpinner?.classList.add('hidden');
-                
+
                 const provCode = value.substring(0, 2);
                 const provinces = {
                     '01': { city: 'Vitoria-Gasteiz', province: 'Álava' },
@@ -290,6 +303,17 @@ function setupZipCodeLookup() {
 }
 
 function confirmOrder() {
+    const confirmBtn = document.getElementById('confirm-order-btn');
+    
+    // Si PayPal ya se abrió previamente, al hacer clic reabrimos la pestaña/ventana
+    if (confirmBtn && confirmBtn.classList.contains('paypal-opened')) {
+        const url = confirmBtn.dataset.paypalUrl;
+        if (url) {
+            window.open(url, '_blank');
+        }
+        return;
+    }
+
     if (!currentUser) {
         alert('Debes iniciar sesión para realizar un pedido.');
         window.location.href = '/pages/login.html';
@@ -363,7 +387,6 @@ function confirmOrder() {
         orderData.paypalLink = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${finalTotal.toFixed(2)}`;
     }
 
-    const confirmBtn = document.getElementById('confirm-order-btn');
     if (!confirmBtn) return;
     if (paymentMethod === 'paypal') {
         const paypalUrl = orderData.paypalLink;
@@ -376,14 +399,16 @@ function confirmOrder() {
         }
 
         const originalText = confirmBtn.innerHTML;
-        confirmBtn.innerHTML = '<i class="fas fa-external-link-alt"></i> PayPal abierto...';
-        confirmBtn.disabled = true;
+        confirmBtn.innerHTML = '<i class="fas fa-external-link-alt"></i> PayPal abierto... Clic para volver a abrir';
+        confirmBtn.classList.add('paypal-opened');
+        confirmBtn.dataset.paypalUrl = paypalUrl;
+        confirmBtn.disabled = false; // Mantener clickable para reabrir el enlace
 
         // Botón de confirmación manual — el usuario lo pulsa tras pagar
         let manualBtn = document.getElementById('paypal-manual-confirm-btn');
         if (!manualBtn) {
             manualBtn = document.createElement('button');
-            manualBtn.id   = 'paypal-manual-confirm-btn';
+            manualBtn.id = 'paypal-manual-confirm-btn';
             manualBtn.type = 'button';
             manualBtn.style.cssText = 'width:100%;margin-top:0.75rem;padding:0.9rem 1.5rem;background:linear-gradient(135deg,#0070ba,#003087);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;box-shadow:0 4px 14px rgba(0,112,186,0.35);transition:all 0.2s ease';
             manualBtn.innerHTML = '<i class="fab fa-paypal"></i> Ya he pagado &mdash; Confirmar pedido';
@@ -395,6 +420,8 @@ function confirmOrder() {
             manualBtn.style.display = 'none';
             confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finalizando...';
             confirmBtn.disabled = true;
+            confirmBtn.classList.remove('paypal-opened');
+            delete confirmBtn.dataset.paypalUrl;
             try {
                 await saveOrder(orderData);
                 await sendOrderViaWeb3Forms(orderData);
@@ -415,6 +442,8 @@ function confirmOrder() {
                 alert('Error al procesar el pedido: ' + (error.message || 'Intentalo de nuevo.'));
                 confirmBtn.innerHTML = originalText;
                 confirmBtn.disabled = false;
+                confirmBtn.classList.add('paypal-opened');
+                confirmBtn.dataset.paypalUrl = paypalUrl;
                 manualBtn.style.display = 'flex';
             }
         };
@@ -469,7 +498,7 @@ Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
         if (version.toLowerCase() === 'aficionado') {
             version = 'fan';
         }
-        
+
         let extras = [];
         if (custom.patch) {
             extras.push('Parche: ' + custom.patch);
@@ -484,9 +513,9 @@ Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
         } else if (custom.number) {
             extras.push('Personalización: ' + custom.number);
         }
-        
+
         let extrasStr = extras.length > 0 ? (' [' + extras.join(' | ') + ']') : '';
-        
+
         const price = (item.price * qty).toFixed(2);
         productsText += qty + 'x ' + item.name + ' - ' + size + ' - ' + version + extrasStr + ' - €' + price + '\n';
     });
@@ -501,11 +530,11 @@ Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
     if (orderData.discount > 0) {
         totalInfo += `Descuento total: -€${orderData.discount.toFixed(2)}\n`;
     }
-    
+
     const paymentMethodText = orderData.paymentMethod ? orderData.paymentMethod.toUpperCase() : 'NO ESPECIFICADO';
     totalInfo += `Método de pago: ${paymentMethodText}\n`;
     totalInfo += `TOTAL A PAGAR: €${orderData.total.toFixed(2)}`;
-    
+
     const formData = new FormData();
     formData.append("access_key", WEB3FORMS_KEY);
     formData.append("subject", "Nuevo pedido con pago confirmado - " + orderData.orderId);
@@ -765,12 +794,12 @@ function applyCouponDiscount() {
                 appliedPromoCode = null;
                 promoDiscount = 0;
                 finalTotal = calculations.total; // recalcular sin promo
-                const promoInput  = document.getElementById('promo-code-input');
-                const promoBtn    = document.getElementById('apply-promo-btn');
+                const promoInput = document.getElementById('promo-code-input');
+                const promoBtn = document.getElementById('apply-promo-btn');
                 const promoResult = document.getElementById('promo-result');
                 const promoRemoveRow = document.getElementById('promo-remove-row');
-                if (promoInput)  { promoInput.value = ''; promoInput.disabled = false; }
-                if (promoBtn)    { promoBtn.disabled = false; promoBtn.innerHTML = 'Aplicar código'; promoBtn.style.background = '#6366f1'; }
+                if (promoInput) { promoInput.value = ''; promoInput.disabled = false; }
+                if (promoBtn) { promoBtn.disabled = false; promoBtn.innerHTML = 'Aplicar código'; promoBtn.style.background = '#6366f1'; }
                 if (promoResult) { promoResult.style.display = 'none'; }
                 if (promoRemoveRow) promoRemoveRow.style.display = 'none';
             }
@@ -933,11 +962,11 @@ async function applyPromoCode() {
         setTotalDisplay(calculations.total, finalTotal);
         // El contador de usos se incrementa solo al confirmar el pedido (ver incrementPromoUsage).
         // ── Exclusividad mutua: aviso + desactivar cupones ──────────────
-        const couponSelect    = document.getElementById('apply-coupon');
+        const couponSelect = document.getElementById('apply-coupon');
         const discountApplied = document.getElementById('discount-applied');
         if (couponSelect) {
             if (couponSelect.value) {
-                selectedCoupon  = null;
+                selectedCoupon = null;
                 appliedDiscount = 0;
                 couponSelect.value = '';
                 if (discountApplied) discountApplied.style.display = 'none';
@@ -988,23 +1017,23 @@ async function applyPromoCode() {
 // ── Quitar código promo (restaura cupones) ───────────────────────────────
 function removePromoCode() {
     appliedPromoCode = null;
-    promoDiscount    = 0;
+    promoDiscount = 0;
 
-    const input     = document.getElementById('promo-code-input');
-    const btn       = document.getElementById('apply-promo-btn');
+    const input = document.getElementById('promo-code-input');
+    const btn = document.getElementById('apply-promo-btn');
     const resultDiv = document.getElementById('promo-result');
     const removeRow = document.getElementById('promo-remove-row');
 
-    if (input)     { input.value = ''; input.disabled = false; }
-    if (btn)       { btn.disabled = false; btn.innerHTML = 'Aplicar código'; btn.style.background = '#6366f1'; }
+    if (input) { input.value = ''; input.disabled = false; }
+    if (btn) { btn.disabled = false; btn.innerHTML = 'Aplicar código'; btn.style.background = '#6366f1'; }
     if (resultDiv) { resultDiv.style.display = 'none'; }
     if (removeRow) { removeRow.style.display = 'none'; }
 
     // Reactivar selector de cupones
     const couponSelect = document.getElementById('apply-coupon');
     if (couponSelect) {
-        couponSelect.disabled            = false;
-        couponSelect.style.opacity       = '1';
+        couponSelect.disabled = false;
+        couponSelect.style.opacity = '1';
         couponSelect.style.pointerEvents = 'auto';
     }
     setCouponError(''); // limpiar aviso de exclusividad
