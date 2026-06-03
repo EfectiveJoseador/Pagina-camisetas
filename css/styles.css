@@ -113,6 +113,13 @@ main {
     transition: all 0.3s cubic-bezier(0.22, 1, 0.36, 1);
 }
 
+.logo-link span {
+    white-space: nowrap;
+    font-size: clamp(0.85rem, 3.5vw, 1.5rem);
+    overflow: hidden;
+    text-overflow: clip;
+}
+
 .logo-link:hover {
     transform: translateY(-2px);
 }

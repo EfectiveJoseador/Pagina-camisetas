@@ -1,9 +1,11 @@
 const Toast = {
     container: null,
+    _queue: [],
+    MAX: 3,
 
     init() {
         if (this.container) return;
-        
+
         this.container = document.createElement('div');
         this.container.className = 'toast-container';
         this.container.setAttribute('role', 'alert');
@@ -13,6 +15,10 @@ const Toast = {
 
     show(message, type = 'info', duration = 3000) {
         this.init();
+
+        while (this._queue.length >= this.MAX) {
+            this._remove(this._queue[0]);
+        }
 
         const icons = {
             success: 'fa-check',
@@ -32,6 +38,7 @@ const Toast = {
             this.hide(toast);
         });
 
+        this._queue.push(toast);
         this.container.appendChild(toast);
         if (duration > 0) {
             setTimeout(() => this.hide(toast), duration);
@@ -40,12 +47,19 @@ const Toast = {
         return toast;
     },
 
-    hide(toast) {
-        if (!toast || toast.classList.contains('hiding')) return;
-        
+    _remove(toast) {
+        const idx = this._queue.indexOf(toast);
+        if (idx > -1) this._queue.splice(idx, 1);
+        if (!toast || !toast.isConnected) return;
         toast.classList.add('hiding');
         setTimeout(() => toast.remove(), 300);
     },
+
+    hide(toast) {
+        if (!toast || !toast.isConnected || toast.classList.contains('hiding')) return;
+        this._remove(toast);
+    },
+
     success(message, duration) {
         return this.show(message, 'success', duration);
     },
@@ -65,7 +79,7 @@ const Toast = {
 const ButtonStates = {
     setLoading(button, loadingText = 'Cargando...') {
         if (!button) return;
-        
+
         button.dataset.originalText = button.innerHTML;
         button.dataset.originalDisabled = button.disabled;
         button.innerHTML = loadingText;
@@ -75,7 +89,7 @@ const ButtonStates = {
 
     setSuccess(button, successText = '¡Hecho!', duration = 2000) {
         if (!button) return;
-        
+
         button.classList.remove('btn-loading');
         button.classList.add('btn-success-state');
         button.innerHTML = `<i class="fas fa-check"></i> ${successText}`;
@@ -88,7 +102,7 @@ const ButtonStates = {
 
     setError(button, errorText = 'Error', duration = 2000) {
         if (!button) return;
-        
+
         button.classList.remove('btn-loading');
         button.classList.add('btn-error-state');
         button.innerHTML = `<i class="fas fa-times"></i> ${errorText}`;
@@ -100,13 +114,13 @@ const ButtonStates = {
 
     reset(button) {
         if (!button) return;
-        
+
         button.classList.remove('btn-loading', 'btn-success-state', 'btn-error-state');
-        
+
         if (button.dataset.originalText) {
             button.innerHTML = button.dataset.originalText;
         }
-        
+
         if (button.dataset.originalDisabled !== 'true') {
             button.disabled = false;
         }
@@ -144,7 +158,7 @@ const NavActiveState = {
             if (!href) return;
             const linkPath = new URL(href, window.location.origin).pathname;
             const isActive = this.isMatch(currentPath, linkPath);
-            
+
             if (isActive) {
                 link.classList.add('active');
                 link.setAttribute('aria-current', 'page');
@@ -157,7 +171,7 @@ const NavActiveState = {
 
     isMatch(currentPath, linkPath) {
         if (currentPath === linkPath) return true;
-        if ((currentPath === '/' || currentPath === '/index.html') && 
+        if ((currentPath === '/' || currentPath === '/index.html') &&
             (linkPath === '/' || linkPath === '/index.html')) {
             return true;
         }
@@ -171,15 +185,15 @@ const NavActiveState = {
 const FormFeedback = {
     showError(input, message) {
         this.clearError(input);
-        
+
         const wrapper = input.closest('.form-group') || input.parentElement;
         input.classList.add('input-error');
-        
+
         const errorEl = document.createElement('span');
         errorEl.className = 'form-error-message';
         errorEl.textContent = message;
         errorEl.style.cssText = 'color: #ef4444; font-size: 0.85rem; margin-top: 0.25rem; display: block;';
-        
+
         wrapper.appendChild(errorEl);
     },
 
