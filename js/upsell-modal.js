@@ -179,11 +179,12 @@ export function updatePackPromoMessage() {
 // ---------------------------------------------------------------------------
 // addToCartDirectly — adds a recommended product and refreshes the modal
 // ---------------------------------------------------------------------------
-function addToCartDirectly(product, size, btnElement) {
+function addToCartDirectly(product, size, btnElement, pendingCustom = null) {
     const prices = getProductPrices(product);
-    const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
+    const sizeSurcharge = UPSELL_SIZE_SURCHARGES[size] || 0;
 
-    const customization = {
+    // Use pending customization if provided, otherwise default
+    const customization = pendingCustom ? { ...pendingCustom, size } : {
         size: size,
         version: 'aficionado',
         name: '',
@@ -192,12 +193,18 @@ function addToCartDirectly(product, size, btnElement) {
         extras: []
     };
 
+    // Recalculate price including any customization surcharges
+    let totalPrice = prices.price + sizeSurcharge;
+    if (customization.version === 'jugador') totalPrice += 5;
+    if (customization.patch) totalPrice += 1.5;
+    if (customization.name || customization.number) totalPrice += 2;
+
     const cartItem = {
         id: product.id,
         name: product.name,
         image: product.image,
         basePrice: prices.price,
-        price: prices.price + sizeSurcharge,
+        price: totalPrice,
         quantity: 1,
         customization: customization
     };
@@ -229,8 +236,11 @@ function addToCartDirectly(product, size, btnElement) {
     }
 
     // Success feedback
+    const customDesc = (customization.name || customization.number)
+        ? ` · ${customization.name || ''} ${customization.number || ''}`.trim()
+        : '';
     if (window.Toast && typeof window.Toast.success === 'function') {
-        window.Toast.success(`${product.name} (${size}) añadido`);
+        window.Toast.success(`${product.name} (${size}${customDesc}) añadido`);
     } else if (window.showToast) {
         window.showToast(`${product.name} (${size}) añadido`);
     }
@@ -251,6 +261,168 @@ function addToCartDirectly(product, size, btnElement) {
 }
 
 // ---------------------------------------------------------------------------
+// Inline customization panel for upsell items (pencil button)
+// ---------------------------------------------------------------------------
+const UPSELL_SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+
+function calcUpsellEditPrice(basePrice, custom) {
+    let total = basePrice;
+    total += UPSELL_SIZE_SURCHARGES[custom.size] || 0;
+    if (custom.version === 'jugador') total += 5;
+    if (custom.patch) total += 1.5;
+    if (custom.name || custom.number) total += 2;
+    return total;
+}
+
+function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
+    const prices = getProductPrices(prod);
+    const basePrice = prices.price;
+    const type = getProductType(prod);
+    const sizes = SIZE_CONFIGS[type] || SIZE_CONFIGS.normal;
+    const currentSize = sizeSelect ? sizeSelect.value : (type === 'kids' ? '24' : 'M');
+    const current = pendingCustomRef.custom || {};
+
+    const isNBA     = type === 'nba';
+    const isKids    = type === 'kids';
+    const isRetro   = type === 'retro';
+    const isRestricted = isNBA || isKids || isRetro;
+    const showVersion  = !isRestricted;
+    const showPatch    = !isNBA;
+
+    const sizeOptions = sizes.map(sz => {
+        const sel   = sz === currentSize ? 'selected' : '';
+        const extra = UPSELL_SIZE_SURCHARGES[sz] ? ` (+€${UPSELL_SIZE_SURCHARGES[sz]})` : '';
+        return `<option value="${sz}" ${sel}>${sz}${extra}</option>`;
+    }).join('');
+
+    const versionBlock = showVersion ? `
+        <div class="upsell-edit-field">
+            <label>Versión <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€5 Jugador)</span></label>
+            <select id="ue-version">
+                <option value="aficionado" ${(current.version||'aficionado')==='aficionado'?'selected':''}>Aficionado</option>
+                <option value="jugador"    ${current.version==='jugador'?'selected':''}>Jugador (+€5)</option>
+            </select>
+        </div>` : '';
+
+    const patchBlock = showPatch ? `
+        <div class="upsell-edit-field">
+            <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€1.50)</span></label>
+            <input type="text" id="ue-patch" placeholder="Ej. Champions League" maxlength="30" autocomplete="off" value="${current.patch || ''}">
+        </div>` : '';
+
+    const overlay = document.createElement('div');
+    overlay.className = 'upsell-edit-overlay';
+    overlay.innerHTML = `
+        <div class="upsell-edit-panel" role="dialog" aria-modal="true">
+            <div class="upsell-edit-header">
+                <h3>Personalizar</h3>
+                <button class="upsell-edit-close" aria-label="Cerrar">&times;</button>
+            </div>
+            <div class="upsell-edit-product-preview">
+                <img src="${getMiniImagePath(prod.image)}" alt="${prod.name}">
+                <span class="upsell-edit-product-preview-name">${prod.name}</span>
+            </div>
+            <div class="upsell-edit-field">
+                <label>Talla</label>
+                <select id="ue-size">${sizeOptions}</select>
+            </div>
+            ${versionBlock}
+            <div class="upsell-edit-field">
+                <label>Nombre <span style="color:#6b7280;text-transform:none;font-weight:400;">(solo letras · máx 15 · +€2 con nombre o dorsal)</span></label>
+                <input type="text" id="ue-name" placeholder="Ej. PEDRI" maxlength="15" autocomplete="off" value="${current.name || ''}">
+            </div>
+            <div class="upsell-edit-field">
+                <label>Dorsal <span style="color:#6b7280;text-transform:none;font-weight:400;">(0–99)</span></label>
+                <input type="text" id="ue-number" placeholder="Ej. 10" maxlength="2" inputmode="numeric" autocomplete="off" value="${current.number || ''}">
+            </div>
+            ${patchBlock}
+            <div class="upsell-edit-price-summary">
+                <span>Total por unidad</span>
+                <span class="upsell-edit-price-total" id="ue-total">€${calcUpsellEditPrice(basePrice, { size: currentSize, ...current }).toFixed(2)}</span>
+            </div>
+            <div class="upsell-edit-actions">
+                <button class="btn-upsell-edit-cancel">Cancelar</button>
+                <button class="btn-upsell-edit-save" id="ue-save-btn">Añadir al carrito</button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(overlay);
+    requestAnimationFrame(() => requestAnimationFrame(() => overlay.classList.add('active')));
+
+    const getSize    = () => overlay.querySelector('#ue-size')?.value    || currentSize;
+    const getVersion = () => overlay.querySelector('#ue-version')?.value || 'aficionado';
+    const getName    = () => overlay.querySelector('#ue-name')?.value    || '';
+    const getNumber  = () => overlay.querySelector('#ue-number')?.value  || '';
+    const getPatch   = () => overlay.querySelector('#ue-patch')?.value   || '';
+
+    function updatePrice() {
+        const el = overlay.querySelector('#ue-total');
+        if (!el) return;
+        el.textContent = `€${calcUpsellEditPrice(basePrice, { size: getSize(), version: getVersion(), name: getName().trim(), number: getNumber().trim(), patch: getPatch() }).toFixed(2)}`;
+    }
+
+    // Live validation on name
+    overlay.querySelector('#ue-name')?.addEventListener('input', e => {
+        let v = e.target.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+        if (v.length > 15) v = v.slice(0, 15);
+        e.target.value = v;
+        updatePrice();
+    });
+    // Live validation on number
+    overlay.querySelector('#ue-number')?.addEventListener('input', e => {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 2) v = v.slice(0, 2);
+        if (v !== '' && parseInt(v) > 99) v = '99';
+        e.target.value = v;
+        updatePrice();
+    });
+    overlay.querySelector('#ue-version')?.addEventListener('change', updatePrice);
+    overlay.querySelector('#ue-size')?.addEventListener('change', updatePrice);
+    overlay.querySelector('#ue-patch')?.addEventListener('input', updatePrice);
+
+    function closeOverlay() {
+        overlay.classList.remove('active');
+        setTimeout(() => overlay.remove(), 220);
+    }
+    overlay.querySelector('.upsell-edit-close').addEventListener('click', closeOverlay);
+    overlay.querySelector('.btn-upsell-edit-cancel').addEventListener('click', closeOverlay);
+    overlay.addEventListener('click', e => { if (e.target === overlay) closeOverlay(); });
+    const escHandler = e => { if (e.key === 'Escape') { closeOverlay(); document.removeEventListener('keydown', escHandler); } };
+    document.addEventListener('keydown', escHandler);
+
+    overlay.querySelector('#ue-save-btn').addEventListener('click', () => {
+        const nameVal    = getName().trim();
+        const numberVal  = getNumber().trim();
+
+        if (nameVal && !/^[A-Za-z\u00C0-\u00FF\s]+$/.test(nameVal)) {
+            if (window.Toast) window.Toast.error('El nombre solo puede contener letras y espacios');
+            return;
+        }
+        if (numberVal) {
+            const n = parseInt(numberVal);
+            if (numberVal.length > 2 || n < 0 || n > 99 || isNaN(n)) {
+                if (window.Toast) window.Toast.error('El dorsal debe ser un número entre 0 y 99');
+                return;
+            }
+        }
+
+        const newSize = getSize();
+        const customization = {
+            size:    newSize,
+            version: getVersion(),
+            name:    nameVal ? nameVal.toUpperCase() : '',
+            number:  numberVal,
+            patch:   getPatch(),
+            extras:  []
+        };
+
+        // Añadir directamente al carrito y cerrar el panel
+        addToCartDirectly(prod, newSize, null, customization);
+        closeOverlay();
+    });
+}
+
+// ---------------------------------------------------------------------------
 // Recommendation item rendering
 // ---------------------------------------------------------------------------
 function renderProductItemHTML(prod) {
@@ -265,19 +437,24 @@ function renderProductItemHTML(prod) {
     }).join('');
 
     return `
-        <div class="upsell-rec-item" data-id="${prod.id}">
-            <img src="${getMiniImagePath(prod.image)}" alt="${prod.name}" class="upsell-rec-img">
-            <div class="upsell-rec-info">
-                <span class="upsell-rec-title">${prod.name}</span>
-                <div class="upsell-rec-prices">
-                    <span class="upsell-rec-price">€${prices.price.toFixed(2)}</span>
-                    <span class="upsell-rec-old-price">€${prices.oldPrice.toFixed(2)}</span>
+        <div class="upsell-rec-item" data-id="${prod.id}" style="cursor:default;">
+            <a href="/pages/producto.html?id=${prod.id}" class="upsell-rec-card-link" aria-label="Ver ${prod.name}" title="Ver ${prod.name}">
+                <img src="${getMiniImagePath(prod.image)}" alt="${prod.name}" class="upsell-rec-img">
+                <div class="upsell-rec-info">
+                    <span class="upsell-rec-title">${prod.name}</span>
+                    <div class="upsell-rec-prices">
+                        <span class="upsell-rec-price">€${prices.price.toFixed(2)}</span>
+                        <span class="upsell-rec-old-price">€${prices.oldPrice.toFixed(2)}</span>
+                    </div>
                 </div>
-            </div>
+            </a>
             <div class="upsell-rec-actions">
                 <select class="upsell-rec-size-select" aria-label="Seleccionar talla">
                     ${sizeOptionsHTML}
                 </select>
+                <button class="btn-upsell-rec-customize" data-id="${prod.id}" title="Personalizar" aria-label="Personalizar ${prod.name}">
+                    <i class="fas fa-pen"></i>
+                </button>
                 <button class="btn-upsell-rec-add" data-id="${prod.id}" title="Añadir al carrito">
                     <i class="fas fa-plus"></i>
                 </button>
@@ -287,20 +464,40 @@ function renderProductItemHTML(prod) {
 }
 
 function attachRecItemListeners(parentElement) {
-    parentElement.querySelectorAll('.btn-upsell-rec-add').forEach(btn => {
-        if (btn.getAttribute('data-listener-attached')) return;
-        btn.setAttribute('data-listener-attached', 'true');
-        btn.addEventListener('click', () => {
-            const prodId = parseInt(btn.getAttribute('data-id'));
-            const recProduct = products.find(p => p.id === prodId);
-            if (!recProduct) return;
+    // Each item gets its own pending-customization ref
+    parentElement.querySelectorAll('.upsell-rec-item').forEach(recItem => {
+        if (recItem.getAttribute('data-listeners-attached')) return;
+        recItem.setAttribute('data-listeners-attached', 'true');
 
-            const recItem = btn.closest('.upsell-rec-item');
-            const sizeSelect = recItem.querySelector('.upsell-rec-size-select');
-            const size = sizeSelect ? sizeSelect.value : 'M';
+        const prodId = parseInt(recItem.getAttribute('data-id'));
+        const recProduct = products.find(p => p.id === prodId);
+        if (!recProduct) return;
 
-            addToCartDirectly(recProduct, size, btn);
-        });
+        const sizeSelect = recItem.querySelector('.upsell-rec-size-select');
+        const addBtn     = recItem.querySelector('.btn-upsell-rec-add');
+        const editBtn    = recItem.querySelector('.btn-upsell-rec-customize');
+
+        // Shared pending customization state per card
+        const pendingCustomRef = { custom: null };
+
+        // Pencil button → open customization panel
+        if (editBtn) {
+            editBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                openUpsellItemEditPanel(recProduct, sizeSelect, pendingCustomRef);
+            });
+        }
+
+        // + button → add to cart (with pending customization if set)
+        if (addBtn) {
+            addBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const size = pendingCustomRef.custom?.size || (sizeSelect ? sizeSelect.value : 'M');
+                addToCartDirectly(recProduct, size, addBtn, pendingCustomRef.custom);
+                // Reset pending after adding
+                pendingCustomRef.custom = null;
+            });
+        }
     });
 }
 
