@@ -99,18 +99,21 @@ function getRecommendations(addedProduct, allProducts) {
 // ---------------------------------------------------------------------------
 // Pack promo logic
 // ---------------------------------------------------------------------------
+export function formatPrice(price) {
+    return price.toFixed(2).replace('.', ',');
+}
+
 function getPackPromoHTML() {
+    // 1. Lectura Directa y Única en Tiempo Real
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     if (cart.length === 0) return '';
 
     const totalQty = cart.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
+    
+    // 2. Homogeneización del Conteo (Solución Temporal del Core)
+    const normalQty = totalQty;
 
-    const normalItems = cart.filter(item => {
-        const bp = item.basePrice;
-        return !bp || Math.abs(bp - 19.90) < 0.01;
-    });
-    const normalQty = normalItems.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
-
+    // 1. Envío Gratis (Prioridad Máxima)
     if (totalQty === 1) {
         return `
             <div class="pack-promo-card promo-entering">
@@ -123,25 +126,37 @@ function getPackPromoHTML() {
         `;
     }
 
-    if (normalQty === 2) {
-        return `
-            <div class="pack-promo-card popular promo-entering">
-                <div class="pack-promo-icon">🔥</div>
-                <div class="pack-promo-text">
-                    <span class="pack-promo-title">¡Ahorro Pack Popular!</span>
-                    <span class="pack-promo-desc">Con <strong>1 camiseta más</strong>, consigues el <strong>Pack 3 por €56.90</strong> (¡Ahorrarás un 5%!).</span>
-                </div>
-            </div>
-        `;
-    }
-
-    if (normalQty === 4) {
+    // 2. Megapack (Bloques de 5) - Prioridad Alta
+    if (normalQty % 5 === 3 || normalQty % 5 === 4) {
+        const m = Math.floor((normalQty + 2) / 5);
+        const faltan = 5 - (normalQty % 5);
+        const textoCamisetas = faltan === 1 ? "1 camiseta más" : "2 camisetas más";
+        const precioTotal = formatPrice(m * 85.90);
+        const ahorro = m * 15;
+        
         return `
             <div class="pack-promo-card mega promo-entering">
                 <div class="pack-promo-icon">⚡</div>
                 <div class="pack-promo-text">
                     <span class="pack-promo-title">¡Ahorro Megapack!</span>
-                    <span class="pack-promo-desc">Con <strong>1 camiseta más</strong>, consigues el <strong>Megapack 5 por €85.90</strong> (¡Ahorrarás 15€!).</span>
+                    <span class="pack-promo-desc">Con <strong>${textoCamisetas}</strong>, consigues el <strong>${m}x Megapack 5 por ${precioTotal}€</strong> (¡Ahorrarás ${ahorro}€!).</span>
+                </div>
+            </div>
+        `;
+    }
+
+    // 3. Pack Popular (Bloques de 3) - Prioridad Baja
+    if (normalQty % 3 === 2) {
+        const n = Math.floor((normalQty + 1) / 3);
+        const precioTotal = formatPrice(n * 56.90);
+        const ahorro = n * 5;
+        
+        return `
+            <div class="pack-promo-card popular promo-entering">
+                <div class="pack-promo-icon">🔥</div>
+                <div class="pack-promo-text">
+                    <span class="pack-promo-title">¡Ahorro Pack Popular!</span>
+                    <span class="pack-promo-desc">Con <strong>1 camiseta más</strong>, consigues el <strong>${n}x Pack 3 por ${precioTotal}€</strong> (¡Ahorrarás un ${ahorro}%!).</span>
                 </div>
             </div>
         `;
@@ -151,31 +166,15 @@ function getPackPromoHTML() {
 }
 
 // ---------------------------------------------------------------------------
-// Mejora 1: updatePackPromoMessage — animated update of the promo banner
+// updatePackPromoMessage — update of the promo banner
 // ---------------------------------------------------------------------------
-function updatePackPromoMessage() {
+export function updatePackPromoMessage() {
     const promoContainer = document.getElementById('upsell-pack-promo');
     if (!promoContainer) return;
 
-    const newHTML = getPackPromoHTML();
-    const hasCurrentContent = promoContainer.innerHTML.trim() !== '';
-    const hasNewContent = newHTML.trim() !== '';
-
-    if (hasCurrentContent) {
-        // Fade out existing card first, then swap
-        promoContainer.classList.add('promo-hiding');
-        setTimeout(() => {
-            promoContainer.classList.remove('promo-hiding');
-            promoContainer.innerHTML = newHTML;
-            // The new card already has .promo-entering so it animates in
-        }, 200);
-    } else {
-        // Nothing was there before — just insert with entry animation
-        promoContainer.innerHTML = newHTML;
-    }
+    // Inyección de forma síncrona con el estado actual del carrito
+    promoContainer.innerHTML = getPackPromoHTML();
 }
-
-
 
 // ---------------------------------------------------------------------------
 // addToCartDirectly — adds a recommended product and refreshes the modal
@@ -327,8 +326,6 @@ export function showUpsellModal(addedProduct, selectedSize = 'M', addedProductPr
         document.body.appendChild(modalOverlay);
     }
 
-    const packPromoHTML = getPackPromoHTML();
-
     modalOverlay.innerHTML = `
         <div class="upsell-modal-container" role="dialog" aria-modal="true" aria-labelledby="upsell-title">
             <button class="upsell-modal-close" aria-label="Cerrar modal">&times;</button>
@@ -350,7 +347,7 @@ export function showUpsellModal(addedProduct, selectedSize = 'M', addedProductPr
             </div>
 
             <div class="upsell-pack-promo" id="upsell-pack-promo">
-                ${packPromoHTML}
+                ${getPackPromoHTML()}
             </div>
 
             <div class="upsell-recommendations">
