@@ -771,15 +771,12 @@ function showShareModal(shareUrl) {
         document.body.appendChild(overlay);
     }
     
-    const qrApiUrl = `https://api.qrserver.com/v1/create-qr-code/?size=150x150&data=${encodeURIComponent(shareUrl)}`;
     
     overlay.innerHTML = `
         <div class="share-modal-content">
             <button class="share-modal-close">&times;</button>
             <h3 style="margin-top:0.5rem; font-family:var(--font-heading); font-weight:800; font-size:1.25rem; display:flex; align-items:center; justify-content:center; gap:0.5rem;"><i class="fas fa-share-alt" style="color:var(--accent);"></i>Compartir Carrito</h3>
-            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.5rem;">Cualquiera con este enlace o QR podrá abrir y fusionar tu carrito en otro dispositivo.</p>
-            
-            <img src="${qrApiUrl}" alt="Código QR del Carrito" class="share-qr-img">
+            <p style="font-size:0.85rem; color:var(--text-muted); margin-top:0.5rem;">Cualquiera con este enlace podrá abrir y fusionar tu carrito en otro dispositivo.</p>
             
             <div class="share-input-group">
                 <input type="text" class="share-link-input" value="${shareUrl}" readonly>
