@@ -386,8 +386,12 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
     }
     overlay.querySelector('.upsell-edit-close').addEventListener('click', closeOverlay);
     overlay.querySelector('.btn-upsell-edit-cancel').addEventListener('click', closeOverlay);
-    overlay.addEventListener('click', e => { if (e.target === overlay) closeOverlay(); });
-    const escHandler = e => { if (e.key === 'Escape') { closeOverlay(); document.removeEventListener('keydown', escHandler); } };
+    let _mdOnOverlay = false;
+    overlay.addEventListener('mousedown', e => { _mdOnOverlay = e.target === overlay; });
+    overlay.addEventListener('click', e => { if (e.target === overlay && _mdOnOverlay) closeOverlay(); });
+    const escHandler = e => {
+        if (e.key === 'Escape') { closeOverlay(); document.removeEventListener('keydown', escHandler); }
+    };
     document.addEventListener('keydown', escHandler);
 
     overlay.querySelector('#ue-save-btn').addEventListener('click', () => {
