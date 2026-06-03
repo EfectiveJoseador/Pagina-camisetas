@@ -437,7 +437,8 @@ const Cart = {
 
             const el = document.createElement('div');
             el.className = 'checkout-item-mini';
-            el.style.cssText = 'display:flex; justify-content:space-between; align-items:center; gap:0.5rem; margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid var(--border);';
+            const isLast = index === this.items.length - 1;
+            el.style.cssText = `display:flex; justify-content:space-between; align-items:center; gap:0.5rem; ${isLast ? 'margin-bottom:0.5rem;' : 'margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid var(--border);'}`;
             el.innerHTML = `
                 <div style="display:flex; align-items:center; gap:0.75rem; flex:1; min-width:0;">
                     <img src="${imgUrl}" alt="${sanitizeHTML(displayName)}" style="width:44px; height:44px; object-fit:contain; border:1px solid var(--border); border-radius:8px; padding:2px; background:#fff; flex-shrink:0;">
