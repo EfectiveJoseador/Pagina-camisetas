@@ -131,74 +131,163 @@ const Components = {
 
         // --- Dynamic import of products-data.js & features hook up ---
         const inPagesDir = window.location.pathname.includes('/pages/');
-        const productsPath = inPagesDir ? '../js/products-data.js' : './js/products-data.js';
+        // Usamos URL absoluta para evitar ambigüedades de resolución en scripts clásicos vs módulos
+        const productsPath = `${window.location.origin}/js/products-data.js`;
+
+        // ─── Global Search Submit Handler (funciona en TODAS las páginas) ───
+        const searchInput = document.getElementById('global-search');
+        const searchIcon = document.querySelector('.header-search-icon');
+        if (searchInput) {
+            const handleGlobalSearch = () => {
+                const q = searchInput.value.trim();
+                if (!q) return;
+                const isList = window.location.pathname.includes('tienda') || window.location.pathname.includes('catalogo');
+                if (isList) {
+                    // Ya estamos en tienda/catálogo: actualizar el filtro local
+                    const pageSearchInput = document.getElementById('search-input');
+                    if (pageSearchInput) {
+                        pageSearchInput.value = q;
+                        pageSearchInput.dispatchEvent(new Event('input', { bubbles: true }));
+                        const target = document.getElementById('product-grid') || document.querySelector('.catalog-container');
+                        if (target) target.scrollIntoView({ behavior: 'smooth' });
+                    }
+                } else {
+                    // Otra página: redirigir a tienda con el parámetro de búsqueda
+                    const tiendaPath = inPagesDir ? 'tienda.html' : 'pages/tienda.html';
+                    window.location.href = `${tiendaPath}?search=${encodeURIComponent(q)}`;
+                }
+                const resultsBox = document.getElementById('search-predictive-results');
+                if (resultsBox) resultsBox.classList.add('hidden');
+            };
+
+            searchInput.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    handleGlobalSearch();
+                }
+            });
+
+            if (searchIcon) {
+                searchIcon.addEventListener('click', handleGlobalSearch);
+                searchIcon.style.cursor = 'pointer';
+            }
+        }
         
         import(productsPath).then((module) => {
             const productsList = module.default;
-            
-            // 1. Predictive Search Setup (Mejora 1)
-            const searchInput = document.getElementById('global-search');
+
+            // Helper to get prices
+            function getProductPrice(prod) {
+                const nameLower = prod.name.toLowerCase();
+                const imageLower = (prod.image || '').toLowerCase();
+                const isKids = prod.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
+                const isRetro = prod.retro === true || nameLower.includes('retro') || prod.league === 'retro';
+                const isNBA = prod.category === 'nba' || prod.league === 'nba';
+                if (isNBA || isRetro) return 24.90;
+                if (isKids) return 21.90;
+                return 19.90;
+            }
+
+            function buildResultItem(p) {
+                const prices = getProductPrice(p);
+                const miniImg = p.image.replace(/\/(\d+)\.(webp|jpg|png|jpeg)$/i, '/$1_mini.$2');
+                return `
+                    <a href="#" class="search-result-item" data-id="${p.id}" data-name="${encodeURIComponent(p.name)}">
+                        <img src="${miniImg}" alt="${p.name}" class="search-result-img" loading="lazy">
+                        <div class="search-result-info">
+                            <span class="search-result-title">${p.name}</span>
+                            <span class="search-result-category">${p.league ? p.league.toUpperCase() : ''}</span>
+                        </div>
+                        <span class="search-result-price">€${prices.toFixed(2)}</span>
+                    </a>
+                `;
+            }
+
+            function attachItemClicks(container) {
+                container.querySelectorAll('.search-result-item:not([data-bound])').forEach(item => {
+                    item.dataset.bound = '1';
+                    item.addEventListener('click', (ev) => {
+                        ev.preventDefault();
+                        const pId = parseInt(item.dataset.id);
+
+                        container.classList.add('hidden');
+                        const si = document.getElementById('global-search');
+                        if (si) si.value = '';
+
+                        // Comportamiento idéntico en TODAS las páginas: navegar al producto
+                        window.location.href = inPagesDir ? `producto.html?id=${pId}` : `pages/producto.html?id=${pId}`;
+                    });
+                });
+            }
+
+            // 1. Predictive Search Setup – carga de 6 en 6 con scroll (Mejora 1)
+            const searchInputEl = document.getElementById('global-search');
             const resultsBox = document.getElementById('search-predictive-results');
-            if (searchInput && resultsBox) {
+
+            if (searchInputEl && resultsBox) {
+                const BATCH = 6;
+                let allMatches = [];
+                let loadedCount = 0;
+
+                function renderBatch() {
+                    const batch = allMatches.slice(loadedCount, loadedCount + BATCH);
+                    if (batch.length === 0) return;
+                    const html = batch.map(buildResultItem).join('');
+                    // Remove existing load-more sentinel if present
+                    const oldSentinel = resultsBox.querySelector('.search-load-more');
+                    if (oldSentinel) oldSentinel.remove();
+
+                    resultsBox.insertAdjacentHTML('beforeend', html);
+                    loadedCount += batch.length;
+                    attachItemClicks(resultsBox);
+
+                    if (loadedCount < allMatches.length) {
+                        // Add a sentinel div for intersection observer
+                        resultsBox.insertAdjacentHTML('beforeend',
+                            `<div class="search-load-more" style="height:1px;"></div>`
+                        );
+                        observeSentinel();
+                    }
+                }
+
+                let sentinelObserver = null;
+                function observeSentinel() {
+                    if (sentinelObserver) sentinelObserver.disconnect();
+                    const sentinel = resultsBox.querySelector('.search-load-more');
+                    if (!sentinel) return;
+                    sentinelObserver = new IntersectionObserver((entries) => {
+                        if (entries[0].isIntersecting) {
+                            sentinelObserver.disconnect();
+                            renderBatch();
+                        }
+                    }, { root: resultsBox, threshold: 0.1 });
+                    sentinelObserver.observe(sentinel);
+                }
+
                 let debounceTimer;
-                searchInput.addEventListener('input', (e) => {
+                searchInputEl.addEventListener('input', (e) => {
                     clearTimeout(debounceTimer);
                     const q = e.target.value.toLowerCase().trim();
                     if (q.length < 2) {
                         resultsBox.innerHTML = '';
                         resultsBox.classList.add('hidden');
+                        allMatches = [];
+                        loadedCount = 0;
+                        if (sentinelObserver) sentinelObserver.disconnect();
                         return;
                     }
                     debounceTimer = setTimeout(() => {
-                        const matches = productsList.filter(p => 
-                            p.name.toLowerCase().includes(q) || 
+                        allMatches = productsList.filter(p =>
+                            p.name.toLowerCase().includes(q) ||
                             (p.league && p.league.toLowerCase().includes(q))
-                        ).slice(0, 5);
+                        );
+                        loadedCount = 0;
+                        resultsBox.innerHTML = '';
 
-                        if (matches.length === 0) {
+                        if (allMatches.length === 0) {
                             resultsBox.innerHTML = '<div style="padding:0.75rem; text-align:center; font-size:0.85rem; color:var(--text-muted);">No se encontraron camisetas</div>';
                         } else {
-                            resultsBox.innerHTML = matches.map(p => {
-                                const prices = getProductPrice(p);
-                                const miniImg = p.image.replace(/\/(\d+)\.(webp|jpg|png|jpeg)$/i, '/$1_mini.$2');
-                                return `
-                                    <a href="#" class="search-result-item" data-id="${p.id}" data-name="${p.name}">
-                                        <img src="${miniImg}" alt="${p.name}" class="search-result-img">
-                                        <div class="search-result-info">
-                                            <span class="search-result-title">${p.name}</span>
-                                            <span class="search-result-category">${p.league ? p.league.toUpperCase() : ''}</span>
-                                        </div>
-                                        <span class="search-result-price">€${prices.toFixed(2)}</span>
-                                    </a>
-                                `;
-                            }).join('');
-
-                            // Attach click events
-                            resultsBox.querySelectorAll('.search-result-item').forEach(item => {
-                                item.addEventListener('click', (ev) => {
-                                    ev.preventDefault();
-                                    const pId = parseInt(item.dataset.id);
-                                    const pName = item.dataset.name;
-                                    const isList = window.location.pathname.includes('tienda') || window.location.pathname.includes('catalogo');
-                                    
-                                    resultsBox.classList.add('hidden');
-                                    searchInput.value = '';
-
-                                    if (isList) {
-                                        const pageSearchInput = document.getElementById('search-input');
-                                        if (pageSearchInput) {
-                                            pageSearchInput.value = pName;
-                                            pageSearchInput.dispatchEvent(new Event('input', { bubbles: true }));
-                                            const target = document.getElementById('product-grid') || document.querySelector('.catalog-container');
-                                            if (target) {
-                                                target.scrollIntoView({ behavior: 'smooth' });
-                                            }
-                                        }
-                                    } else {
-                                        window.location.href = inPagesDir ? `producto.html?id=${pId}` : `pages/producto.html?id=${pId}`;
-                                    }
-                                });
-                            });
+                            renderBatch();
                         }
                         resultsBox.classList.remove('hidden');
                     }, 150);
@@ -211,20 +300,6 @@ const Components = {
                     }
                 });
             }
-
-            // Helper to get prices
-            function getProductPrice(prod) {
-                const nameLower = prod.name.toLowerCase();
-                const imageLower = (prod.image || '').toLowerCase();
-                const isKids = prod.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
-                const isRetro = prod.retro === true || nameLower.includes('retro') || prod.league === 'retro';
-                const isNBA = prod.category === 'nba' || prod.league === 'nba';
-
-                if (isNBA || isRetro) return 24.90;
-                if (isKids) return 21.90;
-                return 19.90;
-            }
-
 
         }).catch(err => {
             console.error('Error preloading products in components:', err);
