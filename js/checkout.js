@@ -506,12 +506,10 @@ Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
             extras.push('Parches: ' + custom.patches.join(', '));
         }
 
-        if (custom.name && custom.number) {
-            extras.push('Personalización: ' + custom.name + ' - ' + custom.number);
-        } else if (custom.name) {
-            extras.push('Personalización: ' + custom.name);
-        } else if (custom.number) {
-            extras.push('Personalización: ' + custom.number);
+        if (custom.name || custom.number) {
+            const nombreVal = custom.name || '(nombre vacío)';
+            const numeroVal = custom.number || '(numero vacío)';
+            extras.push('Personalización: ' + nombreVal + ' - ' + numeroVal);
         }
 
         let extrasStr = extras.length > 0 ? (' [' + extras.join(' | ') + ']') : '';

@@ -128,7 +128,7 @@ const Cart = {
             const patchSurcharge = patch ? 1.5 : 0;
             const hasName = !!(custom.name || '');
             const hasNumber = !!(custom.number || '');
-            const personSurcharge = (hasName && hasNumber) ? 2 : 0;
+            const personSurcharge = (hasName || hasNumber) ? 2 : 0;
             const surcharge = sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
             surcharges += surcharge * qty;
         });
@@ -312,7 +312,7 @@ const Cart = {
                 const patchSurcharge = patch ? 1.5 : 0;
                 const hasName = !!(custom.name || '');
                 const hasNumber = !!(custom.number || '');
-                const personSurcharge = (hasName && hasNumber) ? 2 : 0;
+                const personSurcharge = (hasName || hasNumber) ? 2 : 0;
                 const baseProductPrice = item.basePrice || product.price;
                 displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
                 
@@ -428,7 +428,7 @@ const Cart = {
                 const patchSurcharge = patch ? 1.5 : 0;
                 const hasName = !!(custom.name || '');
                 const hasNumber = !!(custom.number || '');
-                const personSurcharge = (hasName && hasNumber) ? 2 : 0;
+                const personSurcharge = (hasName || hasNumber) ? 2 : 0;
                 const baseProductPrice = item.basePrice || product.price;
                 displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
                 

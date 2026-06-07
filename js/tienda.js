@@ -733,8 +733,8 @@ function handleQuickAddSubmit(form, product) {
             }
 
             showUpsellModal(product, size, totalPrice);
-        }, 400);
-    }, 500);
+        }, 150);
+    }, 200);
 }
 
 function init() {
@@ -1493,10 +1493,7 @@ function handleFormSubmit(e) {
     const number = numberInput ? numberInput.value : '';
     const patch = patchSelect ? patchSelect.value : 'none';
 
-    if ((name && !number) || (!name && number)) {
-        alert('⚠️ El nombre y el dorsal deben ir juntos.\n\nSi quieres personalizar la camiseta, debes escribir AMBOS campos.');
-        return;
-    }
+
 
     if (name && !/^[A-Za-zÀ-ÿ\s]+$/.test(name)) {
         alert('El nombre solo puede contener letras y espacios');
@@ -1513,7 +1510,7 @@ function handleFormSubmit(e) {
     let totalPrice = currentProduct.price + sizeSurcharge;
     if (version === 'jugador') totalPrice += 5;
     if (patch && patch !== 'none') totalPrice += 1.5;
-    if (name && number) totalPrice += 2;
+    if (name || number) totalPrice += 2;
 
     const customization = {
         size: size,
@@ -1563,8 +1560,8 @@ function handleFormSubmit(e) {
             }
             closeModal();
             showUpsellModal(currentProduct, size, totalPrice);
-        }, 400);
-    }, 500);
+        }, 150);
+    }, 200);
 }
 function addToCart(item) {
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');

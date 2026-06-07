@@ -787,8 +787,8 @@ function addToCart() {
                 cartBtn.disabled = false;
             }
             showUpsellModal(product, selectedSize, totalPrice);
-        }, 1000);
-    }, 500);
+        }, 150);
+    }, 200);
 }
 function showToast(message) {
     const existingToast = document.querySelector('.cart-toast');
