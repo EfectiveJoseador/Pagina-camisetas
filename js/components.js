@@ -191,11 +191,12 @@ const Components = {
             function buildResultItem(p) {
                 const prices = getProductPrice(p);
                 const miniImg = p.image.replace(/\/(\d+)\.(webp|jpg|png|jpeg)$/i, '/$1_mini.$2');
+                const skuHtml = p.sku ? ` <span class="search-sku-label" style="font-family: monospace; font-size: 0.75rem; background: rgba(168, 85, 247, 0.15); color: #a855f7; padding: 2px 6px; border-radius: 4px; margin-left: 6px;">${p.sku}</span>` : '';
                 return `
                     <a href="#" class="search-result-item" data-id="${p.id}" data-name="${encodeURIComponent(p.name)}">
                         <img src="${miniImg}" alt="${p.name}" class="search-result-img" loading="lazy">
                         <div class="search-result-info">
-                            <span class="search-result-title">${p.name}</span>
+                            <span class="search-result-title">${p.name}${skuHtml}</span>
                             <span class="search-result-category">${p.league ? p.league.toUpperCase() : ''}</span>
                         </div>
                         <span class="search-result-price">€${prices.toFixed(2)}</span>
@@ -267,7 +268,8 @@ const Components = {
                 let debounceTimer;
                 searchInputEl.addEventListener('input', (e) => {
                     clearTimeout(debounceTimer);
-                    const q = e.target.value.toLowerCase().trim();
+                    const q = e.target.value.trim();
+                    const qLower = q.toLowerCase();
                     if (q.length < 2) {
                         resultsBox.innerHTML = '';
                         resultsBox.classList.add('hidden');
@@ -277,10 +279,15 @@ const Components = {
                         return;
                     }
                     debounceTimer = setTimeout(() => {
-                        allMatches = productsList.filter(p =>
-                            p.name.toLowerCase().includes(q) ||
-                            (p.league && p.league.toLowerCase().includes(q))
-                        );
+                        const isSkuSearch = /^\d{4}$/.test(q);
+                        if (isSkuSearch) {
+                            allMatches = productsList.filter(p => p.sku === q);
+                        } else {
+                            allMatches = productsList.filter(p =>
+                                p.name.toLowerCase().includes(qLower) ||
+                                (p.league && p.league.toLowerCase().includes(qLower))
+                            );
+                        }
                         loadedCount = 0;
                         resultsBox.innerHTML = '';
 

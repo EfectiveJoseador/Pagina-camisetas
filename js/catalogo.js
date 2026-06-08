@@ -53,7 +53,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
     function filterProducts() {
-        const searchTerm = searchInput.value.toLowerCase();
+        const rawSearch = searchInput.value.trim();
+        const searchTerm = rawSearch.toLowerCase();
         const maxPrice = parseFloat(priceRange.value);
         const selectedCategories = Array.from(categoryCheckboxes)
             .filter(cb => cb.checked)
@@ -62,8 +63,12 @@ document.addEventListener('DOMContentLoaded', () => {
             .filter(cb => cb.checked)
             .map(cb => cb.value);
 
+        const isSkuSearch = /^\d{4}$/.test(rawSearch);
+
         currentProducts = products.filter(product => {
-            const matchesSearch = product.name.toLowerCase().includes(searchTerm);
+            const matchesSearch = isSkuSearch 
+                ? product.sku === rawSearch 
+                : product.name.toLowerCase().includes(searchTerm);
             const matchesPrice = product.price <= maxPrice;
             const matchesCategory = selectedCategories.length === 0 || selectedCategories.includes(product.category);
             const matchesLeague = selectedLeagues.length === 0 || selectedLeagues.includes(product.league);
