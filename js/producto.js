@@ -124,6 +124,16 @@ document.addEventListener('DOMContentLoaded', () => {
     document.getElementById('breadcrumb-name').textContent = product.name;
     document.getElementById('product-category').textContent = product.category;
     document.getElementById('product-name').textContent = product.name;
+
+    // Mostrar SKU de 4 dígitos en la descripción
+    const skuBadge = document.getElementById('product-sku-badge');
+    const skuLine = document.getElementById('product-sku-line');
+    if (skuBadge && product.sku) {
+        skuBadge.textContent = product.sku;
+    } else if (skuLine) {
+        skuLine.style.display = 'none'; // ocultar si no hay SKU
+    }
+
     // Eliminar skeleton del precio antes de mostrar el valor real (CLS fix)
     const priceEl = document.getElementById('product-price');
     priceEl.classList.remove('skeleton');

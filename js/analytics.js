@@ -25,6 +25,18 @@ class AnalyticsManager {
     }
 
     /**
+     * Helper: devuelve el item_id (SKU de 4 dígitos) y el item_name con SKU incluido.
+     * Esto evita que GA4 agrupe productos distintos que comparten el mismo nombre.
+     */
+    _getItemId(product) {
+        return product.sku ? String(product.sku) : String(product.id);
+    }
+
+    _getItemName(product) {
+        return product.sku ? `[${product.sku}] ${product.name}` : product.name;
+    }
+
+    /**
      * Standard Ecommerce Events
      */
     trackViewItem(product) {
@@ -32,8 +44,8 @@ class AnalyticsManager {
             currency: 'EUR',
             value: product.price,
             items: [{
-                item_id: product.id,
-                item_name: product.name,
+                item_id: this._getItemId(product),
+                item_name: this._getItemName(product),
                 item_category: product.league || product.category,
                 price: product.price,
                 quantity: 1
@@ -46,8 +58,8 @@ class AnalyticsManager {
             currency: 'EUR',
             value: item.price * item.quantity,
             items: [{
-                item_id: item.id,
-                item_name: item.name,
+                item_id: item.sku ? String(item.sku) : String(item.id),
+                item_name: item.sku ? `[${item.sku}] ${item.name}` : item.name,
                 item_category: item.customization?.version || 'aficionado',
                 price: item.price,
                 quantity: item.quantity
@@ -60,8 +72,8 @@ class AnalyticsManager {
             currency: 'EUR',
             value: Number(totalValue),
             items: items.map(item => ({
-                item_id: String(item.id),
-                item_name: item.name,
+                item_id: item.sku ? String(item.sku) : String(item.id),
+                item_name: item.sku ? `[${item.sku}] ${item.name}` : item.name,
                 price: Number(item.price || 0),
                 quantity: Number(item.quantity || 1)
             }))
@@ -89,8 +101,8 @@ class AnalyticsManager {
             currency: 'EUR',
             value: Number(product.price * quantity),
             items: [{
-                item_id: String(product.id),
-                item_name: product.name,
+                item_id: product.sku ? String(product.sku) : String(product.id),
+                item_name: product.sku ? `[${product.sku}] ${product.name}` : product.name,
                 price: Number(product.price),
                 quantity: Number(quantity)
             }]
@@ -111,8 +123,8 @@ class AnalyticsManager {
             shipping: parseFloat(Number(orderData.shipping || 0).toFixed(2)),
             coupon: orderData.promoCodeUsed || orderData.couponUsed || '',
             items: (orderData.items || []).map(item => ({
-                item_id: String(item.id),
-                item_name: item.name,
+                item_id: item.sku ? String(item.sku) : String(item.id),
+                item_name: item.sku ? `[${item.sku}] ${item.name}` : item.name,
                 price: parseFloat(Number(item.price || 0).toFixed(2)),
                 quantity: parseInt(item.quantity || item.qty || 1),
                 item_category: item.version || 'aficionado',

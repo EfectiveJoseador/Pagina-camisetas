@@ -361,6 +361,7 @@ function confirmOrder() {
             const custom = item.customization || {};
             return {
                 id: item.id,
+                sku: product?.sku || item.sku || '',
                 name: item.name || product?.name || `Producto ${item.id}`,
                 image: item.image || product?.image || '/assets/placeholder.webp',
                 quantity: item.quantity || item.qty || 1,
@@ -515,7 +516,8 @@ Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
         let extrasStr = extras.length > 0 ? (' [' + extras.join(' | ') + ']') : '';
 
         const price = (item.price * qty).toFixed(2);
-        productsText += qty + 'x ' + item.name + ' - ' + size + ' - ' + version + extrasStr + ' - €' + price + '\n';
+        const itemSku = item.sku ? ` [SKU: ${item.sku}]` : '';
+        productsText += qty + 'x ' + item.name + itemSku + ' - ' + size + ' - ' + version + extrasStr + ' - €' + price + '\n';
     });
     let totalInfo = `Subtotal: €${orderData.subtotal.toFixed(2)}\n`;
 

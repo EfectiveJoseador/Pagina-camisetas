@@ -1253,6 +1253,16 @@ function applyFilters(updateURL = true) {
     const sortBy = document.getElementById('sort-select').value;
     currentPage = 1;
 
+    // ── Búsqueda exacta por SKU de 4 dígitos ────────────────────────────────
+    // Si el usuario escribe exactamente 4 dígitos, mostramos solo ese producto
+    const isSkuSearch = /^\d{4}$/.test(rawSearch);
+    if (isSkuSearch) {
+        filteredProducts = allProducts.filter(product => product.sku === rawSearch);
+        if (updateURL) updateURLWithFilters(rawSearch, sortBy);
+        renderProducts();
+        return;
+    }
+
     // Split search into words for multi-word matching
     const searchWords = searchTerm.split(/\s+/).filter(word => word.length > 0);
 
