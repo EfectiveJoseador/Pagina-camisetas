@@ -113,83 +113,91 @@ const Cart = {
 
     calculateTotal() {
         let totalQty = 0;
+        let totalShirtQty = 0;
         let surcharges = 0;
+        let accessorySubtotal = 0;
         const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 1, '3XL': 2, '4XL': 2 };
+        const NORMAL_PRICE = 19.90;
+
         this.items.forEach(item => {
             const qty = item.quantity || item.qty || 1;
             totalQty += qty;
-            // Recalcular surcharges siempre desde customization (no confiar en item.price)
-            const custom = item.customization || {};
-            const size = custom.size || item.size || '';
-            const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
-            const version = custom.version || item.version || 'aficionado';
-            const versionSurcharge = version === 'jugador' ? 5 : 0;
-            const patch = custom.patch || '';
-            const patchSurcharge = patch ? 1.5 : 0;
-            const hasName = !!(custom.name || '');
-            const hasNumber = !!(custom.number || '');
-            const personSurcharge = (hasName || hasNumber) ? 2 : 0;
-            const surcharge = sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
-            surcharges += surcharge * qty;
+
+            if (item.isAccessory) {
+                const price = item.price || 0;
+                accessorySubtotal += price * qty;
+            } else {
+                totalShirtQty += qty;
+                const custom = item.customization || {};
+                const size = custom.size || item.size || '';
+                const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
+                const version = custom.version || item.version || 'aficionado';
+                const versionSurcharge = version === 'jugador' ? 5 : 0;
+                const patch = custom.patch || '';
+                const patchSurcharge = patch ? 1.5 : 0;
+                const hasName = !!(custom.name || '');
+                const hasNumber = !!(custom.number || '');
+                const personSurcharge = (hasName || hasNumber) ? 2 : 0;
+                const surcharge = sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
+                surcharges += surcharge * qty;
+            }
         });
 
         if (totalQty === 0) return { subtotal: 0, originalSubtotal: 0, shipping: 0, total: 0, packSaving: 0 };
 
-        // Precio sin descuento: suma real de basePrice × qty de cada ítem
-        const NORMAL_PRICE = 19.90;
+        // Precio sin descuento: suma real de basePrice × qty de cada camiseta + surcharges + accesorios
         let originalSubtotal = 0;
         this.items.forEach(item => {
             const qty = item.quantity || item.qty || 1;
-            const product = products.find(p => p.id === item.id);
-            const basePrice = item.basePrice || product?.price || NORMAL_PRICE;
-            originalSubtotal += basePrice * qty;
+            if (item.isAccessory) {
+                const price = item.price || 0;
+                originalSubtotal += price * qty;
+            } else {
+                const product = products.find(p => p.id === item.id);
+                const basePrice = item.basePrice || product?.price || NORMAL_PRICE;
+                originalSubtotal += basePrice * qty;
+            }
         });
         originalSubtotal += surcharges;
 
-        // Calcular precio base con posibles descuentos de pack
-        // Los packs (3x56.90, 5x85.90) solo aplican si TODOS los ítems son camisetas normales (19.90)
-        const allNormal = this.items.every(item => {
-            const bp = item.basePrice;
-            return !bp || Math.abs(bp - NORMAL_PRICE) < 0.01;
-        });
-
-        let packBasePrice = 0;
-        if (allNormal) {
-            // Lógica de packs: 5 camisetas por 85.90, 3 por 56.90, resto a precio normal
-            const fullCycles = Math.floor(totalQty / 5);
-            const remainder = totalQty % 5;
-            packBasePrice = fullCycles * 85.90;
-            if (remainder === 1) {
-                packBasePrice += 19.90;
-            } else if (remainder === 2) {
-                packBasePrice += 19.90 * 2;
-            } else if (remainder === 3) {
-                packBasePrice += 56.90;
-            } else if (remainder === 4) {
-                packBasePrice += 56.90 + 19.90;
-            }
-        } else {
-            // Si hay camisetas de precio distinto (retro, NBA, kids), sumar el basePrice real de cada una
-            this.items.forEach(item => {
-                const qty = item.quantity || item.qty || 1;
-                const product = products.find(p => p.id === item.id);
-                const basePrice = item.basePrice || product?.price || NORMAL_PRICE;
-                packBasePrice += basePrice * qty;
-            });
+        // Calcular precio de pack para las camisetas: 5 camisetas por 85.90, 3 por 56.90, resto a 19.90
+        const fullCycles = Math.floor(totalShirtQty / 5);
+        const remainder = totalShirtQty % 5;
+        let packBasePrice = fullCycles * 85.90;
+        if (remainder === 1) {
+            packBasePrice += 19.90;
+        } else if (remainder === 2) {
+            packBasePrice += 19.90 * 2;
+        } else if (remainder === 3) {
+            packBasePrice += 56.90;
+        } else if (remainder === 4) {
+            packBasePrice += 56.90 + 19.90;
         }
 
-        const subtotal = packBasePrice + surcharges;
+        // Sumar la diferencia de cada camiseta respecto a los 19.90€
+        let priceDifference = 0;
+        this.items.forEach(item => {
+            if (item.isAccessory) return;
+            const qty = item.quantity || item.qty || 1;
+            const product = products.find(p => p.id === item.id);
+            const basePrice = item.basePrice || product?.price || NORMAL_PRICE;
+            priceDifference += (basePrice - NORMAL_PRICE) * qty;
+        });
+
+        const subtotal = packBasePrice + priceDifference + surcharges + accessorySubtotal;
         const packSaving = Math.max(0, Math.round((originalSubtotal - subtotal) * 100) / 100);
+
         let shipping = 0;
-        if (totalQty === 1) {
+        if (totalShirtQty === 1) {
             shipping = 1.90;
         }
         const total = subtotal + shipping;
+
         const shippingEl = document.getElementById('shipping-price');
         if (shippingEl) {
             shippingEl.textContent = shipping === 0 ? 'Gratis' : `€${shipping.toFixed(2)}`;
         }
-        this.renderPackIndicators(totalQty);
+        this.renderPackIndicators(totalShirtQty);
 
         return { subtotal, originalSubtotal, packSaving, shipping, total };
     },

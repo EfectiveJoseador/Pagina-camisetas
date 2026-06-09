@@ -108,13 +108,17 @@ function getPackPromoHTML() {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
     if (cart.length === 0) return '';
 
-    const totalQty = cart.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
+    const totalShirtQty = cart.reduce((sum, item) => sum + (item.isAccessory ? 0 : (item.quantity || item.qty || 1)), 0);
     
-    // 2. Homogeneización del Conteo (Solución Temporal del Core)
-    const normalQty = totalQty;
+    const currentDiff = cart.reduce((sum, item) => {
+        if (item.isAccessory) return sum;
+        const qty = item.quantity || item.qty || 1;
+        const basePrice = item.basePrice || 19.90;
+        return sum + (basePrice - 19.90) * qty;
+    }, 0);
 
     // 1. Envío Gratis (Prioridad Máxima)
-    if (totalQty === 1) {
+    if (totalShirtQty === 1) {
         return `
             <div class="pack-promo-card promo-entering">
                 <div class="pack-promo-icon">🎁</div>
@@ -127,12 +131,12 @@ function getPackPromoHTML() {
     }
 
     // 2. Megapack (Bloques de 5) - Prioridad Alta
-    if (normalQty % 5 === 3 || normalQty % 5 === 4) {
-        const m = Math.floor((normalQty + 2) / 5);
-        const faltan = 5 - (normalQty % 5);
+    if (totalShirtQty % 5 === 3 || totalShirtQty % 5 === 4) {
+        const m = Math.floor((totalShirtQty + 2) / 5);
+        const faltan = 5 - (totalShirtQty % 5);
         const textoCamisetas = faltan === 1 ? "1 camiseta más" : "2 camisetas más";
-        const precioTotal = formatPrice(m * 85.90);
-        const ahorro = m * 15;
+        const precioTotal = formatPrice(m * 85.90 + currentDiff);
+        const ahorro = formatPrice(m * 13.60);
         
         return `
             <div class="pack-promo-card mega promo-entering">
@@ -146,17 +150,17 @@ function getPackPromoHTML() {
     }
 
     // 3. Pack Popular (Bloques de 3) - Prioridad Baja
-    if (normalQty % 3 === 2) {
-        const n = Math.floor((normalQty + 1) / 3);
-        const precioTotal = formatPrice(n * 56.90);
-        const ahorro = n * 5;
+    if (totalShirtQty % 3 === 2) {
+        const n = Math.floor((totalShirtQty + 1) / 3);
+        const precioTotal = formatPrice(n * 56.90 + currentDiff);
+        const ahorro = formatPrice(n * 2.80);
         
         return `
             <div class="pack-promo-card popular promo-entering">
                 <div class="pack-promo-icon">🔥</div>
                 <div class="pack-promo-text">
                     <span class="pack-promo-title">¡Ahorro Pack Popular!</span>
-                    <span class="pack-promo-desc">Con <strong>1 camiseta más</strong>, consigues el <strong>${n}x Pack 3 por ${precioTotal}€</strong> (¡Ahorrarás un ${ahorro}%!).</span>
+                    <span class="pack-promo-desc">Con <strong>1 camiseta más</strong>, consigues el <strong>${n}x Pack 3 por ${precioTotal}€</strong> (¡Ahorrarás ${ahorro}€!).</span>
                 </div>
             </div>
         `;
