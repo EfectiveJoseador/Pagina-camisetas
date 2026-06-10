@@ -3,6 +3,28 @@
 const Components = {
     header: `
         <header class="main-header">
+            <div class="ig-alert-banner" id="igAlertBanner" role="alert" aria-live="polite">
+                <div class="ig-alert-track">
+                    <span class="ig-alert-segment">
+                        <span class="ig-icon"><i class="fab fa-instagram"></i></span>
+                        <span class="ig-separator">⚠</span>
+                        <strong>AVISO IMPORTANTE:</strong>
+                        Nuestra cuenta de Instagram ha sido suspendida temporalmente
+                        <span class="ig-separator">•</span>
+                        Para pedidos y consultas, usa exclusivamente nuestra <strong>WEB OFICIAL</strong>
+                        <span class="ig-separator">•</span>
+                    </span>
+                    <span class="ig-alert-segment" aria-hidden="true">
+                        <span class="ig-icon"><i class="fab fa-instagram"></i></span>
+                        <span class="ig-separator">⚠</span>
+                        <strong>AVISO IMPORTANTE:</strong>
+                        Nuestra cuenta de Instagram ha sido suspendida temporalmente
+                        <span class="ig-separator">•</span>
+                        Para pedidos y consultas, usa exclusivamente nuestra <strong>WEB OFICIAL</strong>
+                        <span class="ig-separator">•</span>
+                    </span>
+                </div>
+            </div>
             <div class="container header-container">
                 <a href="/index.html" class="logo-link">
                     <img src="/assets/logo/logo.png" alt="Camisetazo" class="logo-img">
