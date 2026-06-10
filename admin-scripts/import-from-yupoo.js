@@ -213,6 +213,9 @@ function displayProductPreview(product) {
     separator();
 
     console.log(`${COLORS.cyan}ID:${COLORS.reset}          ${product.id}`);
+    if (product.sku) {
+        console.log(`${COLORS.cyan}SKU:${COLORS.reset}         ${product.sku}`);
+    }
     console.log(`${COLORS.cyan}Nombre:${COLORS.reset}      ${product.name}`);
     console.log(`${COLORS.cyan}Categoría:${COLORS.reset}   ${product.category}`);
     console.log(`${COLORS.cyan}Liga:${COLORS.reset}        ${product.league}`);

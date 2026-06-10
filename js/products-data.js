@@ -11817,6 +11817,22 @@ const products = [
         "kids": true,
         "price": 21.9,
         "oldPrice": 27
+    },
+    {
+        "id": 843719,
+        "sku": "5158",
+        "name": "Real Madrid 2026/27 Local",
+        "slug": "real-madrid-202627-local",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/843719/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/843719/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25
     }
 ];
 

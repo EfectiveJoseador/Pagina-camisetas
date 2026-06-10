@@ -1,7 +1,10 @@
 const crypto = require('crypto');
+const fs = require('fs');
+const path = require('path');
+const https = require('https');
+const http = require('http');
 
 const TEXT_NORMALIZATION = {
-    // Originales
     'away': 'Visitante',
     'home': 'Local',
     'third': 'Tercera',
@@ -11,7 +14,9 @@ const TEXT_NORMALIZATION = {
     '3rd': 'Tercera',
     '4th': 'Cuarta',
     'retro': 'Retro',
+    'retro style': 'Retro',
     'kids': 'Niño',
+    'kids kit': 'Niño',
     'goalkeeper': 'Portero',
     'gk': 'Portero',
     'training': 'Entrenamiento',
@@ -24,8 +29,7 @@ const TEXT_NORMALIZATION = {
     'player': 'Jugador',
     'fan': 'Aficionado',
     'style': 'estilo',
-    
-    // Nuevos
+    'third away': 'Tercera',
     'authentic': 'Auténtica',
     'stadium': 'Estadio',
     'player version': 'Versión Jugador',
@@ -40,7 +44,15 @@ const TEXT_NORMALIZATION = {
     'pre-match': 'Pre-Match',
     'warm up': 'Calentamiento',
     'concept': 'Concepto',
-    'limited': 'Limitada'
+    'limited': 'Limitada',
+    'windbreaker': 'Chubasquero',
+    'training top': 'Camiseta de Entrenamiento',
+    'polo': 'Polo',
+    'tracksuit': 'Chándal',
+    'jacket': 'Chaqueta',
+    'shorts': 'Pantalón Corto',
+    'socks': 'Calcetines',
+    'goalkeeper kit': 'Equipación Portero'
 };
 
 const TEAM_NAME_NORMALIZATION = {
@@ -104,7 +116,9 @@ const TEAM_NAME_NORMALIZATION = {
     'osasuna': 'Osasuna',
     'ca osasuna': 'Osasuna',
     'alaves': 'Deportivo Alavés',
+    'alavés': 'Deportivo Alavés',
     'deportivo alaves': 'Deportivo Alavés',
+    'deportivo alavés': 'Deportivo Alavés',
     'girona': 'Girona FC',
     'cadiz': 'Cádiz CF',
     'zaragoza': 'Real Zaragoza',
@@ -1742,8 +1756,8 @@ function loadExistingProducts(productsFilePath) {
 }
 
 function generateStableId(albumUrl) {
-    const albumIdMatch = albumUrl.match(/albums\/(\d+)/);
-    const albumId = albumIdMatch ? albumIdMatch[1] : albumUrl;
+    const albumIdMatch = albumUrl.match(/\/albums\/(\d+)/);
+    const albumId = albumIdMatch ? albumIdMatch[1] : albumUrl.split('?')[0];
 
     const hash = crypto.createHash('sha256').update(albumId).digest('hex');
     const numericHash = parseInt(hash.substring(0, 8), 16);
@@ -1752,7 +1766,7 @@ function generateStableId(albumUrl) {
 }
 
 function extractAlbumId(url) {
-    const match = url.match(/albums\/(\d+)/);
+    const match = url.match(/\/albums\/(\d+)/);
     return match ? match[1] : null;
 }
 
@@ -1930,7 +1944,6 @@ const TITLE_CLEANUP_PATTERNS = [
     /\bfootball\b/gi,
     /\bbasketball\b/gi,
 
-    // Sufijos de álbum de Yupoo/Proveedores
     /\|\s*album\s*\|.*$/gi,
     /\|\s*pandasportjersey\s*\|.*$/gi,
     /Supplier\s+Product\s+Catalog/gi,
@@ -1939,30 +1952,29 @@ const TITLE_CLEANUP_PATTERNS = [
 
 function parseProductTitle(rawTitle) {
     if (!rawTitle) return null;
+
     let title = rawTitle
         .replace(/&nbsp;/gi, ' ')
         .replace(/\$nbsp/gi, ' ')
-        .replace(/\s+/g, ' ')
-        .trim();
-
-    title = title
         .replace(/&amp;amp;/gi, '&')
         .replace(/&amp;/gi, '&')
         .replace(/&lt;/gi, '<')
         .replace(/&gt;/gi, '>')
         .replace(/&quot;/gi, '"')
         .replace(/&#39;/gi, "'")
-        .replace(/&nbsp;/gi, ' ');
+        .replace(/\s*&\s*/g, ' ')
+        .replace(/\s+/g, ' ')
+        .trim();
 
-    title = title.replace(/\s*&\s*/g, ' ');
+    const titleLower = title.toLowerCase();
 
-    const colors = ['black', 'white', 'red', 'blue', 'green', 'yellow', 'pink', 'gold', 'golden',
-        'purple', 'orange', 'grey', 'gray', 'navy', 'cyan', 'balck', 'bule', 'whit'];
-    colors.forEach(color => {
-        title = title.replace(new RegExp(`\\b${color}\\b`, 'gi'), '');
-    });
-
-    title = title.replace(/\s+/g, ' ').trim();
+    const titleClean = title
+        .replace(/\s*\|\s*álbum\s*\|.*$/gi, '')
+        .replace(/\s*\|\s*album\s*\|.*$/gi, '')
+        .replace(/Supplier\s+Product\s+Catalog.*/gi, '')
+        .replace(/\s*\|\s*[a-z0-9.]+\.yupoo\.com.*$/gi, '')
+        .replace(/\s+/g, ' ')
+        .trim();
 
     const result = {
         raw: rawTitle,
@@ -1976,20 +1988,26 @@ function parseProductTitle(rawTitle) {
         isStyle: false
     };
 
-    // Detectar temporada (ej: 1999/00, 2024/25, 23/24, 2024)
-    // Buscamos primero rangos de años (temporadas)
-    const explicitSeasonMatch = title.match(/\b(\d{2,4})[\/\-](\d{2})\b/);
-    const fullYearMatch = title.match(/\b(19\d{2}|20\d{2})\b/);
-    const gluedSeasonMatch = title.match(/\b(\d{2})(\d{2})\b(?!\d)/);
+    const titleLowerClean = titleClean.toLowerCase();
+
+    const sizeRangeMatch = titleClean.match(/\bSize\s*(\d+)[-–](\d+)\b/i);
+    const sizeCodeMatch = titleClean.match(/\b(S-4XL|S-3XL|S-2XL|S-XXL|M-XXL|XS-XXL|XS-4XL|S-5XL)\b/i);
+    if (sizeRangeMatch) {
+        result.tallas = `Size ${sizeRangeMatch[1]}-${sizeRangeMatch[2]}`;
+    } else if (sizeCodeMatch) {
+        result.tallas = sizeCodeMatch[1].toUpperCase();
+    }
+
+    const explicitSeasonMatch = titleClean.match(/\b(\d{2,4})[\/\-](\d{2})\b/);
+    const fullYearMatch = titleClean.match(/\b(19\d{2}|20\d{2})\b/);
+    const gluedSeasonMatch = titleClean.match(/\b(\d{2})(\d{2})\b(?!\d)/);
 
     const processYearLogic = (y1, y2) => {
-        // Normalizar y1 a 2 o 4 dígitos
         let year1 = y1;
         if (y1.length === 2) {
             const n1 = parseInt(y1, 10);
             year1 = (n1 > 30 ? '19' : '20') + y1;
         }
-
         return `${year1}/${y2}`;
     };
 
@@ -2002,61 +2020,56 @@ function parseProductTitle(rawTitle) {
         const y2 = gluedSeasonMatch[2];
         const n1 = parseInt(y1, 10);
         const n2 = parseInt(y2, 10);
-
         if (n2 > n1 || (n1 >= 90 && n2 < 10) || y1 === '19') {
             result.temporada = processYearLogic(y1, y2);
         }
     }
 
-    if (!result.temporada && title.includes('25/26')) result.temporada = '25/26';
-    if (!result.temporada && title.includes('24/25')) result.temporada = '24/25';
+    result.isKids = /\b(kids?\s*kit|kids?|niños?|child(?:ren)?|junior)\b/i.test(titleLowerClean);
+    result.isRetro = /\b(retro(?:\s*style)?)\b/i.test(titleLowerClean);
+    result.isStyle = /\bstyle\b/i.test(titleLowerClean);
 
-    const titleLower = title.toLowerCase();
-    if (titleLower.includes('away') || titleLower.includes('visitante') || titleLower.includes('2nd') || titleLower.includes('2a')) {
-        result.tipo = 'visitante';
-    } else if (titleLower.includes('third') || titleLower.includes('tercera') || titleLower.includes('3rd') || titleLower.includes('3a')) {
+    AutoLearn.learnStyles(titleLowerClean);
+
+    if (/\bthird\s+away\b/i.test(titleLowerClean)) {
         result.tipo = 'tercera';
-    } else if (titleLower.includes('fourth') || titleLower.includes('cuarta') || titleLower.includes('4th') || titleLower.includes('4a')) {
+    } else if (/\bthird\b/i.test(titleLowerClean)) {
+        result.tipo = 'tercera';
+    } else if (/\baway\b/i.test(titleLowerClean) || /\bvisitante\b/i.test(titleLowerClean) || /\b2nd\b/i.test(titleLowerClean)) {
+        result.tipo = 'visitante';
+    } else if (/\bfourth\b/i.test(titleLowerClean) || /\bcuarta\b/i.test(titleLowerClean) || /\b4th\b/i.test(titleLowerClean)) {
         result.tipo = 'cuarta';
-    } else if (titleLower.includes('home') || titleLower.includes('local') || titleLower.includes('1st') || titleLower.includes('1a')) {
+    } else if (/\bhome\b/i.test(titleLowerClean) || /\blocal\b/i.test(titleLowerClean) || /\b1st\b/i.test(titleLowerClean)) {
         result.tipo = 'local';
-    } else if (titleLower.includes('gk') || titleLower.includes('goalkeeper') || titleLower.includes('portero')) {
+    } else if (/\b(gk|goalkeeper|portero)\b/i.test(titleLowerClean)) {
         result.tipo = 'portero';
-    } else if (titleLower.includes('special') || titleLower.includes('especial') || titleLower.includes('edition') || titleLower.includes('limited')) {
+    } else if (/\b(special|especial|edition|limited)\b/i.test(titleLowerClean)) {
         result.tipo = 'especial';
-    } else if (titleLower.includes('training') || titleLower.includes('entrenamiento')) {
+    } else if (/\b(training|entrenamiento)\b/i.test(titleLowerClean)) {
         result.tipo = 'entrenamiento';
     }
 
-    const sizesMatch = title.match(/\b(S-\d?XL|S-4XL|XS-XXL|S-XXL|M-XXL|S-3XL)/i);
-    if (sizesMatch) {
-        result.tallas = sizesMatch[1].toUpperCase();
-    }
-
-    result.isKids = /\b(kids?|niños?|child|children|junior)\b/i.test(titleLower);
-    result.isRetro = /\bretro\b/i.test(titleLower);
-    result.isStyle = /\bstyle\b/i.test(titleLower);
-
-    let teamName = title;
-    console.log('[DEBUG] Original Title:', title);
+    let teamName = titleClean;
+    console.log('[DEBUG] Original Title:', titleClean);
 
     teamName = teamName
-        .replace(/\|\s*album\s*\|.*$/gi, '')
-        .replace(/(\d{2,4})[\/-]?(\d{2,4})\b/g, '') // Rangos primero (ej: 1999/00)
-        .replace(/\b(19\d{2}|20\d{2})\b/g, '')     // Años sueltos después
+        .replace(/\bSize\s*\d+[-–]\d+\b/gi, '')
+        .replace(/\b(S-4XL|S-3XL|S-2XL|S-XXL|M-XXL|XS-XXL|XS-4XL|S-5XL)\b/gi, '')
+        .replace(/(\d{2,4})[\/\-](\d{2,4})\b/g, '')
+        .replace(/\b(19\d{2}|20\d{2})\b/g, '')
+        .replace(/[\/\-]\d{2,4}\b/g, '')
+        .replace(/\bthird\s+away\b/gi, '')
         .replace(/\b(away|home|third|fourth|visitante|local|tercera|cuarta|gk|goalkeeper|portero)\b/gi, '')
         .replace(/\b(1st|2nd|3rd|4th|1a|2a|3a|4a)\b/gi, '')
         .replace(/\b(special|especial|edition|edici[oó]n|limited|limitada)\b/gi, '')
         .replace(/\b(training|entrenamiento|pre-?match|warm-?up)\b/gi, '')
+        .replace(/\bretro\s*style\b/gi, '')
         .replace(/\b(retro|classic|vintage)\b/gi, '')
-        .replace(/\b(kids?|niños?|child|children|junior)\b/gi, '')
-        .replace(/\b(S-\d?XL|S-4XL|XS-XXL|S-XXL|M-XXL|S-3XL|S-XXL2|S-\dXL2)\b/gi, '')
+        .replace(/\bkids?\s*kit\b/gi, '')
+        .replace(/\b(kids?|niños?|child(?:ren)?|junior)\b/gi, '')
         .replace(/\b(style|estilo)\b/gi, '')
         .replace(/\b(jerseys?|shirts?|camisas?|camisetas?|kits?|soccer|football)\b/gi, '')
-        .replace(/[\/\-]\d{2,4}\b/g, '') // Limpiar restos
         .trim();
-
-    console.log('[DEBUG] After Regex Cleanup:', teamName);
 
     TITLE_CLEANUP_PATTERNS.forEach(pattern => {
         teamName = teamName.replace(pattern, '');
@@ -2064,34 +2077,44 @@ function parseProductTitle(rawTitle) {
 
     teamName = teamName
         .replace(/\s+/g, ' ')
-        .replace(/^\W+|\W+$/g, '')
+        .replace(/^[\W_]+|[\W_]+$/g, '')
         .trim();
 
-    console.log('[DEBUG] After Pattern Cleanup: "' + teamName + '"');
+    console.log('[DEBUG] Team after cleanup: "' + teamName + '"');
 
-    // Aplicar normalización de nombres de equipos (filiales → equipo principal)
-    teamName = normalizeTeamNameFromDictionary(teamName);
+    const normalizedFromDict = normalizeTeamNameFromDictionary(teamName);
+    if (normalizedFromDict !== teamName) {
+        teamName = normalizedFromDict;
+    } else {
+        AutoLearn.learnTeam(teamName);
+    }
 
     result.team = teamName;
 
+    const tipoLabels = {
+        local: 'Local',
+        visitante: 'Visitante',
+        tercera: 'Tercera',
+        cuarta: 'Cuarta',
+        portero: 'Portero',
+        especial: 'Especial',
+        entrenamiento: 'Entrenamiento'
+    };
+
     let finalParts = [result.team];
-
-    if (result.isStyle && result.isRetro) {
-        finalParts.push('estilo Retro');
-        if (result.temporada) finalParts.push(result.temporada);
-    } else {
-        if (result.temporada) finalParts.push(result.temporada);
-        if (result.tipo) {
-            finalParts.push(result.tipo.charAt(0).toUpperCase() + result.tipo.slice(1));
+    if (result.temporada) finalParts.push(result.temporada);
+    if (result.isRetro) {
+        if (result.tipo && result.tipo !== 'local') {
+            finalParts.push(tipoLabels[result.tipo] || result.tipo);
         }
-        if (result.isRetro) finalParts.push('Retro');
+        finalParts.push('Retro');
+    } else if (result.tipo) {
+        finalParts.push(tipoLabels[result.tipo] || result.tipo);
     }
-
     if (result.isKids) finalParts.push('(Niño)');
 
     result.name = finalParts.join(' ');
-
-    if (!result.name.trim()) result.name = result.raw;
+    if (!result.name.trim()) result.name = titleClean;
 
     return result;
 }
@@ -2541,13 +2564,114 @@ async function importFromYupoo(albumUrl, options = {}) {
         product.oldPrice = 25.00;
     }
 
+    product.sku = generateUniqueSku();
+
     return product;
 }
 
-const fs = require('fs');
-const path = require('path');
-const https = require('https');
-const http = require('http');
+
+
+const PRODUCTS_FILE_PATH = path.join(__dirname, '..', 'js', 'products-data.js');
+
+function loadUsedSkus() {
+    try {
+        if (!fs.existsSync(PRODUCTS_FILE_PATH)) return new Set();
+        const src = fs.readFileSync(PRODUCTS_FILE_PATH, 'utf-8');
+        const start = src.indexOf('[');
+        const end = src.lastIndexOf(']');
+        if (start === -1 || end === -1) return new Set();
+        const products = JSON.parse(src.slice(start, end + 1));
+        return new Set(products.filter(p => p.sku).map(p => String(p.sku)));
+    } catch {
+        return new Set();
+    }
+}
+
+function generateUniqueSku() {
+    const used = loadUsedSkus();
+    const MAX_ATTEMPTS = 500;
+    let attempts = 0;
+    while (attempts < MAX_ATTEMPTS) {
+        const sku = String(Math.floor(1000 + Math.random() * 9000));
+        if (!used.has(sku)) return sku;
+        attempts++;
+    }
+    for (let n = 1000; n <= 9999; n++) {
+        const sku = String(n);
+        if (!used.has(sku)) return sku;
+    }
+    throw new Error('Pool de SKUs agotado (9000 productos superados)');
+}
+
+const AutoLearn = {
+    _newTeams: new Map(),
+    _newStyles: new Map(),
+    _learnFilePath: path.join(__dirname, '.autolearn.json'),
+
+    _load() {
+        try {
+            if (fs.existsSync(this._learnFilePath)) {
+                const data = JSON.parse(fs.readFileSync(this._learnFilePath, 'utf-8'));
+                if (data.teams) Object.entries(data.teams).forEach(([k, v]) => this._newTeams.set(k, v));
+                if (data.styles) Object.entries(data.styles).forEach(([k, v]) => this._newStyles.set(k, v));
+            }
+        } catch (e) { }
+    },
+
+    _save() {
+        try {
+            const data = {
+                teams: Object.fromEntries(this._newTeams),
+                styles: Object.fromEntries(this._newStyles),
+                lastUpdated: new Date().toISOString()
+            };
+            fs.writeFileSync(this._learnFilePath, JSON.stringify(data, null, 2), 'utf-8');
+        } catch (e) { }
+    },
+
+    learnTeam(teamName) {
+        if (!teamName || teamName.length < 3) return;
+        const key = teamName.toLowerCase().trim();
+        if (!TEAM_NAME_NORMALIZATION[key] && !this._newTeams.has(key)) {
+            this._newTeams.set(key, teamName);
+            console.log(`[AutoLearn] Nuevo equipo registrado: "${teamName}"`);
+            this._save();
+        }
+    },
+
+    learnStyles(titleLower) {
+        const knownStyleKeywords = new Set(Object.keys(TEXT_NORMALIZATION));
+        const unknownStylePattern = /\b([a-z]+(?:\s+[a-z]+)?(?:\s+version|\s+kit|\s+jersey|\s+shirt)?)\b/gi;
+        let m;
+        while ((m = unknownStylePattern.exec(titleLower)) !== null) {
+            const candidate = m[1].trim();
+            if (
+                candidate.length > 4 &&
+                !knownStyleKeywords.has(candidate) &&
+                !this._newStyles.has(candidate) &&
+                /[a-z]{3,}/.test(candidate) &&
+                !/^\d+$/.test(candidate)
+            ) {
+                const isTerm = /(version|kit|top|jacket|suit|wear|coat|track)/.test(candidate);
+                if (isTerm) {
+                    this._newStyles.set(candidate, `[Pendiente traducción: ${candidate}]`);
+                    console.log(`[AutoLearn] Nuevo estilo/variación detectado: "${candidate}"`);
+                    this._save();
+                }
+            }
+        }
+    },
+
+    getLearnedTeams() {
+        return Object.fromEntries(this._newTeams);
+    },
+
+    getLearnedStyles() {
+        return Object.fromEntries(this._newStyles);
+    }
+};
+
+AutoLearn._load();
 
 function downloadImage(imageUrl, destPath, referer) {
     return new Promise((resolve, reject) => {
@@ -2785,9 +2909,13 @@ module.exports = {
     isHighResImage,
     toHighResUrl,
     fetchYupooAlbum,
+    AutoLearn,
+    generateUniqueSku,
+    loadUsedSkus,
 
     TEAM_TO_LEAGUE,
     TEXT_NORMALIZATION,
+    TEAM_NAME_NORMALIZATION,
     EXCLUDED_IMAGE_KEYWORDS,
     TEAM_STOPWORDS
 };
