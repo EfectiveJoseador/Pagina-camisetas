@@ -88,7 +88,7 @@ window.InstagramAlert = {
     injectStyles() {
         if (document.getElementById('igAlertStyles')) return;
         const isInPages = window.location.pathname.includes('/pages/');
-        const cssPath = isInPages ? '../css/instagram-alert.css' : '/css/instagram-alert.css';
+        const cssPath = (isInPages ? '../css/instagram-alert.css' : '/css/instagram-alert.css') + '?v=3';
         const link = document.createElement('link');
         link.id = 'igAlertStyles';
         link.rel = 'stylesheet';

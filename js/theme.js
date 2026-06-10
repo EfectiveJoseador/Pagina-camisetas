@@ -1,6 +1,6 @@
 
 (function () {
-    const SW_VERSION = 'v2';
+    const SW_VERSION = 'v3';
     const CLEANUP_KEY = 'sw_cleanup_' + SW_VERSION;
     if (localStorage.getItem(CLEANUP_KEY)) return;
 
@@ -22,7 +22,7 @@
             });
         }
         localStorage.setItem(CLEANUP_KEY, Date.now().toString());
-        navigator.serviceWorker.register('/service-worker.js').then(function (registration) {
+        navigator.serviceWorker.register('/service-worker.js?v=3').then(function (registration) {
             if (registration.waiting) {
                 registration.waiting.postMessage({ type: 'SKIP_WAITING' });
             }

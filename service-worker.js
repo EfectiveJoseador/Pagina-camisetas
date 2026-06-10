@@ -1,4 +1,4 @@
-const CACHE_NAME = 'camisetazo-cache-v12';
+const CACHE_NAME = 'camisetazo-cache-v13';
 
 // Solo cachear assets estáticos (JS, CSS, imágenes, fuentes).
 // NUNCA cachear HTML — los documentos HTML llevan headers de seguridad
@@ -8,8 +8,8 @@ const ASSETS_TO_CACHE = [
   './css/variables.css',
   './css/reset.css',
   './css/ux-feedback.css',
-  './js/theme.js',
-  './js/components.js',
+  './js/theme.js?v=3',
+  './js/components.js?v=3',
   './js/ux-feedback.js',
   './js/analytics.js',
   './manifest.json',
