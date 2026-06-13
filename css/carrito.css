@@ -184,11 +184,56 @@
     border-color: rgba(239, 68, 68, 0.2);
 }
 
-.cart-item-price {
+/* ── Nuevo sistema de precio doble: tachado + rebajado ─────────────────── */
+.cart-item-price-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    gap: 0.1rem;
+    margin-right: 1.5rem;
+}
+
+.cart-item-price-old {
+    font-size: 0.82rem;
+    font-weight: 500;
+    color: var(--text-muted, #9ca3af);
+    text-decoration: line-through;
+    letter-spacing: 0.01em;
+    opacity: 0.75;
+    line-height: 1.2;
+}
+
+.cart-item-price-current {
     font-weight: 800;
     font-size: 1.15rem;
     color: var(--text-main);
-    margin-right: 1.5rem; /* Separación significativa del borde */
+    line-height: 1.2;
+}
+
+/* Cuando hay precio tachado, el precio actual se colorea en verde para enfatizar el ahorro */
+.cart-item-price-wrapper:has(.cart-item-price-old) .cart-item-price-current {
+    color: #10b981;
+}
+
+/* Animación sutil al aparecer el precio tachado */
+@keyframes fadeInOldPrice {
+    from { opacity: 0; transform: translateY(-4px); }
+    to   { opacity: 0.75; transform: translateY(0); }
+}
+.cart-item-price-old {
+    animation: fadeInOldPrice 0.4s ease both;
+}
+
+@media (max-width: 480px) {
+    .cart-item-price-wrapper {
+        margin-right: 0.75rem;
+    }
+    .cart-item-price-old {
+        font-size: 0.75rem;
+    }
+    .cart-item-price-current {
+        font-size: 1rem;
+    }
 }
 
 

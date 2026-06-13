@@ -26,6 +26,18 @@ function applySpecialPricing() {
     });
 }
 applySpecialPricing();
+
+// ---------------------------------------------------------------------------
+// Helper: calcula el precio original (sin oferta) de un ítem del carrito.
+// Usa product.oldPrice como base y añade los mismos extras fijos.
+// Los extras (parche, dorsal) se mantienen idénticos en ambos precios.
+// ---------------------------------------------------------------------------
+function getItemOldPrice(item, product, sizeSurcharge, versionSurcharge, patchSurcharge, personSurcharge) {
+    if (item.isAccessory) return null;     // Accesorios: sin precio tachado
+    const oldBasePrice = product?.oldPrice || null;
+    if (!oldBasePrice) return null;        // Si no hay oldPrice definido, no mostrar
+    return oldBasePrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
+}
 const Cart = {
     items: [],
 
@@ -301,12 +313,14 @@ const Cart = {
             const qty = item.quantity || item.qty || 1;
             let displayName = '';
             let displayPrice = 0;
+            let displayOldPrice = null;
             let displayDetails = '';
             let imgUrl = '';
 
             if (item.isAccessory) {
                 displayName = item.name;
                 displayPrice = item.price;
+                displayOldPrice = null;
                 displayDetails = 'Accesorio adicional';
                 imgUrl = '/assets/logo/logo.png';
             } else {
@@ -323,6 +337,7 @@ const Cart = {
                 const personSurcharge = (hasName || hasNumber) ? 3 : 0;
                 const baseProductPrice = item.basePrice || product.price;
                 displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
+                displayOldPrice = getItemOldPrice(item, product, sizeSurcharge, versionSurcharge, patchSurcharge, personSurcharge);
                 
                 displayDetails = `Talla: ${size} / ${version === 'jugador' ? 'Jugador' : 'Aficionado'}`;
                 if (custom.name) displayDetails += ` | Nombre: ${sanitizeHTML(custom.name)}`;
@@ -367,7 +382,12 @@ const Cart = {
                         <button class="btn-remove touch-target" data-index="${index}" aria-label="Eliminar"><i class="fas fa-trash-alt"></i></button>
                         <button class="btn-cart-edit" data-index="${index}" title="Editar producto" aria-label="Editar ${sanitizeHTML(displayName)}"><i class="fas fa-pen"></i></button>
                     </div>
-                    <div class="cart-item-price">€${(displayPrice * qty).toFixed(2)}</div>
+                    <div class="cart-item-price-wrapper">
+                        ${displayOldPrice && (displayOldPrice * qty) > (displayPrice * qty) ? `
+                            <span class="cart-item-price-old">€${(displayOldPrice * qty).toFixed(2)}</span>
+                        ` : ''}
+                        <span class="cart-item-price-current">€${(displayPrice * qty).toFixed(2)}</span>
+                    </div>
                 </div>
             `;
             container.appendChild(el);

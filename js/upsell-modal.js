@@ -143,7 +143,7 @@ function getPackPromoHTML() {
                 <div class="pack-promo-icon">⚡</div>
                 <div class="pack-promo-text">
                     <span class="pack-promo-title">¡Ahorro Megapack!</span>
-                    <span class="pack-promo-desc">Con <strong>${textoCamisetas}</strong>, consigues el <strong>${m}x Megapack 5 por ${precioTotal}€</strong> (¡Ahorrarás ${ahorro}€!).</span>
+                    <span class="pack-promo-desc">Con <strong>${textoCamisetas}</strong>, consigues el <strong>${m}x Megapack 5 por ${precioTotal}€</strong> (Ahorrarás ${ahorro}€!)</span>
                 </div>
             </div>
         `;
@@ -160,7 +160,7 @@ function getPackPromoHTML() {
                 <div class="pack-promo-icon">🔥</div>
                 <div class="pack-promo-text">
                     <span class="pack-promo-title">¡Ahorro Pack Popular!</span>
-                    <span class="pack-promo-desc">Con <strong>1 camiseta más</strong>, consigues el <strong>${n}x Pack 3 por ${precioTotal}€</strong> (¡Ahorrarás ${ahorro}€!).</span>
+                    <span class="pack-promo-desc">Con <strong>1 camiseta más</strong>, consigues el <strong>${n}x Pack 3 por ${precioTotal}€</strong> (Ahorrarás ${ahorro}€!)</span>
                 </div>
             </div>
         `;
