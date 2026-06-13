@@ -48,14 +48,14 @@ const LEAGUE_DISPLAY_MAP = {
 };
 const patchPrices = {
     none: 0,
-    liga: 1.5,
-    champions: 1.5,
-    europa: 1.5,
-    premier: 1.5,
-    seriea: 1.5,
-    mundial: 1.5,
-    copamundo: 1.5,
-    conmemorativo: 1.5
+    liga: 2,
+    champions: 2,
+    europa: 2,
+    premier: 2,
+    seriea: 2,
+    mundial: 2,
+    copamundo: 2,
+    conmemorativo: 2
 };
 const SIZE_CONFIGS = {
     kids: ['16', '18', '20', '22', '24', '26', '28'],
@@ -143,7 +143,7 @@ function generatePatchOptionsHTML(product) {
 
     return `
         <div class="form-group">
-            <label>Parche (+€1.50)</label>
+            <label>Parche (+€2.00)</label>
             <input type="text" class="quick-patch-input" placeholder="Ej: Champions League" maxlength="30">
         </div>
     `;
@@ -505,17 +505,17 @@ function setupQuickAddListeners() {
                 total += SIZE_SURCHARGES[size];
             }
 
-            // Personalización: nombre O dorsal = +€2
+            // Personalización: nombre O dorsal = +€3
             const name = nameInput?.value?.trim();
             const number = numberInput?.value?.trim();
             if (name || number) {
-                total += 2;
+                total += 3;
             }
 
             
             const patch = patchInput?.value?.trim();
             if (patch) {
-                total += 1.5;
+                total += 2;
             }
 
             if (priceValue) {
@@ -669,14 +669,14 @@ function handleQuickAddSubmit(form, product) {
     const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
     let totalPrice = product.price + sizeSurcharge;
 
-    // Personalización: nombre O dorsal = +€2 (no es necesario tener ambos)
+    // Personalización: nombre O dorsal = +€3 (no es necesario tener ambos)
     if (name || number) {
-        totalPrice += 2;
+        totalPrice += 3;
     }
 
     const patch = patchInput?.value?.trim() || '';
     if (patch) {
-        totalPrice += 1.5;
+        totalPrice += 2;
     }
 
     const customization = {
@@ -1460,9 +1460,9 @@ function updatePreview() {
 
     if (version === 'jugador') total += 5;
 
-    if (patch && patch !== 'none') total += 1.5;
+    if (patch && patch !== 'none') total += 2;
 
-    if (name && number) total += 2;
+    if (name || number) total += 3;
 
     // Actualizar elementos HTML en el modal
     const basePriceEl = document.getElementById('preview-base-price');
@@ -1519,8 +1519,8 @@ function handleFormSubmit(e) {
     const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
     let totalPrice = currentProduct.price + sizeSurcharge;
     if (version === 'jugador') totalPrice += 5;
-    if (patch && patch !== 'none') totalPrice += 1.5;
-    if (name || number) totalPrice += 2;
+    if (patch && patch !== 'none') totalPrice += 2;
+    if (name || number) totalPrice += 3;
 
     const customization = {
         size: size,

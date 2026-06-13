@@ -561,19 +561,19 @@ function updatePreview() {
     // --- Parche ---
     const patch = document.getElementById('patch-input').value.trim();
     if (patch) {
-        const patchCost = 1.5;
+        const patchCost = 2;
         totalPrice += patchCost;
         details.push(`Parche ${patch}: +€${patchCost.toFixed(2)}`);
     }
 
-    // --- Personalización (nombre O dorsal = +€2) ---
+    // --- Personalización (nombre O dorsal = +€3) ---
     const name = document.getElementById('name-input').value.trim();
     const number = document.getElementById('number-input').value;
     if (name || number) {
-        totalPrice += 2;
+        totalPrice += 3;
         if (name) details.push(`Nombre: ${name.toUpperCase()}`);
         if (number) details.push(`Dorsal: ${number}`);
-        details.push('Personalización: +€2');
+        details.push('Personalización: +€3');
     }
 
     // --- Actualizar precio principal mostrado en pantalla ---
@@ -733,11 +733,11 @@ function addToCart() {
     totalPrice += sizeSurcharge;
     if (customization.version === 'jugador') totalPrice += 5;
     if (customization.patch) {
-        totalPrice += 1.5;
-    }
-    // Personalización: nombre O dorsal = +€2 (no hace falta tener los dos)
-    if (customization.name || customization.number) {
         totalPrice += 2;
+    }
+    // Personalización: nombre O dorsal = +€3 (no hace falta tener los dos)
+    if (customization.name || customization.number) {
+        totalPrice += 3;
     }
     const quantity = parseInt(document.getElementById('qty-input').value) || 1;
     const cartItem = {

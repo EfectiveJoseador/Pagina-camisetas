@@ -200,8 +200,8 @@ function addToCartDirectly(product, size, btnElement, pendingCustom = null) {
     // Recalculate price including any customization surcharges
     let totalPrice = prices.price + sizeSurcharge;
     if (customization.version === 'jugador') totalPrice += 5;
-    if (customization.patch) totalPrice += 1.5;
-    if (customization.name || customization.number) totalPrice += 2;
+    if (customization.patch) totalPrice += 2;
+    if (customization.name || customization.number) totalPrice += 3;
 
     const cartItem = {
         id: product.id,
@@ -273,8 +273,8 @@ function calcUpsellEditPrice(basePrice, custom) {
     let total = basePrice;
     total += UPSELL_SIZE_SURCHARGES[custom.size] || 0;
     if (custom.version === 'jugador') total += 5;
-    if (custom.patch) total += 1.5;
-    if (custom.name || custom.number) total += 2;
+    if (custom.patch) total += 2;
+    if (custom.name || custom.number) total += 3;
     return total;
 }
 
@@ -310,7 +310,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
 
     const patchBlock = showPatch ? `
         <div class="upsell-edit-field">
-            <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€1.50)</span></label>
+            <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€2.00)</span></label>
             <input type="text" id="ue-patch" placeholder="Ej. Champions League" maxlength="30" autocomplete="off" value="${current.patch || ''}">
         </div>` : '';
 
@@ -332,7 +332,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
             </div>
             ${versionBlock}
             <div class="upsell-edit-field">
-                <label>Nombre <span style="color:#6b7280;text-transform:none;font-weight:400;">(solo letras · máx 15 · +€2 con nombre o dorsal)</span></label>
+                <label>Nombre <span style="color:#6b7280;text-transform:none;font-weight:400;">(solo letras · máx 15 · +€3 con nombre o dorsal)</span></label>
                 <input type="text" id="ue-name" placeholder="Ej. PEDRI" maxlength="15" autocomplete="off" value="${current.name || ''}">
             </div>
             <div class="upsell-edit-field">

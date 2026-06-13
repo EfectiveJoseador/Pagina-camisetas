@@ -134,10 +134,10 @@ const Cart = {
                 const version = custom.version || item.version || 'aficionado';
                 const versionSurcharge = version === 'jugador' ? 5 : 0;
                 const patch = custom.patch || '';
-                const patchSurcharge = patch ? 1.5 : 0;
+                const patchSurcharge = patch ? 2 : 0;
                 const hasName = !!(custom.name || '');
                 const hasNumber = !!(custom.number || '');
-                const personSurcharge = (hasName || hasNumber) ? 2 : 0;
+                const personSurcharge = (hasName || hasNumber) ? 3 : 0;
                 const surcharge = sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
                 surcharges += surcharge * qty;
             }
@@ -317,10 +317,10 @@ const Cart = {
                 const version = custom.version || item.version || 'aficionado';
                 const versionSurcharge = version === 'jugador' ? 5 : 0;
                 const patch = custom.patch || '';
-                const patchSurcharge = patch ? 1.5 : 0;
+                const patchSurcharge = patch ? 2 : 0;
                 const hasName = !!(custom.name || '');
                 const hasNumber = !!(custom.number || '');
-                const personSurcharge = (hasName || hasNumber) ? 2 : 0;
+                const personSurcharge = (hasName || hasNumber) ? 3 : 0;
                 const baseProductPrice = item.basePrice || product.price;
                 displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
                 
@@ -433,10 +433,10 @@ const Cart = {
                 const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
                 const versionSurcharge = version === 'jugador' ? 5 : 0;
                 const patch = custom.patch || '';
-                const patchSurcharge = patch ? 1.5 : 0;
+                const patchSurcharge = patch ? 2 : 0;
                 const hasName = !!(custom.name || '');
                 const hasNumber = !!(custom.number || '');
-                const personSurcharge = (hasName || hasNumber) ? 2 : 0;
+                const personSurcharge = (hasName || hasNumber) ? 3 : 0;
                 const baseProductPrice = item.basePrice || product.price;
                 displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
                 
@@ -538,9 +538,9 @@ function calcEditPrice(basePrice, custom) {
     let total = basePrice;
     total += CART_SIZE_SURCHARGES[custom.size] || 0;
     if (custom.version === 'jugador') total += 5;
-    if (custom.patch) total += 1.5;
-    // Nombre O dorsal = +€2 (no hace falta tener los dos)
-    if (custom.name || custom.number) total += 2;
+    if (custom.patch) total += 2;
+    // Nombre O dorsal = +€3 (no hace falta tener los dos)
+    if (custom.name || custom.number) total += 3;
     return total;
 }
 
@@ -582,7 +582,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
 
     const patchBlock = showPatch ? `
         <div class="upsell-edit-field" id="ce-patch-group">
-            <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€1.50 si rellenas)</span></label>
+            <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€2.00 si rellenas)</span></label>
             <input type="text" id="ce-patch" placeholder="Ej. Champions League" maxlength="30" autocomplete="off" value="${custom.patch || ''}">
         </div>` : '';
 
@@ -609,7 +609,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
             ${versionBlock}
 
             <div class="upsell-edit-field">
-                <label>Nombre <span style="color:#6b7280;text-transform:none;font-weight:400;">(solo letras · máx 15 · +€2 con nombre o dorsal)</span></label>
+                <label>Nombre <span style="color:#6b7280;text-transform:none;font-weight:400;">(solo letras · máx 15 · +€3 con nombre o dorsal)</span></label>
                 <input type="text" id="ce-name" placeholder="Ej. PEDRI" maxlength="15" autocomplete="off" value="${custom.name || ''}">
             </div>
 
