@@ -3,6 +3,12 @@
 import products from './products-data.js';
 import Analytics from './analytics.js';
 import { showUpsellModal } from './upsell-modal.js';
+
+function getBypassImageUrl(url) {
+    if (!url || !url.includes('photo.yupoo.com')) return url;
+    return `/api/image-proxy?url=${encodeURIComponent(url)}`;
+}
+
 const CONFIG = {
     PRODUCTS_PER_PAGE: 20,
     LAZY_LOAD_THRESHOLD: '200px',
@@ -273,17 +279,14 @@ function renderPagination() {
 }
 
 function getMiniImagePath(imagePath) {
-    
-    return imagePath.replace(/\/(\d+)\.(webp|jpg|png|jpeg)$/i, '/$1_mini.$2');
+    return getBypassImageUrl(imagePath.replace(/\/(\d+)\.(webp|jpg|png|jpeg)$/i, '/$1_mini.$2'));
 }
-
 
 function getSecondaryMiniImagePath(product) {
     if (product.images && product.images.length > 0) {
         return getMiniImagePath(product.images[0]);
     }
-    
-    return product.image.replace(/\/1\.(webp|jpg|png|jpeg)$/i, '/2_mini.$1');
+    return getBypassImageUrl(product.image.replace(/\/1\.(webp|jpg|png|jpeg)$/i, '/2_mini.$1'));
 }
 
 function renderProducts() {
@@ -342,6 +345,7 @@ function renderProducts() {
                         width="300"
                         height="300"
                         loading="lazy"
+                        onerror="console.error('Image load failed statically:', this.src);"
                     >
                     <img 
                         src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1 1'%3E%3Crect fill='%23e5e7eb' width='1' height='1'/%3E%3C/svg%3E"
@@ -351,6 +355,7 @@ function renderProducts() {
                         width="300"
                         height="300"
                         loading="lazy"
+                        onerror="console.error('Image load failed statically:', this.src);"
                     >
                 </a>
                 <button class="btn-quick-add" data-id="${product.id}" title="Añadir al carrito">
@@ -1252,6 +1257,22 @@ function applyFilters(updateURL = true) {
     const searchTerm = normalizeString(rawSearch);
     const sortBy = document.getElementById('sort-select').value;
     currentPage = 1;
+
+    let pageTitleText = 'Catálogo de Camisetas - Camisetazo';
+    let h1Text = 'Catálogo Completo';
+    if (selectedLeague) {
+        const leagueName = LEAGUE_DISPLAY_MAP[selectedLeague] || selectedLeague;
+        pageTitleText = `Camisetas de la ${leagueName} Baratas - Réplicas 2026`;
+        h1Text = `Camisetas de la ${leagueName} Baratas - Réplicas 2026`;
+    }
+    if (selectedTeam) {
+        const teamName = selectedTeam.split(' ').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        pageTitleText = `Camisetas del ${teamName} Baratas - Calidad Tailandesa`;
+        h1Text = `Camisetas del ${teamName} Baratas - Calidad Tailandesa`;
+    }
+    document.title = pageTitleText;
+    const h1El = document.querySelector('h1');
+    if (h1El) h1El.textContent = h1Text;
 
     // ── Búsqueda exacta por SKU de 4 dígitos ────────────────────────────────
     // Si el usuario escribe exactamente 4 dígitos, mostramos solo ese producto

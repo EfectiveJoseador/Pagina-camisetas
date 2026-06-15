@@ -2,6 +2,22 @@ import products from './products-data.js';
 import Analytics from './analytics.js';
 import { showUpsellModal } from './upsell-modal.js';
 import Health from './health-check.js';
+
+function getBypassImageUrl(url) {
+    if (!url || !url.includes('photo.yupoo.com')) return url;
+    return `/api/image-proxy?url=${encodeURIComponent(url)}`;
+}
+
+function injectSecureYupooImage(containerSelector, imgSrc) {
+    const container = document.querySelector(containerSelector);
+    if (!container) return;
+    const img = document.createElement('img');
+    img.src = getBypassImageUrl(imgSrc);
+    img.referrerPolicy = 'no-referrer';
+    img.onerror = () => console.error('Image load failed statically:', imgSrc);
+    container.appendChild(img);
+}
+
 const patchPrices = {
     none: 0,
     liga: 1.5,
@@ -76,7 +92,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     applySpecialPricing(product);
     products.forEach(p => applySpecialPricing(p));
-    document.title = `${product.name} - Camisetazo`;
+    document.title = 'Camiseta ' + product.name + ' barata de buena calidad - Camisetazo';
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+        metaDesc = document.createElement('meta');
+        metaDesc.name = 'description';
+        document.head.appendChild(metaDesc);
+    }
+    metaDesc.content = `Consigue la camiseta ${product.name} al mejor precio. Réplica de fútbol de buena calidad, tela transpirable y personalizable con nombre y dorsal. ¡Envío gratis disponible!`;
     if (Analytics) Analytics.trackViewItem(product);
     initPlayerVersionListener();
 
@@ -123,7 +146,11 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.getElementById('breadcrumb-name').textContent = product.name;
     document.getElementById('product-category').textContent = product.category;
-    document.getElementById('product-name').textContent = product.name;
+    let pName = product.name;
+    if (!pName.toLowerCase().startsWith('camiseta')) {
+        pName = 'Camiseta ' + pName;
+    }
+    document.getElementById('product-name').textContent = pName;
 
     // Mostrar SKU de 4 dígitos en la descripción
     const skuBadge = document.getElementById('product-sku-badge');
@@ -330,61 +357,47 @@ document.addEventListener('DOMContentLoaded', () => {
 function updateProductSchema() {
     const schemaEl = document.getElementById('product-schema');
     if (!schemaEl || !product) return;
-
+    const material = "Poliéster de alta calidad (Pro-Fit)";
+    const colorMatch = product.name.match(/(Azul|Blanco|Rojo|Negro|Verde|Amarillo|Naranja|Gris|Rosa|Morado)/i);
+    const color = colorMatch ? colorMatch[0] : 'Multicolor';
+    const sizes = SIZE_CONFIGS[getProductType(product)] || [];
+    const priceValidUntil = new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0];
     const schema = {
         "@context": "https://schema.org/",
         "@type": "Product",
         "name": product.name,
-        "image": product.image,
-        "description": `${product.name} - Camiseta de fútbol de alta calidad. Categoría: ${product.category}. Disponible en varias tallas y personalizable.`,
+        "image": getBypassImageUrl(product.image),
+        "description": `Consigue la camiseta ${product.name} al mejor precio. Réplica de fútbol de buena calidad, tela transpirable y personalizable con nombre y dorsal. ¡Envío gratis disponible!`,
         "sku": `JER-${product.id}`,
+        "material": material,
+        "color": color,
         "brand": {
             "@type": "Brand",
             "name": "Camisetazo"
         },
-        "offers": {
+        "offers": sizes.map(size => ({
             "@type": "Offer",
             "url": window.location.href,
             "priceCurrency": "EUR",
             "price": product.price.toFixed(2),
             "availability": "https://schema.org/InStock",
             "itemCondition": "https://schema.org/NewCondition",
-            "priceValidUntil": new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0],
-            "shippingDetails": {
-                "@type": "OfferShippingDetails",
-                "shippingRate": {
-                    "@type": "MonetaryAmount",
-                    "value": "0",
-                    "currency": "EUR"
-                },
-                "deliveryTime": {
-                    "@type": "ShippingDeliveryTime",
-                    "handlingTime": {
-                        "@type": "QuantitativeValue",
-                        "minValue": 1,
-                        "maxValue": 2,
-                        "unitCode": "DAY"
-                    },
-                    "transitTime": {
-                        "@type": "QuantitativeValue",
-                        "minValue": 7,
-                        "maxValue": 12,
-                        "unitCode": "DAY"
-                    }
-                }
+            "priceValidUntil": priceValidUntil,
+            "itemOffered": {
+                "@type": "Product",
+                "size": size
             },
             "seller": {
                 "@type": "Organization",
                 "name": "Camisetazo"
             }
-        },
+        })),
         "aggregateRating": {
             "@type": "AggregateRating",
             "ratingValue": "4.9",
             "reviewCount": "320"
         }
     };
-
     schemaEl.textContent = JSON.stringify(schema, null, 2);
 }
 function applySpecialPricing(p) {

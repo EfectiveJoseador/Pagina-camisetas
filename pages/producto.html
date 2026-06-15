@@ -29,7 +29,7 @@
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
-        
+
         // Estado de consentimiento por defecto (Modo Avanzado)
         gtag('consent', 'default', {
             'ad_storage': 'denied',
@@ -46,12 +46,12 @@
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    
-    
+
+
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
         rel="stylesheet">
-    
+
     <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
 
 
@@ -197,6 +197,7 @@
                 min-height: 52px;
                 font-size: 1.05rem;
             }
+
             .select-input {
                 min-height: 52px;
                 font-size: 1.05rem;
@@ -282,18 +283,21 @@
            Shimmer suave, desaparece cuando JS carga
            ========================================= */
         @keyframes skeleton-shimmer {
-            0%   { background-position: -400px 0; }
-            100% { background-position: 400px 0; }
+            0% {
+                background-position: -400px 0;
+            }
+
+            100% {
+                background-position: 400px 0;
+            }
         }
 
         .skeleton {
             border-radius: 8px;
-            background: linear-gradient(
-                90deg,
-                rgba(150, 150, 160, 0.12) 25%,
-                rgba(150, 150, 160, 0.22) 50%,
-                rgba(150, 150, 160, 0.12) 75%
-            );
+            background: linear-gradient(90deg,
+                    rgba(150, 150, 160, 0.12) 25%,
+                    rgba(150, 150, 160, 0.22) 50%,
+                    rgba(150, 150, 160, 0.12) 75%);
             background-size: 800px 100%;
             animation: skeleton-shimmer 1.4s infinite linear;
         }
@@ -302,21 +306,21 @@
         .main-image.skeleton-wrap #main-img {
             opacity: 0;
         }
+
         .main-image.skeleton-wrap::before {
             content: '';
             position: absolute;
             inset: 0;
             border-radius: inherit;
-            background: linear-gradient(
-                90deg,
-                rgba(150, 150, 160, 0.12) 25%,
-                rgba(150, 150, 160, 0.22) 50%,
-                rgba(150, 150, 160, 0.12) 75%
-            );
+            background: linear-gradient(90deg,
+                    rgba(150, 150, 160, 0.12) 25%,
+                    rgba(150, 150, 160, 0.22) 50%,
+                    rgba(150, 150, 160, 0.12) 75%);
             background-size: 800px 100%;
             animation: skeleton-shimmer 1.4s infinite linear;
             z-index: 1;
         }
+
         /* Skeleton para el precio */
         #product-price.skeleton {
             display: inline-block;
@@ -440,9 +444,11 @@
             .pv-card {
                 padding: 1.75rem 1.25rem;
             }
+
             .pv-title {
                 font-size: 1.15rem;
             }
+
             .pv-text {
                 font-size: 0.9rem;
             }
@@ -472,12 +478,8 @@
                     <button class="gallery-arrow gallery-arrow-left" id="prev-image">
                         <i class="fas fa-chevron-left"></i>
                     </button>
-                    <img id="main-img" src="" alt="Producto"
-                         fetchpriority="high"
-                         loading="eager"
-                         decoding="async"
-                         width="600"
-                         height="600">
+                    <img id="main-img" src="" alt="Producto" fetchpriority="high" loading="eager" decoding="async"
+                        width="600" height="600">
                     <button class="gallery-arrow gallery-arrow-right" id="next-image">
                         <i class="fas fa-chevron-right"></i>
                     </button>
@@ -526,10 +528,10 @@
                     <div class="option-group">
                         <label class="option-label" for="version-select">Versión</label>
                         <div class="select-wrapper">
-                        <select id="version-select" class="select-input">
-                            <option value="aficionado">Versión Fan</option>
-                            <option value="jugador">Versión Jugador (+5)</option>
-                        </select>
+                            <select id="version-select" class="select-input">
+                                <option value="aficionado">Versión Fan</option>
+                                <option value="jugador">Versión Jugador (+5)</option>
+                            </select>
                         </div>
                     </div>
 
@@ -566,7 +568,8 @@
                                 style="color: var(--text-muted); font-weight: 400; font-size: 0.9rem;">Opcional
                                 (+2.00€)</span></label>
                         <div class="input-wrapper">
-                            <input type="text" id="patch-input" class="text-input" placeholder="Ej: Champions, Liga, etc." maxlength="15">
+                            <input type="text" id="patch-input" class="text-input"
+                                placeholder="Ej: Champions, Liga, etc." maxlength="15">
                         </div>
                     </div>
 
@@ -623,10 +626,11 @@
                             border-radius: 6px;
                             padding: 0.15rem 0.55rem;
                         ">----</code>
-                        <span style="font-size: 0.78rem; color: var(--text-muted); font-style: italic;">Introdúcelo en el buscador para encontrar esta camiseta directamente</span>
+                        <span style="font-size: 0.78rem; color: var(--text-muted); font-style: italic;">Introdúcelo en
+                            el buscador para encontrar esta camiseta directamente</span>
                     </p>
                     <ul class="features-list">
-                        <li><i class="fas fa-check"></i> 100% Poliéster reciclado</li>
+                        <li><i class="fas fa-check"></i> La mejor calidad del mercado (G5) </li>
                         <li><i class="fas fa-check"></i> Tecnología de absorción de humedad</li>
                         <li><i class="fas fa-check"></i> Escudo bordado de alta calidad</li>
                     </ul>
@@ -706,9 +710,11 @@
             </div>
             <h3 class="pv-title">Verificar Disponibilidad</h3>
             <p class="pv-text">
-                Has seleccionado la <strong>Versión Jugador</strong>. Por favor, asegúrate de que el diseño específico esté disponible para esta versión en nuestro catálogo oficial antes de continuar.
+                Has seleccionado la <strong>Versión Jugador</strong>. Por favor, asegúrate de que el diseño específico
+                esté disponible para esta versión en nuestro catálogo oficial antes de continuar.
             </p>
-            <a href="https://www.yupoo.store/search?uid=1&q=player%20version&page=1" target="_blank" rel="noopener" class="pv-link">
+            <a href="https://www.yupoo.store/search?uid=1&q=player%20version&page=1" target="_blank" rel="noopener"
+                class="pv-link">
                 <i class="fas fa-external-link-alt"></i> Abrir Catálogo de Jugador
             </a>
             <button id="pv-close-btn" class="pv-btn">Entendido, continuar</button>
