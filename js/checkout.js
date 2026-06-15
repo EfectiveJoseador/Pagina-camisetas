@@ -12,6 +12,7 @@ let appliedDiscount = 0;
 let userCoupons = [];
 let appliedPromoCode = null;
 let promoDiscount = 0;
+let editingAddressId = null;
 const WEB3FORMS_KEY = "8e920ab3-b0f7-4768-a83a-ed3ef8cd58a8";
 const PAYPAL_USERNAME = "camisetazo";
 
@@ -66,9 +67,14 @@ function renderAddresses(addressArray) {
         <label class="address-option ${selectedAddressId === addr.id ? 'selected' : ''}" data-id="${sanitizeHTML(addr.id)}">
             <input type="radio" name="shipping-address" value="${sanitizeHTML(addr.id)}" ${selectedAddressId === addr.id ? 'checked' : ''}>
             <div class="address-content">
-                <div class="address-header">
+                <div class="address-header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                     <strong>${sanitizeHTML(addr.name)}</strong>
-                    ${selectedAddressId === addr.id ? '<span class="selected-badge"><i class="fas fa-check-circle"></i> Seleccionada</span>' : ''}
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        ${selectedAddressId === addr.id ? '<span class="selected-badge"><i class="fas fa-check-circle"></i> Seleccionada</span>' : ''}
+                        <button type="button" class="btn-edit-address-card" data-id="${sanitizeHTML(addr.id)}" title="Editar dirección" style="background: rgba(99, 102, 241, 0.1); border: none; color: var(--primary); cursor: pointer; font-size: 0.8rem; padding: 0.3rem 0.6rem; border-radius: 6px; display: flex; align-items: center; gap: 0.25rem;">
+                            <i class="fas fa-pen" style="font-size: 0.75rem;"></i> Editar
+                        </button>
+                    </div>
                 </div>
                 <p>${sanitizeHTML(addr.street)}</p>
                 <p>${sanitizeHTML(addr.zip)}, ${sanitizeHTML(addr.city)}${addr.province ? ' (' + sanitizeHTML(addr.province) + ')' : ''}</p>
@@ -83,6 +89,46 @@ function renderAddresses(addressArray) {
             selectAddress(e.target.value);
         });
     });
+
+    document.querySelectorAll('.btn-edit-address-card').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            e.preventDefault();
+            const id = btn.dataset.id;
+            editAddress(id);
+        });
+    });
+}
+
+function editAddress(addressId) {
+    const addr = addresses.find(a => a.id === addressId);
+    if (!addr) return;
+
+    editingAddressId = addressId;
+
+    document.getElementById('new-address-name').value = addr.name || '';
+    document.getElementById('new-address-street').value = addr.street || '';
+    document.getElementById('new-address-city').value = addr.city || '';
+    document.getElementById('new-address-zip').value = addr.zip || '';
+    
+    const provinceSelect = document.getElementById('new-address-province');
+    if (provinceSelect) {
+        provinceSelect.value = addr.province || '';
+    }
+    
+    document.getElementById('new-address-phone').value = addr.phone || '';
+    
+    const instagramInput = document.getElementById('new-address-instagram');
+    if (instagramInput) {
+        instagramInput.value = addr.instagram || '';
+    }
+
+    const formTitle = document.querySelector('#new-address-form-container h3');
+    if (formTitle) {
+        formTitle.textContent = 'Editar Dirección';
+    }
+
+    showNewAddressForm();
 }
 
 function selectAddress(addressId) {
@@ -148,6 +194,12 @@ function hideNewAddressForm() {
     if (form) {
         form.reset();
     }
+    
+    editingAddressId = null;
+    const formTitle = document.querySelector('#new-address-form-container h3');
+    if (formTitle) {
+        formTitle.textContent = 'Nueva Dirección';
+    }
 }
 
 async function saveNewAddress(e) {
@@ -167,13 +219,21 @@ async function saveNewAddress(e) {
     };
 
     try {
-        const addressesRef = ref(db, `users/${currentUser.uid}/addresses`);
-        const newAddressRef = await push(addressesRef, addressData);
+        if (editingAddressId) {
+            const addressRef = ref(db, `users/${currentUser.uid}/addresses/${editingAddressId}`);
+            await set(addressRef, addressData);
 
-        await loadUserAddresses();
+            await loadUserAddresses();
+            selectAddress(editingAddressId);
+        } else {
+            const addressesRef = ref(db, `users/${currentUser.uid}/addresses`);
+            const newAddressRef = await push(addressesRef, addressData);
 
-        const newAddressId = newAddressRef.key;
-        selectAddress(newAddressId);
+            await loadUserAddresses();
+
+            const newAddressId = newAddressRef.key;
+            selectAddress(newAddressId);
+        }
 
         hideNewAddressForm();
     } catch (error) {
@@ -639,7 +699,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const newAddressForm = document.getElementById('new-address-form');
 
     if (addNewAddressBtn) {
-        addNewAddressBtn.addEventListener('click', showNewAddressForm);
+        addNewAddressBtn.addEventListener('click', () => {
+            editingAddressId = null;
+            const formTitle = document.querySelector('#new-address-form-container h3');
+            if (formTitle) {
+                formTitle.textContent = 'Nueva Dirección';
+            }
+            const form = document.getElementById('new-address-form');
+            if (form) {
+                form.reset();
+            }
+            showNewAddressForm();
+        });
     }
 
     if (cancelNewAddressBtn) {

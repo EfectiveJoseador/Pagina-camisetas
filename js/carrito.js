@@ -470,24 +470,29 @@ const Cart = {
             const el = document.createElement('div');
             el.className = 'checkout-item-mini';
             const isLast = index === this.items.length - 1;
-            el.style.cssText = `display:flex; justify-content:space-between; align-items:center; gap:0.5rem; ${isLast ? 'margin-bottom:0.5rem;' : 'margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid var(--border);'}`;
+            el.style.cssText = `display:flex; gap:0.75rem; align-items:flex-start; ${isLast ? 'margin-bottom:0.5rem;' : 'margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid var(--border);'}`;
             el.innerHTML = `
-                <div style="display:flex; align-items:center; gap:0.75rem; flex:1; min-width:0;">
-                    <img src="${imgUrl}" alt="${sanitizeHTML(displayName)}" style="width:44px; height:44px; object-fit:contain; border:1px solid var(--border); border-radius:8px; padding:2px; background:#fff; flex-shrink:0;">
-                    <div style="min-width:0; flex:1;">
-                        <h4 style="font-size:0.85rem; font-weight:600; margin:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:left;">${sanitizeHTML(displayName)}</h4>
-                        <p style="font-size:0.75rem; color:var(--text-muted); margin:2px 0 0 0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; text-align:left;">${displayDetails}</p>
+                <img src="${imgUrl}" alt="${sanitizeHTML(displayName)}" style="width:50px; height:50px; object-fit:contain; border:1px solid var(--border); border-radius:8px; padding:2px; background:#fff; flex-shrink:0;">
+                <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:0.25rem;">
+                    <h4 style="font-size:0.9rem; font-weight:700; margin:0; color:var(--text-main); line-height:1.3; overflow-wrap:break-word; text-align:left;">${sanitizeHTML(displayName)}</h4>
+                    <p style="font-size:0.75rem; color:var(--text-muted); margin:0; line-height:1.3; overflow-wrap:break-word; text-align:left;">${displayDetails}</p>
+                    
+                    <div style="display:flex; align-items:center; justify-content:space-between; margin-top:0.5rem; gap:0.5rem; flex-wrap:wrap;">
+                        <div style="display:flex; align-items:center; gap:0.35rem;">
+                            <!-- Quantity Selector in Checkout -->
+                            <div class="quantity-selector" style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden; background:var(--bg-body); height:26px; flex-shrink:0; width:72px !important; min-width:72px !important; max-width:72px !important; justify-content:space-between !important;">
+                                <button class="qty-btn-minus-checkout" data-index="${index}" style="border:none; background:transparent; width:24px !important; height:22px; min-width:24px !important; max-width:24px !important; flex:none !important; cursor:pointer; color:var(--text-main); display:flex; align-items:center; justify-content:center; padding:0;" aria-label="Disminuir"><i class="fas fa-minus" style="font-size:0.65rem;"></i></button>
+                                <input type="number" value="${qty}" style="width:24px !important; flex:none !important; border:none; text-align:center; background:transparent; font-size:0.8rem; font-weight:600; color:var(--text-main); pointer-events:none; padding:0; margin:0;" readonly>
+                                <button class="qty-btn-plus-checkout" data-index="${index}" style="border:none; background:transparent; width:24px !important; height:22px; min-width:24px !important; max-width:24px !important; flex:none !important; cursor:pointer; color:var(--text-main); display:flex; align-items:center; justify-content:center; padding:0;" aria-label="Aumentar"><i class="fas fa-plus" style="font-size:0.65rem;"></i></button>
+                            </div>
+                            <!-- Delete Button -->
+                            <button class="btn-remove-checkout" data-index="${index}" style="border:none; background:transparent; color:var(--text-muted); cursor:pointer; font-size:0.85rem; width:26px; height:26px; display:flex; align-items:center; justify-content:center; border-radius:6px; transition:all 0.2s;" title="Eliminar"><i class="fas fa-trash-alt"></i></button>
+                            <!-- Edit Button -->
+                            <button class="btn-checkout-edit" data-index="${index}" style="border:none; background:transparent; color:var(--text-muted); cursor:pointer; font-size:0.85rem; width:26px; height:26px; display:flex; align-items:center; justify-content:center; border-radius:6px; transition:all 0.2s;" title="Editar producto" aria-label="Editar ${sanitizeHTML(displayName)}"><i class="fas fa-pen"></i></button>
+                        </div>
+                        
+                        <span style="font-size:0.9rem; font-weight:800; color:var(--text-main);">€${(displayPrice * qty).toFixed(2)}</span>
                     </div>
-                </div>
-                <div style="display:flex; align-items:center; gap:0.5rem; flex-shrink:0;">
-                    <!-- Editable Controls in Checkout (Mejora 3) -->
-                    <div class="quantity-selector touch-optimized" style="display:flex; align-items:center; border:1px solid var(--border); border-radius:6px; overflow:hidden; background:var(--bg-body); height:28px;">
-                        <button class="qty-btn-minus-checkout touch-target" data-index="${index}" style="border:none; background:transparent; width:24px; height:24px; cursor:pointer; color:var(--text-main); display:flex; align-items:center; justify-content:center;"><i class="fas fa-minus" style="font-size:0.7rem;"></i></button>
-                        <input type="number" value="${qty}" style="width:18px; border:none; text-align:center; background:transparent; font-size:0.8rem; font-weight:600; color:var(--text-main); pointer-events:none; padding:0;" readonly>
-                        <button class="qty-btn-plus-checkout touch-target" data-index="${index}" style="border:none; background:transparent; width:24px; height:24px; cursor:pointer; color:var(--text-main); display:flex; align-items:center; justify-content:center;"><i class="fas fa-plus" style="font-size:0.7rem;"></i></button>
-                    </div>
-                    <button class="btn-remove-checkout" data-index="${index}" style="border:none; background:transparent; color:var(--text-muted); cursor:pointer; font-size:0.9rem; width:28px; height:28px; display:flex; align-items:center; justify-content:center; border-radius:6px; transition:all 0.2s;"><i class="fas fa-trash-alt"></i></button>
-                    <span style="font-size:0.85rem; font-weight:700; min-width:55px; text-align:right;">€${(displayPrice * qty).toFixed(2)}</span>
                 </div>
             `;
             container.appendChild(el);
@@ -512,6 +517,12 @@ const Cart = {
             btn.addEventListener('click', () => {
                 const index = parseInt(btn.dataset.index);
                 this.remove(index);
+            });
+        });
+        container.querySelectorAll('.btn-checkout-edit').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const index = parseInt(btn.dataset.index);
+                openCartItemEditModal(index, this);
             });
         });
 
