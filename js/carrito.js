@@ -691,7 +691,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
 
     // ── Name input: letters/spaces only, max 15 (mirrors handleNameInput) ───
     overlay.querySelector('#ce-name')?.addEventListener('input', e => {
-        let v = e.target.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+        let v = e.target.value.replace(/[^A-Za-zÀ-ÿ\s\.]/g, '');
         if (v.length > 15) v = v.slice(0, 15);
         e.target.value = v;
         // Hide hint while typing
@@ -744,10 +744,10 @@ function openCartItemEditModal(cartIndex, cartRef) {
         const hasName   = nameVal.length > 0;
         const hasNumber = numberVal.length > 0;
 
-        // Validation: name — letters and spaces only
-        if (hasName && !/^[A-Za-z\u00C0-\u00FF\s]+$/.test(nameVal)) {
-            if (window.Toast) window.Toast.error('El nombre solo puede contener letras y espacios');
-            else alert('El nombre solo puede contener letras y espacios');
+        // Validation: name — letters, spaces and dots only
+        if (hasName && !/^[A-Za-z\u00C0-\u00FF\s\.]+$/.test(nameVal)) {
+            if (window.Toast) window.Toast.error('El nombre solo puede contener letras, espacios y puntos');
+            else alert('El nombre solo puede contener letras, espacios y puntos');
             return;
         }
 

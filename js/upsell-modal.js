@@ -367,7 +367,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
 
     // Live validation on name
     overlay.querySelector('#ue-name')?.addEventListener('input', e => {
-        let v = e.target.value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+        let v = e.target.value.replace(/[^A-Za-zÀ-ÿ\s\.]/g, '');
         if (v.length > 15) v = v.slice(0, 15);
         e.target.value = v;
         updatePrice();
@@ -402,8 +402,8 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
         const nameVal    = getName().trim();
         const numberVal  = getNumber().trim();
 
-        if (nameVal && !/^[A-Za-z\u00C0-\u00FF\s]+$/.test(nameVal)) {
-            if (window.Toast) window.Toast.error('El nombre solo puede contener letras y espacios');
+        if (nameVal && !/^[A-Za-z\u00C0-\u00FF\s\.]+$/.test(nameVal)) {
+            if (window.Toast) window.Toast.error('El nombre solo puede contener letras, espacios y puntos');
             return;
         }
         if (numberVal) {

@@ -508,7 +508,7 @@ function applyProductRestrictions() {
 }
 function handleNameInput(e) {
     let value = e.target.value;
-    value = value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+    value = value.replace(/[^A-Za-zÀ-ÿ\s\.]/g, '');
     if (value.length > 15) {
         value = value.slice(0, 15);
     }

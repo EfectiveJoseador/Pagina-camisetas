@@ -381,7 +381,7 @@ function renderProducts() {
                             <div class="form-row">
                                 <div class="form-group">
                                     <label>Nombre</label>
-                                    <input type="text" class="quick-name" placeholder="Ej: MESSI" maxlength="15" pattern="[A-Za-zÀ-ÿ\\s]*">
+                                    <input type="text" class="quick-name" placeholder="Ej: MESSI" maxlength="15" pattern="[A-Za-zÀ-ÿ\\s\\.]*">
                                 </div>
                                 <div class="form-group">
                                     <label>Dorsal</label>
@@ -529,7 +529,7 @@ function setupQuickAddListeners() {
             nameInput.addEventListener('input', (e) => {
                 let value = e.target.value;
                 
-                value = value.replace(/[^A-Za-zÀ-ÿ\s]/g, '');
+                value = value.replace(/[^A-Za-zÀ-ÿ\s\.]/g, '');
                 if (value.length > 15) {
                     value = value.slice(0, 15);
                 }
@@ -1505,8 +1505,8 @@ function handleFormSubmit(e) {
 
 
 
-    if (name && !/^[A-Za-zÀ-ÿ\s]+$/.test(name)) {
-        alert('El nombre solo puede contener letras y espacios');
+    if (name && !/^[A-Za-zÀ-ÿ\s\.]+$/.test(name)) {
+        alert('El nombre solo puede contener letras, espacios y puntos');
         return;
     }
 
