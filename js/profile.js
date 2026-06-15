@@ -277,8 +277,8 @@ function renderOrders(orders) {
                             </div>
                         ` : ''}
                         ${shipping.instagram ? `
-                            <div style="display: flex; align-items: center; gap: 0.4rem; margin-top: 0.3rem; color: #E1306C; font-weight: 600;">
-                                <i class="fab fa-instagram" style="font-size: 0.85rem;"></i>
+                            <div style="display: flex; align-items: center; gap: 0.4rem; margin-top: 0.3rem; color: #00c951; font-weight: 600;">
+                                <i class="fab fa-tiktok" style="font-size: 0.85rem;"></i>
                                 <span>@${sanitizeHTML(shipping.instagram.replace(/^@/, ''))}</span>
                             </div>
                         ` : ''}
@@ -628,7 +628,7 @@ function renderAddresses(addresses) {
             <p>${sanitizeHTML(addr.street)}</p>
             <p>${sanitizeHTML(addr.zip)}, ${sanitizeHTML(addr.city)}${addr.province ? ' (' + sanitizeHTML(addr.province) + ')' : ''}</p>
             <p><i class="fas fa-phone"></i> ${sanitizeHTML(addr.phone)}</p>
-            <p><i class="fab fa-instagram" style="color: #E1306C;"></i> @${sanitizeHTML((addr.instagram || '').replace(/^@/, ''))}</p>
+            <p><i class="fab fa-tiktok" style="color: #00c951;"></i> @${sanitizeHTML((addr.instagram || '').replace(/^@/, ''))}</p>
             <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
                 <button class="btn-text edit-address" data-id="${sanitizeHTML(addr.id)}">
                     <i class="fas fa-edit"></i> Editar

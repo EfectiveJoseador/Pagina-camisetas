@@ -73,7 +73,7 @@ function renderAddresses(addressArray) {
                 <p>${sanitizeHTML(addr.street)}</p>
                 <p>${sanitizeHTML(addr.zip)}, ${sanitizeHTML(addr.city)}${addr.province ? ' (' + sanitizeHTML(addr.province) + ')' : ''}</p>
                 <p><i class="fas fa-phone" style="font-size: 0.85em;"></i> ${sanitizeHTML(addr.phone)}</p>
-                <p><i class="fab fa-instagram" style="color: #E1306C; font-size: 0.85em;"></i> @${sanitizeHTML((addr.instagram || '').replace(/^@/, ''))}</p>
+                <p><i class="fab fa-tiktok" style="color: #00c951; font-size: 0.85em;"></i> @${sanitizeHTML((addr.instagram || '').replace(/^@/, ''))}</p>
             </div>
         </label>
     `).join('');
@@ -489,7 +489,7 @@ Province: ${sa.province || ''}
 Country: España
 Postal Code: ${sa.zip || ''}
 Phone Number: ${sa.phone || ''}
-Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
+TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
     let productsText = '';
     orderData.items.forEach((item) => {
         const qty = item.quantity || 1;

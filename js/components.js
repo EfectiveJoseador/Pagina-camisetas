@@ -1,30 +1,34 @@
-
-
 const Components = {
     header: `
         <header class="main-header">
-            <div class="ig-alert-banner" id="igAlertBanner" role="alert" aria-live="polite">
-                <div class="ig-alert-track">
-                    <span class="ig-alert-segment">
-                        <span class="ig-icon"><i class="fab fa-instagram"></i></span>
-                        <span class="ig-separator">⚠</span>
-                        <strong>AVISO IMPORTANTE:</strong>
-                        Nuestra cuenta de Instagram ha sido suspendida temporalmente
-                        <span class="ig-separator">•</span>
-                        Para pedidos y consultas, usa exclusivamente nuestra <strong>WEB OFICIAL</strong>
-                        <span class="ig-separator">•</span>
+            <a href="https://www.tiktok.com/@camisetazo" target="_blank" rel="noopener"
+               class="tk-banner" id="tkBanner" role="alert" aria-live="polite"
+               id="tk-banner-link"
+               onclick="if(window.TikTokBanner)window.TikTokBanner.trackClick()">
+                <div class="tk-banner-track">
+                    <span class="tk-banner-segment">
+                        <span class="tk-icon"><i class="fab fa-tiktok"></i></span>
+                        <strong>¡NOS MUDAMOS A TIKTOK!</strong>
+                        <span class="tk-sep">•</span>
+                        Los primeros 100 seguidores en <strong>@camisetazo</strong> obtienen un <strong>código de descuento del 15%</strong>
+                        <span class="tk-sep">•</span>
+                        ¡Síguenos y envíanos la palabra <strong>'codigo'</strong> por privado para reclamarlo!
+                        <span class="tk-sep">•</span>
                     </span>
-                    <span class="ig-alert-segment" aria-hidden="true">
-                        <span class="ig-icon"><i class="fab fa-instagram"></i></span>
-                        <span class="ig-separator">⚠</span>
-                        <strong>AVISO IMPORTANTE:</strong>
-                        Nuestra cuenta de Instagram ha sido suspendida temporalmente
-                        <span class="ig-separator">•</span>
-                        Para pedidos y consultas, usa exclusivamente nuestra <strong>WEB OFICIAL</strong>
-                        <span class="ig-separator">•</span>
+                    <span class="tk-banner-segment" aria-hidden="true">
+                        <span class="tk-icon"><i class="fab fa-tiktok"></i></span>
+                        <strong>¡NOS MUDAMOS A TIKTOK!</strong>
+                        <span class="tk-sep">•</span>
+                        Los primeros 100 seguidores en <strong>@camisetazo</strong> obtienen un <strong>código de descuento del 15%</strong>
+                        <span class="tk-sep">•</span>
+                        ¡Síguenos y envíanos la palabra <strong>'codigo'</strong> por privado para reclamarlo!
+                        <span class="tk-sep">•</span>
                     </span>
                 </div>
-            </div>
+                <button class="tk-banner-close" id="tkBannerClose" aria-label="Cerrar aviso" title="Cerrar">
+                    <i class="fas fa-times"></i>
+                </button>
+            </a>
             <div class="container header-container">
                 <a href="/index.html" class="logo-link">
                     <img src="/assets/logo/logo.png" alt="Camisetazo" class="logo-img">
@@ -88,9 +92,12 @@ const Components = {
                     <ul class="footer-links">
                         <li><a href="mailto:camisetazocontacto@gmail.com"><i class="fas fa-envelope"></i> camisetazocontacto@gmail.com</a></li>
                     </ul>
-                    <h4 style="margin-top: 1rem;">Síguenos</h4>
+                    <h4 style="margin-top: 1rem;">Síguenos en TikTok</h4>
                     <div class="social-links">
-                        <a href="https://www.instagram.com/camisetazo._/" target="_blank" rel="noopener" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="https://www.tiktok.com/@camisetazo" target="_blank" rel="noopener" class="social-link" aria-label="TikTok"
+                           onclick="if(window.TikTokBanner)window.TikTokBanner.trackClick()">
+                            <i class="fab fa-tiktok"></i>
+                        </a>
                     </div>
                 </div>
             </div>
@@ -112,6 +119,29 @@ const Components = {
             footerPlaceholder.outerHTML = this.footer;
         } else {
             document.body.insertAdjacentHTML('beforeend', this.footer);
+        }
+
+        // ── TikTok Banner: dismiss button ──
+        const tkClose = document.getElementById('tkBannerClose');
+        const tkBanner = document.getElementById('tkBanner');
+        if (tkClose && tkBanner) {
+            // Check if already dismissed
+            if (window.TikTokBanner && window.TikTokBanner.isDismissed()) {
+                tkBanner.style.display = 'none';
+                tkBanner.remove();
+            } else {
+                tkClose.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    tkBanner.style.transition = 'height 0.35s ease, opacity 0.35s ease';
+                    tkBanner.style.opacity = '0';
+                    tkBanner.style.height = '0';
+                    tkBanner.style.overflow = 'hidden';
+                    tkBanner.style.borderBottom = 'none';
+                    if (window.TikTokBanner) window.TikTokBanner.saveDismiss();
+                    setTimeout(() => tkBanner.remove(), 400);
+                });
+            }
         }
         const menuBtn = document.getElementById('mobile-menu-toggle');
         const navMenu = document.getElementById('navMenu');
@@ -194,7 +224,7 @@ const Components = {
                 searchIcon.style.cursor = 'pointer';
             }
         }
-        
+
         import(productsPath).then((module) => {
             const productsList = module.default;
 
@@ -344,9 +374,9 @@ const Components = {
                 if (Array.isArray(importedItems)) {
                     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
                     importedItems.forEach(item => {
-                        const matchIndex = cart.findIndex(i => 
-                            i.id === item.id && 
-                            i.size === item.size && 
+                        const matchIndex = cart.findIndex(i =>
+                            i.id === item.id &&
+                            i.size === item.size &&
                             i.version === item.version &&
                             JSON.stringify(i.customization) === JSON.stringify(item.customization)
                         );
@@ -358,10 +388,10 @@ const Components = {
                         }
                     });
                     localStorage.setItem('cart', JSON.stringify(cart));
-                    
+
                     // Dispatch updates
                     window.dispatchEvent(new CustomEvent('cart:updated'));
-                    
+
                     // Update count in header
                     const totalItems = cart.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
                     const cartBadge = document.getElementById('cart-count');
@@ -377,7 +407,7 @@ const Components = {
                         }
                     }, 500);
                 }
-                
+
                 // Clean URL params
                 urlParams.delete('cart');
                 const newSearch = urlParams.toString();
@@ -396,51 +426,65 @@ const Components = {
 
 const CookieConsent = {
     banner: `
-        <div id="cookie-consent" class="cookie-consent" role="dialog">
+        <div id="cookie-consent" class="cookie-consent" role="dialog" aria-labelledby="cookie-title">
             <div id="cookie-main-view" class="cookie-consent-content">
-                <div class="cookie-text">
-                    <h3><i class="fas fa-cookie-bite"></i> Experiencia Personalizada</h3>
-                    <p>Utilizamos cookies para optimizar tu navegación y mostrarte las mejores camisetas de fútbol según tus gustos. <a href="/pages/cookies.html">Ver política</a></p>
+                <div class="cookie-header">
+                    <i class="fas fa-cookie-bite cookie-main-icon" aria-hidden="true"></i>
+                    <h3 id="cookie-title">Preferencias de Cookies</h3>
                 </div>
-                <div class="cookie-buttons">
-                    <button id="cookie-accept-all" class="cookie-btn cookie-btn-primary">ACEPTAR Y CONTINUAR</button>
-                    <button id="cookie-show-settings" class="cookie-link">Configuración mínima</button>
+                <p class="cookie-text">
+                    Utilizamos cookies para optimizar tu navegación y mostrarte las mejores camisetas de fútbol según tus gustos. Puedes configurar tus preferencias o aceptar todas las cookies. <a href="/pages/cookies.html" class="cookie-policy-link">Ver política de cookies</a>.
+                </p>
+                <div class="cookie-actions">
+                    <button id="cookie-show-settings" class="cookie-btn cookie-btn-secondary">CONFIGURAR</button>
+                    <button id="cookie-accept-all" class="cookie-btn cookie-btn-primary">ACEPTAR TODAS</button>
                 </div>
             </div>
             
             <div id="cookie-settings-view" class="cookie-settings-content" style="display: none;">
-                <div class="cookie-text">
-                    <h3>Configuración de Privacidad</h3>
-                    <p>Selecciona qué cookies deseas permitir. Las cookies técnicas son obligatorias para el funcionamiento de la tienda.</p>
+                <div class="cookie-header">
+                    <h3 id="cookie-settings-title">Configuración de Cookies</h3>
                 </div>
+                <p class="cookie-text-settings">
+                    Selecciona qué categorías de cookies deseas activar. Las cookies técnicas son obligatorias para el funcionamiento básico de la tienda y el carrito.
+                </p>
                 
                 <div class="cookie-options-list">
                     <div class="cookie-option-item">
                         <div class="option-info">
-                            <span>Técnicas y Necesarias</span>
-                            <p>Obligatorias para el carrito y el inicio de sesión.</p>
+                            <span class="option-title">Técnicas y Obligatorias</span>
+                            <span class="option-desc">Esenciales para el carrito de compras y sesiones seguras.</span>
                         </div>
-                        <input type="checkbox" checked disabled>
+                        <label class="cookie-switch">
+                            <input type="checkbox" checked disabled>
+                            <span class="switch-slider disabled"></span>
+                        </label>
                     </div>
                     <div class="cookie-option-item">
                         <div class="option-info">
-                            <span>Estadísticas y Análisis</span>
-                            <p>Nos ayudan a saber qué camisetas son las más populares.</p>
+                            <span class="option-title">Estadísticas y Analíticas</span>
+                            <span class="option-desc">Nos permiten medir el rendimiento del sitio y mejorar tu experiencia.</span>
                         </div>
-                        <input type="checkbox" id="check-analytics">
+                        <label class="cookie-switch">
+                            <input type="checkbox" id="check-analytics">
+                            <span class="switch-slider"></span>
+                        </label>
                     </div>
                     <div class="cookie-option-item">
                         <div class="option-info">
-                            <span>Marketing Personalizado</span>
-                            <p>Para ofrecerte ofertas exclusivas en tus equipos favoritos.</p>
+                            <span class="option-title">Marketing y Ofertas</span>
+                            <span class="option-desc">Usadas para mostrarte ofertas relevantes de tus equipos favoritos.</span>
                         </div>
-                        <input type="checkbox" id="check-marketing">
+                        <label class="cookie-switch">
+                            <input type="checkbox" id="check-marketing">
+                            <span class="switch-slider"></span>
+                        </label>
                     </div>
                 </div>
 
-                <div class="cookie-buttons">
-                    <button id="cookie-accept-all-2" class="cookie-btn cookie-btn-primary">ACEPTAR TODAS LAS COOKIES</button>
-                    <button id="cookie-save-selected" class="cookie-link">Guardar configuración seleccionada</button>
+                <div class="cookie-actions settings-actions">
+                    <button id="cookie-save-selected" class="cookie-btn cookie-btn-secondary">GUARDAR</button>
+                    <button id="cookie-accept-all-2" class="cookie-btn cookie-btn-primary">ACEPTAR TODAS</button>
                 </div>
             </div>
         </div>
@@ -451,109 +495,224 @@ const CookieConsent = {
             .cookie-consent {
                 position: fixed;
                 bottom: 2rem;
-                left: 50%;
-                transform: translateX(-50%) translateY(120%);
-                width: 90%;
-                max-width: 450px;
-                background: rgba(10, 10, 15, 0.98);
-                backdrop-filter: blur(20px);
-                border: 1px solid rgba(168, 85, 247, 0.3);
-                border-radius: 24px;
-                padding: 1.75rem;
+                left: 2rem;
+                width: calc(100% - 4rem);
+                max-width: 420px;
+                background: rgba(13, 13, 18, 0.96);
+                backdrop-filter: blur(24px);
+                -webkit-backdrop-filter: blur(24px);
+                border: 1px solid rgba(255, 255, 255, 0.08);
+                border-radius: 20px;
+                padding: 1.5rem;
                 z-index: 99999;
-                box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+                box-shadow: 
+                    0 20px 40px rgba(0, 0, 0, 0.4),
+                    0 0 0 1px rgba(255, 255, 255, 0.04),
+                    inset 0 1px 0 rgba(255, 255, 255, 0.1);
                 opacity: 0;
-                transition: all 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+                transform: translateY(20px);
+                transition: opacity 0.4s ease, transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), max-width 0.4s ease;
             }
             .cookie-consent.show {
-                transform: translateX(-50%) translateY(0);
                 opacity: 1;
+                transform: translateY(0);
             }
             .cookie-consent.expanded {
-                max-width: 600px;
-                bottom: 50%;
-                transform: translateX(-50%) translateY(50%);
+                max-width: 480px;
             }
             .cookie-consent-content, .cookie-settings-content {
                 display: flex;
                 flex-direction: column;
-                gap: 1.5rem;
-                text-align: center;
+                gap: 1rem;
             }
-            .cookie-text h3 {
-                font-size: 1.3rem;
-                font-weight: 800;
-                color: #fff;
-                margin-bottom: 0.5rem;
+            .cookie-header {
                 display: flex;
                 align-items: center;
-                justify-content: center;
                 gap: 0.75rem;
+                color: #fff;
             }
-            .cookie-text h3 i { color: #a855f7; }
-            .cookie-text p {
-                font-size: 0.95rem;
-                color: rgba(255, 255, 255, 0.6);
-                line-height: 1.6;
+            .cookie-main-icon {
+                font-size: 1.25rem;
+                color: #a855f7;
+                animation: cookieSpin 4s ease-in-out infinite;
             }
+            @keyframes cookieSpin {
+                0%, 100% { transform: rotate(0); }
+                50% { transform: rotate(12deg); }
+            }
+            .cookie-header h3 {
+                font-family: 'Outfit', 'Inter', sans-serif;
+                font-size: 1.15rem;
+                font-weight: 700;
+                margin: 0;
+                letter-spacing: -0.01em;
+            }
+            .cookie-text, .cookie-text-settings {
+                font-family: 'Inter', sans-serif;
+                font-size: 0.88rem;
+                color: rgba(255, 255, 255, 0.7);
+                line-height: 1.5;
+                margin: 0;
+                text-align: left;
+            }
+            .cookie-policy-link {
+                color: #a855f7;
+                text-decoration: none;
+                font-weight: 600;
+                transition: color 0.2s;
+            }
+            .cookie-policy-link:hover {
+                color: #c084fc;
+                text-decoration: underline;
+            }
+            .cookie-actions {
+                display: flex;
+                gap: 0.75rem;
+                width: 100%;
+                margin-top: 0.5rem;
+            }
+            .cookie-btn {
+                flex: 1;
+                font-family: 'Inter', sans-serif;
+                font-size: 0.85rem;
+                font-weight: 700;
+                padding: 0.75rem 1rem;
+                border-radius: 12px;
+                cursor: pointer;
+                transition: all 0.2s ease;
+                text-align: center;
+                border: none;
+                text-transform: uppercase;
+                letter-spacing: 0.03em;
+            }
+            .cookie-btn-primary {
+                background: #ffffff;
+                color: #0b0b0e;
+            }
+            .cookie-btn-primary:hover {
+                background: rgba(255, 255, 255, 0.9);
+                transform: translateY(-1px);
+            }
+            .cookie-btn-secondary {
+                background: rgba(255, 255, 255, 0.08);
+                color: #ffffff;
+                border: 1px solid rgba(255, 255, 255, 0.1);
+            }
+            .cookie-btn-secondary:hover {
+                background: rgba(255, 255, 255, 0.12);
+                border-color: rgba(255, 255, 255, 0.2);
+                transform: translateY(-1px);
+            }
+            
             .cookie-options-list {
                 display: flex;
                 flex-direction: column;
-                gap: 1rem;
-                text-align: left;
-                margin: 1rem 0;
+                gap: 0.75rem;
+                margin: 0.5rem 0;
             }
             .cookie-option-item {
                 display: flex;
                 justify-content: space-between;
                 align-items: center;
-                background: rgba(255,255,255,0.05);
-                padding: 1rem;
+                background: rgba(255, 255, 255, 0.03);
+                padding: 0.75rem 1rem;
                 border-radius: 12px;
-                border: 1px solid rgba(255,255,255,0.05);
+                border: 1px solid rgba(255, 255, 255, 0.04);
             }
-            .option-info span {
-                display: block;
+            .option-info {
+                display: flex;
+                flex-direction: column;
+                gap: 0.15rem;
+                text-align: left;
+                padding-right: 1rem;
+            }
+            .option-title {
+                font-size: 0.85rem;
                 font-weight: 600;
-                font-size: 0.9rem;
-                color: #fff;
+                color: #ffffff;
             }
-            .option-info p {
-                font-size: 0.75rem !important;
-                margin: 0 !important;
+            .option-desc {
+                font-size: 0.72rem;
+                color: rgba(255, 255, 255, 0.45);
+                line-height: 1.3;
             }
-            .cookie-btn-primary {
-                background: linear-gradient(135deg, #6366f1 0%, #a855f7 100%);
-                color: #fff;
-                border: none;
-                padding: 1.1rem;
-                border-radius: 14px;
-                font-size: 1rem;
-                font-weight: 800;
-                cursor: pointer;
-                transition: all 0.3s ease;
-                box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4);
-            }
-            .cookie-btn-primary:hover {
-                transform: scale(1.02);
-                box-shadow: 0 8px 25px rgba(168, 85, 247, 0.6);
-            }
-            .cookie-link {
-                background: transparent;
-                border: none;
-                color: rgba(255, 255, 255, 0.3);
-                font-size: 0.8rem;
-                cursor: pointer;
-                text-decoration: underline;
-                transition: color 0.2s;
-            }
-            .cookie-link:hover { color: #fff; }
             
-            input[type="checkbox"] {
-                width: 20px;
-                height: 20px;
-                accent-color: #a855f7;
+            .cookie-switch {
+                position: relative;
+                display: inline-block;
+                width: 40px;
+                height: 22px;
+                flex-shrink: 0;
+            }
+            .cookie-switch input {
+                opacity: 0;
+                width: 0;
+                height: 0;
+            }
+            .switch-slider {
+                position: absolute;
                 cursor: pointer;
+                top: 0; left: 0; right: 0; bottom: 0;
+                background-color: rgba(255, 255, 255, 0.15);
+                transition: .3s;
+                border-radius: 34px;
+            }
+            .switch-slider:before {
+                position: absolute;
+                content: "";
+                height: 16px;
+                width: 16px;
+                left: 3px;
+                bottom: 3px;
+                background-color: white;
+                transition: .3s;
+                border-radius: 50%;
+            }
+            .cookie-switch input:checked + .switch-slider {
+                background-color: #a855f7;
+            }
+            .cookie-switch input:checked + .switch-slider:before {
+                transform: translateX(18px);
+            }
+            .switch-slider.disabled {
+                background-color: rgba(255, 255, 255, 0.05);
+                cursor: not-allowed;
+            }
+            .switch-slider.disabled:before {
+                background-color: rgba(255, 255, 255, 0.3);
+            }
+            
+            @media (max-width: 480px) {
+                .cookie-consent {
+                    bottom: 1rem;
+                    left: 1rem;
+                    width: calc(100% - 2rem);
+                    padding: 1.25rem;
+                    border-radius: 16px;
+                }
+                .cookie-consent.expanded {
+                    max-width: 100%;
+                }
+                .cookie-header h3 {
+                    font-size: 1.05rem;
+                }
+                .cookie-text {
+                    font-size: 0.8rem;
+                }
+                .cookie-actions {
+                    flex-direction: column-reverse;
+                    gap: 0.5rem;
+                }
+                .cookie-btn {
+                    width: 100%;
+                    padding: 0.7rem;
+                }
+                .option-title {
+                    font-size: 0.8rem;
+                }
+                .option-desc {
+                    font-size: 0.68rem;
+                }
             }
         </style>
     `,
@@ -592,9 +751,9 @@ const CookieConsent = {
         document.getElementById('cookie-save-selected').addEventListener('click', () => {
             const isAnalytics = document.getElementById('check-analytics').checked;
             const isMarketing = document.getElementById('check-marketing').checked;
-            
+
             this.setConsent(isAnalytics && isMarketing ? 'accepted' : 'partial');
-            this.updateGoogleConsent(isAnalytics); 
+            this.updateGoogleConsent(isAnalytics);
             this.hideBanner();
         });
     },

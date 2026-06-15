@@ -1,0 +1,176 @@
+/* =============================================
+   tiktok-banner.css  — Migración a TikTok
+   Banner sticky verde con promo Early Adopters
+   ============================================= */
+
+:root {
+    --tk-green-1: #00c951;
+    --tk-green-2: #00a63f;
+    --tk-green-dark: #003d19;
+    --tk-black: #010101;
+    --tk-text: #ffffff;
+    --tk-gold: #f9e44a;
+    --tk-marquee-speed: 35s;
+    --tk-banner-height: 42px;
+}
+
+/* ── Banner sticky (reemplaza .ig-alert-banner) ── */
+.tk-banner {
+    position: sticky;
+    top: 0;
+    width: 100%;
+    background: linear-gradient(90deg,
+        #002d15 0%,
+        #004d22 25%,
+        #006b30 50%,
+        #004d22 75%,
+        #002d15 100%);
+    border-bottom: 2px solid var(--tk-green-1);
+    overflow: hidden;
+    height: var(--tk-banner-height);
+    display: flex;
+    align-items: center;
+    z-index: 9999;
+    box-shadow:
+        0 2px 16px rgba(0, 201, 81, 0.4),
+        0 0 40px rgba(0, 201, 81, 0.1);
+    flex-shrink: 0;
+    cursor: pointer;
+    text-decoration: none;
+}
+
+/* Efecto glow lateral */
+.tk-banner::before,
+.tk-banner::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    width: 120px;
+    height: 100%;
+    z-index: 2;
+    pointer-events: none;
+}
+.tk-banner::before {
+    left: 0;
+    background: linear-gradient(to right, #002d15 0%, transparent 100%);
+}
+.tk-banner::after {
+    right: 0;
+    background: linear-gradient(to left, #002d15 0%, transparent 100%);
+}
+
+/* ── Marquee track ── */
+.tk-banner-track {
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    animation: tkMarquee var(--tk-marquee-speed) linear infinite;
+    will-change: transform;
+}
+
+.tk-banner:hover .tk-banner-track {
+    animation-play-state: paused;
+}
+
+@keyframes tkMarquee {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+}
+
+/* ── Segmento ── */
+.tk-banner-segment {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    padding: 0 2.5rem;
+    font-family: 'Inter', sans-serif;
+    font-size: 0.8rem;
+    font-weight: 700;
+    letter-spacing: 0.03em;
+    color: var(--tk-text);
+}
+
+/* Icono TikTok pulsante */
+.tk-banner-segment .tk-icon {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: var(--tk-green-1);
+    border-radius: 5px;
+    font-size: 0.7rem;
+    flex-shrink: 0;
+    animation: tkIconPulse 2s ease-in-out infinite;
+}
+
+@keyframes tkIconPulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0, 201, 81, 0.7); }
+    50%       { box-shadow: 0 0 0 5px rgba(0, 201, 81, 0); }
+}
+
+.tk-banner-segment .tk-sep {
+    color: var(--tk-gold);
+    font-size: 0.95rem;
+    margin: 0 0.2rem;
+    opacity: 0.85;
+}
+
+.tk-banner-segment strong {
+    color: var(--tk-gold);
+}
+
+/* Emoji rocket anima */
+.tk-rocket {
+    display: inline-block;
+    animation: tkRocketBounce 1.4s ease-in-out infinite;
+}
+@keyframes tkRocketBounce {
+    0%, 100% { transform: translateY(0) rotate(-10deg); }
+    50%       { transform: translateY(-3px) rotate(5deg); }
+}
+
+/* ── Botón dismiss (X) ── */
+.tk-banner-close {
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 10;
+    background: rgba(255, 255, 255, 0.12);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 50%;
+    width: 22px;
+    height: 22px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    color: rgba(255, 255, 255, 0.7);
+    font-size: 0.65rem;
+    transition: background 0.2s, color 0.2s, transform 0.2s;
+    flex-shrink: 0;
+    line-height: 1;
+}
+.tk-banner-close:hover {
+    background: rgba(0, 201, 81, 0.3);
+    color: #fff;
+    transform: translateY(-50%) rotate(90deg);
+}
+
+/* ── Responsive ── */
+@media (max-width: 480px) {
+    :root {
+        --tk-banner-height: 36px;
+        --tk-marquee-speed: 28s;
+    }
+    .tk-banner-segment {
+        font-size: 0.72rem;
+        padding: 0 1.5rem;
+    }
+    .tk-banner-close {
+        width: 20px;
+        height: 20px;
+        right: 8px;
+    }
+}

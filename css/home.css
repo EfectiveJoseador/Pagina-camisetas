@@ -116,6 +116,10 @@ body.low-performance * {
 @media (max-width: 768px) {
     .hero-section {
         clip-path: none;
+        align-items: flex-start;
+        padding-top: 2.5rem;
+        height: auto;
+        min-height: calc(100vh - var(--header-height));
     }
 
     .hero-fixed-bg {
@@ -1436,7 +1440,7 @@ a.catalogo-btn:hover,
     }
 
     .hero-content {
-        transform: translateY(-40px);
+        transform: none;
     }
 }
 

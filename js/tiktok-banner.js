@@ -1,13 +1,11 @@
 /**
- * tiktok-banner.js  (legacy alias: instagram-alert.js)
+ * tiktok-banner.js
  *
- * Este fichero es un ALIAS de compatibilidad y control.
  * La lógica de control del banner y del modal de migración a TikTok vive aquí.
- *
  * Muestra una barra superior (sticky banner) verde y un modal emergente (popup)
  * con toda la información de la mudanza y la promoción de inauguración en TikTok.
  */
-window.TikTokBanner = window.TikTokBanner || {
+window.TikTokBanner = {
 
     STORAGE_KEY: 'tiktokBannerDismissed_v2', // Nueva clave para forzar la visualización a todos
     MODAL_STORAGE_KEY: 'tiktokModalDismissed_v2', // Clave para el modal emergente
@@ -49,12 +47,14 @@ window.TikTokBanner = window.TikTokBanner || {
 
     trackClick() {
         try {
+            // GA4 event
             if (typeof gtag === 'function') {
                 gtag('event', 'tiktok_migration_click', {
                     event_category: 'social',
                     event_label: 'tiktok_banner_cta'
                 });
             }
+            // Analytics module (si está disponible)
             if (window.Analytics && typeof window.Analytics.trackEvent === 'function') {
                 window.Analytics.trackEvent('tiktok_migration_click');
             }

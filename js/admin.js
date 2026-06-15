@@ -386,7 +386,7 @@ window.viewOrderDetails = async function (path) {
                 <p>${sanitizeHTML(address.street || 'N/A')}</p>
                 <p>${sanitizeHTML(address.city || '')}, ${sanitizeHTML(address.postalCode || '')}</p>
                 <p>${sanitizeHTML(address.province || '')}, ${sanitizeHTML(address.country || '')}</p>
-                <p><strong><i class="fab fa-instagram" style="color: #E1306C;"></i> Instagram:</strong> @${sanitizeHTML((address.instagram || '').replace(/^@/, ''))}</p>
+                <p><strong><i class="fab fa-tiktok" style="color: #00c951;"></i> TikTok:</strong> @${sanitizeHTML((address.instagram || '').replace(/^@/, ''))}</p>
                 <p><strong>Tel:</strong> ${sanitizeHTML(address.phone || 'N/A')}</p>
             </div>
 
@@ -394,7 +394,7 @@ window.viewOrderDetails = async function (path) {
                 <h3><i class="fas fa-credit-card"></i> Pago</h3>
                 <p><strong>Método:</strong> ${sanitizeHTML(order.paymentMethod || 'N/A')}</p>
                 ${order.paymentMethod === 'bizum' && order.bizumInstagram ? `
-                    <p><strong><i class="fab fa-instagram" style="color: #E1306C;"></i> (Legacy) Instagram Bizum:</strong> ${sanitizeHTML(order.bizumInstagram)}</p>
+                    <p><strong><i class="fab fa-tiktok" style="color: #00c951;"></i> (Legacy) TikTok Bizum:</strong> ${sanitizeHTML(order.bizumInstagram)}</p>
                 ` : ''}
                 ${order.payment?.confirmedBy ? `<p><strong>Confirmado por:</strong> ${sanitizeHTML(order.payment.confirmedBy)}</p>` : ''}
             </div>
