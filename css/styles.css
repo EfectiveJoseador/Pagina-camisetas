@@ -320,7 +320,7 @@ main {
         display: none;
 
         position: absolute;
-        top: var(--header-height);
+        top: 100%;
         left: 0;
         width: 100%;
         background: var(--bg-card);
