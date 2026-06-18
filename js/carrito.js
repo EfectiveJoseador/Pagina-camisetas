@@ -155,7 +155,18 @@ const Cart = {
             }
         });
 
-        if (totalQty === 0) return { subtotal: 0, originalSubtotal: 0, shipping: 0, total: 0, packSaving: 0 };
+        if (totalQty === 0) {
+            const protectionFeeEl = document.getElementById('checkout-protection-fee');
+            if (protectionFeeEl) {
+                protectionFeeEl.parentElement.style.display = 'none';
+            }
+            return { subtotal: 0, originalSubtotal: 0, shipping: 0, protectionFee: 0, total: 0, packSaving: 0 };
+        } else {
+            const protectionFeeEl = document.getElementById('checkout-protection-fee');
+            if (protectionFeeEl) {
+                protectionFeeEl.parentElement.style.display = 'flex';
+            }
+        }
 
         // Precio sin descuento: suma real de basePrice × qty de cada camiseta + surcharges + accesorios
         let originalSubtotal = 0;
@@ -203,15 +214,23 @@ const Cart = {
         if (totalShirtQty === 1) {
             shipping = 1.90;
         }
-        const total = subtotal + shipping;
+        
+        const protectionFee = 3.00;
+        const total = subtotal + shipping + protectionFee;
 
         const shippingEl = document.getElementById('shipping-price');
         if (shippingEl) {
             shippingEl.textContent = shipping === 0 ? 'Gratis' : `€${shipping.toFixed(2)}`;
         }
+        
+        const protectionFeeEl = document.getElementById('checkout-protection-fee');
+        if (protectionFeeEl) {
+            protectionFeeEl.textContent = `+€${protectionFee.toFixed(2)}`;
+        }
+        
         this.renderPackIndicators(totalShirtQty);
 
-        return { subtotal, originalSubtotal, packSaving, shipping, total };
+        return { subtotal, originalSubtotal, packSaving, shipping, protectionFee, total };
     },
 
     renderPackIndicators(totalQty) {

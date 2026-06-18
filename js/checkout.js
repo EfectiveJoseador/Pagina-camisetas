@@ -434,6 +434,7 @@ function confirmOrder() {
         total: finalTotal,
         subtotal: calculations.subtotal,
         shipping: calculations.shipping,
+        protectionFee: calculations.protectionFee,
         discount: totalDiscounts,
         couponUsed: selectedCoupon ? selectedCoupon.id : null,
         couponDiscount: appliedDiscount,
@@ -580,6 +581,10 @@ TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
         productsText += qty + 'x ' + item.name + itemSku + ' - ' + size + ' - ' + version + extrasStr + ' - €' + price + '\n';
     });
     let totalInfo = `Subtotal: €${orderData.subtotal.toFixed(2)}\n`;
+
+    if (orderData.protectionFee && orderData.protectionFee > 0) {
+        totalInfo += `Tasa Temporal de Protección: +€${orderData.protectionFee.toFixed(2)}\n`;
+    }
 
     if (orderData.promoCodeUsed) {
         totalInfo += `Código promo (${orderData.promoCodeUsed}): -€${orderData.promoCodeDiscount.toFixed(2)}\n`;
