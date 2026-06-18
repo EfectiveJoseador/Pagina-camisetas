@@ -1,4 +1,4 @@
-const CACHE_NAME = 'camisetazo-cache-v14';
+const CACHE_NAME = 'camisetazo-cache-v15';
 
 // Solo cachear assets estáticos (JS, CSS, imágenes, fuentes).
 // NUNCA cachear HTML — los documentos HTML llevan headers de seguridad
