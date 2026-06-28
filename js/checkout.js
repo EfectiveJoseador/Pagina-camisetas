@@ -1,4 +1,4 @@
-import { auth, db, onAuthStateChanged, ref, get, push, set } from './firebase-config.js';
+import { auth, db, onAuthStateChanged, ref, get, push, set, update } from './firebase-config.js';
 import Cart from './carrito.js';
 import products from './products-data.js';
 import { getUserCoupons, useCoupon, addPendingPoints } from './points.js';
@@ -362,7 +362,7 @@ function setupZipCodeLookup() {
     });
 }
 
-function confirmOrder() {
+async function confirmOrder() {
     const confirmBtn = document.getElementById('confirm-order-btn');
     
     // Si PayPal ya se abrió previamente, al hacer clic reabrimos la pestaña/ventana
@@ -452,63 +452,36 @@ function confirmOrder() {
     if (!confirmBtn) return;
     if (paymentMethod === 'paypal') {
         const paypalUrl = orderData.paypalLink;
+        const originalText = confirmBtn.innerHTML;
+
+        // ── NUEVO: Guardar pedido ANTES de ir a PayPal con status pendiente ──
+        confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Preparando...';
+        confirmBtn.disabled = true;
+        try {
+            // Guardamos con status 'paypal_pendiente' para no perder el pedido
+            // si el usuario cierra el navegador antes de confirmar.
+            await saveOrder({ ...orderData, status: 'paypal_pendiente' });
+        } catch (saveError) {
+            console.error('Error guardando pedido previo a PayPal:', saveError);
+            // No bloqueamos: si falla el pre-guardado, intentamos continuar igual
+        }
 
         let paypalWindow = window.open(paypalUrl, '_blank');
 
         if (!paypalWindow) {
             alert('Por favor, permite ventanas emergentes para completar el pago.');
+            confirmBtn.innerHTML = originalText;
+            confirmBtn.disabled = false;
             return;
         }
 
-        const originalText = confirmBtn.innerHTML;
         confirmBtn.innerHTML = '<i class="fas fa-external-link-alt"></i> PayPal abierto... Clic para volver a abrir';
         confirmBtn.classList.add('paypal-opened');
         confirmBtn.dataset.paypalUrl = paypalUrl;
         confirmBtn.disabled = false; // Mantener clickable para reabrir el enlace
 
         // Botón de confirmación manual — el usuario lo pulsa tras pagar
-        let manualBtn = document.getElementById('paypal-manual-confirm-btn');
-        if (!manualBtn) {
-            manualBtn = document.createElement('button');
-            manualBtn.id = 'paypal-manual-confirm-btn';
-            manualBtn.type = 'button';
-            manualBtn.style.cssText = 'width:100%;margin-top:0.75rem;padding:0.9rem 1.5rem;background:linear-gradient(135deg,#0070ba,#003087);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;box-shadow:0 4px 14px rgba(0,112,186,0.35);transition:all 0.2s ease';
-            manualBtn.innerHTML = '<i class="fab fa-paypal"></i> Ya he pagado &mdash; Confirmar pedido';
-            confirmBtn.parentNode.appendChild(manualBtn);
-        }
-        manualBtn.style.display = 'flex';
-
-        manualBtn.onclick = async () => {
-            manualBtn.style.display = 'none';
-            confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finalizando...';
-            confirmBtn.disabled = true;
-            confirmBtn.classList.remove('paypal-opened');
-            delete confirmBtn.dataset.paypalUrl;
-            try {
-                await saveOrder(orderData);
-                await sendOrderViaWeb3Forms(orderData);
-                if (appliedPromoCode) {
-                    await incrementPromoUsage(appliedPromoCode.id, appliedPromoCode);
-                }
-                if (orderData.pointsToEarn > 0) {
-                    await addPendingPoints(currentUser.uid, orderData.orderId, totalShirtQuantity);
-                }
-                if (selectedCoupon) {
-                    await useCoupon(currentUser.uid, selectedCoupon.id, orderData.orderId);
-                }
-                localStorage.removeItem('cart');
-                localStorage.removeItem('appliedPacks');
-                window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
-            } catch (error) {
-                console.error('Error procesando pedido:', error);
-                alert('Error al procesar el pedido: ' + (error.message || 'Intentalo de nuevo.'));
-                confirmBtn.innerHTML = originalText;
-                confirmBtn.disabled = false;
-                confirmBtn.classList.add('paypal-opened');
-                confirmBtn.dataset.paypalUrl = paypalUrl;
-                manualBtn.style.display = 'flex';
-            }
-        };
+        showPaypalManualConfirmBtn(confirmBtn, paypalUrl, orderData, totalShirtQuantity, originalText);
 
     } else {
         const originalText = confirmBtn.innerHTML;
@@ -656,6 +629,139 @@ async function saveOrder(orderData) {
     }
 }
 
+// ── Actualizar solo el status de un pedido ya guardado ──────────────────────
+async function updateOrderStatus(orderId, status) {
+    if (!currentUser) throw new Error('Usuario no autenticado');
+    const orderRef = ref(db, `ordersByUser/${currentUser.uid}/${orderId}`);
+    await update(orderRef, { status });
+}
+
+// ── Mostrar botón "Ya he pagado" (reutilizable desde flujo normal y resume) ───
+function showPaypalManualConfirmBtn(confirmBtn, paypalUrl, orderData, totalShirtQuantity, originalText) {
+    let manualBtn = document.getElementById('paypal-manual-confirm-btn');
+    if (!manualBtn) {
+        manualBtn = document.createElement('button');
+        manualBtn.id = 'paypal-manual-confirm-btn';
+        manualBtn.type = 'button';
+        manualBtn.style.cssText = 'width:100%;margin-top:0.75rem;padding:0.9rem 1.5rem;background:linear-gradient(135deg,#0070ba,#003087);color:#fff;border:none;border-radius:10px;font-weight:700;font-size:1rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;box-shadow:0 4px 14px rgba(0,112,186,0.35);transition:all 0.2s ease';
+        manualBtn.innerHTML = '<i class="fab fa-paypal"></i> Ya he pagado &mdash; Confirmar pedido';
+        if (confirmBtn && confirmBtn.parentNode) {
+            confirmBtn.parentNode.appendChild(manualBtn);
+        }
+    }
+    manualBtn.style.display = 'flex';
+
+    manualBtn.onclick = async () => {
+        manualBtn.style.display = 'none';
+        confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Finalizando...';
+        confirmBtn.disabled = true;
+        confirmBtn.classList.remove('paypal-opened');
+        delete confirmBtn.dataset.paypalUrl;
+        try {
+            // Actualizar status de 'paypal_pendiente' a 'pendiente'
+            await updateOrderStatus(orderData.orderId, 'pendiente');
+            await sendOrderViaWeb3Forms(orderData);
+            if (appliedPromoCode) {
+                await incrementPromoUsage(appliedPromoCode.id, appliedPromoCode);
+            }
+            if (orderData.pointsToEarn > 0) {
+                await addPendingPoints(currentUser.uid, orderData.orderId, totalShirtQuantity);
+            }
+            if (selectedCoupon) {
+                await useCoupon(currentUser.uid, selectedCoupon.id, orderData.orderId);
+            }
+            localStorage.removeItem('cart');
+            localStorage.removeItem('appliedPacks');
+            // Limpiar banner de pedido pendiente si está visible
+            try { sessionStorage.removeItem('pendingBannerDismissed'); } catch (_) {}
+            window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
+        } catch (error) {
+            console.error('Error confirmando pedido:', error);
+            alert('Error al confirmar el pedido: ' + (error.message || 'Inténtalo de nuevo.'));
+            confirmBtn.innerHTML = originalText || '<i class="fas fa-check-circle"></i> Confirmar Pedido';
+            confirmBtn.disabled = false;
+            confirmBtn.classList.add('paypal-opened');
+            confirmBtn.dataset.paypalUrl = paypalUrl;
+            manualBtn.style.display = 'flex';
+        }
+    };
+}
+
+// ── Recuperar pedido pendiente desde URL ?resume=ORDERID ──────────────────
+async function resumePendingOrder(orderId) {
+    try {
+        const orderRef = ref(db, `ordersByUser/${currentUser.uid}/${orderId}`);
+        const snapshot = await get(orderRef);
+
+        if (!snapshot.exists()) {
+            console.warn('Pedido pendiente no encontrado:', orderId);
+            return;
+        }
+
+        const orderData = snapshot.val();
+
+        if (orderData.status !== 'paypal_pendiente') {
+            // El pedido ya fue confirmado o tiene otro estado; redirigir al perfil
+            window.location.href = '/pages/perfil.html';
+            return;
+        }
+
+        // Mostrar aviso de recuperación en la UI
+        const checkoutLayout = document.querySelector('.checkout-layout');
+        if (!checkoutLayout) return;
+
+        const totalShirtQuantity = (orderData.items || []).reduce(
+            (sum, item) => sum + (item.quantity || 1), 0
+        );
+
+        // Inyectar panel de recuperación antes del layout normal
+        const resumePanel = document.createElement('div');
+        resumePanel.style.cssText = 'grid-column: 1 / -1; background: linear-gradient(135deg, rgba(245,158,11,0.1) 0%, rgba(217,119,6,0.08) 100%); border: 2px solid #f59e0b; border-radius: 16px; padding: 1.5rem 2rem; margin-bottom: 1.5rem; display: flex; flex-direction: column; gap: 1rem;';
+        resumePanel.innerHTML = `
+            <div style="display: flex; align-items: center; gap: 0.75rem;">
+                <span style="font-size: 1.8rem;">⏳</span>
+                <div>
+                    <h3 style="margin: 0; color: var(--text-main); font-size: 1.1rem;">Pedido pendiente de confirmar</h3>
+                    <p style="margin: 0.25rem 0 0; color: var(--text-muted); font-size: 0.88rem;">
+                        Pedido <strong>${sanitizeHTML(orderId)}</strong> &mdash; Total: <strong>&euro;${Number(orderData.total || 0).toFixed(2)}</strong>
+                    </p>
+                </div>
+            </div>
+            <p style="color: var(--text-muted); font-size: 0.9rem; margin: 0;">
+                Si ya realizaste el pago en PayPal, haz clic en el botón de abajo para finalizar el pedido.
+                Si no llegaste a pagar, puedes ignorar este aviso.
+            </p>
+            <div id="resume-confirm-area" style="display: flex; flex-direction: column; gap: 0.5rem; max-width: 400px;"></div>
+        `;
+        checkoutLayout.insertBefore(resumePanel, checkoutLayout.firstChild);
+
+        // Crear botón de confirmación directamente en el panel
+        const resumeArea = resumePanel.querySelector('#resume-confirm-area');
+        const fakeConfirmBtn = document.createElement('button');
+        fakeConfirmBtn.type = 'button';
+        fakeConfirmBtn.style.cssText = 'padding:0.85rem 1.5rem;background:#f59e0b;color:#1c1917;border:none;border-radius:10px;font-weight:700;font-size:0.95rem;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.5rem;';
+        fakeConfirmBtn.innerHTML = '<i class="fas fa-external-link-alt"></i> Volver a abrir PayPal';
+        fakeConfirmBtn.classList.add('paypal-opened');
+        fakeConfirmBtn.dataset.paypalUrl = orderData.paypalLink || `https://www.paypal.com/paypalme/camisetazo`;
+        fakeConfirmBtn.addEventListener('click', () => {
+            window.open(fakeConfirmBtn.dataset.paypalUrl, '_blank');
+        });
+        resumeArea.appendChild(fakeConfirmBtn);
+
+        showPaypalManualConfirmBtn(
+            fakeConfirmBtn,
+            orderData.paypalLink || '',
+            orderData,
+            totalShirtQuantity,
+            fakeConfirmBtn.innerHTML
+        );
+
+    } catch (error) {
+        console.error('Error al recuperar pedido pendiente:', error);
+    }
+}
+
+
 function showAddressWarning() {
     const warning = document.getElementById('address-warning');
     if (warning) {
@@ -738,6 +844,12 @@ document.addEventListener('DOMContentLoaded', () => {
             await loadUserCoupons();
             initPaymentMethods();
             setupZipCodeLookup();
+
+            // ── Recuperar pedido pendiente si viene de ?resume=ORDERID ──
+            const resumeOrderId = new URLSearchParams(window.location.search).get('resume');
+            if (resumeOrderId) {
+                await resumePendingOrder(resumeOrderId);
+            }
         } else {
             showLoginPrompt();
         }
