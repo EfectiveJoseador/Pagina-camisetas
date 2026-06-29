@@ -236,6 +236,14 @@
             });
         }
 
+        // ── Limpieza de seguridad: si llegamos aquí, el pedido se confirmó ─────
+        // Esto actúa como red de seguridad para cualquier flujo (móvil, desktop, resume)
+        try {
+            localStorage.removeItem('pendingPayPalOrderId');
+            localStorage.removeItem('pendingPayPalOrderData');
+            sessionStorage.removeItem('pendingBannerDismissed');
+        } catch (_) {}
+
         if (orderId) {
             document.getElementById('order-id').textContent = orderId;
             
