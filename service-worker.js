@@ -1,4 +1,4 @@
-const CACHE_NAME = 'camisetazo-cache-v15';
+const CACHE_NAME = 'camisetazo-cache-v16';
 
 // Solo cachear assets estáticos (JS, CSS, imágenes, fuentes).
 // NUNCA cachear HTML — los documentos HTML llevan headers de seguridad
@@ -48,6 +48,13 @@ self.addEventListener('activate', (event) => {
   );
 });
 
+// ── Escuchar mensajes del cliente (skipWaiting para auto-actualización) ────
+self.addEventListener('message', (event) => {
+  if (event.data && event.data.type === 'SKIP_WAITING') {
+    self.skipWaiting();
+  }
+});
+
 self.addEventListener('fetch', (event) => {
   const url = event.request.url;
 
@@ -56,8 +63,6 @@ self.addEventListener('fetch', (event) => {
   if (url.includes('.map')) return;
 
   // ── Regla 1: HTML → SIEMPRE red con cache: 'no-store' ─────────────────
-  // Forzar bypass del HTTP cache del navegador para que los headers CSP
-  // lleguen siempre frescos desde el servidor (Vercel/Firebase Hosting).
   const isHtml = url.endsWith('.html') ||
     url.endsWith('/') ||
     event.request.mode === 'navigate' ||
@@ -66,7 +71,7 @@ self.addEventListener('fetch', (event) => {
   if (isHtml) {
     event.respondWith(
       fetch(new Request(event.request, {
-        cache: 'no-store',   // ← bypass HTTP cache del navegador
+        cache: 'no-store',
         redirect: 'follow'
       })).catch(() => {
         return new Response('<h1>Sin conexión</h1>', {
@@ -78,29 +83,22 @@ self.addEventListener('fetch', (event) => {
   }
 
   // ── Regla 2: Dominios externos — pasar directamente a la red ───────────
-  // Estos dominios no se cachean. Firebase Auth, Google Sign-In y servicios
-  // de analítica deben ir siempre a la red sin pasar por el caché local.
   const PASS_THROUGH_DOMAINS = [
-    // Firebase Auth & Database
     'firebaseio.com',
     'firebasedatabase.app',
     'firebase.googleapis.com',
     'identitytoolkit.googleapis.com',
     'securetoken.google.com',
-    // Google Sign-In (signInWithPopup necesita estos)
     'apis.google.com',
     'accounts.google.com',
-    // Google APIs generales
     'googleapis.com',
     'gstatic.com',
-    // Analítica y tracking
     'google-analytics.com',
     'analytics.google.com',
     'googletagmanager.com',
     'stats.g.doubleclick.net',
     'plausible.io',
     'contentsquare.net',
-    // Otros servicios externos
     'api.web3forms.com',
     'www.paypal.com',
     'analytics.vercel.com',
@@ -117,19 +115,41 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
-  // ── Regla 3: Assets del mismo origen — Cache First ─────────────────────
-  // CSS, JS, imágenes, fuentes: primero caché, si no existe → red y guardar.
+  // ── Regla 3a: JS propios → Network First (siempre fresco, caché de respaldo) ──
+  // Esto garantiza que el código actualizado llega a todos los usuarios
+  // automáticamente, sin necesidad de limpiar caché manualmente.
+  const isOwnJs = url.includes('/js/') && url.includes(self.location.origin);
+
+  if (isOwnJs) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          // Sin red: servir desde caché como fallback
+          return caches.match(event.request);
+        })
+    );
+    return;
+  }
+
+  // ── Regla 3b: CSS, imágenes, fuentes → Cache First ─────────────────────
   event.respondWith(
     caches.match(event.request).then((cached) => {
       if (cached) return cached;
 
       return fetch(event.request)
         .then((response) => {
-          // Solo cachear respuestas válidas de assets estáticos
           if (response && response.status === 200) {
             const url = event.request.url;
             const isAsset = url.includes('/css/') ||
-              url.includes('/js/') ||
               url.includes('/assets/') ||
               url.match(/\.(woff2?|ttf|eot|svg|png|jpg|jpeg|gif|webp|ico)(\?|$)/);
 

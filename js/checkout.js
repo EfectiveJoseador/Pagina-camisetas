@@ -752,67 +752,21 @@ function showPaypalManualConfirmBtn(confirmBtn, paypalUrl, orderData, totalShirt
     manualBtn.onclick = doConfirm;
 
     // ── Detectar retorno automático desde PayPal (visibilitychange / pageshow) ─
-    const onReturn = () => {
-        // Sólo actuar si el botón de confirmación todavía está esperando
-        if (manualBtn && manualBtn.style.display !== 'none') {
-            showPaypalReturnToast();
-        }
-    };
-
+    // Al detectar que el usuario regresó, el botón azul ya está visible.
+    // No se muestra toast adicional.
     document.addEventListener('visibilitychange', function handleVis() {
         if (document.visibilityState === 'visible') {
             document.removeEventListener('visibilitychange', handleVis);
-            onReturn();
+            // El botón "Ya he pagado" ya está visible; nada más que hacer.
         }
     });
 
     window.addEventListener('pageshow', function handlePageShow(e) {
         if (e.persisted) {
             window.removeEventListener('pageshow', handlePageShow);
-            onReturn();
+            // bfcache restore: el botón ya está en el DOM
         }
     });
-}
-
-// ── Mostrar toast de retorno de PayPal ──────────────────────────────────────
-function showPaypalReturnToast() {
-    if (document.getElementById('paypal-return-toast')) return;
-    const toast = document.createElement('div');
-    toast.id = 'paypal-return-toast';
-    toast.style.cssText = [
-        'position:fixed',
-        'bottom:1.5rem',
-        'left:50%',
-        'transform:translateX(-50%)',
-        'background:linear-gradient(135deg,#0070ba,#003087)',
-        'color:#fff',
-        'padding:1rem 1.5rem',
-        'border-radius:14px',
-        'font-weight:600',
-        'font-size:0.95rem',
-        'z-index:9999',
-        'box-shadow:0 8px 28px rgba(0,112,186,0.5)',
-        'display:flex',
-        'align-items:center',
-        'gap:0.6rem',
-        'max-width:90vw',
-        'animation:toastSlideUp 0.4s cubic-bezier(0.34,1.56,0.64,1) both'
-    ].join(';');
-    toast.innerHTML = '<i class="fab fa-paypal"></i> ¿Ya completaste el pago? Pulsa el botón azul de arriba ⬆️';
-
-    if (!document.getElementById('paypal-toast-style')) {
-        const s = document.createElement('style');
-        s.id = 'paypal-toast-style';
-        s.textContent = '@keyframes toastSlideUp{from{transform:translateX(-50%) translateY(120%);opacity:0}to{transform:translateX(-50%) translateY(0);opacity:1}}';
-        document.head.appendChild(s);
-    }
-
-    document.body.appendChild(toast);
-    setTimeout(() => {
-        toast.style.transition = 'opacity 0.4s ease';
-        toast.style.opacity = '0';
-        setTimeout(() => toast.remove(), 420);
-    }, 5000);
 }
 
 // ── Recuperar pedido pendiente desde URL ?resume=ORDERID ──────────────────
@@ -1026,8 +980,6 @@ document.addEventListener('DOMContentLoaded', () => {
                                     totalShirts,
                                     ''
                                 );
-                                // Mostrar toast inmediatamente
-                                showPaypalReturnToast();
                             } else if (snap.exists() && snap.val().status !== 'paypal_pendiente') {
                                 // El pedido ya fue confirmado — limpiar
                                 localStorage.removeItem('pendingPayPalOrderId');
