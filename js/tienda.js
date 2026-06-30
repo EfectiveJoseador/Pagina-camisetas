@@ -21,9 +21,33 @@ let selectedLeague = '';
 let selectedTeam = '';
 let selectedKids = false;
 let selectedRetro = false;
+let selectedNewSeason = false;
 let currentPage = 1;
 let totalPages = 1;
 let imageObserver = null;
+
+/**
+ * Extracts [startYear, endYear] from a season string embedded anywhere in text.
+ * Handles formats like: 25/26, 2025/26, 2025/2026, 2025-26, 2025-2026,
+ * "Temporada 26/27", "26/27", etc.
+ * Returns null if no season pattern is found.
+ */
+function extractSeasonYears(text) {
+    if (!text) return null;
+    // Match patterns: optionally 4-digit year + separator (/ or -) + 2 or 4-digit year
+    // Also match standalone short years like "25/26" or "2025/2026"
+    const match = text.match(/\b((?:20)?\d{2})[\/-]((?:20)?\d{2})\b/);
+    if (!match) return null;
+
+    let start = parseInt(match[1], 10);
+    let end   = parseInt(match[2], 10);
+
+    // Expand 2-digit years to 4-digit (assume 2000s)
+    if (start < 100) start += (start >= 90 ? 1900 : 2000);
+    if (end   < 100) end   += (end   >= 90 ? 1900 : 2000);
+
+    return [start, end];
+}
 const LEAGUE_NORMALIZATION_MAP = {
     'eredivise': 'eredivisie',
     'eredivisie': 'eredivisie',
@@ -1208,6 +1232,14 @@ function attachEventListeners() {
             applyFilters();
         });
     }
+
+    const newSeasonCheckbox = document.getElementById('filter-new-season');
+    if (newSeasonCheckbox) {
+        newSeasonCheckbox.addEventListener('change', (e) => {
+            selectedNewSeason = e.target.checked;
+            applyFilters();
+        });
+    }
     document.getElementById('sort-select').addEventListener('change', applyFilters);
     document.getElementById('close-filters').addEventListener('click', () => {
         const container = document.querySelector('.catalog-container');
@@ -1233,6 +1265,7 @@ function attachEventListeners() {
         selectedTeam = '';
         selectedKids = false;
         selectedRetro = false;
+        selectedNewSeason = false;
         document.getElementById('team-step').classList.add('hidden');
         
         const kidsCb = document.getElementById('filter-kids');
@@ -1240,6 +1273,9 @@ function attachEventListeners() {
         
         const retroCb = document.getElementById('filter-retro');
         if (retroCb) retroCb.checked = false;
+
+        const newSeasonCb = document.getElementById('filter-new-season');
+        if (newSeasonCb) newSeasonCb.checked = false;
 
         document.getElementById('search-input').value = '';
         document.getElementById('sort-select').value = 'default';
@@ -1340,6 +1376,27 @@ function applyFilters(updateURL = true) {
 
         return matchesSearch && matchesLeague && matchesTeam && matchesKids && matchesRetro;
     });
+
+    // ── Nueva Temporada filter ────────────────────────────────────────────────
+    if (selectedNewSeason) {
+        const currentYear = new Date().getFullYear(); // e.g. 2026
+        const targetYear  = currentYear + 1;          // e.g. 2027
+
+        const filterBySeason = (year) =>
+            filteredProducts.filter(p => {
+                const season = extractSeasonYears(p.name);
+                return season && (season[0] === year || season[1] === year);
+            });
+
+        let seasonFiltered = filterBySeason(targetYear);
+
+        // Fallback: if next season isn't available yet, show current season
+        if (seasonFiltered.length === 0) {
+            seasonFiltered = filterBySeason(currentYear);
+        }
+
+        filteredProducts = seasonFiltered;
+    }
 
     // Sorting logic
     function getProductTypeOrder(name) {
