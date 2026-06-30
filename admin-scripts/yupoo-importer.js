@@ -41,7 +41,8 @@ const TEXT_NORMALIZATION = {
     'women': 'Mujer',
     'womens': 'Mujer',
     'ladies': 'Mujer',
-    'pre-match': 'Pre-Match',
+    'pre-match': 'Pre-Partido',
+    'prematch': 'Pre-Partido',
     'warm up': 'Calentamiento',
     'concept': 'Concepto',
     'limited': 'Limitada',
@@ -77,6 +78,7 @@ const TEAM_NAME_NORMALIZATION = {
     'atlético madrid': 'Atlético Madrid',
     'atleti': 'Atlético Madrid',
     'atm': 'Atlético Madrid',
+    'villarreal': 'Villarreal',
     'villarreal b': 'Villarreal',
     'villareal': 'Villarreal',
     'villarreal cf': 'Villarreal',
@@ -177,6 +179,8 @@ const TEAM_NAME_NORMALIZATION = {
     'man united': 'Manchester United',
     'united': 'Manchester United',
     'mufc': 'Manchester United',
+    'm-u': 'Manchester United',
+    'mu': 'Manchester United',
     'man city': 'Manchester City',
     'city': 'Manchester City',
     'mcfc': 'Manchester City',
@@ -934,6 +938,7 @@ const TEAM_TO_LEAGUE = {
     'betis': 'laliga',
     'real betis': 'laliga',
     'villarreal': 'laliga',
+    'villareal': 'laliga',
     'getafe': 'laliga',
     'osasuna': 'laliga',
     'celta': 'laliga',
@@ -1026,6 +1031,8 @@ const TEAM_TO_LEAGUE = {
     'man united': 'premier',
     'manchester united': 'premier',
     'united': 'premier',
+    'm-u': 'premier',
+    'mu': 'premier',
     'man city': 'premier',
     'manchester city': 'premier',
     'city': 'premier',
@@ -1556,17 +1563,13 @@ function normalizeTeamNameFromDictionary(teamName) {
         
         // Si el título contiene la clave del diccionario
         if (normalized.includes(normKey)) {
-            // Un token genérico como "deportivo" solo debe contar si es un token completo
-            // para evitar falsos positivos si hay otros tokens más específicos
-            const isGeneric = ['deportivo', 'real', 'atletico', 'club', 'sporting'].includes(normKey);
+            // Enforce that it MUST be standalone to prevent partial substring matches inside other words
+            // (e.g. preventing "villarreal" from matching "villa" or "real")
             const isStandalone = new RegExp(`\\b${normKey}\\b`, 'i').test(normalized);
             
-            if (key.length > longestKeyLength) {
-                // Si es genérico, solo lo aceptamos si no hay otra cosa mejor o si es standalone
-                if (!isGeneric || isStandalone) {
-                    bestMatch = value;
-                    longestKeyLength = key.length;
-                }
+            if (isStandalone && key.length > longestKeyLength) {
+                bestMatch = value;
+                longestKeyLength = key.length;
             }
         }
     }
@@ -1876,6 +1879,8 @@ const TEAM_TRANSLATIONS = {
     'new zealand': 'Nueva Zelanda',
 
     'man utd': 'Manchester United',
+    'm-u': 'Manchester United',
+    'mu': 'Manchester United',
     'man city': 'Manchester City',
     'spurs': 'Tottenham',
     'barca': 'FC Barcelona',
@@ -1998,9 +2003,18 @@ function parseProductTitle(rawTitle) {
         result.tallas = sizeCodeMatch[1].toUpperCase();
     }
 
-    const explicitSeasonMatch = titleClean.match(/\b(\d{2,4})[\/\-](\d{2})\b/);
-    const fullYearMatch = titleClean.match(/\b(19\d{2}|20\d{2})\b/);
-    const gluedSeasonMatch = titleClean.match(/\b(\d{2})(\d{2})\b(?!\d)/);
+    // Remove sizes from a copy of the title used for season detection to prevent size ranges (like "16-28") matching as seasons
+    let titleForSeason = titleClean;
+    if (sizeRangeMatch) {
+        titleForSeason = titleForSeason.replace(/\bSize\s*\d+[-–]\d+\b/gi, '');
+    }
+    if (sizeCodeMatch) {
+        titleForSeason = titleForSeason.replace(/\b(S-4XL|S-3XL|S-2XL|S-XXL|M-XXL|XS-XXL|XS-4XL|S-5XL)\b/gi, '');
+    }
+
+    const explicitSeasonMatch = titleForSeason.match(/\b(\d{2,4})[\/\-](\d{2})\b/);
+    const fullYearMatch = titleForSeason.match(/\b(19\d{2}|20\d{2})\b/);
+    const gluedSeasonMatch = titleForSeason.match(/\b(\d{2})(\d{2})\b(?!\d)/);
 
     const processYearLogic = (y1, y2) => {
         let year1 = y1;
@@ -2011,17 +2025,31 @@ function parseProductTitle(rawTitle) {
         return `${year1}/${y2}`;
     };
 
+    let explicitSeasonFound = false;
     if (explicitSeasonMatch) {
-        result.temporada = processYearLogic(explicitSeasonMatch[1], explicitSeasonMatch[2]);
-    } else if (fullYearMatch) {
-        result.temporada = fullYearMatch[1];
-    } else if (gluedSeasonMatch) {
-        const y1 = gluedSeasonMatch[1];
-        const y2 = gluedSeasonMatch[2];
-        const n1 = parseInt(y1, 10);
+        const y1 = explicitSeasonMatch[1];
+        const y2 = explicitSeasonMatch[2];
+        const n1 = parseInt(y1.slice(-2), 10);
         const n2 = parseInt(y2, 10);
-        if (n2 > n1 || (n1 >= 90 && n2 < 10) || y1 === '19') {
+        // Valid seasons have consecutive years or are the same year (diff of 0 or 1 modulo 100)
+        const diff = (n2 - n1 + 100) % 100;
+        if (diff === 0 || diff === 1) {
             result.temporada = processYearLogic(y1, y2);
+            explicitSeasonFound = true;
+        }
+    }
+
+    if (!explicitSeasonFound) {
+        if (fullYearMatch) {
+            result.temporada = fullYearMatch[1];
+        } else if (gluedSeasonMatch) {
+            const y1 = gluedSeasonMatch[1];
+            const y2 = gluedSeasonMatch[2];
+            const n1 = parseInt(y1, 10);
+            const n2 = parseInt(y2, 10);
+            if (n2 > n1 || (n1 >= 90 && n2 < 10) || y1 === '19') {
+                result.temporada = processYearLogic(y1, y2);
+            }
         }
     }
 
@@ -2047,6 +2075,8 @@ function parseProductTitle(rawTitle) {
         result.tipo = 'especial';
     } else if (/\b(training|entrenamiento)\b/i.test(titleLowerClean)) {
         result.tipo = 'entrenamiento';
+    } else if (/\b(pre-?match|pre-?partido)\b/i.test(titleLowerClean)) {
+        result.tipo = 'pre-partido';
     }
 
     let teamName = titleClean;
@@ -2062,7 +2092,7 @@ function parseProductTitle(rawTitle) {
         .replace(/\b(away|home|third|fourth|visitante|local|tercera|cuarta|gk|goalkeeper|portero)\b/gi, '')
         .replace(/\b(1st|2nd|3rd|4th|1a|2a|3a|4a)\b/gi, '')
         .replace(/\b(special|especial|edition|edici[oó]n|limited|limitada)\b/gi, '')
-        .replace(/\b(training|entrenamiento|pre-?match|warm-?up)\b/gi, '')
+        .replace(/\b(training|entrenamiento|pre-?match|pre-?partido|warm-?up)\b/gi, '')
         .replace(/\bretro\s*style\b/gi, '')
         .replace(/\b(retro|classic|vintage)\b/gi, '')
         .replace(/\bkids?\s*kit\b/gi, '')
@@ -2098,7 +2128,8 @@ function parseProductTitle(rawTitle) {
         cuarta: 'Cuarta',
         portero: 'Portero',
         especial: 'Especial',
-        entrenamiento: 'Entrenamiento'
+        entrenamiento: 'Entrenamiento',
+        'pre-partido': 'Pre-Partido'
     };
 
     let finalParts = [result.team];

@@ -11833,6 +11833,1510 @@ const products = [
         "tipo": "local",
         "price": 19.9,
         "oldPrice": 25
+    },
+    {
+        "id": 291962,
+        "name": "España 2026 Especial",
+        "slug": "espana-2026-especial",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/291962/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/291962/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "especial",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "5635"
+    },
+    {
+        "id": 674426,
+        "name": "Brasil 2026 Azul",
+        "slug": "brasil-2026-azul",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/674426/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/674426/2.webp"
+        ],
+        "temporada": "2026",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "3015"
+    },
+    {
+        "id": 693936,
+        "name": "Portugal 2026 Portero",
+        "slug": "portugal-2026-portero",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/693936/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/693936/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "portero",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "7634"
+    },
+    {
+        "id": 463833,
+        "name": "Portugal 2026 Pre-Partido",
+        "slug": "portugal-2026-pre-partido",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/463833/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/463833/2.webp"
+        ],
+        "temporada": "2026",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "5909"
+    },
+    {
+        "id": 320432,
+        "name": "Argentina 2026 Entrenamiento",
+        "slug": "argentina-2026-entrenamiento",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/320432/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/320432/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "entrenamiento",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "8945"
+    },
+    {
+        "id": 981544,
+        "name": "Argentina 2026 Entrenamiento",
+        "slug": "argentina-2026-entrenamiento",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/981544/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/981544/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "entrenamiento",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "3006"
+    },
+    {
+        "id": 458173,
+        "name": "Alemania 2026 Visitante (Niño)",
+        "slug": "alemania-2026-visitante-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/458173/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/458173/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "1040"
+    },
+    {
+        "id": 535468,
+        "name": "Alemania 2026 Local (Niño)",
+        "slug": "alemania-2026-local-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/535468/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/535468/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "5041"
+    },
+    {
+        "id": 349908,
+        "name": "Alemania 2026 Portero (Niño)",
+        "slug": "alemania-2026-portero-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/349908/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/349908/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "portero",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "4835"
+    },
+    {
+        "id": 946154,
+        "name": "Francia 2026 Local (Niño)",
+        "slug": "francia-2026-local-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/946154/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/946154/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "2751"
+    },
+    {
+        "id": 942676,
+        "name": "Francia 2026 Visitante (Niño)",
+        "slug": "francia-2026-visitante-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/942676/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/942676/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "5096"
+    },
+    {
+        "id": 615809,
+        "name": "México 2026 Local (Niño)",
+        "slug": "mexico-2026-local-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/615809/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/615809/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "7998"
+    },
+    {
+        "id": 343760,
+        "name": "México 2026 Visitante (Niño)",
+        "slug": "mexico-2026-visitante-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/343760/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/343760/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "3326"
+    },
+    {
+        "id": 763481,
+        "name": "México 2026 Tercera (Niño)",
+        "slug": "mexico-2026-tercera-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/763481/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/763481/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "tercera",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "5759"
+    },
+    {
+        "id": 183287,
+        "name": "México 2026 Visitante",
+        "slug": "mexico-2026-visitante",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/183287/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/183287/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "3581"
+    },
+    {
+        "id": 224592,
+        "name": "México 2026 Entrenamiento",
+        "slug": "mexico-2026-entrenamiento",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/224592/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/224592/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "entrenamiento",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "1958"
+    },
+    {
+        "id": 917345,
+        "name": "Inglaterra 2026 Local (Niño)",
+        "slug": "inglaterra-2026-local-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/917345/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/917345/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "4217"
+    },
+    {
+        "id": 414243,
+        "name": "Inglaterra 2026 Visitante (Niño)",
+        "slug": "inglaterra-2026-visitante-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/414243/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/414243/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "6815"
+    },
+    {
+        "id": 693929,
+        "name": "Inglaterra 2026 Portero (Niño)",
+        "slug": "inglaterra-2026-portero-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/693929/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/693929/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "portero",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "8000"
+    },
+    {
+        "id": 723243,
+        "name": "Inglaterra 2026 Portero (Niño)",
+        "slug": "inglaterra-2026-portero-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/723243/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/723243/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "portero",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "9244"
+    },
+    {
+        "id": 157292,
+        "name": "Inglaterra 2026 Portero",
+        "slug": "inglaterra-2026-portero",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/157292/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/157292/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "portero",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "3709"
+    },
+    {
+        "id": 559330,
+        "name": "Colombia 2026 Local (Niño)",
+        "slug": "colombia-2026-local-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/559330/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/559330/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "4862"
+    },
+    {
+        "id": 135069,
+        "name": "Japón 2026 Visitante",
+        "slug": "japon-2026-visitante",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/135069/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/135069/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "8162"
+    },
+    {
+        "id": 453107,
+        "name": "Estados Unidos 2026 Portero",
+        "slug": "estados-unidos-2026-portero",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/453107/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/453107/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "portero",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "5744"
+    },
+    {
+        "id": 706706,
+        "name": "Inglaterra 2026 Portero",
+        "slug": "inglaterra-2026-portero",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/706706/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/706706/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "portero",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "2529"
+    },
+    {
+        "id": 892101,
+        "name": "Holanda 2026 Local (Niño)",
+        "slug": "holanda-2026-local-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/892101/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/892101/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "3973"
+    },
+    {
+        "id": 113050,
+        "name": "Holanda 2026 Visitante (Niño)",
+        "slug": "holanda-2026-visitante-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/113050/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/113050/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "3070"
+    },
+    {
+        "id": 213952,
+        "name": "Argelia 2026 Local (Niño)",
+        "slug": "argelia-2026-local-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/213952/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/213952/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "7196"
+    },
+    {
+        "id": 426361,
+        "name": "Argelia 2026 Local",
+        "slug": "argelia-2026-local",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/426361/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/426361/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "2357"
+    },
+    {
+        "id": 700200,
+        "name": "Argelia 2026 Visitante",
+        "slug": "argelia-2026-visitante",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/700200/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/700200/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "9049"
+    },
+    {
+        "id": 786320,
+        "name": "Croacia 2026 Local (Niño)",
+        "slug": "croacia-2026-local-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/786320/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/786320/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "6022"
+    },
+    {
+        "id": 174275,
+        "name": "Croacia 2026 Visitante (Niño)",
+        "slug": "croacia-2026-visitante-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/174275/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/174275/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "8958"
+    },
+    {
+        "id": 302748,
+        "name": "Croacia 2026 Visitante",
+        "slug": "croacia-2026-visitante",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/302748/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/302748/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "7067"
+    },
+    {
+        "id": 936222,
+        "name": "Venezuela 2026 Local (Niño)",
+        "slug": "venezuela-2026-local-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/936222/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/936222/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "1798"
+    },
+    {
+        "id": 684924,
+        "name": "Venezuela 2026 Local",
+        "slug": "venezuela-2026-local",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/684924/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/684924/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "9404"
+    },
+    {
+        "id": 907201,
+        "name": "Paraguay 2026 Visitante",
+        "slug": "paraguay-2026-visitante",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/907201/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/907201/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "6459"
+    },
+    {
+        "id": 708172,
+        "name": "Paraguay 2026 Visitante (Niño)",
+        "slug": "paraguay-2026-visitante-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/708172/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/708172/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "3912"
+    },
+    {
+        "id": 354015,
+        "name": "Paraguay 2026 Local",
+        "slug": "paraguay-2026-local",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/354015/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/354015/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "1854"
+    },
+    {
+        "id": 258180,
+        "name": "Paraguay 2026 Local (Niño)",
+        "slug": "paraguay-2026-local-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/258180/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/258180/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "6303"
+    },
+    {
+        "id": 305959,
+        "name": "Chile 2026 Visitante (Niño)",
+        "slug": "chile-2026-visitante-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/305959/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/305959/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "6306"
+    },
+    {
+        "id": 614954,
+        "name": "Ecuador 2025/26 Visitante",
+        "slug": "ecuador-202526-visitante",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/614954/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/614954/2.webp"
+        ],
+        "temporada": "2025/26",
+        "tipo": "visitante",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "6663"
+    },
+    {
+        "id": 264410,
+        "name": "Ecuador 2026 Local (Niño)",
+        "slug": "ecuador-2026-local-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/264410/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/264410/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "4703"
+    },
+    {
+        "id": 898588,
+        "name": "Ecuador 2026 Tercera (Niño)",
+        "slug": "ecuador-2026-tercera-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/898588/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/898588/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "tercera",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "9902"
+    },
+    {
+        "id": 203455,
+        "name": "Ecuador 2025/26 Especial",
+        "slug": "ecuador-202526-especial",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/203455/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/203455/2.webp"
+        ],
+        "temporada": "2025/26",
+        "tipo": "especial",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "9671"
+    },
+    {
+        "id": 107625,
+        "name": "Ecuador 2026 Visitante (Niño)",
+        "slug": "ecuador-2026-visitante-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/107625/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/107625/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "8192"
+    },
+    {
+        "id": 935560,
+        "name": "FC Barcelona 2026/27 Local (Niño)",
+        "slug": "fc-barcelona-202627-local-nino",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/935560/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/935560/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "2608"
+    },
+    {
+        "id": 300954,
+        "name": "FC Barcelona 2026/27 Local",
+        "slug": "fc-barcelona-202627-local",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/300954/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/300954/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "5075"
+    },
+    {
+        "id": 379254,
+        "name": "FC Barcelona 2026/27 Especial",
+        "slug": "fc-barcelona-202627-especial",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/379254/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/379254/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "especial",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "6705"
+    },
+    {
+        "id": 738474,
+        "name": "FC Barcelona 2026/27 Especial",
+        "slug": "fc-barcelona-202627-especial",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/738474/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/738474/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "especial",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "3719"
+    },
+    {
+        "id": 794686,
+        "name": "Inter Milan 2026/27 Local",
+        "slug": "inter-de-milan-202627-local",
+        "category": "futbol",
+        "league": "seriea",
+        "image": "/assets/productos/Yupoo/794686/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/794686/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "9092"
+    },
+    {
+        "id": 937149,
+        "name": "Alemania 1988 Retro",
+        "slug": "alemania-1988-retro",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/937149/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/937149/2.webp"
+        ],
+        "temporada": "1988",
+        "tipo": "local",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "7450"
+    },
+    {
+        "id": 308764,
+        "name": "Porto 2026/27 Local",
+        "slug": "porto-202627-local",
+        "category": "futbol",
+        "league": "ligaportugal",
+        "image": "/assets/productos/Yupoo/308764/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/308764/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "4124"
+    },
+    {
+        "id": 202795,
+        "name": "Manchester United 2026/27 Local (Niño)",
+        "slug": "m-u-202627-local-nino",
+        "category": "futbol",
+        "league": "premier",
+        "image": "/assets/productos/Yupoo/202795/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/202795/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "3375"
+    },
+    {
+        "id": 900251,
+        "name": "Santos 2026/27 Local",
+        "slug": "santos-202627-local",
+        "category": "futbol",
+        "league": "brasileirao",
+        "image": "/assets/productos/Yupoo/900251/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/900251/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "2676"
+    },
+    {
+        "id": 231422,
+        "name": "Chelsea 2026/27 Tercera",
+        "slug": "chelsea-202627-tercera",
+        "category": "futbol",
+        "league": "premier",
+        "image": "/assets/productos/Yupoo/231422/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/231422/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "tercera",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "7399"
+    },
+    {
+        "id": 476195,
+        "name": "PSG 2026/27 Local",
+        "slug": "psg-202627-local",
+        "category": "futbol",
+        "league": "ligue1",
+        "image": "/assets/productos/Yupoo/476195/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/476195/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "3642"
+    },
+    {
+        "id": 608138,
+        "name": "Real Madrid 2026/27 Tercera (Niño)",
+        "slug": "real-madrid-202627-tercera-nino",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/608138/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/608138/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "tercera",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "8751"
+    },
+    {
+        "id": 485076,
+        "name": "Manchester United 2026/27 Local",
+        "slug": "m-u-202627-local",
+        "category": "futbol",
+        "league": "premier",
+        "image": "/assets/productos/Yupoo/485076/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/485076/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "1875"
+    },
+    {
+        "id": 755332,
+        "name": "Real Oviedo 1992/93 Retro",
+        "slug": "real-oviedo-199293-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/755332/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/755332/2.webp"
+        ],
+        "temporada": "1992/93",
+        "tipo": "local",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "5480"
+    },
+    {
+        "id": 128213,
+        "name": "Inter Milan 2026/27 Local (Niño)",
+        "slug": "inter-de-milan-202627-local-nino",
+        "category": "futbol",
+        "league": "seriea",
+        "image": "/assets/productos/Yupoo/128213/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/128213/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "kids": true,
+        "price": 21.9,
+        "oldPrice": 27,
+        "sku": "5084"
+    },
+    {
+        "id": 690467,
+        "name": "Real Madrid 2026/27 Concepto",
+        "slug": "real-madrid-202627-concepto",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/690467/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/690467/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "especial",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "9564"
+    },
+    {
+        "id": 265724,
+        "name": "Real Madrid 2026/27 Tercera",
+        "slug": "real-madrid-202627-tercera",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/265724/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/265724/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "tercera",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "4803"
+    },
+    {
+        "id": 226217,
+        "name": "Real Madrid 2026/27 Retro",
+        "slug": "real-madrid-202627-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/226217/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/226217/2.webp"
+        ],
+        "temporada": "2026/27",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "8798"
+    },
+    {
+        "id": 844335,
+        "name": "Real Madrid 2026/27 Retro Negra",
+        "slug": "real-madrid-202627-retro-negra",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/844335/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/844335/2.webp"
+        ],
+        "temporada": "2026/27",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "6014"
+    },
+    {
+        "id": 556281,
+        "name": "Real Madrid 2026/27 Especial",
+        "slug": "real-madrid-202627-especial",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/556281/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/556281/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "especial",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "5044"
+    },
+    {
+        "id": 924407,
+        "name": "Benfica 2026/27 Local",
+        "slug": "benfica-202627-local",
+        "category": "futbol",
+        "league": "ligaportugal",
+        "image": "/assets/productos/Yupoo/924407/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/924407/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "5425"
+    },
+    {
+        "id": 891991,
+        "name": "Santos 2026/27 Visitante",
+        "slug": "santos-202627-visitante",
+        "category": "futbol",
+        "league": "brasileirao",
+        "image": "/assets/productos/Yupoo/891991/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/891991/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "4785"
+    },
+    {
+        "id": 238369,
+        "name": "River Plate 2026/27 Local",
+        "slug": "river-plate-202627-local",
+        "category": "futbol",
+        "league": "saf",
+        "image": "/assets/productos/Yupoo/238369/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/238369/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "4385"
+    },
+    {
+        "id": 924225,
+        "name": "Marseille 2026/27 Local",
+        "slug": "marseille-202627-local",
+        "category": "futbol",
+        "league": "ligue1",
+        "image": "/assets/productos/Yupoo/924225/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/924225/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "4580"
+    },
+    {
+        "id": 247424,
+        "name": "Manchester United 2026/27 Tercera",
+        "slug": "m-u-202627-tercera",
+        "category": "futbol",
+        "league": "premier",
+        "image": "/assets/productos/Yupoo/247424/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/247424/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "tercera",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "4902"
+    },
+    {
+        "id": 971852,
+        "name": "Marruecos 2026 Visitante",
+        "slug": "marruecos-2026-visitante",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/971852/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/971852/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "visitante",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "6919"
+    },
+    {
+        "id": 734090,
+        "name": "Marruecos 1998 Visitante Retro",
+        "slug": "marruecos-1998-visitante-retro",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/734090/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/734090/2.webp"
+        ],
+        "temporada": "1998",
+        "tipo": "visitante",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "9560"
+    },
+    {
+        "id": 141881,
+        "name": "Marruecos 1998 Retro",
+        "slug": "marruecos-1998-retro",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/141881/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/141881/2.webp"
+        ],
+        "temporada": "1998",
+        "tipo": "local",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "5652"
+    },
+    {
+        "id": 226766,
+        "name": "Marruecos 1994 Visitante Retro",
+        "slug": "marruecos-1994-visitante-retro",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/226766/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/226766/2.webp"
+        ],
+        "temporada": "1994",
+        "tipo": "visitante",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "5627"
+    },
+    {
+        "id": 161573,
+        "name": "Marruecos 1994 Retro",
+        "slug": "marruecos-1994-retro",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/161573/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/161573/2.webp"
+        ],
+        "temporada": "1994",
+        "tipo": "local",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "7074"
+    },
+    {
+        "id": 188909,
+        "name": "Sao Paulo 2026/27 Visitante",
+        "slug": "sao-paulo-202627-visitante",
+        "category": "futbol",
+        "league": "brasileirao",
+        "image": "/assets/productos/Yupoo/188909/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/188909/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "2296"
+    },
+    {
+        "id": 550065,
+        "name": "Manchester United 2026/27 Especial",
+        "slug": "manchester-united-202627-especial",
+        "category": "futbol",
+        "league": "premier",
+        "image": "/assets/productos/Yupoo/550065/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/550065/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "especial",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "7073"
+    },
+    {
+        "id": 294819,
+        "name": "Alemania Casual Retro",
+        "slug": "alemania-casual-retro",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/294819/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/294819/2.webp"
+        ],
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "6680"
+    },
+    {
+        "id": 875609,
+        "name": "Atlético Madrid 2015/16 Visitante Retro",
+        "slug": "atletico-madrid-201516-visitante-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/875609/1.webp",
+        "images": [],
+        "temporada": "2015/16",
+        "tipo": "visitante",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "9745"
+    },
+    {
+        "id": 591340,
+        "name": "UD Almería 2025/26 Retro",
+        "slug": "ud-almeria-202526-retro",
+        "category": "futbol",
+        "league": "otros",
+        "image": "/assets/productos/Yupoo/591340/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/591340/2.webp"
+        ],
+        "temporada": "2025/26",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "8123"
+    },
+    {
+        "id": 762618,
+        "name": "Osasuna 1987/88 Retro",
+        "slug": "osasuna-198788-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/762618/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/762618/2.webp"
+        ],
+        "temporada": "1987/88",
+        "tipo": "local",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "4464"
+    },
+    {
+        "id": 136244,
+        "name": "Real Madrid 2026/27 Retro",
+        "slug": "real-madrid-202627-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/136244/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/136244/2.webp"
+        ],
+        "temporada": "2026/27",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "2554"
+    },
+    {
+        "id": 711351,
+        "name": "Bayern Munich 2026/27 Local",
+        "slug": "bayern-munich-202627-local",
+        "category": "futbol",
+        "league": "bundesliga",
+        "image": "/assets/productos/Yupoo/711351/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/711351/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "2235"
+    },
+    {
+        "id": 485682,
+        "name": "Racing Club 2025/26 Retro",
+        "slug": "racing-club-202526-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/485682/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/485682/2.webp"
+        ],
+        "temporada": "2025/26",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "6861"
+    },
+    {
+        "id": 183691,
+        "name": "Atlético Madrid Visitante Retro",
+        "slug": "atletico-madrid-visitante-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/183691/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/183691/2.webp"
+        ],
+        "tipo": "visitante",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "6601"
+    },
+    {
+        "id": 735014,
+        "name": "Real Madrid 2026/27 Especial",
+        "slug": "real-madrid-202627-especial",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/735014/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/735014/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "especial",
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "7250"
+    },
+    {
+        "id": 209165,
+        "name": "Celta de Vigo 2001/02 Retro",
+        "slug": "celta-de-vigo-200102-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/209165/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/209165/2.webp"
+        ],
+        "temporada": "2001/02",
+        "tipo": "local",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "9073"
+    },
+    {
+        "id": 547469,
+        "name": "Osasuna 1983 Retro",
+        "slug": "osasuna-1983-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/547469/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/547469/2.webp"
+        ],
+        "temporada": "1983",
+        "tipo": "local",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "3193"
+    },
+    {
+        "id": 484600,
+        "name": "Mallorca 97/99 Retro",
+        "slug": "mallorca-9799-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/484600/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/484600/2.webp"
+        ],
+        "tipo": "local",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "9164"
+    },
+    {
+        "id": 470984,
+        "name": "Osasuna 98/00 Retro",
+        "slug": "osasuna-9800-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/470984/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/470984/2.webp"
+        ],
+        "tipo": "local",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "1934"
+    },
+    {
+        "id": 474789,
+        "name": "Elche 2025/26 Retro",
+        "slug": "elche-202526-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/474789/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/474789/2.webp"
+        ],
+        "temporada": "2025/26",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "7353"
+    },
+    {
+        "id": 844271,
+        "name": "Villareal 2025/26 Retro",
+        "slug": "villareal-202526-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/844271/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/844271/2.webp"
+        ],
+        "temporada": "2025/26",
+        "retro": true,
+        "price": 24.9,
+        "oldPrice": 30,
+        "sku": "9985"
     }
 ];
 

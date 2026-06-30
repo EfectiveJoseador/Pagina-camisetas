@@ -1,10 +1,21 @@
 {
   "teams": {
-    "real madrid": "Real Madrid"
+    "real madrid": "Real Madrid",
+    "m-u": "M-U",
+    "bayern munich": "Bayern Munich",
+    "aston villa": "Aston Villa",
+    "montreal impact": "Montreal Impact"
   },
   "styles": {
     "kids kit jersey": "[Pendiente traducción: kids kit jersey]",
-    "home kids kit": "[Pendiente traducción: home kids kit]"
+    "home kids kit": "[Pendiente traducción: home kids kit]",
+    "blue player version": "[Pendiente traducción: blue player version]",
+    "away kids kit": "[Pendiente traducción: away kids kit]",
+    "goalkeeper kids kit": "[Pendiente traducción: goalkeeper kids kit]",
+    "gk kids kit": "[Pendiente traducción: gk kids kit]",
+    "away player version": "[Pendiente traducción: away player version]",
+    "home player version": "[Pendiente traducción: home player version]",
+    "player version jersey": "[Pendiente traducción: player version jersey]"
   },
-  "lastUpdated": "2026-06-10T09:15:32.542Z"
+  "lastUpdated": "2026-06-30T11:40:47.502Z"
 }
