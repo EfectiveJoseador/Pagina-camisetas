@@ -61,6 +61,12 @@
                                 <span class="checkbox-custom"></span>
                                 <span class="checkbox-label">Solo Retro</span>
                             </label>
+                            
+                            <label class="mobile-filter-checkbox" for="mobile-filter-new-season">
+                                <input type="checkbox" id="mobile-filter-new-season">
+                                <span class="checkbox-custom"></span>
+                                <span class="checkbox-label">Nueva Temporada</span>
+                            </label>
                         </div>
                     </div>
                     
@@ -102,11 +108,13 @@
         const mobileTeamStep = document.getElementById('mobile-team-step');
         const mobileKidsCheckbox = document.getElementById('mobile-filter-kids');
         const mobileRetroCheckbox = document.getElementById('mobile-filter-retro');
+        const mobileNewSeasonCheckbox = document.getElementById('mobile-filter-new-season');
 
         const desktopLeagueSelect = document.getElementById('filter-league');
         const desktopTeamSelect = document.getElementById('filter-team');
         const desktopKidsCheckbox = document.getElementById('filter-kids');
         const desktopRetroCheckbox = document.getElementById('filter-retro');
+        const desktopNewSeasonCheckbox = document.getElementById('filter-new-season');
 
         if (!panel || !btn) {
             console.warn('Mobile filter elements not found');
@@ -143,12 +151,16 @@
             if (desktopRetroCheckbox && mobileRetroCheckbox) {
                 mobileRetroCheckbox.checked = desktopRetroCheckbox.checked;
             }
+            if (desktopNewSeasonCheckbox && mobileNewSeasonCheckbox) {
+                mobileNewSeasonCheckbox.checked = desktopNewSeasonCheckbox.checked;
+            }
         }
         function applyFilters() {
             const selectedLeague = mobileLeagueSelect.value;
             const selectedTeam = mobileTeamSelect.value;
             const kidsChecked = mobileKidsCheckbox ? mobileKidsCheckbox.checked : false;
             const retroChecked = mobileRetroCheckbox ? mobileRetroCheckbox.checked : false;
+            const newSeasonChecked = mobileNewSeasonCheckbox ? mobileNewSeasonCheckbox.checked : false;
 
             if (desktopLeagueSelect) {
                 desktopLeagueSelect.value = selectedLeague;
@@ -163,6 +175,10 @@
             if (desktopRetroCheckbox) {
                 desktopRetroCheckbox.checked = retroChecked;
                 desktopRetroCheckbox.dispatchEvent(new Event('change'));
+            }
+            if (desktopNewSeasonCheckbox) {
+                desktopNewSeasonCheckbox.checked = newSeasonChecked;
+                desktopNewSeasonCheckbox.dispatchEvent(new Event('change'));
             }
 
             setTimeout(() => {
@@ -179,6 +195,7 @@
             mobileTeamStep.classList.add('hidden');
             if (mobileKidsCheckbox) mobileKidsCheckbox.checked = false;
             if (mobileRetroCheckbox) mobileRetroCheckbox.checked = false;
+            if (mobileNewSeasonCheckbox) mobileNewSeasonCheckbox.checked = false;
 
             if (desktopLeagueSelect) {
                 desktopLeagueSelect.value = '';
@@ -191,6 +208,10 @@
             if (desktopRetroCheckbox) {
                 desktopRetroCheckbox.checked = false;
                 desktopRetroCheckbox.dispatchEvent(new Event('change'));
+            }
+            if (desktopNewSeasonCheckbox) {
+                desktopNewSeasonCheckbox.checked = false;
+                desktopNewSeasonCheckbox.dispatchEvent(new Event('change'));
             }
 
             closePanel();
