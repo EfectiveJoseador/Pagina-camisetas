@@ -1,34 +1,6 @@
 const Components = {
     header: `
         <header class="main-header">
-            <a href="https://www.tiktok.com/@camisetazo" target="_blank" rel="noopener"
-               class="tk-banner" id="tkBanner" role="alert" aria-live="polite"
-               id="tk-banner-link"
-               onclick="if(window.TikTokBanner)window.TikTokBanner.trackClick()">
-                <div class="tk-banner-track">
-                    <span class="tk-banner-segment">
-                        <span class="tk-icon"><i class="fab fa-tiktok"></i></span>
-                        <strong>¡NOS MUDAMOS A TIKTOK!</strong>
-                        <span class="tk-sep">•</span>
-                        Los primeros 100 seguidores en <strong>@camisetazo</strong> obtienen un <strong>código de descuento del 15%</strong>
-                        <span class="tk-sep">•</span>
-                        ¡Síguenos y envíanos la palabra <strong>'codigo'</strong> por privado para reclamarlo!
-                        <span class="tk-sep">•</span>
-                    </span>
-                    <span class="tk-banner-segment" aria-hidden="true">
-                        <span class="tk-icon"><i class="fab fa-tiktok"></i></span>
-                        <strong>¡NOS MUDAMOS A TIKTOK!</strong>
-                        <span class="tk-sep">•</span>
-                        Los primeros 100 seguidores en <strong>@camisetazo</strong> obtienen un <strong>código de descuento del 15%</strong>
-                        <span class="tk-sep">•</span>
-                        ¡Síguenos y envíanos la palabra <strong>'codigo'</strong> por privado para reclamarlo!
-                        <span class="tk-sep">•</span>
-                    </span>
-                </div>
-                <button class="tk-banner-close" id="tkBannerClose" aria-label="Cerrar aviso" title="Cerrar">
-                    <i class="fas fa-times"></i>
-                </button>
-            </a>
             <div class="container header-container">
                 <a href="/index.html" class="logo-link">
                     <img src="/assets/logo/logo.png" alt="Camisetazo" class="logo-img">
@@ -94,8 +66,7 @@ const Components = {
                     </ul>
                     <h4 style="margin-top: 1rem;">Síguenos en TikTok</h4>
                     <div class="social-links">
-                        <a href="https://www.tiktok.com/@camisetazo" target="_blank" rel="noopener" class="social-link" aria-label="TikTok"
-                           onclick="if(window.TikTokBanner)window.TikTokBanner.trackClick()">
+                        <a href="https://www.tiktok.com/@camisetazo" target="_blank" rel="noopener" class="social-link" aria-label="TikTok">
                             <i class="fab fa-tiktok"></i>
                         </a>
                     </div>
@@ -119,29 +90,6 @@ const Components = {
             footerPlaceholder.outerHTML = this.footer;
         } else {
             document.body.insertAdjacentHTML('beforeend', this.footer);
-        }
-
-        // ── TikTok Banner: dismiss button ──
-        const tkClose = document.getElementById('tkBannerClose');
-        const tkBanner = document.getElementById('tkBanner');
-        if (tkClose && tkBanner) {
-            // Check if already dismissed
-            if (window.TikTokBanner && window.TikTokBanner.isDismissed()) {
-                tkBanner.style.display = 'none';
-                tkBanner.remove();
-            } else {
-                tkClose.addEventListener('click', (e) => {
-                    e.preventDefault();
-                    e.stopPropagation();
-                    tkBanner.style.transition = 'height 0.35s ease, opacity 0.35s ease';
-                    tkBanner.style.opacity = '0';
-                    tkBanner.style.height = '0';
-                    tkBanner.style.overflow = 'hidden';
-                    tkBanner.style.borderBottom = 'none';
-                    if (window.TikTokBanner) window.TikTokBanner.saveDismiss();
-                    setTimeout(() => tkBanner.remove(), 400);
-                });
-            }
         }
         const menuBtn = document.getElementById('mobile-menu-toggle');
         const navMenu = document.getElementById('navMenu');
