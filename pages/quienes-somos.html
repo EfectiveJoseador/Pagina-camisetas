@@ -29,7 +29,7 @@
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
-        
+
         // Estado de consentimiento por defecto (Modo Avanzado)
         gtag('consent', 'default', {
             'ad_storage': 'denied',
@@ -439,7 +439,7 @@
 
 
         <section class="gallery-section clients-carousel">
-            <h2>Nuestros Clientes</h2>
+            <h2>Pedidos Enviados</h2>
             <p class="gallery-subtitle">Fotos reales de nuestros proveedores</p>
 
             <div id="clients-grid">
@@ -453,6 +453,28 @@
                         <i class="fas fa-chevron-left"></i>
                     </button>
                     <button class="carousel-arrow carousel-arrow-right" id="clients-next">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <section class="gallery-section clients-carousel">
+            <h2>Imágenes de Nuestros Clientes</h2>
+            <p class="gallery-subtitle">Fotos reales de nuestros clientes satisfechos</p>
+
+            <div id="pedidos-grid">
+                <div class="carousel-container">
+                    <div class="carousel-track" id="pedidos-carousel-track">
+
+                    </div>
+                </div>
+                <div class="carousel-arrows">
+                    <button class="carousel-arrow carousel-arrow-left" id="pedidos-prev">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="carousel-arrow carousel-arrow-right" id="pedidos-next">
                         <i class="fas fa-chevron-right"></i>
                     </button>
                 </div>
@@ -509,6 +531,9 @@
         </div>
     </div>
 
+
+
+
     <div id="footer-placeholder"></div>
 
 
@@ -524,10 +549,13 @@
 
 
         let CLIENT_IMAGES = [];
+        let PEDIDOS_IMAGES = [];
         const WATERMARK_TEXT = '@camisetazo._';
 
 
-        let lightboxImages = [];
+        let clientesLightboxImages = [];
+        let pedidosLightboxImages = [];
+        let lightboxImages = []; // array activo según qué galería abrió el lightbox
         let currentLightboxIndex = 0;
         let currentLightboxKeyIndex = 0;
         let jumpTimeout = null;
@@ -545,15 +573,28 @@
                 const response = await fetch('../assets/clientes/clientes.json');
                 const data = await response.json();
                 CLIENT_IMAGES = data.images || [];
-                console.log(`? Cargadas ${CLIENT_IMAGES.length} imgenes de clientes`);
+                console.log(`✅ Cargadas ${CLIENT_IMAGES.length} imágenes de clientes`);
             } catch (error) {
-                console.warn('?? No se pudo cargar clientes.json, usando fallback');
+                console.warn('⚠️ No se pudo cargar clientes.json, usando fallback');
                 CLIENT_IMAGES = Array.from({ length: 66 }, (_, i) => `cliente${i + 1}.webp`);
+            }
+
+            try {
+                const responsePedidos = await fetch('../assets/pedidos/pedidos.json');
+                const dataPedidos = await responsePedidos.json();
+                PEDIDOS_IMAGES = dataPedidos.images || [];
+                console.log(`✅ Cargadas ${PEDIDOS_IMAGES.length} imágenes de pedidos`);
+            } catch (error) {
+                console.warn('⚠️ No se pudo cargar pedidos.json, usando fallback');
+                PEDIDOS_IMAGES = Array.from({ length: 10 }, (_, i) => `pedido${i + 1}.webp`);
             }
 
             renderCarousel();
             initClientsCarousel();
             initLightbox();
+
+            renderPedidosCarousel();
+            initPedidosCarousel();
         });
 
 
@@ -561,11 +602,11 @@
             const track = document.getElementById('carousel-track');
 
             const shuffled = [...CLIENT_IMAGES].sort(() => Math.random() - 0.5);
-            lightboxImages = shuffled.map(img => `/assets/clientes/${img}`);
+            clientesLightboxImages = shuffled.map(img => `/assets/clientes/${img}`);
 
 
             track.innerHTML = shuffled.map((img, index) => `
-                <article class="client-card" data-index="${index}">
+                <article class="client-card" data-index="${index}" data-carousel="clientes">
                     <div class="client-image">
                         <img 
                             src="../assets/clientes/${img}" 
@@ -577,8 +618,40 @@
             `).join('');
 
 
-            document.querySelectorAll('.client-card').forEach(card => {
+            document.querySelectorAll('#clients-grid .client-card').forEach(card => {
                 card.addEventListener('click', () => {
+                    lightboxImages = clientesLightboxImages;
+                    const index = parseInt(card.dataset.index);
+                    openLightbox(index);
+                });
+            });
+        }
+
+
+        function renderPedidosCarousel() {
+            const track = document.getElementById('pedidos-carousel-track');
+            if (!track) return;
+
+            const shuffled = [...PEDIDOS_IMAGES].sort(() => Math.random() - 0.5);
+            pedidosLightboxImages = shuffled.map(img => `/assets/pedidos/${img}`);
+
+
+            track.innerHTML = shuffled.map((img, index) => `
+                <article class="client-card" data-index="${index}" data-carousel="pedidos">
+                    <div class="client-image">
+                        <img 
+                            src="../assets/pedidos/${img}" 
+                            alt="Pedido Enviado de Camisetazo"
+                            loading="${index < 6 ? 'eager' : 'lazy'}"
+                        >
+                    </div>
+                </article>
+            `).join('');
+
+
+            document.querySelectorAll('#pedidos-grid .client-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    lightboxImages = pedidosLightboxImages;
                     const index = parseInt(card.dataset.index);
                     openLightbox(index);
                 });
@@ -624,6 +697,7 @@
 
             track.querySelectorAll('.client-card').forEach(card => {
                 card.addEventListener('click', () => {
+                    lightboxImages = clientesLightboxImages;
                     const index = parseInt(card.dataset.index);
                     openLightbox(index);
                 });
@@ -907,6 +981,192 @@
 
 
 
+        function initPedidosCarousel() {
+            const grid = document.getElementById('pedidos-grid');
+            const track = grid?.querySelector('.carousel-track');
+            const prevBtn = document.getElementById('pedidos-prev');
+            const nextBtn = document.getElementById('pedidos-next');
+
+            if (!track || !prevBtn || !nextBtn) return;
+
+            const originalCards = Array.from(track.querySelectorAll('.client-card'));
+            if (originalCards.length === 0) return;
+
+            const cardWidth = 220 + 24;
+            const totalCards = originalCards.length;
+
+            originalCards.forEach(card => {
+                const cloneEnd = card.cloneNode(true);
+                cloneEnd.classList.add('carousel-clone');
+                const img = cloneEnd.querySelector('img');
+                if (img) img.loading = 'eager';
+                track.appendChild(cloneEnd);
+            });
+
+            const allCards = Array.from(track.querySelectorAll('.client-card')).filter(c => !c.classList.contains('carousel-clone'));
+            [...allCards].reverse().forEach(card => {
+                const cloneStart = card.cloneNode(true);
+                cloneStart.classList.add('carousel-clone');
+                const img = cloneStart.querySelector('img');
+                if (img) img.loading = 'eager';
+                track.insertBefore(cloneStart, track.firstChild);
+            });
+
+            track.querySelectorAll('.client-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    lightboxImages = pedidosLightboxImages;
+                    const index = parseInt(card.dataset.index);
+                    openLightbox(index);
+                });
+            });
+
+            let currentPosition = totalCards * cardWidth;
+            let isJumping = false;
+            let animationId = null;
+            let isPaused = false;
+
+            const SCROLL_SPEED = 0.3;
+            const PAUSE_DURATION = 3000;
+
+            function setPositionP(position, animate = true) {
+                track.style.transition = animate ? 'transform 150ms ease-out' : 'none';
+                track.style.transform = `translateX(${-position}px)`;
+            }
+
+            function checkBoundaryP(e) {
+                if (e && e.target !== track) return;
+                if (currentPosition >= totalCards * 2 * cardWidth) {
+                    isJumping = true;
+                    track.style.transition = 'none';
+                    currentPosition -= totalCards * cardWidth;
+                    track.style.transform = `translateX(${-currentPosition}px)`;
+                    void track.offsetHeight;
+                    isJumping = false;
+                }
+                if (currentPosition < totalCards * cardWidth) {
+                    isJumping = true;
+                    track.style.transition = 'none';
+                    currentPosition += totalCards * cardWidth;
+                    track.style.transform = `translateX(${-currentPosition}px)`;
+                    void track.offsetHeight;
+                    isJumping = false;
+                }
+            }
+
+            function smoothScrollP() {
+                if (isPaused || isJumping) { animationId = requestAnimationFrame(smoothScrollP); return; }
+                currentPosition += SCROLL_SPEED;
+                if (currentPosition >= totalCards * 2 * cardWidth) currentPosition -= totalCards * cardWidth;
+                track.style.transition = 'none';
+                track.style.transform = `translateX(${-currentPosition}px)`;
+                animationId = requestAnimationFrame(smoothScrollP);
+            }
+
+            function pauseP() { isPaused = true; }
+            function resumeP() { isPaused = false; }
+
+            let resumeTimeout = null;
+            function interactP() {
+                pauseP();
+                if (resumeTimeout) clearTimeout(resumeTimeout);
+                resumeTimeout = setTimeout(resumeP, PAUSE_DURATION);
+            }
+
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); e.preventDefault();
+                if (isJumping) return;
+                interactP();
+                currentPosition -= cardWidth;
+                setPositionP(currentPosition, true);
+            });
+
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); e.preventDefault();
+                if (isJumping) return;
+                interactP();
+                currentPosition += cardWidth;
+                setPositionP(currentPosition, true);
+            });
+
+            track.addEventListener('transitionend', checkBoundaryP);
+
+            const carouselContainer = grid?.querySelector('.carousel-container');
+            if (carouselContainer) {
+                carouselContainer.addEventListener('mouseenter', pauseP);
+                carouselContainer.addEventListener('mouseleave', () => {
+                    if (resumeTimeout) clearTimeout(resumeTimeout);
+                    resumeP();
+                });
+                carouselContainer.addEventListener('scroll', () => interactP(), { passive: true });
+            }
+
+            setPositionP(currentPosition, false);
+            track.offsetHeight;
+            animationId = requestAnimationFrame(smoothScrollP);
+
+            let dragActive = false;
+            let startPos = 0, lastPos = 0, lastTime = 0, velocity = 0, inertiaId = null;
+            track.style.touchAction = 'pan-y';
+            track.style.userSelect = 'none';
+
+            track.addEventListener('touchstart', (event) => {
+                if (inertiaId) { cancelAnimationFrame(inertiaId); inertiaId = null; }
+                if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+                dragActive = true;
+                track.classList.add('dragging');
+                startPos = event.touches[0].clientX;
+                lastPos = startPos; lastTime = performance.now(); velocity = 0; isPaused = true;
+                if (resumeTimeout) clearTimeout(resumeTimeout);
+            }, { passive: true });
+
+            track.addEventListener('touchmove', (event) => {
+                if (!dragActive) return;
+                event.preventDefault();
+                const currentX = event.touches[0].clientX;
+                const diff = currentX - lastPos;
+                const now = performance.now();
+                const dt = now - lastTime;
+                if (dt > 0) velocity = diff / dt * 16;
+                currentPosition -= diff;
+                lastPos = currentX; lastTime = now;
+                track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
+                if (currentPosition >= totalCards * 2 * cardWidth) currentPosition -= totalCards * cardWidth;
+                else if (currentPosition < totalCards * cardWidth) currentPosition += totalCards * cardWidth;
+            }, { passive: false });
+
+            track.addEventListener('touchend', () => {
+                if (!dragActive) return;
+                dragActive = false;
+                track.classList.remove('dragging');
+                if (Math.abs(velocity) > 0.5) {
+                    const friction = 0.94;
+                    function inertiaStep() {
+                        if (Math.abs(velocity) < 0.1) {
+                            inertiaId = null;
+                            resumeTimeout = setTimeout(() => { isPaused = false; if (!animationId) animationId = requestAnimationFrame(smoothScrollP); }, PAUSE_DURATION);
+                            return;
+                        }
+                        currentPosition -= velocity; velocity *= friction;
+                        if (currentPosition >= totalCards * 2 * cardWidth) currentPosition -= totalCards * cardWidth;
+                        else if (currentPosition < totalCards * cardWidth) currentPosition += totalCards * cardWidth;
+                        track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
+                        inertiaId = requestAnimationFrame(inertiaStep);
+                    }
+                    inertiaId = requestAnimationFrame(inertiaStep);
+                } else {
+                    resumeTimeout = setTimeout(() => { isPaused = false; if (!animationId) animationId = requestAnimationFrame(smoothScrollP); }, PAUSE_DURATION);
+                }
+            }, { passive: true });
+
+            const addScrolledClass = () => {
+                if (carouselContainer) carouselContainer.classList.add('scrolled');
+                grid.closest('.clients-carousel')?.classList.add('scrolled');
+            };
+            track.addEventListener('touchstart', addScrolledClass, { once: true, passive: true });
+            if (carouselContainer) carouselContainer.addEventListener('scroll', addScrolledClass, { once: true });
+        }
+
+
         function initLightbox() {
             const lightbox = document.getElementById('image-lightbox');
             const wrapper = document.getElementById('lightbox-wrapper');
@@ -1099,14 +1359,24 @@
 
             currentLightboxIndex = index;
             const N = lightboxImages.length;
-            currentLightboxKeyIndex = N + index;
+
+            // Si hay pocas imágenes, usar modo simple (sin triplicar para scroll infinito)
+            const useSimpleMode = N < 15;
+
+            if (useSimpleMode) {
+                currentLightboxKeyIndex = index;
+            } else {
+                currentLightboxKeyIndex = N + index;
+            }
 
             if (thumbsContainer) {
-                const paddedThumbs = [
-                    ...lightboxImages.map((src, i) => ({ src, i, k: i })),
-                    ...lightboxImages.map((src, i) => ({ src, i, k: N + i })),
-                    ...lightboxImages.map((src, i) => ({ src, i, k: 2 * N + i }))
-                ];
+                const paddedThumbs = useSimpleMode
+                    ? lightboxImages.map((src, i) => ({ src, i, k: i }))
+                    : [
+                        ...lightboxImages.map((src, i) => ({ src, i, k: i })),
+                        ...lightboxImages.map((src, i) => ({ src, i, k: N + i })),
+                        ...lightboxImages.map((src, i) => ({ src, i, k: 2 * N + i }))
+                    ];
 
                 thumbsContainer.innerHTML = paddedThumbs.map(item => `
                     <div class="lightbox-thumb ${item.k === currentLightboxKeyIndex ? 'active' : ''}" 
@@ -1146,19 +1416,24 @@
 
         function navigateLightbox(direction) {
             const N = lightboxImages.length;
+            const useSimpleMode = N < 15;
             currentLightboxIndex = (currentLightboxIndex + direction + N) % N;
 
-            const targets = [currentLightboxIndex, N + currentLightboxIndex, 2 * N + currentLightboxIndex];
-            let closestKey = targets[0];
-            let minDiff = Math.abs(closestKey - currentLightboxKeyIndex);
-            for (let j = 1; j < targets.length; j++) {
-                const diff = Math.abs(targets[j] - currentLightboxKeyIndex);
-                if (diff < minDiff) {
-                    minDiff = diff;
-                    closestKey = targets[j];
+            if (useSimpleMode) {
+                currentLightboxKeyIndex = currentLightboxIndex;
+            } else {
+                const targets = [currentLightboxIndex, N + currentLightboxIndex, 2 * N + currentLightboxIndex];
+                let closestKey = targets[0];
+                let minDiff = Math.abs(closestKey - currentLightboxKeyIndex);
+                for (let j = 1; j < targets.length; j++) {
+                    const diff = Math.abs(targets[j] - currentLightboxKeyIndex);
+                    if (diff < minDiff) {
+                        minDiff = diff;
+                        closestKey = targets[j];
+                    }
                 }
+                currentLightboxKeyIndex = closestKey;
             }
-            currentLightboxKeyIndex = closestKey;
 
             updateLightboxImage();
             resetZoom();
@@ -1181,8 +1456,9 @@
                 behavior: animate ? 'smooth' : 'auto'
             });
 
-            if (animate) {
-                const N = lightboxImages.length;
+            // Solo hacer reposicionamiento infinito si estamos en modo triplicado (N >= 15)
+            const N = lightboxImages.length;
+            if (animate && N >= 15) {
                 if (keyIndex < N || keyIndex >= 2 * N) {
                     if (jumpTimeout) clearTimeout(jumpTimeout);
                     jumpTimeout = setTimeout(() => {
@@ -1203,13 +1479,201 @@
         function updateLightboxImage() {
             const lightboxImage = document.getElementById('lightbox-image');
             if (lightboxImage) lightboxImage.src = lightboxImages[currentLightboxIndex];
-            document.querySelectorAll('.lightbox-thumb').forEach((thumb) => {
+            document.querySelectorAll('#lightbox-thumbnails .lightbox-thumb').forEach((thumb) => {
                 const key = parseInt(thumb.dataset.key);
                 thumb.classList.toggle('active', key === currentLightboxKeyIndex);
             });
             resetZoom();
             scrollActiveThumbIntoView(currentLightboxKeyIndex, true);
         }
+
+
+        /* ============================================================
+           PEDIDOS CAROUSEL
+        ============================================================ */
+
+        function initPedidosCarousel() {
+            const grid = document.getElementById('pedidos-grid');
+            const track = grid?.querySelector('.carousel-track');
+            const prevBtn = document.getElementById('pedidos-prev');
+            const nextBtn = document.getElementById('pedidos-next');
+
+            if (!track || !prevBtn || !nextBtn) return;
+
+            const originalCards = Array.from(track.querySelectorAll('.client-card'));
+            if (originalCards.length === 0) return;
+
+            const cardWidth = 220 + 24;
+            const totalCards = originalCards.length;
+
+            originalCards.forEach(card => {
+                const cloneEnd = card.cloneNode(true);
+                cloneEnd.classList.add('carousel-clone');
+                const img = cloneEnd.querySelector('img');
+                if (img) img.loading = 'eager';
+                track.appendChild(cloneEnd);
+            });
+
+            const allCards = Array.from(track.querySelectorAll('.client-card')).filter(c => !c.classList.contains('carousel-clone'));
+            [...allCards].reverse().forEach(card => {
+                const cloneStart = card.cloneNode(true);
+                cloneStart.classList.add('carousel-clone');
+                const img = cloneStart.querySelector('img');
+                if (img) img.loading = 'eager';
+                track.insertBefore(cloneStart, track.firstChild);
+            });
+
+            track.querySelectorAll('.client-card').forEach(card => {
+                card.addEventListener('click', () => {
+                    lightboxImages = pedidosLightboxImages;
+                    const index = parseInt(card.dataset.index);
+                    openLightbox(index);
+                });
+            });
+
+            let currentPosition = totalCards * cardWidth;
+            let isJumping = false;
+            let animationId = null;
+            let isPaused = false;
+
+            const SCROLL_SPEED = 0.3;
+            const PAUSE_DURATION = 3000;
+
+            function setPosition(position, animate = true) {
+                track.style.transition = animate ? 'transform 150ms ease-out' : 'none';
+                track.style.transform = `translateX(${-position}px)`;
+            }
+
+            function checkBoundary(e) {
+                if (e && e.target !== track) return;
+                if (currentPosition >= totalCards * 2 * cardWidth) {
+                    isJumping = true;
+                    track.style.transition = 'none';
+                    currentPosition -= totalCards * cardWidth;
+                    track.style.transform = `translateX(${-currentPosition}px)`;
+                    void track.offsetHeight;
+                    isJumping = false;
+                }
+                if (currentPosition < totalCards * cardWidth) {
+                    isJumping = true;
+                    track.style.transition = 'none';
+                    currentPosition += totalCards * cardWidth;
+                    track.style.transform = `translateX(${-currentPosition}px)`;
+                    void track.offsetHeight;
+                    isJumping = false;
+                }
+            }
+
+            function smoothScroll() {
+                if (isPaused || isJumping) { animationId = requestAnimationFrame(smoothScroll); return; }
+                currentPosition += SCROLL_SPEED;
+                if (currentPosition >= totalCards * 2 * cardWidth) {
+                    currentPosition -= totalCards * cardWidth;
+                }
+                track.style.transition = 'none';
+                track.style.transform = `translateX(${-currentPosition}px)`;
+                animationId = requestAnimationFrame(smoothScroll);
+            }
+
+            function pauseAutoScroll() { isPaused = true; }
+            function resumeAutoScroll() { isPaused = false; }
+
+            let resumeTimeout = null;
+            function handleUserInteraction() {
+                pauseAutoScroll();
+                if (resumeTimeout) clearTimeout(resumeTimeout);
+                resumeTimeout = setTimeout(resumeAutoScroll, PAUSE_DURATION);
+            }
+
+            prevBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); e.preventDefault();
+                if (isJumping) return;
+                handleUserInteraction();
+                currentPosition -= cardWidth;
+                setPosition(currentPosition, true);
+            });
+
+            nextBtn.addEventListener('click', (e) => {
+                e.stopPropagation(); e.preventDefault();
+                if (isJumping) return;
+                handleUserInteraction();
+                currentPosition += cardWidth;
+                setPosition(currentPosition, true);
+            });
+
+            track.addEventListener('transitionend', checkBoundary);
+
+            const carouselContainer = grid?.querySelector('.carousel-container');
+            if (carouselContainer) {
+                carouselContainer.addEventListener('mouseenter', pauseAutoScroll);
+                carouselContainer.addEventListener('mouseleave', () => {
+                    if (resumeTimeout) clearTimeout(resumeTimeout);
+                    resumeAutoScroll();
+                });
+            }
+
+            setPosition(currentPosition, false);
+            track.offsetHeight;
+            animationId = requestAnimationFrame(smoothScroll);
+
+            let dragActive = false;
+            let startPos = 0, lastPos = 0, lastTime = 0, velocity = 0, inertiaId = null;
+            track.style.touchAction = 'pan-y';
+            track.style.userSelect = 'none';
+
+            track.addEventListener('touchstart', (event) => {
+                if (inertiaId) { cancelAnimationFrame(inertiaId); inertiaId = null; }
+                if (animationId) { cancelAnimationFrame(animationId); animationId = null; }
+                dragActive = true;
+                track.classList.add('dragging');
+                startPos = event.touches[0].clientX;
+                lastPos = startPos; lastTime = performance.now(); velocity = 0; isPaused = true;
+                if (resumeTimeout) clearTimeout(resumeTimeout);
+            }, { passive: true });
+
+            track.addEventListener('touchmove', (event) => {
+                if (!dragActive) return;
+                event.preventDefault();
+                const currentX = event.touches[0].clientX;
+                const diff = currentX - lastPos;
+                const now = performance.now();
+                const dt = now - lastTime;
+                if (dt > 0) velocity = diff / dt * 16;
+                currentPosition -= diff;
+                lastPos = currentX; lastTime = now;
+                track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
+                if (currentPosition >= totalCards * 2 * cardWidth) currentPosition -= totalCards * cardWidth;
+                else if (currentPosition < totalCards * cardWidth) currentPosition += totalCards * cardWidth;
+            }, { passive: false });
+
+            track.addEventListener('touchend', () => {
+                if (!dragActive) return;
+                dragActive = false;
+                track.classList.remove('dragging');
+                if (Math.abs(velocity) > 0.5) {
+                    const friction = 0.94;
+                    function inertiaStep() {
+                        if (Math.abs(velocity) < 0.1) {
+                            inertiaId = null;
+                            if (resumeTimeout) clearTimeout(resumeTimeout);
+                            resumeTimeout = setTimeout(() => { isPaused = false; if (!animationId) animationId = requestAnimationFrame(smoothScroll); }, PAUSE_DURATION);
+                            return;
+                        }
+                        currentPosition -= velocity; velocity *= friction;
+                        if (currentPosition >= totalCards * 2 * cardWidth) currentPosition -= totalCards * cardWidth;
+                        else if (currentPosition < totalCards * cardWidth) currentPosition += totalCards * cardWidth;
+                        track.style.transform = `translate3d(${-currentPosition}px, 0, 0)`;
+                        inertiaId = requestAnimationFrame(inertiaStep);
+                    }
+                    inertiaId = requestAnimationFrame(inertiaStep);
+                } else {
+                    if (resumeTimeout) clearTimeout(resumeTimeout);
+                    resumeTimeout = setTimeout(() => { isPaused = false; if (!animationId) animationId = requestAnimationFrame(smoothScroll); }, PAUSE_DURATION);
+                }
+            }, { passive: true });
+        }
+
+
     </script>
 </body>
 
