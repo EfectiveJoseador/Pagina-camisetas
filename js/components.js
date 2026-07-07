@@ -56,6 +56,7 @@ const Components = {
                     <ul class="footer-links">
                         <li><a href="/pages/privacidad.html">Política de Privacidad</a></li>
                         <li><a href="/pages/cookies.html">Política de Cookies</a></li>
+                        <li><a href="/pages/devoluciones.html">Devoluciones y Garantías</a></li>
                         <li><a href="/pages/terminos.html">Términos y Condiciones</a></li>
                     </ul>
                 </div>

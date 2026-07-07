@@ -131,6 +131,10 @@
                 "destination": "/pages/terminos.html"
             },
             {
+                "source": "/devoluciones",
+                "destination": "/pages/devoluciones.html"
+            },
+            {
                 "source": "/seleccion/brasil",
                 "destination": "/pages/tienda.html?team=brasil"
             },
