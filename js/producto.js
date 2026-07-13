@@ -1626,13 +1626,11 @@ function openLightbox() {
     if (currentLightboxIndex === -1) currentLightboxIndex = 0;
 
     const N = lightboxImages.length;
-    currentLightboxKeyIndex = N + currentLightboxIndex;
+    currentLightboxKeyIndex = currentLightboxIndex;
 
     if (thumbsContainer) {
         const paddedThumbs = [
-            ...lightboxImages.map((src, i) => ({ src, i, k: i })),
-            ...lightboxImages.map((src, i) => ({ src, i, k: N + i })),
-            ...lightboxImages.map((src, i) => ({ src, i, k: 2 * N + i }))
+            ...lightboxImages.map((src, i) => ({ src, i, k: i }))
         ];
 
         thumbsContainer.innerHTML = paddedThumbs.map(item => `
@@ -1674,18 +1672,7 @@ function closeLightbox() {
 function navigateLightbox(direction) {
     const N = lightboxImages.length;
     currentLightboxIndex = (currentLightboxIndex + direction + N) % N;
-
-    const targets = [currentLightboxIndex, N + currentLightboxIndex, 2 * N + currentLightboxIndex];
-    let closestKey = targets[0];
-    let minDiff = Math.abs(closestKey - currentLightboxKeyIndex);
-    for (let j = 1; j < targets.length; j++) {
-        const diff = Math.abs(targets[j] - currentLightboxKeyIndex);
-        if (diff < minDiff) {
-            minDiff = diff;
-            closestKey = targets[j];
-        }
-    }
-    currentLightboxKeyIndex = closestKey;
+    currentLightboxKeyIndex = currentLightboxIndex;
 
     updateLightboxImage();
     resetZoom();
@@ -1707,24 +1694,6 @@ function scrollActiveThumbIntoView(keyIndex, animate = true) {
         left: targetScrollLeft,
         behavior: animate ? 'smooth' : 'auto'
     });
-
-    if (animate) {
-        const N = lightboxImages.length;
-        if (keyIndex < N || keyIndex >= 2 * N) {
-            if (jumpTimeout) clearTimeout(jumpTimeout);
-            jumpTimeout = setTimeout(() => {
-                const middleKey = N + (keyIndex % N);
-                currentLightboxKeyIndex = middleKey;
-
-                document.querySelectorAll('.lightbox-thumb').forEach((thumb) => {
-                    const key = parseInt(thumb.dataset.key);
-                    thumb.classList.toggle('active', key === middleKey);
-                });
-
-                scrollActiveThumbIntoView(middleKey, false);
-            }, 300);
-        }
-    }
 }
 
 function updateLightboxImage() {
