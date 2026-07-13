@@ -1,4 +1,8 @@
 {
+  "scripts": {
+    "actualizar-galerias": "node scripts/actualizar-galerias.js",
+    "actualizar-clientes": "node scripts/update-clients.js"
+  },
   "dependencies": {
     "sharp": "^0.34.5"
   }
