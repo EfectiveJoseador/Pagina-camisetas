@@ -1,4 +1,4 @@
-const CACHE_NAME = 'camisetazo-cache-v16';
+const CACHE_NAME = 'camisetazo-cache-v17';
 
 // Solo cachear assets estáticos (JS, CSS, imágenes, fuentes).
 // NUNCA cachear HTML — los documentos HTML llevan headers de seguridad
@@ -115,6 +115,27 @@ self.addEventListener('fetch', (event) => {
     return;
   }
 
+  // ── Regla 2b: Archivos JSON propios → Network First (siempre fresco, caché de respaldo) ──
+  const isJson = url.includes('.json') && url.includes(self.location.origin);
+  if (isJson) {
+    event.respondWith(
+      fetch(event.request)
+        .then((response) => {
+          if (response && response.status === 200) {
+            const responseToCache = response.clone();
+            caches.open(CACHE_NAME).then((cache) => {
+              cache.put(event.request, responseToCache);
+            });
+          }
+          return response;
+        })
+        .catch(() => {
+          return caches.match(event.request);
+        })
+    );
+    return;
+  }
+
   // ── Regla 3a: JS propios → Network First (siempre fresco, caché de respaldo) ──
   // Esto garantiza que el código actualizado llega a todos los usuarios
   // automáticamente, sin necesidad de limpiar caché manualmente.
@@ -149,9 +170,10 @@ self.addEventListener('fetch', (event) => {
         .then((response) => {
           if (response && response.status === 200) {
             const url = event.request.url;
-            const isAsset = url.includes('/css/') ||
+            const isAsset = (url.includes('/css/') ||
               url.includes('/assets/') ||
-              url.match(/\.(woff2?|ttf|eot|svg|png|jpg|jpeg|gif|webp|ico)(\?|$)/);
+              url.match(/\.(woff2?|ttf|eot|svg|png|jpg|jpeg|gif|webp|ico)(\?|$)/)) &&
+              !url.includes('.json');
 
             if (isAsset) {
               const responseToCache = response.clone();

@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-theme="light">
 
 <head>
@@ -569,17 +569,17 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             try {
-                const response = await fetch('../assets/clientes/clientes.json');
+                const response = await fetch('../assets/clientes/clientes.json', { cache: 'no-cache' });
                 const data = await response.json();
                 CLIENT_IMAGES = data.images || [];
                 console.log(`✅ Cargadas ${CLIENT_IMAGES.length} imágenes de clientes`);
             } catch (error) {
                 console.warn('⚠️ No se pudo cargar clientes.json, usando fallback');
-                CLIENT_IMAGES = Array.from({ length: 66 }, (_, i) => `cliente${i + 1}.webp`);
+                CLIENT_IMAGES = Array.from({ length: 92 }, (_, i) => `cliente${i + 1}.webp`);
             }
 
             try {
-                const responsePedidos = await fetch('../assets/pedidos/pedidos.json');
+                const responsePedidos = await fetch('../assets/pedidos/pedidos.json', { cache: 'no-cache' });
                 const dataPedidos = await responsePedidos.json();
                 PEDIDOS_IMAGES = dataPedidos.images || [];
                 console.log(`✅ Cargadas ${PEDIDOS_IMAGES.length} imágenes de pedidos`);
