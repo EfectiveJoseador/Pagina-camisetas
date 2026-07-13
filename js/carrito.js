@@ -664,8 +664,8 @@ function openCartItemEditModal(cartIndex, cartRef) {
             </div>
 
             <div class="upsell-edit-field">
-                <label>Dorsal <span style="color:#6b7280;text-transform:none;font-weight:400;">(0–99)</span></label>
-                <input type="text" id="ce-number" placeholder="Ej. 10" maxlength="2" inputmode="numeric" autocomplete="off" value="${custom.number || ''}">
+                <label>Dorsal <span style="color:#6b7280;text-transform:none;font-weight:400;">(0–999)</span></label>
+                <input type="text" id="ce-number" placeholder="Ej. 10" maxlength="3" inputmode="numeric" autocomplete="off" value="${custom.number || ''}">
             </div>
 
             ${patchBlock}
@@ -730,11 +730,11 @@ function openCartItemEditModal(cartIndex, cartRef) {
         updatePrice();
     });
 
-    // ── Number input: digits only, 0-99, max 2 (mirrors handleDorsalInput) ──
+    // ── Number input: digits only, 0-999, max 3 (mirrors handleDorsalInput) ──
     overlay.querySelector('#ce-number')?.addEventListener('input', e => {
         let v = e.target.value.replace(/\D/g, '');
-        if (v.length > 2) v = v.slice(0, 2);
-        if (v !== '' && parseInt(v) > 99) v = '99';
+        if (v.length > 3) v = v.slice(0, 3);
+        if (v !== '' && parseInt(v) > 999) v = '999';
         e.target.value = v;
         updatePrice();
     });
@@ -781,12 +781,12 @@ function openCartItemEditModal(cartIndex, cartRef) {
             return;
         }
 
-        // Validation: dorsal — numeric 0-99, max 2 digits
+        // Validation: dorsal — numeric 0-999, max 3 digits
         if (hasNumber) {
             const numValue = parseInt(numberVal);
-            if (numberVal.length > 2 || numValue < 0 || numValue > 99 || isNaN(numValue)) {
-                if (window.Toast) window.Toast.error('El dorsal debe ser un número entre 0 y 99 (máximo 2 dígitos)');
-                else alert('El dorsal debe ser un número entre 0 y 99 (máximo 2 dígitos)');
+            if (numberVal.length > 3 || numValue < 0 || numValue > 999 || isNaN(numValue)) {
+                if (window.Toast) window.Toast.error('El dorsal debe ser un número entre 0 y 999 (máximo 3 dígitos)');
+                else alert('El dorsal debe ser un número entre 0 y 999 (máximo 3 dígitos)');
                 return;
             }
         }

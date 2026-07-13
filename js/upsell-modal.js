@@ -336,8 +336,8 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
                 <input type="text" id="ue-name" placeholder="Ej. PEDRI" maxlength="15" autocomplete="off" value="${current.name || ''}">
             </div>
             <div class="upsell-edit-field">
-                <label>Dorsal <span style="color:#6b7280;text-transform:none;font-weight:400;">(0–99)</span></label>
-                <input type="text" id="ue-number" placeholder="Ej. 10" maxlength="2" inputmode="numeric" autocomplete="off" value="${current.number || ''}">
+                <label>Dorsal <span style="color:#6b7280;text-transform:none;font-weight:400;">(0–999)</span></label>
+                <input type="text" id="ue-number" placeholder="Ej. 10" maxlength="3" inputmode="numeric" autocomplete="off" value="${current.number || ''}">
             </div>
             ${patchBlock}
             <div class="upsell-edit-price-summary">
@@ -375,8 +375,8 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
     // Live validation on number
     overlay.querySelector('#ue-number')?.addEventListener('input', e => {
         let v = e.target.value.replace(/\D/g, '');
-        if (v.length > 2) v = v.slice(0, 2);
-        if (v !== '' && parseInt(v) > 99) v = '99';
+        if (v.length > 3) v = v.slice(0, 3);
+        if (v !== '' && parseInt(v) > 999) v = '999';
         e.target.value = v;
         updatePrice();
     });
@@ -408,8 +408,8 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
         }
         if (numberVal) {
             const n = parseInt(numberVal);
-            if (numberVal.length > 2 || n < 0 || n > 99 || isNaN(n)) {
-                if (window.Toast) window.Toast.error('El dorsal debe ser un número entre 0 y 99');
+            if (numberVal.length > 3 || n < 0 || n > 999 || isNaN(n)) {
+                if (window.Toast) window.Toast.error('El dorsal debe ser un número entre 0 y 999');
                 return;
             }
         }

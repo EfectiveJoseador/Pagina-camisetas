@@ -532,13 +532,13 @@ function handleNameInput(e) {
 function handleDorsalInput(e) {
     let value = e.target.value;
     value = value.replace(/\D/g, '');
-    if (value.length > 2) {
-        value = value.slice(0, 2);
+    if (value.length > 3) {
+        value = value.slice(0, 3);
     }
     if (value !== '') {
         const numValue = parseInt(value);
-        if (numValue > 99) {
-            value = '99';
+        if (numValue > 999) {
+            value = '999';
         }
     }
 

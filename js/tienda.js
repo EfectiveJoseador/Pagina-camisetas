@@ -385,51 +385,6 @@ function renderProducts() {
                 <button class="btn-quick-add" data-id="${product.id}" title="Añadir al carrito">
                     <i class="fas fa-shopping-basket"></i>
                 </button>
-                
-                <!-- Quick Add Panel -->
-                <div class="quick-add-panel" data-product-id="${product.id}">
-                    <div class="panel-header">
-                        <span class="panel-title">Añadir rápido</span>
-                        <button class="panel-close" data-id="${product.id}"><i class="fas fa-times"></i></button>
-                    </div>
-                    <form class="quick-add-form" data-product-id="${product.id}">
-                        <div class="form-group">
-                            <label>Talla *</label>
-                            <select class="quick-size" required>
-                                <option value="">Seleccionar</option>
-                                ${sizeOptions}
-                            </select>
-                        </div>
-                        
-                        <div class="optional-toggle" data-id="${product.id}">
-                            <i class="fas fa-chevron-down"></i>
-                            <span>Personalización (opcional)</span>
-                        </div>
-                        
-                        <div class="optional-fields" data-id="${product.id}">
-                            <div class="form-row">
-                                <div class="form-group">
-                                    <label>Nombre</label>
-                                    <input type="text" class="quick-name" placeholder="Ej: MESSI" maxlength="15" pattern="[A-Za-zÀ-ÿ\\s\\.]*">
-                                </div>
-                                <div class="form-group">
-                                    <label>Dorsal</label>
-                                    <input type="text" class="quick-number" placeholder="10" maxlength="2" inputmode="numeric" pattern="[0-9]*">
-                                </div>
-                            </div>
-                            ${generatePatchOptionsHTML(product)}
-                        </div>
-                        
-                        <div class="price-preview">
-                            <span class="price-label">Total:</span>
-                            <span class="price-value" data-base="${product.price}">€${product.price.toFixed(2)}</span>
-                        </div>
-                        
-                        <button type="submit" class="btn-add-quick">
-                            <i class="fas fa-cart-plus"></i> Añadir
-                        </button>
-                    </form>
-                </div>
             </div>
             <div class="product-info">
                 <span class="product-category">${product.category}</span>
@@ -478,171 +433,259 @@ function updateItemListSchema(productsToShow) {
 }
 
 
-function setupQuickAddListeners() {
-    
-    document.querySelectorAll('.btn-quick-add').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const productId = btn.dataset.id;
-            toggleQuickAddPanel(productId);
-        });
+// ─── GLOBAL QUICK-ADD DRAWER ─────────────────────────────────────────────────
+let _qdProduct   = null;   // product currently shown in drawer
+let _qdBackdrop  = null;
+let _qdDrawer    = null;
+let _qdInited    = false;
+
+const SIZE_SURCHARGES_QAD = { '2XL': 1, '3XL': 2, '4XL': 2 };
+
+function _buildDrawer() {
+    if (_qdInited) return;
+    _qdInited = true;
+
+    // backdrop
+    _qdBackdrop = document.createElement('div');
+    _qdBackdrop.className = 'qad-backdrop';
+    document.body.appendChild(_qdBackdrop);
+
+    // drawer shell
+    _qdDrawer = document.createElement('div');
+    _qdDrawer.className = 'qad-drawer';
+    _qdDrawer.innerHTML = `
+        <div class="qad-handle"></div>
+        <div class="qad-body">
+            <div class="qad-header">
+                <img class="qad-thumb" src="" alt="">
+                <div class="qad-header-info">
+                    <div class="qad-product-name"></div>
+                    <div class="qad-base-price">Desde <strong></strong></div>
+                </div>
+                <button class="qad-close" title="Cerrar"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="qad-section-label"><i class="fas fa-ruler"></i> Talla <span style="color:#ef4444;margin-left:2px">*</span></div>
+            <div class="qad-field" style="margin-bottom:1rem">
+                <select id="qad-size">
+                    <option value="">Seleccionar talla…</option>
+                </select>
+            </div>
+
+            <div class="qad-section-label"><i class="fas fa-tshirt"></i> Personalización <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€3 si rellenas algún campo)</span></div>
+            <div class="qad-custom-grid">
+                <div class="qad-field">
+                    <label>Nombre</label>
+                    <input id="qad-name" type="text" placeholder="Ej: MESSI" maxlength="15" autocomplete="off">
+                </div>
+                <div class="qad-field">
+                    <label>Dorsal</label>
+                    <input id="qad-number" type="text" placeholder="Ej: 10" maxlength="3" inputmode="numeric">
+                </div>
+            </div>
+
+            <div class="qad-patch-wrap" style="display:none">
+                <div class="qad-section-label"><i class="fas fa-shield-alt"></i> Parche <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€2 si rellenas)</span></div>
+                <div class="qad-field">
+                    <input id="qad-patch" type="text" placeholder="Ej: Champions League" maxlength="30" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="qad-footer">
+                <div class="qad-total">
+                    <span class="qad-total-label">Total</span>
+                    <span class="qad-total-price">€0.00</span>
+                </div>
+                <button class="qad-submit" id="qad-submit-btn">
+                    <i class="fas fa-cart-plus"></i> Añadir al carrito
+                </button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(_qdDrawer);
+
+    // ── close handlers ─────────────────────────────────────────────────────────────────────
+    _qdBackdrop.addEventListener('click', _closeDrawer);
+    _qdDrawer.querySelector('.qad-close').addEventListener('click', _closeDrawer);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') _closeDrawer(); });
+
+    // ── size select ────────────────────────────────────────────────────────────────────
+    _qdDrawer.querySelector('#qad-size').addEventListener('change', _updateTotal);
+
+    // ── personalisation live sanitize + price ───────────────────────────────────────────
+    _qdDrawer.querySelector('#qad-name').addEventListener('input', e => {
+        let v = e.target.value.replace(/[^A-Za-zÀ-ÿ\s\.]/g, '');
+        if (v.length > 15) v = v.slice(0, 15);
+        e.target.value = v;
+        _updateTotal();
     });
-
-    
-    document.querySelectorAll('.quick-add-panel .panel-close').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const productId = btn.dataset.id;
-            closeQuickAddPanel(productId);
-        });
+    _qdDrawer.querySelector('#qad-number').addEventListener('input', e => {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 3) v = v.slice(0, 3);
+        if (v !== '' && parseInt(v) > 999) v = '999';
+        e.target.value = v;
+        _updateTotal();
     });
+    _qdDrawer.querySelector('#qad-patch').addEventListener('input', _updateTotal);
 
-    
-    document.querySelectorAll('.optional-toggle').forEach(toggle => {
-        toggle.addEventListener('click', (e) => {
-            e.preventDefault();
-            const productId = toggle.dataset.id;
-            const optionalFields = document.querySelector(`.optional-fields[data-id="${productId}"]`);
-            if (optionalFields) {
-                optionalFields.classList.toggle('show');
-                toggle.classList.toggle('expanded');
-            }
-        });
-    });
+    // ── submit ────────────────────────────────────────────────────────────────────────
+    _qdDrawer.querySelector('#qad-submit-btn').addEventListener('click', _handleDrawerSubmit);
 
-    
-    document.querySelectorAll('.quick-add-form').forEach(form => {
-        const productId = form.dataset.productId;
-        const product = allProducts.find(p => p.id === parseInt(productId));
-        if (!product) return;
-
-        const updatePrice = () => {
-            const sizeSelect = form.querySelector('.quick-size');
-            const nameInput = form.querySelector('.quick-name');
-            const numberInput = form.querySelector('.quick-number');
-            const patchInput = form.querySelector('.quick-patch-input');
-            const priceValue = form.querySelector('.price-value');
-
-            let total = product.price;
-
-            // Suplemento por talla oversize
-            const size = sizeSelect?.value || '';
-            const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
-            if (SIZE_SURCHARGES[size]) {
-                total += SIZE_SURCHARGES[size];
-            }
-
-            // Personalización: nombre O dorsal = +€3
-            const name = nameInput?.value?.trim();
-            const number = numberInput?.value?.trim();
-            if (name || number) {
-                total += 3;
-            }
-
-            
-            const patch = patchInput?.value?.trim();
-            if (patch) {
-                total += 2;
-            }
-
-            if (priceValue) {
-                priceValue.textContent = `€${total.toFixed(2)}`;
-            }
-        };
-
-        
-        const nameInput = form.querySelector('.quick-name');
-        if (nameInput) {
-            nameInput.addEventListener('input', (e) => {
-                let value = e.target.value;
-                
-                value = value.replace(/[^A-Za-zÀ-ÿ\s\.]/g, '');
-                if (value.length > 15) {
-                    value = value.slice(0, 15);
-                }
-                e.target.value = value;
-                updatePrice();
-            });
-        }
-
-        
-        const numberInput = form.querySelector('.quick-number');
-        if (numberInput) {
-            numberInput.addEventListener('input', (e) => {
-                let value = e.target.value;
-                
-                value = value.replace(/\D/g, '');
-                if (value.length > 2) {
-                    value = value.slice(0, 2);
-                }
-                
-                if (value !== '' && parseInt(value) > 99) {
-                    value = '99';
-                }
-                e.target.value = value;
-                updatePrice();
-            });
-        }
-
-        
-        form.querySelectorAll('select').forEach(input => {
-            input.addEventListener('change', updatePrice);
-        });
-        const patchInput = form.querySelector('.quick-patch-input');
-        if (patchInput) {
-            patchInput.addEventListener('input', updatePrice);
-        }
-
-        
-        form.addEventListener('submit', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            handleQuickAddSubmit(form, product);
-        });
-    });
-
-    
-    document.addEventListener('click', (e) => {
-        if (!e.target.closest('.quick-add-panel') && !e.target.closest('.btn-quick-add')) {
-            closeAllQuickAddPanels();
-        }
-    });
+    // ── mobile swipe-down to close ───────────────────────────────────────────────────
+    let touchStartY = 0;
+    _qdDrawer.querySelector('.qad-handle').addEventListener('touchstart', e => {
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    _qdDrawer.querySelector('.qad-handle').addEventListener('touchmove', e => {
+        const delta = e.touches[0].clientY - touchStartY;
+        if (delta > 60) _closeDrawer();
+    }, { passive: true });
 }
 
-function toggleQuickAddPanel(productId) {
-    const panel = document.querySelector(`.quick-add-panel[data-product-id="${productId}"]`);
-    const btn = document.querySelector(`.btn-quick-add[data-id="${productId}"]`);
+function _openDrawer(product) {
+    _buildDrawer();
+    _qdProduct = product;
 
-    if (!panel) return;
+    const body       = _qdDrawer.querySelector('.qad-body');
+    const thumb      = _qdDrawer.querySelector('.qad-thumb');
+    const nameEl     = _qdDrawer.querySelector('.qad-product-name');
+    const priceEl    = _qdDrawer.querySelector('.qad-base-price strong');
+    const sizeSel    = _qdDrawer.querySelector('#qad-size');
+    const patchWrap  = _qdDrawer.querySelector('.qad-patch-wrap');
+    const patchInput = _qdDrawer.querySelector('#qad-patch');
+    const nameInput  = _qdDrawer.querySelector('#qad-name');
+    const numInput   = _qdDrawer.querySelector('#qad-number');
 
-    const isActive = panel.classList.contains('active');
+    // reset inputs
+    nameInput.value  = '';
+    numInput.value   = '';
+    patchInput.value = '';
+    body.scrollTop   = 0;
 
-    
-    closeAllQuickAddPanels();
+    // product info
+    thumb.src = getMiniImagePath(product.image);
+    thumb.alt = product.name;
+    nameEl.textContent  = product.name;
+    priceEl.textContent = `€${product.price.toFixed(2)}`;
 
-    if (!isActive) {
-        panel.classList.add('active');
-        if (btn) btn.classList.add('active');
+    // size select options
+    const productType = getProductType(product);
+    const sizes = SIZE_CONFIGS[productType] || SIZE_CONFIGS.normal;
+    sizeSel.innerHTML = '<option value="">Seleccionar talla…</option>' +
+        sizes.map(sz => {
+            const surcharge = SIZE_SURCHARGES_QAD[sz];
+            const label = sz + (surcharge ? ` (+€${surcharge})` : '');
+            return `<option value="${sz}">${label}</option>`;
+        }).join('');
+
+    // patch: show for non-NBA products
+    const allowedPatches = getAllowedPatches(product);
+    patchWrap.style.display = allowedPatches.length > 0 ? '' : 'none';
+    patchInput.placeholder = allowedPatches.length > 0
+        ? 'Ej: ' + (PATCH_DEFINITIONS[allowedPatches[0]] || allowedPatches[0])
+        : '';
+
+    _updateTotal();
+
+    // open
+    _qdBackdrop.classList.add('active');
+    _qdDrawer.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    // mark active btn
+    document.querySelectorAll('.btn-quick-add').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(`.btn-quick-add[data-id="${product.id}"]`);
+    if (activeBtn) activeBtn.classList.add('active');
+}
+
+function _closeDrawer() {
+    if (!_qdDrawer) return;
+    _qdBackdrop.classList.remove('active');
+    _qdDrawer.classList.remove('active');
+    document.body.style.overflow = '';
+    document.querySelectorAll('.btn-quick-add').forEach(b => b.classList.remove('active'));
+    _qdProduct = null;
+}
+
+function _updateTotal() {
+    if (!_qdProduct || !_qdDrawer) return;
+    const size          = _qdDrawer.querySelector('#qad-size').value;
+    const sizeSurcharge = SIZE_SURCHARGES_QAD[size] || 0;
+    const name          = _qdDrawer.querySelector('#qad-name').value.trim();
+    const number        = _qdDrawer.querySelector('#qad-number').value.trim();
+    const patch         = _qdDrawer.querySelector('#qad-patch').value.trim();
+
+    let total = _qdProduct.price + sizeSurcharge;
+    if (name || number) total += 3;
+    if (patch)          total += 2;
+
+    _qdDrawer.querySelector('.qad-total-price').textContent = `€${total.toFixed(2)}`;
+}
+
+function _handleDrawerSubmit() {
+    if (!_qdProduct) return;
+
+    const size = _qdDrawer.querySelector('#qad-size').value;
+    if (!size) {
+        // shake the size select as validation feedback
+        const sizeField = _qdDrawer.querySelector('#qad-size');
+        sizeField.style.borderColor = '#ef4444';
+        sizeField.style.boxShadow   = '0 0 0 3px rgba(239,68,68,0.2)';
+        setTimeout(() => {
+            sizeField.style.borderColor = '';
+            sizeField.style.boxShadow   = '';
+        }, 1200);
+        if (window.Toast) window.Toast.error('Por favor, selecciona una talla');
+        return;
     }
-}
 
-function closeQuickAddPanel(productId) {
-    const panel = document.querySelector(`.quick-add-panel[data-product-id="${productId}"]`);
-    const btn = document.querySelector(`.btn-quick-add[data-id="${productId}"]`);
+    const name   = _qdDrawer.querySelector('#qad-name').value.trim().toUpperCase();
+    const number = _qdDrawer.querySelector('#qad-number').value.trim();
+    const patch  = _qdDrawer.querySelector('#qad-patch').value.trim();
 
-    if (panel) panel.classList.remove('active');
-    if (btn) btn.classList.remove('active');
-}
+    const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+    const sizeSurcharge   = SIZE_SURCHARGES[size] || 0;
+    let totalPrice        = _qdProduct.price + sizeSurcharge;
+    if (name || number) totalPrice += 3;
+    if (patch)          totalPrice += 2;
 
-function closeAllQuickAddPanels() {
-    document.querySelectorAll('.quick-add-panel.active').forEach(panel => {
-        panel.classList.remove('active');
-    });
-    document.querySelectorAll('.btn-quick-add.active').forEach(btn => {
-        btn.classList.remove('active');
-    });
+    const customization = { size, version: 'aficionado', name, number, patch, extras: [] };
+    const cartItem = {
+        id:        _qdProduct.id,
+        name:      _qdProduct.name,
+        image:     _qdProduct.image,
+        basePrice: _qdProduct.price,
+        price:     totalPrice,
+        quantity:  1,
+        customization
+    };
+
+    // button feedback
+    const btn = _qdDrawer.querySelector('#qad-submit-btn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    btn.disabled  = true;
+
+    // fly animation from card image
+    const card = document.querySelector(`.product-card[data-id="${_qdProduct.id}"]`);
+    if (card) animateFlyToCart(card);
+
+    setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-check"></i> ¡Añadido!';
+        addToCart(cartItem);
+
+        const productSnapshot = { ..._qdProduct };
+        setTimeout(() => {
+            _closeDrawer();
+            showUpsellModal(productSnapshot, size, totalPrice);
+        }, 300);
+
+        setTimeout(() => {
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-cart-plus"></i> Añadir al carrito';
+                btn.disabled  = false;
+            }
+        }, 800);
+    }, 200);
 }
 
 function animateFlyToCart(cardElement) {
@@ -651,120 +694,50 @@ function animateFlyToCart(cardElement) {
     if (!img || !cartIcon) return;
 
     const startRect = img.getBoundingClientRect();
-    const endRect = cartIcon.getBoundingClientRect();
+    const endRect   = cartIcon.getBoundingClientRect();
 
     const flyer = document.createElement('img');
     flyer.src = img.src;
     flyer.className = 'cart-fly-item';
-    flyer.style.left = `${startRect.left}px`;
-    flyer.style.top = `${startRect.top}px`;
-    flyer.style.width = `${startRect.width}px`;
+    flyer.style.left   = `${startRect.left}px`;
+    flyer.style.top    = `${startRect.top}px`;
+    flyer.style.width  = `${startRect.width}px`;
     flyer.style.height = `${startRect.height}px`;
     document.body.appendChild(flyer);
 
     setTimeout(() => {
-        flyer.style.left = `${endRect.left + endRect.width / 2 - 15}px`;
-        flyer.style.top = `${endRect.top + endRect.height / 2 - 15}px`;
-        flyer.style.width = '30px';
-        flyer.style.height = '30px';
+        flyer.style.left    = `${endRect.left + endRect.width / 2 - 15}px`;
+        flyer.style.top     = `${endRect.top  + endRect.height / 2 - 15}px`;
+        flyer.style.width   = '30px';
+        flyer.style.height  = '30px';
         flyer.style.opacity = '0.2';
     }, 50);
 
-    setTimeout(() => {
-        flyer.remove();
-    }, 700);
+    setTimeout(() => flyer.remove(), 700);
 }
 
-function handleQuickAddSubmit(form, product) {
-    const sizeSelect = form.querySelector('.quick-size');
-    const nameInput = form.querySelector('.quick-name');
-    const numberInput = form.querySelector('.quick-number');
-    const patchInput = form.querySelector('.quick-patch-input');
-
-    const size = sizeSelect?.value;
-    if (!size) {
-        if (window.Toast) {
-            window.Toast.error('Por favor, selecciona una talla');
-        } else {
-            alert('Por favor, selecciona una talla');
-        }
-        return;
-    }
-
-    const name = nameInput?.value?.trim().toUpperCase() || '';
-    const number = numberInput?.value?.trim() || '';
-
-    const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
-    const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
-    let totalPrice = product.price + sizeSurcharge;
-
-    // Personalización: nombre O dorsal = +€3 (no es necesario tener ambos)
-    if (name || number) {
-        totalPrice += 3;
-    }
-
-    const patch = patchInput?.value?.trim() || '';
-    if (patch) {
-        totalPrice += 2;
-    }
-
-    const customization = {
-        size: size,
-        version: 'aficionado', 
-        name: name,
-        number: number,
-        patch: patch,
-        extras: []
-    };
-
-    const cartItem = {
-        id: product.id,
-        name: product.name,
-        image: product.image,
-        basePrice: product.price,
-        price: totalPrice,
-        quantity: 1,
-        customization: customization
-    };
-
-    // Microinteracción en botón (Spinner + Checkmark + Vuelo) (Mejora 4)
-    const submitBtn = form.querySelector('.btn-add-quick');
-    const originalHTML = submitBtn ? submitBtn.innerHTML : 'Añadir';
-
-    if (submitBtn) {
-        submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
-        submitBtn.disabled = true;
-    }
-
-    // Ejecutar vuelo
-    const card = form.closest('.product-card');
-    if (card) {
-        animateFlyToCart(card);
-    }
-
-    setTimeout(() => {
-        if (submitBtn) submitBtn.innerHTML = '<i class="fas fa-check"></i>';
-        
-        // Agregar al carrito real
-        addToCart(cartItem);
-
-        setTimeout(() => {
-            closeQuickAddPanel(product.id.toString());
-            form.reset();
-            const optionalFields = form.querySelector('.optional-fields');
-            const optionalToggle = form.querySelector('.optional-toggle');
-            if (optionalFields) optionalFields.classList.remove('show');
-            if (optionalToggle) optionalToggle.classList.remove('expanded');
-
-            if (submitBtn) {
-                submitBtn.innerHTML = originalHTML;
-                submitBtn.disabled = false;
+function setupQuickAddListeners() {
+    document.querySelectorAll('.btn-quick-add').forEach(btn => {
+        btn.addEventListener('click', (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            const productId = parseInt(btn.dataset.id);
+            const product   = allProducts.find(p => p.id === productId);
+            if (!product) return;
+            // toggle: if same product is already open, close
+            if (_qdProduct?.id === productId && _qdDrawer?.classList.contains('active')) {
+                _closeDrawer();
+            } else {
+                _openDrawer(product);
             }
-
-            showUpsellModal(product, size, totalPrice);
-        }, 150);
-    }, 200);
+        });
+    });
 }
+
+function toggleQuickAddPanel() {}   // kept for compatibility, no-op
+function closeQuickAddPanel()  {}
+function closeAllQuickAddPanels() { _closeDrawer(); }
+
 
 function init() {
     
@@ -1588,8 +1561,8 @@ function handleFormSubmit(e) {
         return;
     }
 
-    if (number && (number < 0 || number > 99)) {
-        alert('El dorsal debe estar entre 0 y 99');
+    if (number && (number < 0 || number > 999)) {
+        alert('El dorsal debe estar entre 0 y 999');
         return;
     }
 
