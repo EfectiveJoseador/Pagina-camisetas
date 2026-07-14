@@ -102,6 +102,8 @@ self.addEventListener('fetch', (event) => {
     'api.web3forms.com',
     'www.paypal.com',
     'analytics.vercel.com',
+    'doubleclick.net',
+    'googleadservices.com',
   ];
 
   const isPassThrough = PASS_THROUGH_DOMAINS.some(domain => url.includes(domain));
