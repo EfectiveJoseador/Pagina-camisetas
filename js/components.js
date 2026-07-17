@@ -91,11 +91,22 @@ const Components = {
             baseDate.setDate(baseDate.getDate() + 1);
         }
         
+        const adjustToNearestWorkingDay = (date) => {
+            const day = date.getDay();
+            if (day === 6) { // Saturday -> Friday
+                date.setDate(date.getDate() - 1);
+            } else if (day === 0) { // Sunday -> Monday
+                date.setDate(date.getDate() + 1);
+            }
+            return date;
+        };
+
         const minD = new Date(baseDate);
-        minD.setDate(minD.getDate() + 11);
+        minD.setDate(minD.getDate() + 12);
+        adjustToNearestWorkingDay(minD);
         
-        const maxD = new Date(baseDate);
-        maxD.setDate(maxD.getDate() + 17);
+        const maxD = new Date(minD);
+        maxD.setDate(minD.getDate() + 7);
         
         const opts = { day: 'numeric', month: 'short' };
         const minDateStr = minD.toLocaleDateString('es-ES', opts);
@@ -792,11 +803,22 @@ document.addEventListener('DOMContentLoaded', () => {
             baseDate.setDate(baseDate.getDate() + 1);
         }
         
+        const adjustToNearestWorkingDay = (date) => {
+            const day = date.getDay();
+            if (day === 6) { // Saturday -> Friday
+                date.setDate(date.getDate() - 1);
+            } else if (day === 0) { // Sunday -> Monday
+                date.setDate(date.getDate() + 1);
+            }
+            return date;
+        };
+
         const minDate = new Date(baseDate);
-        minDate.setDate(minDate.getDate() + 11);
+        minDate.setDate(minDate.getDate() + 12);
+        adjustToNearestWorkingDay(minDate);
         
-        const maxDate = new Date(baseDate);
-        maxDate.setDate(maxDate.getDate() + 17);
+        const maxDate = new Date(minDate);
+        maxDate.setDate(minDate.getDate() + 7);
         
         const options = { day: 'numeric', month: 'short' };
         const minDateStr = minDate.toLocaleDateString('es-ES', options);
