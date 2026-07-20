@@ -308,6 +308,12 @@
                             <span>Bizum (Te contactaremos para completar el pago)</span>
                             <i class="fas fa-mobile-alt"></i>
                         </label>
+
+                        <label class="payment-option">
+                            <input type="radio" name="payment" value="revolut">
+                            <span>Revolut (Te contactaremos para completar el pago)</span>
+                            <i class="fas fa-credit-card"></i>
+                        </label>
                     </div>
 
                     <div id="paypal-info" class="payment-info-box" style="margin-top: 1rem;">
@@ -328,6 +334,15 @@
                         </div>
                     </div>
 
+                    <div id="revolut-info" class="payment-info-box" style="display:none; margin-top:1rem;">
+                        <div style="background: rgba(0, 150, 136, 0.05); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;">
+                            <p style="color: var(--text-main); margin: 0; font-size: 0.9rem;">
+                                <i class="fas fa-info-circle" style="color: #00bfa5; margin-right: 0.4rem;"></i>
+                                Te contactaremos por TikTok para enviarte los datos de Revolut y confirmar el pago.
+                            </p>
+                        </div>
+                    </div>
+
                     <div class="checkout-action-wrapper" style="margin-top: 1.5rem;">
                         <button type="button" id="confirm-order-btn" class="btn btn-block btn-primary btn-sticky-mobile">
                             <i class="fas fa-check-circle"></i> Confirmar Pedido
@@ -344,7 +359,7 @@
     <script type="module" src="../js/firebase-global.js?v=5"></script>
     <script type="module" src="../js/analytics.js?v=5"></script>
     <script type="module" src="../js/carrito.js?v=10"></script>
-    <script type="module" src="../js/checkout.js?v=7"></script>
+    <script type="module" src="../js/checkout.js?v=8"></script>
 
 
 </body>

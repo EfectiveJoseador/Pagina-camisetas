@@ -195,7 +195,7 @@ function renderOrders() {
         const truncatedProducts = products.length > 50 ? products.substring(0, 50) + '...' : products;
         const isPaid = order.payment?.paid === true;
         const paymentMethod = order.paymentMethod || 'N/A';
-        const needsConfirmation = (['bizum', 'revtag', 'transferencia'].includes(paymentMethod)) && !isPaid;
+        const needsConfirmation = (['bizum', 'revtag', 'revolut', 'transferencia'].includes(paymentMethod)) && !isPaid;
 
         const sOrderId = sanitizeHTML(order.orderId || '-');
         const sCustomerName = sanitizeHTML(order.customerName || 'N/A');

@@ -246,6 +246,7 @@ function initPaymentMethods() {
     const paymentRadios = document.querySelectorAll('input[name="payment"]');
     const paypalInfo = document.getElementById('paypal-info');
     const bizumInfo = document.getElementById('bizum-info');
+    const revolutInfo = document.getElementById('revolut-info');
 
     if (!paymentRadios || paymentRadios.length === 0) return;
 
@@ -254,12 +255,14 @@ function initPaymentMethods() {
     if (activeRadio) {
         if (paypalInfo) paypalInfo.style.display = activeRadio.value === 'paypal' ? 'block' : 'none';
         if (bizumInfo) bizumInfo.style.display = activeRadio.value === 'bizum' ? 'block' : 'none';
+        if (revolutInfo) revolutInfo.style.display = activeRadio.value === 'revolut' ? 'block' : 'none';
     }
 
     paymentRadios.forEach(radio => {
         radio.addEventListener('change', (e) => {
             if (paypalInfo) paypalInfo.style.display = e.target.value === 'paypal' ? 'block' : 'none';
             if (bizumInfo) bizumInfo.style.display = e.target.value === 'bizum' ? 'block' : 'none';
+            if (revolutInfo) revolutInfo.style.display = e.target.value === 'revolut' ? 'block' : 'none';
 
             // Reset checkout button state if payment method changes
             const confirmBtn = document.getElementById('confirm-order-btn');

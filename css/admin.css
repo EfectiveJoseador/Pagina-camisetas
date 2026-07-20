@@ -338,6 +338,12 @@ body {
     color: #00bfa5;
 }
 
+.payment-method.revolut,
+.payment-method.revtag {
+    background: rgba(99, 102, 241, 0.2);
+    color: #6366f1;
+}
+
 .payment-status {
     font-size: 0.8rem;
 }
