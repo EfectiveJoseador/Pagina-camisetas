@@ -1372,23 +1372,44 @@ function applyFilters(updateURL = true) {
 
     // ── Nueva Temporada filter ────────────────────────────────────────────────
     if (selectedNewSeason) {
-        const currentYear = new Date().getFullYear(); // e.g. 2026
-        const targetYear  = currentYear + 1;          // e.g. 2027
+        // Cap: any 2-digit year < 30 expands to 2000s correctly (e.g. 26→2026),
+        // but years like 88, 91 would expand to 2088, 2091 — clearly retro.
+        // We ignore any year above this ceiling to avoid retro shirts winning.
+        const MAX_SEASON_YEAR = new Date().getFullYear() + 10; // e.g. 2036
 
-        const filterBySeason = (year) =>
-            filteredProducts.filter(p => {
-                const season = extractSeasonYears(p.name);
-                return season && (season[0] === year || season[1] === year);
-            });
+        // Helper to extract the highest VALID (non-retro) year from a single product
+        const getMaxYearForProduct = (p) => {
+            let y = 0;
+            const season = extractSeasonYears(p.name);
+            if (season) {
+                if (season[0] <= MAX_SEASON_YEAR && season[0] > y) y = season[0];
+                if (season[1] <= MAX_SEASON_YEAR && season[1] > y) y = season[1];
+            }
+            if (p.temporada) {
+                const tSeason = extractSeasonYears(String(p.temporada));
+                if (tSeason) {
+                    if (tSeason[0] <= MAX_SEASON_YEAR && tSeason[0] > y) y = tSeason[0];
+                    if (tSeason[1] <= MAX_SEASON_YEAR && tSeason[1] > y) y = tSeason[1];
+                } else {
+                    const plain = parseInt(p.temporada, 10);
+                    if (!isNaN(plain) && plain > 2000 && plain <= MAX_SEASON_YEAR && plain > y) y = plain;
+                }
+            }
+            return y;
+        };
 
-        let seasonFiltered = filterBySeason(targetYear);
+        // Find the most recent VALID year within the already-filtered set
+        // (respects league/team/search filters, so "España" finds its own max)
+        let maxYear = 0;
+        filteredProducts.forEach(p => {
+            const y = getMaxYearForProduct(p);
+            if (y > maxYear) maxYear = y;
+        });
 
-        // Fallback: if next season isn't available yet, show current season
-        if (seasonFiltered.length === 0) {
-            seasonFiltered = filterBySeason(currentYear);
+        // Keep only products whose season contains that maximum year
+        if (maxYear > 0) {
+            filteredProducts = filteredProducts.filter(p => getMaxYearForProduct(p) === maxYear);
         }
-
-        filteredProducts = seasonFiltered;
     }
 
     // Sorting logic
