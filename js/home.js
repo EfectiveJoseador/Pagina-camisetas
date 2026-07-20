@@ -374,15 +374,15 @@ function _openDrawer(product) {
     thumb.src = getMiniImagePath(product.image);
     thumb.alt = product.name;
     nameEl.textContent  = product.name;
-    priceEl.textContent = \`€\${product.price.toFixed(2)}\`;
+    priceEl.textContent = `€${product.price.toFixed(2)}`;
 
     const productType = getProductType(product);
     const sizes = SIZE_CONFIGS[productType] || SIZE_CONFIGS.normal;
     sizeSel.innerHTML = '<option value="">Seleccionar talla…</option>' +
         sizes.map(sz => {
             const surcharge = SIZE_SURCHARGES_QAD[sz];
-            const label = sz + (surcharge ? \` (+€\${surcharge})\` : '');
-            return \`<option value="\${sz}">\${label}</option>\`;
+            const label = sz + (surcharge ? ` (+€${surcharge})` : '');
+            return `<option value="${sz}">${label}</option>`;
         }).join('');
 
     const allowedPatches = getAllowedPatches(product);
@@ -398,7 +398,7 @@ function _openDrawer(product) {
     document.body.style.overflow = 'hidden';
 
     document.querySelectorAll('.btn-quick-add').forEach(b => b.classList.remove('active'));
-    const activeBtn = document.querySelector(\`.btn-quick-add[data-id="\${product.id}"]\`);
+    const activeBtn = document.querySelector(`.btn-quick-add[data-id="${product.id}"]`);
     if (activeBtn) activeBtn.classList.add('active');
 }
 
@@ -424,7 +424,7 @@ function _updateTotal() {
     if (name || number) total += 3;
     if (patch)          total += 2;
 
-    _qdDrawer.querySelector('.qad-total-price').textContent = \`€\${total.toFixed(2)}\`;
+    _qdDrawer.querySelector('.qad-total-price').textContent = `€${total.toFixed(2)}`;
 }
 
 function _handleDrawerSubmit() {
@@ -468,7 +468,7 @@ function _handleDrawerSubmit() {
     btn.disabled  = true;
 
     // animate fly to cart
-    const card = document.querySelector(\`.product-card[data-id="\${_qdProduct.id}"]\`);
+    const card = document.querySelector(`.product-card[data-id="${_qdProduct.id}"]`);
     if (card) animateFlyToCart(card);
 
     setTimeout(() => {
