@@ -1031,19 +1031,6 @@ const products = [
         "tipo": "local"
     },
     {
-        "id": 882796,
-        "sku": "6605",
-        "name": "España 2026 Local",
-        "category": "futbol",
-        "league": "selecciones",
-        "image": "/assets/productos/Yupoo/218139402/1.webp",
-        "images": [
-            "/assets/productos/Yupoo/218139402/2.webp"
-        ],
-        "tipo": "local",
-        "temporada": "2026"
-    },
-    {
         "id": 431137,
         "sku": "8626",
         "name": "Costa Rica 2026 Local",
@@ -3799,22 +3786,6 @@ const products = [
         "oldPrice": 25
     },
     {
-        "id": 640573,
-        "sku": "4475",
-        "name": "España 2026 Visitante",
-        "slug": "espana-2026-visitante",
-        "category": "futbol",
-        "league": "selecciones",
-        "image": "/assets/productos/Yupoo/640573/1.webp",
-        "images": [
-            "/assets/productos/Yupoo/640573/2.webp"
-        ],
-        "temporada": "2026",
-        "tipo": "visitante",
-        "price": 19.9,
-        "oldPrice": 25
-    },
-    {
         "id": 971378,
         "sku": "6754",
         "name": "Estados Unidos 2026 Visitante",
@@ -5988,23 +5959,6 @@ const products = [
         "tipo": "portero",
         "price": 19.9,
         "oldPrice": 25
-    },
-    {
-        "id": 235473,
-        "sku": "8077",
-        "name": "España 2026 Local (Niño)",
-        "slug": "espana-2026-local-nino",
-        "category": "futbol",
-        "league": "selecciones",
-        "image": "/assets/productos/Yupoo/235473/1.webp",
-        "images": [
-            "/assets/productos/Yupoo/235473/2.webp"
-        ],
-        "temporada": "2026",
-        "tipo": "local",
-        "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
     },
     {
         "id": 294234,
@@ -13339,25 +13293,6 @@ const products = [
         "sku": "9985"
     },
     {
-        "id": 575253,
-        "name": "España 2026 Visitante (Niño)",
-        "slug": "espana-2026-visitante-nino",
-        "category": "futbol",
-        "league": "selecciones",
-        "image": "/assets/productos/Yupoo/575253/1.webp",
-        "images": [
-            "/assets/productos/Yupoo/575253/2.webp",
-            "/assets/productos/Yupoo/575253/3.webp",
-            "/assets/productos/Yupoo/575253/4.webp"
-        ],
-        "temporada": "2026",
-        "tipo": "visitante",
-        "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
-        "sku": "9252"
-    },
-    {
         "id": 903720,
         "name": "Athletic Club 2026/27 Local (Niño)",
         "slug": "athletic-club-202627-local-nino",
@@ -13642,7 +13577,7 @@ const products = [
     },
     {
         "id": 763152,
-        "name": "España 2026 Visitante (Niño)",
+        "name": "España 2026 Mundial 2 estrellas Visitante (Niño)",
         "slug": "espana-2026-visitante-nino",
         "category": "futbol",
         "league": "selecciones",
@@ -13654,13 +13589,13 @@ const products = [
         "tipo": "visitante",
         "kids": true,
         "customPatches": "espana26",
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 23.9,
+        "oldPrice": 29,
         "sku": "3992"
     },
     {
         "id": 240028,
-        "name": "España 2026 Local (Niño)",
+        "name": "España 2026 Mundial 2 estrellas Local (Niño)",
         "slug": "espana-2026-local-nino",
         "category": "futbol",
         "league": "selecciones",
@@ -13673,8 +13608,8 @@ const products = [
         "tipo": "local",
         "kids": true,
         "customPatches": "espana26",
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 23.9,
+        "oldPrice": 29,
         "sku": "5104"
     }
 ];

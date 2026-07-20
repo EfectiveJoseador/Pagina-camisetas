@@ -377,12 +377,11 @@ async function confirmOrder() {
     }
 
     const selectedPayment = document.querySelector('input[name="payment"]:checked');
-    if (!selectedPayment) {
-        alert('Por favor, selecciona un método de pago');
-        return;
-    }
-
     const paymentMethod = selectedPayment.value;
+
+    if (paymentMethod === 'paypal') {
+        await showPayPalWarningModal();
+    }
 
     const selectedAddress = addresses.find(a => a.id === selectedAddressId);
     const calculations = Cart.calculateTotal();
@@ -1137,4 +1136,109 @@ if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', setupPromoCodeListeners);
 } else {
     setupPromoCodeListeners();
+}
+
+function showPayPalWarningModal() {
+    return new Promise((resolve) => {
+        const modal = document.createElement('div');
+        modal.id = 'paypal-warning-modal';
+        modal.style.cssText = `
+            position: fixed;
+            inset: 0;
+            z-index: 10500;
+            background: rgba(0, 0, 0, 0.85);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+            backdrop-filter: blur(5px);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            font-family: inherit;
+        `;
+
+        modal.innerHTML = `
+            <div style="
+                background: var(--bg-card, #1f2937);
+                border: 2px solid #f59e0b;
+                border-radius: 16px;
+                padding: 2rem;
+                max-width: 500px;
+                width: 100%;
+                box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
+                text-align: center;
+                transform: scale(0.9);
+                transition: transform 0.3s ease;
+                color: var(--text-main, #f3f4f6);
+            ">
+                <div style="font-size: 3rem; color: #f59e0b; margin-bottom: 1rem;">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1.25rem; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.5px;">
+                    ¡Atención Muy Importante!
+                </h3>
+                <div style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem; text-align: left; color: var(--text-main, #f3f4f6);">
+                    <p style="margin-bottom: 1rem;">
+                        Para que tu pedido sea procesado correctamente, es <strong>totalmente obligatorio</strong> realizar el pago bajo la modalidad de <strong>"Amigos y Familiares"</strong> en PayPal.
+                    </p>
+                    <p style="margin-bottom: 0; padding: 0.85rem; background: rgba(245, 158, 11, 0.12); border-left: 4px solid #f59e0b; border-radius: 6px; font-weight: 500;">
+                        ⚠️ Si realizas el pago como "Producto o Servicio" <strong>no será válido</strong>, tu pedido se cancelará automáticamente y se te devolverá el importe.
+                    </p>
+                </div>
+                <button id="paypal-warning-btn" disabled style="
+                    width: 100%;
+                    padding: 0.85rem;
+                    background: #f59e0b;
+                    color: #000;
+                    border: none;
+                    border-radius: 30px;
+                    font-size: 0.95rem;
+                    font-weight: 700;
+                    cursor: not-allowed;
+                    opacity: 0.65;
+                    transition: all 0.2s ease;
+                    text-transform: uppercase;
+                    letter-spacing: 0.5px;
+                ">
+                    Leer aviso (5s)
+                </button>
+            </div>
+        `;
+
+        document.body.appendChild(modal);
+        
+        requestAnimationFrame(() => {
+            modal.style.opacity = '1';
+            modal.querySelector('div').style.transform = 'scale(1)';
+        });
+
+        const btn = modal.querySelector('#paypal-warning-btn');
+        let timeLeft = 5;
+
+        const interval = setInterval(() => {
+            timeLeft--;
+            if (timeLeft <= 0) {
+                clearInterval(interval);
+                btn.disabled = false;
+                btn.textContent = 'He leído y acepto, proceder al pago';
+                btn.style.cursor = 'pointer';
+                btn.style.opacity = '1';
+                btn.style.background = 'linear-gradient(90deg, #6366f1, #a855f7)';
+                btn.style.color = '#fff';
+            } else {
+                btn.textContent = `Leer aviso (${timeLeft}s)`;
+            }
+        }, 1000);
+
+        btn.addEventListener('click', () => {
+            if (timeLeft > 0) return;
+            
+            modal.style.opacity = '0';
+            modal.querySelector('div').style.transform = 'scale(0.9)';
+            setTimeout(() => {
+                modal.remove();
+                resolve();
+            }, 300);
+        });
+    });
 }

@@ -17,6 +17,9 @@ function applySpecialPricing() {
         } else if (isRetro) {
             oldPrice = 30.00;
             newPrice = 24.90;
+        } else if (product.customPatches === 'espana26' && isKids) {
+            oldPrice = 29.00;
+            newPrice = 23.90;
         } else if (isKids) {
             oldPrice = 27.00;
             newPrice = 21.90;
