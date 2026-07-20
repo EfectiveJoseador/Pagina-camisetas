@@ -132,6 +132,7 @@ async function renderBestSellers() {
                         <img src="${getMiniImagePath(product.image)}" alt="${product.name}" class="primary-image" loading="lazy">
                         ${secondaryImg ? `<img src="${secondaryImg}" alt="${product.name} - Vista 2" class="secondary-image" loading="lazy">` : ''}
                     </a>
+                    <button class="btn-quick-add" data-id="${product.id}" title="Añadir rápido"><i class="fas fa-shopping-basket"></i></button>
                     <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
                 </div>
                 <div class="product-info">
@@ -157,6 +158,7 @@ async function renderBestSellers() {
                         <img src="${getMiniImagePath(product.image)}" alt="${product.name}" class="primary-image" loading="lazy">
                         ${secondaryImg ? `<img src="${secondaryImg}" alt="${product.name} - Vista 2" class="secondary-image" loading="lazy">` : ''}
                     </a>
+                    <button class="btn-quick-add" data-id="${product.id}" title="Añadir rápido"><i class="fas fa-shopping-basket"></i></button>
                     <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
                 </div>
                 <div class="product-info">
@@ -170,6 +172,15 @@ async function renderBestSellers() {
             </article>
         `}).join('');
     }
+
+    // Attach delegated event listener for the quick-add buttons
+    grid.addEventListener('click', e => {
+        const btn = e.target.closest('.btn-quick-add');
+        if (!btn) return;
+        const productId = parseInt(btn.dataset.id, 10);
+        const product = products.find(p => p.id === productId);
+        if (product) _openDrawer(product);
+    });
 }
 async function getGlobalFeaturedProducts() {
 
@@ -200,4 +211,354 @@ function saveToSessionStorage(productIds) {
 function getRandomFeaturedProducts() {
     const shuffled = [...products].sort(() => Math.random() - 0.5);
     return shuffled.slice(0, FEATURED_CONFIG.PRODUCT_COUNT).map(p => p.id);
+}
+
+// ─── GLOBAL QUICK-ADD DRAWER FOR HOME ─────────────────────────────────────────
+
+let _qdProduct   = null;
+let _qdBackdrop  = null;
+let _qdDrawer    = null;
+let _qdInited    = false;
+
+const SIZE_SURCHARGES_QAD = { '2XL': 1, '3XL': 2, '4XL': 2 };
+
+const SIZE_CONFIGS = {
+    normal: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+    nba: ['S', 'M', 'L', 'XL', '2XL'],
+    kids: ['16', '18', '20', '22', '24', '26', '28'],
+    mujer: ['S', 'M', 'L', 'XL', '2XL']
+};
+
+const PATCH_DEFINITIONS = {
+    ucl: 'Champions League',
+    laliga: 'LaLiga',
+    premier: 'Premier League',
+    serie_a: 'Serie A',
+    ligue1: 'Ligue 1',
+    bundesliga: 'Bundesliga',
+    worldcup: 'World Cup'
+};
+
+function getProductType(p) {
+    const nameLower = p.name.toLowerCase();
+    if (p.category === 'nba' || p.league === 'nba') return 'nba';
+    if (p.kids || nameLower.includes('niño') || nameLower.includes('kids')) return 'kids';
+    if (nameLower.includes('mujer') || nameLower.includes('femenino')) return 'mujer';
+    return 'normal';
+}
+
+function getAllowedPatches(p) {
+    if (getProductType(p) === 'nba') return [];
+    if (p.league === 'laliga') return ['laliga', 'ucl'];
+    if (p.league === 'premier') return ['premier', 'ucl'];
+    if (p.league === 'serie_a') return ['serie_a', 'ucl'];
+    if (p.league === 'ligue1') return ['ligue1', 'ucl'];
+    if (p.league === 'bundesliga') return ['bundesliga', 'ucl'];
+    if (p.league === 'retro') return ['ucl', 'worldcup'];
+    return ['ucl'];
+}
+
+function _buildDrawer() {
+    if (_qdInited) return;
+    _qdInited = true;
+
+    _qdBackdrop = document.createElement('div');
+    _qdBackdrop.className = 'qad-backdrop';
+    document.body.appendChild(_qdBackdrop);
+
+    _qdDrawer = document.createElement('div');
+    _qdDrawer.className = 'qad-drawer';
+    _qdDrawer.innerHTML = `
+        <div class="qad-handle"></div>
+        <div class="qad-body">
+            <div class="qad-header">
+                <img class="qad-thumb" src="" alt="">
+                <div class="qad-header-info">
+                    <div class="qad-product-name"></div>
+                    <div class="qad-base-price">Desde <strong></strong></div>
+                </div>
+                <button class="qad-close" title="Cerrar"><i class="fas fa-times"></i></button>
+            </div>
+
+            <div class="qad-section-label"><i class="fas fa-ruler"></i> Talla <span style="color:#ef4444;margin-left:2px">*</span></div>
+            <div class="qad-field" style="margin-bottom:1rem">
+                <select id="qad-size">
+                    <option value="">Seleccionar talla…</option>
+                </select>
+            </div>
+
+            <div class="qad-section-label"><i class="fas fa-tshirt"></i> Personalización <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€3 si rellenas algún campo)</span></div>
+            <div class="qad-custom-grid">
+                <div class="qad-field">
+                    <label>Nombre</label>
+                    <input id="qad-name" type="text" placeholder="Ej: MESSI" maxlength="15" autocomplete="off">
+                </div>
+                <div class="qad-field">
+                    <label>Dorsal</label>
+                    <input id="qad-number" type="text" placeholder="Ej: 10" maxlength="3" inputmode="numeric">
+                </div>
+            </div>
+
+            <div class="qad-patch-wrap" style="display:none">
+                <div class="qad-section-label"><i class="fas fa-shield-alt"></i> Parche <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€2 si rellenas)</span></div>
+                <div class="qad-field">
+                    <input id="qad-patch" type="text" placeholder="Ej: Champions League" maxlength="30" autocomplete="off">
+                </div>
+            </div>
+
+            <div class="qad-footer">
+                <div class="qad-total">
+                    <span class="qad-total-label">Total</span>
+                    <span class="qad-total-price">€0.00</span>
+                </div>
+                <button class="qad-submit" id="qad-submit-btn">
+                    <i class="fas fa-cart-plus"></i> Añadir al carrito
+                </button>
+            </div>
+        </div>
+    `;
+    document.body.appendChild(_qdDrawer);
+
+    _qdBackdrop.addEventListener('click', _closeDrawer);
+    _qdDrawer.querySelector('.qad-close').addEventListener('click', _closeDrawer);
+    document.addEventListener('keydown', e => { if (e.key === 'Escape') _closeDrawer(); });
+
+    _qdDrawer.querySelector('#qad-size').addEventListener('change', _updateTotal);
+
+    _qdDrawer.querySelector('#qad-name').addEventListener('input', e => {
+        let v = e.target.value.replace(/[^A-Za-zÀ-ÿ\s\.]/g, '');
+        if (v.length > 15) v = v.slice(0, 15);
+        e.target.value = v;
+        _updateTotal();
+    });
+    _qdDrawer.querySelector('#qad-number').addEventListener('input', e => {
+        let v = e.target.value.replace(/\D/g, '');
+        if (v.length > 3) v = v.slice(0, 3);
+        if (v !== '' && parseInt(v) > 999) v = '999';
+        e.target.value = v;
+        _updateTotal();
+    });
+    _qdDrawer.querySelector('#qad-patch').addEventListener('input', _updateTotal);
+
+    _qdDrawer.querySelector('#qad-submit-btn').addEventListener('click', _handleDrawerSubmit);
+
+    let touchStartY = 0;
+    _qdDrawer.querySelector('.qad-handle').addEventListener('touchstart', e => {
+        touchStartY = e.touches[0].clientY;
+    }, { passive: true });
+    _qdDrawer.querySelector('.qad-handle').addEventListener('touchmove', e => {
+        const delta = e.touches[0].clientY - touchStartY;
+        if (delta > 60) _closeDrawer();
+    }, { passive: true });
+}
+
+function _openDrawer(product) {
+    _buildDrawer();
+    _qdProduct = product;
+
+    const body       = _qdDrawer.querySelector('.qad-body');
+    const thumb      = _qdDrawer.querySelector('.qad-thumb');
+    const nameEl     = _qdDrawer.querySelector('.qad-product-name');
+    const priceEl    = _qdDrawer.querySelector('.qad-base-price strong');
+    const sizeSel    = _qdDrawer.querySelector('#qad-size');
+    const patchWrap  = _qdDrawer.querySelector('.qad-patch-wrap');
+    const patchInput = _qdDrawer.querySelector('#qad-patch');
+    const nameInput  = _qdDrawer.querySelector('#qad-name');
+    const numInput   = _qdDrawer.querySelector('#qad-number');
+
+    nameInput.value  = '';
+    numInput.value   = '';
+    patchInput.value = '';
+    body.scrollTop   = 0;
+
+    thumb.src = getMiniImagePath(product.image);
+    thumb.alt = product.name;
+    nameEl.textContent  = product.name;
+    priceEl.textContent = \`€\${product.price.toFixed(2)}\`;
+
+    const productType = getProductType(product);
+    const sizes = SIZE_CONFIGS[productType] || SIZE_CONFIGS.normal;
+    sizeSel.innerHTML = '<option value="">Seleccionar talla…</option>' +
+        sizes.map(sz => {
+            const surcharge = SIZE_SURCHARGES_QAD[sz];
+            const label = sz + (surcharge ? \` (+€\${surcharge})\` : '');
+            return \`<option value="\${sz}">\${label}</option>\`;
+        }).join('');
+
+    const allowedPatches = getAllowedPatches(product);
+    patchWrap.style.display = allowedPatches.length > 0 ? '' : 'none';
+    patchInput.placeholder = allowedPatches.length > 0
+        ? 'Ej: ' + (PATCH_DEFINITIONS[allowedPatches[0]] || allowedPatches[0])
+        : '';
+
+    _updateTotal();
+
+    _qdBackdrop.classList.add('active');
+    _qdDrawer.classList.add('active');
+    document.body.style.overflow = 'hidden';
+
+    document.querySelectorAll('.btn-quick-add').forEach(b => b.classList.remove('active'));
+    const activeBtn = document.querySelector(\`.btn-quick-add[data-id="\${product.id}"]\`);
+    if (activeBtn) activeBtn.classList.add('active');
+}
+
+function _closeDrawer() {
+    if (!_qdDrawer) return;
+    _qdBackdrop.classList.remove('active');
+    _qdDrawer.classList.remove('active');
+    document.body.style.overflow = '';
+    setTimeout(() => {
+        document.querySelectorAll('.btn-quick-add').forEach(b => b.classList.remove('active'));
+    }, 300);
+}
+
+function _updateTotal() {
+    if (!_qdProduct || !_qdDrawer) return;
+    const size          = _qdDrawer.querySelector('#qad-size').value;
+    const sizeSurcharge = SIZE_SURCHARGES_QAD[size] || 0;
+    const name          = _qdDrawer.querySelector('#qad-name').value.trim();
+    const number        = _qdDrawer.querySelector('#qad-number').value.trim();
+    const patch         = _qdDrawer.querySelector('#qad-patch').value.trim();
+
+    let total = _qdProduct.price + sizeSurcharge;
+    if (name || number) total += 3;
+    if (patch)          total += 2;
+
+    _qdDrawer.querySelector('.qad-total-price').textContent = \`€\${total.toFixed(2)}\`;
+}
+
+function _handleDrawerSubmit() {
+    if (!_qdProduct) return;
+
+    const size = _qdDrawer.querySelector('#qad-size').value;
+    if (!size) {
+        const sizeField = _qdDrawer.querySelector('#qad-size');
+        sizeField.style.borderColor = '#ef4444';
+        sizeField.style.boxShadow   = '0 0 0 3px rgba(239,68,68,0.2)';
+        setTimeout(() => {
+            sizeField.style.borderColor = '';
+            sizeField.style.boxShadow   = '';
+        }, 1200);
+        if (window.Toast) window.Toast.error('Por favor, selecciona una talla');
+        return;
+    }
+
+    const name   = _qdDrawer.querySelector('#qad-name').value.trim().toUpperCase();
+    const number = _qdDrawer.querySelector('#qad-number').value.trim();
+    const patch  = _qdDrawer.querySelector('#qad-patch').value.trim();
+
+    const sizeSurcharge = SIZE_SURCHARGES_QAD[size] || 0;
+    let totalPrice      = _qdProduct.price + sizeSurcharge;
+    if (name || number) totalPrice += 3;
+    if (patch)          totalPrice += 2;
+
+    const customization = { size, version: 'aficionado', name, number, patch, extras: [] };
+    const cartItem = {
+        id:        _qdProduct.id,
+        name:      _qdProduct.name,
+        image:     _qdProduct.image,
+        basePrice: _qdProduct.price,
+        price:     totalPrice,
+        quantity:  1,
+        customization
+    };
+
+    const btn = _qdDrawer.querySelector('#qad-submit-btn');
+    btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
+    btn.disabled  = true;
+
+    // animate fly to cart
+    const card = document.querySelector(\`.product-card[data-id="\${_qdProduct.id}"]\`);
+    if (card) animateFlyToCart(card);
+
+    setTimeout(() => {
+        btn.innerHTML = '<i class="fas fa-check"></i> ¡Añadido!';
+        addToCart(cartItem);
+
+        const productSnapshot = { ..._qdProduct };
+        setTimeout(() => {
+            _closeDrawer();
+            if (typeof showUpsellModal === 'function') {
+                showUpsellModal(productSnapshot, size, totalPrice);
+            } else if (window.Toast) {
+                window.Toast.success('Producto añadido al carrito');
+            }
+        }, 300);
+
+        setTimeout(() => {
+            if (btn) {
+                btn.innerHTML = '<i class="fas fa-cart-plus"></i> Añadir al carrito';
+                btn.disabled  = false;
+            }
+        }, 800);
+    }, 200);
+}
+
+function addToCart(item) {
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const existingIndex = cart.findIndex(cartItem =>
+        cartItem.id === item.id &&
+        JSON.stringify(cartItem.customization) === JSON.stringify(item.customization)
+    );
+
+    if (existingIndex > -1) {
+        cart[existingIndex].quantity += 1;
+    } else {
+        cart.push(item);
+    }
+
+    localStorage.setItem('cart', JSON.stringify(cart));
+    updateCartCount();
+}
+
+function updateCartCount() {
+    const cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    const totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+    const cartBadge = document.getElementById('cart-count');
+    if (cartBadge) {
+        cartBadge.textContent = totalItems;
+        cartBadge.classList.remove('pulse-animation');
+        void cartBadge.offsetWidth;
+        cartBadge.classList.add('pulse-animation');
+    }
+}
+
+function animateFlyToCart(cardElement) {
+    const img = cardElement.querySelector('img');
+    const cartIcon = document.querySelector('.fa-shopping-cart');
+    if (!img || !cartIcon) return;
+
+    const imgRect = img.getBoundingClientRect();
+    const cartRect = cartIcon.getBoundingClientRect();
+
+    const clone = img.cloneNode(true);
+    Object.assign(clone.style, {
+        position: 'fixed',
+        left: imgRect.left + 'px',
+        top: imgRect.top + 'px',
+        width: imgRect.width + 'px',
+        height: imgRect.height + 'px',
+        objectFit: 'cover',
+        borderRadius: '50%',
+        zIndex: '9999',
+        transition: 'all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1)',
+        pointerEvents: 'none',
+        boxShadow: '0 10px 20px rgba(0,0,0,0.3)'
+    });
+    document.body.appendChild(clone);
+
+    requestAnimationFrame(() => {
+        Object.assign(clone.style, {
+            left: cartRect.left + 'px',
+            top: cartRect.top + 'px',
+            width: '20px',
+            height: '20px',
+            opacity: '0.2',
+            transform: 'scale(0.1)'
+        });
+    });
+
+    setTimeout(() => {
+        clone.remove();
+    }, 800);
 }
