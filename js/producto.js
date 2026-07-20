@@ -401,6 +401,9 @@ function updateProductSchema() {
     schemaEl.textContent = JSON.stringify(schema, null, 2);
 }
 function applySpecialPricing(p) {
+    // Si el producto tiene precio fijo, no sobreescribir con la lógica general
+    if (p.fixedPrice === true) return;
+
     const nameLower = p.name.toLowerCase();
     const imageLower = (p.image || '').toLowerCase();
     const isKids = p.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
@@ -516,6 +519,49 @@ function applyProductRestrictions() {
         }
         if (patchInput) {
             patchInput.value = '';
+        }
+    }
+
+    // Productos con parches incluidos en el precio (noPatches: true)
+    if (product && product.noPatches === true) {
+        // Ocultar selector de versión (va siempre en fan)
+        if (versionGroup) {
+            versionGroup.style.display = 'none';
+            if (versionSelect) versionSelect.value = 'aficionado';
+        }
+        // Ocultar campo de parches
+        if (patchGroup) {
+            patchGroup.style.display = 'none';
+        }
+        if (patchInput) {
+            patchInput.value = '';
+        }
+        // Mostrar banner informativo de parches incluidos
+        const optionsBlock = document.querySelector('.options-block');
+        if (optionsBlock && !document.getElementById('patches-included-banner')) {
+            const banner = document.createElement('div');
+            banner.id = 'patches-included-banner';
+            banner.style.cssText = `
+                display: flex;
+                align-items: flex-start;
+                gap: 0.75rem;
+                background: linear-gradient(135deg, rgba(34, 197, 94, 0.12), rgba(16, 185, 129, 0.08));
+                border: 1.5px solid rgba(34, 197, 94, 0.35);
+                border-radius: 12px;
+                padding: 1rem 1.1rem;
+                margin-bottom: 1.5rem;
+                font-size: 0.92rem;
+                line-height: 1.55;
+                color: var(--text-main);
+            `;
+            banner.innerHTML = `
+                <i class="fas fa-tag" style="color: #22c55e; font-size: 1.1rem; margin-top: 0.1rem; flex-shrink: 0;"></i>
+                <div>
+                    <strong style="display: block; margin-bottom: 0.25rem; color: #22c55e;">Precio todo incluido</strong>
+                    El precio de <strong>€24.90</strong> incluye todos los parches que aparecen en la imagen de la camiseta. No es necesario añadir ningún parche adicional.
+                </div>
+            `;
+            optionsBlock.insertBefore(banner, optionsBlock.firstChild);
         }
     }
 }

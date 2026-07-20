@@ -805,6 +805,7 @@ function saveProductOrderToSession(orderIds) {
 }
 function applySpecialPricing() {
     allProducts.forEach(product => {
+        if (product.fixedPrice === true) return;
         const nameLower = product.name.toLowerCase();
         const imageLower = (product.image || '').toLowerCase();
         const isKids = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
