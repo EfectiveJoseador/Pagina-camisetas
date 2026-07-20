@@ -192,9 +192,14 @@ async function renderBestSellers() {
 async function getGlobalFeaturedProducts() {
     let pinnedIds = [];
     try {
-        const snap = await get(ref(db, 'settings/pinnedProducts'));
+        const snap = await get(ref(db, 'pinnedProducts'));
         if (snap.exists()) {
-            pinnedIds = snap.val() || [];
+            const data = snap.val();
+            if (data && typeof data.ids === 'string') {
+                pinnedIds = JSON.parse(data.ids).map(Number);
+            } else if (Array.isArray(data)) {
+                pinnedIds = data.map(Number);
+            }
             localStorage.setItem('camisetazo_pinned_products', JSON.stringify(pinnedIds));
         } else {
             // Fallback to local storage if not in Firebase yet
