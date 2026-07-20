@@ -183,20 +183,59 @@ async function renderBestSellers() {
     });
 }
 async function getGlobalFeaturedProducts() {
+    let pinnedIds = [];
+    try {
+        const raw = localStorage.getItem('camisetazo_pinned_products');
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) pinnedIds = parsed.map(Number);
+        }
+    } catch (e) {}
 
+    // Filter to ensure pinned IDs actually exist in products data
+    const validPinned = pinnedIds.filter(id => products.some(p => p.id === id));
+    
+    // If we have enough pinned products to fill the section, return them
+    if (validPinned.length >= FEATURED_CONFIG.PRODUCT_COUNT) {
+        return validPinned.slice(0, FEATURED_CONFIG.PRODUCT_COUNT);
+    }
+
+    // Try to load cached randoms from session
+    let randoms = [];
     const sessionCached = sessionStorage.getItem('featuredProductsSession');
     if (sessionCached) {
         try {
             const cached = JSON.parse(sessionCached);
-            if (cached.products && cached.products.length === FEATURED_CONFIG.PRODUCT_COUNT) {
-                return cached.products;
-            }
+            if (cached.products) randoms = cached.products;
         } catch (e) { }
     }
 
-    const randomProducts = getRandomFeaturedProducts();
-    saveToSessionStorage(randomProducts);
-    return randomProducts;
+    // If no cache or invalid, generate new randoms
+    if (randoms.length === 0) {
+        randoms = getRandomFeaturedProducts();
+        saveToSessionStorage(randoms);
+    }
+
+    // Combine pinned and randoms, ensuring no duplicates, up to the count limit
+    const combined = [...validPinned];
+    for (const id of randoms) {
+        if (!combined.includes(id)) {
+            combined.push(id);
+        }
+        if (combined.length >= FEATURED_CONFIG.PRODUCT_COUNT) break;
+    }
+
+    // If we still don't have enough, grab any remaining from the main product list
+    if (combined.length < FEATURED_CONFIG.PRODUCT_COUNT) {
+        for (const p of products) {
+            if (!combined.includes(p.id)) {
+                combined.push(p.id);
+            }
+            if (combined.length >= FEATURED_CONFIG.PRODUCT_COUNT) break;
+        }
+    }
+
+    return combined;
 }
 
 function saveToSessionStorage(productIds) {
