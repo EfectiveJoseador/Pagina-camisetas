@@ -26,16 +26,38 @@ let currentPage = 1;
 let totalPages = 1;
 let imageObserver = null;
 
-// ── Pinned products (set from admin panel via localStorage) ───────────────────
+import { db, ref, onValue } from './firebase-config.js';
+
+// ── Pinned products (Firebase synced + localStorage cache) ───────────────────
 const PINNED_PRODUCTS_KEY = 'camisetazo_pinned_products';
-function getPinnedProductIds() {
-    try {
-        const raw = localStorage.getItem(PINNED_PRODUCTS_KEY);
-        if (!raw) return [];
+let globalPinnedIds = [];
+
+try {
+    const raw = localStorage.getItem(PINNED_PRODUCTS_KEY);
+    if (raw) {
         const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) ? parsed.map(Number) : [];
-    } catch { return []; }
+        if (Array.isArray(parsed)) globalPinnedIds = parsed.map(Number);
+    }
+} catch { }
+
+function getPinnedProductIds() {
+    return globalPinnedIds;
 }
+
+// Sync from Firebase
+onValue(ref(db, 'settings/pinnedProducts'), (snapshot) => {
+    if (snapshot.exists()) {
+        const newPinned = snapshot.val() || [];
+        if (JSON.stringify(newPinned) !== JSON.stringify(globalPinnedIds)) {
+            globalPinnedIds = newPinned;
+            localStorage.setItem(PINNED_PRODUCTS_KEY, JSON.stringify(globalPinnedIds));
+            // Re-render if products are already loaded
+            if (typeof allProducts !== 'undefined' && allProducts.length > 0) {
+                if (typeof applyFilters === 'function') applyFilters();
+            }
+        }
+    }
+});
 
 /**
  * Extracts [startYear, endYear] from a season string embedded anywhere in text.

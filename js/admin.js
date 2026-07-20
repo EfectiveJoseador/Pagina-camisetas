@@ -1001,6 +1001,9 @@ async function loadProductsCache() {
 
 function savePinned() {
     localStorage.setItem(PINNED_KEY, JSON.stringify(pinnedIds));
+    set(ref(db, 'settings/pinnedProducts'), pinnedIds).catch(err => {
+        console.error("Error saving pinned products to Firebase:", err);
+    });
 }
 
 function loadPinned() {
@@ -1106,6 +1109,16 @@ async function initPinnedProducts() {
     pinnedIds = loadPinned();
     const products = await loadProductsCache();
     renderPinnedList(products);
+
+    // Sincronizar en tiempo real desde Firebase
+    onValue(ref(db, 'settings/pinnedProducts'), (snapshot) => {
+        if (snapshot.exists()) {
+            pinnedIds = snapshot.val() || [];
+            // Guardar localmente para caché
+            localStorage.setItem(PINNED_KEY, JSON.stringify(pinnedIds));
+            renderPinnedList(products);
+        }
+    });
 
     // ── Search ─────────────────────────────────────────────────────────────
     const searchInput = document.getElementById('pinned-search-input');

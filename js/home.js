@@ -1,4 +1,5 @@
 import products from './products-data.js';
+import { db, ref, get } from './firebase-config.js';
 
 const FEATURED_CONFIG = {
     PRODUCT_COUNT: 6,
@@ -185,12 +186,28 @@ async function renderBestSellers() {
 async function getGlobalFeaturedProducts() {
     let pinnedIds = [];
     try {
+        const snap = await get(ref(db, 'settings/pinnedProducts'));
+        if (snap.exists()) {
+            pinnedIds = snap.val() || [];
+            localStorage.setItem('camisetazo_pinned_products', JSON.stringify(pinnedIds));
+        } else {
+            // Fallback to local storage if not in Firebase yet
+            const raw = localStorage.getItem('camisetazo_pinned_products');
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) pinnedIds = parsed.map(Number);
+            }
+        }
+    } catch (e) {
+        console.warn("Failed to fetch pinned products from Firebase, using cache.", e);
         const raw = localStorage.getItem('camisetazo_pinned_products');
         if (raw) {
-            const parsed = JSON.parse(raw);
-            if (Array.isArray(parsed)) pinnedIds = parsed.map(Number);
+            try {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) pinnedIds = parsed.map(Number);
+            } catch (err) {}
         }
-    } catch (e) {}
+    }
 
     // Filter to ensure pinned IDs actually exist in products data
     const validPinned = pinnedIds.filter(id => products.some(p => p.id === id));
