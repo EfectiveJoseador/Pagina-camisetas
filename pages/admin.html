@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-theme="dark">
 
 <head>
@@ -259,6 +259,55 @@
                     </div>
                 </div>
             </section>
+
+
+            <!-- ══════════════════════════════════════════════════
+                 PRODUCTOS FIJADOS
+            ══════════════════════════════════════════════════ -->
+            <section class="pinned-section" id="pinned-section">
+                <div class="pinned-header">
+                    <div class="pinned-title-group">
+                        <h2 class="section-title"><i class="fas fa-thumbtack"></i> Productos Fijados</h2>
+                        <span class="pinned-badge" id="pinned-count-badge">0 fijados</span>
+                    </div>
+                    <p class="pinned-subtitle">Los productos fijados aparecerán siempre <strong>al principio</strong> de la tienda, en el orden que establezcas aquí.</p>
+                </div>
+
+                <!-- Search box -->
+                <div class="pinned-search-wrap">
+                    <div class="pinned-search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="pinned-search-input"
+                               placeholder="Buscar producto por nombre, SKU o liga…"
+                               autocomplete="off">
+                        <button class="pinned-search-clear" id="pinned-search-clear" title="Limpiar">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                    <!-- Suggestions dropdown -->
+                    <div class="pinned-suggestions" id="pinned-suggestions"></div>
+                </div>
+
+                <!-- Pinned list -->
+                <div class="pinned-list-wrap">
+                    <div class="pinned-empty" id="pinned-empty">
+                        <i class="fas fa-thumbtack" style="opacity:.3;font-size:2rem;margin-bottom:.5rem;"></i>
+                        <p>Ningún producto fijado aún.<br>Busca un producto arriba y haz clic en <strong>Fijar</strong>.</p>
+                    </div>
+                    <ul class="pinned-list" id="pinned-list"></ul>
+                </div>
+
+                <!-- Footer actions -->
+                <div class="pinned-footer">
+                    <button class="btn-pinned-clear-all" id="btn-pinned-clear-all">
+                        <i class="fas fa-trash-alt"></i> Quitar todos
+                    </button>
+                    <button class="btn-pinned-save" id="btn-pinned-save">
+                        <i class="fas fa-save"></i> Guardar y aplicar
+                    </button>
+                </div>
+            </section>
+
 
 
             <section class="users-section">

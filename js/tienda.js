@@ -26,6 +26,17 @@ let currentPage = 1;
 let totalPages = 1;
 let imageObserver = null;
 
+// ── Pinned products (set from admin panel via localStorage) ───────────────────
+const PINNED_PRODUCTS_KEY = 'camisetazo_pinned_products';
+function getPinnedProductIds() {
+    try {
+        const raw = localStorage.getItem(PINNED_PRODUCTS_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed.map(Number) : [];
+    } catch { return []; }
+}
+
 /**
  * Extracts [startYear, endYear] from a season string embedded anywhere in text.
  * Handles formats like: 25/26, 2025/26, 2025/2026, 2025-26, 2025-2026,
@@ -1429,6 +1440,21 @@ function applyFilters(updateURL = true) {
         filteredProducts.sort((a, b) => a.price - b.price);
     } else if (sortBy === 'price-desc') {
         filteredProducts.sort((a, b) => b.price - a.price);
+    }
+
+    // ── Pinned products: float to the top (in pinned order) ──────────────────
+    const pinnedIds = getPinnedProductIds();
+    if (pinnedIds.length > 0) {
+        const pinnedSet = new Set(pinnedIds);
+        const pinned = [];
+        const rest   = [];
+        filteredProducts.forEach(p => {
+            if (pinnedSet.has(p.id)) pinned.push(p);
+            else rest.push(p);
+        });
+        // Sort pinned by their admin-defined order
+        pinned.sort((a, b) => pinnedIds.indexOf(a.id) - pinnedIds.indexOf(b.id));
+        filteredProducts = [...pinned, ...rest];
     }
 
     // CRITICAL: Update URL and Render UI BEFORE optional Analytics

@@ -60,6 +60,7 @@ function initPanel() {
     loadPromoCodes();
     setupUsersListeners();
     loadAllUsers();
+    initPinnedProducts();
 }
 
 function setupEventListeners() {
@@ -976,6 +977,239 @@ function setupUsersListeners() {
             if (e.target === userModal) {
                 userModal.classList.remove('active');
             }
+        });
+    }
+}
+
+// ══════════════════════════════════════════════════════════════════════════════
+// PRODUCTOS FIJADOS
+// ══════════════════════════════════════════════════════════════════════════════
+const PINNED_KEY = 'camisetazo_pinned_products';
+let pinnedIds = []; // ordered array of product ids (numbers)
+let allProductsCache = null; // loaded lazily from products-data.js
+
+async function loadProductsCache() {
+    if (allProductsCache) return allProductsCache;
+    try {
+        const mod = await import('./products-data.js');
+        allProductsCache = mod.default || mod.products || [];
+    } catch {
+        allProductsCache = [];
+    }
+    return allProductsCache;
+}
+
+function savePinned() {
+    localStorage.setItem(PINNED_KEY, JSON.stringify(pinnedIds));
+}
+
+function loadPinned() {
+    try {
+        const raw = localStorage.getItem(PINNED_KEY);
+        if (!raw) return [];
+        const parsed = JSON.parse(raw);
+        return Array.isArray(parsed) ? parsed.map(Number) : [];
+    } catch { return []; }
+}
+
+function updatePinnedBadge() {
+    const badge = document.getElementById('pinned-count-badge');
+    if (badge) badge.textContent = pinnedIds.length === 1 ? '1 fijado' : `${pinnedIds.length} fijados`;
+}
+
+function renderPinnedList(products) {
+    const list  = document.getElementById('pinned-list');
+    const empty = document.getElementById('pinned-empty');
+    if (!list || !empty) return;
+
+    if (pinnedIds.length === 0) {
+        list.innerHTML = '';
+        empty.style.display = 'flex';
+        updatePinnedBadge();
+        return;
+    }
+    empty.style.display = 'none';
+    updatePinnedBadge();
+
+    list.innerHTML = pinnedIds.map((id, idx) => {
+        const p     = products.find(x => x.id === id);
+        const name  = p ? p.name  : `ID ${id} (no encontrado)`;
+        const sku   = p ? (p.sku  || '') : '';
+        const thumb = p ? (p.image || '') : '';
+        return `
+        <li class="pinned-item" data-id="${id}" draggable="true">
+            <span class="pinned-drag-handle" title="Arrastra para reordenar">
+                <i class="fas fa-grip-vertical"></i>
+            </span>
+            <span class="pinned-pos">${idx + 1}</span>
+            ${thumb
+                ? `<img class="pinned-thumb" src="${thumb}" alt="" loading="lazy">`
+                : '<div class="pinned-thumb-placeholder"><i class="fas fa-tshirt"></i></div>'}
+            <div class="pinned-info">
+                <span class="pinned-name">${name}</span>
+                ${sku ? `<span class="pinned-sku">SKU: ${sku}</span>` : ''}
+            </div>
+            <button class="pinned-remove-btn" data-id="${id}" title="Quitar del fijado">
+                <i class="fas fa-times"></i>
+            </button>
+        </li>`;
+    }).join('');
+
+    // Remove buttons
+    list.querySelectorAll('.pinned-remove-btn').forEach(btn => {
+        btn.addEventListener('click', async () => {
+            const id = Number(btn.dataset.id);
+            pinnedIds = pinnedIds.filter(x => x !== id);
+            const prods = await loadProductsCache();
+            renderPinnedList(prods);
+        });
+    });
+
+    // Drag-and-drop reorder
+    initPinnedDragDrop(list, products);
+}
+
+function initPinnedDragDrop(list, products) {
+    let dragSrc = null;
+
+    list.querySelectorAll('.pinned-item').forEach(item => {
+        item.addEventListener('dragstart', e => {
+            dragSrc = item;
+            item.classList.add('dragging');
+            e.dataTransfer.effectAllowed = 'move';
+        });
+        item.addEventListener('dragend', () => {
+            item.classList.remove('dragging');
+            list.querySelectorAll('.pinned-item').forEach(i => i.classList.remove('drag-over'));
+        });
+        item.addEventListener('dragover', e => {
+            e.preventDefault();
+            e.dataTransfer.dropEffect = 'move';
+            list.querySelectorAll('.pinned-item').forEach(i => i.classList.remove('drag-over'));
+            if (item !== dragSrc) item.classList.add('drag-over');
+        });
+        item.addEventListener('drop', e => {
+            e.preventDefault();
+            if (!dragSrc || dragSrc === item) return;
+            const fromId  = Number(dragSrc.dataset.id);
+            const toId    = Number(item.dataset.id);
+            const fromIdx = pinnedIds.indexOf(fromId);
+            const toIdx   = pinnedIds.indexOf(toId);
+            pinnedIds.splice(fromIdx, 1);
+            pinnedIds.splice(toIdx, 0, fromId);
+            renderPinnedList(products);
+        });
+    });
+}
+
+async function initPinnedProducts() {
+    pinnedIds = loadPinned();
+    const products = await loadProductsCache();
+    renderPinnedList(products);
+
+    // ── Search ─────────────────────────────────────────────────────────────
+    const searchInput = document.getElementById('pinned-search-input');
+    const searchClear = document.getElementById('pinned-search-clear');
+    const suggestions = document.getElementById('pinned-suggestions');
+    if (!searchInput || !suggestions) return;
+
+    function normalizeStr(s) {
+        return String(s).normalize('NFD').replace(/[\u0300-\u036f]/g, '').toLowerCase();
+    }
+
+    function showSuggestions(query) {
+        const q = normalizeStr(query);
+        if (!q || q.length < 2) {
+            suggestions.innerHTML = '';
+            suggestions.classList.remove('active');
+            return;
+        }
+        const matches = products
+            .filter(p => normalizeStr(`${p.name} ${p.sku || ''} ${p.league || ''}`).includes(q))
+            .slice(0, 8);
+
+        if (!matches.length) {
+            suggestions.innerHTML = '<div class="pinned-sug-empty">Sin resultados</div>';
+            suggestions.classList.add('active');
+            return;
+        }
+
+        suggestions.innerHTML = matches.map(p => {
+            const already = pinnedIds.includes(p.id);
+            return `
+            <div class="pinned-sug-item${already ? ' already-pinned' : ''}" data-id="${p.id}">
+                ${p.image
+                    ? `<img src="${p.image}" alt="" class="sug-thumb" loading="lazy">`
+                    : '<div class="sug-thumb-placeholder"><i class="fas fa-tshirt"></i></div>'}
+                <div class="sug-info">
+                    <span class="sug-name">${p.name}</span>
+                    <span class="sug-meta">${p.league || ''}${p.sku ? ' · SKU: ' + p.sku : ''}</span>
+                </div>
+                <button class="sug-pin-btn" data-id="${p.id}"${already ? ' disabled' : ''}>
+                    ${already
+                        ? '<i class="fas fa-check"></i> Fijado'
+                        : '<i class="fas fa-thumbtack"></i> Fijar'}
+                </button>
+            </div>`;
+        }).join('');
+
+        // Pin from suggestion
+        suggestions.querySelectorAll('.sug-pin-btn:not([disabled])').forEach(btn => {
+            btn.addEventListener('click', () => {
+                const id = Number(btn.dataset.id);
+                if (!pinnedIds.includes(id)) {
+                    pinnedIds.push(id);
+                    renderPinnedList(products);
+                    // Update suggestion row in-place
+                    const row = suggestions.querySelector(`.pinned-sug-item[data-id="${id}"]`);
+                    if (row) {
+                        row.classList.add('already-pinned');
+                        btn.disabled = true;
+                        btn.innerHTML = '<i class="fas fa-check"></i> Fijado';
+                    }
+                }
+            });
+        });
+
+        suggestions.classList.add('active');
+    }
+
+    searchInput.addEventListener('input', () => showSuggestions(searchInput.value.trim()));
+    searchInput.addEventListener('focus', () => {
+        if (searchInput.value.trim().length >= 2) showSuggestions(searchInput.value.trim());
+    });
+    searchClear.addEventListener('click', () => {
+        searchInput.value = '';
+        suggestions.innerHTML = '';
+        suggestions.classList.remove('active');
+        searchInput.focus();
+    });
+    document.addEventListener('click', e => {
+        if (!e.target.closest('.pinned-search-wrap')) suggestions.classList.remove('active');
+    });
+
+    // ── Save ───────────────────────────────────────────────────────────────
+    const saveBtn = document.getElementById('btn-pinned-save');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', () => {
+            savePinned();
+            saveBtn.innerHTML = '<i class="fas fa-check"></i> ¡Guardado!';
+            saveBtn.classList.add('saved');
+            setTimeout(() => {
+                saveBtn.innerHTML = '<i class="fas fa-save"></i> Guardar y aplicar';
+                saveBtn.classList.remove('saved');
+            }, 2200);
+        });
+    }
+
+    // ── Clear all ──────────────────────────────────────────────────────────
+    const clearAll = document.getElementById('btn-pinned-clear-all');
+    if (clearAll) {
+        clearAll.addEventListener('click', () => {
+            if (!pinnedIds.length || !confirm('¿Quitar todos los productos fijados?')) return;
+            pinnedIds = [];
+            savePinned();
+            renderPinnedList(products);
         });
     }
 }
