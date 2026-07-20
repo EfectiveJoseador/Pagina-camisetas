@@ -135,6 +135,16 @@
             ".read": true,
             ".write": "auth.token.admin === true"
         },
+        "pinnedProducts": {
+            ".read": true,
+            ".write": "auth.token.admin === true",
+            "ids": {
+                ".validate": "newData.isString()"
+            },
+            "updatedAt": {
+                ".validate": "newData.isString()"
+            }
+        },
         "products": {
             ".read": true,
             ".write": "auth.token.admin === true"

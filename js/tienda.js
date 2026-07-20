@@ -26,36 +26,59 @@ let currentPage = 1;
 let totalPages = 1;
 let imageObserver = null;
 
-import { db, ref, onValue } from './firebase-config.js';
+import { db, ref, onValue, get } from './firebase-config.js';
 
-const PINNED_PRODUCTS_KEY = 'camisetazo_pinned_products';
-const MANDATORY_PINNED_IDS = [500002, 500001];
+// ── Pinned products (Sync from Firebase) ──────────────────────────────────
 let globalPinnedIds = [];
-
-try {
-    const raw = localStorage.getItem(PINNED_PRODUCTS_KEY);
-    if (raw) {
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed)) globalPinnedIds = parsed.map(Number);
-    }
-} catch { }
+let initialPinnedLoaded = false;
 
 function getPinnedProductIds() {
-    const set = new Set(MANDATORY_PINNED_IDS);
-    const rest = globalPinnedIds.filter(id => !set.has(id));
-    return [...MANDATORY_PINNED_IDS, ...rest];
+    return globalPinnedIds;
 }
 
-// Sync from Firebase
-onValue(ref(db, 'settings/pinnedProducts'), (snapshot) => {
+async function loadPinnedProducts() {
+    try {
+        const snapshot = await get(ref(db, 'pinnedProducts'));
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            if (data && typeof data.ids === 'string') {
+                globalPinnedIds = JSON.parse(data.ids).map(Number);
+            } else if (Array.isArray(data)) {
+                globalPinnedIds = data.map(Number);
+            }
+        }
+    } catch (e) {
+        console.error('Error fetching pinned ids:', e);
+    }
+    initialPinnedLoaded = true;
+}
+
+onValue(ref(db, 'pinnedProducts'), (snapshot) => {
+    if (!initialPinnedLoaded) return; // Ignore first trigger, handled by get() in init()
     if (snapshot.exists()) {
-        const newPinned = snapshot.val() || [];
+        const data = snapshot.val();
+        let newPinned = [];
+        
+        if (data && typeof data.ids === 'string') {
+            try {
+                newPinned = JSON.parse(data.ids).map(Number);
+            } catch (e) { }
+        } else if (Array.isArray(data)) {
+            newPinned = data.map(Number);
+        }
+        
+        // Re-render if changed
         if (JSON.stringify(newPinned) !== JSON.stringify(globalPinnedIds)) {
             globalPinnedIds = newPinned;
-            localStorage.setItem(PINNED_PRODUCTS_KEY, JSON.stringify(globalPinnedIds));
-            // Re-render if products are already loaded
             if (typeof allProducts !== 'undefined' && allProducts.length > 0) {
-                if (typeof applyFilters === 'function') applyFilters();
+                if (typeof applyFilters === 'function') applyFilters(false);
+            }
+        }
+    } else {
+        if (globalPinnedIds.length > 0) {
+            globalPinnedIds = [];
+            if (typeof allProducts !== 'undefined' && allProducts.length > 0) {
+                if (typeof applyFilters === 'function') applyFilters(false);
             }
         }
     }
@@ -844,7 +867,7 @@ function closeQuickAddPanel()  {}
 function closeAllQuickAddPanels() { _closeDrawer(); }
 
 
-function init() {
+async function init() {
     
     const cachedOrder = getProductOrderFromSession();
 
@@ -873,7 +896,24 @@ function init() {
     attachEventListeners();
     setupModal();
 
+    const grid = document.getElementById('product-grid');
+    if (grid) {
+        grid.dataset.loadingSkeletons = 'loading';
+        grid.innerHTML = Array(8).fill(0).map(() => `
+            <div class="skeleton-card">
+                <div class="skeleton-image"></div>
+                <div class="skeleton-text skeleton-title"></div>
+                <div class="skeleton-text skeleton-price"></div>
+            </div>
+        `).join('');
+    }
+
     applyURLFilters();
+    await loadPinnedProducts();
+
+    if (grid) {
+        grid.dataset.loadingSkeletons = 'loaded';
+    }
     applyFilters(false);
 }
 

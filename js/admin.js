@@ -982,11 +982,11 @@ function setupUsersListeners() {
 }
 
 // ══════════════════════════════════════════════════════════════════════════════
-// PRODUCTOS FIJADOS
+// PRODUCTOS FIJADOS — Firebase RTDB (lectura pública / escritura solo admin)
+// Nodo: /pinnedProducts  →  { ids: "[101,205,…]", updatedAt: "ISO" }
 // ══════════════════════════════════════════════════════════════════════════════
-const PINNED_KEY = 'camisetazo_pinned_products';
-let pinnedIds = []; // ordered array of product ids (numbers)
-let allProductsCache = null; // loaded lazily from products-data.js
+let pinnedIds = []; // ordered array of product ids (numbers) — in-memory state
+let allProductsCache = null; // product catalogue loaded lazily
 
 async function loadProductsCache() {
     if (allProductsCache) return allProductsCache;
@@ -997,23 +997,6 @@ async function loadProductsCache() {
         allProductsCache = [];
     }
     return allProductsCache;
-}
-
-function savePinned() {
-    localStorage.setItem(PINNED_KEY, JSON.stringify(pinnedIds));
-    set(ref(db, 'settings/pinnedProducts'), pinnedIds).catch(err => {
-        console.error("Error saving pinned products to Firebase:", err);
-    });
-}
-
-function loadPinned() {
-    try {
-        const raw = localStorage.getItem(PINNED_KEY);
-        if (!raw) return [500002, 500001];
-        const parsed = JSON.parse(raw);
-        if (Array.isArray(parsed) && parsed.length > 0) return parsed.map(Number);
-        return [500002, 500001];
-    } catch { return [500002, 500001]; }
 }
 
 function updatePinnedBadge() {
@@ -1059,17 +1042,13 @@ function renderPinnedList(products) {
         </li>`;
     }).join('');
 
-    // Remove buttons
     list.querySelectorAll('.pinned-remove-btn').forEach(btn => {
         btn.addEventListener('click', async () => {
-            const id = Number(btn.dataset.id);
-            pinnedIds = pinnedIds.filter(x => x !== id);
-            const prods = await loadProductsCache();
-            renderPinnedList(prods);
+            pinnedIds = pinnedIds.filter(x => x !== Number(btn.dataset.id));
+            renderPinnedList(await loadProductsCache());
         });
     });
 
-    // Drag-and-drop reorder
     initPinnedDragDrop(list, products);
 }
 
@@ -1107,21 +1086,27 @@ function initPinnedDragDrop(list, products) {
 }
 
 async function initPinnedProducts() {
-    pinnedIds = loadPinned();
     const products = await loadProductsCache();
+
+    // ── Carga inicial desde Firebase RTDB (nodo público) ─────────────────
+    try {
+        const snapshot = await get(ref(db, 'pinnedProducts'));
+        if (snapshot.exists()) {
+            const data = snapshot.val();
+            pinnedIds = data && typeof data.ids === 'string'
+                ? JSON.parse(data.ids).map(Number)
+                : [];
+        } else {
+            pinnedIds = [];
+        }
+    } catch (err) {
+        console.error('[Pinned] Error loading from Firebase:', err);
+        pinnedIds = [];
+    }
+
     renderPinnedList(products);
 
-    // Sincronizar en tiempo real desde Firebase
-    onValue(ref(db, 'settings/pinnedProducts'), (snapshot) => {
-        if (snapshot.exists()) {
-            pinnedIds = snapshot.val() || [];
-            // Guardar localmente para caché
-            localStorage.setItem(PINNED_KEY, JSON.stringify(pinnedIds));
-            renderPinnedList(products);
-        }
-    });
-
-    // ── Search ─────────────────────────────────────────────────────────────
+    // ── Buscador de productos ──────────────────────────────────────────────
     const searchInput = document.getElementById('pinned-search-input');
     const searchClear = document.getElementById('pinned-search-clear');
     const suggestions = document.getElementById('pinned-suggestions');
@@ -1202,28 +1187,49 @@ async function initPinnedProducts() {
         if (!e.target.closest('.pinned-search-wrap')) suggestions.classList.remove('active');
     });
 
-    // ── Save ───────────────────────────────────────────────────────────────
+    // ── Guardar en Firebase RTDB (escritura protegida: solo admin) ─────────
     const saveBtn = document.getElementById('btn-pinned-save');
     if (saveBtn) {
-        saveBtn.addEventListener('click', () => {
-            savePinned();
-            saveBtn.innerHTML = '<i class="fas fa-check"></i> ¡Guardado!';
-            saveBtn.classList.add('saved');
-            setTimeout(() => {
-                saveBtn.innerHTML = '<i class="fas fa-save"></i> Guardar y aplicar';
-                saveBtn.classList.remove('saved');
-            }, 2200);
+        saveBtn.addEventListener('click', async () => {
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando…';
+            try {
+                await set(ref(db, 'pinnedProducts'), {
+                    ids: JSON.stringify(pinnedIds),
+                    updatedAt: new Date().toISOString()
+                });
+                saveBtn.innerHTML = '<i class="fas fa-check"></i> ¡Guardado!';
+                saveBtn.classList.add('saved');
+            } catch (err) {
+                console.error('[Pinned] Error saving:', err);
+                saveBtn.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Error al guardar';
+                saveBtn.style.background = 'linear-gradient(135deg,#ef4444,#dc2626)';
+            } finally {
+                saveBtn.disabled = false;
+                setTimeout(() => {
+                    saveBtn.innerHTML = '<i class="fas fa-save"></i> Guardar y aplicar';
+                    saveBtn.classList.remove('saved');
+                    saveBtn.style.background = '';
+                }, 2500);
+            }
         });
     }
 
-    // ── Clear all ──────────────────────────────────────────────────────────
+    // ── Quitar todos ───────────────────────────────────────────────────────
     const clearAll = document.getElementById('btn-pinned-clear-all');
     if (clearAll) {
-        clearAll.addEventListener('click', () => {
+        clearAll.addEventListener('click', async () => {
             if (!pinnedIds.length || !confirm('¿Quitar todos los productos fijados?')) return;
             pinnedIds = [];
-            savePinned();
             renderPinnedList(products);
+            try {
+                await set(ref(db, 'pinnedProducts'), {
+                    ids: JSON.stringify([]),
+                    updatedAt: new Date().toISOString()
+                });
+            } catch (err) {
+                console.error('[Pinned] Error clearing:', err);
+            }
         });
     }
 }
