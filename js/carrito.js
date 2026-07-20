@@ -613,8 +613,8 @@ function openCartItemEditModal(cartIndex, cartRef) {
     // Leer noPatches del producto original
     const productData  = products.find(p => p.id === item.id);
     const isNoPatches  = productData?.noPatches === true;
-    const showVersion  = !isRestricted && !isNoPatches;   // version hidden for kids / retro / NBA / noPatches
-    const showPatch    = !isNBA && !isNoPatches;           // patch hidden for NBA and noPatches
+    const showVersion  = !isRestricted;           // version hidden for kids / retro / NBA
+    const showPatch    = !isNBA && !isNoPatches;   // patch hidden for NBA and noPatches
 
     const currentVersion = custom.version || 'aficionado';
 

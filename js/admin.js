@@ -1009,10 +1009,11 @@ function savePinned() {
 function loadPinned() {
     try {
         const raw = localStorage.getItem(PINNED_KEY);
-        if (!raw) return [];
+        if (!raw) return [500002, 500001];
         const parsed = JSON.parse(raw);
-        return Array.isArray(parsed) ? parsed.map(Number) : [];
-    } catch { return []; }
+        if (Array.isArray(parsed) && parsed.length > 0) return parsed.map(Number);
+        return [500002, 500001];
+    } catch { return [500002, 500001]; }
 }
 
 function updatePinnedBadge() {

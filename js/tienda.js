@@ -28,8 +28,8 @@ let imageObserver = null;
 
 import { db, ref, onValue } from './firebase-config.js';
 
-// ── Pinned products (Firebase synced + localStorage cache) ───────────────────
 const PINNED_PRODUCTS_KEY = 'camisetazo_pinned_products';
+const MANDATORY_PINNED_IDS = [500002, 500001];
 let globalPinnedIds = [];
 
 try {
@@ -41,7 +41,9 @@ try {
 } catch { }
 
 function getPinnedProductIds() {
-    return globalPinnedIds;
+    const set = new Set(MANDATORY_PINNED_IDS);
+    const rest = globalPinnedIds.filter(id => !set.has(id));
+    return [...MANDATORY_PINNED_IDS, ...rest];
 }
 
 // Sync from Firebase
@@ -505,6 +507,16 @@ function _buildDrawer() {
                 </select>
             </div>
 
+            <div class="qad-version-wrap" style="display:none">
+                <div class="qad-section-label"><i class="fas fa-star"></i> Versión <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€5 Jugador)</span></div>
+                <div class="qad-field" style="margin-bottom:1rem">
+                    <select id="qad-version">
+                        <option value="aficionado">Versión Fan</option>
+                        <option value="jugador">Versión Jugador (+€5)</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="qad-section-label"><i class="fas fa-tshirt"></i> Personalización <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€3 si rellenas algún campo)</span></div>
             <div class="qad-custom-grid">
                 <div class="qad-field">
@@ -561,6 +573,9 @@ function _buildDrawer() {
     });
     _qdDrawer.querySelector('#qad-patch').addEventListener('input', _updateTotal);
 
+    // ── version change: restrict 3XL/4XL for Jugador ─────────────────────────
+    _qdDrawer.querySelector('#qad-version').addEventListener('change', _qdApplyVersionSize);
+
     // ── submit ────────────────────────────────────────────────────────────────────────
     _qdDrawer.querySelector('#qad-submit-btn').addEventListener('click', _handleDrawerSubmit);
 
@@ -579,21 +594,24 @@ function _openDrawer(product) {
     _buildDrawer();
     _qdProduct = product;
 
-    const body       = _qdDrawer.querySelector('.qad-body');
-    const thumb      = _qdDrawer.querySelector('.qad-thumb');
-    const nameEl     = _qdDrawer.querySelector('.qad-product-name');
-    const priceEl    = _qdDrawer.querySelector('.qad-base-price strong');
-    const sizeSel    = _qdDrawer.querySelector('#qad-size');
-    const patchWrap  = _qdDrawer.querySelector('.qad-patch-wrap');
-    const patchInput = _qdDrawer.querySelector('#qad-patch');
-    const nameInput  = _qdDrawer.querySelector('#qad-name');
-    const numInput   = _qdDrawer.querySelector('#qad-number');
+    const body          = _qdDrawer.querySelector('.qad-body');
+    const thumb         = _qdDrawer.querySelector('.qad-thumb');
+    const nameEl        = _qdDrawer.querySelector('.qad-product-name');
+    const priceEl       = _qdDrawer.querySelector('.qad-base-price strong');
+    const sizeSel       = _qdDrawer.querySelector('#qad-size');
+    const versionWrap   = _qdDrawer.querySelector('.qad-version-wrap');
+    const versionSel    = _qdDrawer.querySelector('#qad-version');
+    const patchWrap     = _qdDrawer.querySelector('.qad-patch-wrap');
+    const patchInput    = _qdDrawer.querySelector('#qad-patch');
+    const nameInput     = _qdDrawer.querySelector('#qad-name');
+    const numInput      = _qdDrawer.querySelector('#qad-number');
 
     // reset inputs
-    nameInput.value  = '';
-    numInput.value   = '';
-    patchInput.value = '';
-    body.scrollTop   = 0;
+    nameInput.value   = '';
+    numInput.value    = '';
+    patchInput.value  = '';
+    if (versionSel) versionSel.value = 'aficionado';
+    body.scrollTop    = 0;
 
     // product info
     thumb.src = getMiniImagePath(product.image);
@@ -610,6 +628,17 @@ function _openDrawer(product) {
             const label = sz + (surcharge ? ` (+€${surcharge})` : '');
             return `<option value="${sz}">${label}</option>`;
         }).join('');
+
+    // version: mostrar para productos normales (no kids, no retro, no NBA)
+    const isRestricted = (productType === 'kids' || productType === 'retro' || productType === 'nba');
+    if (versionWrap) {
+        versionWrap.style.display = isRestricted ? 'none' : '';
+        // registrar listener solo la primera vez (usando flag en el elemento)
+        if (!versionSel.dataset.listenerAdded) {
+            versionSel.addEventListener('change', _updateTotal);
+            versionSel.dataset.listenerAdded = '1';
+        }
+    }
 
     // patch: show for non-NBA products
     const allowedPatches = getAllowedPatches(product);
@@ -638,6 +667,7 @@ function _openDrawer(product) {
     }
 
     _updateTotal();
+    _qdApplyVersionSize();  // aplicar restricción de talla inicial
 
     // open
     _qdBackdrop.classList.add('active');
@@ -648,6 +678,25 @@ function _openDrawer(product) {
     document.querySelectorAll('.btn-quick-add').forEach(b => b.classList.remove('active'));
     const activeBtn = document.querySelector(`.btn-quick-add[data-id="${product.id}"]`);
     if (activeBtn) activeBtn.classList.add('active');
+}
+
+function _qdApplyVersionSize() {
+    if (!_qdDrawer) return;
+    const versionSel = _qdDrawer.querySelector('#qad-version');
+    const sizeSel    = _qdDrawer.querySelector('#qad-size');
+    if (!versionSel || !sizeSel) return;
+    const isJugador = versionSel.value === 'jugador';
+    ['3XL', '4XL'].forEach(sz => {
+        const opt = sizeSel.querySelector(`option[value="${sz}"]`);
+        if (!opt) return;
+        opt.disabled = isJugador;
+        opt.hidden   = isJugador;
+    });
+    if (isJugador && ['3XL', '4XL'].includes(sizeSel.value)) {
+        sizeSel.value = 'XL';
+        if (window.Toast) window.Toast.error('La talla 3XL/4XL no está disponible en Versión Jugador');
+    }
+    _updateTotal();
 }
 
 function _closeDrawer() {
@@ -663,11 +712,13 @@ function _updateTotal() {
     if (!_qdProduct || !_qdDrawer) return;
     const size          = _qdDrawer.querySelector('#qad-size').value;
     const sizeSurcharge = SIZE_SURCHARGES_QAD[size] || 0;
+    const version       = _qdDrawer.querySelector('#qad-version')?.value || 'aficionado';
     const name          = _qdDrawer.querySelector('#qad-name').value.trim();
     const number        = _qdDrawer.querySelector('#qad-number').value.trim();
     const patch         = _qdDrawer.querySelector('#qad-patch').value.trim();
 
     let total = _qdProduct.price + sizeSurcharge;
+    if (version === 'jugador') total += 5;
     if (name || number) total += 3;
     if (patch)          total += 2;
 
@@ -691,17 +742,19 @@ function _handleDrawerSubmit() {
         return;
     }
 
-    const name   = _qdDrawer.querySelector('#qad-name').value.trim().toUpperCase();
-    const number = _qdDrawer.querySelector('#qad-number').value.trim();
-    const patch  = _qdDrawer.querySelector('#qad-patch').value.trim();
+    const version = _qdDrawer.querySelector('#qad-version')?.value || 'aficionado';
+    const name    = _qdDrawer.querySelector('#qad-name').value.trim().toUpperCase();
+    const number  = _qdDrawer.querySelector('#qad-number').value.trim();
+    const patch   = _qdDrawer.querySelector('#qad-patch').value.trim();
 
     const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
     const sizeSurcharge   = SIZE_SURCHARGES[size] || 0;
     let totalPrice        = _qdProduct.price + sizeSurcharge;
+    if (version === 'jugador') totalPrice += 5;
     if (name || number) totalPrice += 3;
     if (patch)          totalPrice += 2;
 
-    const customization = { size, version: 'aficionado', name, number, patch, extras: [] };
+    const customization = { size, version, name, number, patch, extras: [] };
     const cartItem = {
         id:        _qdProduct.id,
         name:      _qdProduct.name,
@@ -1543,7 +1596,7 @@ function openCustomizationModal(productId) {
     document.getElementById('modal-product-id').value = productId;
     populateSizeOptions();
 
-    // noPatches: ocultar parches y versión, mostrar banner verde
+    // noPatches: ocultar solo parches, mostrar banner verde (versión jugador sigue disponible)
     const patchGroup = document.getElementById('modal-patch')?.closest('.form-group');
     const versionGroup = document.getElementById('modal-version')?.closest('.form-group');
     const existingModalBanner = document.getElementById('modal-patches-banner');
@@ -1551,9 +1604,6 @@ function openCustomizationModal(productId) {
 
     if (currentProduct.noPatches === true) {
         if (patchGroup) patchGroup.style.display = 'none';
-        if (versionGroup) versionGroup.style.display = 'none';
-        const versionSelect = document.getElementById('modal-version');
-        if (versionSelect) versionSelect.value = 'aficionado';
         const patchSelect = document.getElementById('modal-patch');
         if (patchSelect) patchSelect.value = 'none';
         // Insertar banner verde antes del campo de talla

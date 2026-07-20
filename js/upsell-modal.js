@@ -51,6 +51,10 @@ const SIZE_CONFIGS = {
 const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
 
 function getProductPrices(product) {
+    // Productos con precio fijo (noPatches: true) — no sobrescribir
+    if (product.fixedPrice === true) {
+        return { price: product.price, oldPrice: product.oldPrice || product.price };
+    }
     const nameLower = product.name.toLowerCase();
     const imageLower = (product.image || '').toLowerCase();
     const isKids = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
@@ -290,7 +294,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
     const isKids    = type === 'kids';
     const isRetro   = type === 'retro';
     const isRestricted = isNBA || isKids || isRetro;
-    const showVersion  = !isRestricted && !prod.noPatches;
+    const showVersion  = !isRestricted;
     const showPatch    = !isNBA && !prod.noPatches;
 
     const sizeOptions = sizes.map(sz => {
@@ -370,6 +374,24 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
         el.textContent = `€${calcUpsellEditPrice(basePrice, { size: getSize(), version: getVersion(), name: getName().trim(), number: getNumber().trim(), patch: getPatch() }).toFixed(2)}`;
     }
 
+    // Version → deshabilitar 3XL/4XL para Jugador (mismo comportamiento que producto.js)
+    function applyVersionSizeRestriction() {
+        const sizeSelect = overlay.querySelector('#ue-size');
+        if (!sizeSelect) return;
+        const isJugador = getVersion() === 'jugador';
+        ['3XL', '4XL'].forEach(sz => {
+            const opt = sizeSelect.querySelector(`option[value="${sz}"]`);
+            if (!opt) return;
+            opt.disabled = isJugador;
+            opt.hidden   = isJugador;
+        });
+        if (isJugador && ['3XL', '4XL'].includes(sizeSelect.value)) {
+            sizeSelect.value = 'XL';
+            if (window.Toast) window.Toast.error('La talla 3XL/4XL no está disponible en Versión Jugador');
+        }
+        updatePrice();
+    }
+
     // Live validation on name
     overlay.querySelector('#ue-name')?.addEventListener('input', e => {
         let v = e.target.value.replace(/[^A-Za-zÀ-ÿ\s\.]/g, '');
@@ -385,9 +407,12 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
         e.target.value = v;
         updatePrice();
     });
-    overlay.querySelector('#ue-version')?.addEventListener('change', updatePrice);
+    overlay.querySelector('#ue-version')?.addEventListener('change', applyVersionSizeRestriction);
     overlay.querySelector('#ue-size')?.addEventListener('change', updatePrice);
     overlay.querySelector('#ue-patch')?.addEventListener('input', updatePrice);
+
+    // Aplicar restricción inicial (por si el item ya estaba en Jugador)
+    applyVersionSizeRestriction();
 
     function closeOverlay() {
         overlay.classList.remove('active');

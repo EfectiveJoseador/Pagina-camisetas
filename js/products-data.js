@@ -1,5 +1,31 @@
 const products = [
     {
+        "id": 500002,
+        "name": "España 2026 Mundial 2 estrellas Local",
+        "slug": "espana-mundial-2-estrellas-local",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Internacional/EspañaCampeonaL/1.webp",
+        "price": 24.9,
+        "oldPrice": 30,
+        "fixedPrice": true,
+        "noPatches": true,
+        "sku": "9102"
+    },
+    {
+        "id": 500001,
+        "name": "España 2026 Mundial 2 estrellas Visitante",
+        "slug": "espana-2026-mundial-2-estrellas-visitante",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Internacional/EspañaCampeonaV/1.webp",
+        "price": 24.9,
+        "oldPrice": 30,
+        "fixedPrice": true,
+        "noPatches": true,
+        "sku": "9101"
+    },
+    {
         "id": 101,
         "sku": "8531",
         "name": "Alavés 25/26 Local",
@@ -13604,32 +13630,6 @@ const products = [
         "price": 19.9,
         "oldPrice": 25,
         "sku": "7931"
-    },
-    {
-        "id": 500001,
-        "name": "España 2026 Mundial 2 estrellas Visitante",
-        "slug": "espana-2026-mundial-2-estrellas-visitante",
-        "category": "futbol",
-        "league": "selecciones",
-        "image": "/assets/productos/Internacional/EspañaCampeonaV/1.webp",
-        "price": 24.9,
-        "oldPrice": 30,
-        "fixedPrice": true,
-        "noPatches": true,
-        "sku": "9101"
-    },
-    {
-        "id": 500002,
-        "name": "España 2026 Mundial 2 estrellas Local",
-        "slug": "espana-mundial-2-estrellas-local",
-        "category": "futbol",
-        "league": "selecciones",
-        "image": "/assets/productos/Internacional/EspañaCampeonaL/1.webp",
-        "price": 24.9,
-        "oldPrice": 30,
-        "fixedPrice": true,
-        "noPatches": true,
-        "sku": "9102"
     }
 ];
 

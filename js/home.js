@@ -210,6 +210,11 @@ async function getGlobalFeaturedProducts() {
     }
 
     // Filter to ensure pinned IDs actually exist in products data
+    const mandatoryTop = [500002, 500001];
+    const mandatorySet = new Set(mandatoryTop);
+    const restPinned = pinnedIds.filter(id => !mandatorySet.has(id));
+    pinnedIds = [...mandatoryTop, ...restPinned];
+
     const validPinned = pinnedIds.filter(id => products.some(p => p.id === id));
     
     // If we have enough pinned products to fill the section, return them

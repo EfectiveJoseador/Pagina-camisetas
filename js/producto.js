@@ -524,12 +524,7 @@ function applyProductRestrictions() {
 
     // Productos con parches incluidos en el precio (noPatches: true)
     if (product && product.noPatches === true) {
-        // Ocultar selector de versión (va siempre en fan)
-        if (versionGroup) {
-            versionGroup.style.display = 'none';
-            if (versionSelect) versionSelect.value = 'aficionado';
-        }
-        // Ocultar campo de parches
+        // Ocultar solo el campo de parches (la versión jugador sigue disponible)
         if (patchGroup) {
             patchGroup.style.display = 'none';
         }
