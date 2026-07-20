@@ -585,6 +585,25 @@ function _openDrawer(product) {
         ? 'Ej: ' + (PATCH_DEFINITIONS[allowedPatches[0]] || allowedPatches[0])
         : '';
 
+    // noPatches: ocultar parches y mostrar banner informativo verde
+    const existingBanner = _qdDrawer.querySelector('#qad-patches-banner');
+    if (existingBanner) existingBanner.remove();
+    if (product.noPatches === true) {
+        patchWrap.style.display = 'none';
+        patchInput.value = '';
+        const banner = document.createElement('div');
+        banner.id = 'qad-patches-banner';
+        banner.style.cssText = [
+            'display:flex', 'align-items:flex-start', 'gap:0.65rem',
+            'background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(16,185,129,.08))',
+            'border:1.5px solid rgba(34,197,94,.35)', 'border-radius:10px',
+            'padding:0.85rem 1rem', 'margin-bottom:1rem',
+            'font-size:0.88rem', 'line-height:1.5', 'color:var(--text-main,#fff)'
+        ].join(';');
+        banner.innerHTML = `<i class="fas fa-tag" style="color:#22c55e;font-size:1rem;margin-top:0.1rem;flex-shrink:0;"></i><div><strong style="display:block;margin-bottom:0.2rem;color:#22c55e;">Precio todo incluido</strong>€${product.price.toFixed(2)} incluye todos los parches de la imagen. No se añaden parches extra.</div>`;
+        patchWrap.insertAdjacentElement('beforebegin', banner);
+    }
+
     _updateTotal();
 
     // open
@@ -1454,6 +1473,40 @@ function openCustomizationModal(productId) {
     document.getElementById('customization-form').reset();
     document.getElementById('modal-product-id').value = productId;
     populateSizeOptions();
+
+    // noPatches: ocultar parches y versión, mostrar banner verde
+    const patchGroup = document.getElementById('modal-patch')?.closest('.form-group');
+    const versionGroup = document.getElementById('modal-version')?.closest('.form-group');
+    const existingModalBanner = document.getElementById('modal-patches-banner');
+    if (existingModalBanner) existingModalBanner.remove();
+
+    if (currentProduct.noPatches === true) {
+        if (patchGroup) patchGroup.style.display = 'none';
+        if (versionGroup) versionGroup.style.display = 'none';
+        const versionSelect = document.getElementById('modal-version');
+        if (versionSelect) versionSelect.value = 'aficionado';
+        const patchSelect = document.getElementById('modal-patch');
+        if (patchSelect) patchSelect.value = 'none';
+        // Insertar banner verde antes del campo de talla
+        const sizeGroup = document.getElementById('modal-size')?.closest('.form-group');
+        if (sizeGroup) {
+            const banner = document.createElement('div');
+            banner.id = 'modal-patches-banner';
+            banner.style.cssText = [
+                'display:flex', 'align-items:flex-start', 'gap:0.65rem',
+                'background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(16,185,129,.08))',
+                'border:1.5px solid rgba(34,197,94,.35)', 'border-radius:10px',
+                'padding:0.85rem 1rem', 'margin-bottom:1rem',
+                'font-size:0.88rem', 'line-height:1.5', 'color:var(--text-main,#1a1a2e)'
+            ].join(';');
+            banner.innerHTML = `<i class="fas fa-tag" style="color:#22c55e;font-size:1rem;margin-top:0.1rem;flex-shrink:0;"></i><div><strong style="display:block;margin-bottom:0.2rem;color:#22c55e;">Precio todo incluido</strong>€${currentProduct.price.toFixed(2)} incluye todos los parches de la imagen. No se añaden parches extra.</div>`;
+            sizeGroup.insertAdjacentElement('beforebegin', banner);
+        }
+    } else {
+        if (patchGroup) patchGroup.style.display = '';
+        if (versionGroup) versionGroup.style.display = '';
+    }
+
     updatePreview();
     document.getElementById('customization-modal').classList.add('active');
     document.body.style.overflow = 'hidden';

@@ -290,8 +290,8 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
     const isKids    = type === 'kids';
     const isRetro   = type === 'retro';
     const isRestricted = isNBA || isKids || isRetro;
-    const showVersion  = !isRestricted;
-    const showPatch    = !isNBA;
+    const showVersion  = !isRestricted && !prod.noPatches;
+    const showPatch    = !isNBA && !prod.noPatches;
 
     const sizeOptions = sizes.map(sz => {
         const sel   = sz === currentSize ? 'selected' : '';
@@ -308,11 +308,16 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
             </select>
         </div>` : '';
 
+
     const patchBlock = showPatch ? `
         <div class="upsell-edit-field">
             <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€2.00)</span></label>
             <input type="text" id="ue-patch" placeholder="Ej. Champions League" maxlength="30" autocomplete="off" value="${current.patch || ''}">
-        </div>` : '';
+        </div>` : (prod.noPatches ? `
+        <div style="display:flex;align-items:flex-start;gap:0.6rem;background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(16,185,129,.08));border:1.5px solid rgba(34,197,94,.35);border-radius:10px;padding:0.8rem 0.9rem;margin-top:0.5rem;font-size:0.87rem;line-height:1.5;color:inherit;">
+            <i class="fas fa-tag" style="color:#22c55e;font-size:0.95rem;margin-top:0.1rem;flex-shrink:0;"></i>
+            <div><strong style="display:block;margin-bottom:0.2rem;color:#22c55e;">Precio todo incluido</strong>€${basePrice.toFixed(2)} incluye todos los parches de la imagen. No se añaden parches extra.</div>
+        </div>` : '');
 
     const overlay = document.createElement('div');
     overlay.className = 'upsell-edit-overlay';

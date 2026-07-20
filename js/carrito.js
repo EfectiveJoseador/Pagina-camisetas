@@ -610,8 +610,11 @@ function openCartItemEditModal(cartIndex, cartRef) {
     const isKids       = type === 'kids';
     const isRetro      = type === 'retro';
     const isRestricted = isNBA || isKids || isRetro;
-    const showVersion  = !isRestricted;   // version hidden for kids / retro / NBA
-    const showPatch    = !isNBA;           // patch hidden only for NBA
+    // Leer noPatches del producto original
+    const productData  = products.find(p => p.id === item.id);
+    const isNoPatches  = productData?.noPatches === true;
+    const showVersion  = !isRestricted && !isNoPatches;   // version hidden for kids / retro / NBA / noPatches
+    const showPatch    = !isNBA && !isNoPatches;           // patch hidden for NBA and noPatches
 
     const currentVersion = custom.version || 'aficionado';
 
@@ -635,7 +638,11 @@ function openCartItemEditModal(cartIndex, cartRef) {
         <div class="upsell-edit-field" id="ce-patch-group">
             <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€2.00 si rellenas)</span></label>
             <input type="text" id="ce-patch" placeholder="Ej. Champions League" maxlength="30" autocomplete="off" value="${custom.patch || ''}">
-        </div>` : '';
+        </div>` : (isNoPatches ? `
+        <div style="display:flex;align-items:flex-start;gap:0.6rem;background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(16,185,129,.08));border:1.5px solid rgba(34,197,94,.35);border-radius:10px;padding:0.8rem 0.9rem;margin-top:0.5rem;font-size:0.87rem;line-height:1.5;color:inherit;">
+            <i class="fas fa-tag" style="color:#22c55e;font-size:0.95rem;margin-top:0.1rem;flex-shrink:0;"></i>
+            <div><strong style="display:block;margin-bottom:0.2rem;color:#22c55e;">Precio todo incluido</strong>€${basePrice.toFixed(2)} incluye todos los parches de la imagen. No se añaden parches extra.</div>
+        </div>` : '');
 
     const overlay = document.createElement('div');
     overlay.id = 'cart-edit-overlay';
