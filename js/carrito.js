@@ -20,6 +20,9 @@ function applySpecialPricing() {
         } else if (isKids) {
             oldPrice = 27.00;
             newPrice = 21.90;
+        } else if (product.customPatches === 'espana26') {
+            oldPrice = 27.00;
+            newPrice = 21.90;
         }
         product.oldPrice = oldPrice;
         product.price = newPrice;
@@ -146,8 +149,17 @@ const Cart = {
                 const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
                 const version = custom.version || item.version || 'aficionado';
                 const versionSurcharge = version === 'jugador' ? 5 : 0;
+                const product = products.find(p => p.id === item.id);
                 const patch = custom.patch || '';
-                const patchSurcharge = patch ? 2 : 0;
+                let patchSurcharge = 0;
+                if (patch && patch !== 'none') {
+                    if (product && product.customPatches === 'espana26') {
+                        const count = patch.split(',').map(s => s.trim()).filter(Boolean).length;
+                        patchSurcharge = count * 1.25;
+                    } else {
+                        patchSurcharge = 2;
+                    }
+                }
                 const hasName = !!(custom.name || '');
                 const hasNumber = !!(custom.number || '');
                 const personSurcharge = (hasName || hasNumber) ? 3 : 0;
@@ -351,7 +363,15 @@ const Cart = {
                 const version = custom.version || item.version || 'aficionado';
                 const versionSurcharge = version === 'jugador' ? 5 : 0;
                 const patch = custom.patch || '';
-                const patchSurcharge = patch ? 2 : 0;
+                let patchSurcharge = 0;
+                if (patch && patch !== 'none') {
+                    if (product && product.customPatches === 'espana26') {
+                        const count = patch.split(',').map(s => s.trim()).filter(Boolean).length;
+                        patchSurcharge = count * 1.25;
+                    } else {
+                        patchSurcharge = 2;
+                    }
+                }
                 const hasName = !!(custom.name || '');
                 const hasNumber = !!(custom.number || '');
                 const personSurcharge = (hasName || hasNumber) ? 3 : 0;
@@ -473,7 +493,15 @@ const Cart = {
                 const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
                 const versionSurcharge = version === 'jugador' ? 5 : 0;
                 const patch = custom.patch || '';
-                const patchSurcharge = patch ? 2 : 0;
+                let patchSurcharge = 0;
+                if (patch && patch !== 'none') {
+                    if (product && product.customPatches === 'espana26') {
+                        const count = patch.split(',').map(s => s.trim()).filter(Boolean).length;
+                        patchSurcharge = count * 1.25;
+                    } else {
+                        patchSurcharge = 2;
+                    }
+                }
                 const hasName = !!(custom.name || '');
                 const hasNumber = !!(custom.number || '');
                 const personSurcharge = (hasName || hasNumber) ? 3 : 0;
@@ -585,11 +613,18 @@ const CART_SIZE_CONFIGS = {
 
 const CART_SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
 
-function calcEditPrice(basePrice, custom) {
+function calcEditPrice(basePrice, custom, isEspana26 = false) {
     let total = basePrice;
     total += CART_SIZE_SURCHARGES[custom.size] || 0;
     if (custom.version === 'jugador') total += 5;
-    if (custom.patch) total += 2;
+    if (custom.patch) {
+        if (isEspana26) {
+            const count = custom.patch.split(',').map(s => s.trim()).filter(Boolean).length;
+            total += count * 1.25;
+        } else {
+            total += 2;
+        }
+    }
     // Nombre O dorsal = +€3 (no hace falta tener los dos)
     if (custom.name || custom.number) total += 3;
     return total;
@@ -618,6 +653,8 @@ function openCartItemEditModal(cartIndex, cartRef) {
 
     const currentVersion = custom.version || 'aficionado';
 
+    const isEspana26 = productData?.customPatches === 'espana26';
+
     // Size options — 3XL/4XL will be hidden dynamically when Jugador
     const sizeOptions = sizes.map(sz => {
         const sel   = custom.size === sz ? 'selected' : '';
@@ -634,15 +671,46 @@ function openCartItemEditModal(cartIndex, cartRef) {
             </select>
         </div>` : '';
 
-    const patchBlock = showPatch ? `
-        <div class="upsell-edit-field" id="ce-patch-group">
-            <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€2.00 si rellenas)</span></label>
-            <input type="text" id="ce-patch" placeholder="Ej. Champions League" maxlength="30" autocomplete="off" value="${custom.patch || ''}">
-        </div>` : (isNoPatches ? `
-        <div style="display:flex;align-items:flex-start;gap:0.6rem;background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(16,185,129,.08));border:1.5px solid rgba(34,197,94,.35);border-radius:10px;padding:0.8rem 0.9rem;margin-top:0.5rem;font-size:0.87rem;line-height:1.5;color:inherit;">
-            <i class="fas fa-tag" style="color:#22c55e;font-size:0.95rem;margin-top:0.1rem;flex-shrink:0;"></i>
-            <div><strong style="display:block;margin-bottom:0.2rem;color:#22c55e;">Precio todo incluido</strong>€${basePrice.toFixed(2)} incluye todos los parches de la imagen. No se añaden parches extra.</div>
-        </div>` : '');
+    let patchBlock = '';
+    if (isEspana26) {
+        const patches = [
+            { label: 'Parche dorado central (Campeones de mundo 2026)', short: 'Campeones', img: '/assets/images/patches/dorado-central.webp' },
+            { label: 'Parche manga derecha mundial 2026 dorado', short: '26 dorado', img: '/assets/images/patches/manga-derecha.webp' },
+            { label: 'Parche Football unites the world manga izquierda', short: 'fifa', img: '/assets/images/patches/manga-izquierda.webp' }
+        ];
+        if (productData?.tipo === 'local') {
+            patches.push({ label: 'Letras debajo de escudo de final', short: 'letras', img: '/assets/images/patches/letras-final.webp' });
+        }
+        const activePatches = custom.patch ? custom.patch.split(',').map(s => s.trim()) : [];
+        
+        patchBlock = `
+            <div class="upsell-edit-field" id="ce-patch-group">
+                <label>Parches Especiales 2026 <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€1.25 c/u)</span></label>
+                <div id="ce-custom-patches-list" style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
+                    ${patches.map(p => {
+                        const checked = activePatches.includes(p.short) ? 'checked' : '';
+                        return `
+                            <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                                <input type="checkbox" class="ce-custom-patch-cb" value="${p.short}" ${checked} style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
+                                <img src="${p.img}" style="width: 30px; height: 30px; object-fit: contain; border-radius: 4px;">
+                                <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">${p.label}</span>
+                            </label>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        patchBlock = showPatch ? `
+            <div class="upsell-edit-field" id="ce-patch-group">
+                <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€2.00 si rellenas)</span></label>
+                <input type="text" id="ce-patch" placeholder="Ej. Champions League" maxlength="30" autocomplete="off" value="${custom.patch || ''}">
+            </div>` : (isNoPatches ? `
+            <div style="display:flex;align-items:flex-start;gap:0.6rem;background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(16,185,129,.08));border:1.5px solid rgba(34,197,94,.35);border-radius:10px;padding:0.8rem 0.9rem;margin-top:0.5rem;font-size:0.87rem;line-height:1.5;color:inherit;">
+                <i class="fas fa-tag" style="color:#22c55e;font-size:0.95rem;margin-top:0.1rem;flex-shrink:0;"></i>
+                <div><strong style="display:block;margin-bottom:0.2rem;color:#22c55e;">Precio todo incluido</strong>€${basePrice.toFixed(2)} incluye todos los parches de la imagen. No se añaden parches extra.</div>
+            </div>` : '');
+    }
 
     const overlay = document.createElement('div');
     overlay.id = 'cart-edit-overlay';
@@ -680,7 +748,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
 
             <div class="upsell-edit-price-summary">
                 <span>Total por unidad</span>
-                <span class="upsell-edit-price-total" id="ce-total">€${calcEditPrice(basePrice, custom).toFixed(2)}</span>
+                <span class="upsell-edit-price-total" id="ce-total">€${calcEditPrice(basePrice, custom, isEspana26).toFixed(2)}</span>
             </div>
 
             <div class="upsell-edit-actions">
@@ -698,21 +766,37 @@ function openCartItemEditModal(cartIndex, cartRef) {
     const getVersion = () => overlay.querySelector('#ce-version')?.value || 'aficionado';
     const getName    = () => overlay.querySelector('#ce-name')?.value    || '';
     const getNumber  = () => overlay.querySelector('#ce-number')?.value  || '';
-    const getPatch   = () => overlay.querySelector('#ce-patch')?.value   || '';
+    const getPatch   = () => {
+        if (isEspana26) {
+            const cbs = overlay.querySelectorAll('.ce-custom-patch-cb:checked');
+            return Array.from(cbs).map(cb => cb.value).join(', ');
+        }
+        return overlay.querySelector('#ce-patch')?.value || '';
+    };
 
     // ── Live price — mirrors updatePreview() in producto.js ─────────────────
     function updatePrice() {
         const el = overlay.querySelector('#ce-total');
         if (!el) return;
         const c = { size: getSize(), version: getVersion(), name: getName().trim(), number: getNumber().trim(), patch: getPatch() };
-        el.textContent = `€${calcEditPrice(basePrice, c).toFixed(2)}`;
+        el.textContent = `€${calcEditPrice(basePrice, c, isEspana26).toFixed(2)}`;
     }
 
     // ── Version → disable 3XL/4XL (mirrors applyPlayerVersionSizeRestriction) ──
     function applyVersionSizeRestriction() {
         if (!showVersion) return;
         const sizeSelect = overlay.querySelector('#ce-size');
-        if (!sizeSelect) return;
+        const versionSelect = overlay.querySelector('#ce-version');
+        if (!sizeSelect || !versionSelect) return;
+
+        if (versionSelect.value === 'jugador' && isEspana26) {
+            if (window.Toast) {
+                window.Toast.error('La versión jugador para este modelo estará disponible muy pronto.');
+            } else {
+                alert('La versión jugador para este modelo estará disponible muy pronto.');
+            }
+            versionSelect.value = 'aficionado';
+        }
         const isJugador = getVersion() === 'jugador';
         ['3XL', '4XL'].forEach(sz => {
             const opt = sizeSelect.querySelector(`option[value="${sz}"]`);
@@ -752,7 +836,13 @@ function openCartItemEditModal(cartIndex, cartRef) {
 
     // ── Size / patch change ──────────────────────────────────────────────────
     overlay.querySelector('#ce-size')?.addEventListener('change', updatePrice);
-    overlay.querySelector('#ce-patch')?.addEventListener('input',  updatePrice);
+    if (isEspana26) {
+        overlay.querySelectorAll('.ce-custom-patch-cb').forEach(cb => {
+            cb.addEventListener('change', updatePrice);
+        });
+    } else {
+        overlay.querySelector('#ce-patch')?.addEventListener('input',  updatePrice);
+    }
 
     // Apply initial restriction (in case item was saved as jugador with 3XL/4XL)
     applyVersionSizeRestriction();
@@ -808,7 +898,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
             number:        hasNumber ? numberVal             : '',
             patch:         patchVal,
         };
-        const newPrice = calcEditPrice(basePrice, newCustom);
+        const newPrice = calcEditPrice(basePrice, newCustom, isEspana26);
 
         const updatedCart = JSON.parse(localStorage.getItem('cart') || '[]');
         if (updatedCart[cartIndex]) {

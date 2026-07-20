@@ -61,7 +61,7 @@
     <link rel="stylesheet" href="../css/styles.css?v=3">
     <link rel="stylesheet" href="../css/producto.css">
     <link rel="stylesheet" href="../css/badges.css">
-    <link rel="stylesheet" href="../css/ux-feedback.css">
+    <link rel="stylesheet" href="../css/ux-feedback.css?v=2">
 
 
     <script type="application/ld+json" id="product-schema">
@@ -564,13 +564,21 @@
                     </div>
 
 
-                    <div class="option-group">
+                    <div class="option-group" id="normal-patch-group">
                         <label class="option-label" for="patch-input">Parches <span
                                 style="color: var(--text-muted); font-weight: 400; font-size: 0.9rem;">Opcional
                                 (+2.00€)</span></label>
                         <div class="input-wrapper">
                             <input type="text" id="patch-input" class="text-input"
                                 placeholder="Ej: Champions, Liga, etc." maxlength="15">
+                        </div>
+                    </div>
+
+                    <div class="option-group" id="custom-patches-container" style="display: none; background: var(--bg-body); padding: 1rem; border-radius: var(--radius-md); border: 1px solid var(--border);">
+                        <label class="option-label" style="margin-bottom: 1rem;">Parches Especiales 2026 <span
+                                style="color: var(--text-muted); font-weight: 400; font-size: 0.9rem;">(+1.25€ c/u)</span></label>
+                        <div id="custom-patches-list" style="display: flex; flex-direction: column; gap: 0.75rem;">
+                            <!-- Checkboxes injected via JS -->
                         </div>
                     </div>
 
@@ -725,8 +733,8 @@
     <script src="../js/ux-feedback.js"></script>
     <script type="module" src="../js/analytics.js"></script>
     <script type="module" src="../js/firebase-global.js"></script>
-    <script type="module" src="../js/producto.js?v=3"></script>
-    <script type="module" src="../js/carrito.js?v=5"></script>
+    <script type="module" src="../js/producto.js?v=5"></script>
+    <script type="module" src="../js/carrito.js?v=9"></script>
     <script src="../js/image-protection.js"></script>
 </body>
 

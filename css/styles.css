@@ -2010,3 +2010,30 @@ button {
     border-color: var(--accent);
     color: var(--accent);
 }
+
+/* --- Custom Patches Checkboxes Styling --- */
+.custom-patch-item input[type="checkbox"],
+.custom-patch-checkbox input[type="checkbox"],
+.qad-custom-patch-cb,
+.qad-field input[type="checkbox"] {
+    width: 18px !important;
+    height: 18px !important;
+    -webkit-appearance: checkbox !important;
+    appearance: checkbox !important;
+    accent-color: var(--accent, #6366f1) !important;
+    cursor: pointer;
+    background: transparent !important;
+    border: none !important;
+}
+
+.custom-patch-item,
+.custom-patch-checkbox {
+    transition: all 0.2s ease;
+}
+
+.custom-patch-item:has(input:checked),
+.custom-patch-checkbox:has(input:checked) {
+    border-color: var(--accent, #6366f1) !important;
+    background: rgba(99, 102, 241, 0.12) !important;
+    box-shadow: 0 0 0 1px var(--accent, #6366f1);
+}

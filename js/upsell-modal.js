@@ -72,6 +72,9 @@ function getProductPrices(product) {
     } else if (isKids) {
         oldPrice = 27.00;
         price = 21.90;
+    } else if (product.customPatches === 'espana26') {
+        oldPrice = 27.00;
+        price = 21.90;
     }
     return { price, oldPrice };
 }
@@ -204,7 +207,14 @@ function addToCartDirectly(product, size, btnElement, pendingCustom = null) {
     // Recalculate price including any customization surcharges
     let totalPrice = prices.price + sizeSurcharge;
     if (customization.version === 'jugador') totalPrice += 5;
-    if (customization.patch) totalPrice += 2;
+    if (customization.patch) {
+        if (product.customPatches === 'espana26') {
+            const count = customization.patch.split(',').map(s => s.trim()).filter(Boolean).length;
+            totalPrice += count * 1.25;
+        } else {
+            totalPrice += 2;
+        }
+    }
     if (customization.name || customization.number) totalPrice += 3;
 
     const cartItem = {
@@ -273,11 +283,18 @@ function addToCartDirectly(product, size, btnElement, pendingCustom = null) {
 // ---------------------------------------------------------------------------
 const UPSELL_SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
 
-function calcUpsellEditPrice(basePrice, custom) {
+function calcUpsellEditPrice(basePrice, custom, isEspana26 = false) {
     let total = basePrice;
     total += UPSELL_SIZE_SURCHARGES[custom.size] || 0;
     if (custom.version === 'jugador') total += 5;
-    if (custom.patch) total += 2;
+    if (custom.patch) {
+        if (isEspana26) {
+            const count = custom.patch.split(',').map(s => s.trim()).filter(Boolean).length;
+            total += count * 1.25;
+        } else {
+            total += 2;
+        }
+    }
     if (custom.name || custom.number) total += 3;
     return total;
 }
@@ -297,6 +314,8 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
     const showVersion  = !isRestricted;
     const showPatch    = !isNBA && !prod.noPatches;
 
+    const isEspana26 = prod.customPatches === 'espana26';
+
     const sizeOptions = sizes.map(sz => {
         const sel   = sz === currentSize ? 'selected' : '';
         const extra = UPSELL_SIZE_SURCHARGES[sz] ? ` (+€${UPSELL_SIZE_SURCHARGES[sz]})` : '';
@@ -312,16 +331,46 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
             </select>
         </div>` : '';
 
-
-    const patchBlock = showPatch ? `
-        <div class="upsell-edit-field">
-            <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€2.00)</span></label>
-            <input type="text" id="ue-patch" placeholder="Ej. Champions League" maxlength="30" autocomplete="off" value="${current.patch || ''}">
-        </div>` : (prod.noPatches ? `
-        <div style="display:flex;align-items:flex-start;gap:0.6rem;background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(16,185,129,.08));border:1.5px solid rgba(34,197,94,.35);border-radius:10px;padding:0.8rem 0.9rem;margin-top:0.5rem;font-size:0.87rem;line-height:1.5;color:inherit;">
-            <i class="fas fa-tag" style="color:#22c55e;font-size:0.95rem;margin-top:0.1rem;flex-shrink:0;"></i>
-            <div><strong style="display:block;margin-bottom:0.2rem;color:#22c55e;">Precio todo incluido</strong>€${basePrice.toFixed(2)} incluye todos los parches de la imagen. No se añaden parches extra.</div>
-        </div>` : '');
+    let patchBlock = '';
+    if (isEspana26) {
+        const patches = [
+            { label: 'Parche dorado central (Campeones de mundo 2026)', short: 'Campeones', img: '/assets/images/patches/dorado-central.webp' },
+            { label: 'Parche manga derecha mundial 2026 dorado', short: '26 dorado', img: '/assets/images/patches/manga-derecha.webp' },
+            { label: 'Parche Football unites the world manga izquierda', short: 'fifa', img: '/assets/images/patches/manga-izquierda.webp' }
+        ];
+        if (prod.tipo === 'local') {
+            patches.push({ label: 'Letras debajo de escudo de final', short: 'letras', img: '/assets/images/patches/letras-final.webp' });
+        }
+        const activePatches = current.patch ? current.patch.split(',').map(s => s.trim()) : [];
+        
+        patchBlock = `
+            <div class="upsell-edit-field">
+                <label>Parches Especiales 2026 <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€1.25 c/u)</span></label>
+                <div id="ue-custom-patches-list" style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
+                    ${patches.map(p => {
+                        const checked = activePatches.includes(p.short) ? 'checked' : '';
+                        return `
+                            <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                                <input type="checkbox" class="ue-custom-patch-cb" value="${p.short}" ${checked} style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
+                                <img src="${p.img}" style="width: 30px; height: 30px; object-fit: contain; border-radius: 4px;">
+                                <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">${p.label}</span>
+                            </label>
+                        `;
+                    }).join('')}
+                </div>
+            </div>
+        `;
+    } else {
+        patchBlock = showPatch ? `
+            <div class="upsell-edit-field">
+                <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€2.00)</span></label>
+                <input type="text" id="ue-patch" placeholder="Ej. Champions League" maxlength="30" autocomplete="off" value="${current.patch || ''}">
+            </div>` : (prod.noPatches ? `
+            <div style="display:flex;align-items:flex-start;gap:0.6rem;background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(16,185,129,.08));border:1.5px solid rgba(34,197,94,.35);border-radius:10px;padding:0.8rem 0.9rem;margin-top:0.5rem;font-size:0.87rem;line-height:1.5;color:inherit;">
+                <i class="fas fa-tag" style="color:#22c55e;font-size:0.95rem;margin-top:0.1rem;flex-shrink:0;"></i>
+                <div><strong style="display:block;margin-bottom:0.2rem;color:#22c55e;">Precio todo incluido</strong>€${basePrice.toFixed(2)} incluye todos los parches de la imagen. No se añaden parches extra.</div>
+            </div>` : '');
+    }
 
     const overlay = document.createElement('div');
     overlay.className = 'upsell-edit-overlay';
@@ -351,7 +400,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
             ${patchBlock}
             <div class="upsell-edit-price-summary">
                 <span>Total por unidad</span>
-                <span class="upsell-edit-price-total" id="ue-total">€${calcUpsellEditPrice(basePrice, { size: currentSize, ...current }).toFixed(2)}</span>
+                <span class="upsell-edit-price-total" id="ue-total">€${calcUpsellEditPrice(basePrice, { size: currentSize, ...current }, isEspana26).toFixed(2)}</span>
             </div>
             <div class="upsell-edit-actions">
                 <button class="btn-upsell-edit-cancel">Cancelar</button>
@@ -366,18 +415,34 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
     const getVersion = () => overlay.querySelector('#ue-version')?.value || 'aficionado';
     const getName    = () => overlay.querySelector('#ue-name')?.value    || '';
     const getNumber  = () => overlay.querySelector('#ue-number')?.value  || '';
-    const getPatch   = () => overlay.querySelector('#ue-patch')?.value   || '';
+    const getPatch   = () => {
+        if (isEspana26) {
+            const cbs = overlay.querySelectorAll('.ue-custom-patch-cb:checked');
+            return Array.from(cbs).map(cb => cb.value).join(', ');
+        }
+        return overlay.querySelector('#ue-patch')?.value || '';
+    };
 
     function updatePrice() {
         const el = overlay.querySelector('#ue-total');
         if (!el) return;
-        el.textContent = `€${calcUpsellEditPrice(basePrice, { size: getSize(), version: getVersion(), name: getName().trim(), number: getNumber().trim(), patch: getPatch() }).toFixed(2)}`;
+        el.textContent = `€${calcUpsellEditPrice(basePrice, { size: getSize(), version: getVersion(), name: getName().trim(), number: getNumber().trim(), patch: getPatch() }, isEspana26).toFixed(2)}`;
     }
 
     // Version → deshabilitar 3XL/4XL para Jugador (mismo comportamiento que producto.js)
     function applyVersionSizeRestriction() {
         const sizeSelect = overlay.querySelector('#ue-size');
-        if (!sizeSelect) return;
+        const versionSelect = overlay.querySelector('#ue-version');
+        if (!sizeSelect || !versionSelect) return;
+
+        if (versionSelect.value === 'jugador' && isEspana26) {
+            if (window.Toast) {
+                window.Toast.error('La versión jugador para este modelo estará disponible muy pronto.');
+            } else {
+                alert('La versión jugador para este modelo estará disponible muy pronto.');
+            }
+            versionSelect.value = 'aficionado';
+        }
         const isJugador = getVersion() === 'jugador';
         ['3XL', '4XL'].forEach(sz => {
             const opt = sizeSelect.querySelector(`option[value="${sz}"]`);
@@ -409,7 +474,13 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
     });
     overlay.querySelector('#ue-version')?.addEventListener('change', applyVersionSizeRestriction);
     overlay.querySelector('#ue-size')?.addEventListener('change', updatePrice);
-    overlay.querySelector('#ue-patch')?.addEventListener('input', updatePrice);
+    if (isEspana26) {
+        overlay.querySelectorAll('.ue-custom-patch-cb').forEach(cb => {
+            cb.addEventListener('change', updatePrice);
+        });
+    } else {
+        overlay.querySelector('#ue-patch')?.addEventListener('input', updatePrice);
+    }
 
     // Aplicar restricción inicial (por si el item ya estaba en Jugador)
     applyVersionSizeRestriction();

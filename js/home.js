@@ -83,6 +83,9 @@ function applySpecialPricing() {
         } else if (isKids) {
             oldPrice = 27.00;
             newPrice = 21.90;
+        } else if (product.customPatches === 'espana26') {
+            oldPrice = 27.00;
+            newPrice = 21.90;
         }
 
         product.oldPrice = oldPrice;
@@ -366,6 +369,13 @@ function _buildDrawer() {
                     <input id="qad-patch" type="text" placeholder="Ej: Champions League" maxlength="30" autocomplete="off">
                 </div>
             </div>
+            
+            <div class="qad-custom-patches-wrap" style="display:none">
+                <div class="qad-section-label"><i class="fas fa-shield-alt"></i> Parches Especiales 2026 <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€1.25 c/u)</span></div>
+                <div class="qad-field" id="qad-custom-patches-list" style="display: flex; flex-direction: column; gap: 0.6rem;">
+                    <!-- JS injected -->
+                </div>
+            </div>
 
             <div class="qad-footer">
                 <div class="qad-total">
@@ -447,7 +457,37 @@ function _openDrawer(product) {
         }).join('');
 
     const allowedPatches = getAllowedPatches(product);
-    patchWrap.style.display = allowedPatches.length > 0 ? '' : 'none';
+    const customPatchesWrap = _qdDrawer.querySelector('.qad-custom-patches-wrap');
+    const customPatchesList = _qdDrawer.querySelector('#qad-custom-patches-list');
+    
+    if (product.customPatches === 'espana26') {
+        patchWrap.style.display = 'none';
+        if (customPatchesWrap && customPatchesList) {
+            customPatchesWrap.style.display = '';
+            const patches = [
+                { id: 'qad_cp_doradocentral', label: 'Parche dorado central (Campeones de mundo 2026)', short: 'Campeones', img: '/assets/images/patches/dorado-central.webp' },
+                { id: 'qad_cp_mangaderecha', label: 'Parche manga derecha mundial 2026 dorado', short: '26 dorado', img: '/assets/images/patches/manga-derecha.webp' },
+                { id: 'qad_cp_mangaizquierda', label: 'Parche Football unites the world manga izquierda', short: 'fifa', img: '/assets/images/patches/manga-izquierda.webp' }
+            ];
+            if (product.tipo === 'local') {
+                patches.push({ id: 'qad_cp_letrasfinal', label: 'Letras debajo de escudo de final', short: 'letras', img: '/assets/images/patches/letras-final.webp' });
+            }
+            customPatchesList.innerHTML = patches.map(p => `
+                <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                    <input type="checkbox" class="qad-custom-patch-cb" value="${p.short}" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
+                    <img src="${p.img}" style="width: 30px; height: 30px; object-fit: contain; border-radius: 4px;">
+                    <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">${p.label}</span>
+                </label>
+            `).join('');
+            
+            customPatchesList.querySelectorAll('.qad-custom-patch-cb').forEach(cb => {
+                cb.addEventListener('change', _updateTotal);
+            });
+        }
+    } else {
+        if (customPatchesWrap) customPatchesWrap.style.display = 'none';
+        patchWrap.style.display = (allowedPatches.length > 0 && !product.noPatches) ? '' : 'none';
+    }
     patchInput.placeholder = allowedPatches.length > 0
         ? 'Ej: ' + (PATCH_DEFINITIONS[allowedPatches[0]] || allowedPatches[0])
         : '';
@@ -477,15 +517,23 @@ function _updateTotal() {
     if (!_qdProduct || !_qdDrawer) return;
     const size          = _qdDrawer.querySelector('#qad-size').value;
     const sizeSurcharge = SIZE_SURCHARGES_QAD[size] || 0;
-    const name          = _qdDrawer.querySelector('#qad-name').value.trim();
-    const number        = _qdDrawer.querySelector('#qad-number').value.trim();
-    const patch         = _qdDrawer.querySelector('#qad-patch').value.trim();
+    const name   = _qdDrawer.querySelector('#qad-name').value.trim();
+    const number = _qdDrawer.querySelector('#qad-number').value.trim();
+    const patch  = _qdDrawer.querySelector('#qad-patch').value.trim();
 
-    let total = _qdProduct.price + sizeSurcharge;
-    if (name || number) total += 3;
-    if (patch)          total += 2;
+    let totalPrice      = _qdProduct.price + sizeSurcharge;
+    if (name || number) totalPrice += 3;
+    
+    if (_qdProduct && _qdProduct.customPatches === 'espana26') {
+        const customCbs = _qdDrawer.querySelectorAll('#qad-custom-patches-list .qad-custom-patch-cb:checked');
+        if (customCbs.length > 0) {
+            totalPrice += (customCbs.length * 1.25);
+        }
+    } else {
+        if (patch) totalPrice += 2;
+    }
 
-    _qdDrawer.querySelector('.qad-total-price').textContent = `€${total.toFixed(2)}`;
+    _qdDrawer.querySelector('.qad-total-price').textContent = `€${totalPrice.toFixed(2)}`;
 }
 
 function _handleDrawerSubmit() {
@@ -506,12 +554,23 @@ function _handleDrawerSubmit() {
 
     const name   = _qdDrawer.querySelector('#qad-name').value.trim().toUpperCase();
     const number = _qdDrawer.querySelector('#qad-number').value.trim();
-    const patch  = _qdDrawer.querySelector('#qad-patch').value.trim();
+    let patch  = _qdDrawer.querySelector('#qad-patch').value.trim();
 
     const sizeSurcharge = SIZE_SURCHARGES_QAD[size] || 0;
     let totalPrice      = _qdProduct.price + sizeSurcharge;
     if (name || number) totalPrice += 3;
-    if (patch)          totalPrice += 2;
+    
+    if (_qdProduct && _qdProduct.customPatches === 'espana26') {
+        const customCbs = _qdDrawer.querySelectorAll('#qad-custom-patches-list .qad-custom-patch-cb:checked');
+        if (customCbs.length > 0) {
+            totalPrice += (customCbs.length * 1.25);
+            patch = Array.from(customCbs).map(cb => cb.value).join(', ');
+        } else {
+            patch = '';
+        }
+    } else {
+        if (patch) totalPrice += 2;
+    }
 
     const customization = { size, version: 'aficionado', name, number, patch, extras: [] };
     const cartItem = {

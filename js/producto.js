@@ -421,6 +421,9 @@ function applySpecialPricing(p) {
     } else if (isKids) {
         oldPrice = 27.00;
         newPrice = 21.90;
+    } else if (p.customPatches === 'espana26') {
+        oldPrice = 27.00;
+        newPrice = 21.90;
     }
     p.oldPrice = oldPrice;
     p.price = newPrice;
@@ -559,6 +562,42 @@ function applyProductRestrictions() {
             optionsBlock.insertBefore(banner, optionsBlock.firstChild);
         }
     }
+
+    // Lógica para parches personalizados en checkbox (ej: España 2026)
+    if (product && product.customPatches === 'espana26') {
+        const normalPatchGroup = document.getElementById('normal-patch-group');
+        const customPatchesContainer = document.getElementById('custom-patches-container');
+        const customPatchesList = document.getElementById('custom-patches-list');
+
+        if (normalPatchGroup) normalPatchGroup.style.display = 'none';
+        
+        if (customPatchesContainer && customPatchesList) {
+            customPatchesContainer.style.display = 'block';
+            
+            const patches = [
+                { id: 'cp_doradocentral', label: 'Parche dorado central (Campeones de mundo 2026)', short: 'Campeones', img: '/assets/images/patches/dorado-central.webp' },
+                { id: 'cp_mangaderecha', label: 'Parche manga derecha mundial 2026 dorado', short: '26 dorado', img: '/assets/images/patches/manga-derecha.webp' },
+                { id: 'cp_mangaizquierda', label: 'Parche Football unites the world manga izquierda', short: 'fifa', img: '/assets/images/patches/manga-izquierda.webp' }
+            ];
+
+            if (product.tipo === 'local') {
+                patches.push({ id: 'cp_letrasfinal', label: 'Letras debajo de escudo de final', short: 'letras', img: '/assets/images/patches/letras-final.webp' });
+            }
+
+            customPatchesList.innerHTML = patches.map(p => `
+                <label class="custom-patch-checkbox" style="display: flex; align-items: center; gap: 1rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                    <input type="checkbox" name="custom_patch" value="${p.short}" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
+                    <img src="${p.img}" alt="${p.label}" style="width: 40px; height: 40px; object-fit: contain; border-radius: 4px; background: #f8f9fa;">
+                    <span style="font-size: 0.9rem; color: var(--text-main); flex: 1;">${p.label}</span>
+                </label>
+            `).join('');
+
+            // Escuchar cambios para actualizar el precio
+            customPatchesList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', updatePreview);
+            });
+        }
+    }
 }
 function handleNameInput(e) {
     let value = e.target.value;
@@ -613,11 +652,20 @@ function updatePreview() {
     }
 
     // --- Parche ---
-    const patch = document.getElementById('patch-input').value.trim();
-    if (patch) {
-        const patchCost = 2;
-        totalPrice += patchCost;
-        details.push(`Parche ${patch}: +€${patchCost.toFixed(2)}`);
+    if (product && product.customPatches === 'espana26') {
+        const customCheckboxes = document.querySelectorAll('#custom-patches-list input[type="checkbox"]:checked');
+        customCheckboxes.forEach(cb => {
+            const patchCost = 1.25;
+            totalPrice += patchCost;
+            details.push(`Parche especial: +€${patchCost.toFixed(2)}`);
+        });
+    } else {
+        const patch = document.getElementById('patch-input').value.trim();
+        if (patch) {
+            const patchCost = 2;
+            totalPrice += patchCost;
+            details.push(`Parche ${patch}: +€${patchCost.toFixed(2)}`);
+        }
     }
 
     // --- Personalización (nombre O dorsal = +€3) ---
@@ -704,7 +752,18 @@ function initPlayerVersionListener() {
     if (versionSelect) {
         versionSelect.addEventListener('change', (e) => {
             if (e.target.value === 'jugador') {
-                showPlayerVersionModal();
+                if (product && product.customPatches === 'espana26') {
+                    if (window.Toast) {
+                        window.Toast.error('La versión jugador para este modelo estará disponible muy pronto.');
+                    } else {
+                        alert('La versión jugador para este modelo estará disponible muy pronto.');
+                    }
+                    e.target.value = 'aficionado';
+                    applyPlayerVersionSizeRestriction();
+                    updatePreview();
+                } else {
+                    showPlayerVersionModal();
+                }
             }
         });
     }
@@ -775,20 +834,36 @@ function addToCart() {
     const hasNumber = number.length > 0;
 
     const sizeSurcharge = getSizeSurcharge(selectedSize);
+    let patchStr = '';
+    let patchExtraPrice = 0;
+    
+    if (product && product.customPatches === 'espana26') {
+        const customCheckboxes = document.querySelectorAll('#custom-patches-list input[type="checkbox"]:checked');
+        const labels = Array.from(customCheckboxes).map(cb => cb.value);
+        if (labels.length > 0) {
+            patchStr = labels.join(', ');
+            patchExtraPrice = labels.length * 1.25;
+        }
+    } else {
+        patchStr = document.getElementById('patch-input').value.trim();
+        if (patchStr) {
+            patchExtraPrice = 2;
+        }
+    }
+
     const customization = {
         size: selectedSize,
         sizeSurcharge: sizeSurcharge,
         version: document.getElementById('version-select').value,
         name: name ? name.toUpperCase() : '',
         number: number || '',
-        patch: document.getElementById('patch-input').value.trim()
+        patch: patchStr
     };
     let totalPrice = product.price;
     totalPrice += sizeSurcharge;
     if (customization.version === 'jugador') totalPrice += 5;
-    if (customization.patch) {
-        totalPrice += 2;
-    }
+    
+    totalPrice += patchExtraPrice;
     // Personalización: nombre O dorsal = +€3 (no hace falta tener los dos)
     if (customization.name || customization.number) {
         totalPrice += 3;

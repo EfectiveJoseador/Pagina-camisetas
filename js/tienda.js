@@ -558,6 +558,13 @@ function _buildDrawer() {
                     <input id="qad-patch" type="text" placeholder="Ej: Champions League" maxlength="30" autocomplete="off">
                 </div>
             </div>
+            
+            <div class="qad-custom-patches-wrap" style="display:none">
+                <div class="qad-section-label"><i class="fas fa-shield-alt"></i> Parches Especiales 2026 <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€1.25 c/u)</span></div>
+                <div class="qad-field" id="qad-custom-patches-list" style="display: flex; flex-direction: column; gap: 0.6rem;">
+                    <!-- JS injected -->
+                </div>
+            </div>
 
             <div class="qad-footer">
                 <div class="qad-total">
@@ -665,7 +672,38 @@ function _openDrawer(product) {
 
     // patch: show for non-NBA products
     const allowedPatches = getAllowedPatches(product);
-    patchWrap.style.display = allowedPatches.length > 0 ? '' : 'none';
+    const customPatchesWrap = _qdDrawer.querySelector('.qad-custom-patches-wrap');
+    const customPatchesList = _qdDrawer.querySelector('#qad-custom-patches-list');
+
+    if (product.customPatches === 'espana26') {
+        patchWrap.style.display = 'none';
+        if (customPatchesWrap && customPatchesList) {
+            customPatchesWrap.style.display = '';
+            const patches = [
+                { id: 'qad_cp_doradocentral', label: 'Parche dorado central (Campeones de mundo 2026)', short: 'Campeones', img: '/assets/images/patches/dorado-central.webp' },
+                { id: 'qad_cp_mangaderecha', label: 'Parche manga derecha mundial 2026 dorado', short: '26 dorado', img: '/assets/images/patches/manga-derecha.webp' },
+                { id: 'qad_cp_mangaizquierda', label: 'Parche Football unites the world manga izquierda', short: 'fifa', img: '/assets/images/patches/manga-izquierda.webp' }
+            ];
+            if (product.tipo === 'local') {
+                patches.push({ id: 'qad_cp_letrasfinal', label: 'Letras debajo de escudo de final', short: 'letras', img: '/assets/images/patches/letras-final.webp' });
+            }
+            customPatchesList.innerHTML = patches.map(p => `
+                <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                    <input type="checkbox" class="qad-custom-patch-cb" value="${p.short}" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
+                    <img src="${p.img}" style="width: 30px; height: 30px; object-fit: contain; border-radius: 4px;">
+                    <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">${p.label}</span>
+                </label>
+            `).join('');
+            
+            customPatchesList.querySelectorAll('.qad-custom-patch-cb').forEach(cb => {
+                cb.addEventListener('change', _updateTotal);
+            });
+        }
+    } else {
+        if (customPatchesWrap) customPatchesWrap.style.display = 'none';
+        patchWrap.style.display = (allowedPatches.length > 0 && !product.noPatches) ? '' : 'none';
+    }
+    
     patchInput.placeholder = allowedPatches.length > 0
         ? 'Ej: ' + (PATCH_DEFINITIONS[allowedPatches[0]] || allowedPatches[0])
         : '';
@@ -674,6 +712,7 @@ function _openDrawer(product) {
     const existingBanner = _qdDrawer.querySelector('#qad-patches-banner');
     if (existingBanner) existingBanner.remove();
     if (product.noPatches === true) {
+        if (customPatchesWrap) customPatchesWrap.style.display = 'none';
         patchWrap.style.display = 'none';
         patchInput.value = '';
         const banner = document.createElement('div');
@@ -708,6 +747,14 @@ function _qdApplyVersionSize() {
     const versionSel = _qdDrawer.querySelector('#qad-version');
     const sizeSel    = _qdDrawer.querySelector('#qad-size');
     if (!versionSel || !sizeSel) return;
+    if (versionSel.value === 'jugador' && _qdProduct && _qdProduct.customPatches === 'espana26') {
+        if (window.Toast) {
+            window.Toast.error('La versión jugador para este modelo estará disponible muy pronto.');
+        } else {
+            alert('La versión jugador para este modelo estará disponible muy pronto.');
+        }
+        versionSel.value = 'aficionado';
+    }
     const isJugador = versionSel.value === 'jugador';
     ['3XL', '4XL'].forEach(sz => {
         const opt = sizeSel.querySelector(`option[value="${sz}"]`);
@@ -740,12 +787,20 @@ function _updateTotal() {
     const number        = _qdDrawer.querySelector('#qad-number').value.trim();
     const patch         = _qdDrawer.querySelector('#qad-patch').value.trim();
 
-    let total = _qdProduct.price + sizeSurcharge;
-    if (version === 'jugador') total += 5;
-    if (name || number) total += 3;
-    if (patch)          total += 2;
+    let totalPrice = _qdProduct.price + sizeSurcharge;
+    if (version === 'jugador') totalPrice += 5;
+    if (name || number) totalPrice += 3;
 
-    _qdDrawer.querySelector('.qad-total-price').textContent = `€${total.toFixed(2)}`;
+    if (_qdProduct && _qdProduct.customPatches === 'espana26') {
+        const customCbs = _qdDrawer.querySelectorAll('#qad-custom-patches-list .qad-custom-patch-cb:checked');
+        if (customCbs.length > 0) {
+            totalPrice += (customCbs.length * 1.25);
+        }
+    } else {
+        if (patch) totalPrice += 2;
+    }
+
+    _qdDrawer.querySelector('.qad-total-price').textContent = `€${totalPrice.toFixed(2)}`;
 }
 
 function _handleDrawerSubmit() {
@@ -768,14 +823,25 @@ function _handleDrawerSubmit() {
     const version = _qdDrawer.querySelector('#qad-version')?.value || 'aficionado';
     const name    = _qdDrawer.querySelector('#qad-name').value.trim().toUpperCase();
     const number  = _qdDrawer.querySelector('#qad-number').value.trim();
-    const patch   = _qdDrawer.querySelector('#qad-patch').value.trim();
+    let patch   = _qdDrawer.querySelector('#qad-patch').value.trim();
 
     const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
     const sizeSurcharge   = SIZE_SURCHARGES[size] || 0;
     let totalPrice        = _qdProduct.price + sizeSurcharge;
     if (version === 'jugador') totalPrice += 5;
     if (name || number) totalPrice += 3;
-    if (patch)          totalPrice += 2;
+
+    if (_qdProduct && _qdProduct.customPatches === 'espana26') {
+        const customCbs = _qdDrawer.querySelectorAll('#qad-custom-patches-list .qad-custom-patch-cb:checked');
+        if (customCbs.length > 0) {
+            totalPrice += (customCbs.length * 1.25);
+            patch = Array.from(customCbs).map(cb => cb.value).join(', ');
+        } else {
+            patch = '';
+        }
+    } else {
+        if (patch) totalPrice += 2;
+    }
 
     const customization = { size, version, name, number, patch, extras: [] };
     const cartItem = {
@@ -966,6 +1032,9 @@ function applySpecialPricing() {
             oldPrice = 30.00;
             newPrice = 24.90;
         } else if (isKids) {
+            oldPrice = 27.00;
+            newPrice = 21.90;
+        } else if (product.customPatches === 'espana26') {
             oldPrice = 27.00;
             newPrice = 21.90;
         }
@@ -1662,7 +1731,38 @@ function openCustomizationModal(productId) {
             sizeGroup.insertAdjacentElement('beforebegin', banner);
         }
     } else {
-        if (patchGroup) patchGroup.style.display = '';
+        const customPatchesContainer = document.getElementById('custom-patches-modal-container');
+        const customPatchesList = document.getElementById('custom-patches-modal-list');
+        
+        if (currentProduct.customPatches === 'espana26') {
+            if (patchGroup) patchGroup.style.display = 'none';
+            if (customPatchesContainer && customPatchesList) {
+                customPatchesContainer.style.display = 'block';
+                const patches = [
+                    { id: 'cpm_doradocentral', label: 'Parche dorado central (Campeones de mundo 2026)', short: 'Campeones', img: '/assets/images/patches/dorado-central.webp' },
+                    { id: 'cpm_mangaderecha', label: 'Parche manga derecha mundial 2026 dorado', short: '26 dorado', img: '/assets/images/patches/manga-derecha.webp' },
+                    { id: 'cpm_mangaizquierda', label: 'Parche Football unites the world manga izquierda', short: 'fifa', img: '/assets/images/patches/manga-izquierda.webp' }
+                ];
+                if (currentProduct.tipo === 'local') {
+                    patches.push({ id: 'cpm_letrasfinal', label: 'Letras debajo de escudo de final', short: 'letras', img: '/assets/images/patches/letras-final.webp' });
+                }
+                customPatchesList.innerHTML = patches.map(p => `
+                    <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                        <input type="checkbox" class="custom-patch-cb" value="${p.short}" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
+                        <img src="${p.img}" style="width: 30px; height: 30px; object-fit: contain; border-radius: 4px;">
+                        <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">${p.label}</span>
+                    </label>
+                `).join('');
+                
+                customPatchesList.querySelectorAll('.custom-patch-cb').forEach(cb => {
+                    cb.addEventListener('change', updatePreview);
+                });
+            }
+        } else {
+            if (patchGroup) patchGroup.style.display = '';
+            if (customPatchesContainer) customPatchesContainer.style.display = 'none';
+        }
+        
         if (versionGroup) versionGroup.style.display = '';
     }
 
@@ -1703,6 +1803,10 @@ function updatePreview() {
 
     const sizeSelect = document.getElementById('modal-size');
     const versionSelect = document.getElementById('modal-version');
+    if (versionSelect && versionSelect.value === 'jugador' && currentProduct && currentProduct.customPatches === 'espana26') {
+        alert('La versión jugador para este modelo estará disponible muy pronto.');
+        versionSelect.value = 'aficionado';
+    }
     const nameInput = document.getElementById('modal-name');
     const numberInput = document.getElementById('modal-number');
     const patchSelect = document.getElementById('modal-patch');
@@ -1724,7 +1828,19 @@ function updatePreview() {
 
     if (version === 'jugador') total += 5;
 
-    if (patch && patch !== 'none') total += 2;
+    let patchStr = '';
+    if (currentProduct && currentProduct.customPatches === 'espana26') {
+        const customCbs = document.querySelectorAll('#custom-patches-modal-list .custom-patch-cb:checked');
+        if (customCbs.length > 0) {
+            total += (customCbs.length * 1.25);
+            patchStr = Array.from(customCbs).map(cb => 'Especial').join(', ');
+        }
+    } else {
+        if (patch && patch !== 'none') {
+            total += 2;
+            patchStr = PATCH_DEFINITIONS[patch] || patch;
+        }
+    }
 
     if (name || number) total += 3;
 
@@ -1741,7 +1857,7 @@ function updatePreview() {
         if (size) detailsText += `Talla: ${size}`;
         if (version) detailsText += ` | Versión: ${version === 'jugador' ? 'Jugador' : 'Aficionado'}`;
         if (name && number) detailsText += ` | Personalización: ${name} (${number})`;
-        if (patch && patch !== 'none') detailsText += ` | Parche: ${PATCH_DEFINITIONS[patch] || patch}`;
+        if (patchStr) detailsText += ` | Parche: ${patchStr}`;
         detailsEl.textContent = detailsText;
     }
 }
@@ -1783,7 +1899,21 @@ function handleFormSubmit(e) {
     const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
     let totalPrice = currentProduct.price + sizeSurcharge;
     if (version === 'jugador') totalPrice += 5;
-    if (patch && patch !== 'none') totalPrice += 2;
+    
+    let finalPatchStr = '';
+    if (currentProduct && currentProduct.customPatches === 'espana26') {
+        const customCbs = document.querySelectorAll('#custom-patches-modal-list .custom-patch-cb:checked');
+        if (customCbs.length > 0) {
+            totalPrice += (customCbs.length * 1.25);
+            finalPatchStr = Array.from(customCbs).map(cb => cb.value).join(', ');
+        }
+    } else {
+        if (patch && patch !== 'none') {
+            totalPrice += 2;
+            finalPatchStr = patch;
+        }
+    }
+    
     if (name || number) totalPrice += 3;
 
     const customization = {
@@ -1791,7 +1921,7 @@ function handleFormSubmit(e) {
         version: version,
         name: name,
         number: number,
-        patch: patch,
+        patch: finalPatchStr,
         extras: []
     };
 
