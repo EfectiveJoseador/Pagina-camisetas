@@ -383,7 +383,8 @@ async function confirmOrder() {
     const paymentMethod = selectedPayment.value;
 
     if (paymentMethod === 'paypal') {
-        await showPayPalWarningModal();
+        const accepted = await showPayPalWarningModal();
+        if (!accepted) return;
     }
 
     const selectedAddress = addresses.find(a => a.id === selectedAddressId);
@@ -1153,7 +1154,7 @@ function showPayPalWarningModal() {
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 1.5rem;
+            padding: 1.25rem;
             backdrop-filter: blur(5px);
             opacity: 0;
             transition: opacity 0.3s ease;
@@ -1162,10 +1163,11 @@ function showPayPalWarningModal() {
 
         modal.innerHTML = `
             <div style="
+                position: relative;
                 background: var(--bg-card, #1f2937);
                 border: 2px solid #f59e0b;
                 border-radius: 16px;
-                padding: 2rem;
+                padding: 2.25rem 1.5rem 1.75rem;
                 max-width: 500px;
                 width: 100%;
                 box-shadow: 0 25px 50px -12px rgba(0,0,0,0.5);
@@ -1173,11 +1175,37 @@ function showPayPalWarningModal() {
                 transform: scale(0.9);
                 transition: transform 0.3s ease;
                 color: var(--text-main, #f3f4f6);
+                box-sizing: border-box;
             ">
-                <div style="font-size: 3rem; color: #f59e0b; margin-bottom: 1rem;">
+                <button id="paypal-warning-close" type="button" aria-label="Cerrar aviso" title="Cerrar" style="
+                    position: absolute;
+                    top: 12px;
+                    right: 12px;
+                    width: 40px;
+                    height: 40px;
+                    background: rgba(239, 68, 68, 0.15);
+                    border: 1px solid rgba(239, 68, 68, 0.4);
+                    border-radius: 50%;
+                    color: #ef4444;
+                    font-size: 1.25rem;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    cursor: pointer;
+                    transition: all 0.2s ease;
+                    outline: none;
+                    z-index: 10;
+                    padding: 0;
+                    line-height: 1;
+                    touch-action: manipulation;
+                    -webkit-tap-highlight-color: transparent;
+                ">
+                    <i class="fas fa-times" style="pointer-events: none;"></i>
+                </button>
+                <div style="font-size: 3rem; color: #f59e0b; margin-bottom: 0.75rem;">
                     <i class="fas fa-exclamation-triangle"></i>
                 </div>
-                <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1.25rem; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.5px;">
+                <h3 style="font-size: 1.4rem; font-weight: 700; margin-bottom: 1.25rem; color: #f59e0b; text-transform: uppercase; letter-spacing: 0.5px; padding: 0 1.5rem;">
                     ¡Atención Muy Importante!
                 </h3>
                 <div style="font-size: 0.95rem; line-height: 1.6; margin-bottom: 2rem; text-align: left; color: var(--text-main, #f3f4f6);">
@@ -1203,7 +1231,7 @@ function showPayPalWarningModal() {
                     text-transform: uppercase;
                     letter-spacing: 0.5px;
                 ">
-                    Leer aviso (5s)
+                    Leer aviso (10s)
                 </button>
             </div>
         `;
@@ -1212,11 +1240,14 @@ function showPayPalWarningModal() {
         
         requestAnimationFrame(() => {
             modal.style.opacity = '1';
-            modal.querySelector('div').style.transform = 'scale(1)';
+            const card = modal.querySelector('div');
+            if (card) card.style.transform = 'scale(1)';
         });
 
         const btn = modal.querySelector('#paypal-warning-btn');
-        let timeLeft = 5;
+        const closeBtn = modal.querySelector('#paypal-warning-close');
+        let timeLeft = 10;
+        let isClosed = false;
 
         const interval = setInterval(() => {
             timeLeft--;
@@ -1233,15 +1264,55 @@ function showPayPalWarningModal() {
             }
         }, 1000);
 
-        btn.addEventListener('click', () => {
-            if (timeLeft > 0) return;
-            
+        const closeModal = (accepted) => {
+            if (isClosed) return;
+            isClosed = true;
+            clearInterval(interval);
+            document.removeEventListener('keydown', handleKeyDown);
             modal.style.opacity = '0';
-            modal.querySelector('div').style.transform = 'scale(0.9)';
+            const card = modal.querySelector('div');
+            if (card) card.style.transform = 'scale(0.9)';
             setTimeout(() => {
                 modal.remove();
-                resolve();
+                resolve(accepted);
             }, 300);
+        };
+
+        if (closeBtn) {
+            closeBtn.addEventListener('mouseenter', () => {
+                closeBtn.style.background = 'rgba(239, 68, 68, 0.3)';
+                closeBtn.style.transform = 'scale(1.1)';
+                closeBtn.style.borderColor = 'rgba(239, 68, 68, 0.7)';
+                closeBtn.style.color = '#ff6b6b';
+            });
+            closeBtn.addEventListener('mouseleave', () => {
+                closeBtn.style.background = 'rgba(239, 68, 68, 0.15)';
+                closeBtn.style.transform = 'scale(1)';
+                closeBtn.style.borderColor = 'rgba(239, 68, 68, 0.4)';
+                closeBtn.style.color = '#ef4444';
+            });
+            closeBtn.addEventListener('click', (e) => {
+                e.stopPropagation();
+                closeModal(false);
+            });
+        }
+
+        modal.addEventListener('click', (e) => {
+            if (e.target === modal) {
+                closeModal(false);
+            }
+        });
+
+        const handleKeyDown = (e) => {
+            if (e.key === 'Escape') {
+                closeModal(false);
+            }
+        };
+        document.addEventListener('keydown', handleKeyDown);
+
+        btn.addEventListener('click', () => {
+            if (timeLeft > 0) return;
+            closeModal(true);
         });
     });
 }
