@@ -104,19 +104,39 @@
                 },
                 "lastAddressEditDate": {
                     ".validate": "newData.isString()"
+                },
+
+                "security": {
+                    ".read": "$uid === auth.uid || auth.token.admin === true",
+                    ".write": "auth.token.admin === true",
+                    "hasBackupPassword": {
+                        ".validate": "newData.isBoolean()"
+                    },
+                    "backupPasswordUpdatedAt": {
+                        ".validate": "newData.isString()"
+                    },
+                    "backupPasswordProvider": {
+                        ".validate": "newData.isString()"
+                    }
                 }
             }
         },
+
         "ordersByUser": {
             ".read": "auth.token.admin === true",
             "$uid": {
                 ".read": "$uid === auth.uid || auth.token.admin === true",
-                ".write": "$uid === auth.uid || auth.token.admin === true",
+
                 "$orderId": {
+                    ".write": "auth.token.admin === true",
+
                     "items": {
                         ".validate": "newData.exists()"
                     },
                     "total": {
+                        ".validate": "newData.isNumber() && newData.val() >= 0"
+                    },
+                    "subtotal": {
                         ".validate": "newData.isNumber() && newData.val() >= 0"
                     },
                     "status": {
@@ -131,6 +151,7 @@
                 }
             }
         },
+
         "bestSellers": {
             ".read": true,
             ".write": "auth.token.admin === true"
@@ -149,11 +170,11 @@
             ".read": true,
             ".write": "auth.token.admin === true"
         },
+
         "promoCodes": {
             ".read": "auth.token.admin === true",
             ".write": "auth.token.admin === true",
             "$codeId": {
-                ".read": "auth != null",
                 ".validate": "newData.hasChildren(['code', 'type', 'value', 'active'])",
                 "code": {
                     ".validate": "newData.isString() && newData.val().length >= 3 && newData.val().length <= 30"
@@ -168,7 +189,7 @@
                     ".validate": "newData.isBoolean()"
                 },
                 "usageCount": {
-                    ".write": "auth != null",
+                    ".write": "auth.token.admin === true",
                     ".validate": "newData.isNumber() && newData.val() >= 0"
                 },
                 "maxUses": {
@@ -180,7 +201,7 @@
                 "userUsages": {
                     "$uid": {
                         ".read": "$uid === auth.uid || auth.token.admin === true",
-                        ".write": "$uid === auth.uid || auth.token.admin === true",
+                        ".write": "auth.token.admin === true",
                         ".validate": "newData.isNumber() && newData.val() >= 0"
                     }
                 },
@@ -192,6 +213,34 @@
                 }
             }
         },
+
+        "auditLog": {
+            ".read": "auth.token.admin === true",
+            ".write": false,
+            "$eventId": {
+                ".validate": "newData.hasChildren(['uid', 'event', 'timestamp'])"
+            }
+        },
+
+        "loginAttempts": {
+            ".read": false,
+            ".write": true,
+            "$ipHash": {
+                "count": {
+                    ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 1000"
+                },
+                "firstAttempt": {
+                    ".validate": "newData.isNumber()"
+                },
+                "lastAttempt": {
+                    ".validate": "newData.isNumber()"
+                },
+                "blocked": {
+                    ".validate": "newData.isBoolean()"
+                }
+            }
+        },
+
         "$other": {
             ".read": false,
             ".write": false

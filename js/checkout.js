@@ -1,9 +1,11 @@
 import { auth, db, onAuthStateChanged, ref, get, push, set } from './firebase-config.js';
+import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
 import Cart from './carrito.js';
 import products from './products-data.js';
 import { getUserCoupons, useCoupon, addPendingPoints } from './points.js';
 import { sanitizeHTML } from './security.js';
 import Analytics from './analytics.js';
+
 let currentUser = null;
 let selectedAddressId = null;
 let addresses = [];
@@ -380,112 +382,151 @@ async function confirmOrder() {
     }
 
     const selectedPayment = document.querySelector('input[name="payment"]:checked');
-    const paymentMethod = selectedPayment.value;
+    const paymentMethod   = selectedPayment.value;
 
     if (paymentMethod === 'paypal') {
         const accepted = await showPayPalWarningModal();
         if (!accepted) return;
     }
 
-    const selectedAddress = addresses.find(a => a.id === selectedAddressId);
-    const calculations = Cart.calculateTotal();
-    const orderId = 'ORD-' + Date.now();
-
-    if (!calculations || isNaN(calculations.total)) {
-        alert('Error al calcular el total del pedido. Actualiza la página e inténtalo de nuevo.');
+    if (!Cart.items || Cart.items.length === 0) {
+        alert('Tu carrito está vacío.');
         return;
-    }
-    const totalDiscounts = appliedDiscount + promoDiscount;
-    const finalTotal = Math.max(0, calculations.total - totalDiscounts);
-    const totalShirtQuantity = Cart.items.reduce((sum, item) => sum + (item.quantity || item.qty || 1), 0);
-
-    const orderData = {
-        orderId: orderId,
-        userId: currentUser.uid,
-        userEmail: currentUser.email,
-        customerName: currentUser.displayName || 'Usuario',
-        customerEmail: currentUser.email,
-        date: new Date().toISOString(),
-        dateFormatted: new Date().toLocaleString('es-ES'),
-        createdAt: Date.now(),
-        status: 'pendiente',
-        trackingNumber: null,
-        items: Cart.items.map(item => {
-            const product = products.find(p => p.id === item.id);
-            const custom = item.customization || {};
-            return {
-                id: item.id,
-                sku: product?.sku || item.sku || '',
-                name: item.name || product?.name || `Producto ${item.id}`,
-                image: item.image || product?.image || '/assets/placeholder.webp',
-                quantity: item.quantity || item.qty || 1,
-                size: custom.size || item.size || 'N/A',
-                version: custom.version || item.version || 'aficionado',
-                price: item.price || product?.price || 0,
-                customization: custom
-            };
-        }),
-        total: finalTotal,
-        subtotal: calculations.subtotal,
-        shipping: calculations.shipping,
-        protectionFee: calculations.protectionFee,
-        discount: totalDiscounts,
-        couponUsed: selectedCoupon ? selectedCoupon.id : null,
-        couponDiscount: appliedDiscount,
-        promoCodeUsed: appliedPromoCode ? appliedPromoCode.id : null,
-        promoCodeDiscount: promoDiscount,
-        shippingAddress: selectedAddress,
-        paymentMethod: paymentMethod,
-        pointsToEarn: totalShirtQuantity * 10
-    };
-
-    if (paymentMethod === 'paypal') {
-        orderData.paypalLink = `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${finalTotal.toFixed(2)}`;
     }
 
     if (!confirmBtn) return;
 
-    const originalText = confirmBtn.innerHTML;
+    const originalHTML = confirmBtn.innerHTML;
     confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
-    confirmBtn.disabled = true;
+    confirmBtn.disabled  = true;
 
     try {
-        // Guardar pedido en Firebase
-        await saveOrder(orderData);
-
-        // Enviar notificación por email
-        await sendOrderViaWeb3Forms(orderData);
-
-        // Aplicar descuentos y puntos
-        if (appliedPromoCode) {
-            await incrementPromoUsage(appliedPromoCode.id, appliedPromoCode);
-        }
-        if (orderData.pointsToEarn > 0) {
-            await addPendingPoints(currentUser.uid, orderData.orderId, totalShirtQuantity);
-        }
-        if (selectedCoupon) {
-            await useCoupon(currentUser.uid, selectedCoupon.id, orderData.orderId);
-        }
-
-        // Si es PayPal: abrir en nueva pestaña antes de redirigir
-        if (paymentMethod === 'paypal') {
-            try {
-                window.open(orderData.paypalLink, '_blank');
-            } catch (_) {
-                // Si el popup fue bloqueado, no interrumpir el flujo
+        // ── Build the secure payload — IDs + quantities ONLY, NO prices ──────────
+        // The Cloud Function fetches real prices from the database.
+        // The client CANNOT inject or modify any price data.
+        const cartPayload = Cart.items.map(item => ({
+            productId:     item.id,
+            qty:           item.quantity || item.qty || 1,
+            customization: {
+                size:    item.customization?.size    || item.size    || 'N/A',
+                version: item.customization?.version || item.version || 'aficionado',
+                name:    item.customization?.name    || '',
+                number:  item.customization?.number  || '',
+                patches: item.customization?.patches || []
             }
+        }));
+
+        // Fetch Firebase JWT Token for authentication
+        const token = await auth.currentUser.getIdToken();
+
+        const response = await fetch('/api/checkout', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                cartItems:     cartPayload,
+                addressId:     selectedAddressId,
+                paymentMethod,
+                couponId:      selectedCoupon ? selectedCoupon.id : null,
+                promoCode:     appliedPromoCode ? (appliedPromoCode.code || appliedPromoCode.id || null) : null
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok) {
+            // Re-throw in a format the catch block understands
+            const err = new Error(result.message || 'Error interno');
+            err.code = result.code || 'functions/internal';
+            throw err;
         }
 
-        // Limpiar carrito y redirigir a página de éxito
+        const { orderId, total, paypalLink } = result.data;
+
+        // ── Analytics (uses server-returned total, not client-calculated) ──
+        if (window.Analytics) {
+            window.Analytics.trackPurchase(orderId, total, Cart.items);
+        }
+
+        // ── Notify admin via Web3Forms (email notification only) ─────────
+        await sendOrderNotification(orderId, total, paymentMethod);
+
+        // ── Open PayPal if applicable ──────────────────────────────
+        if (paymentMethod === 'paypal' && paypalLink) {
+            try { window.open(paypalLink, '_blank'); } catch (_) { /* popup blocked — ok */ }
+        }
+
+        // ── Clear cart and redirect ──────────────────────────────
         localStorage.removeItem('cart');
         localStorage.removeItem('appliedPacks');
-        window.location.href = '/pages/orden-exitosa.html?order=' + orderData.orderId;
+        window.location.href = '/pages/orden-exitosa.html?order=' + orderId;
 
     } catch (error) {
-        console.error('Error procesando pedido:', error);
-        alert('Error al procesar el pedido: ' + (error.message || 'Inténtalo de nuevo.'));
-        confirmBtn.innerHTML = originalText;
-        confirmBtn.disabled = false;
+        // Map Firebase Functions error codes to descriptive Spanish messages
+        let userMsg;
+        const code = error?.code || '';
+
+        if (code === 'functions/not-found') {
+            userMsg = error.message || 'Producto no encontrado. Por favor, actualiza la página y vuelve a intentarlo.';
+        } else if (code === 'functions/invalid-argument') {
+            userMsg = error.message || 'Datos del pedido incorrectos. Por favor, revisa tu carrito.';
+        } else if (code === 'functions/unauthenticated') {
+            userMsg = 'Sesión expirada. Por favor, vuelve a iniciar sesión.';
+            setTimeout(() => { window.location.href = '/pages/login.html?redirect=checkout'; }, 2000);
+        } else if (code === 'functions/failed-precondition') {
+            userMsg = error.message || 'El servicio no está disponible en este momento. Inténtalo más tarde.';
+        } else if (code === 'functions/internal') {
+            // Extract the reference ID from the message for support purposes
+            const refMatch = error.message?.match(/ref: (co_\d+_\w+)/);
+            const refId    = refMatch ? ` (Ref: ${refMatch[1]})` : '';
+            userMsg = `Error interno del servidor${refId}. Por favor, inténtalo de nuevo en unos minutos.`;
+        } else if (code === 'functions/resource-exhausted') {
+            userMsg = 'Demasiadas solicitudes. Por favor, espera unos minutos antes de intentarlo de nuevo.';
+        } else {
+            userMsg = error.message || 'Error desconocido. Por favor, actualiza la página e inténtalo de nuevo.';
+        }
+
+        console.error('[Checkout] Order error — code:', code, 'message:', error?.message);
+        alert('Error al procesar el pedido: ' + userMsg);
+        confirmBtn.innerHTML = originalHTML;
+        confirmBtn.disabled  = false;
+    }
+}
+
+/**
+ * sendOrderNotification — Lightweight admin notification via Web3Forms
+ * ─────────────────────────────────────────────────────────────────────
+ * Sends a notification email to the admin with the order reference.
+ * The actual order data (including verified prices) is stored in Firebase
+ * by the processCheckoutTotal Cloud Function — this is informational only.
+ *
+ * @param {string} orderId
+ * @param {number} total          - Server-verified total (from Cloud Function)
+ * @param {string} paymentMethod
+ */
+async function sendOrderNotification(orderId, total, paymentMethod) {
+    try {
+        const formData = new FormData();
+        formData.append('access_key', WEB3FORMS_KEY);
+        formData.append('subject', `Nuevo pedido confirmado - ${orderId}`);
+        formData.append('order_id', orderId);
+        formData.append('total', `€${total.toFixed(2)}`);
+        formData.append('payment', paymentMethod.toUpperCase());
+        formData.append('timestamp', new Date().toLocaleString('es-ES'));
+
+        const response = await fetch('https://api.web3forms.com/submit', {
+            method: 'POST',
+            body: formData
+        });
+        const data = await response.json();
+        if (!data.success) {
+            console.warn('[Web3Forms] Notification warning:', data.message);
+        }
+    } catch (err) {
+        // Notification failure must NEVER block the order flow
+        console.warn('[Web3Forms] Notification error:', err.message);
     }
 }
 
@@ -931,45 +972,40 @@ async function applyPromoCode() {
     }
 
     try {
-        const promoRef = ref(db, `promoCodes/${code}`);
-        const snapshot = await get(promoRef);
-
-        if (!snapshot.exists()) {
-            showPromoResult('Código no válido', 'error');
-            resetPromoButton();
-            return;
-        }
-
-        const promo = snapshot.val();
-        if (!promo.active) {
-            showPromoResult('Este código ya no está activo', 'error');
-            resetPromoButton();
-            return;
-        }
-        // ── Validar límite global de usos ───────────────────────────────────
-        if (promo.maxUses && promo.usageCount >= promo.maxUses) {
-            showPromoResult('Este código ha alcanzado el límite de usos', 'error');
-            resetPromoButton();
-            return;
-        }
-
-        // ── Validar límite de usos por usuario (maxUsesPerUser) ─────────────
-        if (promo.maxUsesPerUser) {
-            const userUsageRef = ref(db, `promoCodes/${code}/userUsages/${currentUser.uid}`);
-            const userUsageSnap = await get(userUsageRef);
-            const userUsageCount = userUsageSnap.exists() ? (userUsageSnap.val() || 0) : 0;
-            if (userUsageCount >= promo.maxUsesPerUser) {
-                showPromoResult(
-                    `Ya has usado este código el máximo permitido (${promo.maxUsesPerUser} ${promo.maxUsesPerUser === 1 ? 'vez' : 'veces'} por usuario)`,
-                    'error'
-                );
-                resetPromoButton();
-                return;
-            }
-        }
-
-        appliedPromoCode = { ...promo, id: code };
+        const token = await auth.currentUser.getIdToken();
         const calculations = Cart.calculateTotal();
+
+        const response = await fetch('/api/promo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${token}`
+            },
+            body: JSON.stringify({
+                code: code,
+                cartSubtotal: calculations.subtotal
+            })
+        });
+
+        const result = await response.json();
+
+        if (!response.ok || !result.data) {
+            showPromoResult('Error al validar el código', 'error');
+            resetPromoButton();
+            return;
+        }
+
+        const promoResult = result.data;
+
+        if (!promoResult.valid) {
+            showPromoResult(promoResult.reason || 'Código no válido', 'error');
+            resetPromoButton();
+            return;
+        }
+
+        const promo = promoResult;
+
+        appliedPromoCode = { id: promo.code, code: promo.code };
 
         if (promo.type === 'free_shipping') {
             if (calculations.shipping === 0) {
@@ -981,10 +1017,10 @@ async function applyPromoCode() {
             promoDiscount = calculations.shipping;
             showPromoResult('¡Envío gratis aplicado!', 'success');
         } else if (promo.type === 'percentage') {
-            promoDiscount = (calculations.subtotal * promo.value) / 100;
+            promoDiscount = promo.discountAmount;
             showPromoResult(`¡${promo.value}% de descuento aplicado! (-€${promoDiscount.toFixed(2)})`, 'success');
         } else {
-            promoDiscount = Math.min(promo.value, calculations.subtotal);
+            promoDiscount = promo.discountAmount;
             showPromoResult(`¡€${promo.value} de descuento aplicado!`, 'success');
         }
         let finalTotal = calculations.total - promoDiscount - appliedDiscount;

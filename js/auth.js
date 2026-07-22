@@ -19,7 +19,18 @@ import {
     get,
     update
 } from './firebase-config.js';
-import { sanitizeInput, isValidEmail, checkRateLimit, getRemainingAttempts } from './security.js';
+import {
+    sanitizeInput,
+    isValidEmail,
+    checkRateLimit,
+    getRemainingAttempts,
+    getBackoffUntil,
+    resetRateLimit,
+    validateRedirectParam,
+    checkPasswordBreached,
+    storeSessionFingerprint,
+    logSecurityEvent
+} from './security.js';
 
 // ─────────────────────────────────────────────────────────────────────────────
 // CONSTANTES
@@ -39,11 +50,13 @@ const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:
 // HELPERS DE REDIRECCIÓN Y ERRORES
 // ─────────────────────────────────────────────────────────────────────────────
 const urlParams     = new URLSearchParams(window.location.search);
-const redirectParam = urlParams.get('redirect');
+// validateRedirectParam enforces a strict allowlist — prevents Open Redirect (C-5)
+const redirectParam = validateRedirectParam(urlParams.get('redirect'));
 
 function getRedirectUrl(isAdmin) {
-    if (isAdmin)                      return '/pages/admin.html';
-    if (redirectParam === 'checkout') return '/pages/checkout.html';
+    if (isAdmin)                         return '/pages/admin.html';
+    if (redirectParam === 'checkout')    return '/pages/checkout.html';
+    if (redirectParam === 'carrito')     return '/pages/carrito.html';
     return '/pages/perfil.html';
 }
 
@@ -552,14 +565,44 @@ document.addEventListener('DOMContentLoaded', () => {
                     });
                 }
 
+                // Store session fingerprint for anomaly detection
+                await storeSessionFingerprint();
+
+                // Reset rate limit on successful login
+                resetRateLimit(LOGIN_RATE_LIMIT_KEY);
+
+                // Audit log
+                await logSecurityEvent('login_success', {});
+
                 const { claims } = await user.getIdTokenResult(true);
                 window.location.href = getRedirectUrl(claims.admin === true);
 
             } catch (error) {
-                console.error(error);
+                // Audit failed login attempt (no sensitive data)
+                await logSecurityEvent('login_attempt_failed', {});
+
                 showError('login-error', mapAuthError(error.code));
                 btn.textContent = 'Entrar';
                 btn.disabled    = false;
+
+                // Show backoff countdown if locked out
+                const backoffUntil = getBackoffUntil(LOGIN_RATE_LIMIT_KEY);
+                if (backoffUntil > Date.now()) {
+                    const secsLeft = Math.ceil((backoffUntil - Date.now()) / 1000);
+                    showError('login-error', `Demasiados intentos. Espera ${secsLeft} segundos antes de intentarlo de nuevo.`);
+                    btn.disabled = true;
+                    const countdown = setInterval(() => {
+                        const remaining = Math.ceil((backoffUntil - Date.now()) / 1000);
+                        if (remaining <= 0) {
+                            clearInterval(countdown);
+                            btn.disabled = false;
+                            btn.textContent = 'Entrar';
+                            clearError('login-error');
+                        } else {
+                            showError('login-error', `Espera ${remaining}s antes de intentarlo de nuevo.`);
+                        }
+                    }, 1000);
+                }
             }
         });
     }
@@ -584,19 +627,34 @@ document.addEventListener('DOMContentLoaded', () => {
             }
 
             try {
-                btn.textContent = 'Creando cuenta...';
+                btn.textContent = 'Verificando seguridad...';
                 btn.disabled    = true;
+
+                // HIBP check — verify password not in known breach databases
+                const { pwned, count } = await checkPasswordBreached(password);
+                if (pwned) {
+                    showError(
+                        'register-error',
+                        `⚠️ Esta contraseña aparece en ${count.toLocaleString()} filtraciones de datos conocidas. Por tu seguridad, elige una contraseña diferente.`
+                    );
+                    btn.textContent = 'Crear Cuenta';
+                    btn.disabled    = false;
+                    if (recaptchaVerifier) grecaptcha.reset(recaptchaVerifier.widgetId);
+                    return;
+                }
+
+                btn.textContent = 'Creando cuenta...';
                 const { user } = await createUserWithEmailAndPassword(auth, email, password);
                 await updateProfile(user, { displayName: name });
                 await sendEmailVerification(user);
                 await signOut(auth);
+                await logSecurityEvent('registration_attempt', {});
                 if (recaptchaVerifier) grecaptcha.reset(recaptchaVerifier.widgetId);
                 showError('register-error', '¡Cuenta creada! Hemos enviado un enlace de verificación a tu correo. Por favor verifícalo para iniciar sesión.', true);
                 registerForm.reset();
                 btn.textContent = 'Crear Cuenta';
                 btn.disabled    = false;
             } catch (error) {
-                console.error(error);
                 showError('register-error', mapAuthError(error.code) || error.message);
                 btn.textContent = 'Crear Cuenta';
                 btn.disabled    = false;

@@ -1,342 +1,806 @@
+/**
+ * ════════════════════════════════════════════════════════════════════════════
+ *  Camisetazo — Firebase Cloud Functions
+ *  Security Architecture: Defense-in-Depth | Zero Trust | CISSP-grade
+ * ════════════════════════════════════════════════════════════════════════════
+ *
+ *  HASHING: Argon2id (OWASP recommended, GPU/ASIC-resistant)
+ *    - memoryCost: 65536 (64 MB) — forces GPU memory bottleneck
+ *    - timeCost:   3            — 3 iterations
+ *    - parallelism: 4           — 4 lanes
+ *    - outputLen: 32            — 256-bit output
+ *
+ *  BCRYPT kept ONLY for verifying legacy hashes created before this migration.
+ *  All new hashes use Argon2id exclusively.
+ */
 
+'use strict';
 
 const functions = require('firebase-functions');
-const admin = require('firebase-admin');
+const admin     = require('firebase-admin');
+const bcrypt    = require('bcryptjs');
 
+// ─────────────────────────────────────────────────────────────────────────────
+// LAZY ARGON2 LOADER
+// ─────────────────────────────────────────────────────────────────────────────
+// @node-rs/argon2 is a native Node addon. Loading it at the top level means
+// that if it fails (wrong architecture, missing binding), ALL functions in
+// this file will crash with 'internal' — including processCheckoutTotal, which
+// doesn't use argon2 at all. Lazy-loading isolates the failure to password
+// functions only.
+let _argon2 = null;
+function getArgon2() {
+    if (!_argon2) {
+        try {
+            _argon2 = require('@node-rs/argon2');
+            console.log('[Argon2] Loaded @node-rs/argon2 successfully');
+        } catch (err) {
+            console.error('[Argon2] FATAL: Failed to load @node-rs/argon2:', err.message);
+            throw new functions.https.HttpsError(
+                'internal',
+                'El módulo de hashing no está disponible. Contacta al administrador.'
+            );
+        }
+    }
+    return _argon2;
+}
 
 admin.initializeApp();
 
-
-
+// ─────────────────────────────────────────────────────────────────────────────
+// CONSTANTS
+// ─────────────────────────────────────────────────────────────────────────────
 
 const SUPER_ADMIN_EMAIL = 'camisetazocontacto@gmail.com';
 
+/** Argon2id parameters calibrated against GPU/ASIC attacks (OWASP 2024) */
+const ARGON2_OPTIONS = {
+    memoryCost:  65536, // 64 MB — kills GPU parallelism
+    timeCost:    3,
+    parallelism: 4,
+    outputLen:   32
+};
 
+/** Strict password validation: 8+ chars, upper, lower, digit, symbol */
+const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()\-_=+{};:,<.>/?\\|[\]`~'"]).{8,128}$/;
 
+/** Protection fee added to every order (tamper-proof) */
+const PROTECTION_FEE = 3.00;
 
-exports.setAdminByEmail = functions.https.onCall(async (data, context) => {
-    
-    if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'Debes estar autenticado');
+/** Shipping threshold — orders >= this value get free shipping */
+const FREE_SHIPPING_THRESHOLD = 50.00;
+const SHIPPING_COST = 4.99;
+
+/** Allowed payment methods — server-side allowlist */
+const ALLOWED_PAYMENT_METHODS = ['paypal', 'bizum', 'revolut'];
+
+/** PayPal.me username */
+const PAYPAL_USERNAME = 'camisetazo';
+
+// ─────────────────────────────────────────────────────────────────────────────
+// HELPERS
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * Writes an immutable audit log entry using Admin SDK (bypasses RTDB rules).
+ * The auditLog node has ".write: false" for clients — only the Admin SDK can write here.
+ *
+ * @param {string} uid      - Firebase UID (or 'anonymous')
+ * @param {string} event    - Event name e.g. 'login_failed', 'order_created'
+ * @param {Object} metadata - Additional context (never include raw passwords or PII)
+ */
+async function writeAuditLog(uid, event, metadata = {}) {
+    try {
+        const db     = admin.database();
+        const logRef = db.ref('auditLog').push();
+        await logRef.set({
+            uid,
+            event,
+            timestamp:   Date.now(),
+            timestampISO: new Date().toISOString(),
+            ...metadata
+        });
+    } catch (err) {
+        // Audit logging must never break the main flow
+        console.error('[AuditLog] Failed to write:', err.message);
     }
+}
 
-    
-    const callerEmail = context.auth.token.email;
+/**
+ * Validates that the caller has an active Firebase Auth session.
+ * Throws HttpsError 'unauthenticated' if not.
+ *
+ * @param {Object} context - Cloud Function context
+ * @returns {Object} context.auth
+ */
+function requireAuth(context) {
+    if (!context.auth) {
+        throw new functions.https.HttpsError(
+            'unauthenticated',
+            'Debes estar autenticado para realizar esta acción.'
+        );
+    }
+    return context.auth;
+}
+
+/**
+ * Validates that the caller has admin custom claim.
+ *
+ * @param {Object} context - Cloud Function context
+ */
+function requireAdmin(context) {
+    requireAuth(context);
+    const callerEmail   = context.auth.token.email;
     const isCallerAdmin = context.auth.token.admin === true;
-    const isSuperAdmin = callerEmail === SUPER_ADMIN_EMAIL;
-
+    const isSuperAdmin  = callerEmail === SUPER_ADMIN_EMAIL;
     if (!isCallerAdmin && !isSuperAdmin) {
-        throw new functions.https.HttpsError('permission-denied', 'No tienes permisos de administrador');
+        throw new functions.https.HttpsError(
+            'permission-denied',
+            'No tienes permisos de administrador.'
+        );
     }
+}
 
-    const email = data.email;
-    if (!email) {
-        throw new functions.https.HttpsError('invalid-argument', 'Email requerido');
-    }
+/**
+ * Sanitizes a string input to prevent injection.
+ * @param {*}      value     - Input value
+ * @param {number} maxLength - Maximum allowed length
+ * @returns {string}
+ */
+function sanitizeString(value, maxLength = 500) {
+    if (value === null || value === undefined) return '';
+    const str = String(value).trim();
+    // Remove null bytes and control characters
+    return str.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '').substring(0, maxLength);
+}
+
+
+// ─────────────────────────────────────────────────────────────────────────────
+// ██████╗ ██████╗  ██████╗ ██████╗ ██╗   ██╗ ██████╗████████╗███████╗
+// ██╔══██╗██╔══██╗██╔═══██╗██╔══██╗██║   ██║██╔════╝╚══██╔══╝██╔════╝
+// ██████╔╝██████╔╝██║   ██║██║  ██║██║   ██║██║        ██║   ███████╗
+// ██╔═══╝ ██╔══██╗██║   ██║██║  ██║██║   ██║██║        ██║   ╚════██║
+// ██║     ██║  ██║╚██████╔╝██████╔╝╚██████╔╝╚██████╗   ██║   ███████║
+// ╚═╝     ╚═╝  ╚═╝ ╚═════╝ ╚═════╝  ╚═════╝  ╚═════╝   ╚═╝   ╚══════╝
+// PRODUCTS — Admin-only RTDB writes via Admin SDK
+// ─────────────────────────────────────────────────────────────────────────────
+
+/**
+ * processCheckoutTotal — THE CORE SECURITY FUNCTION
+ * ──────────────────────────────────────────────────
+ *
+ * SECURITY MODEL (Zero Trust):
+ *  1. Client sends ONLY: cartItems (productId + qty + customization), addressId, paymentMethod, couponId, promoCode
+ *  2. This function fetches REAL prices from the database (never trusts client prices)
+ *  3. Applies discounts server-side after validating coupons/promos
+ *  4. Adds the tamper-proof protection fee
+ *  5. Writes the order to RTDB using Admin SDK (bypasses client write restrictions)
+ *  6. Returns orderId to client for redirect — client CANNOT modify the stored price
+ *
+ * PREVENTS:
+ *  - C-9: Client-side price manipulation
+ *  - Coupon stacking / replay attacks
+ *  - Fake discount injection
+ *
+ * @param {Object} data
+ *   @param {Array}  data.cartItems     - [{productId, qty, customization}]
+ *   @param {string} data.addressId     - Selected address ID from user's profile
+ *   @param {string} data.paymentMethod - 'paypal' | 'bizum' | 'revolut'
+ *   @param {string} [data.couponId]    - Optional coupon ID
+ *   @param {string} [data.promoCode]   - Optional promo code string
+ */
+exports.processCheckoutTotal = functions.https.onCall(async (data, context) => {
+    // Unique request ID for log correlation
+    const reqId = `co_${Date.now()}_${Math.random().toString(36).slice(2, 5)}`;
+    console.log(`[${reqId}] processCheckoutTotal START — uid: ${context.auth?.uid || 'UNAUTHENTICATED'}`);
 
     try {
-        
-        const user = await admin.auth().getUserByEmail(email);
+        // ── 0. Auth ───────────────────────────────────────────────────────────
+        const authCtx = requireAuth(context);
+        const uid     = authCtx.uid;
 
-        
-        await admin.auth().setCustomUserClaims(user.uid, { admin: true });
+        // ── 1. Input validation ───────────────────────────────────────────────
+        const { cartItems, addressId, paymentMethod, couponId, promoCode } = data;
 
+        console.log(`[${reqId}] Payload — items: ${Array.isArray(cartItems) ? cartItems.length : 'INVALID'}, addressId: ${addressId}, payment: ${paymentMethod}`);
 
-
-        return {
-            success: true,
-            message: `Usuario ${email} ahora es administrador`,
-            uid: user.uid
-        };
-    } catch (error) {
-        console.error('Error asignando admin:', error);
-        throw new functions.https.HttpsError('internal', error.message);
-    }
-});
-
-
-
-
-exports.setAdminByUID = functions.https.onCall(async (data, context) => {
-    
-    if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'Debes estar autenticado');
-    }
-
-    const callerEmail = context.auth.token.email;
-    const isCallerAdmin = context.auth.token.admin === true;
-    const isSuperAdmin = callerEmail === SUPER_ADMIN_EMAIL;
-
-    if (!isCallerAdmin && !isSuperAdmin) {
-        throw new functions.https.HttpsError('permission-denied', 'No tienes permisos de administrador');
-    }
-
-    const uid = data.uid;
-    if (!uid) {
-        throw new functions.https.HttpsError('invalid-argument', 'UID requerido');
-    }
-
-    try {
-        
-        const user = await admin.auth().getUser(uid);
-
-        
-        await admin.auth().setCustomUserClaims(uid, { admin: true });
-
-
-
-        return {
-            success: true,
-            message: `Usuario ${user.email || uid} ahora es administrador`,
-            uid: uid
-        };
-    } catch (error) {
-        console.error('Error asignando admin por UID:', error);
-        throw new functions.https.HttpsError('internal', error.message);
-    }
-});
-
-
-
-
-exports.removeAdmin = functions.https.onCall(async (data, context) => {
-    
-    if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'Debes estar autenticado');
-    }
-
-    const callerEmail = context.auth.token.email;
-    const isSuperAdmin = callerEmail === SUPER_ADMIN_EMAIL;
-
-    
-    if (!isSuperAdmin) {
-        throw new functions.https.HttpsError('permission-denied', 'Solo el super admin puede quitar administradores');
-    }
-
-    const email = data.email;
-    const uid = data.uid;
-
-    if (!email && !uid) {
-        throw new functions.https.HttpsError('invalid-argument', 'Email o UID requerido');
-    }
-
-    try {
-        let targetUser;
-
-        if (email) {
-            targetUser = await admin.auth().getUserByEmail(email);
-        } else {
-            targetUser = await admin.auth().getUser(uid);
+        if (!Array.isArray(cartItems) || cartItems.length === 0) {
+            throw new functions.https.HttpsError('invalid-argument', 'El carrito está vacío.');
+        }
+        if (cartItems.length > 50) {
+            throw new functions.https.HttpsError('invalid-argument', 'Demasiados artículos en el carrito.');
+        }
+        if (!addressId || typeof addressId !== 'string') {
+            throw new functions.https.HttpsError('invalid-argument', 'Dirección de envío requerida.');
+        }
+        if (!paymentMethod || !ALLOWED_PAYMENT_METHODS.includes(paymentMethod)) {
+            throw new functions.https.HttpsError('invalid-argument', `Método de pago no válido: ${paymentMethod}`);
         }
 
-        
-        if (targetUser.email === SUPER_ADMIN_EMAIL) {
-            throw new functions.https.HttpsError('failed-precondition', 'No puedes quitarte los permisos de super admin');
+        // Validate and normalize each cart item
+        const normalizedItems = [];
+        for (const item of cartItems) {
+            if (!item.productId || typeof item.productId !== 'string') {
+                throw new functions.https.HttpsError('invalid-argument', `ID de producto inválido: ${JSON.stringify(item.productId)}`);
+            }
+            const qty = parseInt(item.qty, 10);
+            if (isNaN(qty) || qty < 1 || qty > 20) {
+                throw new functions.https.HttpsError('invalid-argument', `Cantidad inválida para producto ${item.productId}: ${item.qty}`);
+            }
+            normalizedItems.push({ ...item, qty });
         }
 
-        
-        await admin.auth().setCustomUserClaims(targetUser.uid, { admin: false });
+        const db = admin.database();
 
+        // ── 2. Fetch user's address (verify ownership) ────────────────────────
+        console.log(`[${reqId}] Fetching address: users/${uid}/addresses/${addressId}`);
+        const addrSnap = await db.ref(`users/${uid}/addresses/${sanitizeString(addressId, 100)}`).once('value');
+        if (!addrSnap.exists()) {
+            throw new functions.https.HttpsError('not-found', 'Dirección no encontrada. Por favor, selecciona una dirección válida.');
+        }
+        const shippingAddress = addrSnap.val();
+        console.log(`[${reqId}] Address OK`);
 
+        // ── 3. Fetch REAL prices from database ────────────────────────────────
+        console.log(`[${reqId}] Fetching products from RTDB...`);
+        const productsSnap = await db.ref('products').once('value');
+        const dbProducts   = productsSnap.val() || {};
+        const productCount = Object.keys(dbProducts).length;
+        console.log(`[${reqId}] Found ${productCount} products in RTDB`);
 
-        return {
-            success: true,
-            message: `Permisos de admin removidos de ${targetUser.email}`,
-            uid: targetUser.uid
+        if (productCount === 0) {
+            console.error(`[${reqId}] CRITICAL: products node is EMPTY in RTDB. Upload products via admin panel first.`);
+            throw new functions.https.HttpsError(
+                'failed-precondition',
+                'El catálogo de productos no está disponible. Por favor, inténtalo más tarde.'
+            );
+        }
+
+        // Build a price map from DB data
+        const priceMap = {};
+        Object.entries(dbProducts).forEach(([id, product]) => {
+            if (product && typeof product.price === 'number') {
+                priceMap[id] = { price: product.price, name: product.name || id, sku: product.sku || '', image: product.image || '' };
+            }
+        });
+        console.log(`[${reqId}] Price map built with ${Object.keys(priceMap).length} valid products`);
+
+        // ── 4. Calculate subtotal using SERVER prices only ────────────────────
+        let subtotal = 0;
+        const resolvedItems = [];
+
+        for (const item of normalizedItems) {
+            const productData = priceMap[item.productId];
+            if (!productData) {
+                console.error(`[${reqId}] Product not found in RTDB: '${item.productId}'. Available keys sample: ${Object.keys(priceMap).slice(0, 5).join(', ')}`);
+                throw new functions.https.HttpsError(
+                    'not-found',
+                    `Producto '${item.productId}' no encontrado en el catálogo. Por favor, actualiza la página.`
+                );
+            }
+
+            const lineTotal = productData.price * item.qty;
+            subtotal += lineTotal;
+
+            resolvedItems.push({
+                id:            item.productId,
+                sku:           productData.sku,
+                name:          productData.name,
+                image:         productData.image,
+                price:         productData.price,
+                quantity:      item.qty,
+                size:          sanitizeString(item.customization?.size    || 'N/A', 10),
+                version:       sanitizeString(item.customization?.version || 'aficionado', 20),
+                customization: {
+                    size:    sanitizeString(item.customization?.size    || 'N/A', 10),
+                    version: sanitizeString(item.customization?.version || 'aficionado', 20),
+                    name:    sanitizeString(item.customization?.name    || '', 50),
+                    number:  sanitizeString(item.customization?.number  || '', 10),
+                    patches: Array.isArray(item.customization?.patches)
+                        ? item.customization.patches.slice(0, 5).map(p => sanitizeString(p, 50))
+                        : []
+                }
+            });
+        }
+        console.log(`[${reqId}] Subtotal calculated: €${subtotal.toFixed(2)} (${resolvedItems.length} items)`);
+
+        // ── 5. Shipping calculation ───────────────────────────────────────────
+        const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+
+        // ── 6. Apply promo code (server-side validation) ──────────────────────
+        let promoDiscount   = 0;
+        let appliedPromoId  = null;
+
+        if (promoCode && typeof promoCode === 'string') {
+            const normalizedCode = promoCode.trim().toUpperCase().substring(0, 30);
+            console.log(`[${reqId}] Validating promo code: ${normalizedCode}`);
+
+            const promoSnap = await db.ref('promoCodes').orderByChild('code').equalTo(normalizedCode).once('value');
+
+            if (promoSnap.exists()) {
+                let promoId   = null;
+                let promoData = null;
+                promoSnap.forEach(child => { promoId = child.key; promoData = child.val(); });
+
+                if (promoData && promoData.active === true) {
+                    const totalUsed = promoData.usageCount || 0;
+                    const maxUses   = promoData.maxUses;
+                    if (maxUses === null || maxUses === undefined || totalUsed < maxUses) {
+                        const userUsed    = (promoData.userUsages && promoData.userUsages[uid]) || 0;
+                        const maxPerUser  = promoData.maxUsesPerUser || null;
+                        if (maxPerUser === null || userUsed < maxPerUser) {
+                            if (promoData.type === 'percentage') {
+                                promoDiscount = (subtotal * promoData.value) / 100;
+                            } else if (promoData.type === 'fixed') {
+                                promoDiscount = Math.min(promoData.value, subtotal);
+                            } else if (promoData.type === 'free_shipping') {
+                                promoDiscount = shipping;
+                            }
+                            appliedPromoId = promoId;
+                            console.log(`[${reqId}] Promo applied: ${promoId}, discount: €${promoDiscount.toFixed(2)}`);
+                        }
+                    }
+                }
+            } else {
+                console.log(`[${reqId}] Promo code not found: ${normalizedCode}`);
+            }
+        }
+
+        // ── 7. Apply user coupon (server-side validation) ─────────────────────
+        let couponDiscount  = 0;
+        let appliedCouponId = null;
+
+        if (couponId && typeof couponId === 'string' && !appliedPromoId) {
+            const couponSnap = await db.ref(`users/${uid}/coupons/${sanitizeString(couponId, 100)}`).once('value');
+
+            if (couponSnap.exists()) {
+                const coupon = couponSnap.val();
+
+                if (coupon && coupon.used !== true) {
+                    const totalQty    = resolvedItems.reduce((s, i) => s + i.quantity, 0);
+                    const isFreeShirt = coupon.type === 'fixed' && Number(coupon.value) === 19.90;
+
+                    if (isFreeShirt && totalQty < 2) {
+                        console.log(`[${reqId}] Free shirt coupon skipped: only ${totalQty} item(s)`);
+                    } else {
+                        if (coupon.type === 'percentage') {
+                            couponDiscount = (subtotal * coupon.value) / 100;
+                        } else if (coupon.type === 'fixed') {
+                            couponDiscount = Math.min(coupon.value, subtotal);
+                        }
+                        appliedCouponId = couponId;
+                        console.log(`[${reqId}] Coupon applied: ${couponId}, discount: €${couponDiscount.toFixed(2)}`);
+                    }
+                }
+            }
+        }
+
+        // ── 8. Final total calculation ────────────────────────────────────────
+        const totalDiscount  = promoDiscount + couponDiscount;
+        const protectionFee  = PROTECTION_FEE;
+        const finalTotal     = Math.max(0, subtotal + shipping + protectionFee - totalDiscount);
+        const roundedTotal   = Math.round(finalTotal * 100) / 100;
+        console.log(`[${reqId}] Total: €${roundedTotal} (subtotal: €${subtotal.toFixed(2)}, shipping: €${shipping}, fee: €${protectionFee}, discount: €${totalDiscount.toFixed(2)})`);
+
+        // ── 9. Build and save order via Admin SDK ─────────────────────────────
+        const orderId  = `ORD-${Date.now()}-${Math.random().toString(36).slice(2, 7).toUpperCase()}`;
+        const userSnap = await db.ref(`users/${uid}`).once('value');
+        const userData = userSnap.val() || {};
+        const totalQty = resolvedItems.reduce((s, i) => s + i.quantity, 0);
+
+        const orderRecord = {
+            orderId,
+            userId:           uid,
+            userEmail:        sanitizeString(authCtx.token.email || '', 255),
+            customerName:     sanitizeString(userData.username || 'Usuario', 100),
+            customerEmail:    sanitizeString(authCtx.token.email || '', 255),
+            date:             new Date().toISOString(),
+            dateFormatted:    new Date().toLocaleString('es-ES'),
+            // NOTE: Use Date.now() — admin.database.ServerValue.TIMESTAMP is only
+            // valid inside a set/update call, not as a plain object value.
+            createdAt:        Date.now(),
+            status:           'pendiente',
+            trackingNumber:   null,
+            items:            resolvedItems,
+
+            // Financial fields — written by server ONLY (Admin SDK bypasses rules)
+            subtotal:         Math.round(subtotal      * 100) / 100,
+            shipping,
+            protectionFee,
+            promoCodeUsed:    appliedPromoId,
+            promoCodeDiscount: Math.round(promoDiscount  * 100) / 100,
+            couponUsed:       appliedCouponId,
+            couponDiscount:   Math.round(couponDiscount * 100) / 100,
+            discount:         Math.round(totalDiscount  * 100) / 100,
+            total:            roundedTotal,
+
+            shippingAddress:  shippingAddress,
+            paymentMethod,
+            pointsToEarn:     totalQty * 10,
+            paypalLink:       paymentMethod === 'paypal'
+                ? `https://www.paypal.com/paypalme/${PAYPAL_USERNAME}/${roundedTotal.toFixed(2)}`
+                : null,
+
+            _createdByServer: true
         };
+
+        console.log(`[${reqId}] Writing order to RTDB: ordersByUser/${uid}/${orderId}`);
+        await db.ref(`ordersByUser/${uid}/${orderId}`).set(orderRecord);
+        console.log(`[${reqId}] Order written successfully`);
+
+        // ── 10. Increment promo usage counters ────────────────────────────────
+        if (appliedPromoId) {
+            const usageRef    = db.ref(`promoCodes/${appliedPromoId}/usageCount`);
+            const userUseRef  = db.ref(`promoCodes/${appliedPromoId}/userUsages/${uid}`);
+            const usageSnap   = await usageRef.once('value');
+            await usageRef.set((usageSnap.val() || 0) + 1);
+            const userUseSnap = await userUseRef.once('value');
+            await userUseRef.set((userUseSnap.val() || 0) + 1);
+        }
+
+        // ── 11. Mark coupon as used ───────────────────────────────────────────
+        if (appliedCouponId) {
+            await db.ref(`users/${uid}/coupons/${appliedCouponId}`).update({
+                used:        true,
+                usedAt:      new Date().toISOString(),
+                usedInOrder: orderId
+            });
+        }
+
+        // ── 12. Write audit log ───────────────────────────────────────────────
+        await writeAuditLog(uid, 'order_created', {
+            orderId,
+            total:        roundedTotal,
+            paymentMethod,
+            itemCount:    resolvedItems.length,
+            couponUsed:   !!appliedCouponId,
+            promoUsed:    !!appliedPromoId
+        });
+
+        console.log(`[${reqId}] processCheckoutTotal COMPLETE — orderId: ${orderId}`);
+
+        // ── 13. Return only what the client needs ─────────────────────────────
+        return {
+            success:      true,
+            orderId,
+            total:        roundedTotal,
+            paypalLink:   orderRecord.paypalLink,
+            pointsToEarn: orderRecord.pointsToEarn
+        };
+
     } catch (error) {
-        console.error('Error removiendo admin:', error);
-        throw new functions.https.HttpsError('internal', error.message);
+        // ── Error handling ─────────────────────────────────────────────────
+        console.error(`[${reqId}] ERROR in processCheckoutTotal:`, error?.message);
+        console.error(`[${reqId}] ERROR code:`, error?.code);
+        console.error(`[${reqId}] STACK:`, error?.stack);
+
+        // Re-throw Firebase HttpsErrors as-is (they have user-safe messages)
+        if (error instanceof functions.https.HttpsError) {
+            throw error;
+        }
+
+        // Wrap any unexpected uncaught exception with a descriptive message
+        throw new functions.https.HttpsError(
+            'internal',
+            `Error interno al procesar el pedido (ref: ${reqId}). Por favor, inténtalo de nuevo.`
+        );
     }
 });
 
 
+/**
+ * validatePromoCode — Server-side promo validation (read-only check)
+ * ───────────────────────────────────────────────────────────────────
+ * Replaces the client-side read of promoCodes which was readable by any
+ * authenticated user (vulnerability C-8).
+ *
+ * Returns only the discount info — never exposes the full promo record.
+ */
+exports.validatePromoCode = functions.https.onCall(async (data, context) => {
+    const authCtx = requireAuth(context);
+    const uid     = authCtx.uid;
 
+    const { code, cartSubtotal } = data;
 
-exports.checkAdmin = functions.https.onCall(async (data, context) => {
-    if (!context.auth) {
-        return { isAdmin: false };
+    if (!code || typeof code !== 'string') {
+        throw new functions.https.HttpsError('invalid-argument', 'Código requerido.');
+    }
+
+    const normalizedCode = code.trim().toUpperCase().substring(0, 30);
+    if (typeof cartSubtotal !== 'number' || cartSubtotal < 0) {
+        throw new functions.https.HttpsError('invalid-argument', 'Subtotal inválido.');
+    }
+
+    const db       = admin.database();
+    const promoSnap = await db.ref('promoCodes').orderByChild('code').equalTo(normalizedCode).once('value');
+
+    if (!promoSnap.exists()) {
+        return { valid: false, reason: 'Código no encontrado.' };
+    }
+
+    let promoId   = null;
+    let promoData = null;
+    promoSnap.forEach(child => { promoId = child.key; promoData = child.val(); });
+
+    if (!promoData || promoData.active !== true) {
+        return { valid: false, reason: 'El código está inactivo.' };
+    }
+
+    const totalUsed = promoData.usageCount || 0;
+    const maxUses   = promoData.maxUses;
+    if (maxUses !== null && maxUses !== undefined && totalUsed >= maxUses) {
+        return { valid: false, reason: 'El código ha alcanzado su límite de usos.' };
+    }
+
+    const userUsed    = (promoData.userUsages && promoData.userUsages[uid]) || 0;
+    const maxPerUser  = promoData.maxUsesPerUser || null;
+    if (maxPerUser !== null && userUsed >= maxPerUser) {
+        return { valid: false, reason: 'Ya has utilizado este código el máximo de veces permitido.' };
+    }
+
+    let discountAmount = 0;
+    if (promoData.type === 'percentage') {
+        discountAmount = (cartSubtotal * promoData.value) / 100;
+    } else if (promoData.type === 'fixed') {
+        discountAmount = Math.min(promoData.value, cartSubtotal);
+    } else if (promoData.type === 'free_shipping') {
+        discountAmount = cartSubtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
     }
 
     return {
-        isAdmin: context.auth.token.admin === true,
-        email: context.auth.token.email,
-        uid: context.auth.uid
+        valid:          true,
+        promoId,
+        type:           promoData.type,
+        discountAmount: Math.round(discountAmount * 100) / 100,
+        description:    promoData.description || ''
     };
 });
 
 
-
 // ─────────────────────────────────────────────────────────────────────────────
-// FUNCIONES DE CONTRASEÑA DE RESPALDO (GOOGLE SIGN-IN)
+// PASSWORD HASHING (Argon2id — OWASP 2024 recommended)
 // ─────────────────────────────────────────────────────────────────────────────
-
-const bcrypt = require('bcryptjs');
 
 /**
- * Expresión regular para validar la fortaleza de la contraseña.
- * Requisitos: mínimo 8 caracteres, una mayúscula, una minúscula,
- * un número y un carácter especial.
- */
-const PASSWORD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?]).{8,}$/;
-
-/**
- * setBackupPassword
- * ─────────────────
- * Recibe la contraseña en texto plano, la valida, la hashea con bcryptjs
- * (salt automático, cost factor 12) y la guarda en Realtime Database.
- *
- * SEGURIDAD:
- *  - Solo accesible si el usuario está autenticado (context.auth lo verifica).
- *  - El hash NUNCA se devuelve al cliente.
- *  - La validación se realiza también en backend (defensa en profundidad).
- *  - Cost factor 12 de bcrypt: ~300ms por hash, suficientemente lento para
- *    resistir ataques de fuerza bruta si la BD fuese comprometida.
+ * setBackupPassword — Hashes password with Argon2id and stores in RTDB
+ * ─────────────────────────────────────────────────────────────────────
+ * Upgraded from bcrypt (cost 12) → Argon2id with 64MB memory cost.
+ * Argon2id is resistant to GPU and ASIC attacks unlike bcrypt.
  */
 exports.setBackupPassword = functions.https.onCall(async (data, context) => {
-    // 1. Verificar que el usuario esté autenticado
-    if (!context.auth) {
-        throw new functions.https.HttpsError(
-            'unauthenticated',
-            'Debes iniciar sesión con Google antes de configurar la contraseña.'
-        );
-    }
+    requireAuth(context);
 
     const { password } = data;
 
-    // 2. Validar que se recibió la contraseña
     if (!password || typeof password !== 'string') {
+        throw new functions.https.HttpsError('invalid-argument', 'La contraseña es requerida.');
+    }
+
+    // Strict length bounds to prevent DoS via hashing
+    if (password.length < 8 || password.length > 128) {
         throw new functions.https.HttpsError(
             'invalid-argument',
-            'La contraseña es requerida.'
+            'La contraseña debe tener entre 8 y 128 caracteres.'
         );
     }
 
-    // 3. Validar la fortaleza de la contraseña en el backend
     if (!PASSWORD_REGEX.test(password)) {
         throw new functions.https.HttpsError(
             'invalid-argument',
-            'La contraseña no cumple los requisitos de seguridad: mínimo 8 caracteres, una mayúscula, una minúscula, un número y un símbolo especial.'
-        );
-    }
-
-    // 4. Limitar longitud máxima para evitar ataques DoS con bcrypt
-    if (password.length > 72) {
-        throw new functions.https.HttpsError(
-            'invalid-argument',
-            'La contraseña no puede superar los 72 caracteres.'
+            'La contraseña no cumple los requisitos: mínimo 8 caracteres, mayúscula, minúscula, número y símbolo.'
         );
     }
 
     try {
-        // 5. Hashear la contraseña con salt automático (cost factor 12)
-        const saltRounds = 12;
-        const passwordHash = await bcrypt.hash(password, saltRounds);
+        // Argon2id — GPU/ASIC resistant hashing (lazy-loaded)
+        const a2 = getArgon2();
+        const passwordHash = await a2.hash(password, ARGON2_OPTIONS);
 
-        // 6. Guardar en Realtime Database:
-        //    - SOLO se guarda el hash, NUNCA la contraseña en texto plano
-        //    - hasBackupPassword: flag rápido de consulta sin exponer el hash
         const uid = context.auth.uid;
-        const db = admin.database();
-        const userRef = db.ref(`users/${uid}/security`);
+        const db  = admin.database();
 
-        await userRef.update({
-            hasBackupPassword: true,
-            backupPasswordHash: passwordHash,
+        await db.ref(`users/${uid}/security`).update({
+            hasBackupPassword:       true,
+            backupPasswordHash:      passwordHash,
+            hashAlgorithm:           'argon2id',
             backupPasswordUpdatedAt: new Date().toISOString(),
-            backupPasswordProvider: 'manual'
+            backupPasswordProvider:  'manual'
         });
 
-        console.log(`[setBackupPassword] Contraseña de respaldo configurada para UID: ${uid}`);
+        await writeAuditLog(uid, 'backup_password_set', { hashAlgorithm: 'argon2id' });
 
-        // 7. Retornar solo confirmación (NUNCA el hash)
-        return {
-            success: true,
-            message: 'Contraseña de respaldo configurada correctamente.'
-        };
+        return { success: true, message: 'Contraseña de respaldo configurada correctamente.' };
 
     } catch (error) {
-        // No exponer detalles técnicos al cliente
-        console.error('[setBackupPassword] Error interno:', error);
-        throw new functions.https.HttpsError(
-            'internal',
-            'Error al guardar la contraseña. Inténtalo de nuevo.'
-        );
+        console.error('[setBackupPassword]', error.message);
+        throw new functions.https.HttpsError('internal', 'Error al guardar la contraseña. Inténtalo de nuevo.');
     }
 });
 
 
 /**
- * checkBackupPasswordStatus
- * ─────────────────────────
- * Verifica si el usuario autenticado ya tiene una contraseña de respaldo
- * configurada. Devuelve solo un booleano, nunca datos sensibles.
+ * checkBackupPasswordStatus — Boolean check only, no sensitive data returned
  */
 exports.checkBackupPasswordStatus = functions.https.onCall(async (data, context) => {
-    // Verificar autenticación
-    if (!context.auth) {
-        return { hasBackupPassword: false };
-    }
+    if (!context.auth) return { hasBackupPassword: false };
 
     try {
-        const uid = context.auth.uid;
-        const db = admin.database();
-        const snapshot = await db.ref(`users/${uid}/security/hasBackupPassword`).once('value');
-
-        return {
-            hasBackupPassword: snapshot.val() === true
-        };
+        const uid      = context.auth.uid;
+        const snapshot = await admin.database().ref(`users/${uid}/security/hasBackupPassword`).once('value');
+        return { hasBackupPassword: snapshot.val() === true };
     } catch (error) {
-        console.error('[checkBackupPasswordStatus] Error:', error);
+        console.error('[checkBackupPasswordStatus]', error.message);
         return { hasBackupPassword: false };
     }
 });
 
 
 /**
- * verifyBackupPassword
- * ────────────────────
- * Verifica una contraseña de respaldo ingresada contra el hash almacenado.
- * Útil para flujos futuros de login con email+contraseña de respaldo.
- *
- * NOTA: Esta función es un placeholder para uso futuro. Actualmente
- * el login es exclusivamente vía Google + contraseña de respaldo como método
- * de seguridad adicional, no como login principal.
+ * verifyBackupPassword — Timing-safe comparison using Argon2id or bcrypt legacy
+ * ──────────────────────────────────────────────────────────────────────────────
+ * Detects hash algorithm from stored hash prefix:
+ *   $argon2id → verify with argon2
+ *   $2b$      → verify with bcrypt (legacy migration path)
  */
 exports.verifyBackupPassword = functions.https.onCall(async (data, context) => {
-    if (!context.auth) {
-        throw new functions.https.HttpsError('unauthenticated', 'No autenticado.');
-    }
+    requireAuth(context);
 
     const { password } = data;
+
     if (!password || typeof password !== 'string') {
         throw new functions.https.HttpsError('invalid-argument', 'Contraseña requerida.');
     }
+    if (password.length > 128) {
+        throw new functions.https.HttpsError('invalid-argument', 'Contraseña demasiado larga.');
+    }
 
     try {
-        const uid = context.auth.uid;
-        const db = admin.database();
-        const snapshot = await db.ref(`users/${uid}/security`).once('value');
+        const uid          = context.auth.uid;
+        const snapshot     = await admin.database().ref(`users/${uid}/security`).once('value');
         const securityData = snapshot.val();
 
-        if (!securityData || !securityData.hasBackupPassword || !securityData.backupPasswordHash) {
-            throw new functions.https.HttpsError(
-                'not-found',
-                'No tienes contraseña de respaldo configurada.'
-            );
+        if (!securityData?.hasBackupPassword || !securityData.backupPasswordHash) {
+            throw new functions.https.HttpsError('not-found', 'No tienes contraseña de respaldo configurada.');
         }
 
-        // Comparar usando bcrypt.compare (timing-safe)
-        const isValid = await bcrypt.compare(password, securityData.backupPasswordHash);
+        const storedHash = securityData.backupPasswordHash;
+        let isValid      = false;
+
+        if (storedHash.startsWith('$argon2')) {
+            isValid = await argon2.verify(storedHash, password);
+        } else if (storedHash.startsWith('$2b$') || storedHash.startsWith('$2a$')) {
+            // Legacy bcrypt hash — verify and upgrade to Argon2id
+            isValid = await bcrypt.compare(password, storedHash);
+            if (isValid) {
+                // Upgrade hash silently
+                const newHash = await argon2.hash(password, ARGON2_OPTIONS);
+                await admin.database().ref(`users/${uid}/security`).update({
+                    backupPasswordHash: newHash,
+                    hashAlgorithm:      'argon2id',
+                    hashUpgradedAt:     new Date().toISOString()
+                });
+                console.log(`[verifyBackupPassword] Hash upgraded to Argon2id for UID: ${uid}`);
+            }
+        }
 
         return { isValid };
 
     } catch (error) {
         if (error instanceof functions.https.HttpsError) throw error;
-        console.error('[verifyBackupPassword] Error:', error);
+        console.error('[verifyBackupPassword]', error.message);
         throw new functions.https.HttpsError('internal', 'Error de verificación.');
     }
 });
 
 
-// End of file
+// ─────────────────────────────────────────────────────────────────────────────
+// ADMIN MANAGEMENT
+// ─────────────────────────────────────────────────────────────────────────────
+
+exports.setAdminByEmail = functions.https.onCall(async (data, context) => {
+    requireAdmin(context);
+
+    const email = sanitizeString(data.email, 255);
+    if (!email) throw new functions.https.HttpsError('invalid-argument', 'Email requerido.');
+
+    try {
+        const user = await admin.auth().getUserByEmail(email);
+        await admin.auth().setCustomUserClaims(user.uid, { admin: true });
+        await writeAuditLog(context.auth.uid, 'admin_granted', { targetEmail: email, targetUid: user.uid });
+        return { success: true, message: `Usuario ${email} ahora es administrador`, uid: user.uid };
+    } catch (error) {
+        console.error('[setAdminByEmail]', error.message);
+        throw new functions.https.HttpsError('internal', error.message);
+    }
+});
+
+exports.setAdminByUID = functions.https.onCall(async (data, context) => {
+    requireAdmin(context);
+
+    const uid = sanitizeString(data.uid, 128);
+    if (!uid) throw new functions.https.HttpsError('invalid-argument', 'UID requerido.');
+
+    try {
+        const user = await admin.auth().getUser(uid);
+        await admin.auth().setCustomUserClaims(uid, { admin: true });
+        await writeAuditLog(context.auth.uid, 'admin_granted', { targetUid: uid });
+        return { success: true, message: `Usuario ${user.email || uid} ahora es administrador`, uid };
+    } catch (error) {
+        console.error('[setAdminByUID]', error.message);
+        throw new functions.https.HttpsError('internal', error.message);
+    }
+});
+
+exports.removeAdmin = functions.https.onCall(async (data, context) => {
+    requireAuth(context);
+    if (context.auth.token.email !== SUPER_ADMIN_EMAIL) {
+        throw new functions.https.HttpsError('permission-denied', 'Solo el super admin puede quitar administradores.');
+    }
+
+    const email = sanitizeString(data.email, 255);
+    const uid   = sanitizeString(data.uid, 128);
+
+    if (!email && !uid) throw new functions.https.HttpsError('invalid-argument', 'Email o UID requerido.');
+
+    try {
+        const targetUser = email
+            ? await admin.auth().getUserByEmail(email)
+            : await admin.auth().getUser(uid);
+
+        if (targetUser.email === SUPER_ADMIN_EMAIL) {
+            throw new functions.https.HttpsError('failed-precondition', 'No puedes quitarte los permisos de super admin.');
+        }
+
+        await admin.auth().setCustomUserClaims(targetUser.uid, { admin: false });
+        await writeAuditLog(context.auth.uid, 'admin_revoked', { targetUid: targetUser.uid });
+        return { success: true, message: `Permisos de admin removidos de ${targetUser.email}`, uid: targetUser.uid };
+    } catch (error) {
+        if (error instanceof functions.https.HttpsError) throw error;
+        console.error('[removeAdmin]', error.message);
+        throw new functions.https.HttpsError('internal', error.message);
+    }
+});
+
+exports.checkAdmin = functions.https.onCall(async (data, context) => {
+    if (!context.auth) return { isAdmin: false };
+    return {
+        isAdmin: context.auth.token.admin === true,
+        email:   context.auth.token.email,
+        uid:     context.auth.uid
+    };
+});
+
+
+/**
+ * logAuditEvent — Client-triggered audit event (limited metadata)
+ * ─────────────────────────────────────────────────────────────────
+ * Used by the frontend for security events the client can detect:
+ * login attempts, session anomalies, etc. Admin SDK writes bypass
+ * the RTDB ".write: false" rule on auditLog.
+ */
+exports.logAuditEvent = functions.https.onCall(async (data, context) => {
+    const uid   = context.auth ? context.auth.uid : 'anonymous';
+    const event = sanitizeString(data.event || 'unknown', 100);
+
+    // Allowlist of events that clients are allowed to log
+    const ALLOWED_CLIENT_EVENTS = [
+        'login_attempt_failed',
+        'login_success',
+        'logout',
+        'session_anomaly_detected',
+        'password_reset_requested',
+        'registration_attempt'
+    ];
+
+    if (!ALLOWED_CLIENT_EVENTS.includes(event)) {
+        // Silently ignore disallowed events — don't error out
+        return { logged: false };
+    }
+
+    await writeAuditLog(uid, event, {
+        userAgent: sanitizeString(data.userAgent || '', 200),
+        source:    'client'
+    });
+
+    return { logged: true };
+});
