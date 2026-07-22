@@ -306,12 +306,16 @@ exports.processCheckoutTotal = functions.https.onCall(async (data, context) => {
             }
 
             // 4. Recargo por Parches
-            if (productData.customPatches === 'espana26') {
-                const patchesArr = Array.isArray(cust.patches) ? cust.patches : (cust.patch ? cust.patch.split(',').map(s => s.trim()) : []);
-                const validPatchesCount = patchesArr.filter(p => p).length;
-                finalPrice += validPatchesCount * 1.25;
-            } else {
-                if (cust.patch && cust.patch.trim() !== '' && cust.patch.trim() !== 'none') {
+            const patchesArr = Array.isArray(cust.patches) ? cust.patches : (cust.patch ? cust.patch.split(',').map(s => s.trim()) : []);
+            const validPatches = patchesArr.filter(p => p && p !== 'none');
+            
+            if (validPatches.length > 0) {
+                const espana26Keywords = ['Campeones', '26 dorado', 'fifa', 'letras'];
+                const isEspana26 = validPatches.length > 1 || validPatches.some(p => espana26Keywords.includes(p)) || productData.customPatches === 'espana26';
+                
+                if (isEspana26) {
+                    finalPrice += validPatches.length * 1.25;
+                } else {
                     finalPrice += 2;
                 }
             }
@@ -343,7 +347,9 @@ exports.processCheckoutTotal = functions.https.onCall(async (data, context) => {
         console.log(`[${reqId}] Subtotal calculated: €${subtotal.toFixed(2)} (${resolvedItems.length} items)`);
 
         // ── 5. Shipping calculation ───────────────────────────────────────────
-        const shipping = subtotal >= FREE_SHIPPING_THRESHOLD ? 0 : SHIPPING_COST;
+        const SINGLE_ITEM_SHIPPING_COST = 1.90;
+        const totalQtyShipping = resolvedItems.reduce((s, i) => s + i.quantity, 0);
+        const shipping = totalQtyShipping === 1 ? SINGLE_ITEM_SHIPPING_COST : 0;
 
         // ── 6. Apply promo code (server-side validation) ──────────────────────
         let promoDiscount   = 0;
