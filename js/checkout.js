@@ -407,6 +407,7 @@ async function confirmOrder() {
         const cartPayload = Cart.items.map(item => ({
             productId:     item.productId || item.id,
             qty:           item.quantity || item.qty || 1,
+            isAccessory:   item.isAccessory === true,
             customization: {
                 size:    item.customization?.size    || item.size    || 'N/A',
                 version: item.customization?.version || item.version || 'aficionado',

@@ -426,6 +426,15 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
         return overlay.querySelector('#ue-patch')?.value || '';
     };
 
+    const getPatchesArray = () => {
+        if (isEspana26) {
+            const cbs = overlay.querySelectorAll('.ue-custom-patch-cb:checked');
+            return Array.from(cbs).map(cb => cb.value);
+        }
+        const val = overlay.querySelector('#ue-patch')?.value.trim() || '';
+        return val ? [val] : [];
+    };
+
     function updatePrice() {
         const el = overlay.querySelector('#ue-total');
         if (!el) return;
@@ -488,6 +497,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
     // Aplicar restricción inicial (por si el item ya estaba en Jugador)
     applyVersionSizeRestriction();
 
+
     function closeOverlay() {
         overlay.classList.remove('active');
         setTimeout(() => overlay.remove(), 220);
@@ -525,6 +535,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
             name:    nameVal ? nameVal.toUpperCase() : '',
             number:  numberVal,
             patch:   getPatch(),
+            patches: getPatchesArray(),
             extras:  []
         };
 

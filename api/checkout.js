@@ -157,7 +157,11 @@ export default async function handler(req, res) {
         }
 
         // ── 4. Calculate subtotal using SERVER prices only ────────────────────
-        let subtotal = 0;
+        let originalSubtotal = 0;
+        let totalShirtQty = 0;
+        let accessorySubtotal = 0;
+        let surchargesTotal = 0;
+        let priceDifference = 0;
         const resolvedItems = [];
 
         for (const item of normalizedItems) {
@@ -182,27 +186,28 @@ export default async function handler(req, res) {
             }
 
             const rawPrice = catalogProduct.price ?? catalogProduct.precio ?? catalogProduct.priceEur ?? 24.99;
-            let finalPrice = typeof rawPrice === 'number' ? rawPrice : parseFloat(rawPrice) || 24.99;
+            const basePrice = typeof rawPrice === 'number' ? rawPrice : parseFloat(rawPrice) || 24.99;
             
             // --- CÁLCULO DE RECARGOS (Talla, Versión, Personalización, Parches) ---
+            let itemSurcharges = 0;
             const cust = item.customization || {};
             
             // 1. Recargo por Talla
             const size = (cust.size || '').toUpperCase();
             if (size === '3XL' || size === '4XL') {
-                finalPrice += 2;
+                itemSurcharges += 2;
             } else if (size === '2XL') {
-                finalPrice += 1;
+                itemSurcharges += 1;
             }
 
             // 2. Recargo por Versión
             if ((cust.version || '').toLowerCase() === 'jugador') {
-                finalPrice += 5;
+                itemSurcharges += 5;
             }
 
             // 3. Recargo por Personalización (Nombre o Dorsal)
             if ((cust.name && cust.name.trim() !== '') || (cust.number && cust.number.trim() !== '')) {
-                finalPrice += 3;
+                itemSurcharges += 3;
             }
 
             // 4. Recargo por Parches
@@ -214,14 +219,24 @@ export default async function handler(req, res) {
                 const isEspana26 = validPatches.length > 1 || validPatches.some(p => espana26Keywords.includes(p)) || catalogProduct.customPatches === 'espana26';
                 
                 if (isEspana26) {
-                    finalPrice += validPatches.length * 1.25;
+                    itemSurcharges += validPatches.length * 1.25;
                 } else {
-                    finalPrice += 2;
+                    itemSurcharges += 2;
                 }
             }
 
+            const finalPrice = basePrice + itemSurcharges;
             const lineTotal = finalPrice * item.qty;
-            subtotal += lineTotal;
+            originalSubtotal += lineTotal;
+
+            if (item.isAccessory === true) {
+                accessorySubtotal += basePrice * item.qty;
+                surchargesTotal += itemSurcharges * item.qty;
+            } else {
+                totalShirtQty += item.qty;
+                priceDifference += (basePrice - 19.90) * item.qty;
+                surchargesTotal += itemSurcharges * item.qty;
+            }
 
             resolvedItems.push({
                 id:            item.productId,
@@ -244,6 +259,22 @@ export default async function handler(req, res) {
                 }
             });
         }
+
+        // --- CÁLCULO DE PACK AHORRO ---
+        let packBasePrice = 0;
+        if (totalShirtQty > 0) {
+            const fullCycles = Math.floor(totalShirtQty / 5);
+            const remainder = totalShirtQty % 5;
+            packBasePrice = fullCycles * 85.90;
+            if (remainder === 1) packBasePrice += 19.90;
+            else if (remainder === 2) packBasePrice += 19.90 * 2;
+            else if (remainder === 3) packBasePrice += 56.90;
+            else if (remainder === 4) packBasePrice += 56.90 + 19.90;
+        }
+
+        // El subtotal es el precio del pack + la diferencia de precio (ej. si es Retro 24.90, aporta +5€) + recargos + accesorios
+        let subtotal = packBasePrice + priceDifference + surchargesTotal + accessorySubtotal;
+        if (totalShirtQty === 0) subtotal = originalSubtotal; // Fallback para carritos que solo tienen accesorios
 
         // ── 5. Shipping calculation ───────────────────────────────────────────
         const SINGLE_ITEM_SHIPPING_COST = 1.90;
