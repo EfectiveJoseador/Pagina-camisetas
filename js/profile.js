@@ -303,8 +303,20 @@ function renderOrders(orders) {
                     Productos <span style="background: linear-gradient(135deg, var(--primary), #8b5cf6); color: white; padding: 0.2rem 0.6rem; border-radius: 50px; font-size: 0.7rem; margin-left: 0.25rem; font-weight: 700;">${Array.isArray(products) ? products.reduce((sum, p) => sum + (p.quantity || p.qty || 1), 0) : 0}</span>
                 </h4>
                 
-                ${Array.isArray(products) && products.length > 0 ? products.map(p => `
-                    <div style="
+                ${Array.isArray(products) && products.length > 0 ? products.map(p => {
+                    let patchesData = p.customization?.patches || p.customization?.patch || p.patches || p.patch;
+                    let patchHtml = '';
+                    if (patchesData && patchesData !== 'none' && patchesData !== 'Ninguno' && patchesData !== 'No' && patchesData !== 'no' && (!Array.isArray(patchesData) || patchesData.length > 0)) {
+                        let patchText = Array.isArray(patchesData) ? patchesData.join(', ') : patchesData;
+                        patchHtml = `
+                            <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">
+                                <i class="fas fa-shield-alt" style="font-size:0.75rem;"></i> ${sanitizeHTML(patchText)}
+                            </span>
+                        `;
+                    }
+
+                    return `
+                    <a href="/pages/producto.html?id=${p.productId || p.id}" style="
                         display: flex;
                         align-items: center;
                         gap: 1rem;
@@ -313,8 +325,14 @@ function renderOrders(orders) {
                         border-radius: 12px;
                         margin-bottom: 0.75rem;
                         border: 1px solid var(--border);
-                        transition: border-color 0.2s ease;
-                    ">
+                        transition: all 0.2s ease;
+                        text-decoration: none;
+                        color: inherit;
+                        cursor: pointer;
+                    "
+                    onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.05)';"
+                    onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';"
+                    >
                         <!-- Product Image -->
                         <div style="
                             width: 70px;
@@ -347,11 +365,7 @@ function renderOrders(orders) {
                                         <i class="fas fa-font" style="font-size:0.75rem;"></i> ${sanitizeHTML(p.customization?.name || p.nameCustom || '')} ${p.customization?.number || p.numberCustom ? '#' + sanitizeHTML(p.customization?.number || p.numberCustom) : ''}
                                     </span>
                                 ` : ''}
-                                ${(p.customization?.patch || p.patch) && (p.customization?.patch !== 'none' && p.patch !== 'none') ? `
-                                    <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">
-                                        <i class="fas fa-shield-alt" style="font-size:0.75rem;"></i> ${sanitizeHTML(p.customization?.patch || p.patch)}
-                                    </span>
-                                ` : ''}
+                                ${patchHtml}
                                 <span style="background: rgba(var(--text-rgb), 0.08); color: var(--text-muted); padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">
                                     ×${p.quantity || p.qty || 1}
                                 </span>
@@ -370,8 +384,9 @@ function renderOrders(orders) {
                         ">
                             €${(p.price || 0).toFixed(2)}
                         </div>
-                    </div>
-                `).join('') : '<p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 1.5rem; background: var(--bg-body); border-radius: 12px;"><i class="fas fa-box-open" style="margin-right: 0.5rem;"></i>Sin productos</p>'}
+                    </a>
+                `;
+                }).join('') : '<p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 1.5rem; background: var(--bg-body); border-radius: 12px;"><i class="fas fa-box-open" style="margin-right: 0.5rem;"></i>Sin productos</p>'}
             </div>
             
             <!-- Total -->
