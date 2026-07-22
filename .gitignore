@@ -4,3 +4,5 @@ admin-scripts/node_modules/
 .env
 .DS_Store
 .vercel
+serviceAccountKey.json
+admin-scripts/*.json

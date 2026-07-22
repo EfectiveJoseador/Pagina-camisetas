@@ -69,29 +69,63 @@ if (!Array.isArray(products)) {
 
 console.log(`✅ Leídos ${products.length} productos de products-data.js`);
 
+// ── Helper para calcular el precio oficial del producto según el frontend ────
+function getProductOfficialPrice(product) {
+    // 1. Si el producto tiene 'price', 'precio' o 'priceEur' explícito, usa ese valor
+    let rawPrice = product.price ?? product.precio ?? product.priceEur;
+    if (rawPrice !== undefined && rawPrice !== null && rawPrice !== '') {
+        const parsed = typeof rawPrice === 'number' ? rawPrice : parseFloat(rawPrice);
+        if (!isNaN(parsed) && parsed > 0) {
+            return parsed;
+        }
+    }
+
+    // 2. Si no tiene precio explícito, aplica el PRECIO BASE OFICIAL del frontend
+    const nameLower = (product.name || '').toLowerCase();
+    const imageLower = (product.image || '').toLowerCase();
+
+    const isKids = product.kids === true || 
+                   nameLower.includes('kids') || 
+                   nameLower.includes('niño') || 
+                   nameLower.includes('niños') || 
+                   imageLower.includes('kids');
+
+    const isRetro = product.retro === true || 
+                    nameLower.includes('retro') || 
+                    product.league === 'retro';
+
+    const isNBA = product.category === 'nba' || product.league === 'nba';
+
+    if (isNBA || isRetro) {
+        return 24.90;
+    } else if (product.customPatches === 'espana26' && isKids) {
+        return 23.90;
+    } else if (isKids || product.customPatches === 'espana26') {
+        return 21.90;
+    }
+
+    return 19.90;
+}
+
 // ── Construir el objeto para RTDB ────────────────────────────────────────────
-// Clave: product.id
-// Valor: campos necesarios para processCheckoutTotal (price, name, sku, image)
+// Clave: product.id (o fallback a sku/code)
+// Valor: campos necesarios para processCheckoutTotal (price, name, sku, image, category)
 const rtdbProducts = {};
-let skipped = 0;
 
-for (const product of products) {
-    if (!product.id) {
-        console.warn(`⚠️  Producto sin ID ignorado:`, product.name || '(sin nombre)');
-        skipped++;
-        continue;
-    }
-    if (typeof product.price !== 'number' || product.price <= 0) {
-        console.warn(`⚠️  Producto '${product.id}' ignorado: price inválido (${product.price})`);
-        skipped++;
-        continue;
-    }
+for (let i = 0; i < products.length; i++) {
+    const product = products[i];
+    const productId = product.id !== undefined && product.id !== null 
+        ? String(product.id) 
+        : (product.sku || product.code || `prod_${i + 1}`);
 
-    rtdbProducts[product.id] = {
-        price:     product.price,
-        name:      product.name  || product.id,
-        sku:       product.sku   || '',
-        image:     product.image || '',
+    const price = getProductOfficialPrice(product);
+
+    rtdbProducts[productId] = {
+        id:        productId,
+        price:     price,
+        name:      product.name || product.title || String(productId),
+        sku:       product.sku  || '',
+        image:     product.image || (Array.isArray(product.images) && product.images[0]) || '',
         category:  product.category || '',
         updatedAt: new Date().toISOString()
     };
@@ -99,9 +133,6 @@ for (const product of products) {
 
 const syncCount = Object.keys(rtdbProducts).length;
 console.log(`📦 Sincronizando ${syncCount} productos al nodo RTDB 'products/'...`);
-if (skipped > 0) {
-    console.warn(`   ⚠️  ${skipped} productos omitidos (sin ID o precio inválido)`);
-}
 
 // ── Escribir en RTDB ─────────────────────────────────────────────────────────
 const db = admin.database();
