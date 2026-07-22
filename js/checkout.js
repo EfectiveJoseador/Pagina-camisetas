@@ -546,6 +546,9 @@ Phone Number: ${sa.phone || ''}
 TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
     let productsText = '';
     orderData.items.forEach((item) => {
+        console.log("📦 DUMP DEL ITEM EN WEB3FORMS:", JSON.stringify(item, null, 2));
+        alert("DEBUG ITEM: " + JSON.stringify(item.customization || item));
+
         const qty = item.quantity || 1;
         const custom = item.customization || {};
         const size = custom.size || item.size || 'N/A';
