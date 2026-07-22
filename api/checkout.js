@@ -129,13 +129,16 @@ export default async function handler(req, res) {
         const resolvedItems = [];
 
         for (const item of normalizedItems) {
-            let catalogProduct = null;
+            const productsList = Array.isArray(dbProducts) ? dbProducts : Object.values(dbProducts);
             
-            if (Array.isArray(dbProducts)) {
-                catalogProduct = dbProducts.find(p => p && (String(p.id) === String(item.productId) || String(p.productId) === String(item.productId) || String(p.code) === String(item.productId)));
-            } else if (typeof dbProducts === 'object' && dbProducts !== null) {
-                catalogProduct = Object.values(dbProducts).find(p => p && (String(p.id) === String(item.productId) || String(p.productId) === String(item.productId) || String(p.code) === String(item.productId)));
-            }
+            const catalogProduct = productsList.find(p => {
+                if (!p) return false;
+                const searchId = String(item.productId).trim();
+                return String(p.id).trim() === searchId || 
+                       (p.sku && String(p.sku).trim() === searchId) || 
+                       (p.productId && String(p.productId).trim() === searchId) || 
+                       (p.code && String(p.code).trim() === searchId);
+            });
 
             if (!catalogProduct) {
                 console.log(`[DEBUG-CHECKOUT] Producto no encontrado: ${item.productId}.`);
@@ -146,7 +149,8 @@ export default async function handler(req, res) {
                 });
             }
 
-            const lineTotal = catalogProduct.price * item.qty;
+            const finalPrice = catalogProduct.price || catalogProduct.precio || catalogProduct.priceEur || 0;
+            const lineTotal = finalPrice * item.qty;
             subtotal += lineTotal;
 
             resolvedItems.push({
@@ -154,7 +158,7 @@ export default async function handler(req, res) {
                 sku:           catalogProduct.sku || '',
                 name:          catalogProduct.name || catalogProduct.id || item.productId,
                 image:         catalogProduct.image || '',
-                price:         catalogProduct.price,
+                price:         finalPrice,
                 quantity:      item.qty,
                 size:          sanitizeString(item.customization?.size    || 'N/A', 10),
                 version:       sanitizeString(item.customization?.version || 'aficionado', 20),
