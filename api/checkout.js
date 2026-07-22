@@ -115,7 +115,10 @@ export default async function handler(req, res) {
         // ── 3. Fetch REAL prices from database ────────────────────────────────
         const productsSnap = await db.ref('products').once('value');
         const dbProducts   = productsSnap.val() || {};
-        const productCount = Object.keys(dbProducts).length;
+        const availableKeys = Object.keys(dbProducts);
+        const productCount = availableKeys.length;
+
+        console.log('[DEBUG-CHECKOUT] CLAVES EN RTDB (primeras 20):', availableKeys.slice(0, 20));
 
         if (productCount === 0) {
             return res.status(412).json({ code: 'functions/failed-precondition', message: 'El catálogo de productos no está disponible. Por favor, inténtalo más tarde.' });
@@ -136,7 +139,11 @@ export default async function handler(req, res) {
         for (const item of normalizedItems) {
             const productData = priceMap[item.productId];
             if (!productData) {
-                return res.status(404).json({ code: 'functions/not-found', message: `Producto '${item.productId}' no encontrado en el catálogo.` });
+                console.log(`[DEBUG-CHECKOUT] Producto no encontrado: ${item.productId}. Claves en priceMap:`, Object.keys(priceMap).slice(0, 20));
+                return res.status(404).json({ 
+                    code: 'functions/not-found', 
+                    message: `Producto '${item.productId}' no encontrado. Ruta consultada: /products. Claves disponibles en catálogo: ${availableKeys.slice(0, 10).join(', ')}...` 
+                });
             }
 
             const lineTotal = productData.price * item.qty;
