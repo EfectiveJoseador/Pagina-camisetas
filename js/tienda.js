@@ -831,19 +831,24 @@ function _handleDrawerSubmit() {
     if (version === 'jugador') totalPrice += 5;
     if (name || number) totalPrice += 3;
 
+    let patchArr = [];
     if (_qdProduct && _qdProduct.customPatches === 'espana26') {
         const customCbs = _qdDrawer.querySelectorAll('#qad-custom-patches-list .qad-custom-patch-cb:checked');
         if (customCbs.length > 0) {
             totalPrice += (customCbs.length * 1.25);
             patch = Array.from(customCbs).map(cb => cb.value).join(', ');
+            patchArr = Array.from(customCbs).map(cb => cb.value);
         } else {
             patch = '';
         }
     } else {
-        if (patch) totalPrice += 2;
+        if (patch) {
+            totalPrice += 2;
+            patchArr = [patch];
+        }
     }
 
-    const customization = { size, version, name, number, patch, extras: [] };
+    const customization = { size, version, name, number, patch, patches: patchArr, extras: [] };
     const cartItem = {
         id:        _qdProduct.id,
         name:      _qdProduct.name,
@@ -1904,16 +1909,19 @@ function handleFormSubmit(e) {
     if (version === 'jugador') totalPrice += 5;
     
     let finalPatchStr = '';
+    let finalPatchesArr = [];
     if (currentProduct && currentProduct.customPatches === 'espana26') {
         const customCbs = document.querySelectorAll('#custom-patches-modal-list .custom-patch-cb:checked');
         if (customCbs.length > 0) {
             totalPrice += (customCbs.length * 1.25);
             finalPatchStr = Array.from(customCbs).map(cb => cb.value).join(', ');
+            finalPatchesArr = Array.from(customCbs).map(cb => cb.value);
         }
     } else {
         if (patch && patch !== 'none') {
             totalPrice += 2;
             finalPatchStr = patch;
+            finalPatchesArr = [patch];
         }
     }
     
@@ -1925,6 +1933,7 @@ function handleFormSubmit(e) {
         name: name,
         number: number,
         patch: finalPatchStr,
+        patches: finalPatchesArr,
         extras: []
     };
 

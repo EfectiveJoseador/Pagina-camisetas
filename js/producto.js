@@ -839,17 +839,23 @@ function addToCart() {
     const sizeSurcharge = getSizeSurcharge(selectedSize);
     let patchStr = '';
     let patchExtraPrice = 0;
+    let selectedPatchesArray = [];
     
     if (product && product.customPatches === 'espana26') {
         const customCheckboxes = document.querySelectorAll('#custom-patches-list input[type="checkbox"]:checked');
         const labels = Array.from(customCheckboxes).map(cb => cb.value);
         if (labels.length > 0) {
             patchStr = labels.join(', ');
+            selectedPatchesArray = labels;
             patchExtraPrice = labels.length * 1.25;
         }
     } else {
-        patchStr = document.getElementById('patch-input').value.trim();
+        const patchEl = document.getElementById('patch-input');
+        if (patchEl) {
+            patchStr = patchEl.value.trim();
+        }
         if (patchStr) {
+            selectedPatchesArray = [patchStr];
             patchExtraPrice = 2;
         }
     }
@@ -860,7 +866,8 @@ function addToCart() {
         version: document.getElementById('version-select').value,
         name: name ? name.toUpperCase() : '',
         number: number || '',
-        patch: patchStr
+        patch: patchStr,
+        patches: selectedPatchesArray
     };
     let totalPrice = product.price;
     totalPrice += sizeSurcharge;

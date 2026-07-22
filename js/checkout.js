@@ -556,7 +556,6 @@ TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
 
         let extras = [];
 
-        console.log("🔍 DEBUG CUSTOMIZATION COMPLETO:", JSON.stringify(item.customization));
         const c = item.customization || {};
         const pText = c.patch || c.patches || c.selectedPatches || c.patchText || c.badges || item.patch || item.selectedPatches || '';
         
