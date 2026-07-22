@@ -774,7 +774,15 @@ function openCartItemEditModal(cartIndex, cartRef) {
             const cbs = overlay.querySelectorAll('.ce-custom-patch-cb:checked');
             return Array.from(cbs).map(cb => cb.value).join(', ');
         }
-        return overlay.querySelector('#ce-patch')?.value || '';
+        return overlay.querySelector('#ce-patch')?.value.trim() || '';
+    };
+    const getPatchesArray = () => {
+        if (isEspana26) {
+            const cbs = overlay.querySelectorAll('.ce-custom-patch-cb:checked');
+            return Array.from(cbs).map(cb => cb.value);
+        }
+        const val = overlay.querySelector('#ce-patch')?.value.trim() || '';
+        return val ? [val] : [];
     };
 
     // ── Live price — mirrors updatePreview() in producto.js ─────────────────
@@ -900,6 +908,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
             name:          hasName   ? nameVal.toUpperCase() : '',
             number:        hasNumber ? numberVal             : '',
             patch:         patchVal,
+            patches:       getPatchesArray(),
         };
         const newPrice = calcEditPrice(basePrice, newCustom, isEspana26);
 
