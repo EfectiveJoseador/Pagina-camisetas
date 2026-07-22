@@ -546,9 +546,6 @@ Phone Number: ${sa.phone || ''}
 TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
     let productsText = '';
     orderData.items.forEach((item) => {
-        console.log("📦 DUMP DEL ITEM EN WEB3FORMS:", JSON.stringify(item, null, 2));
-        alert("DEBUG ITEM: " + JSON.stringify(item.customization || item));
-
         const qty = item.quantity || 1;
         const custom = item.customization || {};
         const size = custom.size || item.size || 'N/A';
@@ -559,13 +556,17 @@ TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
 
         let extras = [];
         
-        const patchText = item.customization?.patch || item.customization?.patches || item.patches || item.patch || item.customPatches || '';
-        
+        const rawPatches = item.patch || item.customization?.patch || item.patches || item.selectedPatch;
+        let patchText = '';
+
+        if (Array.isArray(rawPatches) && rawPatches.length > 0) {
+            patchText = rawPatches.join(', ');
+        } else if (typeof rawPatches === 'string' && rawPatches.trim() !== '') {
+            patchText = rawPatches.trim();
+        }
+
         if (patchText) {
-            const formattedPatch = Array.isArray(patchText) ? patchText.join(', ') : patchText;
-            if (String(formattedPatch).trim() !== '') {
-                extras.push('Parches: ' + formattedPatch);
-            }
+            extras.push('Parches: ' + patchText);
         }
 
         if (custom.name || custom.number) {
