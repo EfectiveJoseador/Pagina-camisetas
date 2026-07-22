@@ -556,11 +556,14 @@ TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
 
         let extras = [];
 
-        // 2. Parches
-        const pText = item.customization?.patch || 
-                     (Array.isArray(item.customization?.patches) ? item.customization.patches.join(', ') : '') ||
-                     item.patch || '';
-        if (pText && pText.trim() !== '') {
+        console.log("🔍 DEBUG CUSTOMIZATION COMPLETO:", JSON.stringify(item.customization));
+        const c = item.customization || {};
+        const pText = c.patch || c.patches || c.selectedPatches || c.patchText || c.badges || item.patch || item.selectedPatches || '';
+        
+        if (Array.isArray(pText)) {
+            const joined = pText.filter(Boolean).join(', ');
+            if (joined) extras.push(`Parches: ${joined}`);
+        } else if (typeof pText === 'string' && pText.trim() !== '') {
             extras.push(`Parches: ${pText.trim()}`);
         }
 
