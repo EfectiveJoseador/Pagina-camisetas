@@ -405,7 +405,7 @@ async function confirmOrder() {
         // The Cloud Function fetches real prices from the database.
         // The client CANNOT inject or modify any price data.
         const cartPayload = Cart.items.map(item => ({
-            productId:     item.id,
+            productId:     item.productId || item.id,
             qty:           item.quantity || item.qty || 1,
             customization: {
                 size:    item.customization?.size    || item.size    || 'N/A',

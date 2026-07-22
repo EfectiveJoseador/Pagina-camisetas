@@ -89,14 +89,18 @@ export default async function handler(req, res) {
 
         const normalizedItems = [];
         for (const item of cartItems) {
-            if (!item.productId || typeof item.productId !== 'string') {
+            const rawId = item.productId || item.id;
+            const resolvedId = rawId ? String(rawId) : null;
+
+            if (!resolvedId) {
+                console.log('[Checkout] Invalid product ID received:', item);
                 return res.status(400).json({ code: 'functions/invalid-argument', message: `ID de producto inválido.` });
             }
             const qty = parseInt(item.qty, 10);
             if (isNaN(qty) || qty < 1 || qty > 20) {
                 return res.status(400).json({ code: 'functions/invalid-argument', message: `Cantidad inválida para producto.` });
             }
-            normalizedItems.push({ ...item, qty });
+            normalizedItems.push({ ...item, productId: resolvedId, qty });
         }
 
         const db = admin.database();
