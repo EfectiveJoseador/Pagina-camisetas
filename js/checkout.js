@@ -555,28 +555,23 @@ TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
         }
 
         let extras = [];
+
+        // 2. Parches
+        const pText = item.customization?.patch || 
+                     (Array.isArray(item.customization?.patches) ? item.customization.patches.join(', ') : '') ||
+                     item.patch || '';
+        if (pText && pText.trim() !== '') {
+            extras.push(`Parches: ${pText.trim()}`);
+        }
+
+        // 1. Personalización (Nombre y Número)
+        // Nota: Solo usamos item.customization?.name porque item.name guarda el nombre del producto (ej: "España 2026").
+        const cName = item.customization?.name || '';
+        const cNum  = item.customization?.number || item.number || '';
         
-        const rawPatches = item.patch || item.patches || item.customization?.patch || item.customization?.patches || item.selectedPatches;
-        let patchText = '';
-
-        if (Array.isArray(rawPatches) && rawPatches.length > 0) {
-            patchText = rawPatches.join(', ');
-        } else if (typeof rawPatches === 'string' && rawPatches.trim() !== '') {
-            patchText = rawPatches.trim();
-        }
-
-        if (patchText) {
-            extras.push(`Parches: ${patchText}`);
-        }
-
-        const customName = item.customization?.name || '';
-        const customNumber = item.customization?.number || '';
-        if (customName || customNumber) {
-            // Evitamos imprimir "(nombre vacío)" como antes. Solo concatenamos si existen.
-            let customText = `Personalización: ${customName}`;
-            if (customName && customNumber) customText += ` - ${customNumber}`;
-            else if (!customName && customNumber) customText += `${customNumber}`;
-            extras.push(customText);
+        if (cName || cNum) {
+            let customStr = `Personalización: ${cName}${cNum ? (cName ? ' - ' : '') + cNum : ''}`;
+            extras.push(customStr);
         }
 
         let extrasStr = extras.length > 0 ? (' [' + extras.join('] [') + ']') : '';
