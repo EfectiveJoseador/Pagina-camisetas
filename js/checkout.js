@@ -554,24 +554,20 @@ TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
             version = 'fan';
         }
 
-        let extras = [];
-        if (custom.patch) {
-            extras.push('Parche: ' + custom.patch);
-        } else if (custom.patches && custom.patches.length > 0) {
-            extras.push('Parches: ' + custom.patches.join(', '));
+        let extrasStr = '';
+        if (custom.patch && custom.patch !== 'none') {
+            extrasStr += ` [Parches: ${custom.patch}]`;
         }
 
         if (custom.name || custom.number) {
             const nombreVal = custom.name || '(nombre vacío)';
             const numeroVal = custom.number || '(numero vacío)';
-            extras.push('Personalización: ' + nombreVal + ' - ' + numeroVal);
+            extrasStr += ` [Personalización: ${nombreVal} - ${numeroVal}]`;
         }
-
-        let extrasStr = extras.length > 0 ? (' [' + extras.join(' | ') + ']') : '';
 
         const price = (item.price * qty).toFixed(2);
         const itemSku = item.sku ? ` [SKU: ${item.sku}]` : '';
-        productsText += qty + 'x ' + item.name + itemSku + ' - ' + size + ' - ' + version + extrasStr + ' - €' + price + '\n';
+        productsText += `${qty}x ${item.name}${itemSku} - ${size} - ${version}${extrasStr} - €${price}\n`;
     });
     let totalInfo = `Subtotal: €${orderData.subtotal.toFixed(2)}\n`;
 
