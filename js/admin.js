@@ -360,15 +360,53 @@ window.deleteOrder = async function (path, orderId) {
         alert('Error al eliminar pedido: ' + error.message);
     }
 };
+let currentEditingOrder = null;
+let currentEditingItems = [];
+let isOrderEditMode = false;
+
 window.viewOrderDetails = async function (path) {
     const order = allOrders.find(o => o.path === path);
     if (!order) return;
 
+    currentEditingOrder = JSON.parse(JSON.stringify(order));
+    currentEditingItems = JSON.parse(JSON.stringify(order.items || []));
+    isOrderEditMode = false;
+
+    renderOrderModalView();
+};
+
+function renderOrderModalView() {
+    if (!currentEditingOrder) return;
+    const order = currentEditingOrder;
+
     const modal = document.getElementById('order-modal');
     const modalBody = document.getElementById('modal-body');
     const modalOrderId = document.getElementById('modal-order-id');
+    const headerActions = document.getElementById('modal-header-actions');
 
     modalOrderId.textContent = '#' + sanitizeHTML(order.orderId || '');
+
+    if (headerActions) {
+        if (isOrderEditMode) {
+            headerActions.innerHTML = `
+                <button class="btn-modal-cancel" onclick="cancelOrderEditMode()">
+                    <i class="fas fa-times"></i> Cancelar Edición
+                </button>
+            `;
+        } else {
+            headerActions.innerHTML = `
+                <button class="btn-modal-edit" onclick="enableOrderEditMode()">
+                    <i class="fas fa-edit"></i> Editar Pedido
+                </button>
+            `;
+        }
+    }
+
+    if (isOrderEditMode) {
+        renderOrderEditMode();
+        modal.classList.add('active');
+        return;
+    }
 
     const address = order.shippingAddress || {};
     const items = order.items || [];
@@ -377,15 +415,15 @@ window.viewOrderDetails = async function (path) {
         <div class="order-detail-grid">
             <div class="detail-section">
                 <h3><i class="fas fa-user"></i> Cliente</h3>
-                <p><strong>Nombre:</strong> ${sanitizeHTML(order.customerName || 'N/A')}</p>
+                <p><strong>Nombre:</strong> ${sanitizeHTML(order.customerName || order.userEmail || 'N/A')}</p>
                 <p><strong>Email:</strong> ${sanitizeHTML(order.userEmail || 'N/A')}</p>
                 <p><strong>UID:</strong> <code>${sanitizeHTML(order.uid)}</code></p>
             </div>
 
             <div class="detail-section">
                 <h3><i class="fas fa-map-marker-alt"></i> Dirección de Envío</h3>
-                <p>${sanitizeHTML(address.street || 'N/A')}</p>
-                <p>${sanitizeHTML(address.city || '')}, ${sanitizeHTML(address.postalCode || '')}</p>
+                <p>${sanitizeHTML(address.street || address.address || 'N/A')}</p>
+                <p>${sanitizeHTML(address.city || '')}, ${sanitizeHTML(address.postalCode || address.zip || '')}</p>
                 <p>${sanitizeHTML(address.province || '')}, ${sanitizeHTML(address.country || '')}</p>
                 <p><strong><i class="fab fa-tiktok" style="color: #00c951;"></i> TikTok:</strong> @${sanitizeHTML((address.instagram || '').replace(/^@/, ''))}</p>
                 <p><strong>Tel:</strong> ${sanitizeHTML(address.phone || 'N/A')}</p>
@@ -393,63 +431,595 @@ window.viewOrderDetails = async function (path) {
 
             <div class="detail-section">
                 <h3><i class="fas fa-credit-card"></i> Pago</h3>
-                <p><strong>Método:</strong> ${sanitizeHTML(order.paymentMethod || 'N/A')}</p>
+                <p><strong>Método:</strong> <span class="payment-method ${(order.paymentMethod || 'N/A').toLowerCase()}">${sanitizeHTML(order.paymentMethod || 'N/A')}</span></p>
+                <p><strong>Estado pago:</strong> ${order.payment?.paid ? '<span style="color:#10b981;font-weight:700;"><i class="fas fa-check-circle"></i> Pagado</span>' : '<span style="color:#f59e0b;font-weight:700;"><i class="fas fa-clock"></i> Pendiente</span>'}</p>
                 ${order.paymentMethod === 'bizum' && order.bizumInstagram ? `
-                    <p><strong><i class="fab fa-tiktok" style="color: #00c951;"></i> (Legacy) TikTok Bizum:</strong> ${sanitizeHTML(order.bizumInstagram)}</p>
+                    <p><strong><i class="fab fa-tiktok" style="color: #00c951;"></i> TikTok Bizum:</strong> ${sanitizeHTML(order.bizumInstagram)}</p>
                 ` : ''}
                 ${order.payment?.confirmedBy ? `<p><strong>Confirmado por:</strong> ${sanitizeHTML(order.payment.confirmedBy)}</p>` : ''}
             </div>
 
             <div class="detail-section">
-                <h3><i class="fas fa-info-circle"></i> Estado</h3>
+                <h3><i class="fas fa-info-circle"></i> Estado e Historial</h3>
                 <p><strong>Estado actual:</strong> <span class="status-badge status-${order.status}">${order.status}</span></p>
                 <p><strong>Tracking:</strong> ${sanitizeHTML(order.trackingNumber || 'Sin asignar')}</p>
-                <p><strong>Fecha:</strong> ${order.dateFormatted || new Date(order.date).toLocaleString('es-ES')}</p>
-                ${order.updatedBy ? `<p><strong>Última edición:</strong> ${sanitizeHTML(order.updatedBy)}</p>` : ''}
+                <p><strong>Fecha pedido:</strong> ${order.dateFormatted || new Date(order.date || Date.now()).toLocaleString('es-ES')}</p>
+                ${order.lastUpdated ? `<p><strong>Última actualización:</strong> ${new Date(order.lastUpdated).toLocaleString('es-ES')}</p>` : ''}
+                ${order.updatedBy ? `<p><strong>Editado por:</strong> ${sanitizeHTML(order.updatedBy)}</p>` : ''}
             </div>
         </div>
 
         <div class="detail-section full-width">
-            <h3><i class="fas fa-shopping-cart"></i> Productos</h3>
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:0.75rem;">
+                <h3 style="margin-bottom:0;"><i class="fas fa-shopping-cart"></i> Productos del Pedido (${items.reduce((acc, i) => acc + (parseInt(i.quantity) || 1), 0)} unidades)</h3>
+                <button class="btn-modal-edit" style="font-size:0.8rem;padding:0.35rem 0.75rem;" onclick="enableOrderEditMode()">
+                    <i class="fas fa-pencil-alt"></i> Editar Productos
+                </button>
+            </div>
+
             <table class="items-table">
                 <thead>
                     <tr>
                         <th>Producto</th>
                         <th>Talla</th>
                         <th>Versión</th>
+                        <th>Personalización / Extras</th>
                         <th>Cantidad</th>
-                        <th>Precio</th>
+                        <th>Precio Un.</th>
+                        <th>Subtotal</th>
                     </tr>
                 </thead>
                 <tbody>
-                    ${items.map(item => `
-                        <tr>
-                            <td>
-                                <div class="item-info">
-                                    <img src="${item.image || '/assets/placeholder.webp'}" alt="${sanitizeHTML(item.name)}">
-                                    <span>${sanitizeHTML(item.name)}</span>
-                                </div>
-                            </td>
-                            <td>${sanitizeHTML(item.size || '-')}</td>
-                            <td>${sanitizeHTML(item.version || '-')}</td>
-                            <td>${item.quantity}</td>
-                            <td>€${(item.price || 0).toFixed(2)}</td>
-                        </tr>
-                    `).join('')}
+                    ${items.map((item, idx) => {
+                        const custom = item.customization || {};
+                        const name = custom.name || item.nameCustom || '';
+                        const number = custom.number || item.numberCustom || '';
+                        const patch = custom.patch || item.patch || '';
+                        const version = custom.version || item.version || 'aficionado';
+                        const size = custom.size || item.size || 'M';
+                        const unitPrice = parseFloat(item.price || 0);
+                        const qty = parseInt(item.quantity || item.qty || 1);
+                        const itemSubtotal = unitPrice * qty;
+
+                        return `
+                            <tr>
+                                <td>
+                                    <div class="item-info">
+                                        <img src="${item.image || '/assets/placeholder.webp'}" alt="${sanitizeHTML(item.name || '')}" onerror="this.src='/assets/placeholder.webp'">
+                                        <div>
+                                            <div style="font-weight:600;color:#fff;">${sanitizeHTML(item.name || `Producto ${item.id}`)}</div>
+                                            ${item.sku ? `<div style="font-size:0.75rem;color:#888;">SKU: ${sanitizeHTML(item.sku)}</div>` : ''}
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <span class="item-extra-tag tag-size"><i class="fas fa-ruler"></i> ${sanitizeHTML(size)}</span>
+                                </td>
+                                <td>
+                                    <span class="item-extra-tag ${version === 'jugador' ? 'tag-version-jugador' : 'tag-version-aficionado'}">
+                                        <i class="fas ${version === 'jugador' ? 'fa-bolt' : 'fa-user'}"></i> ${version.toUpperCase()}
+                                    </span>
+                                </td>
+                                <td>
+                                    <div class="item-customization-tags">
+                                        ${(name || number) ? `
+                                            <span class="item-extra-tag tag-name-num">
+                                                <i class="fas fa-font"></i> ${sanitizeHTML(name)} ${sanitizeHTML(number ? '#' + number : '')}
+                                            </span>
+                                        ` : ''}
+                                        ${(patch && patch !== 'none') ? `
+                                            <span class="item-extra-tag tag-patches">
+                                                <i class="fas fa-shield-alt"></i> ${sanitizeHTML(patch)}
+                                            </span>
+                                        ` : ''}
+                                        ${(!name && !number && (!patch || patch === 'none')) ? `
+                                            <span style="color:#666;font-size:0.8rem;">Sin extras</span>
+                                        ` : ''}
+                                    </div>
+                                </td>
+                                <td><strong>x${qty}</strong></td>
+                                <td>€${unitPrice.toFixed(2)}</td>
+                                <td style="font-weight:700;color:#10b981;">€${itemSubtotal.toFixed(2)}</td>
+                            </tr>
+                        `;
+                    }).join('')}
                 </tbody>
             </table>
+
             <div class="order-total-box">
                 <p><strong>Subtotal:</strong> €${(order.subtotal || 0).toFixed(2)}</p>
-                <p><strong>Envío:</strong> €${(order.shipping || 0).toFixed(2)}</p>
-                <p class="total"><strong>TOTAL:</strong> €${(order.total || 0).toFixed(2)}</p>
+                ${order.shipping !== undefined ? `<p><strong>Envío:</strong> €${(order.shipping || 0).toFixed(2)}</p>` : ''}
+                ${order.protectionFee ? `<p><strong>Tasa de Protección:</strong> +€${(order.protectionFee || 0).toFixed(2)}</p>` : ''}
+                ${order.discount ? `<p style="color:#f87171;"><strong>Descuento:</strong> -€${(order.discount || 0).toFixed(2)}</p>` : ''}
+                ${order.couponUsed ? `<p style="font-size:0.8rem;color:#888;">Cupón: ${sanitizeHTML(order.couponUsed)} (-€${(order.couponDiscount || 0).toFixed(2)})</p>` : ''}
+                ${order.promoCodeUsed ? `<p style="font-size:0.8rem;color:#888;">Código Promo: ${sanitizeHTML(order.promoCodeUsed)} (-€${(order.promoCodeDiscount || 0).toFixed(2)})</p>` : ''}
+                <p class="total"><strong>TOTAL PEDIDO:</strong> €${(order.total || 0).toFixed(2)}</p>
             </div>
         </div>
     `;
 
     modal.classList.add('active');
+}
+
+window.enableOrderEditMode = function () {
+    isOrderEditMode = true;
+    renderOrderModalView();
+};
+
+window.cancelOrderEditMode = function () {
+    if (!currentEditingOrder) return;
+    currentEditingItems = JSON.parse(JSON.stringify(currentEditingOrder.items || []));
+    isOrderEditMode = false;
+    renderOrderModalView();
+};
+
+window.renderOrderEditMode = function () {
+    const modalContent = document.querySelector('#order-modal .modal-content');
+    if (modalContent) modalContent.classList.add('full-screen-modal');
+
+    const modalBody = document.getElementById('modal-body');
+    const items = currentEditingItems;
+    const standardSizes = ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL', '16 (Niño)', '18 (Niño)', '20 (Niño)', '22 (Niño)', '24 (Niño)', '26 (Niño)', '28 (Niño)'];
+
+    modalBody.innerHTML = `
+        <div class="edit-mode-banner">
+            <div>
+                <i class="fas fa-edit" style="color:#6366f1;font-size:1.1rem;margin-right:0.4rem;"></i>
+                <strong>Modo Edición Activado</strong> — Modifica modelos, tallas, versión, personalización, añade o elimina productos. Los precios se recalcularán automáticamente.
+            </div>
+        </div>
+
+        <div class="detail-section full-width">
+            <h3><i class="fas fa-tshirt"></i> Editar Productos del Pedido (${items.length} productos)</h3>
+            
+            <!-- DESKTOP TABLE -->
+            <table class="items-edit-table">
+                <thead>
+                    <tr>
+                        <th style="width:26%;">Producto / Modelo</th>
+                        <th style="width:12%;">Talla</th>
+                        <th style="width:14%;">Versión</th>
+                        <th style="width:20%;">Nombre y Número</th>
+                        <th style="width:14%;">Parches</th>
+                        <th style="width:7%;">Cant.</th>
+                        <th style="width:9%;">Precio (€)</th>
+                        <th style="width:4%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    ${items.map((item, idx) => {
+                        const custom = item.customization || {};
+                        const size = custom.size || item.size || 'M';
+                        const version = custom.version || item.version || 'aficionado';
+                        const name = custom.name || '';
+                        const number = custom.number || '';
+                        const patch = custom.patch || '';
+                        const price = item.price !== undefined ? item.price : 19.90;
+                        const qty = item.quantity || item.qty || 1;
+
+                        return `
+                            <tr>
+                                <td>
+                                    <div class="item-info" style="margin-bottom:0.4rem;">
+                                        <img src="${item.image || '/assets/placeholder.webp'}" alt="${sanitizeHTML(item.name || '')}" onerror="this.src='/assets/placeholder.webp'">
+                                        <input type="text" class="edit-input" value="${sanitizeHTML(item.name || '')}" 
+                                               onchange="updateItemField(${idx}, 'name', this.value)" placeholder="Nombre del producto">
+                                    </div>
+                                </td>
+                                <td>
+                                    <select class="edit-select" onchange="updateItemField(${idx}, 'size', this.value)">
+                                        ${standardSizes.map(s => `<option value="${s}" ${size === s ? 'selected' : ''}>${s}</option>`).join('')}
+                                    </select>
+                                </td>
+                                <td>
+                                    <select class="edit-select" onchange="updateItemField(${idx}, 'version', this.value)">
+                                        <option value="aficionado" ${version === 'aficionado' ? 'selected' : ''}>Aficionado</option>
+                                        <option value="jugador" ${version === 'jugador' ? 'selected' : ''}>Jugador (+5€)</option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <div style="display:flex;gap:0.3rem;margin-bottom:0.2rem;">
+                                        <input type="text" class="edit-input" placeholder="Nombre" value="${sanitizeHTML(name)}" 
+                                               onchange="updateItemField(${idx}, 'nameCustom', this.value)">
+                                        <input type="text" class="edit-input" style="width:65px;" placeholder="Nº" value="${sanitizeHTML(number)}" 
+                                               onchange="updateItemField(${idx}, 'numberCustom', this.value)">
+                                    </div>
+                                </td>
+                                <td>
+                                    <input type="text" class="edit-input" placeholder="Parches" value="${sanitizeHTML(patch)}" 
+                                           onchange="updateItemField(${idx}, 'patch', this.value)">
+                                </td>
+                                <td>
+                                    <input type="number" class="edit-input edit-qty-input" min="1" max="99" value="${qty}" 
+                                           onchange="updateItemField(${idx}, 'quantity', parseInt(this.value) || 1)">
+                                </td>
+                                <td>
+                                    <input type="number" step="0.01" class="edit-input edit-price-input" value="${parseFloat(price).toFixed(2)}" 
+                                           onchange="updateItemField(${idx}, 'price', parseFloat(this.value) || 0)">
+                                </td>
+                                <td>
+                                    <button class="btn-remove-item" onclick="removeItemFromEditOrder(${idx})" title="Eliminar producto">
+                                        <i class="fas fa-trash-alt"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        `;
+                    }).join('')}
+                </tbody>
+            </table>
+
+            <!-- MOBILE CARDS -->
+            <div class="mobile-edit-cards">
+                ${items.map((item, idx) => {
+                    const custom = item.customization || {};
+                    const size = custom.size || item.size || 'M';
+                    const version = custom.version || item.version || 'aficionado';
+                    const name = custom.name || '';
+                    const number = custom.number || '';
+                    const patch = custom.patch || '';
+                    const price = item.price !== undefined ? item.price : 19.90;
+                    const qty = item.quantity || item.qty || 1;
+
+                    return `
+                        <div class="edit-item-card">
+                            <div class="card-item-header">
+                                <img src="${item.image || '/assets/placeholder.webp'}" class="card-item-thumb" alt="${sanitizeHTML(item.name || '')}" onerror="this.src='/assets/placeholder.webp'">
+                                <div style="flex:1;min-width:0;">
+                                    <input type="text" class="edit-input" value="${sanitizeHTML(item.name || '')}" 
+                                           onchange="updateItemField(${idx}, 'name', this.value)" placeholder="Nombre del producto">
+                                </div>
+                                <button class="btn-remove-item" onclick="removeItemFromEditOrder(${idx})" title="Eliminar">
+                                    <i class="fas fa-trash-alt"></i>
+                                </button>
+                            </div>
+
+                            <div class="card-item-grid">
+                                <div class="card-field">
+                                    <label><i class="fas fa-ruler"></i> Talla</label>
+                                    <select class="edit-select" onchange="updateItemField(${idx}, 'size', this.value)">
+                                        ${standardSizes.map(s => `<option value="${s}" ${size === s ? 'selected' : ''}>${s}</option>`).join('')}
+                                    </select>
+                                </div>
+                                <div class="card-field">
+                                    <label><i class="fas fa-bolt"></i> Versión</label>
+                                    <select class="edit-select" onchange="updateItemField(${idx}, 'version', this.value)">
+                                        <option value="aficionado" ${version === 'aficionado' ? 'selected' : ''}>Aficionado</option>
+                                        <option value="jugador" ${version === 'jugador' ? 'selected' : ''}>Jugador (+5€)</option>
+                                    </select>
+                                </div>
+                                <div class="card-field full-width">
+                                    <label><i class="fas fa-font"></i> Nombre y Número</label>
+                                    <div style="display:flex;gap:0.4rem;">
+                                        <input type="text" class="edit-input" placeholder="Nombre (Ej: MESSI)" value="${sanitizeHTML(name)}" 
+                                               onchange="updateItemField(${idx}, 'nameCustom', this.value)">
+                                        <input type="text" class="edit-input" style="width:75px;" placeholder="Nº" value="${sanitizeHTML(number)}" 
+                                               onchange="updateItemField(${idx}, 'numberCustom', this.value)">
+                                    </div>
+                                </div>
+                                <div class="card-field full-width">
+                                    <label><i class="fas fa-shield-alt"></i> Parches</label>
+                                    <input type="text" class="edit-input" placeholder="Parches (Ej: Champions)" value="${sanitizeHTML(patch)}" 
+                                           onchange="updateItemField(${idx}, 'patch', this.value)">
+                                </div>
+                                <div class="card-field">
+                                    <label><i class="fas fa-cubes"></i> Cantidad</label>
+                                    <input type="number" class="edit-input" min="1" max="99" value="${qty}" 
+                                           onchange="updateItemField(${idx}, 'quantity', parseInt(this.value) || 1)">
+                                </div>
+                                <div class="card-field">
+                                    <label><i class="fas fa-euro-sign"></i> Precio Un. (€)</label>
+                                    <input type="number" step="0.01" class="edit-input" value="${parseFloat(price).toFixed(2)}" 
+                                           onchange="updateItemField(${idx}, 'price', parseFloat(this.value) || 0)">
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                }).join('')}
+            </div>
+
+            <div class="add-product-bar">
+                <div class="add-product-btn-wrap">
+                    <button class="btn-add-product-trigger" onclick="toggleAddProductPanel()">
+                        <i class="fas fa-plus-circle"></i> Añadir Nuevo Producto al Pedido
+                    </button>
+                    <button class="btn-refresh" style="background:#4f46e5;font-size:0.8rem;" onclick="recalculateModalOrderTotals()">
+                        <i class="fas fa-calculator"></i> Recalcular Precios Automáticamente
+                    </button>
+                </div>
+
+                <div class="add-product-panel hidden" id="add-product-panel">
+                    <label style="font-size:0.85rem;color:#a0a0a0;display:block;margin-bottom:0.4rem;">
+                        Buscar camiseta en el catálogo:
+                    </label>
+                    <input type="text" class="edit-input" id="add-product-search-input" 
+                           placeholder="Escribe el nombre o equipo (ej. Real Madrid, Barcelona, España)..." 
+                           oninput="searchAddProductCatalog(this.value)">
+                    <div class="add-product-search-results hidden" id="add-product-search-results"></div>
+                </div>
+            </div>
+
+            <!-- Total Recalculation Form -->
+            <div class="edit-totals-grid">
+                <div class="edit-total-field">
+                    <label>Subtotal (€):</label>
+                    <input type="number" step="0.01" class="edit-input" id="edit-order-subtotal" 
+                           value="${(currentEditingOrder.subtotal || 0).toFixed(2)}" onchange="updateOrderTotalsFromInput()">
+                </div>
+                <div class="edit-total-field">
+                    <label>Gastos de Envío (€):</label>
+                    <input type="number" step="0.01" class="edit-input" id="edit-order-shipping" 
+                           value="${(currentEditingOrder.shipping || 0).toFixed(2)}" onchange="updateOrderTotalsFromInput()">
+                </div>
+                <div class="edit-total-field">
+                    <label>Descuento Total (€):</label>
+                    <input type="number" step="0.01" class="edit-input" id="edit-order-discount" 
+                           value="${(currentEditingOrder.discount || 0).toFixed(2)}" onchange="updateOrderTotalsFromInput()">
+                </div>
+                <div class="edit-total-field">
+                    <label style="color:#10b981;font-weight:700;">TOTAL FINAL (€):</label>
+                    <input type="number" step="0.01" class="edit-input" id="edit-order-total" 
+                           style="border-color:#10b981;font-weight:700;color:#10b981;" 
+                           value="${(currentEditingOrder.total || 0).toFixed(2)}">
+                </div>
+            </div>
+
+            <div class="edit-actions-footer">
+                <button class="btn-modal-cancel" onclick="cancelOrderEditMode()">
+                    Cancelar
+                </button>
+                <button class="btn-save-order-changes" onclick="saveOrderEdits()">
+                    <i class="fas fa-check-circle"></i> Guardar Cambios y Notificar Cliente
+                </button>
+            </div>
+        </div>
+    `;
+
+    recalculateModalOrderTotals();
+};
+
+window.updateItemField = function (index, field, value) {
+    if (!currentEditingItems[index]) return;
+
+    const item = currentEditingItems[index];
+    if (!item.customization) item.customization = {};
+
+    if (field === 'size') {
+        item.size = value;
+        item.customization.size = value;
+    } else if (field === 'version') {
+        item.version = value;
+        item.customization.version = value;
+    } else if (field === 'nameCustom') {
+        item.customization.name = value;
+    } else if (field === 'numberCustom') {
+        item.customization.number = value;
+    } else if (field === 'patch') {
+        item.patch = value;
+        item.customization.patch = value;
+    } else if (field === 'name') {
+        item.name = value;
+    } else if (field === 'quantity') {
+        item.quantity = value;
+        item.qty = value;
+    } else if (field === 'price') {
+        item.price = value;
+    }
+
+    recalculateModalOrderTotals();
+};
+
+window.removeItemFromEditOrder = function (index) {
+    if (confirm('¿Eliminar este producto del pedido?')) {
+        currentEditingItems.splice(index, 1);
+        renderOrderEditMode();
+    }
+};
+
+window.toggleAddProductPanel = async function () {
+    const panel = document.getElementById('add-product-panel');
+    if (!panel) return;
+
+    if (panel.classList.contains('hidden')) {
+        panel.classList.remove('hidden');
+        await loadProductsCache();
+        const input = document.getElementById('add-product-search-input');
+        if (input) input.focus();
+    } else {
+        panel.classList.add('hidden');
+    }
+};
+
+window.searchAddProductCatalog = async function (query) {
+    const resultsContainer = document.getElementById('add-product-search-results');
+    if (!resultsContainer) return;
+
+    if (!query || query.trim().length < 2) {
+        resultsContainer.innerHTML = '';
+        resultsContainer.classList.add('hidden');
+        return;
+    }
+
+    const catalog = await loadProductsCache();
+    const cleanQuery = query.toLowerCase().trim();
+    const matches = catalog.filter(p => p.name.toLowerCase().includes(cleanQuery) || (p.sku && p.sku.toLowerCase().includes(cleanQuery))).slice(0, 10);
+
+    if (matches.length === 0) {
+        resultsContainer.innerHTML = `<div style="padding:0.6rem;color:#888;font-size:0.85rem;">No se encontraron productos</div>`;
+        resultsContainer.classList.remove('hidden');
+        return;
+    }
+
+    resultsContainer.innerHTML = matches.map(p => `
+        <div class="add-product-result-item" onclick="selectProductToAdd(${p.id})">
+            <img src="${p.image || '/assets/placeholder.webp'}" alt="${sanitizeHTML(p.name)}" onerror="this.src='/assets/placeholder.webp'">
+            <div style="flex:1;">
+                <div style="font-weight:600;color:#fff;font-size:0.85rem;">${sanitizeHTML(p.name)}</div>
+                <div style="font-size:0.75rem;color:#888;">SKU: ${sanitizeHTML(p.sku || '-')} | €${(p.price || 19.90).toFixed(2)}</div>
+            </div>
+            <button class="btn-modal-edit" style="font-size:0.75rem;padding:0.25rem 0.5rem;">
+                <i class="fas fa-plus"></i> Añadir
+            </button>
+        </div>
+    `).join('');
+
+    resultsContainer.classList.remove('hidden');
+};
+
+window.selectProductToAdd = async function (productId) {
+    const catalog = await loadProductsCache();
+    const product = catalog.find(p => p.id === productId);
+    if (!product) return;
+
+    const newItem = {
+        id: product.id,
+        sku: product.sku || '',
+        name: product.name,
+        image: product.image || '/assets/placeholder.webp',
+        quantity: 1,
+        qty: 1,
+        size: 'M',
+        version: 'aficionado',
+        price: product.price || 19.90,
+        customization: {
+            size: 'M',
+            version: 'aficionado',
+            name: '',
+            number: '',
+            patch: ''
+        }
+    };
+
+    currentEditingItems.push(newItem);
+    renderOrderEditMode();
+};
+
+window.recalculateModalOrderTotals = function () {
+    let totalShirtQty = 0;
+    let surcharges = 0;
+
+    currentEditingItems.forEach(item => {
+        const qty = parseInt(item.quantity || item.qty || 1);
+        totalShirtQty += qty;
+
+        const custom = item.customization || {};
+        const version = custom.version || item.version || 'aficionado';
+        const versionSurcharge = version === 'jugador' ? 5 : 0;
+
+        const patch = custom.patch || item.patch || '';
+        let patchSurcharge = 0;
+        if (patch && patch !== 'none') {
+            patchSurcharge = 2;
+        }
+
+        const name = custom.name || '';
+        const number = custom.number || '';
+        const personSurcharge = (name || number) ? 3 : 0;
+
+        surcharges += (versionSurcharge + patchSurcharge + personSurcharge) * qty;
+    });
+
+    const fullCycles = Math.floor(totalShirtQty / 5);
+    const remainder = totalShirtQty % 5;
+    let packBasePrice = fullCycles * 85.90;
+    if (remainder === 1) packBasePrice += 19.90;
+    else if (remainder === 2) packBasePrice += 19.90 * 2;
+    else if (remainder === 3) packBasePrice += 56.90;
+    else if (remainder === 4) packBasePrice += 56.90 + 19.90;
+
+    const calculatedSubtotal = Math.round((packBasePrice + surcharges) * 100) / 100;
+    const shipping = totalShirtQty === 1 ? 1.90 : 0;
+    const protectionFee = currentEditingOrder.protectionFee || 0;
+    const discount = currentEditingOrder.discount || 0;
+    const calculatedTotal = Math.max(0, Math.round((calculatedSubtotal + shipping + protectionFee - discount) * 100) / 100);
+
+    const subtotalEl = document.getElementById('edit-order-subtotal');
+    const shippingEl = document.getElementById('edit-order-shipping');
+    const discountEl = document.getElementById('edit-order-discount');
+    const totalEl = document.getElementById('edit-order-total');
+
+    if (subtotalEl) subtotalEl.value = calculatedSubtotal.toFixed(2);
+    if (shippingEl) shippingEl.value = shipping.toFixed(2);
+    if (discountEl) discountEl.value = discount.toFixed(2);
+    if (totalEl) totalEl.value = calculatedTotal.toFixed(2);
+
+    currentEditingOrder.subtotal = calculatedSubtotal;
+    currentEditingOrder.shipping = shipping;
+    currentEditingOrder.total = calculatedTotal;
+};
+
+window.updateOrderTotalsFromInput = function () {
+    const subtotal = parseFloat(document.getElementById('edit-order-subtotal')?.value || 0);
+    const shipping = parseFloat(document.getElementById('edit-order-shipping')?.value || 0);
+    const discount = parseFloat(document.getElementById('edit-order-discount')?.value || 0);
+    const protectionFee = currentEditingOrder.protectionFee || 0;
+
+    const total = Math.max(0, subtotal + shipping + protectionFee - discount);
+    const totalEl = document.getElementById('edit-order-total');
+    if (totalEl) totalEl.value = total.toFixed(2);
+};
+
+window.saveOrderEdits = async function () {
+    if (!isAdmin) {
+        alert('No tienes permisos de administrador');
+        return;
+    }
+
+    if (!currentEditingOrder || !currentEditingOrder.path) {
+        alert('Error: no se encontró la ruta del pedido');
+        return;
+    }
+
+    if (currentEditingItems.length === 0) {
+        if (!confirm('Atención: El pedido no tiene ningún producto. ¿Deseas guardar el pedido vacío?')) {
+            return;
+        }
+    }
+
+    const subtotal = parseFloat(document.getElementById('edit-order-subtotal')?.value || 0);
+    const shipping = parseFloat(document.getElementById('edit-order-shipping')?.value || 0);
+    const discount = parseFloat(document.getElementById('edit-order-discount')?.value || 0);
+    const total = parseFloat(document.getElementById('edit-order-total')?.value || 0);
+    const totalShirtQty = currentEditingItems.reduce((acc, i) => acc + (parseInt(i.quantity) || 1), 0);
+
+    const updatedOrderData = {
+        ...currentEditingOrder,
+        items: currentEditingItems,
+        subtotal: subtotal,
+        shipping: shipping,
+        discount: discount,
+        total: total,
+        pointsToEarn: totalShirtQty * 10,
+        lastUpdated: new Date().toISOString(),
+        updatedBy: auth.currentUser ? auth.currentUser.email : 'Admin'
+    };
+
+    try {
+        const orderRef = ref(db, currentEditingOrder.path);
+        await update(orderRef, updatedOrderData);
+
+        currentEditingOrder = updatedOrderData;
+        const localIndex = allOrders.findIndex(o => o.path === currentEditingOrder.path);
+        if (localIndex !== -1) {
+            allOrders[localIndex] = { ...updatedOrderData };
+        }
+
+        renderOrders();
+        updateStats();
+
+        showToast('¡Pedido actualizado y recalculado correctamente!');
+        isOrderEditMode = false;
+        renderOrderModalView();
+    } catch (error) {
+        console.error('Error al guardar edición del pedido:', error);
+        alert('Error al guardar el pedido: ' + error.message);
+    }
 };
 
 function closeModal() {
+    isOrderEditMode = false;
+    currentEditingOrder = null;
+    const modalContent = document.querySelector('#order-modal .modal-content');
+    if (modalContent) modalContent.classList.remove('full-screen-modal');
     document.getElementById('order-modal').classList.remove('active');
 }
 function showToast(message) {

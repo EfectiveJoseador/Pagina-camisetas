@@ -28,9 +28,9 @@
     <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
 
 
-    <link rel="stylesheet" href="../css/variables.css">
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/admin.css">
+    <link rel="stylesheet" href="../css/variables.css?v=2">
+    <link rel="stylesheet" href="../css/reset.css?v=2">
+    <link rel="stylesheet" href="../css/admin.css?v=2">
 
     <style>
         .auth-loading {
@@ -356,10 +356,13 @@
 
 
     <div class="modal-overlay" id="order-modal">
-        <div class="modal-content">
+        <div class="modal-content wide-modal">
             <div class="modal-header">
                 <h2>Detalles del Pedido <span id="modal-order-id"></span></h2>
-                <button class="modal-close" id="modal-close">&times;</button>
+                <div class="modal-header-actions" id="modal-header-actions">
+                    <!-- Dynamic Edit button / Close button inserted by JS -->
+                </div>
+                <button class="modal-close" id="modal-close" style="margin-left: 0.5rem;">&times;</button>
             </div>
             <div class="modal-body" id="modal-body">
 

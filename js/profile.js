@@ -337,12 +337,22 @@ function renderOrders(orders) {
                             </p>
                             <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.8rem;">
                                 <span style="background: rgba(var(--primary-rgb), 0.1); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 50px;">
-                                    Talla: ${sanitizeHTML(p.size || 'M')}
+                                    Talla: ${sanitizeHTML(p.size || p.customization?.size || 'M')}
                                 </span>
-                                <span style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; padding: 0.2rem 0.6rem; border-radius: 50px;">
+                                <span style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; padding: 0.2rem 0.6rem; border-radius: 50px; text-transform: capitalize;">
                                     ${sanitizeHTML(p.version || p.customization?.version || 'Aficionado')}
                                 </span>
-                                <span style="background: rgba(var(--text-rgb), 0.08); color: var(--text-muted); padding: 0.2rem 0.6rem; border-radius: 50px;">
+                                ${(p.customization?.name || p.customization?.number || p.nameCustom || p.numberCustom) ? `
+                                    <span style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">
+                                        <i class="fas fa-font" style="font-size:0.75rem;"></i> ${sanitizeHTML(p.customization?.name || p.nameCustom || '')} ${p.customization?.number || p.numberCustom ? '#' + sanitizeHTML(p.customization?.number || p.numberCustom) : ''}
+                                    </span>
+                                ` : ''}
+                                ${(p.customization?.patch || p.patch) && (p.customization?.patch !== 'none' && p.patch !== 'none') ? `
+                                    <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">
+                                        <i class="fas fa-shield-alt" style="font-size:0.75rem;"></i> ${sanitizeHTML(p.customization?.patch || p.patch)}
+                                    </span>
+                                ` : ''}
+                                <span style="background: rgba(var(--text-rgb), 0.08); color: var(--text-muted); padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">
                                     ×${p.quantity || p.qty || 1}
                                 </span>
                             </div>
