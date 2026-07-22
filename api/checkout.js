@@ -15,6 +15,25 @@ function sanitizeString(value, maxLength = 500) {
     return str.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '').substring(0, maxLength);
 }
 
+function flattenProducts(obj, results = []) {
+    if (!obj || typeof obj !== 'object') return results;
+    
+    // Check if current object looks like a product (has price and some ID)
+    const hasPrice = obj.price !== undefined || obj.precio !== undefined || obj.priceEur !== undefined;
+    const hasId = obj.id !== undefined || obj.sku !== undefined || obj.productId !== undefined || obj.code !== undefined;
+    
+    if (hasPrice && hasId && !Array.isArray(obj)) {
+        results.push(obj);
+        return results;
+    }
+    
+    // Otherwise, recurse into its properties
+    for (const key of Object.keys(obj)) {
+        flattenProducts(obj[key], results);
+    }
+    return results;
+}
+
 async function writeAuditLog(uid, event, metadata = {}) {
     try {
         const db = admin.database();
@@ -112,12 +131,26 @@ export default async function handler(req, res) {
         const shippingAddress = addrSnap.val();
 
         // ── 3. Fetch REAL prices from database ────────────────────────────────
+        // Fetch ROOT of DB to see all available root nodes
+        const rootSnap = await db.ref('/').once('value');
+        const rootData = rootSnap.val() || {};
+        const rootKeys = Object.keys(rootData);
+        console.log(`[Checkout] ROOT DB Keys:`, rootKeys);
+
         const productsSnap = await db.ref('products').once('value');
         const dbProducts   = productsSnap.val() || {};
-        const productsList = Array.isArray(dbProducts) ? dbProducts : Object.values(dbProducts);
+        
+        // If /products is empty, try flattening the entire root to find the product anywhere!
+        let productsList = [];
+        if (productsSnap.exists()) {
+            productsList = flattenProducts(dbProducts);
+        } else {
+            console.log(`[Checkout] /products is empty! Flattening entire DB to find products...`);
+            productsList = flattenProducts(rootData);
+        }
 
         if (productsList.length === 0) {
-            return res.status(412).json({ code: 'functions/failed-precondition', message: 'El catálogo de productos no está disponible. Por favor, inténtalo más tarde.' });
+            return res.status(412).json({ code: 'functions/failed-precondition', message: 'El catálogo de productos no está disponible o no se encontraron productos válidos en la base de datos.' });
         }
 
         // ── 4. Calculate subtotal using SERVER prices only ────────────────────
@@ -141,7 +174,7 @@ export default async function handler(req, res) {
                 console.log(`[Checkout] Producto no encontrado: ${searchTarget}`);
                 return res.status(404).json({ 
                     code: 'functions/not-found', 
-                    message: `Producto '${item.productId}' no encontrado en el catálogo.` 
+                    message: `Producto '${item.productId}' no encontrado. Nodos raíz en la base de datos: ${rootKeys.join(', ')}.` 
                 });
             }
 
