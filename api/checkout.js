@@ -139,9 +139,10 @@ export default async function handler(req, res) {
 
             if (!catalogProduct) {
                 console.log(`[DEBUG-CHECKOUT] Producto no encontrado: ${item.productId}.`);
+                const sampleProduct = Array.isArray(dbProducts) ? dbProducts[0] : Object.values(dbProducts)[0];
                 return res.status(404).json({ 
                     code: 'functions/not-found', 
-                    message: `Producto '${item.productId}' no encontrado. Ruta consultada: /products. Claves disponibles en catálogo: ${availableKeys.slice(0, 10).join(', ')}...` 
+                    message: `Producto '${item.productId}' no encontrado. Estructura del primer producto en RTDB: ${JSON.stringify(sampleProduct)}` 
                 });
             }
 
