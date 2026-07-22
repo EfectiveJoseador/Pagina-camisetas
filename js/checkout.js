@@ -443,7 +443,7 @@ async function confirmOrder() {
             throw err;
         }
 
-        const { orderId, total, paypalLink } = result.data;
+        const { orderId, total, paypalLink, orderRecord } = result.data;
 
         // ── Analytics (uses server-returned total, not client-calculated) ──
         if (window.Analytics) {
@@ -451,7 +451,11 @@ async function confirmOrder() {
         }
 
         // ── Notify admin via Web3Forms (email notification only) ─────────
-        await sendOrderNotification(orderId, total, paymentMethod);
+        if (orderRecord) {
+            await sendOrderViaWeb3Forms(orderRecord);
+        } else {
+            await sendOrderNotification(orderId, total, paymentMethod);
+        }
 
         // ── Open PayPal if applicable ──────────────────────────────
         if (paymentMethod === 'paypal' && paypalLink) {
@@ -573,6 +577,10 @@ TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
 
     if (orderData.protectionFee && orderData.protectionFee > 0) {
         totalInfo += `Tasa Temporal de Protección: +€${orderData.protectionFee.toFixed(2)}\n`;
+    }
+    
+    if (orderData.shipping !== undefined) {
+        totalInfo += `Envío: €${orderData.shipping.toFixed(2)}\n`;
     }
 
     if (orderData.promoCodeUsed) {
