@@ -12,7 +12,10 @@ const PAYPAL_USERNAME = 'camisetazo';
 function sanitizeString(value, maxLength = 500) {
     if (value === null || value === undefined) return '';
     const str = String(value).trim();
-    return str.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '').substring(0, maxLength);
+    return str.replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, '')
+              .replace(/</g, '&lt;')
+              .replace(/>/g, '&gt;')
+              .substring(0, maxLength);
 }
 
 function flattenProducts(obj, results = []) {
@@ -179,8 +182,40 @@ export default async function handler(req, res) {
             }
 
             const rawPrice = catalogProduct.price ?? catalogProduct.precio ?? catalogProduct.priceEur ?? 24.99;
-            const finalPrice = typeof rawPrice === 'number' ? rawPrice : parseFloat(rawPrice) || 24.99;
+            let finalPrice = typeof rawPrice === 'number' ? rawPrice : parseFloat(rawPrice) || 24.99;
             
+            // --- CÁLCULO DE RECARGOS (Talla, Versión, Personalización, Parches) ---
+            const cust = item.customization || {};
+            
+            // 1. Recargo por Talla
+            const size = (cust.size || '').toUpperCase();
+            if (size === '3XL' || size === '4XL') {
+                finalPrice += 2;
+            } else if (size === '2XL') {
+                finalPrice += 1;
+            }
+
+            // 2. Recargo por Versión
+            if ((cust.version || '').toLowerCase() === 'jugador') {
+                finalPrice += 5;
+            }
+
+            // 3. Recargo por Personalización (Nombre o Dorsal)
+            if ((cust.name && cust.name.trim() !== '') || (cust.number && cust.number.trim() !== '')) {
+                finalPrice += 3;
+            }
+
+            // 4. Recargo por Parches
+            if (catalogProduct.customPatches === 'espana26') {
+                const patchesArr = Array.isArray(cust.patches) ? cust.patches : (cust.patch ? cust.patch.split(',').map(s => s.trim()) : []);
+                const validPatchesCount = patchesArr.filter(p => p).length;
+                finalPrice += validPatchesCount * 1.25;
+            } else {
+                if (cust.patch && cust.patch.trim() !== '' && cust.patch.trim() !== 'none') {
+                    finalPrice += 2;
+                }
+            }
+
             const lineTotal = finalPrice * item.qty;
             subtotal += lineTotal;
 
