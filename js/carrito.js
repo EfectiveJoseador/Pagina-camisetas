@@ -382,26 +382,10 @@ const Cart = {
                 displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
                 displayOldPrice = getItemOldPrice(item, product, sizeSurcharge, versionSurcharge, patchSurcharge, personSurcharge);
                 
-                displayDetails = `
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.25rem; font-size: 0.7rem;">
-                        <span style="background: rgba(var(--primary-rgb), 0.1); color: var(--primary); padding: 0.1rem 0.4rem; border-radius: 50px; font-weight: 600;">
-                            Talla: ${size}
-                        </span>
-                        <span style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; padding: 0.1rem 0.4rem; border-radius: 50px; text-transform: capitalize; font-weight: 600;">
-                            ${version === 'jugador' ? 'Jugador' : 'Aficionado'}
-                        </span>
-                        ${(custom.name || custom.number) ? `
-                            <span style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; padding: 0.1rem 0.4rem; border-radius: 50px; font-weight: 600;">
-                                <i class="fas fa-font" style="font-size:0.65rem;"></i> ${sanitizeHTML(custom.name || '')} ${custom.number ? '#' + sanitizeHTML(custom.number) : ''}
-                            </span>
-                        ` : ''}
-                        ${(patch && patch !== 'none') ? `
-                            <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 0.1rem 0.4rem; border-radius: 50px; font-weight: 600;">
-                                <i class="fas fa-shield-alt" style="font-size:0.65rem;"></i> ${sanitizeHTML(patch)}
-                            </span>
-                        ` : ''}
-                    </div>
-                `;
+                displayDetails = `Talla: ${size} / ${version === 'jugador' ? 'Jugador' : 'Aficionado'}`;
+                if (custom.name) displayDetails += ` | Nombre: ${sanitizeHTML(custom.name)}`;
+                if (custom.number) displayDetails += ` | Dorsal: ${sanitizeHTML(custom.number)}`;
+                if (patch && patch !== 'none') displayDetails += ` | Parche: ${sanitizeHTML(patch)}`;
                 imgUrl = product.image;
             }
 
@@ -527,26 +511,10 @@ const Cart = {
                 const baseProductPrice = item.basePrice || product.price;
                 displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
                 
-                displayDetails = `
-                    <div style="display: flex; flex-wrap: wrap; gap: 0.4rem; margin-top: 0.25rem; font-size: 0.75rem;">
-                        <span style="background: rgba(var(--primary-rgb), 0.1); color: var(--primary); padding: 0.15rem 0.5rem; border-radius: 50px; font-weight: 600;">
-                            Talla: ${size}
-                        </span>
-                        <span style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; padding: 0.15rem 0.5rem; border-radius: 50px; text-transform: capitalize; font-weight: 600;">
-                            ${version === 'jugador' ? 'Jugador' : 'Aficionado'}
-                        </span>
-                        ${(custom.name || custom.number) ? `
-                            <span style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; padding: 0.15rem 0.5rem; border-radius: 50px; font-weight: 600;">
-                                <i class="fas fa-font" style="font-size:0.7rem;"></i> ${sanitizeHTML(custom.name || '')} ${custom.number ? '#' + sanitizeHTML(custom.number) : ''}
-                            </span>
-                        ` : ''}
-                        ${(patch && patch !== 'none') ? `
-                            <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 0.15rem 0.5rem; border-radius: 50px; font-weight: 600;">
-                                <i class="fas fa-shield-alt" style="font-size:0.7rem;"></i> ${sanitizeHTML(patch)}
-                            </span>
-                        ` : ''}
-                    </div>
-                `;
+                displayDetails = `Talla: ${size} / ${version === 'jugador' ? 'Jugador' : 'Aficionado'}`;
+                if (custom.name) displayDetails += ` | Nombre: ${sanitizeHTML(custom.name)}`;
+                if (custom.number) displayDetails += ` | Dorsal: ${sanitizeHTML(custom.number)}`;
+                if (patch && patch !== 'none') displayDetails += ` | Parche: ${sanitizeHTML(patch)}`;
                 imgUrl = product.image;
             }
 

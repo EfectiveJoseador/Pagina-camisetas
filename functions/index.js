@@ -296,7 +296,9 @@ exports.processCheckoutTotal = functions.https.onCall(async (data, context) => {
                     version: sanitizeString(item.customization?.version || 'aficionado', 20),
                     name:    sanitizeString(item.customization?.name    || '', 50),
                     number:  sanitizeString(item.customization?.number  || '', 10),
-                    patch:   sanitizeString(item.customization?.patch   || '', 100)
+                    patches: Array.isArray(item.customization?.patches)
+                        ? item.customization.patches.slice(0, 5).map(p => sanitizeString(p, 50))
+                        : []
                 }
             });
         }

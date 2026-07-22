@@ -554,20 +554,28 @@ TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
             version = 'fan';
         }
 
-        let extrasStr = '';
-        if (custom.patch && custom.patch !== 'none') {
-            extrasStr += ` [Parches: ${custom.patch}]`;
+        let extras = [];
+        
+        const patchText = item.customization?.patch || item.customization?.patches || item.patches || item.patch || item.customPatches || '';
+        
+        if (patchText) {
+            const formattedPatch = Array.isArray(patchText) ? patchText.join(', ') : patchText;
+            if (String(formattedPatch).trim() !== '') {
+                extras.push('Parches: ' + formattedPatch);
+            }
         }
 
         if (custom.name || custom.number) {
             const nombreVal = custom.name || '(nombre vacío)';
             const numeroVal = custom.number || '(numero vacío)';
-            extrasStr += ` [Personalización: ${nombreVal} - ${numeroVal}]`;
+            extras.push('Personalización: ' + nombreVal + ' - ' + numeroVal);
         }
+
+        let extrasStr = extras.length > 0 ? (' [' + extras.join('] [') + ']') : '';
 
         const price = (item.price * qty).toFixed(2);
         const itemSku = item.sku ? ` [SKU: ${item.sku}]` : '';
-        productsText += `${qty}x ${item.name}${itemSku} - ${size} - ${version}${extrasStr} - €${price}\n`;
+        productsText += qty + 'x ' + item.name + itemSku + ' - ' + size + ' - ' + version + extrasStr + ' - €' + price + '\n';
     });
     let totalInfo = `Subtotal: €${orderData.subtotal.toFixed(2)}\n`;
 
