@@ -124,37 +124,36 @@ export default async function handler(req, res) {
             return res.status(412).json({ code: 'functions/failed-precondition', message: 'El catálogo de productos no está disponible. Por favor, inténtalo más tarde.' });
         }
 
-        const priceMap = {};
-        Object.entries(dbProducts).forEach(([key, product]) => {
-            if (product && typeof product.price === 'number') {
-                const actualId = String(product.id || key);
-                priceMap[actualId] = { price: product.price, name: product.name || actualId, sku: product.sku || '', image: product.image || '' };
-            }
-        });
-
         // ── 4. Calculate subtotal using SERVER prices only ────────────────────
         let subtotal = 0;
         const resolvedItems = [];
 
         for (const item of normalizedItems) {
-            const productData = priceMap[item.productId];
-            if (!productData) {
-                console.log(`[DEBUG-CHECKOUT] Producto no encontrado: ${item.productId}. Claves en priceMap:`, Object.keys(priceMap).slice(0, 20));
+            let catalogProduct = null;
+            
+            if (Array.isArray(dbProducts)) {
+                catalogProduct = dbProducts.find(p => p && (String(p.id) === String(item.productId) || String(p.productId) === String(item.productId) || String(p.code) === String(item.productId)));
+            } else if (typeof dbProducts === 'object' && dbProducts !== null) {
+                catalogProduct = Object.values(dbProducts).find(p => p && (String(p.id) === String(item.productId) || String(p.productId) === String(item.productId) || String(p.code) === String(item.productId)));
+            }
+
+            if (!catalogProduct) {
+                console.log(`[DEBUG-CHECKOUT] Producto no encontrado: ${item.productId}.`);
                 return res.status(404).json({ 
                     code: 'functions/not-found', 
                     message: `Producto '${item.productId}' no encontrado. Ruta consultada: /products. Claves disponibles en catálogo: ${availableKeys.slice(0, 10).join(', ')}...` 
                 });
             }
 
-            const lineTotal = productData.price * item.qty;
+            const lineTotal = catalogProduct.price * item.qty;
             subtotal += lineTotal;
 
             resolvedItems.push({
                 id:            item.productId,
-                sku:           productData.sku,
-                name:          productData.name,
-                image:         productData.image,
-                price:         productData.price,
+                sku:           catalogProduct.sku || '',
+                name:          catalogProduct.name || catalogProduct.id || item.productId,
+                image:         catalogProduct.image || '',
+                price:         catalogProduct.price,
                 quantity:      item.qty,
                 size:          sanitizeString(item.customization?.size    || 'N/A', 10),
                 version:       sanitizeString(item.customization?.version || 'aficionado', 20),
