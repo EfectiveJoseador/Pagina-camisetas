@@ -556,7 +556,7 @@ TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
 
         let extras = [];
         
-        const rawPatches = item.patch || item.customization?.patch || item.patches || item.selectedPatch;
+        const rawPatches = item.patch || item.patches || item.customization?.patch || item.customization?.patches || item.selectedPatches;
         let patchText = '';
 
         if (Array.isArray(rawPatches) && rawPatches.length > 0) {
@@ -566,13 +566,17 @@ TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
         }
 
         if (patchText) {
-            extras.push('Parches: ' + patchText);
+            extras.push(`Parches: ${patchText}`);
         }
 
-        if (custom.name || custom.number) {
-            const nombreVal = custom.name || '(nombre vacío)';
-            const numeroVal = custom.number || '(numero vacío)';
-            extras.push('Personalización: ' + nombreVal + ' - ' + numeroVal);
+        const customName = item.customization?.name || '';
+        const customNumber = item.customization?.number || '';
+        if (customName || customNumber) {
+            // Evitamos imprimir "(nombre vacío)" como antes. Solo concatenamos si existen.
+            let customText = `Personalización: ${customName}`;
+            if (customName && customNumber) customText += ` - ${customNumber}`;
+            else if (!customName && customNumber) customText += `${customNumber}`;
+            extras.push(customText);
         }
 
         let extrasStr = extras.length > 0 ? (' [' + extras.join('] [') + ']') : '';
