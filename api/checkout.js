@@ -122,9 +122,10 @@ export default async function handler(req, res) {
         }
 
         const priceMap = {};
-        Object.entries(dbProducts).forEach(([id, product]) => {
+        Object.entries(dbProducts).forEach(([key, product]) => {
             if (product && typeof product.price === 'number') {
-                priceMap[id] = { price: product.price, name: product.name || id, sku: product.sku || '', image: product.image || '' };
+                const actualId = String(product.id || key);
+                priceMap[actualId] = { price: product.price, name: product.name || actualId, sku: product.sku || '', image: product.image || '' };
             }
         });
 
