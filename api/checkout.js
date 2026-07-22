@@ -35,7 +35,6 @@ async function writeAuditLog(uid, event, metadata = {}) {
 // MAIN HANDLER
 // ─────────────────────────────────────────────────────────────────────────────
 export default async function handler(req, res) {
-    // Enable CORS if needed (depending on vercel.json)
     res.setHeader('Access-Control-Allow-Credentials', true);
     res.setHeader('Access-Control-Allow-Origin', '*');
     res.setHeader('Access-Control-Allow-Methods', 'GET,OPTIONS,PATCH,DELETE,POST,PUT');
@@ -89,8 +88,8 @@ export default async function handler(req, res) {
 
         const normalizedItems = [];
         for (const item of cartItems) {
-            const rawId = item.productId || item.id;
-            const resolvedId = rawId ? String(rawId) : null;
+            const rawId = item.productId || item.id || item.sku;
+            const resolvedId = rawId ? String(rawId).trim() : null;
 
             if (!resolvedId) {
                 console.log('[Checkout] Invalid product ID received:', item);
@@ -115,12 +114,9 @@ export default async function handler(req, res) {
         // ── 3. Fetch REAL prices from database ────────────────────────────────
         const productsSnap = await db.ref('products').once('value');
         const dbProducts   = productsSnap.val() || {};
-        const availableKeys = Object.keys(dbProducts);
-        const productCount = availableKeys.length;
+        const productsList = Array.isArray(dbProducts) ? dbProducts : Object.values(dbProducts);
 
-        console.log('[DEBUG-CHECKOUT] CLAVES EN RTDB (primeras 20):', availableKeys.slice(0, 20));
-
-        if (productCount === 0) {
+        if (productsList.length === 0) {
             return res.status(412).json({ code: 'functions/failed-precondition', message: 'El catálogo de productos no está disponible. Por favor, inténtalo más tarde.' });
         }
 
@@ -129,34 +125,36 @@ export default async function handler(req, res) {
         const resolvedItems = [];
 
         for (const item of normalizedItems) {
-            const productsList = Array.isArray(dbProducts) ? dbProducts : Object.values(dbProducts);
-            
+            const searchTarget = String(item.productId).trim();
+
             const catalogProduct = productsList.find(p => {
                 if (!p) return false;
-                const searchId = String(item.productId).trim();
-                return String(p.id).trim() === searchId || 
-                       (p.sku && String(p.sku).trim() === searchId) || 
-                       (p.productId && String(p.productId).trim() === searchId) || 
-                       (p.code && String(p.code).trim() === searchId);
+                const pId   = p.id   !== undefined && p.id   !== null ? String(p.id).trim()   : '';
+                const pSku  = p.sku  !== undefined && p.sku  !== null ? String(p.sku).trim()  : '';
+                const pProd = p.productId !== undefined && p.productId !== null ? String(p.productId).trim() : '';
+                const pCode = p.code !== undefined && p.code !== null ? String(p.code).trim() : '';
+
+                return pId === searchTarget || pSku === searchTarget || pProd === searchTarget || pCode === searchTarget;
             });
 
             if (!catalogProduct) {
-                console.log(`[DEBUG-CHECKOUT] Producto no encontrado: ${item.productId}.`);
-                const sampleProduct = Array.isArray(dbProducts) ? dbProducts[0] : Object.values(dbProducts)[0];
+                console.log(`[Checkout] Producto no encontrado: ${searchTarget}`);
                 return res.status(404).json({ 
                     code: 'functions/not-found', 
-                    message: `Producto '${item.productId}' no encontrado. Estructura del primer producto en RTDB: ${JSON.stringify(sampleProduct)}` 
+                    message: `Producto '${item.productId}' no encontrado en el catálogo.` 
                 });
             }
 
-            const finalPrice = catalogProduct.price || catalogProduct.precio || catalogProduct.priceEur || 0;
+            const rawPrice = catalogProduct.price ?? catalogProduct.precio ?? catalogProduct.priceEur ?? 24.99;
+            const finalPrice = typeof rawPrice === 'number' ? rawPrice : parseFloat(rawPrice) || 24.99;
+            
             const lineTotal = finalPrice * item.qty;
             subtotal += lineTotal;
 
             resolvedItems.push({
                 id:            item.productId,
                 sku:           catalogProduct.sku || '',
-                name:          catalogProduct.name || catalogProduct.id || item.productId,
+                name:          catalogProduct.name || catalogProduct.title || item.productId,
                 image:         catalogProduct.image || '',
                 price:         finalPrice,
                 quantity:      item.qty,
@@ -315,6 +313,7 @@ export default async function handler(req, res) {
             data: {
                 success:      true,
                 orderId,
+                orderRecord,
                 total:        roundedTotal,
                 paypalLink:   orderRecord.paypalLink,
                 pointsToEarn: orderRecord.pointsToEarn
