@@ -13631,6 +13631,62 @@ const products = [
         "price": 19.9,
         "oldPrice": 25,
         "sku": "1652"
+    },
+    {
+        "id": 521788,
+        "name": "España 'Somos Campeones' (Blanca 1)",
+        "slug": "espana-somos-campeones-blanca-1",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/521788/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/521788/2.webp"
+        ],
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "3914"
+    },
+    {
+        "id": 485410,
+        "name": "España 'Somos Campeones' (Blanca 2)",
+        "slug": "espana-somos-campeones-blanca-2",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/485410/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/485410/2.webp"
+        ],
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "5783"
+    },
+    {
+        "id": 241447,
+        "name": "España 'Somos Campeones' (Roja)",
+        "slug": "espana-somos-campeones-roja",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/241447/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/241447/2.webp"
+        ],
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "9381"
+    },
+    {
+        "id": 880924,
+        "name": "España 'Somos Campeones' (Azul)",
+        "slug": "espana-somos-campeones-azul",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/880924/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/880924/2.webp"
+        ],
+        "price": 19.9,
+        "oldPrice": 25,
+        "sku": "2485"
     }
 ];
 
