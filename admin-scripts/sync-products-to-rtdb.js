@@ -121,13 +121,14 @@ for (let i = 0; i < products.length; i++) {
     const price = getProductOfficialPrice(product);
 
     rtdbProducts[productId] = {
-        id:        productId,
-        price:     price,
-        name:      product.name || product.title || String(productId),
-        sku:       product.sku  || '',
-        image:     product.image || (Array.isArray(product.images) && product.images[0]) || '',
-        category:  product.category || '',
-        updatedAt: new Date().toISOString()
+        id:          productId,
+        price:       price,
+        name:        product.name || product.title || String(productId),
+        sku:         product.sku  || '',
+        image:       product.image || (Array.isArray(product.images) && product.images[0]) || '',
+        category:    product.category || '',
+        description: product.description || '',
+        updatedAt:   new Date().toISOString()
     };
 }
 
