@@ -601,6 +601,7 @@ const Cart = {
 function getCartItemTypeName(item) {
     const n   = (item.name  || '').toLowerCase();
     const img = (item.image || '').toLowerCase();
+    if (n.includes('campeones')) return 'champions';
     if (n.includes('kids') || n.includes('niño') || n.includes('niños') || img.includes('kids')) return 'kids';
     if (n.includes('retro')) return 'retro';
     if (n.includes('nba')   || img.includes('nba')) return 'nba';
@@ -611,7 +612,8 @@ const CART_SIZE_CONFIGS = {
     kids:   ['16', '18', '20', '22', '24', '26', '28'],
     retro:  ['S', 'M', 'L', 'XL', '2XL'],
     normal: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
-    nba:    ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL']
+    nba:    ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+    champions: ['S', 'M', 'L', 'XL', '2XL', '3XL']
 };
 
 const CART_SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
@@ -647,12 +649,14 @@ function openCartItemEditModal(cartIndex, cartRef) {
     const isNBA        = type === 'nba';
     const isKids       = type === 'kids';
     const isRetro      = type === 'retro';
+    const isChampions  = type === 'champions';
     const isRestricted = isNBA || isKids || isRetro;
     // Leer noPatches del producto original
     const productData  = products.find(p => p.id === item.id);
     const isNoPatches  = productData?.noPatches === true;
     const showVersion  = !isRestricted;           // version hidden for kids / retro / NBA
-    const showPatch    = !isNBA && !isNoPatches;   // patch hidden for NBA and noPatches
+    const showPatch    = !isNBA && !isNoPatches && !isChampions;   // patch hidden for NBA and noPatches
+    const showCustomization = !isChampions;
 
     const currentVersion = custom.version || 'aficionado';
 
@@ -736,7 +740,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
             </div>
 
             ${versionBlock}
-
+            ${showCustomization ? `
             <div class="upsell-edit-field">
                 <label>Nombre <span style="color:#6b7280;text-transform:none;font-weight:400;">(solo letras · máx 15 · +€3 con nombre o dorsal)</span></label>
                 <input type="text" id="ce-name" placeholder="Ej. PEDRI" maxlength="15" autocomplete="off" value="${custom.name || ''}">
@@ -744,8 +748,8 @@ function openCartItemEditModal(cartIndex, cartRef) {
 
             <div class="upsell-edit-field">
                 <label>Dorsal <span style="color:#6b7280;text-transform:none;font-weight:400;">(0–999)</span></label>
-                <input type="text" id="ce-number" placeholder="Ej. 10" maxlength="3" inputmode="numeric" autocomplete="off" value="${custom.number || ''}">
-            </div>
+                <input type="text" id="ce-number" placeholder="Ej. 10" maxlength="3" inputmode="numeric" pattern="[0-9]*" autocomplete="off" value="${custom.number || ''}">
+            </div>` : ''}
 
             ${patchBlock}
 

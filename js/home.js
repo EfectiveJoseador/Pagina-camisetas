@@ -295,10 +295,11 @@ let _qdInited    = false;
 const SIZE_SURCHARGES_QAD = { '2XL': 1, '3XL': 2, '4XL': 2 };
 
 const SIZE_CONFIGS = {
-    normal: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
-    nba: ['S', 'M', 'L', 'XL', '2XL'],
     kids: ['16', '18', '20', '22', '24', '26', '28'],
-    mujer: ['S', 'M', 'L', 'XL', '2XL']
+    retro: ['S', 'M', 'L', 'XL', '2XL'],
+    normal: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+    nba: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+    champions: ['S', 'M', 'L', 'XL', '2XL', '3XL']
 };
 
 const PATCH_DEFINITIONS = {
@@ -313,9 +314,11 @@ const PATCH_DEFINITIONS = {
 
 function getProductType(p) {
     const nameLower = p.name.toLowerCase();
+    const imageLower = (p.image || '').toLowerCase();
+    if (nameLower.includes('campeones')) return 'champions';
+    if (p.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids')) return 'kids';
     if (p.category === 'nba' || p.league === 'nba') return 'nba';
-    if (p.kids || nameLower.includes('niño') || nameLower.includes('kids')) return 'kids';
-    if (nameLower.includes('mujer') || nameLower.includes('femenino')) return 'mujer';
+    if (p.retro === true || nameLower.includes('retro') || p.league === 'retro') return 'retro';
     return 'normal';
 }
 
@@ -448,6 +451,16 @@ function _openDrawer(product) {
     nameInput.value  = '';
     numInput.value   = '';
     patchInput.value = '';
+    
+    const isChampions = product.name.toLowerCase().includes('campeones');
+    const qadCustomGrid = _qdDrawer.querySelector('.qad-custom-grid');
+    if (qadCustomGrid) {
+        qadCustomGrid.style.display = isChampions ? 'none' : '';
+        const prevLabel = qadCustomGrid.previousElementSibling;
+        if (prevLabel && prevLabel.classList.contains('qad-section-label')) {
+            prevLabel.style.display = isChampions ? 'none' : '';
+        }
+    }
     body.scrollTop   = 0;
 
     thumb.src = getMiniImagePath(product.image);
@@ -494,7 +507,7 @@ function _openDrawer(product) {
         }
     } else {
         if (customPatchesWrap) customPatchesWrap.style.display = 'none';
-        patchWrap.style.display = (allowedPatches.length > 0 && !product.noPatches) ? '' : 'none';
+        patchWrap.style.display = (allowedPatches.length > 0 && !product.noPatches && !isChampions) ? '' : 'none';
     }
     patchInput.placeholder = allowedPatches.length > 0
         ? 'Ej: ' + (PATCH_DEFINITIONS[allowedPatches[0]] || allowedPatches[0])

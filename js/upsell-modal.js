@@ -34,6 +34,7 @@ function getProductType(product) {
     const isRetro = product.retro === true || nameLower.includes('retro') || product.league === 'retro';
     const isNBA = product.category === 'nba' || product.league === 'nba';
 
+    if (nameLower.includes('campeones')) return 'champions';
     if (isKids) return 'kids';
     if (isRetro) return 'retro';
     if (isNBA) return 'nba';
@@ -45,7 +46,8 @@ const SIZE_CONFIGS = {
     kids: ['16', '18', '20', '22', '24', '26', '28'],
     retro: ['S', 'M', 'L', 'XL', '2XL'],
     normal: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
-    nba: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL']
+    nba: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+    champions: ['S', 'M', 'L', 'XL', '2XL', '3XL']
 };
 
 const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
@@ -313,9 +315,11 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
     const isNBA     = type === 'nba';
     const isKids    = type === 'kids';
     const isRetro   = type === 'retro';
+    const isChampions = type === 'champions';
     const isRestricted = isNBA || isKids || isRetro;
     const showVersion  = !isRestricted;
-    const showPatch    = !isNBA && !prod.noPatches;
+    const showPatch    = !isNBA && !prod.noPatches && !isChampions;
+    const showCustomization = !isChampions;
 
     const isEspana26 = prod.customPatches === 'espana26';
 
@@ -392,14 +396,15 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
                 <select id="ue-size">${sizeOptions}</select>
             </div>
             ${versionBlock}
+            ${showCustomization ? `
             <div class="upsell-edit-field">
                 <label>Nombre <span style="color:#6b7280;text-transform:none;font-weight:400;">(solo letras · máx 15 · +€3 con nombre o dorsal)</span></label>
                 <input type="text" id="ue-name" placeholder="Ej. PEDRI" maxlength="15" autocomplete="off" value="${current.name || ''}">
             </div>
             <div class="upsell-edit-field">
                 <label>Dorsal <span style="color:#6b7280;text-transform:none;font-weight:400;">(0–999)</span></label>
-                <input type="text" id="ue-number" placeholder="Ej. 10" maxlength="3" inputmode="numeric" autocomplete="off" value="${current.number || ''}">
-            </div>
+                <input type="text" id="ue-number" placeholder="Ej. 10" maxlength="3" inputmode="numeric" pattern="[0-9]*" value="${current.number || ''}">
+            </div>` : ''}
             ${patchBlock}
             <div class="upsell-edit-price-summary">
                 <span>Total por unidad</span>

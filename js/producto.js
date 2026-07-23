@@ -326,6 +326,9 @@ document.addEventListener('DOMContentLoaded', () => {
                 opt.textContent = String(t);
                 sizeSelect.appendChild(opt);
             }
+        } else if (_nameLower.includes('campeones')) {
+            const option4xl = sizeSelect.querySelector('option[value="4XL"]');
+            if (option4xl) option4xl.remove();
         }
 
         sizeSelect.addEventListener('change', () => {
@@ -538,6 +541,19 @@ function applyProductRestrictions() {
         if (patchInput) {
             patchInput.value = '';
         }
+    }
+    
+    // Ocultar personalización completa para 'somos campeones'
+    if (product.name.toLowerCase().includes('campeones')) {
+        const nameInput = document.getElementById('name-input');
+        if (nameInput) {
+            const group = nameInput.closest('.option-group');
+            if (group) group.style.display = 'none';
+        }
+        const patchGroup = document.getElementById('normal-patch-group');
+        if (patchGroup) patchGroup.style.display = 'none';
+        const customPatchGroup = document.getElementById('custom-patches-container');
+        if (customPatchGroup) customPatchGroup.style.display = 'none';
     }
 
     // Productos con parches incluidos en el precio (noPatches: true)
@@ -1500,7 +1516,8 @@ updateCartCount();
 const SIZE_GUIDE_IMAGES = {
     kids: '/assets/images/guia tallas niños_resultado.webp',
     nba: '/assets/images/guias tallas nba_resultado.webp',
-    normal: '/assets/images/guia tallas camisetas futbol_resultado.webp'
+    normal: '/assets/images/guia tallas camisetas futbol_resultado.webp',
+    champions: '/assets/images/size_chart champions.webp'
 };
 
 function getProductType() {
@@ -1509,6 +1526,7 @@ function getProductType() {
     const imageLower = (product.image || '').toLowerCase();
     if (product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids')) return 'kids';
     if (product.category === 'nba' || product.league === 'nba') return 'nba';
+    if (nameLower.includes('campeones')) return 'champions';
     return 'normal';
 }
 

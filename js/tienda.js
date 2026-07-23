@@ -149,7 +149,8 @@ const SIZE_CONFIGS = {
     kids: ['16', '18', '20', '22', '24', '26', '28'],
     retro: ['S', 'M', 'L', 'XL', '2XL'],
     normal: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
-    nba: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL']
+    nba: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL'],
+    champions: ['S', 'M', 'L', 'XL', '2XL', '3XL']
 };
 
 const extraPrices = {
@@ -182,9 +183,8 @@ function getAllowedPatches(product) {
     const allowed = [];
     const league = product.league;
     const isNBA = product.category === 'nba' || product.league === 'nba';
-
-    
     if (isNBA) return [];
+    if (product.name.toLowerCase().includes('campeones')) return [];
 
     
     if (league === 'selecciones' || product.category === 'selecciones') {
@@ -640,6 +640,17 @@ function _openDrawer(product) {
     nameInput.value   = '';
     numInput.value    = '';
     patchInput.value  = '';
+    // Ocultar personalizacion si es somos campeones
+    const isChampions = product.name.toLowerCase().includes('campeones');
+    const qadCustomGrid = _qdDrawer.querySelector('.qad-custom-grid');
+    if (qadCustomGrid) {
+        qadCustomGrid.style.display = isChampions ? 'none' : '';
+        const prevLabel = qadCustomGrid.previousElementSibling;
+        if (prevLabel && prevLabel.classList.contains('qad-section-label')) {
+            prevLabel.style.display = isChampions ? 'none' : '';
+        }
+    }
+    
     if (versionSel) versionSel.value = 'aficionado';
     body.scrollTop    = 0;
 
@@ -701,7 +712,7 @@ function _openDrawer(product) {
         }
     } else {
         if (customPatchesWrap) customPatchesWrap.style.display = 'none';
-        patchWrap.style.display = (allowedPatches.length > 0 && !product.noPatches) ? '' : 'none';
+        patchWrap.style.display = (allowedPatches.length > 0 && !product.noPatches && !isChampions) ? '' : 'none';
     }
     
     patchInput.placeholder = allowedPatches.length > 0
@@ -1239,7 +1250,8 @@ function populateTeamFilter(league) {
         'finland': 'finlandia',
         'vicenza': 'victoria',
         'vitoria': 'victoria',
-        'vicenza': 'victoria'
+        'espana \'somos campeones\'': 'espana',
+        'espana mundial 2 estrellas': 'espana'
     };
 
     const teamMap = new Map();
@@ -1781,6 +1793,7 @@ function openCustomizationModal(productId) {
 function getProductType(product) {
     const nameLower = product.name.toLowerCase();
     const imageLower = (product.image || '').toLowerCase();
+    if (nameLower.includes('campeones')) return 'champions';
     if (product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids')) return 'kids';
     if (product.category === 'nba' || product.league === 'nba') return 'nba';
     if (product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro') return 'retro';
