@@ -452,14 +452,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
         const versionSelect = overlay.querySelector('#ue-version');
         if (!sizeSelect || !versionSelect) return;
 
-        if (versionSelect.value === 'jugador' && isEspana26) {
-            if (window.Toast) {
-                window.Toast.error('La versión jugador para este modelo estará disponible muy pronto.');
-            } else {
-                alert('La versión jugador para este modelo estará disponible muy pronto.');
-            }
-            versionSelect.value = 'aficionado';
-        }
+
         const isJugador = getVersion() === 'jugador';
         ['3XL', '4XL'].forEach(sz => {
             const opt = sizeSelect.querySelector(`option[value="${sz}"]`);

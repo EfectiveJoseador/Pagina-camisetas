@@ -758,14 +758,7 @@ function _qdApplyVersionSize() {
     const versionSel = _qdDrawer.querySelector('#qad-version');
     const sizeSel    = _qdDrawer.querySelector('#qad-size');
     if (!versionSel || !sizeSel) return;
-    if (versionSel.value === 'jugador' && _qdProduct && _qdProduct.customPatches === 'espana26') {
-        if (window.Toast) {
-            window.Toast.error('La versión jugador para este modelo estará disponible muy pronto.');
-        } else {
-            alert('La versión jugador para este modelo estará disponible muy pronto.');
-        }
-        versionSel.value = 'aficionado';
-    }
+
     const isJugador = versionSel.value === 'jugador';
     ['3XL', '4XL'].forEach(sz => {
         const opt = sizeSel.querySelector(`option[value="${sz}"]`);
@@ -1824,10 +1817,7 @@ function updatePreview() {
 
     const sizeSelect = document.getElementById('modal-size');
     const versionSelect = document.getElementById('modal-version');
-    if (versionSelect && versionSelect.value === 'jugador' && currentProduct && currentProduct.customPatches === 'espana26') {
-        alert('La versión jugador para este modelo estará disponible muy pronto.');
-        versionSelect.value = 'aficionado';
-    }
+
     const nameInput = document.getElementById('modal-name');
     const numberInput = document.getElementById('modal-number');
     const patchSelect = document.getElementById('modal-patch');

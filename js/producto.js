@@ -783,18 +783,7 @@ function initPlayerVersionListener() {
     if (versionSelect) {
         versionSelect.addEventListener('change', (e) => {
             if (e.target.value === 'jugador') {
-                if (product && product.customPatches === 'espana26') {
-                    if (window.Toast) {
-                        window.Toast.error('La versión jugador para este modelo estará disponible muy pronto.');
-                    } else {
-                        alert('La versión jugador para este modelo estará disponible muy pronto.');
-                    }
-                    e.target.value = 'aficionado';
-                    applyPlayerVersionSizeRestriction();
-                    updatePreview();
-                } else {
-                    showPlayerVersionModal();
-                }
+                showPlayerVersionModal();
             }
         });
     }
