@@ -1,4 +1,7 @@
-import products from './products-data.js';
+import productsData from './products-data.js';
+import { db, ref, onValue } from './firebase-config.js';
+
+let products = [...productsData];
 
 document.addEventListener('DOMContentLoaded', () => {
     const grid = document.getElementById('product-grid');
@@ -14,6 +17,28 @@ document.addEventListener('DOMContentLoaded', () => {
     const sidebar = document.querySelector('.filters-sidebar');
 
     let currentProducts = [...products];
+    
+    // Sincronización en tiempo real con Firebase
+    onValue(ref(db, 'products'), (snapshot) => {
+        if (snapshot.exists()) {
+            const liveData = snapshot.val();
+            let newAllProducts = productsData.map(p => {
+                if (liveData[p.id]) {
+                    return { ...p, ...liveData[p.id] };
+                }
+                return p;
+            });
+            
+            Object.values(liveData).forEach(liveProduct => {
+                if (!newAllProducts.find(p => p.id === liveProduct.id)) {
+                    newAllProducts.push(liveProduct);
+                }
+            });
+            
+            products = newAllProducts;
+            filterProducts();
+        }
+    });
     function renderProducts(items) {
         grid.innerHTML = '';
 

@@ -1803,3 +1803,746 @@ async function initPinnedProducts() {
         });
     }
 }
+
+/* ══════════════════════════════════════════════════
+   EDITOR TOTAL DE PRODUCTOS & BIBLIOTECA GLOBAL DE PARCHES
+   ══════════════════════════════════════════════════ */
+let editingProduct = null;
+let globalPatchesList = []; // Patches from /globalPatches node
+let selectedGlobalPatchKeys = new Set(); // Active global patches for editing product
+let exclusivePatches = []; // Custom exclusive patches for editing product
+
+const KNOWN_LEAGUE_MAP = {
+    'laliga': 'La Liga',
+    'premier': 'Premier League',
+    'seriea': 'Serie A',
+    'bundesliga': 'Bundesliga',
+    'ligue1': 'Ligue 1',
+    'retro': 'Retro',
+    'selecciones': 'Selecciones',
+    'brasileirao': 'Brasileirão',
+    'ligaarabe': 'Liga Árabe',
+    'saf': 'SAF (Argentina)',
+    'nba': 'NBA',
+    'eredivisie': 'Eredivisie',
+    'ligaportugal': 'Liga Portugal',
+    'mls': 'MLS',
+    'ligamx': 'Liga MX'
+};
+
+function formatLeagueName(rawLeague) {
+    if (!rawLeague) return '';
+    const key = rawLeague.toLowerCase().trim();
+    return KNOWN_LEAGUE_MAP[key] || rawLeague;
+}
+
+function extractTeamFromProductName(productName) {
+    if (!productName) return '';
+    return productName
+        .replace(/\s*\d{2}\/?\d{2}.*$/i, '')
+        .replace(/\s*\(Niño\).*$/i, '')
+        .replace(/\s*(Local|Visitante|Tercera|Cuarta|Especial|Retro|Entrenamiento|Portero|Edición Especial|Campeones|Manga Larga).*$/i, '')
+        .trim();
+}
+
+async function populateEditorLeagueDropdown() {
+    const select = document.getElementById('pe-league-select');
+    if (!select) return;
+
+    const catalog = await loadProductsCache();
+    const leaguesSet = new Set();
+
+    catalog.forEach(p => {
+        if (p.league) {
+            leaguesSet.add(formatLeagueName(p.league));
+        }
+    });
+
+    select.innerHTML = '<option value="">-- Seleccionar Liga --</option>';
+    [...leaguesSet].sort().forEach(l => {
+        const opt = document.createElement('option');
+        opt.value = l;
+        opt.textContent = l;
+        select.appendChild(opt);
+    });
+
+    const newOpt = document.createElement('option');
+    newOpt.value = '__new__';
+    newOpt.textContent = '+ Añadir nueva liga...';
+    select.appendChild(newOpt);
+}
+
+async function populateEditorTeamDropdown(selectedLeague) {
+    const teamSelect = document.getElementById('pe-team-select');
+    if (!teamSelect) return;
+
+    const catalog = await loadProductsCache();
+    const teamsSet = new Set();
+
+    catalog.forEach(p => {
+        const pLeague = formatLeagueName(p.league);
+        if (!selectedLeague || !pLeague || pLeague.toLowerCase() === selectedLeague.toLowerCase() || (p.league && p.league.toLowerCase() === selectedLeague.toLowerCase())) {
+            let tName = p.team || extractTeamFromProductName(p.name);
+            if (tName) teamsSet.add(tName);
+        }
+    });
+
+    teamSelect.innerHTML = '<option value="">-- Seleccionar Equipo --</option>';
+    [...teamsSet].sort().forEach(t => {
+        const opt = document.createElement('option');
+        opt.value = t;
+        opt.textContent = t;
+        teamSelect.appendChild(opt);
+    });
+
+    const newOpt = document.createElement('option');
+    newOpt.value = '__new__';
+    newOpt.textContent = '+ Añadir nuevo equipo...';
+    teamSelect.appendChild(newOpt);
+}
+
+function initLeagueAndTeamHandlers() {
+    const leagueSelect = document.getElementById('pe-league-select');
+    const leagueCustom = document.getElementById('pe-league-custom');
+    const teamSelect = document.getElementById('pe-team-select');
+    const teamCustom = document.getElementById('pe-team-custom');
+
+    if (leagueSelect) {
+        leagueSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (val === '__new__') {
+                if (leagueCustom) {
+                    leagueCustom.classList.remove('hidden');
+                    leagueCustom.focus();
+                }
+                populateEditorTeamDropdown('');
+            } else {
+                if (leagueCustom) {
+                    leagueCustom.classList.add('hidden');
+                    leagueCustom.value = '';
+                }
+                populateEditorTeamDropdown(val);
+            }
+            if (teamCustom) {
+                teamCustom.classList.add('hidden');
+                teamCustom.value = '';
+            }
+        });
+    }
+
+    if (teamSelect) {
+        teamSelect.addEventListener('change', (e) => {
+            const val = e.target.value;
+            if (val === '__new__') {
+                if (teamCustom) {
+                    teamCustom.classList.remove('hidden');
+                    teamCustom.focus();
+                }
+            } else {
+                if (teamCustom) {
+                    teamCustom.classList.add('hidden');
+                    teamCustom.value = '';
+                }
+            }
+        });
+    }
+}
+
+async function fetchGlobalPatches() {
+    try {
+        const snap = await get(ref(db, 'globalPatches'));
+        if (snap.exists()) {
+            const data = snap.val();
+            globalPatchesList = Object.keys(data).map(key => ({
+                key,
+                ...data[key]
+            }));
+        } else {
+            globalPatchesList = [];
+        }
+    } catch (err) {
+        console.error('[GlobalPatches] Error fetching global patches:', err);
+    }
+}
+
+function initProductEditor() {
+    const btnOpen = document.getElementById('btn-open-product-editor');
+    const modal = document.getElementById('product-editor-modal');
+    const btnClose = document.getElementById('product-editor-close');
+
+    if (!btnOpen || !modal) return;
+
+    initLeagueAndTeamHandlers();
+    populateEditorLeagueDropdown();
+
+    btnOpen.addEventListener('click', (e) => {
+        if (e) e.preventDefault();
+        modal.classList.add('active');
+        resetEditorForm();
+    });
+
+    btnClose.addEventListener('click', (e) => {
+        if (e) e.preventDefault();
+        modal.classList.remove('active');
+    });
+    
+    // Cerrar clickeando fuera
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) modal.classList.remove('active');
+    });
+
+    // Pestañas
+    const tabs = document.querySelectorAll('.pe-tab');
+    const tabContents = document.querySelectorAll('.pe-tab-content');
+    
+    tabs.forEach(tab => {
+        tab.addEventListener('click', (e) => {
+            if (e) e.preventDefault();
+            tabs.forEach(t => t.classList.remove('active'));
+            tabContents.forEach(c => c.classList.add('hidden'));
+            tab.classList.add('active');
+            document.getElementById(`pe-tab-${tab.dataset.tab}`).classList.remove('hidden');
+            document.getElementById(`pe-tab-${tab.dataset.tab}`).classList.add('active');
+        });
+    });
+
+    // Buscador
+    const searchInput = document.getElementById('pe-search-input');
+    const suggestions = document.getElementById('pe-suggestions');
+    const searchClear = document.getElementById('pe-search-clear');
+    
+    async function doProductSearch() {
+        if (!searchInput) return;
+        const query = searchInput.value.toLowerCase().trim();
+        if (query.length < 2) {
+            if (suggestions) suggestions.classList.remove('active');
+            return;
+        }
+        
+        const catalog = await loadProductsCache();
+        const results = catalog.filter(p => 
+            (p.name && p.name.toLowerCase().includes(query)) ||
+            (p.sku && p.sku.toLowerCase().includes(query)) ||
+            (p.league && p.league.toLowerCase().includes(query))
+        ).slice(0, 15);
+        
+        renderPESuggestions(results);
+    }
+
+    if (searchInput) {
+        searchInput.addEventListener('input', doProductSearch);
+        searchInput.addEventListener('focus', doProductSearch);
+    }
+
+    // Cerrar sugerencias al hacer clic fuera del buscador
+    document.addEventListener('click', (e) => {
+        const searchSection = document.querySelector('.pe-search-section');
+        if (searchSection && !searchSection.contains(e.target) && suggestions) {
+            suggestions.classList.remove('active');
+        }
+    });
+
+    if (searchClear) {
+        searchClear.addEventListener('click', (e) => {
+            if (e) e.preventDefault();
+            if (searchInput) searchInput.value = '';
+            if (suggestions) suggestions.classList.remove('active');
+            resetEditorForm();
+        });
+    }
+
+    // Subida de imagen principal a Base64
+    const imageUpload = document.getElementById('pe-image-upload');
+    const imagePreview = document.getElementById('pe-image-preview');
+    const imageBase64Input = document.getElementById('pe-image-base64');
+    
+    imageUpload.addEventListener('change', (e) => {
+        const file = e.target.files[0];
+        if (!file) return;
+        
+        const reader = new FileReader();
+        reader.onload = (event) => {
+            const b64 = event.target.result;
+            imagePreview.src = b64;
+            imageBase64Input.value = b64;
+        };
+        reader.readAsDataURL(file);
+    });
+
+    // Subida de imagen para NUEVO PARCHE GLOBAL
+    const newGpFile = document.getElementById('pe-new-gp-file');
+    const newGpPreview = document.getElementById('pe-new-gp-preview');
+    const newGpB64 = document.getElementById('pe-new-gp-b64');
+    if (newGpFile) {
+        newGpFile.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+            const reader = new FileReader();
+            reader.onload = (event) => {
+                const b64 = event.target.result;
+                if (newGpPreview) newGpPreview.src = b64;
+                if (newGpB64) newGpB64.value = b64;
+            };
+            reader.readAsDataURL(file);
+        });
+    }
+
+    // Botón GUARDAR EN BIBLIOTECA GLOBAL Y ASIGNAR
+    const btnSaveGlobalPatch = document.getElementById('btn-save-global-patch');
+    if (btnSaveGlobalPatch) {
+        btnSaveGlobalPatch.addEventListener('click', saveNewGlobalPatch);
+    }
+
+    // Botón AÑADIR PARCHE EXCLUSIVO
+    const btnAddExclusivePatch = document.getElementById('btn-add-exclusive-patch');
+    if (btnAddExclusivePatch) {
+        btnAddExclusivePatch.addEventListener('click', (e) => {
+            if (e) e.preventDefault();
+            exclusivePatches.push({ name: '', price: 2.00, image: '' });
+            renderExclusivePatchesList();
+        });
+    }
+
+    // Guardar Producto
+    const btnSave = document.getElementById('btn-save-product');
+    if (btnSave) {
+        btnSave.addEventListener('click', (e) => {
+            if (e) e.preventDefault();
+            saveProductToFirebase();
+        });
+    }
+}
+
+function renderPESuggestions(results) {
+    const suggestions = document.getElementById('pe-suggestions');
+    if (!suggestions) return;
+    suggestions.innerHTML = '';
+    
+    if (results.length === 0) {
+        suggestions.innerHTML = '<div style="padding:0.85rem 1rem;color:#94a3b8;font-size:0.88rem;text-align:center;">No se encontraron productos</div>';
+    } else {
+        results.forEach(p => {
+            const div = document.createElement('div');
+            div.className = 'pe-suggestion-item';
+            div.innerHTML = `
+                <img src="${p.image || '../assets/placeholder.webp'}" alt="${p.name}">
+                <div class="pe-suggestion-item-info">
+                    <span class="pe-suggestion-item-name">${p.name}</span>
+                    <span class="pe-suggestion-item-sku">SKU: ${p.sku || '-'} | ID: ${p.id}</span>
+                </div>
+            `;
+            div.addEventListener('click', async (e) => {
+                if (e) e.preventDefault();
+                e.stopPropagation();
+                suggestions.classList.remove('active');
+                const searchInput = document.getElementById('pe-search-input');
+                if (searchInput) searchInput.value = p.name;
+                await loadProductIntoEditor(p.id);
+            });
+            suggestions.appendChild(div);
+        });
+    }
+    suggestions.classList.add('active');
+}
+
+function resetEditorForm() {
+    document.getElementById('pe-editor-form').classList.add('hidden');
+    editingProduct = null;
+    selectedGlobalPatchKeys.clear();
+    exclusivePatches = [];
+}
+
+async function loadProductIntoEditor(productId) {
+    const catalog = await loadProductsCache();
+    const staticProduct = catalog.find(p => p.id === productId);
+    
+    if (!staticProduct) {
+        alert('Producto no encontrado');
+        return;
+    }
+    
+    // Cargar biblioteca de parches globales y ligas
+    await fetchGlobalPatches();
+    await populateEditorLeagueDropdown();
+
+    // Buscar si existe en Firebase
+    let productData = { ...staticProduct };
+    try {
+        const snap = await get(ref(db, `products/${productId}`));
+        if (snap.exists()) {
+            productData = { ...productData, ...snap.val() };
+        }
+    } catch (err) {
+        console.error('Error fetching product from Firebase', err);
+    }
+
+    editingProduct = productData;
+    
+    document.getElementById('pe-id').value = productData.id;
+    document.getElementById('pe-name').value = productData.name || '';
+    document.getElementById('pe-price').value = productData.price || '';
+    document.getElementById('pe-oldPrice').value = productData.oldPrice || '';
+    document.getElementById('pe-sku').value = productData.sku || '';
+
+    // Cargar Liga
+    const formattedLeague = formatLeagueName(productData.league);
+    const leagueSelect = document.getElementById('pe-league-select');
+    const leagueCustom = document.getElementById('pe-league-custom');
+    
+    let hasLeagueOption = false;
+    if (leagueSelect) {
+        for (let i = 0; i < leagueSelect.options.length; i++) {
+            if (leagueSelect.options[i].value.toLowerCase() === formattedLeague.toLowerCase()) {
+                leagueSelect.selectedIndex = i;
+                hasLeagueOption = true;
+                break;
+            }
+        }
+        if (!hasLeagueOption && formattedLeague) {
+            leagueSelect.value = '__new__';
+            if (leagueCustom) {
+                leagueCustom.classList.remove('hidden');
+                leagueCustom.value = formattedLeague;
+            }
+        } else if (leagueCustom) {
+            leagueCustom.classList.add('hidden');
+            leagueCustom.value = '';
+        }
+    }
+
+    // Cargar Equipo según Liga
+    await populateEditorTeamDropdown(formattedLeague);
+    
+    const formattedTeam = productData.team || extractTeamFromProductName(productData.name);
+    const teamSelect = document.getElementById('pe-team-select');
+    const teamCustom = document.getElementById('pe-team-custom');
+
+    let hasTeamOption = false;
+    if (teamSelect) {
+        for (let i = 0; i < teamSelect.options.length; i++) {
+            if (teamSelect.options[i].value.toLowerCase() === formattedTeam.toLowerCase()) {
+                teamSelect.selectedIndex = i;
+                hasTeamOption = true;
+                break;
+            }
+        }
+        if (!hasTeamOption && formattedTeam) {
+            teamSelect.value = '__new__';
+            if (teamCustom) {
+                teamCustom.classList.remove('hidden');
+                teamCustom.value = formattedTeam;
+            }
+        } else if (teamCustom) {
+            teamCustom.classList.add('hidden');
+            teamCustom.value = '';
+        }
+    }
+
+    document.getElementById('pe-isActive').checked = productData.isActive !== false;
+    
+    // Config
+    document.getElementById('pe-allowCustomization').checked = productData.allowCustomization !== false;
+    document.getElementById('pe-customizationPrice').value = productData.customizationPrice || 0;
+    document.getElementById('pe-allowPatches').checked = productData.allowPatches !== false;
+    
+    // Clasificar parches guardados entre Globales y Exclusivos
+    selectedGlobalPatchKeys.clear();
+    exclusivePatches = [];
+
+    const rawPatches = Array.isArray(productData.patches) 
+        ? productData.patches 
+        : (Array.isArray(productData.customPatches) ? productData.customPatches : []);
+
+    rawPatches.forEach(patch => {
+        if (typeof patch === 'object' && patch !== null) {
+            // Comprobar si coincide con algún parche global por key o por nombre
+            const matchGlobal = globalPatchesList.find(gp => gp.key === patch.key || (gp.name && gp.name.trim().toLowerCase() === patch.name.trim().toLowerCase()));
+            if (matchGlobal) {
+                selectedGlobalPatchKeys.add(matchGlobal.key);
+            } else {
+                exclusivePatches.push({ ...patch });
+            }
+        }
+    });
+
+    renderPatchesTab();
+
+    // Imagen
+    document.getElementById('pe-image-preview').src = productData.image || '/assets/placeholder.webp';
+    document.getElementById('pe-image-base64').value = productData.image || '';
+
+    // Resetear pestaña activa a "basic"
+    const tabs = document.querySelectorAll('.pe-tab');
+    const tabContents = document.querySelectorAll('.pe-tab-content');
+    tabs.forEach(t => t.classList.remove('active'));
+    tabContents.forEach(c => c.classList.add('hidden'));
+    const defaultTab = document.querySelector('.pe-tab[data-tab="basic"]');
+    if (defaultTab) defaultTab.classList.add('active');
+    const defaultContent = document.getElementById('pe-tab-basic');
+    if (defaultContent) defaultContent.classList.remove('hidden');
+
+    document.getElementById('pe-editor-form').classList.remove('hidden');
+}
+
+function renderPatchesTab() {
+    renderGlobalPatchesList();
+    renderExclusivePatchesList();
+}
+
+function renderGlobalPatchesList() {
+    const list = document.getElementById('pe-global-patches-list');
+    if (!list) return;
+    list.innerHTML = '';
+
+    if (globalPatchesList.length === 0) {
+        list.innerHTML = '<div style="color:#888; font-size:0.85rem; font-style:italic; padding:0.5rem 0;">No hay parches en la biblioteca global aún. ¡Crea uno abajo en la sección 2!</div>';
+        return;
+    }
+
+    globalPatchesList.forEach(gp => {
+        const item = document.createElement('label');
+        item.className = 'pe-global-patch-item';
+        
+        const isChecked = selectedGlobalPatchKeys.has(gp.key);
+        
+        item.innerHTML = `
+            <input type="checkbox" value="${gp.key}" ${isChecked ? 'checked' : ''}>
+            <img src="${gp.image || '../assets/placeholder.webp'}" class="pe-global-patch-img" alt="${gp.name}">
+            <div class="pe-global-patch-info">
+                <span class="pe-global-patch-name">${gp.name}</span>
+                <span class="pe-global-patch-price">+€${(parseFloat(gp.price) || 0).toFixed(2)}</span>
+            </div>
+            <span style="font-size:0.75rem; background:rgba(99,102,241,0.15); color:#818cf8; padding:0.2rem 0.5rem; border-radius:4px; font-weight:600;">Global</span>
+        `;
+
+        const checkbox = item.querySelector('input[type="checkbox"]');
+        checkbox.addEventListener('change', (e) => {
+            if (e.target.checked) {
+                selectedGlobalPatchKeys.add(gp.key);
+            } else {
+                selectedGlobalPatchKeys.delete(gp.key);
+            }
+        });
+
+        list.appendChild(item);
+    });
+}
+
+async function saveNewGlobalPatch(e) {
+    if (e) e.preventDefault();
+    const nameInput = document.getElementById('pe-new-gp-name');
+    const priceInput = document.getElementById('pe-new-gp-price');
+    const b64Input = document.getElementById('pe-new-gp-b64');
+    const previewImg = document.getElementById('pe-new-gp-preview');
+    const btn = document.getElementById('btn-save-global-patch');
+
+    const name = nameInput ? nameInput.value.trim() : '';
+    const price = priceInput ? (parseFloat(priceInput.value) || 0) : 2.00;
+    const image = b64Input ? b64Input.value : '';
+
+    if (!name) {
+        alert('Ingresa el nombre del nuevo parche global.');
+        return;
+    }
+
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando en Biblioteca...';
+    }
+
+    try {
+        const newRef = push(ref(db, 'globalPatches'));
+        const patchData = {
+            key: newRef.key,
+            name,
+            price,
+            image,
+            createdAt: new Date().toISOString()
+        };
+
+        await set(newRef, patchData);
+
+        // Añadir localmente y auto-seleccionar
+        globalPatchesList.push(patchData);
+        selectedGlobalPatchKeys.add(patchData.key);
+
+        // Resetear campos del formulario
+        if (nameInput) nameInput.value = '';
+        if (priceInput) priceInput.value = '2.00';
+        if (b64Input) b64Input.value = '';
+        if (previewImg) previewImg.src = '../assets/placeholder.webp';
+
+        renderPatchesTab();
+        alert(`¡Parche "${name}" guardado en la Biblioteca Global y asignado a esta camiseta!`);
+    } catch (err) {
+        console.error('Error saving global patch:', err);
+        alert('Error al guardar en la biblioteca global: ' + err.message);
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-save"></i> Guardar en Biblioteca y Asignar';
+        }
+    }
+}
+
+function renderExclusivePatchesList() {
+    const list = document.getElementById('pe-exclusive-patches-list');
+    if (!list) return;
+    list.innerHTML = '';
+    
+    if (exclusivePatches.length === 0) {
+        list.innerHTML = '<div style="color:#888; font-size:0.85rem; font-style:italic; padding:0.4rem 0;">No hay parches exclusivos para este producto.</div>';
+        return;
+    }
+
+    exclusivePatches.forEach((patch, index) => {
+        const item = document.createElement('div');
+        item.className = 'pe-patch-item';
+        
+        item.innerHTML = `
+            <button type="button" class="pe-patch-remove" title="Eliminar parche"><i class="fas fa-trash"></i></button>
+            <div style="display: flex; gap: 1rem; align-items: center;">
+                <div style="flex-shrink: 0;">
+                    <img class="pe-patch-image-preview" id="patch-img-${index}" src="${patch.image || '../assets/placeholder.webp'}" alt="Parche">
+                    <label class="pe-image-upload-btn" style="padding: 0.3rem 0.6rem; font-size: 0.75rem; justify-content: center; margin-top: 0.5rem; cursor: pointer;">
+                        Subir <input type="file" id="patch-upload-${index}" accept="image/*" class="hidden">
+                    </label>
+                </div>
+                <div style="flex-grow: 1; display: flex; flex-direction: column; gap: 0.5rem;">
+                    <input type="text" class="pe-input" placeholder="Nombre del parche exclusivo" value="${patch.name || ''}" onchange="updateExclusivePatchName(${index}, this.value)">
+                    <div style="display: flex; align-items: center; gap: 0.5rem;">
+                        <span style="color:#a0a0a0; font-size:0.85rem;">Precio (€):</span>
+                        <input type="number" class="pe-input" style="padding: 0.5rem;" step="0.01" value="${patch.price || 0}" onchange="updateExclusivePatchPrice(${index}, this.value)">
+                    </div>
+                </div>
+            </div>
+        `;
+        
+        list.appendChild(item);
+        
+        // Handlers
+        item.querySelector('.pe-patch-remove').addEventListener('click', (e) => {
+            if (e) e.preventDefault();
+            if (confirm('¿Eliminar este parche exclusivo?')) {
+                exclusivePatches.splice(index, 1);
+                renderExclusivePatchesList();
+            }
+        });
+        
+        const uploader = item.querySelector(`#patch-upload-${index}`);
+        if (uploader) {
+            uploader.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const b64 = event.target.result;
+                    const imgEl = document.getElementById(`patch-img-${index}`);
+                    if (imgEl) imgEl.src = b64;
+                    exclusivePatches[index].image = b64;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+    });
+}
+
+// Expuestas al scope global para los onchange de parches exclusivos
+window.updateExclusivePatchName = function(index, value) {
+    if (exclusivePatches[index]) exclusivePatches[index].name = value;
+};
+window.updateExclusivePatchPrice = function(index, value) {
+    if (exclusivePatches[index]) exclusivePatches[index].price = parseFloat(value) || 0;
+};
+
+async function saveProductToFirebase() {
+    if (!editingProduct || !editingProduct.id) return;
+    
+    const id = document.getElementById('pe-id').value;
+    const name = document.getElementById('pe-name').value;
+    const price = parseFloat(document.getElementById('pe-price').value) || 0;
+    const oldPrice = parseFloat(document.getElementById('pe-oldPrice').value) || null;
+    const sku = document.getElementById('pe-sku').value;
+    const isActive = document.getElementById('pe-isActive').checked;
+
+    // Calcular Liga final (desplegable o personalizada)
+    const leagueSelectVal = document.getElementById('pe-league-select') ? document.getElementById('pe-league-select').value : '';
+    const leagueCustomVal = document.getElementById('pe-league-custom') ? document.getElementById('pe-league-custom').value.trim() : '';
+    const finalLeague = leagueSelectVal === '__new__' ? leagueCustomVal : leagueSelectVal;
+
+    // Calcular Equipo final (desplegable o personalizado)
+    const teamSelectVal = document.getElementById('pe-team-select') ? document.getElementById('pe-team-select').value : '';
+    const teamCustomVal = document.getElementById('pe-team-custom') ? document.getElementById('pe-team-custom').value.trim() : '';
+    const finalTeam = teamSelectVal === '__new__' ? teamCustomVal : teamSelectVal;
+    
+    const allowCustomization = document.getElementById('pe-allowCustomization').checked;
+    const customizationPrice = parseFloat(document.getElementById('pe-customizationPrice').value) || 0;
+    const allowPatches = document.getElementById('pe-allowPatches').checked;
+    
+    const imageBase64 = document.getElementById('pe-image-base64').value;
+
+    // Recopilar parches seleccionados (Globales activos + Exclusivos válidos)
+    const activeGlobalPatches = globalPatchesList
+        .filter(gp => selectedGlobalPatchKeys.has(gp.key))
+        .map(gp => ({
+            key: gp.key,
+            name: gp.name,
+            price: parseFloat(gp.price) || 0,
+            image: gp.image || '',
+            isGlobal: true
+        }));
+
+    const validExclusivePatches = exclusivePatches
+        .filter(p => p.name && p.name.trim() !== '')
+        .map(p => ({
+            name: p.name.trim(),
+            price: parseFloat(p.price) || 0,
+            image: p.image || '',
+            isGlobal: false
+        }));
+
+    const finalPatchesArray = [...activeGlobalPatches, ...validExclusivePatches];
+
+    const updatedData = {
+        id: parseInt(id),
+        name,
+        price,
+        oldPrice,
+        sku,
+        league: finalLeague,
+        team: finalTeam,
+        isActive,
+        allowCustomization,
+        customizationPrice,
+        allowPatches,
+        patches: finalPatchesArray,
+        customPatches: finalPatchesArray,
+        image: imageBase64,
+        updatedAt: new Date().toISOString()
+    };
+    
+    const btnSave = document.getElementById('btn-save-product');
+    if (btnSave) {
+        btnSave.disabled = true;
+        btnSave.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+    }
+
+    try {
+        await update(ref(db, `products/${id}`), updatedData);
+        alert('¡Producto actualizado correctamente! Todos los cambios (Liga, Equipo, Parches) se reflejarán de inmediato.');
+    } catch (err) {
+        console.error('Error saving product', err);
+        alert('Error al guardar el producto: ' + err.message);
+    } finally {
+        if (btnSave) {
+            btnSave.disabled = false;
+            btnSave.innerHTML = '<i class="fas fa-save"></i> Guardar en Firebase';
+        }
+    }
+}
+
+// Inicializar el editor cuando carga el documento
+document.addEventListener('DOMContentLoaded', () => {
+    initProductEditor();
+});
+

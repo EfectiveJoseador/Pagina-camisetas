@@ -30,7 +30,7 @@
 
     <link rel="stylesheet" href="../css/variables.css?v=2">
     <link rel="stylesheet" href="../css/reset.css?v=2">
-    <link rel="stylesheet" href="../css/admin.css?v=2">
+    <link rel="stylesheet" href="../css/admin.css?v=7">
 
     <style>
         .auth-loading {
@@ -310,6 +310,24 @@
 
 
 
+            <!-- ══════════════════════════════════════════════════
+                 EDITOR TOTAL DE PRODUCTOS
+            ══════════════════════════════════════════════════ -->
+            <section class="product-editor-section" id="product-editor-section" style="margin-bottom: 2rem;">
+                <div class="pinned-header">
+                    <div class="pinned-title-group">
+                        <h2 class="section-title"><i class="fas fa-edit"></i> Editor Total de Productos</h2>
+                    </div>
+                    <p class="pinned-subtitle">Busca y edita cualquier producto de la tienda. Los cambios se guardarán en Firebase y se reflejarán instantáneamente para todos los usuarios.</p>
+                </div>
+                
+                <div class="product-editor-trigger-wrap" style="margin-top: 1rem;">
+                    <button class="btn-primary" id="btn-open-product-editor" style="padding: 1rem 1.5rem; font-size: 1.1rem; border-radius: 8px; width: 100%; max-width: 400px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; cursor: pointer; background: var(--accent); color: white; border: none; font-weight: 600;">
+                        <i class="fas fa-box-open"></i> Abrir Editor de Productos
+                    </button>
+                </div>
+            </section>
+
             <section class="users-section">
                 <h2 class="section-title"><i class="fas fa-users"></i> Gestin de Usuarios</h2>
 
@@ -379,6 +397,181 @@
             </div>
             <div class="modal-body" id="user-modal-body">
 
+            </div>
+        </div>
+    </div>
+    <div class="modal-overlay" id="product-editor-modal">
+        <div class="modal-content wide-modal product-editor-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> Editar Producto</h2>
+                <button class="modal-close" id="product-editor-close">&times;</button>
+            </div>
+            <div class="modal-body" id="product-editor-body" style="padding: 1rem;">
+                <!-- Buscador rápido de productos -->
+                <div class="pe-search-section">
+                    <label>Buscar Producto para Editar:</label>
+                    <div class="pe-search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="pe-search-input" placeholder="Nombre, SKU o liga..." autocomplete="off">
+                        <button class="pe-search-clear" id="pe-search-clear" title="Limpiar"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="pe-suggestions" id="pe-suggestions"></div>
+                </div>
+
+                <div id="pe-editor-form" class="hidden">
+                    <input type="hidden" id="pe-id">
+                    
+                    <!-- Pestañas (simuladas en móvil como scroll continuo o accordions) -->
+                    <div class="pe-tabs">
+                        <button class="pe-tab active" data-tab="basic">Datos Básicos</button>
+                        <button class="pe-tab" data-tab="config">Configuración</button>
+                        <button class="pe-tab" data-tab="patches">Parches</button>
+                        <button class="pe-tab" data-tab="images">Imagen</button>
+                    </div>
+
+                    <div class="pe-tab-content active" id="pe-tab-basic">
+                        <div class="form-group">
+                            <label>Nombre del Producto</label>
+                            <input type="text" id="pe-name" class="pe-input" placeholder="Ej: Real Madrid 23/24 Local">
+                        </div>
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label>Precio (€)</label>
+                                <input type="number" id="pe-price" class="pe-input" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Precio Anterior (Tachado €)</label>
+                                <input type="number" id="pe-oldPrice" class="pe-input" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label>SKU</label>
+                                <input type="text" id="pe-sku" class="pe-input" placeholder="Ej: 1001">
+                            </div>
+                            <div class="form-group">
+                                <label>Liga / Competición</label>
+                                <select id="pe-league-select" class="pe-input">
+                                    <option value="">-- Seleccionar Liga --</option>
+                                    <option value="__new__">+ Añadir nueva liga...</option>
+                                </select>
+                                <input type="text" id="pe-league-custom" class="pe-input hidden" style="margin-top: 0.5rem;" placeholder="Nombre de la nueva liga...">
+                                <input type="hidden" id="pe-league">
+                            </div>
+                        </div>
+                        <div class="form-row-2" style="margin-top: 0.75rem;">
+                            <div class="form-group">
+                                <label>Equipo / Club</label>
+                                <select id="pe-team-select" class="pe-input">
+                                    <option value="">-- Seleccionar Equipo --</option>
+                                    <option value="__new__">+ Añadir nuevo equipo...</option>
+                                </select>
+                                <input type="text" id="pe-team-custom" class="pe-input hidden" style="margin-top: 0.5rem;" placeholder="Nombre del nuevo equipo...">
+                                <input type="hidden" id="pe-team">
+                            </div>
+                            <div class="form-group checkbox-group" style="align-self: flex-end; margin-bottom: 0;">
+                                <input type="checkbox" id="pe-isActive" checked>
+                                <label for="pe-isActive">Producto Activo (Visible en tienda)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pe-tab-content hidden" id="pe-tab-config">
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="pe-allowCustomization">
+                            <label for="pe-allowCustomization">Permitir Personalización (Nombre y Número)</label>
+                        </div>
+                        <div class="form-group" id="pe-customizationPrice-group">
+                            <label>Precio de Sobrecoste por Personalización (€)</label>
+                            <input type="number" id="pe-customizationPrice" class="pe-input" step="0.01" value="0.00">
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="pe-allowPatches">
+                            <label for="pe-allowPatches">Permitir Parches</label>
+                        </div>
+                    </div>
+
+                    <div class="pe-tab-content hidden" id="pe-tab-patches">
+                        <!-- SECCIÓN 1: BIBLIOTECA GLOBAL DE PARCHES -->
+                        <div class="pe-patch-section-box">
+                            <h4 class="pe-patch-section-title">
+                                <i class="fas fa-globe" style="color: #6366f1;"></i> 1. Seleccionar de la Biblioteca Global
+                            </h4>
+                            <p class="pe-help-text">Marca los parches globales que quieras asignar a este producto:</p>
+                            <div id="pe-global-patches-list" class="pe-global-patches-grid">
+                                <!-- Parches globales inyectados dinámicamente -->
+                            </div>
+                        </div>
+
+                        <!-- SECCIÓN 2: CREAR NUEVO PARCHE GLOBAL -->
+                        <div class="pe-patch-section-box" style="margin-top: 1.25rem;">
+                            <h4 class="pe-patch-section-title">
+                                <i class="fas fa-plus-circle" style="color: #10b981;"></i> 2. Crear Nuevo Parche Global
+                            </h4>
+                            <p class="pe-help-text">Guarda un parche en la biblioteca compartida para usarlo en cualquier camiseta.</p>
+                            <div class="pe-new-global-patch-form">
+                                <div class="form-group">
+                                    <label>Nombre del Parche</label>
+                                    <input type="text" id="pe-new-gp-name" class="pe-input" placeholder="Ej: Champions League 2026">
+                                </div>
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label>Precio Adicional (€)</label>
+                                        <input type="number" id="pe-new-gp-price" class="pe-input" step="0.01" value="2.00">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Imagen del Parche</label>
+                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                            <img id="pe-new-gp-preview" src="../assets/placeholder.webp" style="width: 42px; height: 42px; object-fit: contain; border-radius: 6px; background: #1a1a2e; border: 1px solid rgba(255,255,255,0.1);">
+                                            <label for="pe-new-gp-file" class="pe-image-upload-btn" style="padding: 0.6rem 0.9rem; font-size: 0.8rem; margin: 0; cursor: pointer;">
+                                                <i class="fas fa-upload"></i> Subir
+                                            </label>
+                                            <input type="file" id="pe-new-gp-file" accept="image/*" class="hidden">
+                                            <input type="hidden" id="pe-new-gp-b64">
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" id="btn-save-global-patch" style="width: 100%; margin-top: 0.75rem; background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 0.75rem; border-radius: 8px; font-weight: 600; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: inherit;">
+                                    <i class="fas fa-save"></i> Guardar en Biblioteca y Asignar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- SECCIÓN 3: PARCHES EXCLUSIVOS A MEDIDA -->
+                        <div class="pe-patch-section-box" style="margin-top: 1.25rem;">
+                            <h4 class="pe-patch-section-title">
+                                <i class="fas fa-tshirt" style="color: #f59e0b;"></i> 3. Parches Exclusivos (Solo esta camiseta)
+                            </h4>
+                            <p class="pe-help-text">Añade parches a medida que solo pertenezcan a este producto específico.</p>
+                            <div id="pe-exclusive-patches-list" class="pe-patches-list">
+                                <!-- Parches exclusivos inyectados dinámicamente -->
+                            </div>
+                            <button type="button" id="btn-add-exclusive-patch" style="margin-top: 0.75rem; width: 100%; padding: 0.75rem; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: inherit;">
+                                <i class="fas fa-plus"></i> Añadir Parche Exclusivo
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pe-tab-content hidden" id="pe-tab-images">
+                        <div class="form-group">
+                            <label>Imagen Principal</label>
+                            <div class="pe-image-preview-container">
+                                <img id="pe-image-preview" src="../assets/placeholder.webp" alt="Previsualización">
+                                <label for="pe-image-upload" class="pe-image-upload-btn">
+                                    <i class="fas fa-camera"></i> Cambiar Imagen
+                                </label>
+                                <input type="file" id="pe-image-upload" accept="image/*" class="hidden">
+                                <input type="hidden" id="pe-image-base64">
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pe-actions">
+                        <button class="btn-primary" id="btn-save-product">
+                            <i class="fas fa-save"></i> Guardar en Firebase
+                        </button>
+                    </div>
+                </div>
             </div>
         </div>
     </div>

@@ -81,15 +81,30 @@ function getSizeSurcharge(size) {
     return SIZE_SURCHARGES[size] || 0;
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+import { db, ref, get } from './firebase-config.js';
+
+document.addEventListener('DOMContentLoaded', async () => {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = parseInt(urlParams.get('id'));
-    product = products.find(p => p.id === productId);
+    let staticProduct = products.find(p => p.id === productId);
 
-    if (!product) {
+    if (!staticProduct) {
         window.location.href = '/pages/catalogo.html';
         return;
     }
+    
+    product = { ...staticProduct };
+
+    // Intentar obtener de Firebase antes de renderizar
+    try {
+        const snap = await get(ref(db, `products/${productId}`));
+        if (snap.exists()) {
+            product = { ...product, ...snap.val() };
+        }
+    } catch(e) {
+        console.error("Error cargando de Firebase", e);
+    }
+
     applySpecialPricing(product);
     products.forEach(p => applySpecialPricing(p));
     document.title = 'Camiseta ' + product.name + ' barata de buena calidad - Camisetazo';
@@ -594,8 +609,31 @@ function applyProductRestrictions() {
         }
     }
 
-    // Lógica para parches personalizados en checkbox (ej: España 2026)
-    if (product && product.customPatches === 'espana26') {
+    // Lógica para parches personalizados en checkbox
+    if (product && Array.isArray(product.customPatches) && product.customPatches.length > 0) {
+        const normalPatchGroup = document.getElementById('normal-patch-group');
+        const customPatchesContainer = document.getElementById('custom-patches-container');
+        const customPatchesList = document.getElementById('custom-patches-list');
+
+        if (normalPatchGroup) normalPatchGroup.style.display = 'none';
+        
+        if (customPatchesContainer && customPatchesList) {
+            customPatchesContainer.style.display = 'block';
+            
+            customPatchesList.innerHTML = product.customPatches.map((p, idx) => `
+                <label class="custom-patch-checkbox" style="display: flex; align-items: center; gap: 1rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                    <input type="checkbox" name="dynamic_patch" data-idx="${idx}" data-price="${p.price}" value="${p.name}" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
+                    <img src="${p.image || '/assets/placeholder.webp'}" alt="${p.name}" style="width: 40px; height: 40px; object-fit: contain; border-radius: 4px; background: #f8f9fa;">
+                    <span style="font-size: 0.9rem; color: var(--text-main); flex: 1;">${p.name} (+€${p.price.toFixed(2)})</span>
+                </label>
+            `).join('');
+
+            // Escuchar cambios para actualizar el precio
+            customPatchesList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', updatePreview);
+            });
+        }
+    } else if (product && product.customPatches === 'espana26') {
         const normalPatchGroup = document.getElementById('normal-patch-group');
         const customPatchesContainer = document.getElementById('custom-patches-container');
         const customPatchesList = document.getElementById('custom-patches-list');
@@ -628,6 +666,22 @@ function applyProductRestrictions() {
                 cb.addEventListener('change', updatePreview);
             });
         }
+    }
+    
+    // Configuración general (allowCustomization / allowPatches)
+    if (product && product.allowCustomization === false) {
+        const nameInput = document.getElementById('name-input');
+        if (nameInput) {
+            const group = nameInput.closest('.option-group');
+            if (group) group.style.display = 'none';
+        }
+    }
+    
+    if (product && product.allowPatches === false) {
+        const patchGroup = document.getElementById('normal-patch-group');
+        if (patchGroup) patchGroup.style.display = 'none';
+        const customPatchGroup = document.getElementById('custom-patches-container');
+        if (customPatchGroup) customPatchGroup.style.display = 'none';
     }
 }
 function handleNameInput(e) {
@@ -683,8 +737,15 @@ function updatePreview() {
     }
 
     // --- Parche ---
-    if (product && product.customPatches === 'espana26') {
-        const customCheckboxes = document.querySelectorAll('#custom-patches-list input[type="checkbox"]:checked');
+    if (product && Array.isArray(product.customPatches) && product.customPatches.length > 0) {
+        const customCheckboxes = document.querySelectorAll('#custom-patches-list input[name="dynamic_patch"]:checked');
+        customCheckboxes.forEach(cb => {
+            const patchCost = parseFloat(cb.dataset.price) || 0;
+            totalPrice += patchCost;
+            details.push(`Parche ${cb.value}: +€${patchCost.toFixed(2)}`);
+        });
+    } else if (product && product.customPatches === 'espana26') {
+        const customCheckboxes = document.querySelectorAll('#custom-patches-list input[name="custom_patch"]:checked');
         customCheckboxes.forEach(cb => {
             const patchCost = 1.25;
             totalPrice += patchCost;
@@ -699,14 +760,15 @@ function updatePreview() {
         }
     }
 
-    // --- Personalización (nombre O dorsal = +€3) ---
+    // --- Personalización ---
     const name = document.getElementById('name-input').value.trim();
     const number = document.getElementById('number-input').value;
-    if (name || number) {
-        totalPrice += 3;
+    if ((name || number) && product.allowCustomization !== false) {
+        let custPrice = product.customizationPrice !== undefined ? product.customizationPrice : 3;
+        totalPrice += custPrice;
         if (name) details.push(`Nombre: ${name.toUpperCase()}`);
         if (number) details.push(`Dorsal: ${number}`);
-        details.push('Personalización: +€3');
+        details.push(`Personalización: +€${custPrice.toFixed(2)}`);
     }
 
     // --- Actualizar precio principal mostrado en pantalla ---
@@ -858,10 +920,23 @@ function addToCart() {
     let patchExtraPrice = 0;
     let selectedPatchesArray = [];
     
-    if (product && product.customPatches === 'espana26') {
-        const customCheckboxes = document.querySelectorAll('#custom-patches-list input[type="checkbox"]:checked');
-        const labels = Array.from(customCheckboxes).map(cb => cb.value);
-        if (labels.length > 0) {
+    if (product && Array.isArray(product.customPatches) && product.customPatches.length > 0) {
+        const checked = document.querySelectorAll('#custom-patches-list input[name="dynamic_patch"]:checked');
+        if (checked.length > 0) {
+            const labels = [];
+            let dynPrice = 0;
+            checked.forEach(cb => {
+                labels.push(cb.value);
+                dynPrice += parseFloat(cb.dataset.price) || 0;
+            });
+            patchStr = labels.join(', ');
+            selectedPatchesArray = labels;
+            patchExtraPrice = dynPrice;
+        }
+    } else if (product && product.customPatches === 'espana26') {
+        const checked = document.querySelectorAll('#custom-patches-list input[name="custom_patch"]:checked');
+        if (checked.length > 0) {
+            const labels = Array.from(checked).map(cb => cb.value);
             patchStr = labels.join(', ');
             selectedPatchesArray = labels;
             patchExtraPrice = labels.length * 1.25;
@@ -891,9 +966,10 @@ function addToCart() {
     if (customization.version === 'jugador') totalPrice += 5;
     
     totalPrice += patchExtraPrice;
-    // Personalización: nombre O dorsal = +€3 (no hace falta tener los dos)
-    if (customization.name || customization.number) {
-        totalPrice += 3;
+    
+    if ((customization.name || customization.number) && product.allowCustomization !== false) {
+        let custPrice = product.customizationPrice !== undefined ? product.customizationPrice : 3;
+        totalPrice += custPrice;
     }
     const quantity = parseInt(document.getElementById('qty-input').value) || 1;
     const cartItem = {

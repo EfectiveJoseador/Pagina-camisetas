@@ -1,10 +1,42 @@
-import { auth, db, onAuthStateChanged, ref, get, push, set } from './firebase-config.js';
+import { auth, db, onAuthStateChanged, ref, get, push, set, onValue } from './firebase-config.js';
 import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
 import Cart from './carrito.js';
-import products from './products-data.js';
+import productsData from './products-data.js';
+import { updateOrderMetrics, logDiscountUsage, syncDiscounts, activeDiscounts } from './analytics.js';
+import { clearDraftOrder, finalizeOrder } from './abandoned-carts.js';
 import { getUserCoupons, useCoupon, addPendingPoints } from './points.js';
 import { sanitizeHTML } from './security.js';
 import Analytics from './analytics.js';
+
+let products = [...productsData];
+
+// Sincronización en tiempo real con Firebase
+onValue(ref(db, 'products'), (snapshot) => {
+    if (snapshot.exists()) {
+        const liveData = snapshot.val();
+        let newAllProducts = productsData.map(p => {
+            if (liveData[p.id]) {
+                return { ...p, ...liveData[p.id] };
+            }
+            return p;
+        });
+        
+        Object.values(liveData).forEach(liveProduct => {
+            if (!newAllProducts.find(p => p.id === liveProduct.id)) {
+                newAllProducts.push(liveProduct);
+            }
+        });
+        
+        products = newAllProducts;
+        
+        if (typeof calculateTotals === 'function') {
+            calculateTotals();
+            if (typeof renderCartItems === 'function') {
+                renderCartItems();
+            }
+        }
+    }
+});
 
 let currentUser = null;
 let selectedAddressId = null;

@@ -941,6 +941,32 @@ function toggleQuickAddPanel() {}   // kept for compatibility, no-op
 function closeQuickAddPanel()  {}
 function closeAllQuickAddPanels() { _closeDrawer(); }
 
+// ── Live Products (Sync overrides from Firebase) ──────────────────────────
+function loadLiveProducts() {
+    onValue(ref(db, 'products'), (snapshot) => {
+        if (snapshot.exists()) {
+            const liveData = snapshot.val();
+            // Merge existing
+            let newAllProducts = allProducts.map(p => {
+                if (liveData[p.id]) {
+                    return { ...p, ...liveData[p.id] };
+                }
+                return p;
+            });
+            
+            // Append new ones from liveData that are not in allProducts
+            Object.values(liveData).forEach(liveProduct => {
+                if (!newAllProducts.find(p => p.id === liveProduct.id)) {
+                    newAllProducts.push(liveProduct);
+                }
+            });
+            
+            allProducts = newAllProducts;
+            if (typeof applyFilters === 'function') applyFilters(false);
+        }
+    });
+}
+
 
 async function init() {
     
@@ -970,6 +996,8 @@ async function init() {
     populateLeagueFilter();
     attachEventListeners();
     setupModal();
+
+    loadLiveProducts(); // Iniciar sync de productos
 
     const grid = document.getElementById('product-grid');
     if (grid) {
