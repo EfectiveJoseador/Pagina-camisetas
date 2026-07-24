@@ -2,8 +2,7 @@ import { auth, db, onAuthStateChanged, ref, get, push, set, onValue } from './fi
 import { getFunctions, httpsCallable } from 'https://www.gstatic.com/firebasejs/11.0.1/firebase-functions.js';
 import Cart from './carrito.js';
 import productsData from './products-data.js';
-import { updateOrderMetrics, logDiscountUsage, syncDiscounts, activeDiscounts } from './analytics.js';
-import { clearDraftOrder, finalizeOrder } from './abandoned-carts.js';
+// import abandoned-carts removed
 import { getUserCoupons, useCoupon, addPendingPoints } from './points.js';
 import { sanitizeHTML } from './security.js';
 import Analytics from './analytics.js';
@@ -20,15 +19,15 @@ onValue(ref(db, 'products'), (snapshot) => {
             }
             return p;
         });
-        
+
         Object.values(liveData).forEach(liveProduct => {
             if (!newAllProducts.find(p => p.id === liveProduct.id)) {
                 newAllProducts.push(liveProduct);
             }
         });
-        
+
         products = newAllProducts;
-        
+
         if (typeof calculateTotals === 'function') {
             calculateTotals();
             if (typeof renderCartItems === 'function') {
@@ -144,14 +143,14 @@ function editAddress(addressId) {
     document.getElementById('new-address-street').value = addr.street || '';
     document.getElementById('new-address-city').value = addr.city || '';
     document.getElementById('new-address-zip').value = addr.zip || '';
-    
+
     const provinceSelect = document.getElementById('new-address-province');
     if (provinceSelect) {
         provinceSelect.value = addr.province || '';
     }
-    
+
     document.getElementById('new-address-phone').value = addr.phone || '';
-    
+
     const instagramInput = document.getElementById('new-address-instagram');
     if (instagramInput) {
         instagramInput.value = addr.instagram || '';
@@ -228,7 +227,7 @@ function hideNewAddressForm() {
     if (form) {
         form.reset();
     }
-    
+
     editingAddressId = null;
     const formTitle = document.querySelector('#new-address-form-container h3');
     if (formTitle) {
@@ -414,7 +413,7 @@ async function confirmOrder() {
     }
 
     const selectedPayment = document.querySelector('input[name="payment"]:checked');
-    const paymentMethod   = selectedPayment.value;
+    const paymentMethod = selectedPayment.value;
 
     if (paymentMethod === 'paypal') {
         const accepted = await showPayPalWarningModal();
@@ -430,21 +429,21 @@ async function confirmOrder() {
 
     const originalHTML = confirmBtn.innerHTML;
     confirmBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
-    confirmBtn.disabled  = true;
+    confirmBtn.disabled = true;
 
     try {
         // ── Build the secure payload — IDs + quantities ONLY, NO prices ──────────
         // The Cloud Function fetches real prices from the database.
         // The client CANNOT inject or modify any price data.
         const cartPayload = Cart.items.map(item => ({
-            productId:     item.productId || item.id,
-            qty:           item.quantity || item.qty || 1,
-            isAccessory:   item.isAccessory === true,
+            productId: item.productId || item.id,
+            qty: item.quantity || item.qty || 1,
+            isAccessory: item.isAccessory === true,
             customization: {
-                size:    item.customization?.size    || item.size    || 'N/A',
+                size: item.customization?.size || item.size || 'N/A',
                 version: item.customization?.version || item.version || 'aficionado',
-                name:    item.customization?.name    || '',
-                number:  item.customization?.number  || '',
+                name: item.customization?.name || '',
+                number: item.customization?.number || '',
                 patches: item.customization?.patches || []
             }
         }));
@@ -459,11 +458,11 @@ async function confirmOrder() {
                 'Authorization': `Bearer ${token}`
             },
             body: JSON.stringify({
-                cartItems:     cartPayload,
-                addressId:     selectedAddressId,
+                cartItems: cartPayload,
+                addressId: selectedAddressId,
                 paymentMethod,
-                couponId:      selectedCoupon ? selectedCoupon.id : null,
-                promoCode:     appliedPromoCode ? (appliedPromoCode.code || appliedPromoCode.id || null) : null
+                couponId: selectedCoupon ? selectedCoupon.id : null,
+                promoCode: appliedPromoCode ? (appliedPromoCode.code || appliedPromoCode.id || null) : null
             })
         });
 
@@ -517,7 +516,7 @@ async function confirmOrder() {
         } else if (code === 'functions/internal') {
             // Extract the reference ID from the message for support purposes
             const refMatch = error.message?.match(/ref: (co_\d+_\w+)/);
-            const refId    = refMatch ? ` (Ref: ${refMatch[1]})` : '';
+            const refId = refMatch ? ` (Ref: ${refMatch[1]})` : '';
             userMsg = `Error interno del servidor${refId}. Por favor, inténtalo de nuevo en unos minutos.`;
         } else if (code === 'functions/resource-exhausted') {
             userMsg = 'Demasiadas solicitudes. Por favor, espera unos minutos antes de intentarlo de nuevo.';
@@ -528,7 +527,7 @@ async function confirmOrder() {
         console.error('[Checkout] Order error — code:', code, 'message:', error?.message);
         alert('Error al procesar el pedido: ' + userMsg);
         confirmBtn.innerHTML = originalHTML;
-        confirmBtn.disabled  = false;
+        confirmBtn.disabled = false;
     }
 }
 
@@ -591,7 +590,7 @@ TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
 
         const c = item.customization || {};
         const pText = c.patch || c.patches || c.selectedPatches || c.patchText || c.badges || item.patch || item.selectedPatches || '';
-        
+
         if (Array.isArray(pText)) {
             const joined = pText.filter(Boolean).join(', ');
             if (joined) extras.push(`Parches: ${joined}`);
@@ -602,8 +601,8 @@ TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
         // 1. Personalización (Nombre y Número)
         // Nota: Solo usamos item.customization?.name porque item.name guarda el nombre del producto (ej: "España 2026").
         const cName = item.customization?.name || '';
-        const cNum  = item.customization?.number || item.number || '';
-        
+        const cNum = item.customization?.number || item.number || '';
+
         if (cName || cNum) {
             let customStr = `Personalización: ${cName}${cNum ? (cName ? ' - ' : '') + cNum : ''}`;
             extras.push(customStr);
@@ -620,7 +619,7 @@ TikTok: @${(sa.instagram || '').replace(/^@/, '')}`;
     if (orderData.protectionFee && orderData.protectionFee > 0) {
         totalInfo += `Tasa Temporal de Protección: +€${orderData.protectionFee.toFixed(2)}\n`;
     }
-    
+
     if (orderData.shipping !== undefined) {
         totalInfo += `Envío: €${orderData.shipping.toFixed(2)}\n`;
     }
@@ -772,6 +771,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     onAuthStateChanged(auth, async (user) => {
+        console.log('[CHECKOUT-DEBUG] 1. Estado de Auth:', user ? user.uid : 'No hay usuario autenticado (se mostrará modal de inicio de sesión)');
         if (user) {
             currentUser = user;
             await loadUserAddresses();
@@ -783,8 +783,9 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 localStorage.removeItem('pendingPayPalOrderId');
                 localStorage.removeItem('pendingPayPalOrderData');
-            } catch (_) {}
+            } catch (_) { }
         } else {
+            currentUser = null;
             showLoginPrompt();
         }
     });
@@ -1323,7 +1324,7 @@ function showPayPalWarningModal() {
         `;
 
         document.body.appendChild(modal);
-        
+
         requestAnimationFrame(() => {
             modal.style.opacity = '1';
             const card = modal.querySelector('div');

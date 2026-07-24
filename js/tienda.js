@@ -920,20 +920,27 @@ function animateFlyToCart(cardElement) {
 }
 
 function setupQuickAddListeners() {
-    document.querySelectorAll('.btn-quick-add').forEach(btn => {
-        btn.addEventListener('click', (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            const productId = parseInt(btn.dataset.id);
-            const product   = allProducts.find(p => p.id === productId);
-            if (!product) return;
-            // toggle: if same product is already open, close
-            if (_qdProduct?.id === productId && _qdDrawer?.classList.contains('active')) {
-                _closeDrawer();
-            } else {
-                _openDrawer(product);
-            }
-        });
+    if (window._quickAddDelegated) return;
+    window._quickAddDelegated = true;
+
+    document.addEventListener('click', (e) => {
+        const btn = e.target.closest('.btn-quick-add');
+        if (!btn) return;
+
+        e.preventDefault();
+        e.stopPropagation();
+
+        const rawId = btn.dataset.id;
+        if (!rawId) return;
+
+        const product = allProducts.find(p => String(p.id) === String(rawId));
+        if (!product) return;
+
+        if (_qdProduct && String(_qdProduct.id) === String(rawId) && _qdDrawer?.classList.contains('active')) {
+            _closeDrawer();
+        } else {
+            _openDrawer(product);
+        }
     });
 }
 
@@ -2013,7 +2020,7 @@ function handleFormSubmit(e) {
 function addToCart(item) {
     let cart = JSON.parse(localStorage.getItem('cart') || '[]');
     const existingIndex = cart.findIndex(cartItem =>
-        cartItem.id === item.id &&
+        String(cartItem.id) === String(item.id) &&
         JSON.stringify(cartItem.customization) === JSON.stringify(item.customization)
     );
 
@@ -2025,6 +2032,7 @@ function addToCart(item) {
 
     localStorage.setItem('cart', JSON.stringify(cart));
     updateCartCount();
+    window.dispatchEvent(new CustomEvent('cartUpdated', { detail: cart }));
 }
 function updateCartCount() {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');

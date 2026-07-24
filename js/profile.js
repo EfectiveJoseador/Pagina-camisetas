@@ -442,30 +442,53 @@ function renderOrders(orders) {
                             <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Nº de Seguimiento</span>
                             <strong style="color: var(--text-main); font-size: 1.05rem; font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: 0.5px;">${sanitizeHTML(order.trackingNumber)}</strong>
                         </div>
+                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                        <a href="https://www.17track.net/?nums=${encodeURIComponent(order.trackingNumber)}"
+                           target="_blank"
+                           rel="noopener noreferrer"
+                           style="
+                               background: linear-gradient(135deg, #10b981, #059669);
+                               color: white;
+                               padding: 0.6rem 1.25rem;
+                               border-radius: 8px;
+                               font-size: 0.85rem;
+                               font-weight: 600;
+                               text-decoration: none;
+                               display: inline-flex;
+                               align-items: center;
+                               gap: 0.5rem;
+                               transition: all 0.2s ease;
+                               box-shadow: 0 2px 12px rgba(16, 185, 129, 0.3);
+                           "
+                           onmouseover="this.style.transform='translateY(-2px)'"
+                           onmouseout="this.style.transform='translateY(0)'"
+                        >
+                            <i class="fas fa-search-location"></i> Seguir en 17TRACK
+                        </a>
+                        <button 
+                            onclick="navigator.clipboard.writeText('${sanitizeHTML(order.trackingNumber)}'); this.querySelector('span').textContent='¡Copiado!'; this.style.background='#22c55e'; this.style.color='white'; setTimeout(() => { this.querySelector('span').textContent='Copiar'; this.style.background='linear-gradient(135deg, #1a1a2e, #8b5cf6)'; this.style.color='white'; }, 2000);"
+                            style="
+                                background: linear-gradient(135deg, #1a1a2e, #8b5cf6);
+                                color: white;
+                                border: 1px solid rgba(139, 92, 246, 0.3);
+                                padding: 0.6rem 1.25rem;
+                                border-radius: 8px;
+                                cursor: pointer;
+                                font-size: 0.85rem;
+                                font-weight: 600;
+                                display: flex;
+                                items-center;
+                                gap: 0.5rem;
+                                transition: all 0.2s ease;
+                                box-shadow: 0 2px 12px rgba(139, 92, 246, 0.25);
+                            "
+                            onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 16px rgba(139, 92, 246, 0.4)'"
+                            onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 12px rgba(139, 92, 246, 0.25)'"
+                        >
+                            <i class="fas fa-copy"></i>
+                            <span>Copiar</span>
+                        </button>
                     </div>
-                    <button 
-                        onclick="navigator.clipboard.writeText('${sanitizeHTML(order.trackingNumber)}'); this.querySelector('span').textContent='¡Copiado!'; this.style.background='#22c55e'; this.style.color='white'; setTimeout(() => { this.querySelector('span').textContent='Copiar'; this.style.background='linear-gradient(135deg, #1a1a2e, #8b5cf6)'; this.style.color='white'; }, 2000);"
-                        style="
-                            background: linear-gradient(135deg, #1a1a2e, #8b5cf6);
-                            color: white;
-                            border: 1px solid rgba(139, 92, 246, 0.3);
-                            padding: 0.6rem 1.25rem;
-                            border-radius: 8px;
-                            cursor: pointer;
-                            font-size: 0.85rem;
-                            font-weight: 600;
-                            display: flex;
-                            align-items: center;
-                            gap: 0.5rem;
-                            transition: all 0.2s ease;
-                            box-shadow: 0 2px 12px rgba(139, 92, 246, 0.25);
-                        "
-                        onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 16px rgba(139, 92, 246, 0.4)'"
-                        onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 12px rgba(139, 92, 246, 0.25)'"
-                    >
-                        <i class="fas fa-copy"></i>
-                        <span>Copiar</span>
-                    </button>
                 </div>
             ` : ''}
             

@@ -390,7 +390,13 @@ function updateProductSchema() {
     const material = "Poliéster de alta calidad (Pro-Fit)";
     const colorMatch = product.name.match(/(Azul|Blanco|Rojo|Negro|Verde|Amarillo|Naranja|Gris|Rosa|Morado)/i);
     const color = colorMatch ? colorMatch[0] : 'Multicolor';
-    const sizes = SIZE_CONFIGS[getProductType(product)] || [];
+    const sizeMap = typeof SIZE_CONFIGS !== 'undefined' ? SIZE_CONFIGS : {
+        kids: ['16', '18', '20', '22', '24', '26', '28'],
+        retro: ['S', 'M', 'L', 'XL', '2XL'],
+        normal: ['S', 'M', 'L', 'XL', '2XL', '3XL', '4XL']
+    };
+    const productType = typeof getProductType === 'function' ? getProductType(product) : 'normal';
+    const sizes = sizeMap[productType] || sizeMap.normal || [];
     const priceValidUntil = new Date(new Date().setFullYear(new Date().getFullYear() + 1)).toISOString().split('T')[0];
     const schema = {
         "@context": "https://schema.org/",

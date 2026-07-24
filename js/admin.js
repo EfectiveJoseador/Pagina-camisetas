@@ -242,6 +242,15 @@ function renderOrders() {
                                placeholder="Añadir tracking..."
                                onchange="updateTracking('${order.path}', this.value)">
                     </div>
+                    ${sTracking ? `
+                        <a href="https://www.17track.net/?nums=${encodeURIComponent(sTracking)}" 
+                           target="_blank" 
+                           rel="noopener noreferrer" 
+                           style="display: inline-flex; align-items: center; gap: 0.35rem; margin-top: 0.4rem; font-size: 0.78rem; color: #818cf8; text-decoration: none; font-weight: 600;"
+                           title="Rastrear paquete en 17TRACK">
+                            <i class="fas fa-external-link-alt"></i> Ver en 17TRACK
+                        </a>
+                    ` : ''}
                 </td>
                 <td class="order-actions">
                     <button class="btn-view" onclick="viewOrderDetails('${order.path}')" title="Ver detalles">
@@ -442,7 +451,14 @@ function renderOrderModalView() {
             <div class="detail-section">
                 <h3><i class="fas fa-info-circle"></i> Estado e Historial</h3>
                 <p><strong>Estado actual:</strong> <span class="status-badge status-${order.status}">${order.status}</span></p>
-                <p><strong>Tracking:</strong> ${sanitizeHTML(order.trackingNumber || 'Sin asignar')}</p>
+                <p><strong>Tracking:</strong> ${order.trackingNumber ? `
+                    <a href="https://www.17track.net/?nums=${encodeURIComponent(order.trackingNumber)}" 
+                       target="_blank" 
+                       rel="noopener noreferrer" 
+                       style="color: #818cf8; font-weight: 600; text-decoration: underline; margin-left: 0.25rem;">
+                        ${sanitizeHTML(order.trackingNumber)} <i class="fas fa-external-link-alt" style="font-size: 0.75rem;"></i>
+                    </a>
+                ` : 'Sin asignar'}</p>
                 <p><strong>Fecha pedido:</strong> ${order.dateFormatted || new Date(order.date || Date.now()).toLocaleString('es-ES')}</p>
                 ${order.lastUpdated ? `<p><strong>Última actualización:</strong> ${new Date(order.lastUpdated).toLocaleString('es-ES')}</p>` : ''}
                 ${order.updatedBy ? `<p><strong>Editado por:</strong> ${sanitizeHTML(order.updatedBy)}</p>` : ''}
