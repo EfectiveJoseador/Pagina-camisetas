@@ -13557,7 +13557,7 @@ const products = [
         "price": 21.9,
         "oldPrice": 27,
         "sku": "1260",
-        "description": "De momento los dorsales van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
+        "description": "De momento los dorsales SI NO SON DE JUGADORES DE LA SELECCIÓN van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
     },
     {
         "id": 500001,
@@ -13575,7 +13575,7 @@ const products = [
         "price": 21.9,
         "oldPrice": 27,
         "sku": "8151",
-        "description": "De momento los dorsales van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
+        "description": "De momento los dorsales SI NO SON DE JUGADORES DE LA SELECCIÓN van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
     },
     {
         "id": 763152,
@@ -13594,7 +13594,7 @@ const products = [
         "price": 23.9,
         "oldPrice": 29,
         "sku": "3992",
-        "description": "De momento los dorsales van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
+        "description": "De momento los dorsales SI NO SON DE JUGADORES DE LA SELECCIÓN van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
     },
     {
         "id": 240028,
@@ -13614,7 +13614,7 @@ const products = [
         "price": 23.9,
         "oldPrice": 29,
         "sku": "5104",
-        "description": "De momento los dorsales van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
+        "description": "De momento los dorsales SI NO SON DE JUGADORES DE LA SELECCIÓN van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
     },
     {
         "id": 797521,
