@@ -1690,6 +1690,11 @@ async function initPinnedProducts() {
         pinnedIds = [];
     }
 
+    const mandatoryTop = [500002, 500001];
+    const mandatorySet = new Set(mandatoryTop);
+    const restPinned = pinnedIds.filter(id => !mandatorySet.has(id));
+    pinnedIds = [...mandatoryTop, ...restPinned];
+
     renderPinnedList(products);
 
     // ── Buscador de productos ──────────────────────────────────────────────

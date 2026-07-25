@@ -32,54 +32,81 @@ import { db, ref, onValue, get } from './firebase-config.js';
 let globalPinnedIds = [];
 let initialPinnedLoaded = false;
 
+function processPinnedIds(rawIds) {
+    let ids = Array.isArray(rawIds) ? rawIds.map(Number) : [];
+    // Mantener sincronizados los productos destacados obligatorios al principio
+    const mandatoryTop = [500002, 500001];
+    const mandatorySet = new Set(mandatoryTop);
+    const restPinned = ids.filter(id => !mandatorySet.has(id));
+    return [...mandatoryTop, ...restPinned];
+}
+
 function getPinnedProductIds() {
     return globalPinnedIds;
 }
 
 async function loadPinnedProducts() {
+    let fetchedIds = [];
     try {
         const snapshot = await get(ref(db, 'pinnedProducts'));
         if (snapshot.exists()) {
             const data = snapshot.val();
             if (data && typeof data.ids === 'string') {
-                globalPinnedIds = JSON.parse(data.ids).map(Number);
+                fetchedIds = JSON.parse(data.ids).map(Number);
             } else if (Array.isArray(data)) {
-                globalPinnedIds = data.map(Number);
+                fetchedIds = data.map(Number);
+            }
+            localStorage.setItem('camisetazo_pinned_products', JSON.stringify(fetchedIds));
+        } else {
+            const raw = localStorage.getItem('camisetazo_pinned_products');
+            if (raw) {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) fetchedIds = parsed.map(Number);
             }
         }
     } catch (e) {
-        console.error('Error fetching pinned ids:', e);
+        console.warn('Error fetching pinned ids from Firebase, using cache:', e);
+        const raw = localStorage.getItem('camisetazo_pinned_products');
+        if (raw) {
+            try {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) fetchedIds = parsed.map(Number);
+            } catch (err) {}
+        }
     }
+    globalPinnedIds = processPinnedIds(fetchedIds);
     initialPinnedLoaded = true;
 }
 
 onValue(ref(db, 'pinnedProducts'), (snapshot) => {
     if (!initialPinnedLoaded) return; // Ignore first trigger, handled by get() in init()
+    let fetchedIds = [];
     if (snapshot.exists()) {
         const data = snapshot.val();
-        let newPinned = [];
-        
         if (data && typeof data.ids === 'string') {
             try {
-                newPinned = JSON.parse(data.ids).map(Number);
+                fetchedIds = JSON.parse(data.ids).map(Number);
             } catch (e) { }
         } else if (Array.isArray(data)) {
-            newPinned = data.map(Number);
+            fetchedIds = data.map(Number);
         }
-        
-        // Re-render if changed
-        if (JSON.stringify(newPinned) !== JSON.stringify(globalPinnedIds)) {
-            globalPinnedIds = newPinned;
-            if (typeof allProducts !== 'undefined' && allProducts.length > 0) {
-                if (typeof applyFilters === 'function') applyFilters(false);
-            }
-        }
+        localStorage.setItem('camisetazo_pinned_products', JSON.stringify(fetchedIds));
     } else {
-        if (globalPinnedIds.length > 0) {
-            globalPinnedIds = [];
-            if (typeof allProducts !== 'undefined' && allProducts.length > 0) {
-                if (typeof applyFilters === 'function') applyFilters(false);
-            }
+        const raw = localStorage.getItem('camisetazo_pinned_products');
+        if (raw) {
+            try {
+                const parsed = JSON.parse(raw);
+                if (Array.isArray(parsed)) fetchedIds = parsed.map(Number);
+            } catch (err) {}
+        }
+    }
+    
+    const newPinned = processPinnedIds(fetchedIds);
+    // Re-render if changed
+    if (JSON.stringify(newPinned) !== JSON.stringify(globalPinnedIds)) {
+        globalPinnedIds = newPinned;
+        if (typeof allProducts !== 'undefined' && allProducts.length > 0) {
+            if (typeof applyFilters === 'function') applyFilters(false);
         }
     }
 });
@@ -1677,15 +1704,15 @@ function applyFilters(updateURL = true) {
     // ── Pinned products: float to the top (in pinned order) ──────────────────
     const pinnedIds = getPinnedProductIds();
     if (pinnedIds.length > 0) {
-        const pinnedSet = new Set(pinnedIds);
+        const pinnedSet = new Set(pinnedIds.map(Number));
         const pinned = [];
         const rest   = [];
         filteredProducts.forEach(p => {
-            if (pinnedSet.has(p.id)) pinned.push(p);
+            if (pinnedSet.has(Number(p.id))) pinned.push(p);
             else rest.push(p);
         });
         // Sort pinned by their admin-defined order
-        pinned.sort((a, b) => pinnedIds.indexOf(a.id) - pinnedIds.indexOf(b.id));
+        pinned.sort((a, b) => pinnedIds.indexOf(Number(a.id)) - pinnedIds.indexOf(Number(b.id)));
         filteredProducts = [...pinned, ...rest];
     }
 
