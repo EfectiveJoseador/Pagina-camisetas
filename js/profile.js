@@ -290,7 +290,7 @@ function renderOrders(orders) {
             ` : ''}
             
             <!-- Products Section -->
-            <div class="order-products-box" style="margin-bottom: 1.5rem;">
+            <div class="order-products-box">
                 <h4 style="
                     font-size: 0.75rem;
                     text-transform: uppercase;
@@ -307,91 +307,56 @@ function renderOrders(orders) {
                 </h4>
                 
                 ${Array.isArray(products) && products.length > 0 ? products.map(p => {
-                    let patchesData = p.customization?.patches || p.customization?.patch || p.patches || p.patch;
-                    let patchHtml = '';
-                    if (patchesData && patchesData !== 'none' && patchesData !== 'Ninguno' && patchesData !== 'No' && patchesData !== 'no' && (!Array.isArray(patchesData) || patchesData.length > 0)) {
-                        let patchText = Array.isArray(patchesData) ? patchesData.join(', ') : patchesData;
-                        patchHtml = `
-                            <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600; max-width: 100%; word-break: break-word; display: inline-flex; align-items: center; gap: 0.3rem;">
-                                <i class="fas fa-shield-alt" style="font-size:0.75rem;"></i> <span>${sanitizeHTML(patchText)}</span>
+            let patchesData = p.customization?.patches || p.customization?.patch || p.patches || p.patch;
+            let patchHtml = '';
+            if (patchesData && patchesData !== 'none' && patchesData !== 'Ninguno' && patchesData !== 'No' && patchesData !== 'no' && (!Array.isArray(patchesData) || patchesData.length > 0)) {
+                let patchText = Array.isArray(patchesData) ? patchesData.join(', ') : patchesData;
+                patchHtml = `
+                            <span class="order-badge order-badge-patch">
+                                <i class="fas fa-shield-alt"></i> <span>${sanitizeHTML(patchText)}</span>
                             </span>
                         `;
-                    }
+            }
 
-                    return `
-                    <a href="/pages/producto.html?id=${p.productId || p.id}" class="order-product-item" style="
-                        display: flex;
-                        align-items: center;
-                        gap: 1rem;
-                        padding: 1rem;
-                        background: var(--bg-body);
-                        border-radius: 12px;
-                        margin-bottom: 0.75rem;
-                        border: 1px solid var(--border);
-                        transition: all 0.2s ease;
-                        text-decoration: none;
-                        color: inherit;
-                        cursor: pointer;
-                        box-sizing: border-box;
-                    "
-                    onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.05)';"
-                    onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';"
-                    >
+            return `
+                    <a href="/pages/producto.html?id=${p.productId || p.id}" class="order-product-item">
                         <!-- Product Image -->
-                        <div class="order-product-img-wrap" style="
-                            width: 70px;
-                            height: 70px;
-                            border-radius: 10px;
-                            overflow: hidden;
-                            flex-shrink: 0;
-                            background: linear-gradient(135deg, var(--bg-card), var(--bg-body));
-                            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-                        ">
+                        <div class="order-product-img-wrap">
                             <img src="${p.image || '/assets/placeholder.webp'}" alt="${p.name || 'Producto'}" 
-                                style="width: 100%; height: 100%; object-fit: cover;"
                                 onerror="this.src='/assets/placeholder.webp'">
                         </div>
                         
                         <!-- Product Details -->
-                        <div class="order-product-details" style="flex: 1; min-width: 0;">
-                            <p style="font-weight: 600; font-size: 0.95rem; margin: 0 0 0.4rem 0; color: var(--text-main); word-break: break-word;">
+                        <div class="order-product-details">
+                            <p class="order-product-name">
                                 ${sanitizeHTML(p.name || p.productName || 'Producto')}
                             </p>
-                            <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.8rem;">
-                                <span style="background: rgba(var(--primary-rgb), 0.1); color: var(--primary); padding: 0.2rem 0.6rem; border-radius: 50px;">
+                            <div class="order-product-badges">
+                                <span class="order-badge order-badge-size">
                                     Talla: ${sanitizeHTML(p.size || p.customization?.size || 'M')}
                                 </span>
-                                <span style="background: rgba(139, 92, 246, 0.1); color: #8b5cf6; padding: 0.2rem 0.6rem; border-radius: 50px; text-transform: capitalize;">
+                                <span class="order-badge order-badge-version">
                                     ${sanitizeHTML(p.version || p.customization?.version || 'Aficionado')}
                                 </span>
                                 ${(p.customization?.name || p.customization?.number || p.nameCustom || p.numberCustom) ? `
-                                    <span style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600; max-width: 100%; word-break: break-word; display: inline-flex; align-items: center; gap: 0.3rem;">
-                                        <i class="fas fa-font" style="font-size:0.75rem;"></i> <span>${sanitizeHTML(p.customization?.name || p.nameCustom || '')} ${p.customization?.number || p.numberCustom ? '#' + sanitizeHTML(p.customization?.number || p.numberCustom) : ''}</span>
+                                    <span class="order-badge order-badge-custom">
+                                        <i class="fas fa-font"></i> <span>${sanitizeHTML(p.customization?.name || p.nameCustom || '')} ${p.customization?.number || p.numberCustom ? '#' + sanitizeHTML(p.customization?.number || p.numberCustom) : ''}</span>
                                     </span>
                                 ` : ''}
                                 ${patchHtml}
-                                <span style="background: rgba(var(--text-rgb), 0.08); color: var(--text-muted); padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">
+                                <span class="order-badge order-badge-qty">
                                     ×${p.quantity || p.qty || 1}
                                 </span>
                             </div>
                         </div>
                         
                         <!-- Product Price -->
-                        <div class="order-product-price" style="
-                            font-weight: 700;
-                            font-size: 1.1rem;
-                            color: var(--primary);
-                            flex-shrink: 0;
-                            background: rgba(var(--primary-rgb), 0.1);
-                            padding: 0.5rem 0.75rem;
-                            border-radius: 8px;
-                            box-sizing: border-box;
-                        ">
+                        <div class="order-product-price">
                             €${(p.price || 0).toFixed(2)}
                         </div>
                     </a>
                 `;
-                }).join('') : '<p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 1.5rem; background: var(--bg-body); border-radius: 12px;"><i class="fas fa-box-open" style="margin-right: 0.5rem;"></i>Sin productos</p>'}
+        }).join('') : '<p style="color: var(--text-muted); font-size: 0.9rem; text-align: center; padding: 1.5rem; background: var(--bg-body); border-radius: 12px;"><i class="fas fa-box-open" style="margin-right: 0.5rem;"></i>Sin productos</p>'}
             </div>
             
             <!-- Total -->
@@ -569,7 +534,11 @@ function renderOrders(orders) {
             openEditOrderAddressModal(orderId);
         });
     });
+
+    // ── Invocación Diferida del Diagnóstico de Overflow Módulos ──
+    setTimeout(window.diagnoseMobileOverflow, 500);
 }
+
 const LEGACY_STATUS_MAP = {
     'pending': 'pendiente',
     'confirmed': 'confirmado',
@@ -1286,7 +1255,7 @@ Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
         const qty = item.quantity || 1;
         const size = item.size || 'M';
         const version = item.version || 'fan';
-        
+
         const custom = item.customization || {};
         let extras = [];
         if (custom.patch) {
@@ -1302,9 +1271,9 @@ Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
         } else if (custom.number) {
             extras.push('Personalización: ' + custom.number);
         }
-        
+
         let extrasStr = extras.length > 0 ? (' [' + extras.join(' | ') + ']') : '';
-        
+
         const price = ((item.price || 0) * qty).toFixed(2);
         productsText += qty + 'x ' + (item.name || 'Producto') + ' · ' + size + ' · ' + version + extrasStr + ' — €' + price + '\n';
     });
@@ -1331,4 +1300,37 @@ Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
         return false;
     }
 }
+
+window.diagnoseMobileOverflow = function() {
+    const viewportWidth = document.documentElement.clientWidth;
+    const elements = document.querySelectorAll('*');
+    const culprits = [];
+
+    elements.forEach(el => {
+        const rect = el.getBoundingClientRect();
+        if (rect.right > viewportWidth + 1) {
+            culprits.push({
+                tag: el.tagName.toLowerCase(),
+                id: el.id || 'N/A',
+                class: el.className || 'N/A',
+                rightEdge: Math.round(rect.right),
+                viewportWidth: viewportWidth,
+                overflowBy: Math.round(rect.right - viewportWidth) + 'px'
+            });
+            el.style.outline = '3px solid #ff0055';
+            el.style.outlineOffset = '-3px';
+        }
+    });
+
+    console.group('🔍 [DIAGNÓSTICO OVERFLOW MÓVIL]');
+    console.log('Ancho Viewport Móvil:', viewportWidth + 'px');
+    if (culprits.length === 0) {
+        console.log('✅ Ningún elemento sobrepasa el marco de la pantalla.');
+    } else {
+        console.warn(`🚨 Se han detectado ${culprits.length} elementos desbordando la pantalla:`);
+        console.table(culprits);
+    }
+    console.groupEnd();
+};
+
 
