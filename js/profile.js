@@ -201,11 +201,12 @@ function renderOrders(orders) {
             border: 1px solid var(--border);
             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
             transition: transform 0.2s ease, box-shadow 0.2s ease;
+            box-sizing: border-box;
         ">
             
             <!-- Header: Order ID + Date -->
-            <div style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
-                <div>
+            <div class="order-card-header" style="display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.25rem; flex-wrap: wrap; gap: 0.75rem;">
+                <div class="order-card-id-date">
                     <h3 style="font-size: 1.15rem; font-weight: 700; margin: 0 0 0.25rem 0; color: var(--text-main);">
                         Pedido <span style="background: linear-gradient(135deg, var(--primary), #8b5cf6); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;">#${sanitizeHTML(order.orderId || order.id)}</span>
                     </h3>
@@ -228,7 +229,7 @@ function renderOrders(orders) {
                 </div>
                 
                 <!-- Status Badge - Premium Style -->
-                <div style="
+                <div class="order-status-badge" style="
                     display: inline-flex;
                     align-items: center;
                     gap: 0.5rem;
@@ -241,20 +242,21 @@ function renderOrders(orders) {
                     color: ${currentStatusConfig.color};
                 ">
                     <i class="fas ${currentStatusConfig.icon}"></i>
-                    ${statusInfo.text}
+                    <span>${statusInfo.text}</span>
                 </div>
             </div>
             
             <!-- Shipping Address Section -->
             ${shipping && (shipping.address || shipping.street || shipping.name || shipping.fullName) ? `
-                <div style="
+                <div class="order-shipping-box" style="
                     margin-bottom: 1.5rem;
                     padding: 1rem;
                     background: var(--bg-body);
                     border-radius: 12px;
                     border-left: 3px solid var(--primary);
+                    box-sizing: border-box;
                 ">
-                    <h4 style="
+                    <h4 class="order-shipping-title" style="
                         font-size: 0.75rem;
                         text-transform: uppercase;
                         letter-spacing: 1px;
@@ -263,10 +265,11 @@ function renderOrders(orders) {
                         display: flex;
                         align-items: center;
                         gap: 0.5rem;
+                    ">
                         <i class="fas fa-map-marker-alt" style="color: var(--primary);"></i>
                         Dirección de Envío
                     </h4>
-                    <div style="font-size: 0.95rem; line-height: 1.7; color: var(--text-main);">
+                    <div class="order-shipping-text" style="font-size: 0.95rem; line-height: 1.7; color: var(--text-main);">
                         <div style="font-weight: 600; margin-bottom: 0.25rem;">${sanitizeHTML(shipping.name || shipping.fullName || '')}</div>
                         <div style="opacity: 0.9;">${sanitizeHTML(shipping.address || shipping.street || '')}</div>
                         <div style="opacity: 0.9;">${sanitizeHTML(shipping.postalCode || shipping.zip || '')} ${sanitizeHTML(shipping.city || '')}${shipping.province ? ` (${sanitizeHTML(shipping.province)})` : ''}</div>
@@ -287,7 +290,7 @@ function renderOrders(orders) {
             ` : ''}
             
             <!-- Products Section -->
-            <div style="margin-bottom: 1.5rem;">
+            <div class="order-products-box" style="margin-bottom: 1.5rem;">
                 <h4 style="
                     font-size: 0.75rem;
                     text-transform: uppercase;
@@ -309,14 +312,14 @@ function renderOrders(orders) {
                     if (patchesData && patchesData !== 'none' && patchesData !== 'Ninguno' && patchesData !== 'No' && patchesData !== 'no' && (!Array.isArray(patchesData) || patchesData.length > 0)) {
                         let patchText = Array.isArray(patchesData) ? patchesData.join(', ') : patchesData;
                         patchHtml = `
-                            <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">
-                                <i class="fas fa-shield-alt" style="font-size:0.75rem;"></i> ${sanitizeHTML(patchText)}
+                            <span style="background: rgba(16, 185, 129, 0.15); color: #10b981; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600; max-width: 100%; word-break: break-word; display: inline-flex; align-items: center; gap: 0.3rem;">
+                                <i class="fas fa-shield-alt" style="font-size:0.75rem;"></i> <span>${sanitizeHTML(patchText)}</span>
                             </span>
                         `;
                     }
 
                     return `
-                    <a href="/pages/producto.html?id=${p.productId || p.id}" style="
+                    <a href="/pages/producto.html?id=${p.productId || p.id}" class="order-product-item" style="
                         display: flex;
                         align-items: center;
                         gap: 1rem;
@@ -329,12 +332,13 @@ function renderOrders(orders) {
                         text-decoration: none;
                         color: inherit;
                         cursor: pointer;
+                        box-sizing: border-box;
                     "
                     onmouseover="this.style.borderColor='var(--primary)'; this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 12px rgba(0,0,0,0.05)';"
                     onmouseout="this.style.borderColor='var(--border)'; this.style.transform='translateY(0)'; this.style.boxShadow='none';"
                     >
                         <!-- Product Image -->
-                        <div style="
+                        <div class="order-product-img-wrap" style="
                             width: 70px;
                             height: 70px;
                             border-radius: 10px;
@@ -349,8 +353,8 @@ function renderOrders(orders) {
                         </div>
                         
                         <!-- Product Details -->
-                        <div style="flex: 1; min-width: 0;">
-                            <p style="font-weight: 600; font-size: 0.95rem; margin: 0 0 0.4rem 0; color: var(--text-main);">
+                        <div class="order-product-details" style="flex: 1; min-width: 0;">
+                            <p style="font-weight: 600; font-size: 0.95rem; margin: 0 0 0.4rem 0; color: var(--text-main); word-break: break-word;">
                                 ${sanitizeHTML(p.name || p.productName || 'Producto')}
                             </p>
                             <div style="display: flex; flex-wrap: wrap; gap: 0.5rem; font-size: 0.8rem;">
@@ -361,8 +365,8 @@ function renderOrders(orders) {
                                     ${sanitizeHTML(p.version || p.customization?.version || 'Aficionado')}
                                 </span>
                                 ${(p.customization?.name || p.customization?.number || p.nameCustom || p.numberCustom) ? `
-                                    <span style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600;">
-                                        <i class="fas fa-font" style="font-size:0.75rem;"></i> ${sanitizeHTML(p.customization?.name || p.nameCustom || '')} ${p.customization?.number || p.numberCustom ? '#' + sanitizeHTML(p.customization?.number || p.numberCustom) : ''}
+                                    <span style="background: rgba(245, 158, 11, 0.15); color: #f59e0b; padding: 0.2rem 0.6rem; border-radius: 50px; font-weight: 600; max-width: 100%; word-break: break-word; display: inline-flex; align-items: center; gap: 0.3rem;">
+                                        <i class="fas fa-font" style="font-size:0.75rem;"></i> <span>${sanitizeHTML(p.customization?.name || p.nameCustom || '')} ${p.customization?.number || p.numberCustom ? '#' + sanitizeHTML(p.customization?.number || p.numberCustom) : ''}</span>
                                     </span>
                                 ` : ''}
                                 ${patchHtml}
@@ -373,7 +377,7 @@ function renderOrders(orders) {
                         </div>
                         
                         <!-- Product Price -->
-                        <div style="
+                        <div class="order-product-price" style="
                             font-weight: 700;
                             font-size: 1.1rem;
                             color: var(--primary);
@@ -381,6 +385,7 @@ function renderOrders(orders) {
                             background: rgba(var(--primary-rgb), 0.1);
                             padding: 0.5rem 0.75rem;
                             border-radius: 8px;
+                            box-sizing: border-box;
                         ">
                             €${(p.price || 0).toFixed(2)}
                         </div>
@@ -390,12 +395,13 @@ function renderOrders(orders) {
             </div>
             
             <!-- Total -->
-            <div style="
+            <div class="order-total-box" style="
                 display: flex;
                 justify-content: flex-end;
                 align-items: center;
                 padding-top: 1.25rem;
                 border-top: 2px dashed var(--border);
+                box-sizing: border-box;
             ">
                 <div style="text-align: right;">
                     <span style="font-size: 0.85rem; color: var(--text-muted); display: block; margin-bottom: 0.25rem;">Total del pedido</span>
@@ -414,7 +420,7 @@ function renderOrders(orders) {
             
             <!-- Tracking Number (if shipped/delivered) -->
             ${(normalizedStatus === 'enviado' || normalizedStatus === 'entregado') && order.trackingNumber ? `
-                <div style="
+                <div class="order-tracking-box" style="
                     margin-top: 1.25rem;
                     padding: 1rem 1.25rem;
                     background: linear-gradient(135deg, rgba(34, 197, 94, 0.1), rgba(34, 197, 94, 0.05));
@@ -425,11 +431,13 @@ function renderOrders(orders) {
                     justify-content: space-between;
                     gap: 1rem;
                     flex-wrap: wrap;
+                    box-sizing: border-box;
                 ">
-                    <div style="display: flex; align-items: center; gap: 0.75rem;">
+                    <div class="order-tracking-info" style="display: flex; align-items: center; gap: 0.75rem; min-width: 0; max-width: 100%;">
                         <div style="
                             width: 36px;
                             height: 36px;
+                            min-width: 36px;
                             background: linear-gradient(135deg, #22c55e, #16a34a);
                             border-radius: 50%;
                             display: flex;
@@ -438,14 +446,16 @@ function renderOrders(orders) {
                         ">
                             <i class="fas fa-truck" style="color: white; font-size: 0.9rem;"></i>
                         </div>
-                        <div>
+                        <div style="min-width: 0; max-width: 100%;">
                             <span style="font-size: 0.75rem; color: var(--text-muted); display: block;">Nº de Seguimiento</span>
-                            <strong style="color: var(--text-main); font-size: 1.05rem; font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: 0.5px;">${sanitizeHTML(order.trackingNumber)}</strong>
+                            <strong class="order-tracking-num" style="color: var(--text-main); font-size: 1.05rem; font-family: 'Inter', sans-serif; font-weight: 700; letter-spacing: 0.5px; word-break: break-all; overflow-wrap: anywhere; display: block;">${sanitizeHTML(order.trackingNumber)}</strong>
                         </div>
-                    <div style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
+                    </div>
+                    <div class="order-tracking-actions" style="display: flex; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
                         <a href="https://www.17track.net/?nums=${encodeURIComponent(order.trackingNumber)}"
                            target="_blank"
                            rel="noopener noreferrer"
+                           class="btn-track-17"
                            style="
                                background: linear-gradient(135deg, #10b981, #059669);
                                color: white;
@@ -456,16 +466,19 @@ function renderOrders(orders) {
                                text-decoration: none;
                                display: inline-flex;
                                align-items: center;
+                               justify-content: center;
                                gap: 0.5rem;
                                transition: all 0.2s ease;
                                box-shadow: 0 2px 12px rgba(16, 185, 129, 0.3);
+                               box-sizing: border-box;
                            "
                            onmouseover="this.style.transform='translateY(-2px)'"
                            onmouseout="this.style.transform='translateY(0)'"
                         >
-                            <i class="fas fa-search-location"></i> Seguir en 17TRACK
+                            <i class="fas fa-search-location"></i> <span>Seguir en 17TRACK</span>
                         </a>
                         <button 
+                            class="btn-copy-track"
                             onclick="navigator.clipboard.writeText('${sanitizeHTML(order.trackingNumber)}'); this.querySelector('span').textContent='¡Copiado!'; this.style.background='#22c55e'; this.style.color='white'; setTimeout(() => { this.querySelector('span').textContent='Copiar'; this.style.background='linear-gradient(135deg, #1a1a2e, #8b5cf6)'; this.style.color='white'; }, 2000);"
                             style="
                                 background: linear-gradient(135deg, #1a1a2e, #8b5cf6);
@@ -477,10 +490,12 @@ function renderOrders(orders) {
                                 font-size: 0.85rem;
                                 font-weight: 600;
                                 display: flex;
-                                items-center;
+                                align-items: center;
+                                justify-content: center;
                                 gap: 0.5rem;
                                 transition: all 0.2s ease;
                                 box-shadow: 0 2px 12px rgba(139, 92, 246, 0.25);
+                                box-sizing: border-box;
                             "
                             onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 16px rgba(139, 92, 246, 0.4)'"
                             onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 12px rgba(139, 92, 246, 0.25)'"
@@ -494,10 +509,11 @@ function renderOrders(orders) {
             
             <!-- Edit Address Button (only for pending orders that haven't been edited) -->
             ${normalizedStatus === 'pendiente' && !order.addressEditCount ? `
-                <div style="
+                <div class="order-address-edit-box" style="
                     margin-top: 1.25rem;
                     padding-top: 1rem;
                     border-top: 1px dashed var(--border);
+                    box-sizing: border-box;
                 ">
                     <button 
                         class="edit-order-address-btn"
@@ -513,9 +529,11 @@ function renderOrders(orders) {
                             font-weight: 600;
                             display: inline-flex;
                             align-items: center;
+                            justify-content: center;
                             gap: 0.5rem;
                             transition: all 0.2s ease;
                             box-shadow: 0 2px 12px rgba(99, 102, 241, 0.25);
+                            box-sizing: border-box;
                         "
                         onmouseover="this.style.transform='translateY(-2px)'; this.style.boxShadow='0 4px 16px rgba(99, 102, 241, 0.4)'"
                         onmouseout="this.style.transform='translateY(0)'; this.style.boxShadow='0 2px 12px rgba(99, 102, 241, 0.25)'"
@@ -526,7 +544,7 @@ function renderOrders(orders) {
                 </div>
             ` : ''}
             ${normalizedStatus === 'pendiente' && order.addressEditCount ? `
-                <div style="
+                <div class="order-address-edited-box" style="
                     margin-top: 1rem;
                     padding: 0.5rem 0.75rem;
                     background: rgba(34, 197, 94, 0.1);
@@ -536,6 +554,7 @@ function renderOrders(orders) {
                     display: inline-flex;
                     align-items: center;
                     gap: 0.4rem;
+                    box-sizing: border-box;
                 ">
                     <i class="fas fa-check-circle"></i>
                     Dirección ya editada
