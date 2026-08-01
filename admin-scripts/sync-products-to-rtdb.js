@@ -96,15 +96,13 @@ function getProductOfficialPrice(product) {
 
     const isNBA = product.category === 'nba' || product.league === 'nba';
 
-    if (isNBA || isRetro) {
-        return 24.90;
-    } else if (product.customPatches === 'espana26' && isKids) {
-        return 23.90;
-    } else if (isKids || product.customPatches === 'espana26') {
-        return 21.90;
+    if (isRetro) {
+        return 27.90;
+    } else if (isKids) {
+        return 25.90;
     }
 
-    return 19.90;
+    return 22.90;
 }
 
 // ── Construir el objeto para RTDB ────────────────────────────────────────────

@@ -5,7 +5,8 @@ const products = [
         "name": "Alavés 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Alaves2526L/1.webp"
+        "image": "/assets/productos/La Liga/Alaves2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 102,
@@ -13,7 +14,8 @@ const products = [
         "name": "Albacete 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Albacete2526L/1.webp"
+        "image": "/assets/productos/La Liga/Albacete2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 103,
@@ -22,7 +24,8 @@ const products = [
         "category": "futbol",
         "league": "laliga",
         "image": "/assets/productos/La Liga/AthelticKids2526T/1.webp",
-        "kids": true
+        "kids": true,
+        "price": 25.9
     },
     {
         "id": 104,
@@ -32,8 +35,8 @@ const products = [
         "league": "laliga",
         "image": "/assets/productos/La Liga/Athletic0103FR/1.webp",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 105,
@@ -41,7 +44,8 @@ const products = [
         "name": "Athletic Club 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Athletic2526L/1.webp"
+        "image": "/assets/productos/La Liga/Athletic2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 106,
@@ -51,8 +55,8 @@ const products = [
         "league": "laliga",
         "image": "/assets/productos/La Liga/Atletico0203LR/1.webp",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 107,
@@ -60,7 +64,8 @@ const products = [
         "name": "Atlético Madrid 25/26 Visitante",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Atletico2526F/1.webp"
+        "image": "/assets/productos/La Liga/Atletico2526F/1.webp",
+        "price": 22.9
     },
     {
         "id": 108,
@@ -68,7 +73,8 @@ const products = [
         "name": "Atlético Madrid 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Atletico2526L/1.webp"
+        "image": "/assets/productos/La Liga/Atletico2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 109,
@@ -78,8 +84,8 @@ const products = [
         "league": "laliga",
         "image": "/assets/productos/La Liga/Atletico9596TR/1.webp",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 110,
@@ -88,7 +94,8 @@ const products = [
         "category": "futbol",
         "league": "laliga",
         "image": "/assets/productos/La Liga/AtleticoKids2526F/1.webp",
-        "kids": true
+        "kids": true,
+        "price": 25.9
     },
     {
         "id": 111,
@@ -96,7 +103,8 @@ const products = [
         "name": "FC Barcelona 25/26 Visitante",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Barcelona2526F/1.webp"
+        "image": "/assets/productos/La Liga/Barcelona2526F/1.webp",
+        "price": 22.9
     },
     {
         "id": 112,
@@ -104,7 +112,8 @@ const products = [
         "name": "FC Barcelona 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Barcelona2526L/1.webp"
+        "image": "/assets/productos/La Liga/Barcelona2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 113,
@@ -112,7 +121,8 @@ const products = [
         "name": "FC Barcelona 25/26 Tercera",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Barcelona2526T/1.webp"
+        "image": "/assets/productos/La Liga/Barcelona2526T/1.webp",
+        "price": 22.9
     },
     {
         "id": 114,
@@ -122,8 +132,8 @@ const products = [
         "league": "laliga",
         "image": "/assets/productos/La Liga/Barcelona9697LR/1.webp",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 115,
@@ -131,7 +141,8 @@ const products = [
         "name": "Real Betis 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Betis2526L/1.webp"
+        "image": "/assets/productos/La Liga/Betis2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 116,
@@ -139,7 +150,8 @@ const products = [
         "name": "Celta de Vigo 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Celta2526L/1.webp"
+        "image": "/assets/productos/La Liga/Celta2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 117,
@@ -147,7 +159,8 @@ const products = [
         "name": "Elche 25/26 Visitante",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Elche2526F/1.webp"
+        "image": "/assets/productos/La Liga/Elche2526F/1.webp",
+        "price": 22.9
     },
     {
         "id": 119,
@@ -157,8 +170,8 @@ const products = [
         "league": "laliga",
         "image": "/assets/productos/La Liga/Espanyol9920LR/1.webp",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 120,
@@ -166,7 +179,8 @@ const products = [
         "name": "Getafe 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Getafe2526L/1.webp"
+        "image": "/assets/productos/La Liga/Getafe2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 121,
@@ -174,7 +188,8 @@ const products = [
         "name": "Girona 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Girona2526L/1.webp"
+        "image": "/assets/productos/La Liga/Girona2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 122,
@@ -182,7 +197,8 @@ const products = [
         "name": "Granada 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Granada2526L/1.webp"
+        "image": "/assets/productos/La Liga/Granada2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 123,
@@ -190,7 +206,8 @@ const products = [
         "name": "Las Palmas 25/26 Visitante",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/LasPalmas2526F/1.webp"
+        "image": "/assets/productos/La Liga/LasPalmas2526F/1.webp",
+        "price": 22.9
     },
     {
         "id": 124,
@@ -198,7 +215,8 @@ const products = [
         "name": "Las Palmas 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/LasPalmas2526L/1.webp"
+        "image": "/assets/productos/La Liga/LasPalmas2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 125,
@@ -206,7 +224,8 @@ const products = [
         "name": "Leganés 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Leganes2526L/1.webp"
+        "image": "/assets/productos/La Liga/Leganes2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 126,
@@ -214,7 +233,8 @@ const products = [
         "name": "Levante 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Levante2526L/1.webp"
+        "image": "/assets/productos/La Liga/Levante2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 127,
@@ -222,7 +242,8 @@ const products = [
         "name": "Málaga CF 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Malaga2526L/1.webp"
+        "image": "/assets/productos/La Liga/Malaga2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 128,
@@ -231,7 +252,8 @@ const products = [
         "category": "futbol",
         "league": "laliga",
         "image": "/assets/productos/La Liga/MalagaKids2526L/1.webp",
-        "kids": true
+        "kids": true,
+        "price": 25.9
     },
     {
         "id": 129,
@@ -239,7 +261,8 @@ const products = [
         "name": "Mallorca 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Mallorca2526L/1.webp"
+        "image": "/assets/productos/La Liga/Mallorca2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 130,
@@ -247,7 +270,8 @@ const products = [
         "name": "Osasuna 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Osasuna2526L/1.webp"
+        "image": "/assets/productos/La Liga/Osasuna2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 131,
@@ -255,7 +279,8 @@ const products = [
         "name": "Real Oviedo 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Oviedo2526L/1.webp"
+        "image": "/assets/productos/La Liga/Oviedo2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 133,
@@ -263,7 +288,8 @@ const products = [
         "name": "Real Madrid 25/26 Visitante",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/RealMadrid2526F/1.webp"
+        "image": "/assets/productos/La Liga/RealMadrid2526F/1.webp",
+        "price": 22.9
     },
     {
         "id": 134,
@@ -271,7 +297,8 @@ const products = [
         "name": "Real Madrid 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/RealMadrid2526L/1.webp"
+        "image": "/assets/productos/La Liga/RealMadrid2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 135,
@@ -279,7 +306,8 @@ const products = [
         "name": "Real Madrid 25/26 Tercera",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/RealMadrid2526T/1.webp"
+        "image": "/assets/productos/La Liga/RealMadrid2526T/1.webp",
+        "price": 22.9
     },
     {
         "id": 136,
@@ -287,7 +315,8 @@ const products = [
         "name": "Real Sociedad 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/RealSociedad2526L/1.webp"
+        "image": "/assets/productos/La Liga/RealSociedad2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 137,
@@ -295,7 +324,8 @@ const products = [
         "name": "Sevilla 25/26 Visitante",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Sevilla2526F/1.webp"
+        "image": "/assets/productos/La Liga/Sevilla2526F/1.webp",
+        "price": 22.9
     },
     {
         "id": 138,
@@ -303,7 +333,8 @@ const products = [
         "name": "Sevilla 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Sevilla2526L/1.webp"
+        "image": "/assets/productos/La Liga/Sevilla2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 139,
@@ -311,7 +342,8 @@ const products = [
         "name": "Sevilla 25/26 Tercera",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Sevilla2526T/1.webp"
+        "image": "/assets/productos/La Liga/Sevilla2526T/1.webp",
+        "price": 22.9
     },
     {
         "id": 140,
@@ -319,7 +351,8 @@ const products = [
         "name": "Valencia 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Valencia2526L/1.webp"
+        "image": "/assets/productos/La Liga/Valencia2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 141,
@@ -327,7 +360,8 @@ const products = [
         "name": "Valladolid 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Valladolid2526L/1.webp"
+        "image": "/assets/productos/La Liga/Valladolid2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 142,
@@ -335,7 +369,8 @@ const products = [
         "name": "Villarreal 25/26 Local",
         "category": "futbol",
         "league": "laliga",
-        "image": "/assets/productos/La Liga/Villarreal2526L/1.webp"
+        "image": "/assets/productos/La Liga/Villarreal2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 201,
@@ -343,7 +378,8 @@ const products = [
         "name": "Arsenal 25/26 Local",
         "category": "futbol",
         "league": "premier",
-        "image": "/assets/productos/Premier League/Arsenal2525L/1.webp"
+        "image": "/assets/productos/Premier League/Arsenal2525L/1.webp",
+        "price": 22.9
     },
     {
         "id": 202,
@@ -351,7 +387,8 @@ const products = [
         "name": "Arsenal 25/26 Visitante",
         "category": "futbol",
         "league": "premier",
-        "image": "/assets/productos/Premier League/Arsenal2526F/1.webp"
+        "image": "/assets/productos/Premier League/Arsenal2526F/1.webp",
+        "price": 22.9
     },
     {
         "id": 203,
@@ -359,7 +396,8 @@ const products = [
         "name": "Aston Villa 25/26 Visitante",
         "category": "futbol",
         "league": "premier",
-        "image": "/assets/productos/Premier League/AstonVilla2526L/1.webp"
+        "image": "/assets/productos/Premier League/AstonVilla2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 204,
@@ -367,7 +405,8 @@ const products = [
         "name": "Chelsea 25/26 Local",
         "category": "futbol",
         "league": "premier",
-        "image": "/assets/productos/Premier League/Chealsea2526L/1.webp"
+        "image": "/assets/productos/Premier League/Chealsea2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 205,
@@ -375,7 +414,8 @@ const products = [
         "name": "Crystal Palace 25/26 Local",
         "category": "futbol",
         "league": "premier",
-        "image": "/assets/productos/Premier League/CrystalPalace2526L/1.webp"
+        "image": "/assets/productos/Premier League/CrystalPalace2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 206,
@@ -383,7 +423,8 @@ const products = [
         "name": "Manchester City 25/26 Visitante",
         "category": "futbol",
         "league": "premier",
-        "image": "/assets/productos/Premier League/ManCity2526F/1.webp"
+        "image": "/assets/productos/Premier League/ManCity2526F/1.webp",
+        "price": 22.9
     },
     {
         "id": 207,
@@ -391,7 +432,8 @@ const products = [
         "name": "Manchester United 25/26 Local",
         "category": "futbol",
         "league": "premier",
-        "image": "/assets/productos/Premier League/ManUnited2526L/1.webp"
+        "image": "/assets/productos/Premier League/ManUnited2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 208,
@@ -399,7 +441,8 @@ const products = [
         "name": "Newcastle 25/26 Local",
         "category": "futbol",
         "league": "premier",
-        "image": "/assets/productos/Premier League/Newcastle2526L/1.webp"
+        "image": "/assets/productos/Premier League/Newcastle2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 209,
@@ -408,7 +451,8 @@ const products = [
         "category": "futbol",
         "league": "premier",
         "image": "/assets/productos/Premier League/UnitedKids2526F/1.webp",
-        "kids": true
+        "kids": true,
+        "price": 25.9
     },
     {
         "id": 301,
@@ -416,7 +460,8 @@ const products = [
         "name": "Lazio 25/26 Visitante",
         "category": "futbol",
         "league": "seriea",
-        "image": "/assets/productos/Serie A/Lazio2526F/1.webp"
+        "image": "/assets/productos/Serie A/Lazio2526F/1.webp",
+        "price": 22.9
     },
     {
         "id": 302,
@@ -426,8 +471,8 @@ const products = [
         "league": "seriea",
         "image": "/assets/productos/Serie A/Milan9798LR/1.webp",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 303,
@@ -435,7 +480,8 @@ const products = [
         "name": "Napoli 25/26 Local",
         "category": "futbol",
         "league": "seriea",
-        "image": "/assets/productos/Serie A/Napoli2526L/1.webp"
+        "image": "/assets/productos/Serie A/Napoli2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 304,
@@ -444,7 +490,8 @@ const products = [
         "category": "futbol",
         "league": "seriea",
         "image": "/assets/productos/Serie A/RomaKids2526L/1.webp",
-        "kids": true
+        "kids": true,
+        "price": 25.9
     },
     {
         "id": 401,
@@ -452,7 +499,8 @@ const products = [
         "name": "Bayern Munich 25/26 Local",
         "category": "futbol",
         "league": "bundesliga",
-        "image": "/assets/productos/Bundesliga/Munich2526L/1.webp"
+        "image": "/assets/productos/Bundesliga/Munich2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 402,
@@ -460,7 +508,8 @@ const products = [
         "name": "Schalke 04 25/26 Local",
         "category": "futbol",
         "league": "bundesliga",
-        "image": "/assets/productos/Bundesliga/Schalke2526L/1.webp"
+        "image": "/assets/productos/Bundesliga/Schalke2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 501,
@@ -469,7 +518,8 @@ const products = [
         "category": "futbol",
         "league": "ligue1",
         "image": "/assets/productos/Ligue 1/MarseillaKids2526F/1.webp",
-        "kids": true
+        "kids": true,
+        "price": 25.9
     },
     {
         "id": 502,
@@ -477,7 +527,8 @@ const products = [
         "name": "Monaco 25/26 Visitante",
         "category": "futbol",
         "league": "ligue1",
-        "image": "/assets/productos/Ligue 1/Monaco2526F/1.webp"
+        "image": "/assets/productos/Ligue 1/Monaco2526F/1.webp",
+        "price": 22.9
     },
     {
         "id": 503,
@@ -485,7 +536,8 @@ const products = [
         "name": "PSG 25/26 Local",
         "category": "futbol",
         "league": "ligue1",
-        "image": "/assets/productos/Ligue 1/Paris2526L/1.webp"
+        "image": "/assets/productos/Ligue 1/Paris2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 504,
@@ -493,7 +545,8 @@ const products = [
         "name": "PSG 25/26 Tercera",
         "category": "futbol",
         "league": "ligue1",
-        "image": "/assets/productos/Ligue 1/PSG2526T/1.webp"
+        "image": "/assets/productos/Ligue 1/PSG2526T/1.webp",
+        "price": 22.9
     },
     {
         "id": 601,
@@ -503,8 +556,8 @@ const products = [
         "league": "selecciones",
         "image": "/assets/productos/Internacional/España0809LR/1.webp",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 602,
@@ -512,7 +565,8 @@ const products = [
         "name": "España 24/25 Local",
         "category": "futbol",
         "league": "selecciones",
-        "image": "/assets/productos/Internacional/España2425L/1.webp"
+        "image": "/assets/productos/Internacional/España2425L/1.webp",
+        "price": 22.9
     },
     {
         "id": 603,
@@ -522,8 +576,8 @@ const products = [
         "league": "selecciones",
         "image": "/assets/productos/Internacional/Francia9899LR/1.webp",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 604,
@@ -533,8 +587,8 @@ const products = [
         "league": "selecciones",
         "image": "/assets/productos/Internacional/Holanda9899LR/1.webp",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 551,
@@ -542,7 +596,8 @@ const products = [
         "name": "Flamengo 25/26 Tercera",
         "category": "futbol",
         "league": "brasileirao",
-        "image": "/assets/productos/Brasileirão Série A/Flamengo2526T/1.webp"
+        "image": "/assets/productos/Brasileirão Série A/Flamengo2526T/1.webp",
+        "price": 22.9
     },
     {
         "id": 561,
@@ -550,7 +605,8 @@ const products = [
         "name": "Al-Nassr 25/26 Local",
         "category": "futbol",
         "league": "ligaarabe",
-        "image": "/assets/productos/Liga Arabe/Al-Nassr2526L/1.webp"
+        "image": "/assets/productos/Liga Arabe/Al-Nassr2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 571,
@@ -560,8 +616,8 @@ const products = [
         "league": "saf",
         "image": "/assets/productos/SAF (Argentina)/Boca0102LR/1.webp",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 572,
@@ -569,7 +625,8 @@ const products = [
         "name": "River Plate 25/26 Local",
         "category": "futbol",
         "league": "saf",
-        "image": "/assets/productos/SAF (Argentina)/River2526L/1.webp"
+        "image": "/assets/productos/SAF (Argentina)/River2526L/1.webp",
+        "price": 22.9
     },
     {
         "id": 573,
@@ -578,7 +635,8 @@ const products = [
         "category": "futbol",
         "league": "saf",
         "image": "/assets/productos/SAF (Argentina)/RiverKids2526L/1.webp",
-        "kids": true
+        "kids": true,
+        "price": 25.9
     },
     {
         "id": 701,
@@ -586,7 +644,8 @@ const products = [
         "name": "Lakers 25/26 Local",
         "category": "nba",
         "league": "nba",
-        "image": "/assets/productos/NBA/Lakers1/1.webp"
+        "image": "/assets/productos/NBA/Lakers1/1.webp",
+        "price": 22.9
     },
     {
         "id": 702,
@@ -594,7 +653,8 @@ const products = [
         "name": "Oklahoma City Thunder",
         "category": "nba",
         "league": "nba",
-        "image": "/assets/productos/NBA/Oklahoma/1.webp"
+        "image": "/assets/productos/NBA/Oklahoma/1.webp",
+        "price": 22.9
     },
     {
         "id": 703,
@@ -602,7 +662,8 @@ const products = [
         "name": "Philadelphia 76ers",
         "category": "nba",
         "league": "nba",
-        "image": "/assets/productos/NBA/Phila1/1.webp"
+        "image": "/assets/productos/NBA/Phila1/1.webp",
+        "price": 22.9
     },
     {
         "id": 937715,
@@ -641,7 +702,8 @@ const products = [
             "/assets/productos/Yupoo/216419940/2.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 948475,
@@ -654,7 +716,8 @@ const products = [
             "/assets/productos/Yupoo/216806487/2.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 892563,
@@ -753,7 +816,8 @@ const products = [
             "/assets/productos/Yupoo/207558615/9.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 811678,
@@ -832,8 +896,8 @@ const products = [
         ],
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 385774,
@@ -873,7 +937,8 @@ const products = [
             "/assets/productos/Yupoo/200370927/8.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 489081,
@@ -893,8 +958,8 @@ const products = [
         ],
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 891737,
@@ -933,8 +998,8 @@ const products = [
         "temporada": "97/98",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 745212,
@@ -955,8 +1020,8 @@ const products = [
         "temporada": "09/10",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 144708,
@@ -976,8 +1041,8 @@ const products = [
         ],
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 294032,
@@ -1028,7 +1093,8 @@ const products = [
         "images": [
             "/assets/productos/Yupoo/218139532/2.webp"
         ],
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 431137,
@@ -1040,7 +1106,8 @@ const products = [
         "images": [
             "/assets/productos/Yupoo/218138743/2.webp"
         ],
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 238510,
@@ -1066,7 +1133,8 @@ const products = [
             "/assets/productos/Yupoo/216806586/2.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 729212,
@@ -1079,7 +1147,8 @@ const products = [
             "/assets/productos/Yupoo/216806631/2.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 984139,
@@ -1155,7 +1224,8 @@ const products = [
             "/assets/productos/Yupoo/216441953/2.webp"
         ],
         "temporada": "2026",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 851677,
@@ -1181,7 +1251,8 @@ const products = [
             "/assets/productos/Yupoo/216423781/2.webp"
         ],
         "temporada": "26/27",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 523301,
@@ -1258,7 +1329,8 @@ const products = [
             "/assets/productos/Yupoo/212532108/2.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 637422,
@@ -1296,7 +1368,8 @@ const products = [
             "/assets/productos/Yupoo/211519500/8.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 638151,
@@ -1315,8 +1388,8 @@ const products = [
         "temporada": "00/01",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 829143,
@@ -1335,8 +1408,8 @@ const products = [
         "temporada": "2008",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 861810,
@@ -1355,8 +1428,8 @@ const products = [
         "temporada": "2004",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 740108,
@@ -1376,8 +1449,8 @@ const products = [
         "temporada": "2004",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 431236,
@@ -1475,7 +1548,8 @@ const products = [
             "/assets/productos/Yupoo/219490303/2.webp"
         ],
         "temporada": "2026",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 122777,
@@ -1501,7 +1575,8 @@ const products = [
             "/assets/productos/Yupoo/219490239/2.webp"
         ],
         "temporada": "2026",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 935379,
@@ -1542,7 +1617,8 @@ const products = [
             "/assets/productos/Yupoo/219462514/2.webp"
         ],
         "temporada": "2026",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 623155,
@@ -1568,7 +1644,8 @@ const products = [
             "/assets/productos/Yupoo/218139468/2.webp"
         ],
         "temporada": "2026",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 381663,
@@ -1581,7 +1658,8 @@ const products = [
             "/assets/productos/Yupoo/218139206/2.webp"
         ],
         "temporada": "2026",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 433188,
@@ -1594,7 +1672,8 @@ const products = [
             "/assets/productos/Yupoo/216806220/2.webp"
         ],
         "temporada": "2025",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 448046,
@@ -1619,7 +1698,8 @@ const products = [
             "/assets/productos/Yupoo/216442420/2.webp"
         ],
         "temporada": "2026",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 711830,
@@ -1645,7 +1725,8 @@ const products = [
             "/assets/productos/Yupoo/216442560/1.webp"
         ],
         "temporada": "2026",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 670833,
@@ -1691,8 +1772,8 @@ const products = [
         ],
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 553992,
@@ -1713,8 +1794,8 @@ const products = [
         "temporada": "90/91",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 484880,
@@ -1735,8 +1816,8 @@ const products = [
         "temporada": "02/03",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 113368,
@@ -1758,8 +1839,8 @@ const products = [
         "temporada": "10/11",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 497909,
@@ -1816,7 +1897,8 @@ const products = [
             "/assets/productos/Yupoo/207557639/8.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 744047,
@@ -1832,7 +1914,8 @@ const products = [
             "/assets/productos/Yupoo/207450991/5.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 255670,
@@ -1853,8 +1936,8 @@ const products = [
         "temporada": "97/98",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 178706,
@@ -1872,8 +1955,8 @@ const products = [
         "temporada": "97/98",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 155990,
@@ -1889,7 +1972,8 @@ const products = [
             "/assets/productos/Yupoo/204720362/5.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 776038,
@@ -1944,7 +2028,8 @@ const products = [
             "/assets/productos/Yupoo/204718775/6.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 762229,
@@ -1961,7 +2046,8 @@ const products = [
             "/assets/productos/Yupoo/203703113/6.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 676633,
@@ -2012,7 +2098,8 @@ const products = [
             "/assets/productos/Yupoo/203701618/5.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 464510,
@@ -2044,7 +2131,8 @@ const products = [
             "/assets/productos/Yupoo/202779885/5.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 959227,
@@ -2092,7 +2180,8 @@ const products = [
             "/assets/productos/Yupoo/202779313/5.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 218012,
@@ -2120,7 +2209,8 @@ const products = [
             "/assets/productos/Yupoo/202778698/4.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 899447,
@@ -2135,7 +2225,8 @@ const products = [
             "/assets/productos/Yupoo/202778041/4.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 385548,
@@ -2166,8 +2257,8 @@ const products = [
         "temporada": "17/18",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 608983,
@@ -2184,8 +2275,8 @@ const products = [
         "temporada": "19/20",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 529738,
@@ -2201,8 +2292,8 @@ const products = [
         "temporada": "2019/20",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 457426,
@@ -2217,7 +2308,8 @@ const products = [
             "/assets/productos/Yupoo/201350547/4.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 903135,
@@ -2293,8 +2385,8 @@ const products = [
         "temporada": "99/00",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 592754,
@@ -2323,7 +2415,8 @@ const products = [
             "/assets/productos/Yupoo/197577020/3.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 100332,
@@ -2340,8 +2433,8 @@ const products = [
         "temporada": "14/15",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 302194,
@@ -2400,8 +2493,8 @@ const products = [
         "temporada": "13/14",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 625429,
@@ -2457,7 +2550,8 @@ const products = [
             "/assets/productos/Yupoo/192259967/3.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 224087,
@@ -2474,8 +2568,8 @@ const products = [
         "temporada": "00/01",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 833095,
@@ -2491,8 +2585,8 @@ const products = [
         ],
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 635969,
@@ -2509,8 +2603,8 @@ const products = [
         "temporada": "95/96",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 945452,
@@ -2527,8 +2621,8 @@ const products = [
         "temporada": "13/14",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 588525,
@@ -2543,8 +2637,8 @@ const products = [
         ],
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 766126,
@@ -2560,8 +2654,8 @@ const products = [
         ],
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 523343,
@@ -2578,8 +2672,8 @@ const products = [
         "temporada": "17/18",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 348972,
@@ -2596,8 +2690,8 @@ const products = [
         "temporada": "2000",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 167625,
@@ -2612,8 +2706,8 @@ const products = [
         ],
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 419589,
@@ -2628,8 +2722,8 @@ const products = [
         ],
         "temporada": "2007",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 938026,
@@ -2646,8 +2740,8 @@ const products = [
         "temporada": "16/17",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 769552,
@@ -2664,8 +2758,8 @@ const products = [
         "temporada": "17/18",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 820529,
@@ -2681,8 +2775,8 @@ const products = [
         "temporada": "09/10",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 736040,
@@ -2698,8 +2792,8 @@ const products = [
         "temporada": "13/14",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 497972,
@@ -2715,8 +2809,8 @@ const products = [
         "temporada": "08/09",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 421151,
@@ -2731,8 +2825,8 @@ const products = [
         "temporada": "12/13",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 351350,
@@ -2773,8 +2867,8 @@ const products = [
         "temporada": "88/89",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 379818,
@@ -2789,8 +2883,8 @@ const products = [
         "temporada": "86/87",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 506078,
@@ -2804,8 +2898,8 @@ const products = [
         ],
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 570007,
@@ -2820,8 +2914,8 @@ const products = [
         "temporada": "12/13",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 835385,
@@ -2836,8 +2930,8 @@ const products = [
         "temporada": "16/17",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 228891,
@@ -2852,8 +2946,8 @@ const products = [
         "temporada": "82/83",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 483007,
@@ -2880,8 +2974,8 @@ const products = [
         "temporada": "14/15",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 552798,
@@ -2896,8 +2990,8 @@ const products = [
         "temporada": "14/15",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 900814,
@@ -2912,8 +3006,8 @@ const products = [
         "temporada": "17/18",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 992598,
@@ -2928,8 +3022,8 @@ const products = [
         "temporada": "13/14",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 422613,
@@ -2944,8 +3038,8 @@ const products = [
         "temporada": "11/12",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 487998,
@@ -2960,8 +3054,8 @@ const products = [
         "temporada": "95/96",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 798155,
@@ -2976,8 +3070,8 @@ const products = [
         "temporada": "17/18",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 804311,
@@ -2992,8 +3086,8 @@ const products = [
         "temporada": "12/13",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 501778,
@@ -3049,7 +3143,8 @@ const products = [
             "/assets/productos/Yupoo/210323914/3.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 716949,
@@ -3076,7 +3171,8 @@ const products = [
             "/assets/productos/Yupoo/201349993/4.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 728985,
@@ -3089,7 +3185,8 @@ const products = [
             "/assets/productos/Yupoo/219700516/2.webp"
         ],
         "temporada": "2026",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 384796,
@@ -3104,8 +3201,8 @@ const products = [
         "tipo": "local",
         "retro": true,
         "temporada": "87/89",
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 154366,
@@ -3120,7 +3217,8 @@ const products = [
             "/assets/productos/Yupoo/211234031/4.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 894216,
@@ -3149,7 +3247,8 @@ const products = [
             "/assets/productos/Yupoo/187746737/4.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 570882,
@@ -3177,7 +3276,8 @@ const products = [
             "/assets/productos/Yupoo/187764069/3.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 128909,
@@ -3191,7 +3291,8 @@ const products = [
             "/assets/productos/Yupoo/187670662/3.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 703398,
@@ -3219,7 +3320,8 @@ const products = [
         ],
         "temporada": "25/26",
         "tipo": "local",
-        "kids": true
+        "kids": true,
+        "price": 25.9
     },
     {
         "id": 866849,
@@ -3234,7 +3336,8 @@ const products = [
         ],
         "temporada": "25/26",
         "tipo": "visitante",
-        "kids": true
+        "kids": true,
+        "price": 25.9
     },
     {
         "id": 974000,
@@ -3274,7 +3377,8 @@ const products = [
             "/assets/productos/Yupoo/214401561/2.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 821734,
@@ -3287,7 +3391,8 @@ const products = [
             "/assets/productos/Yupoo/821734/2.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 884672,
@@ -3302,8 +3407,8 @@ const products = [
         "temporada": "94/95",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 333660,
@@ -3319,8 +3424,8 @@ const products = [
         "temporada": "98/99",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 771897,
@@ -3336,8 +3441,8 @@ const products = [
         "temporada": "95/96",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 253296,
@@ -3369,7 +3474,8 @@ const products = [
             "/assets/productos/Yupoo/449990/4.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 510415,
@@ -3385,7 +3491,8 @@ const products = [
             "/assets/productos/Yupoo/510415/4.webp"
         ],
         "temporada": "25/26",
-        "tipo": "local"
+        "tipo": "local",
+        "price": 22.9
     },
     {
         "id": 329742,
@@ -3432,8 +3539,8 @@ const products = [
         "temporada": "2004/06",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 261613,
@@ -3449,8 +3556,8 @@ const products = [
         "temporada": "2002",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 646982,
@@ -3466,8 +3573,8 @@ const products = [
         "temporada": "96/98",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 198265,
@@ -3540,8 +3647,8 @@ const products = [
         ],
         "temporada": "25/26",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 297890,
@@ -3556,8 +3663,8 @@ const products = [
         ],
         "temporada": "25/26",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 268041,
@@ -3588,8 +3695,8 @@ const products = [
         "temporada": "99/00",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 533758,
@@ -3604,8 +3711,8 @@ const products = [
         ],
         "temporada": "25/26",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 180045,
@@ -3621,8 +3728,8 @@ const products = [
         "temporada": "26/27",
         "tipo": "especial",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 847286,
@@ -3718,8 +3825,8 @@ const products = [
         "temporada": "2026",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 317637,
@@ -4213,8 +4320,8 @@ const products = [
         "temporada": "2026",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 563901,
@@ -4230,8 +4337,8 @@ const products = [
         "temporada": "25/26",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 523499,
@@ -4247,8 +4354,8 @@ const products = [
         "temporada": "2026",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 990675,
@@ -4264,8 +4371,8 @@ const products = [
         "temporada": "25/26",
         "tipo": "tercera",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 814013,
@@ -4297,8 +4404,8 @@ const products = [
         "temporada": "25/26",
         "tipo": "tercera",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 252503,
@@ -4314,8 +4421,8 @@ const products = [
         "temporada": "25/26",
         "tipo": "tercera",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 377650,
@@ -4331,8 +4438,8 @@ const products = [
         "temporada": "25/26",
         "tipo": "especial",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 706760,
@@ -4364,8 +4471,8 @@ const products = [
         "temporada": "05/06",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 147598,
@@ -4381,8 +4488,8 @@ const products = [
         "temporada": "91/92",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 969981,
@@ -4398,8 +4505,8 @@ const products = [
         "temporada": "13/14",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 759888,
@@ -4415,8 +4522,8 @@ const products = [
         "temporada": "16/17",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 158326,
@@ -4432,8 +4539,8 @@ const products = [
         "temporada": "15/16",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 549819,
@@ -4449,8 +4556,8 @@ const products = [
         "temporada": "88/89",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 641466,
@@ -4466,8 +4573,8 @@ const products = [
         "temporada": "100 Años",
         "tipo": "especial",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 236719,
@@ -4482,8 +4589,8 @@ const products = [
         ],
         "temporada": "2012",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 439096,
@@ -4514,8 +4621,8 @@ const products = [
         "temporada": "03/04",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 801872,
@@ -4531,8 +4638,8 @@ const products = [
         "temporada": "02/03",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 230310,
@@ -4548,8 +4655,8 @@ const products = [
         "temporada": "08/09",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 625043,
@@ -4565,8 +4672,8 @@ const products = [
         "temporada": "17/18",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 107803,
@@ -4581,8 +4688,8 @@ const products = [
         ],
         "tipo": "especial",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 433942,
@@ -4613,8 +4720,8 @@ const products = [
         "temporada": "13/14",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 324452,
@@ -4630,8 +4737,8 @@ const products = [
         "temporada": "16/17",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 248925,
@@ -4677,8 +4784,8 @@ const products = [
         "temporada": "01/02",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 335092,
@@ -4694,8 +4801,8 @@ const products = [
         "temporada": "25/26",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 464890,
@@ -4711,8 +4818,8 @@ const products = [
         "temporada": "25/26",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 916354,
@@ -4728,8 +4835,8 @@ const products = [
         "temporada": "25/26",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 166157,
@@ -4745,8 +4852,8 @@ const products = [
         "temporada": "03/04",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 913969,
@@ -4777,8 +4884,8 @@ const products = [
         ],
         "temporada": "99/01",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 104722,
@@ -4794,8 +4901,8 @@ const products = [
         "temporada": "94/95",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 867636,
@@ -4811,8 +4918,8 @@ const products = [
         "temporada": "08/09",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 287248,
@@ -4827,8 +4934,8 @@ const products = [
         ],
         "tipo": "especial",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 607126,
@@ -4843,8 +4950,8 @@ const products = [
         ],
         "temporada": "01/02",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 852968,
@@ -4860,8 +4967,8 @@ const products = [
         "temporada": "13/14",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 394589,
@@ -4876,8 +4983,8 @@ const products = [
         ],
         "temporada": "96/97",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 876734,
@@ -4893,8 +5000,8 @@ const products = [
         "temporada": "00/02",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 452233,
@@ -4910,8 +5017,8 @@ const products = [
         "temporada": "99/00",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 287367,
@@ -4927,8 +5034,8 @@ const products = [
         "temporada": "15/16",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 611733,
@@ -4944,8 +5051,8 @@ const products = [
         "temporada": "13/14",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 141113,
@@ -4961,8 +5068,8 @@ const products = [
         "temporada": "04/05",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 776162,
@@ -4978,8 +5085,8 @@ const products = [
         "temporada": "95/96",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 425592,
@@ -4995,8 +5102,8 @@ const products = [
         "temporada": "96/97",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 179185,
@@ -5012,8 +5119,8 @@ const products = [
         "temporada": "99/00",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 599986,
@@ -5029,8 +5136,8 @@ const products = [
         "temporada": "91/92",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 191376,
@@ -5046,8 +5153,8 @@ const products = [
         "temporada": "99/00",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 766701,
@@ -5063,8 +5170,8 @@ const products = [
         "temporada": "99/00",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 161669,
@@ -5080,8 +5187,8 @@ const products = [
         "temporada": "91/92",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 169673,
@@ -5097,8 +5204,8 @@ const products = [
         "temporada": "03/04",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 746921,
@@ -5114,8 +5221,8 @@ const products = [
         "temporada": "99/00",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 726662,
@@ -5131,8 +5238,8 @@ const products = [
         "temporada": "06/07",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 859362,
@@ -5148,8 +5255,8 @@ const products = [
         "temporada": "01/02",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 489145,
@@ -5165,8 +5272,8 @@ const products = [
         "temporada": "05/06",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 440521,
@@ -5182,8 +5289,8 @@ const products = [
         "temporada": "06/07",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 943783,
@@ -5199,8 +5306,8 @@ const products = [
         "temporada": "04/05",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 304790,
@@ -5216,8 +5323,8 @@ const products = [
         "temporada": "84/85",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 370729,
@@ -5233,8 +5340,8 @@ const products = [
         "temporada": "99/00",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 879366,
@@ -5250,8 +5357,8 @@ const products = [
         "temporada": "80/82",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 817935,
@@ -5267,8 +5374,8 @@ const products = [
         "temporada": "87/90",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 766100,
@@ -5284,8 +5391,8 @@ const products = [
         "temporada": "15/16",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 961239,
@@ -5301,8 +5408,8 @@ const products = [
         "temporada": "03/04",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 541195,
@@ -5318,8 +5425,8 @@ const products = [
         "temporada": "98/99",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 589281,
@@ -5335,8 +5442,8 @@ const products = [
         "temporada": "82/84",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 227422,
@@ -5352,8 +5459,8 @@ const products = [
         "temporada": "01/02",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 630514,
@@ -5369,8 +5476,8 @@ const products = [
         "temporada": "83/84",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 560588,
@@ -5385,8 +5492,8 @@ const products = [
         ],
         "temporada": "99/00",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 433590,
@@ -5401,8 +5508,8 @@ const products = [
         ],
         "temporada": "06/07",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 497234,
@@ -5418,8 +5525,8 @@ const products = [
         "temporada": "01/02",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 604843,
@@ -5451,8 +5558,8 @@ const products = [
         "temporada": "95/96",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 620756,
@@ -5468,8 +5575,8 @@ const products = [
         "temporada": "02/03",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 577751,
@@ -5485,8 +5592,8 @@ const products = [
         "temporada": "93/94",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 989871,
@@ -5502,8 +5609,8 @@ const products = [
         "temporada": "99/00",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 177863,
@@ -5519,8 +5626,8 @@ const products = [
         "temporada": "96/97",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 807936,
@@ -5536,8 +5643,8 @@ const products = [
         "temporada": "90/91",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 263214,
@@ -5553,8 +5660,8 @@ const products = [
         "temporada": "95/96",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 197130,
@@ -5569,8 +5676,8 @@ const products = [
         ],
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 637180,
@@ -5585,8 +5692,8 @@ const products = [
         ],
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 317176,
@@ -5602,8 +5709,8 @@ const products = [
         "temporada": "92/93",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 725231,
@@ -5619,8 +5726,8 @@ const products = [
         "temporada": "92/93",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 197135,
@@ -5636,8 +5743,8 @@ const products = [
         "temporada": "07/08",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 868957,
@@ -5653,8 +5760,8 @@ const products = [
         "temporada": "03/04",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 570309,
@@ -5670,8 +5777,8 @@ const products = [
         "temporada": "1993",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 188307,
@@ -5687,8 +5794,8 @@ const products = [
         "temporada": "93/94",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 317006,
@@ -5704,8 +5811,8 @@ const products = [
         "temporada": "84/89",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 616348,
@@ -5721,8 +5828,8 @@ const products = [
         "temporada": "00/01",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 287045,
@@ -5738,8 +5845,8 @@ const products = [
         "temporada": "98/99",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 731682,
@@ -5755,8 +5862,8 @@ const products = [
         "temporada": "94/95",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 347048,
@@ -5772,8 +5879,8 @@ const products = [
         "temporada": "1982",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 555954,
@@ -5789,8 +5896,8 @@ const products = [
         "temporada": "2011",
         "tipo": "portero",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 880454,
@@ -5806,8 +5913,8 @@ const products = [
         "temporada": "2011",
         "tipo": "portero",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 925722,
@@ -5823,8 +5930,8 @@ const products = [
         "temporada": "2001",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 836996,
@@ -5840,8 +5947,8 @@ const products = [
         "temporada": "94/95",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 874744,
@@ -5857,8 +5964,8 @@ const products = [
         "temporada": "95/97",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 618215,
@@ -5874,8 +5981,8 @@ const products = [
         "temporada": "2002",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 559147,
@@ -5891,8 +5998,8 @@ const products = [
         "temporada": "1998",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 422685,
@@ -5907,8 +6014,8 @@ const products = [
         ],
         "temporada": "93/94",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 514408,
@@ -5924,8 +6031,8 @@ const products = [
         "temporada": "2009",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 563822,
@@ -5941,8 +6048,8 @@ const products = [
         "temporada": "97/98",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 992702,
@@ -5974,8 +6081,8 @@ const products = [
         "temporada": "2026",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 925637,
@@ -6023,8 +6130,8 @@ const products = [
         "temporada": "2010",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 411202,
@@ -6040,8 +6147,8 @@ const products = [
         "temporada": "1998",
         "tipo": "portero",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 373336,
@@ -6057,8 +6164,8 @@ const products = [
         "temporada": "05/06",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 590091,
@@ -6074,8 +6181,8 @@ const products = [
         "temporada": "2000",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 242200,
@@ -6091,8 +6198,8 @@ const products = [
         "temporada": "1994",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 225756,
@@ -6108,8 +6215,8 @@ const products = [
         "temporada": "2006",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 709296,
@@ -6125,8 +6232,8 @@ const products = [
         "temporada": "1998",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 633640,
@@ -6142,8 +6249,8 @@ const products = [
         "temporada": "2014",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 322496,
@@ -6159,8 +6266,8 @@ const products = [
         "temporada": "1998",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 719782,
@@ -6176,8 +6283,8 @@ const products = [
         "temporada": "2014",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 207729,
@@ -6193,8 +6300,8 @@ const products = [
         "temporada": "2000",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 631464,
@@ -6210,8 +6317,8 @@ const products = [
         "temporada": "2004",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 415446,
@@ -6227,8 +6334,8 @@ const products = [
         "temporada": "2000",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 871038,
@@ -6244,8 +6351,8 @@ const products = [
         "temporada": "2000",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 983832,
@@ -6261,8 +6368,8 @@ const products = [
         "temporada": "2006",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 412045,
@@ -6278,8 +6385,8 @@ const products = [
         "temporada": "1994",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 299474,
@@ -6295,8 +6402,8 @@ const products = [
         "temporada": "1994",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 624473,
@@ -6312,8 +6419,8 @@ const products = [
         "temporada": "12/13",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 211338,
@@ -6329,8 +6436,8 @@ const products = [
         "temporada": "1994",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 221335,
@@ -6346,8 +6453,8 @@ const products = [
         "temporada": "94/95",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 124272,
@@ -6363,8 +6470,8 @@ const products = [
         "temporada": "87/90",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 552224,
@@ -6380,8 +6487,8 @@ const products = [
         "temporada": "2014",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 889010,
@@ -6397,8 +6504,8 @@ const products = [
         "temporada": "2010",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 121449,
@@ -6414,8 +6521,8 @@ const products = [
         "temporada": "1986",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 891639,
@@ -6431,8 +6538,8 @@ const products = [
         "temporada": "02/03",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 614133,
@@ -6464,8 +6571,8 @@ const products = [
         "temporada": "1996",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 455063,
@@ -6481,8 +6588,8 @@ const products = [
         "temporada": "2006",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 171234,
@@ -6498,8 +6605,8 @@ const products = [
         "temporada": "1996",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 403136,
@@ -6515,8 +6622,8 @@ const products = [
         "temporada": "1996",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 624089,
@@ -6532,8 +6639,8 @@ const products = [
         "temporada": "91/93",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 578790,
@@ -6549,8 +6656,8 @@ const products = [
         "temporada": "12/14",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 629676,
@@ -6566,8 +6673,8 @@ const products = [
         "temporada": "2012",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 722433,
@@ -6583,8 +6690,8 @@ const products = [
         "temporada": "1998",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 419969,
@@ -6600,8 +6707,8 @@ const products = [
         "temporada": "1998",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 570745,
@@ -6617,8 +6724,8 @@ const products = [
         "temporada": "2010",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 724691,
@@ -6634,8 +6741,8 @@ const products = [
         "temporada": "1996",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 504827,
@@ -6651,8 +6758,8 @@ const products = [
         "temporada": "1992",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 274175,
@@ -6668,8 +6775,8 @@ const products = [
         "temporada": "1982",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 652877,
@@ -6685,8 +6792,8 @@ const products = [
         "temporada": "1988",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 907207,
@@ -6702,8 +6809,8 @@ const products = [
         "temporada": "2002",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 143604,
@@ -6719,8 +6826,8 @@ const products = [
         "temporada": "1998",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 175661,
@@ -6736,8 +6843,8 @@ const products = [
         "temporada": "1992",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 243056,
@@ -6753,8 +6860,8 @@ const products = [
         "temporada": "1992",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 238016,
@@ -6770,8 +6877,8 @@ const products = [
         "temporada": "97/98",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 793524,
@@ -6787,8 +6894,8 @@ const products = [
         "temporada": "2012",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 525598,
@@ -6804,8 +6911,8 @@ const products = [
         "temporada": "15/16",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 816728,
@@ -6821,8 +6928,8 @@ const products = [
         "temporada": "1992",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 847420,
@@ -6838,8 +6945,8 @@ const products = [
         "temporada": "1992",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 458786,
@@ -6854,8 +6961,8 @@ const products = [
         ],
         "tipo": "especial",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 945961,
@@ -6871,8 +6978,8 @@ const products = [
         "temporada": "2010",
         "tipo": "portero",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 237158,
@@ -6888,8 +6995,8 @@ const products = [
         "temporada": "2010",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 508708,
@@ -6905,8 +7012,8 @@ const products = [
         "temporada": "1972",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 205573,
@@ -6922,8 +7029,8 @@ const products = [
         "temporada": "1990",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 909022,
@@ -6939,8 +7046,8 @@ const products = [
         "temporada": "1998",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 938172,
@@ -6956,8 +7063,8 @@ const products = [
         "temporada": "96/97",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 900073,
@@ -6973,8 +7080,8 @@ const products = [
         "temporada": "92/94",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 846528,
@@ -6990,8 +7097,8 @@ const products = [
         "temporada": "1982",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 247102,
@@ -7007,8 +7114,8 @@ const products = [
         "temporada": "1998",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 140041,
@@ -7024,8 +7131,8 @@ const products = [
         "temporada": "88/91",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 431932,
@@ -7041,8 +7148,8 @@ const products = [
         "temporada": "2002",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 784592,
@@ -7058,8 +7165,8 @@ const products = [
         "temporada": "1988",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 885507,
@@ -7075,8 +7182,8 @@ const products = [
         "temporada": "1984",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 454795,
@@ -7092,8 +7199,8 @@ const products = [
         "temporada": "92/94",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 512773,
@@ -7109,8 +7216,8 @@ const products = [
         "temporada": "2014",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 394340,
@@ -7125,8 +7232,8 @@ const products = [
         ],
         "temporada": "13/14",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 792752,
@@ -7142,8 +7249,8 @@ const products = [
         "temporada": "2004",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 443170,
@@ -7159,8 +7266,8 @@ const products = [
         "temporada": "1997",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 594929,
@@ -7176,8 +7283,8 @@ const products = [
         "temporada": "2010",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 599601,
@@ -7193,8 +7300,8 @@ const products = [
         "temporada": "2006",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 598668,
@@ -7210,8 +7317,8 @@ const products = [
         "temporada": "1988",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 498910,
@@ -7227,8 +7334,8 @@ const products = [
         "temporada": "2006",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 119268,
@@ -7244,8 +7351,8 @@ const products = [
         "temporada": "1998",
         "tipo": "portero",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 508413,
@@ -7261,8 +7368,8 @@ const products = [
         "temporada": "2014",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 426072,
@@ -7278,8 +7385,8 @@ const products = [
         "temporada": "1998",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 255475,
@@ -7295,8 +7402,8 @@ const products = [
         "temporada": "1993",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 573019,
@@ -7312,8 +7419,8 @@ const products = [
         "temporada": "1970",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 447311,
@@ -7329,8 +7436,8 @@ const products = [
         "temporada": "2012",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 872891,
@@ -7362,8 +7469,8 @@ const products = [
         "temporada": "1982",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 747146,
@@ -7379,8 +7486,8 @@ const products = [
         "temporada": "1984",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 771245,
@@ -7395,8 +7502,8 @@ const products = [
         ],
         "temporada": "1996",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 603168,
@@ -7412,8 +7519,8 @@ const products = [
         "temporada": "1996",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 313032,
@@ -7461,8 +7568,8 @@ const products = [
         "temporada": "1991",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 851563,
@@ -7478,8 +7585,8 @@ const products = [
         "temporada": "1994",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 694647,
@@ -7495,8 +7602,8 @@ const products = [
         "temporada": "1996",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 620494,
@@ -7543,8 +7650,8 @@ const products = [
         "temporada": "19/98",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 254067,
@@ -7560,8 +7667,8 @@ const products = [
         "temporada": "19/94",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 241359,
@@ -7577,8 +7684,8 @@ const products = [
         "temporada": "2012",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 820850,
@@ -7594,8 +7701,8 @@ const products = [
         "temporada": "2012",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 106101,
@@ -7627,8 +7734,8 @@ const products = [
         "temporada": "95/97",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 771224,
@@ -7644,8 +7751,8 @@ const products = [
         "temporada": "09/10",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 506582,
@@ -7661,8 +7768,8 @@ const products = [
         "temporada": "1992/94",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 577477,
@@ -7678,8 +7785,8 @@ const products = [
         "temporada": "2013/14",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 130927,
@@ -7695,8 +7802,8 @@ const products = [
         "temporada": "2011/12",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 634309,
@@ -7712,8 +7819,8 @@ const products = [
         "temporada": "2014/15",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 448421,
@@ -7745,8 +7852,8 @@ const products = [
         "temporada": "1991",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 714190,
@@ -7778,8 +7885,8 @@ const products = [
         "temporada": "2013/14",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 979898,
@@ -7795,8 +7902,8 @@ const products = [
         "temporada": "2008/09",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 169102,
@@ -7812,8 +7919,8 @@ const products = [
         "temporada": "1997/99",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 506403,
@@ -7876,8 +7983,8 @@ const products = [
         "temporada": "2000/01",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 525604,
@@ -7924,8 +8031,8 @@ const products = [
         ],
         "temporada": "1998/99",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 232764,
@@ -7957,8 +8064,8 @@ const products = [
         "temporada": "1994/95",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 951692,
@@ -7990,8 +8097,8 @@ const products = [
         "temporada": "2013/14",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 888468,
@@ -8007,8 +8114,8 @@ const products = [
         "temporada": "2012/13",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 966059,
@@ -8024,8 +8131,8 @@ const products = [
         "temporada": "2003/05",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 365910,
@@ -8041,8 +8148,8 @@ const products = [
         "temporada": "2011/12",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 332673,
@@ -8058,8 +8165,8 @@ const products = [
         "temporada": "2019/20",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 984286,
@@ -8075,8 +8182,8 @@ const products = [
         "temporada": "2013/14",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 496970,
@@ -8091,8 +8198,8 @@ const products = [
         ],
         "temporada": "1998/99",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 643977,
@@ -8107,8 +8214,8 @@ const products = [
         ],
         "temporada": "2007/08",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 808409,
@@ -8124,8 +8231,8 @@ const products = [
         "temporada": "1993/94",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 667330,
@@ -8141,8 +8248,8 @@ const products = [
         "temporada": "1986/88",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 104529,
@@ -8158,8 +8265,8 @@ const products = [
         "temporada": "1997/99",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 111918,
@@ -8175,8 +8282,8 @@ const products = [
         "temporada": "1996/97",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 593024,
@@ -8192,8 +8299,8 @@ const products = [
         "temporada": "1999/01",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 695788,
@@ -8209,8 +8316,8 @@ const products = [
         "temporada": "1998/99",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 887286,
@@ -8226,8 +8333,8 @@ const products = [
         "temporada": "2015/16",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 299162,
@@ -8243,8 +8350,8 @@ const products = [
         "temporada": "2005/06",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 147842,
@@ -8260,8 +8367,8 @@ const products = [
         "temporada": "1995/96",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 564599,
@@ -8277,8 +8384,8 @@ const products = [
         "temporada": "2002/04",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 682260,
@@ -8294,8 +8401,8 @@ const products = [
         "temporada": "2001/02",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 655408,
@@ -8311,8 +8418,8 @@ const products = [
         "temporada": "2007/08",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 689929,
@@ -8328,8 +8435,8 @@ const products = [
         "temporada": "1992/94",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 432269,
@@ -8345,8 +8452,8 @@ const products = [
         "temporada": "1986/88",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 945315,
@@ -8362,8 +8469,8 @@ const products = [
         "temporada": "1991/93",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 313759,
@@ -8379,8 +8486,8 @@ const products = [
         "temporada": "1993/95",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 520481,
@@ -8396,8 +8503,8 @@ const products = [
         "temporada": "2012/13",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 538089,
@@ -8413,8 +8520,8 @@ const products = [
         "temporada": "2003/04",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 662165,
@@ -8430,8 +8537,8 @@ const products = [
         "temporada": "2003/04",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 488442,
@@ -8447,8 +8554,8 @@ const products = [
         "temporada": "2006/08",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 200593,
@@ -8464,8 +8571,8 @@ const products = [
         "temporada": "2002/03",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 960920,
@@ -8481,8 +8588,8 @@ const products = [
         "temporada": "2011/12",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 508529,
@@ -8498,8 +8605,8 @@ const products = [
         "temporada": "2002/03",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 897301,
@@ -8515,8 +8622,8 @@ const products = [
         "temporada": "1984",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 694324,
@@ -8532,8 +8639,8 @@ const products = [
         "temporada": "1992/94",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 792182,
@@ -8549,8 +8656,8 @@ const products = [
         "temporada": "1988/90",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 783279,
@@ -8566,8 +8673,8 @@ const products = [
         "temporada": "2015/16",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 105046,
@@ -8583,8 +8690,8 @@ const products = [
         "temporada": "1997/98",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 274981,
@@ -8599,8 +8706,8 @@ const products = [
         ],
         "temporada": "1990",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 322859,
@@ -8615,8 +8722,8 @@ const products = [
         ],
         "temporada": "1990",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 648236,
@@ -8632,8 +8739,8 @@ const products = [
         "temporada": "2001/02",
         "tipo": "especial",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 194556,
@@ -8649,8 +8756,8 @@ const products = [
         "temporada": "2001/02",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 717509,
@@ -8666,8 +8773,8 @@ const products = [
         "temporada": "2006/08",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 466233,
@@ -8683,8 +8790,8 @@ const products = [
         "temporada": "2004/05",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 634816,
@@ -8700,8 +8807,8 @@ const products = [
         "temporada": "2000",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 996052,
@@ -8717,8 +8824,8 @@ const products = [
         "temporada": "2008/09",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 907180,
@@ -8734,8 +8841,8 @@ const products = [
         "temporada": "2015/16",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 190955,
@@ -8751,8 +8858,8 @@ const products = [
         "temporada": "1997",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 966282,
@@ -8768,8 +8875,8 @@ const products = [
         "temporada": "2006/07",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 613671,
@@ -8785,8 +8892,8 @@ const products = [
         "temporada": "2005/06",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 825149,
@@ -8802,8 +8909,8 @@ const products = [
         "temporada": "2006",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 982262,
@@ -8819,8 +8926,8 @@ const products = [
         "temporada": "2008/09",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 770598,
@@ -8836,8 +8943,8 @@ const products = [
         "temporada": "2002",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 852225,
@@ -8853,8 +8960,8 @@ const products = [
         "temporada": "1981",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 988344,
@@ -8963,8 +9070,8 @@ const products = [
         "temporada": "2001/02",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 246623,
@@ -8980,8 +9087,8 @@ const products = [
         "temporada": "2019/20",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 288583,
@@ -8997,8 +9104,8 @@ const products = [
         "temporada": "2000/01",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 444908,
@@ -9030,8 +9137,8 @@ const products = [
         "temporada": "2025/26",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 915628,
@@ -9047,8 +9154,8 @@ const products = [
         "temporada": "2000/02",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 393514,
@@ -9064,8 +9171,8 @@ const products = [
         "temporada": "2001/02",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 468167,
@@ -9079,8 +9186,8 @@ const products = [
             "/assets/productos/Yupoo/468167/2.webp"
         ],
         "temporada": "2025/26",
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 22.9,
+        "oldPrice": 29
     },
     {
         "id": 324827,
@@ -9127,8 +9234,8 @@ const products = [
         "temporada": "1994/95",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 679609,
@@ -9144,8 +9251,8 @@ const products = [
         "temporada": "1996/97",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 383710,
@@ -9161,8 +9268,8 @@ const products = [
         "temporada": "1995/96",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 480272,
@@ -9178,8 +9285,8 @@ const products = [
         "temporada": "1995/96",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 554262,
@@ -9195,8 +9302,8 @@ const products = [
         "temporada": "2011/12",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 237555,
@@ -9243,8 +9350,8 @@ const products = [
         "temporada": "2001/02",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 598032,
@@ -9260,8 +9367,8 @@ const products = [
         "temporada": "2007/08",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 856518,
@@ -9277,8 +9384,8 @@ const products = [
         "temporada": "2005/06",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 397064,
@@ -9309,8 +9416,8 @@ const products = [
         "temporada": "2014/15",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 180360,
@@ -9326,8 +9433,8 @@ const products = [
         "temporada": "2013/14",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 361792,
@@ -9343,8 +9450,8 @@ const products = [
         "temporada": "2003/04",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 665319,
@@ -9360,8 +9467,8 @@ const products = [
         "temporada": "1993/95",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 680946,
@@ -9377,8 +9484,8 @@ const products = [
         "temporada": "1996/97",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 533979,
@@ -9394,8 +9501,8 @@ const products = [
         "temporada": "1996/98",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 887430,
@@ -9411,8 +9518,8 @@ const products = [
         "temporada": "1993/95",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 926710,
@@ -9428,8 +9535,8 @@ const products = [
         "temporada": "1998/00",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 499986,
@@ -9445,8 +9552,8 @@ const products = [
         "temporada": "1989",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 379123,
@@ -9478,8 +9585,8 @@ const products = [
         "temporada": "1974",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 782056,
@@ -9527,8 +9634,8 @@ const products = [
         "temporada": "2025/26",
         "tipo": "especial",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 504985,
@@ -9622,8 +9729,8 @@ const products = [
         "temporada": "2011/12",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 980644,
@@ -9639,8 +9746,8 @@ const products = [
         "temporada": "2010/11",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 805946,
@@ -9656,8 +9763,8 @@ const products = [
         "temporada": "1999/00",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 444381,
@@ -9673,8 +9780,8 @@ const products = [
         "temporada": "2017/18",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 915572,
@@ -9689,8 +9796,8 @@ const products = [
         ],
         "temporada": "2018/19",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 708029,
@@ -9706,8 +9813,8 @@ const products = [
         "temporada": "2019/20",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 706695,
@@ -9722,8 +9829,8 @@ const products = [
         ],
         "temporada": "2018/19",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 588199,
@@ -9739,8 +9846,8 @@ const products = [
         "temporada": "2011/12",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 733133,
@@ -9804,8 +9911,8 @@ const products = [
         "temporada": "1999/00",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 757098,
@@ -9853,8 +9960,8 @@ const products = [
         "temporada": "2025/26",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 547123,
@@ -9902,8 +10009,8 @@ const products = [
         "temporada": "2017/18",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 614010,
@@ -9919,8 +10026,8 @@ const products = [
         "temporada": "1987/88",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 153190,
@@ -9936,8 +10043,8 @@ const products = [
         "temporada": "2004/05",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 710307,
@@ -9953,8 +10060,8 @@ const products = [
         "temporada": "1999/00",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 632663,
@@ -9970,8 +10077,8 @@ const products = [
         "temporada": "1997/98",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 829257,
@@ -9987,8 +10094,8 @@ const products = [
         "temporada": "2015/16",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 480878,
@@ -10004,8 +10111,8 @@ const products = [
         "temporada": "2025/26",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 756955,
@@ -10037,8 +10144,8 @@ const products = [
         "temporada": "1998/99",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 281244,
@@ -10085,8 +10192,8 @@ const products = [
         "temporada": "2009/10",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 455822,
@@ -10102,8 +10209,8 @@ const products = [
         "temporada": "1991/92",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 836993,
@@ -10119,8 +10226,8 @@ const products = [
         "temporada": "1999/00",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 830971,
@@ -10136,8 +10243,8 @@ const products = [
         "temporada": "1997/98",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 631299,
@@ -10153,8 +10260,8 @@ const products = [
         "temporada": "1991/92",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 284274,
@@ -10170,8 +10277,8 @@ const products = [
         "temporada": "1991/92",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 858937,
@@ -10187,8 +10294,8 @@ const products = [
         "temporada": "1989/90",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 720071,
@@ -10203,8 +10310,8 @@ const products = [
         ],
         "temporada": "2025/26",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 475910,
@@ -10219,8 +10326,8 @@ const products = [
         ],
         "temporada": "2025/26",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 836058,
@@ -10236,8 +10343,8 @@ const products = [
         "temporada": "1998/99",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 941070,
@@ -10253,8 +10360,8 @@ const products = [
         "temporada": "1992/94",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 801758,
@@ -10269,8 +10376,8 @@ const products = [
         ],
         "temporada": "1998/99",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 694601,
@@ -10285,8 +10392,8 @@ const products = [
         ],
         "temporada": "1992/94",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 869204,
@@ -10302,8 +10409,8 @@ const products = [
         "temporada": "1992/94",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 851145,
@@ -10318,8 +10425,8 @@ const products = [
         ],
         "temporada": "1991/92",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 818851,
@@ -10367,8 +10474,8 @@ const products = [
         "temporada": "1999/00",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 658480,
@@ -10384,8 +10491,8 @@ const products = [
         "temporada": "1994/95",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 797208,
@@ -10401,8 +10508,8 @@ const products = [
         "temporada": "2002/03",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 271778,
@@ -10417,8 +10524,8 @@ const products = [
         ],
         "temporada": "2012/13",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 521748,
@@ -10434,8 +10541,8 @@ const products = [
         "temporada": "2003/04",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 194004,
@@ -10466,8 +10573,8 @@ const products = [
         "temporada": "2004/05",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 722607,
@@ -10483,8 +10590,8 @@ const products = [
         "temporada": "1999/00",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 851723,
@@ -10500,8 +10607,8 @@ const products = [
         "temporada": "1990/91",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 374894,
@@ -10517,8 +10624,8 @@ const products = [
         "temporada": "2001/02",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 100075,
@@ -10534,8 +10641,8 @@ const products = [
         "temporada": "2000/01",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 957207,
@@ -10551,8 +10658,8 @@ const products = [
         "temporada": "1998/99",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 590985,
@@ -10568,8 +10675,8 @@ const products = [
         "temporada": "2004/05",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 183881,
@@ -10585,8 +10692,8 @@ const products = [
         "temporada": "2000/02",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 354193,
@@ -10602,8 +10709,8 @@ const products = [
         "temporada": "2000/01",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 666398,
@@ -10619,8 +10726,8 @@ const products = [
         "temporada": "1998",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 651234,
@@ -10636,8 +10743,8 @@ const products = [
         "temporada": "2000/01",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 438813,
@@ -10653,8 +10760,8 @@ const products = [
         "temporada": "1998/99",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 575163,
@@ -10670,8 +10777,8 @@ const products = [
         "temporada": "1990/91",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 275252,
@@ -10687,8 +10794,8 @@ const products = [
         "temporada": "2000",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 141219,
@@ -10703,8 +10810,8 @@ const products = [
         ],
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 875492,
@@ -10720,8 +10827,8 @@ const products = [
         "temporada": "2009/10",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 540489,
@@ -10737,8 +10844,8 @@ const products = [
         "temporada": "2007/08",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 310665,
@@ -10754,8 +10861,8 @@ const products = [
         "temporada": "2009/10",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 167471,
@@ -10771,8 +10878,8 @@ const products = [
         "temporada": "1995/96",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 983088,
@@ -10788,8 +10895,8 @@ const products = [
         "temporada": "1988/89",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 396805,
@@ -10805,8 +10912,8 @@ const products = [
         "temporada": "2012/13",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 932106,
@@ -10822,8 +10929,8 @@ const products = [
         "temporada": "2017/18",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 185753,
@@ -10839,8 +10946,8 @@ const products = [
         "temporada": "2019/20",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 631281,
@@ -10856,8 +10963,8 @@ const products = [
         "temporada": "1990/91",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 491576,
@@ -10873,8 +10980,8 @@ const products = [
         "temporada": "1990/91",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 785743,
@@ -10890,8 +10997,8 @@ const products = [
         "temporada": "2008/09",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 912839,
@@ -10907,8 +11014,8 @@ const products = [
         "temporada": "2009/10",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 459658,
@@ -10924,8 +11031,8 @@ const products = [
         "temporada": "2008/09",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 947402,
@@ -10941,8 +11048,8 @@ const products = [
         "temporada": "2001/02",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 614067,
@@ -10958,8 +11065,8 @@ const products = [
         "temporada": "1993/94",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 304772,
@@ -10975,8 +11082,8 @@ const products = [
         "temporada": "1989/90",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 653948,
@@ -10992,8 +11099,8 @@ const products = [
         "temporada": "2005/06",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 714853,
@@ -11009,8 +11116,8 @@ const products = [
         "temporada": "2009/10",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 620785,
@@ -11026,8 +11133,8 @@ const products = [
         "temporada": "2007/08",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 460209,
@@ -11043,8 +11150,8 @@ const products = [
         "temporada": "2007/08",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 464751,
@@ -11060,8 +11167,8 @@ const products = [
         "temporada": "1998/99",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 309814,
@@ -11077,8 +11184,8 @@ const products = [
         "temporada": "2002/03",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 949822,
@@ -11094,8 +11201,8 @@ const products = [
         "temporada": "2005/06",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 874472,
@@ -11127,8 +11234,8 @@ const products = [
         "temporada": "1999/00",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 604961,
@@ -11144,8 +11251,8 @@ const products = [
         "temporada": "2000",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 781835,
@@ -11161,8 +11268,8 @@ const products = [
         "temporada": "2011",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 454700,
@@ -11178,8 +11285,8 @@ const products = [
         "temporada": "2018/19",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 172864,
@@ -11195,8 +11302,8 @@ const products = [
         "temporada": "2015/16",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 252261,
@@ -11212,8 +11319,8 @@ const products = [
         "temporada": "2011",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 860526,
@@ -11229,8 +11336,8 @@ const products = [
         "temporada": "2013",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 711016,
@@ -11246,8 +11353,8 @@ const products = [
         "temporada": "1994",
         "tipo": "entrenamiento",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 806868,
@@ -11263,8 +11370,8 @@ const products = [
         "temporada": "2004",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 757165,
@@ -11280,8 +11387,8 @@ const products = [
         "temporada": "2000",
         "tipo": "tercera",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 714874,
@@ -11297,8 +11404,8 @@ const products = [
         "temporada": "1990",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 318846,
@@ -11330,8 +11437,8 @@ const products = [
         "temporada": "2001",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 151623,
@@ -11362,8 +11469,8 @@ const products = [
         ],
         "temporada": "2008",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 392687,
@@ -11395,8 +11502,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 660227,
@@ -11475,8 +11582,8 @@ const products = [
         ],
         "temporada": "2025/26",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 552502,
@@ -11668,8 +11775,8 @@ const products = [
         "temporada": "1999/00",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 451851,
@@ -11685,8 +11792,8 @@ const products = [
         "temporada": "1998/99",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 557301,
@@ -11702,8 +11809,8 @@ const products = [
         "temporada": "2000/01",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 739259,
@@ -11719,8 +11826,8 @@ const products = [
         "temporada": "2011/12",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 495588,
@@ -11736,8 +11843,8 @@ const products = [
         "temporada": "2003/04",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 259214,
@@ -11752,8 +11859,8 @@ const products = [
         ],
         "temporada": "2000/01",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30
+        "price": 27.9,
+        "oldPrice": 33
     },
     {
         "id": 643567,
@@ -11769,8 +11876,8 @@ const products = [
         "temporada": "2025/26",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27
+        "price": 25.9,
+        "oldPrice": 31
     },
     {
         "id": 843719,
@@ -11800,8 +11907,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "especial",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "5635"
     },
     {
@@ -11815,8 +11922,8 @@ const products = [
             "/assets/productos/Yupoo/674426/2.webp"
         ],
         "temporada": "2026",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "3015"
     },
     {
@@ -11831,8 +11938,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "portero",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "7634"
     },
     {
@@ -11846,8 +11953,8 @@ const products = [
             "/assets/productos/Yupoo/463833/2.webp"
         ],
         "temporada": "2026",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "5909"
     },
     {
@@ -11862,8 +11969,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "entrenamiento",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "8945"
     },
     {
@@ -11878,8 +11985,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "entrenamiento",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "3006"
     },
     {
@@ -11895,8 +12002,8 @@ const products = [
         "temporada": "2026",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "1040"
     },
     {
@@ -11912,8 +12019,8 @@ const products = [
         "temporada": "2026",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "5041"
     },
     {
@@ -11929,8 +12036,8 @@ const products = [
         "temporada": "2026",
         "tipo": "portero",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "4835"
     },
     {
@@ -11946,8 +12053,8 @@ const products = [
         "temporada": "2026",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "2751"
     },
     {
@@ -11963,8 +12070,8 @@ const products = [
         "temporada": "2026",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "5096"
     },
     {
@@ -11980,8 +12087,8 @@ const products = [
         "temporada": "2026",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "7998"
     },
     {
@@ -11997,8 +12104,8 @@ const products = [
         "temporada": "2026",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "3326"
     },
     {
@@ -12014,8 +12121,8 @@ const products = [
         "temporada": "2026",
         "tipo": "tercera",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "5759"
     },
     {
@@ -12030,8 +12137,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "visitante",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "3581"
     },
     {
@@ -12046,8 +12153,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "entrenamiento",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "1958"
     },
     {
@@ -12063,8 +12170,8 @@ const products = [
         "temporada": "2026",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "4217"
     },
     {
@@ -12080,8 +12187,8 @@ const products = [
         "temporada": "2026",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "6815"
     },
     {
@@ -12097,8 +12204,8 @@ const products = [
         "temporada": "2026",
         "tipo": "portero",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "8000"
     },
     {
@@ -12114,8 +12221,8 @@ const products = [
         "temporada": "2026",
         "tipo": "portero",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "9244"
     },
     {
@@ -12130,8 +12237,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "portero",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "3709"
     },
     {
@@ -12147,8 +12254,8 @@ const products = [
         "temporada": "2026",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "4862"
     },
     {
@@ -12163,8 +12270,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "visitante",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "8162"
     },
     {
@@ -12179,8 +12286,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "portero",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "5744"
     },
     {
@@ -12195,8 +12302,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "portero",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "2529"
     },
     {
@@ -12212,8 +12319,8 @@ const products = [
         "temporada": "2026",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "3973"
     },
     {
@@ -12229,8 +12336,8 @@ const products = [
         "temporada": "2026",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "3070"
     },
     {
@@ -12246,8 +12353,8 @@ const products = [
         "temporada": "2026",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "7196"
     },
     {
@@ -12262,8 +12369,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "2357"
     },
     {
@@ -12278,8 +12385,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "visitante",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "9049"
     },
     {
@@ -12295,8 +12402,8 @@ const products = [
         "temporada": "2026",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "6022"
     },
     {
@@ -12312,8 +12419,8 @@ const products = [
         "temporada": "2026",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "8958"
     },
     {
@@ -12328,8 +12435,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "visitante",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "7067"
     },
     {
@@ -12345,8 +12452,8 @@ const products = [
         "temporada": "2026",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "1798"
     },
     {
@@ -12361,8 +12468,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "9404"
     },
     {
@@ -12377,8 +12484,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "visitante",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "6459"
     },
     {
@@ -12394,8 +12501,8 @@ const products = [
         "temporada": "2026",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "3912"
     },
     {
@@ -12410,8 +12517,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "1854"
     },
     {
@@ -12427,8 +12534,8 @@ const products = [
         "temporada": "2026",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "6303"
     },
     {
@@ -12444,8 +12551,8 @@ const products = [
         "temporada": "2026",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "6306"
     },
     {
@@ -12460,8 +12567,8 @@ const products = [
         ],
         "temporada": "2025/26",
         "tipo": "visitante",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "6663"
     },
     {
@@ -12477,8 +12584,8 @@ const products = [
         "temporada": "2026",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "4703"
     },
     {
@@ -12494,8 +12601,8 @@ const products = [
         "temporada": "2026",
         "tipo": "tercera",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "9902"
     },
     {
@@ -12510,8 +12617,8 @@ const products = [
         ],
         "temporada": "2025/26",
         "tipo": "especial",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "9671"
     },
     {
@@ -12527,8 +12634,8 @@ const products = [
         "temporada": "2026",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "8192"
     },
     {
@@ -12544,8 +12651,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "2608"
     },
     {
@@ -12560,8 +12667,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "5075"
     },
     {
@@ -12576,8 +12683,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "especial",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "6705"
     },
     {
@@ -12592,8 +12699,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "especial",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "3719"
     },
     {
@@ -12608,8 +12715,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "9092"
     },
     {
@@ -12625,8 +12732,8 @@ const products = [
         "temporada": "1988",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "7450"
     },
     {
@@ -12641,8 +12748,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "4124"
     },
     {
@@ -12658,8 +12765,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "3375"
     },
     {
@@ -12674,8 +12781,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "2676"
     },
     {
@@ -12690,8 +12797,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "tercera",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "7399"
     },
     {
@@ -12706,8 +12813,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "3642"
     },
     {
@@ -12723,8 +12830,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "tercera",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "8751"
     },
     {
@@ -12739,8 +12846,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "1875"
     },
     {
@@ -12756,8 +12863,8 @@ const products = [
         "temporada": "1992/93",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "5480"
     },
     {
@@ -12773,8 +12880,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "5084"
     },
     {
@@ -12789,8 +12896,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "especial",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "9564"
     },
     {
@@ -12805,8 +12912,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "tercera",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "4803"
     },
     {
@@ -12820,8 +12927,8 @@ const products = [
             "/assets/productos/Yupoo/226217/2.webp"
         ],
         "temporada": "2026/27",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "8798"
     },
     {
@@ -12835,8 +12942,8 @@ const products = [
             "/assets/productos/Yupoo/844335/2.webp"
         ],
         "temporada": "2026/27",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "6014"
     },
     {
@@ -12851,8 +12958,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "especial",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "5044"
     },
     {
@@ -12867,8 +12974,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "5425"
     },
     {
@@ -12883,8 +12990,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "visitante",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "4785"
     },
     {
@@ -12899,8 +13006,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "4385"
     },
     {
@@ -12915,8 +13022,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "4580"
     },
     {
@@ -12931,8 +13038,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "tercera",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "4902"
     },
     {
@@ -12947,8 +13054,8 @@ const products = [
         ],
         "temporada": "2026",
         "tipo": "visitante",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "6919"
     },
     {
@@ -12964,8 +13071,8 @@ const products = [
         "temporada": "1998",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "9560"
     },
     {
@@ -12981,8 +13088,8 @@ const products = [
         "temporada": "1998",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "5652"
     },
     {
@@ -12998,8 +13105,8 @@ const products = [
         "temporada": "1994",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "5627"
     },
     {
@@ -13015,8 +13122,8 @@ const products = [
         "temporada": "1994",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "7074"
     },
     {
@@ -13031,8 +13138,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "visitante",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "2296"
     },
     {
@@ -13047,8 +13154,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "especial",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "7073"
     },
     {
@@ -13062,8 +13169,8 @@ const products = [
             "/assets/productos/Yupoo/294819/2.webp"
         ],
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "6680"
     },
     {
@@ -13077,8 +13184,8 @@ const products = [
         "temporada": "2015/16",
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "9745"
     },
     {
@@ -13093,8 +13200,8 @@ const products = [
         ],
         "temporada": "2025/26",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "8123"
     },
     {
@@ -13110,8 +13217,8 @@ const products = [
         "temporada": "1987/88",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "4464"
     },
     {
@@ -13126,8 +13233,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "2554"
     },
     {
@@ -13142,8 +13249,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "2235"
     },
     {
@@ -13158,8 +13265,8 @@ const products = [
         ],
         "temporada": "2025/26",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "6861"
     },
     {
@@ -13174,8 +13281,8 @@ const products = [
         ],
         "tipo": "visitante",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "6601"
     },
     {
@@ -13190,8 +13297,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "especial",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "7250"
     },
     {
@@ -13207,8 +13314,8 @@ const products = [
         "temporada": "2001/02",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "9073"
     },
     {
@@ -13224,8 +13331,8 @@ const products = [
         "temporada": "1983",
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "3193"
     },
     {
@@ -13240,8 +13347,8 @@ const products = [
         ],
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "9164"
     },
     {
@@ -13256,8 +13363,8 @@ const products = [
         ],
         "tipo": "local",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "1934"
     },
     {
@@ -13272,8 +13379,8 @@ const products = [
         ],
         "temporada": "2025/26",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "7353"
     },
     {
@@ -13288,8 +13395,8 @@ const products = [
         ],
         "temporada": "2025/26",
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "9985"
     },
     {
@@ -13305,8 +13412,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "4416"
     },
     {
@@ -13322,8 +13429,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "4121"
     },
     {
@@ -13339,8 +13446,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "7660"
     },
     {
@@ -13356,8 +13463,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "portero",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "7377"
     },
     {
@@ -13373,8 +13480,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "portero",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "5931"
     },
     {
@@ -13390,8 +13497,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "1598"
     },
     {
@@ -13407,8 +13514,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "tercera",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "6449"
     },
     {
@@ -13424,8 +13531,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "visitante",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "5291"
     },
     {
@@ -13441,8 +13548,8 @@ const products = [
         "temporada": "2026/27",
         "tipo": "local",
         "kids": true,
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "5577"
     },
     {
@@ -13457,8 +13564,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "2064"
     },
     {
@@ -13472,8 +13579,8 @@ const products = [
             "/assets/productos/Yupoo/686000/2.webp"
         ],
         "retro": true,
-        "price": 24.9,
-        "oldPrice": 30,
+        "price": 27.9,
+        "oldPrice": 33,
         "sku": "4393"
     },
     {
@@ -13488,8 +13595,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "tercera",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "8587"
     },
     {
@@ -13504,8 +13611,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "2055"
     },
     {
@@ -13520,8 +13627,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "visitante",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "2534"
     },
     {
@@ -13536,8 +13643,8 @@ const products = [
         ],
         "temporada": "2026/27",
         "tipo": "visitante",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "7931"
     },
     {
@@ -13554,8 +13661,8 @@ const products = [
         "temporada": "2026",
         "tipo": "local",
         "customPatches": "espana26",
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "1260",
         "description": "De momento los dorsales SI NO SON DE JUGADORES DE LA SELECCIÓN van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
     },
@@ -13572,8 +13679,8 @@ const products = [
         "temporada": "2026",
         "tipo": "visitante",
         "customPatches": "espana26",
-        "price": 21.9,
-        "oldPrice": 27,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "8151",
         "description": "De momento los dorsales SI NO SON DE JUGADORES DE LA SELECCIÓN van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
     },
@@ -13591,8 +13698,8 @@ const products = [
         "tipo": "visitante",
         "kids": true,
         "customPatches": "espana26",
-        "price": 23.9,
-        "oldPrice": 29,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "3992",
         "description": "De momento los dorsales SI NO SON DE JUGADORES DE LA SELECCIÓN van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
     },
@@ -13611,8 +13718,8 @@ const products = [
         "tipo": "local",
         "kids": true,
         "customPatches": "espana26",
-        "price": 23.9,
-        "oldPrice": 29,
+        "price": 25.9,
+        "oldPrice": 31,
         "sku": "5104",
         "description": "De momento los dorsales SI NO SON DE JUGADORES DE LA SELECCIÓN van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
     },
@@ -13628,8 +13735,8 @@ const products = [
         ],
         "temporada": "26/27",
         "tipo": "local",
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "1652"
     },
     {
@@ -13642,8 +13749,8 @@ const products = [
         "images": [
             "/assets/productos/Yupoo/521788/2.webp"
         ],
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "3914"
     },
     {
@@ -13656,8 +13763,8 @@ const products = [
         "images": [
             "/assets/productos/Yupoo/485410/2.webp"
         ],
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "5783"
     },
     {
@@ -13670,8 +13777,8 @@ const products = [
         "images": [
             "/assets/productos/Yupoo/241447/2.webp"
         ],
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "9381"
     },
     {
@@ -13684,8 +13791,8 @@ const products = [
         "images": [
             "/assets/productos/Yupoo/880924/2.webp"
         ],
-        "price": 19.9,
-        "oldPrice": 25,
+        "price": 22.9,
+        "oldPrice": 29,
         "sku": "2485"
     }
 ];
