@@ -11897,8 +11897,8 @@ const products = [
     },
     {
         "id": 291962,
-        "name": "España 2026 Especial",
-        "slug": "espana-2026-especial",
+        "name": "España 2026 Especial Roja",
+        "slug": "espana-2026-especial-roja",
         "category": "futbol",
         "league": "selecciones",
         "image": "/assets/productos/Yupoo/291962/1.webp",
@@ -13827,6 +13827,38 @@ const products = [
         "price": 22.9,
         "oldPrice": 29,
         "sku": "9078"
+    },
+    {
+        "id": 898626,
+        "name": "España 2026 Especial Azul",
+        "slug": "espana-2026-especial-azul",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/898626/2.webp",
+        "images": [
+            "/assets/productos/Yupoo/898626/1.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "especial",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "4048"
+    },
+    {
+        "id": 110146,
+        "name": "España 2026 Especial Negra",
+        "slug": "espana-2026-especial-negra",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/110146/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/110146/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "especial",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "8461"
     }
 ];
 
