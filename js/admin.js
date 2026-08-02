@@ -10,6 +10,7 @@ let currentFilters = {
     payment: 'all',
     search: ''
 };
+let dashboardChart = null;
 const authLoading = document.getElementById('auth-loading');
 const adminPanel = document.getElementById('admin-panel');
 onAuthStateChanged(auth, async (user) => {
@@ -54,6 +55,14 @@ function showAdminPanel(user) {
     initPanel();
 }
 function initPanel() {
+    const end = new Date();
+    const start = new Date();
+    start.setDate(end.getDate() - 30);
+    const startInput = document.getElementById('dash-date-start');
+    const endInput = document.getElementById('dash-date-end');
+    if (startInput) startInput.value = start.toISOString().split('T')[0];
+    if (endInput) endInput.value = end.toISOString().split('T')[0];
+
     setupEventListeners();
     loadAllOrders();
     setupPromoCodeListeners();
@@ -64,6 +73,23 @@ function initPanel() {
 }
 
 function setupEventListeners() {
+    // Navigation Logic
+    const navLinks = document.querySelectorAll('.nav-link');
+    const sections = document.querySelectorAll('.admin-section');
+
+    navLinks.forEach(link => {
+        link.addEventListener('click', () => {
+            // Remove active from all links and sections
+            navLinks.forEach(l => l.classList.remove('active'));
+            sections.forEach(s => s.classList.add('hidden'));
+            
+            // Add active to clicked link and target section
+            link.classList.add('active');
+            const targetId = link.getAttribute('data-target');
+            document.getElementById(targetId).classList.remove('hidden');
+        });
+    });
+
     document.getElementById('btn-logout').addEventListener('click', async () => {
         if (confirm('¿Cerrar sesión de administrador?')) {
             await signOut(auth);
@@ -73,6 +99,12 @@ function setupEventListeners() {
     document.getElementById('btn-refresh').addEventListener('click', () => {
         loadAllOrders();
     });
+    
+    const dashStart = document.getElementById('dash-date-start');
+    const dashEnd = document.getElementById('dash-date-end');
+    if (dashStart) dashStart.addEventListener('change', updateStats);
+    if (dashEnd) dashEnd.addEventListener('change', updateStats);
+
     document.getElementById('filter-status').addEventListener('change', (e) => {
         currentFilters.status = e.target.value;
         renderOrders();
@@ -148,15 +180,221 @@ function loadAllOrders() {
     });
 }
 function updateStats() {
-    const total = allOrders.length;
-    const pending = allOrders.filter(o => o.status === 'pendiente' || o.status === 'confirmado').length;
-    const shipped = allOrders.filter(o => o.status === 'enviado').length;
-    const delivered = allOrders.filter(o => o.status === 'entregado').length;
+    const startInput = document.getElementById('dash-date-start');
+    const endInput = document.getElementById('dash-date-end');
+    const startDateVal = startInput ? startInput.value : '';
+    const endDateVal = endInput ? endInput.value : '';
+
+    let filteredOrders = allOrders;
+
+    if (startDateVal && endDateVal) {
+        const start = new Date(startDateVal).getTime();
+        const end = new Date(endDateVal);
+        end.setHours(23, 59, 59, 999);
+        const endTime = end.getTime();
+
+        filteredOrders = allOrders.filter(o => {
+            const orderTime = o.createdAt || new Date(o.date).getTime();
+            return orderTime >= start && orderTime <= endTime;
+        });
+    }
+
+    const total = filteredOrders.length;
+    const pending = filteredOrders.filter(o => o.status === 'pendiente' || o.status === 'confirmado').length;
+    const shipped = filteredOrders.filter(o => o.status === 'enviado').length;
+    const delivered = filteredOrders.filter(o => o.status === 'entregado').length;
+
+    // Calcular ingresos netos (confirmado, imagenes_cliente, enviado, entregado)
+    const validStatuses = ['confirmado', 'imagenes_cliente', 'enviado', 'entregado'];
+    const revenue = filteredOrders
+        .filter(o => validStatuses.includes(o.status))
+        .reduce((sum, o) => sum + (parseFloat(o.total) || 0), 0);
 
     document.getElementById('stat-total').textContent = total;
     document.getElementById('stat-pending').textContent = pending;
     document.getElementById('stat-shipped').textContent = shipped;
     document.getElementById('stat-delivered').textContent = delivered;
+
+    const revenueEl = document.getElementById('dash-revenue-total');
+    if (revenueEl) {
+        revenueEl.textContent = revenue.toFixed(2).replace('.', ',') + ' €';
+    }
+
+    updateDashboardChart(filteredOrders, startDateVal, endDateVal);
+}
+
+function updateDashboardChart(filteredOrders, startStr, endStr) {
+    const ctx = document.getElementById('dashboard-chart');
+    if (!ctx) return;
+
+    const grouped = {};
+    
+    if (startStr && endStr) {
+        let curr = new Date(startStr);
+        const end = new Date(endStr);
+        while(curr <= end) {
+            const dStr = curr.toISOString().split('T')[0];
+            grouped[dStr] = { pending: 0, shipped: 0, delivered: 0, total: 0 };
+            curr.setDate(curr.getDate() + 1);
+        }
+    }
+
+    filteredOrders.forEach(o => {
+        const dateObj = new Date(o.createdAt || o.date);
+        const dStr = dateObj.toISOString().split('T')[0];
+        
+        if (!grouped[dStr]) {
+            grouped[dStr] = { pending: 0, shipped: 0, delivered: 0, total: 0 };
+        }
+        
+        grouped[dStr].total++;
+        if (o.status === 'pendiente' || o.status === 'confirmado') grouped[dStr].pending++;
+        else if (o.status === 'enviado') grouped[dStr].shipped++;
+        else if (o.status === 'entregado') grouped[dStr].delivered++;
+    });
+
+    const labels = Object.keys(grouped).sort();
+    const dataTotal = labels.map(l => grouped[l].total);
+    const dataPending = labels.map(l => grouped[l].pending);
+    const dataShipped = labels.map(l => grouped[l].shipped);
+    const dataDelivered = labels.map(l => grouped[l].delivered);
+
+    if (dashboardChart) {
+        dashboardChart.destroy();
+    }
+
+    // Crear gradiente para Total Pedidos
+    const gradientTotal = ctx.getContext('2d').createLinearGradient(0, 0, 0, 400);
+    gradientTotal.addColorStop(0, 'rgba(99, 102, 241, 0.4)');
+    gradientTotal.addColorStop(1, 'rgba(99, 102, 241, 0.01)');
+
+    dashboardChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: labels.map(l => new Date(l).toLocaleDateString('es-ES', { month: 'short', day: 'numeric' })),
+            datasets: [
+                {
+                    label: 'Total Pedidos',
+                    data: dataTotal,
+                    borderColor: '#6366f1',
+                    backgroundColor: gradientTotal,
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 6,
+                    pointBackgroundColor: '#6366f1'
+                },
+                {
+                    label: 'Pendientes',
+                    data: dataPending,
+                    borderColor: '#f59e0b',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    borderDash: [5, 5],
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
+                },
+                {
+                    label: 'Enviados',
+                    data: dataShipped,
+                    borderColor: '#3b82f6',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
+                },
+                {
+                    label: 'Entregados',
+                    data: dataDelivered,
+                    borderColor: '#10b981',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
+                }
+            ]
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                legend: {
+                    position: 'top',
+                    align: 'end',
+                    labels: {
+                        color: '#cbd5e1',
+                        usePointStyle: true,
+                        padding: 20,
+                        font: {
+                            family: 'Inter, system-ui, sans-serif',
+                            size: 13,
+                            weight: '500'
+                        }
+                    }
+                },
+                tooltip: {
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    titleColor: '#fff',
+                    bodyColor: '#cbd5e1',
+                    borderColor: 'rgba(255,255,255,0.1)',
+                    borderWidth: 1,
+                    padding: 12,
+                    displayColors: true,
+                    usePointStyle: true,
+                    titleFont: {
+                        size: 14,
+                        family: 'Inter, system-ui, sans-serif'
+                    },
+                    bodyFont: {
+                        size: 13,
+                        family: 'Inter, system-ui, sans-serif'
+                    }
+                }
+            },
+            scales: {
+                x: {
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.03)',
+                        drawBorder: false,
+                        display: false
+                    },
+                    ticks: {
+                        color: '#94a3b8',
+                        font: {
+                            family: 'Inter, system-ui, sans-serif'
+                        }
+                    }
+                },
+                y: {
+                    beginAtZero: true,
+                    grid: {
+                        color: 'rgba(255, 255, 255, 0.05)',
+                        drawBorder: false,
+                        borderDash: [5, 5]
+                    },
+                    ticks: {
+                        color: '#94a3b8',
+                        stepSize: 1,
+                        padding: 10,
+                        font: {
+                            family: 'Inter, system-ui, sans-serif'
+                        }
+                    },
+                    border: {
+                        display: false
+                    }
+                }
+            }
+        }
+    });
 }
 function renderOrders() {
     const tableBody = document.getElementById('orders-table-body');
@@ -204,17 +442,17 @@ function renderOrders() {
 
         return `
             <tr data-order-path="${order.path}">
-                <td class="order-id">${sOrderId}</td>
-                <td class="order-date">${date}</td>
-                <td class="order-customer">
+                <td data-label="ID Pedido" class="order-id">${sOrderId}</td>
+                <td data-label="Fecha" class="order-date">${date}</td>
+                <td data-label="Cliente" class="order-customer">
                     <div class="customer-info">
                         <span class="customer-name">${sCustomerName}</span>
                         <span class="customer-email">${sUserEmail}</span>
                     </div>
                 </td>
-                <td class="order-products" title="${sanitizeHTML(products)}">${sanitizeHTML(truncatedProducts)}</td>
-                <td class="order-total">€${order.total?.toFixed(2) || '0.00'}</td>
-                <td class="order-payment">
+                <td data-label="Productos" class="order-products" title="${sanitizeHTML(products)}">${sanitizeHTML(truncatedProducts)}</td>
+                <td data-label="Total" class="order-total">€${order.total?.toFixed(2) || '0.00'}</td>
+                <td data-label="Pago" class="order-payment">
                     <span class="payment-method ${paymentMethod.toLowerCase()}">${paymentMethod}</span>
                     <span class="payment-status ${isPaid ? 'paid' : 'unpaid'}">
                         ${isPaid ? '<i class="fas fa-check"></i> Pagado' : '<i class="fas fa-clock"></i> Pendiente'}
@@ -225,7 +463,7 @@ function renderOrders() {
                         </button>
                     ` : ''}
                 </td>
-                <td class="order-status">
+                <td data-label="Estado" class="order-status">
                     <select class="status-select status-${order.status}" onchange="updateOrderStatus('${order.path}', this.value, '${order.uid}', '${order.orderId}')">
                         <option value="pendiente" ${order.status === 'pendiente' ? 'selected' : ''}>Pendiente</option>
                         <option value="confirmado" ${order.status === 'confirmado' ? 'selected' : ''}>Confirmado</option>
@@ -235,7 +473,7 @@ function renderOrders() {
                         <option value="cancelado" ${order.status === 'cancelado' ? 'selected' : ''}>Cancelado</option>
                     </select>
                 </td>
-                <td class="order-tracking">
+                <td data-label="Tracking" class="order-tracking">
                     <div class="tracking-input">
                         <input type="text" 
                                value="${sTracking}" 
@@ -252,7 +490,7 @@ function renderOrders() {
                         </a>
                     ` : ''}
                 </td>
-                <td class="order-actions">
+                <td data-label="Acciones" class="order-actions">
                     <button class="btn-view" onclick="viewOrderDetails('${order.path}')" title="Ver detalles">
                         <i class="fas fa-eye"></i>
                     </button>
@@ -499,7 +737,7 @@ function renderOrderModalView() {
 
                         return `
                             <tr>
-                                <td>
+                                <td data-label="Producto">
                                     <div class="item-info">
                                         <img src="${item.image || '/assets/placeholder.webp'}" alt="${sanitizeHTML(item.name || '')}" onerror="this.src='/assets/placeholder.webp'">
                                         <div>
@@ -508,15 +746,15 @@ function renderOrderModalView() {
                                         </div>
                                     </div>
                                 </td>
-                                <td>
+                                <td data-label="Talla">
                                     <span class="item-extra-tag tag-size"><i class="fas fa-ruler"></i> ${sanitizeHTML(size)}</span>
                                 </td>
-                                <td>
+                                <td data-label="Versión">
                                     <span class="item-extra-tag ${version === 'jugador' ? 'tag-version-jugador' : 'tag-version-aficionado'}">
                                         <i class="fas ${version === 'jugador' ? 'fa-bolt' : 'fa-user'}"></i> ${version.toUpperCase()}
                                     </span>
                                 </td>
-                                <td>
+                                <td data-label="Pers. / Extras">
                                     <div class="item-customization-tags">
                                         ${(name || number) ? `
                                             <span class="item-extra-tag tag-name-num">
@@ -533,9 +771,9 @@ function renderOrderModalView() {
                                         ` : ''}
                                     </div>
                                 </td>
-                                <td><strong>x${qty}</strong></td>
-                                <td>€${unitPrice.toFixed(2)}</td>
-                                <td style="font-weight:700;color:#10b981;">€${itemSubtotal.toFixed(2)}</td>
+                                <td data-label="Cantidad"><strong>x${qty}</strong></td>
+                                <td data-label="Precio Un.">€${unitPrice.toFixed(2)}</td>
+                                <td data-label="Subtotal" style="font-weight:700;color:#10b981;">€${itemSubtotal.toFixed(2)}</td>
                             </tr>
                         `;
                     }).join('')}
@@ -1124,15 +1362,15 @@ function renderPromoCodes() {
 
         return `
             <tr>
-                <td class="promo-code-cell"><code>${code.code}</code></td>
-                <td>${typeText}</td>
-                <td class="promo-value-cell">${typeLabel}</td>
-                <td>${usageText}</td>
-                <td>${perUserText}</td>
-                <td>
+                <td data-label="Código" class="promo-code-cell"><code>${code.code}</code></td>
+                <td data-label="Tipo">${typeText}</td>
+                <td data-label="Valor" class="promo-value-cell">${typeLabel}</td>
+                <td data-label="Usos totales">${usageText}</td>
+                <td data-label="Por usuario">${perUserText}</td>
+                <td data-label="Estado">
                     <span class="promo-status ${statusClass}">${statusText}</span>
                 </td>
-                <td class="promo-actions">
+                <td data-label="Acciones" class="promo-actions">
                     <button class="btn-toggle-promo ${code.active ? 'deactivate' : 'activate'}" 
                             onclick="togglePromoCode('${code.id}', ${!code.active})"
                             title="${code.active ? 'Desactivar' : 'Activar'}">
@@ -1389,16 +1627,16 @@ function renderUsers() {
 
         return `
             <tr>
-                <td class="user-email">${user.email}</td>
-                <td>${user.username || '<em>Sin nombre</em>'}</td>
-                <td class="text-center">${user.orderCount}</td>
-                <td class="text-center">
+                <td data-label="Email" class="user-email">${user.email}</td>
+                <td data-label="Nombre">${user.username || '<em>Sin nombre</em>'}</td>
+                <td data-label="Pedidos" class="text-center">${user.orderCount}</td>
+                <td data-label="Puntos" class="text-center">
                     <span class="points-badge">
                         ${user.availablePoints} <small>(+${user.pendingPoints} pend.)</small>
                     </span>
                 </td>
-                <td class="text-center">${dateStr}</td>
-                <td class="user-actions">
+                <td data-label="Registro" class="text-center">${dateStr}</td>
+                <td data-label="Acciones" class="user-actions">
                     <button class="btn-view-user" onclick="viewUserDetails('${user.uid}')" title="Ver detalles">
                         <i class="fas fa-eye"></i>
                     </button>
@@ -1440,10 +1678,10 @@ window.viewUserDetails = async function (uid) {
                     <tbody>
                         ${orders.map(o => `
                             <tr>
-                                <td>#${o.orderId || o.id}</td>
-                                <td>${new Date(o.date).toLocaleDateString('es-ES')}</td>
-                                <td>€${(o.total || 0).toFixed(2)}</td>
-                                <td><span class="status-badge status-${o.status}">${o.status}</span></td>
+                                <td data-label="Pedido">#${o.orderId || o.id}</td>
+                                <td data-label="Fecha">${new Date(o.date).toLocaleDateString('es-ES')}</td>
+                                <td data-label="Total">€${(o.total || 0).toFixed(2)}</td>
+                                <td data-label="Estado"><span class="status-badge status-${o.status}">${o.status}</span></td>
                             </tr>
                         `).join('')}
                     </tbody>

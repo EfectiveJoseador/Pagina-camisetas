@@ -26,11 +26,14 @@
         rel="stylesheet">
     
     <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 
-    <link rel="stylesheet" href="../css/variables.css?v=2">
-    <link rel="stylesheet" href="../css/reset.css?v=2">
-    <link rel="stylesheet" href="../css/admin.css?v=7">
+    <link rel="stylesheet" href="../css/variables.css?v=3">
+    <link rel="stylesheet" href="../css/reset.css?v=3">
+    <link rel="stylesheet" href="../css/admin.css?v=8">
 
     <style>
         .auth-loading {
@@ -80,296 +83,327 @@
 
 
     <div class="admin-panel hidden" id="admin-panel">
-
-        <header class="admin-header">
-            <div class="header-left">
-                <a href="../index.html" class="logo">
-                    <img src="../assets/logo/logo.png" alt="Camisetazo" class="logo-img">
-                    <span>CAMISETAZO</span>
-                </a>
+        <nav class="admin-nav" id="admin-nav">
+            <div class="nav-logo">
+                <img src="../assets/logo/logo.png" alt="Camisetazo" class="logo-img">
+                <span class="logo-text">CAMISETAZO</span>
                 <span class="admin-badge">ADMIN</span>
             </div>
-            <div class="header-right">
-                <span class="admin-email" id="admin-email"></span>
-                <button class="btn-logout" id="btn-logout">
-                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesin
-                </button>
-            </div>
-        </header>
+            <ul class="nav-links">
+                <li><button class="nav-link active" data-target="section-dashboard"><i class="fas fa-chart-line"></i> <span>Dashboard</span></button></li>
+                <li><button class="nav-link" data-target="section-orders"><i class="fas fa-shopping-bag"></i> <span>Pedidos</span></button></li>
+                <li><button class="nav-link" data-target="section-products"><i class="fas fa-box-open"></i> <span>Productos</span></button></li>
+                <li><button class="nav-link" data-target="section-promos"><i class="fas fa-tags"></i> <span>Promociones</span></button></li>
+                <li><button class="nav-link" data-target="section-users"><i class="fas fa-users"></i> <span>Usuarios</span></button></li>
+            </ul>
+        </nav>
 
-
-        <main class="admin-main">
-
-            <section class="stats-grid">
-                <div class="stat-card">
-                    <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="stat-total">0</span>
-                        <span class="stat-label">Total Pedidos</span>
-                    </div>
+        <div class="admin-content-wrapper">
+            <header class="admin-header">
+                <div class="header-left mobile-only">
+                    <img src="../assets/logo/logo.png" alt="Camisetazo" class="logo-img">
+                    <span class="admin-badge">ADMIN</span>
                 </div>
-                <div class="stat-card stat-pending">
-                    <div class="stat-icon"><i class="fas fa-clock"></i></div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="stat-pending">0</span>
-                        <span class="stat-label">Pendientes</span>
-                    </div>
+                <div class="header-right">
+                    <span class="admin-email" id="admin-email"></span>
+                    <button class="btn-logout" id="btn-logout">
+                        <i class="fas fa-sign-out-alt"></i> <span class="hide-mobile">Cerrar Sesión</span>
+                    </button>
                 </div>
-                <div class="stat-card stat-shipped">
-                    <div class="stat-icon"><i class="fas fa-truck"></i></div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="stat-shipped">0</span>
-                        <span class="stat-label">Enviados</span>
-                    </div>
-                </div>
-                <div class="stat-card stat-delivered">
-                    <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
-                    <div class="stat-info">
-                        <span class="stat-value" id="stat-delivered">0</span>
-                        <span class="stat-label">Entregados</span>
-                    </div>
-                </div>
-            </section>
+            </header>
 
-
-            <section class="filters-bar">
-                <div class="filter-group">
-                    <label for="filter-status">Estado:</label>
-                    <select id="filter-status">
-                        <option value="all">Todos</option>
-                        <option value="pendiente">Pendiente</option>
-                        <option value="confirmado">Confirmado</option>
-                        <option value="enviado">Enviado</option>
-                        <option value="entregado">Entregado</option>
-                        <option value="cancelado">Cancelado</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label for="filter-payment">Pago:</label>
-                    <select id="filter-payment">
-                        <option value="all">Todos</option>
-                        <option value="paid">Pagados</option>
-                        <option value="unpaid">Sin pagar</option>
-                    </select>
-                </div>
-                <div class="search-box">
-                    <i class="fas fa-search"></i>
-                    <input type="text" id="search-orders" placeholder="Buscar por ID, email o nombre...">
-                </div>
-                <button class="btn-refresh" id="btn-refresh">
-                    <i class="fas fa-sync-alt"></i> Actualizar
-                </button>
-            </section>
-
-
-            <section class="orders-section">
-                <div class="table-container">
-                    <table class="orders-table">
-                        <thead>
-                            <tr>
-                                <th>ID Pedido</th>
-                                <th>Fecha</th>
-                                <th>Cliente</th>
-                                <th>Productos</th>
-                                <th>Total</th>
-                                <th>Pago</th>
-                                <th>Estado</th>
-                                <th>Tracking</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="orders-table-body">
-
-                        </tbody>
-                    </table>
-                </div>
-
-
-                <div class="empty-state hidden" id="empty-state">
-                    <i class="fas fa-inbox"></i>
-                    <p>No hay pedidos que mostrar</p>
-                </div>
-
-
-                <div class="loading-orders" id="loading-orders">
-                    <div class="spinner"></div>
-                    <p>Cargando pedidos...</p>
-                </div>
-            </section>
-
-
-            <section class="promo-codes-section">
-                <h2 class="section-title"><i class="fas fa-tags"></i> Cdigos Promocionales</h2>
-
-
-                <div class="promo-create-form">
-                    <h3>Crear Nuevo Cdigo</h3>
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="promo-code">Cdigo</label>
-                            <input type="text" id="promo-code" placeholder="Ej: VERANO20" maxlength="30">
+            <main class="admin-main">
+                <!-- ════ DASHBOARD ════ -->
+                <div id="section-dashboard" class="admin-section active">
+                    <section class="stats-grid">
+                        <div class="stat-card">
+                            <div class="stat-icon"><i class="fas fa-shopping-bag"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-total">0</span>
+                                <span class="stat-label">Total Pedidos</span>
+                            </div>
                         </div>
-                        <div class="form-group">
-                            <label for="promo-type">Tipo</label>
-                            <select id="promo-type">
-                                <option value="percentage">% Porcentaje</option>
-                                <option value="fixed"> Euros fijos</option>
-                                <option value="free_shipping">Envo gratis</option>
+                        <div class="stat-card stat-pending">
+                            <div class="stat-icon"><i class="fas fa-clock"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-pending">0</span>
+                                <span class="stat-label">Pendientes</span>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-shipped">
+                            <div class="stat-icon"><i class="fas fa-truck"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-shipped">0</span>
+                                <span class="stat-label">Enviados</span>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-delivered">
+                            <div class="stat-icon"><i class="fas fa-check-circle"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-delivered">0</span>
+                                <span class="stat-label">Entregados</span>
+                            </div>
+                        </div>
+                    </section>
+
+                    <section class="dashboard-chart-section">
+                        <div class="dashboard-controls">
+                            <h3><i class="fas fa-chart-area"></i> Resumen de Pedidos</h3>
+                            <div class="date-filters">
+                                <div class="date-input-group">
+                                    <label for="dash-date-start">Desde:</label>
+                                    <input type="date" id="dash-date-start">
+                                </div>
+                                <div class="date-input-group">
+                                    <label for="dash-date-end">Hasta:</label>
+                                    <input type="date" id="dash-date-end">
+                                </div>
+                            </div>
+                        </div>
+                        <div class="dashboard-chart-container">
+                            <canvas id="dashboard-chart"></canvas>
+                        </div>
+                        <div class="dashboard-revenue-container">
+                            <div class="revenue-box">
+                                <i class="fas fa-wallet revenue-icon"></i>
+                                <div class="revenue-info">
+                                    <span class="revenue-label">Ingresos Netos (Confirmados/Enviados/Entregados)</span>
+                                    <span class="revenue-value" id="dash-revenue-total">0,00 €</span>
+                                </div>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+
+                <!-- ════ PEDIDOS ════ -->
+                <div id="section-orders" class="admin-section hidden">
+                    <section class="filters-bar">
+                        <div class="filter-group">
+                            <label for="filter-status">Estado:</label>
+                            <select id="filter-status">
+                                <option value="all">Todos</option>
+                                <option value="pendiente">Pendiente</option>
+                                <option value="confirmado">Confirmado</option>
+                                <option value="enviado">Enviado</option>
+                                <option value="entregado">Entregado</option>
+                                <option value="cancelado">Cancelado</option>
                             </select>
                         </div>
-                        <div class="form-group">
-                            <label for="promo-value">Valor</label>
-                            <input type="number" id="promo-value" placeholder="Ej: 10" min="1" max="100">
+                        <div class="filter-group">
+                            <label for="filter-payment">Pago:</label>
+                            <select id="filter-payment">
+                                <option value="all">Todos</option>
+                                <option value="paid">Pagados</option>
+                                <option value="unpaid">Sin pagar</option>
+                            </select>
                         </div>
-                        <div class="form-group">
-                            <label for="promo-max-uses">Usos totales <small style="color:var(--text-muted);font-weight:400">(vacío = ∞)</small></label>
-                            <input type="number" id="promo-max-uses" placeholder="Ej: 10" min="1">
+                        <div class="search-box">
+                            <i class="fas fa-search"></i>
+                            <input type="text" id="search-orders" placeholder="Buscar por ID, email o nombre...">
                         </div>
-                        <div class="form-group">
-                            <label for="promo-max-uses-per-user">Uso por usuario <small style="color:var(--text-muted);font-weight:400">(vacío = ∞)</small></label>
-                            <input type="number" id="promo-max-uses-per-user" placeholder="Ej: 1" min="1">
-                        </div>
-                        <button class="btn-create-promo" id="btn-create-promo">
-                            <i class="fas fa-plus"></i> Crear Cdigo
+                        <button class="btn-refresh" id="btn-refresh">
+                            <i class="fas fa-sync-alt"></i> Actualizar
                         </button>
-                    </div>
+                    </section>
+
+                    <section class="orders-section">
+                        <div class="table-container">
+                            <table class="orders-table">
+                                <thead>
+                                    <tr>
+                                        <th>ID Pedido</th>
+                                        <th>Fecha</th>
+                                        <th>Cliente</th>
+                                        <th>Productos</th>
+                                        <th>Total</th>
+                                        <th>Pago</th>
+                                        <th>Estado</th>
+                                        <th>Tracking</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="orders-table-body">
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="empty-state hidden" id="empty-state">
+                            <i class="fas fa-inbox"></i>
+                            <p>No hay pedidos que mostrar</p>
+                        </div>
+                        <div class="loading-orders" id="loading-orders">
+                            <div class="spinner"></div>
+                            <p>Cargando pedidos...</p>
+                        </div>
+                    </section>
                 </div>
 
+                <!-- ════ PRODUCTOS ════ -->
+                <div id="section-products" class="admin-section hidden">
+                    <section class="product-editor-section" id="product-editor-section" style="margin-bottom: 2rem;">
+                        <div class="pinned-header">
+                            <div class="pinned-title-group">
+                                <h2 class="section-title"><i class="fas fa-edit"></i> Editor Total de Productos</h2>
+                            </div>
+                            <p class="pinned-subtitle">Busca y edita cualquier producto de la tienda. Los cambios se guardarán en Firebase y se reflejarán instantáneamente para todos los usuarios.</p>
+                        </div>
+                        
+                        <div class="product-editor-trigger-wrap" style="margin-top: 1rem;">
+                            <button class="btn-primary" id="btn-open-product-editor" style="padding: 1rem 1.5rem; font-size: 1.1rem; border-radius: 8px; width: 100%; max-width: 400px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; cursor: pointer; background: var(--accent); color: white; border: none; font-weight: 600;">
+                                <i class="fas fa-box-open"></i> Abrir Editor de Productos
+                            </button>
+                        </div>
+                    </section>
 
-                <div class="promo-table-container">
-                    <table class="promo-codes-table">
-                        <thead>
-                            <tr>
-                                <th>Código</th>
-                                <th>Tipo</th>
-                                <th>Valor</th>
-                                <th>Usos totales</th>
-                                <th>Por usuario</th>
-                                <th>Estado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="promo-codes-body">
+                    <section class="pinned-section" id="pinned-section">
+                        <div class="pinned-header">
+                            <div class="pinned-title-group">
+                                <h2 class="section-title"><i class="fas fa-thumbtack"></i> Productos Fijados</h2>
+                                <span class="pinned-badge" id="pinned-count-badge">0 fijados</span>
+                            </div>
+                            <p class="pinned-subtitle">Los productos fijados aparecerán siempre <strong>al principio</strong> de la tienda, en el orden que establezcas aquí.</p>
+                        </div>
 
-                        </tbody>
-                    </table>
-                    <div class="empty-state hidden" id="promo-empty-state">
-                        <i class="fas fa-tag"></i>
-                        <p>No hay cdigos promocionales</p>
-                    </div>
-                </div>
-            </section>
+                        <!-- Search box -->
+                        <div class="pinned-search-wrap">
+                            <div class="pinned-search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="pinned-search-input"
+                                    placeholder="Buscar producto por nombre, SKU o liga…"
+                                    autocomplete="off">
+                                <button class="pinned-search-clear" id="pinned-search-clear" title="Limpiar">
+                                    <i class="fas fa-times"></i>
+                                </button>
+                            </div>
+                            <!-- Suggestions dropdown -->
+                            <div class="pinned-suggestions" id="pinned-suggestions"></div>
+                        </div>
 
+                        <!-- Pinned list -->
+                        <div class="pinned-list-wrap">
+                            <div class="pinned-empty" id="pinned-empty">
+                                <i class="fas fa-thumbtack" style="opacity:.3;font-size:2rem;margin-bottom:.5rem;"></i>
+                                <p>Ningún producto fijado aún.<br>Busca un producto arriba y haz clic en <strong>Fijar</strong>.</p>
+                            </div>
+                            <ul class="pinned-list" id="pinned-list"></ul>
+                        </div>
 
-            <!-- ══════════════════════════════════════════════════
-                 PRODUCTOS FIJADOS
-            ══════════════════════════════════════════════════ -->
-            <section class="pinned-section" id="pinned-section">
-                <div class="pinned-header">
-                    <div class="pinned-title-group">
-                        <h2 class="section-title"><i class="fas fa-thumbtack"></i> Productos Fijados</h2>
-                        <span class="pinned-badge" id="pinned-count-badge">0 fijados</span>
-                    </div>
-                    <p class="pinned-subtitle">Los productos fijados aparecerán siempre <strong>al principio</strong> de la tienda, en el orden que establezcas aquí.</p>
-                </div>
-
-                <!-- Search box -->
-                <div class="pinned-search-wrap">
-                    <div class="pinned-search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="pinned-search-input"
-                               placeholder="Buscar producto por nombre, SKU o liga…"
-                               autocomplete="off">
-                        <button class="pinned-search-clear" id="pinned-search-clear" title="Limpiar">
-                            <i class="fas fa-times"></i>
-                        </button>
-                    </div>
-                    <!-- Suggestions dropdown -->
-                    <div class="pinned-suggestions" id="pinned-suggestions"></div>
-                </div>
-
-                <!-- Pinned list -->
-                <div class="pinned-list-wrap">
-                    <div class="pinned-empty" id="pinned-empty">
-                        <i class="fas fa-thumbtack" style="opacity:.3;font-size:2rem;margin-bottom:.5rem;"></i>
-                        <p>Ningún producto fijado aún.<br>Busca un producto arriba y haz clic en <strong>Fijar</strong>.</p>
-                    </div>
-                    <ul class="pinned-list" id="pinned-list"></ul>
-                </div>
-
-                <!-- Footer actions -->
-                <div class="pinned-footer">
-                    <button class="btn-pinned-clear-all" id="btn-pinned-clear-all">
-                        <i class="fas fa-trash-alt"></i> Quitar todos
-                    </button>
-                    <button class="btn-pinned-save" id="btn-pinned-save">
-                        <i class="fas fa-save"></i> Guardar y aplicar
-                    </button>
-                </div>
-            </section>
-
-
-
-            <!-- ══════════════════════════════════════════════════
-                 EDITOR TOTAL DE PRODUCTOS
-            ══════════════════════════════════════════════════ -->
-            <section class="product-editor-section" id="product-editor-section" style="margin-bottom: 2rem;">
-                <div class="pinned-header">
-                    <div class="pinned-title-group">
-                        <h2 class="section-title"><i class="fas fa-edit"></i> Editor Total de Productos</h2>
-                    </div>
-                    <p class="pinned-subtitle">Busca y edita cualquier producto de la tienda. Los cambios se guardarán en Firebase y se reflejarán instantáneamente para todos los usuarios.</p>
-                </div>
-                
-                <div class="product-editor-trigger-wrap" style="margin-top: 1rem;">
-                    <button class="btn-primary" id="btn-open-product-editor" style="padding: 1rem 1.5rem; font-size: 1.1rem; border-radius: 8px; width: 100%; max-width: 400px; display: flex; align-items: center; justify-content: center; gap: 0.5rem; cursor: pointer; background: var(--accent); color: white; border: none; font-weight: 600;">
-                        <i class="fas fa-box-open"></i> Abrir Editor de Productos
-                    </button>
-                </div>
-            </section>
-
-            <section class="users-section">
-                <h2 class="section-title"><i class="fas fa-users"></i> Gestin de Usuarios</h2>
-
-
-                <div class="users-search-bar">
-                    <div class="search-box">
-                        <i class="fas fa-search"></i>
-                        <input type="text" id="search-users" placeholder="Buscar por email o nombre...">
-                    </div>
-                    <button class="btn-refresh" id="btn-refresh-users">
-                        <i class="fas fa-sync-alt"></i> Actualizar
-                    </button>
+                        <!-- Footer actions -->
+                        <div class="pinned-footer">
+                            <button class="btn-pinned-clear-all" id="btn-pinned-clear-all">
+                                <i class="fas fa-trash-alt"></i> Quitar todos
+                            </button>
+                            <button class="btn-pinned-save" id="btn-pinned-save">
+                                <i class="fas fa-save"></i> Guardar y aplicar
+                            </button>
+                        </div>
+                    </section>
                 </div>
 
+                <!-- ════ PROMOCIONES ════ -->
+                <div id="section-promos" class="admin-section hidden">
+                    <section class="promo-codes-section">
+                        <h2 class="section-title"><i class="fas fa-tags"></i> Códigos Promocionales</h2>
 
-                <div class="users-table-container">
-                    <table class="users-table">
-                        <thead>
-                            <tr>
-                                <th>Email</th>
-                                <th>Nombre</th>
-                                <th>Pedidos</th>
-                                <th>Puntos</th>
-                                <th>Registro</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="users-table-body">
+                        <div class="promo-create-form">
+                            <h3>Crear Nuevo Código</h3>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label for="promo-code">Código</label>
+                                    <input type="text" id="promo-code" placeholder="Ej: VERANO20" maxlength="30">
+                                </div>
+                                <div class="form-group">
+                                    <label for="promo-type">Tipo</label>
+                                    <select id="promo-type">
+                                        <option value="percentage">% Porcentaje</option>
+                                        <option value="fixed"> Euros fijos</option>
+                                        <option value="free_shipping">Envío gratis</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="promo-value">Valor</label>
+                                    <input type="number" id="promo-value" placeholder="Ej: 10" min="1" max="100">
+                                </div>
+                                <div class="form-group">
+                                    <label for="promo-max-uses">Usos totales <small style="color:var(--text-muted);font-weight:400">(vacío = ∞)</small></label>
+                                    <input type="number" id="promo-max-uses" placeholder="Ej: 10" min="1">
+                                </div>
+                                <div class="form-group">
+                                    <label for="promo-max-uses-per-user">Uso por usuario <small style="color:var(--text-muted);font-weight:400">(vacío = ∞)</small></label>
+                                    <input type="number" id="promo-max-uses-per-user" placeholder="Ej: 1" min="1">
+                                </div>
+                                <button class="btn-create-promo" id="btn-create-promo">
+                                    <i class="fas fa-plus"></i> Crear Código
+                                </button>
+                            </div>
+                        </div>
 
-                        </tbody>
-                    </table>
-                    <div class="loading-orders" id="loading-users">
-                        <div class="spinner"></div>
-                        <p>Cargando usuarios...</p>
-                    </div>
-                    <div class="empty-state hidden" id="users-empty-state">
-                        <i class="fas fa-users-slash"></i>
-                        <p>No hay usuarios registrados</p>
-                    </div>
+                        <div class="promo-table-container">
+                            <table class="promo-codes-table">
+                                <thead>
+                                    <tr>
+                                        <th>Código</th>
+                                        <th>Tipo</th>
+                                        <th>Valor</th>
+                                        <th>Usos totales</th>
+                                        <th>Por usuario</th>
+                                        <th>Estado</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="promo-codes-body">
+                                </tbody>
+                            </table>
+                            <div class="empty-state hidden" id="promo-empty-state">
+                                <i class="fas fa-tag"></i>
+                                <p>No hay códigos promocionales</p>
+                            </div>
+                        </div>
+                    </section>
                 </div>
-            </section>
-        </main>
+
+                <!-- ════ USUARIOS ════ -->
+                <div id="section-users" class="admin-section hidden">
+                    <section class="users-section">
+                        <h2 class="section-title"><i class="fas fa-users"></i> Gestión de Usuarios</h2>
+
+                        <div class="users-search-bar">
+                            <div class="search-box">
+                                <i class="fas fa-search"></i>
+                                <input type="text" id="search-users" placeholder="Buscar por email o nombre...">
+                            </div>
+                            <button class="btn-refresh" id="btn-refresh-users">
+                                <i class="fas fa-sync-alt"></i> Actualizar
+                            </button>
+                        </div>
+
+                        <div class="users-table-container">
+                            <table class="users-table">
+                                <thead>
+                                    <tr>
+                                        <th>Email</th>
+                                        <th>Nombre</th>
+                                        <th>Pedidos</th>
+                                        <th>Puntos</th>
+                                        <th>Registro</th>
+                                        <th>Acciones</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="users-table-body">
+                                </tbody>
+                            </table>
+                            <div class="loading-orders" id="loading-users">
+                                <div class="spinner"></div>
+                                <p>Cargando usuarios...</p>
+                            </div>
+                            <div class="empty-state hidden" id="users-empty-state">
+                                <i class="fas fa-users-slash"></i>
+                                <p>No hay usuarios registrados</p>
+                            </div>
+                        </div>
+                    </section>
+                </div>
+            </main>
+        </div>
     </div>
 
 
