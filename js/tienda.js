@@ -587,7 +587,7 @@ function _buildDrawer() {
             </div>
             
             <div class="qad-custom-patches-wrap" style="display:none">
-                <div class="qad-section-label"><i class="fas fa-shield-alt"></i> Parches Especiales 2026 <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€1.25 c/u)</span></div>
+                <div class="qad-section-label"><i class="fas fa-shield-alt"></i> Parches</div>
                 <div class="qad-field" id="qad-custom-patches-list" style="display: flex; flex-direction: column; gap: 0.6rem;">
                     <!-- JS injected -->
                 </div>
@@ -713,7 +713,46 @@ function _openDrawer(product) {
     const customPatchesWrap = _qdDrawer.querySelector('.qad-custom-patches-wrap');
     const customPatchesList = _qdDrawer.querySelector('#qad-custom-patches-list');
 
-    if (product.customPatches === 'espana26') {
+    const hasDynamicPatches = Array.isArray(product.customPatches) && product.customPatches.length > 0;
+
+    if (hasDynamicPatches) {
+        patchWrap.style.display = 'none';
+        if (customPatchesWrap && customPatchesList) {
+            customPatchesWrap.style.display = '';
+            
+            customPatchesList.innerHTML = product.customPatches.map((p, idx) => `
+                <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                    <input type="checkbox" class="qad-custom-patch-cb" data-price="${p.price}" value="${p.name}" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
+                    <img src="${p.image || '/assets/placeholder.webp'}" style="width: 30px; height: 30px; object-fit: contain; border-radius: 4px; background: #f8f9fa;">
+                    <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">${p.name} (+€${p.price.toFixed(2)})</span>
+                </label>
+            `).join('') + `
+                <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                    <input type="checkbox" id="qad-custom-patch-otro-cb" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
+                    <div style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px; font-weight: bold; font-size: 1.1rem; color: var(--text-muted);">?</div>
+                    <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">Otro (+€2.00)</span>
+                </label>
+                <div id="qad-custom-patch-otro-input-container" style="display: none; padding-left: 0.5rem; margin-top: -0.25rem;">
+                    <input type="text" id="qad-custom-patch-otro-input" placeholder="Ej: Champions, Liga, etc." maxlength="30" autocomplete="off" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px;">
+                </div>
+            `;
+            
+            _qdDrawer.querySelectorAll('.qad-custom-patch-cb').forEach(cb => {
+                cb.addEventListener('change', _updateTotal);
+            });
+            const otroCb = _qdDrawer.querySelector('#qad-custom-patch-otro-cb');
+            const otroInput = _qdDrawer.querySelector('#qad-custom-patch-otro-input');
+            const otroContainer = _qdDrawer.querySelector('#qad-custom-patch-otro-input-container');
+            if (otroCb && otroInput && otroContainer) {
+                otroCb.addEventListener('change', () => {
+                    otroContainer.style.display = otroCb.checked ? 'block' : 'none';
+                    if (!otroCb.checked) otroInput.value = '';
+                    _updateTotal();
+                });
+                otroInput.addEventListener('input', _updateTotal);
+            }
+        }
+    } else if (product.customPatches === 'espana26') {
         patchWrap.style.display = 'none';
         if (customPatchesWrap && customPatchesList) {
             customPatchesWrap.style.display = '';
@@ -816,18 +855,32 @@ function _updateTotal() {
     const version       = _qdDrawer.querySelector('#qad-version')?.value || 'aficionado';
     const name          = _qdDrawer.querySelector('#qad-name').value.trim();
     const number        = _qdDrawer.querySelector('#qad-number').value.trim();
-    const patch         = _qdDrawer.querySelector('#qad-patch').value.trim();
-
+    
     let totalPrice = _qdProduct.price + sizeSurcharge;
     if (version === 'jugador') totalPrice += 5;
     if (name || number) totalPrice += 3;
 
-    if (_qdProduct && _qdProduct.customPatches === 'espana26') {
+    const hasDynamicPatches = Array.isArray(_qdProduct.customPatches) && _qdProduct.customPatches.length > 0;
+    let patchExtraPrice = 0;
+
+    if (hasDynamicPatches) {
+        const cbs = _qdDrawer.querySelectorAll('.qad-custom-patch-cb:checked');
+        cbs.forEach(cb => {
+            patchExtraPrice += parseFloat(cb.getAttribute('data-price')) || 0;
+        });
+        const otroCb = _qdDrawer.querySelector('#qad-custom-patch-otro-cb');
+        const otroInput = _qdDrawer.querySelector('#qad-custom-patch-otro-input');
+        if (otroCb && otroCb.checked && otroInput && otroInput.value.trim()) {
+            patchExtraPrice += 2;
+        }
+        totalPrice += patchExtraPrice;
+    } else if (_qdProduct.customPatches === 'espana26') {
         const customCbs = _qdDrawer.querySelectorAll('#qad-custom-patches-list .qad-custom-patch-cb:checked');
         if (customCbs.length > 0) {
             totalPrice += (customCbs.length * 1.25);
         }
     } else {
+        const patch = _qdDrawer.querySelector('#qad-patch').value.trim();
         if (patch) totalPrice += 2;
     }
 
@@ -839,7 +892,6 @@ function _handleDrawerSubmit() {
 
     const size = _qdDrawer.querySelector('#qad-size').value;
     if (!size) {
-        // shake the size select as validation feedback
         const sizeField = _qdDrawer.querySelector('#qad-size');
         sizeField.style.borderColor = '#ef4444';
         sizeField.style.boxShadow   = '0 0 0 3px rgba(239,68,68,0.2)';
@@ -854,32 +906,53 @@ function _handleDrawerSubmit() {
     const version = _qdDrawer.querySelector('#qad-version')?.value || 'aficionado';
     const name    = _qdDrawer.querySelector('#qad-name').value.trim().toUpperCase();
     const number  = _qdDrawer.querySelector('#qad-number').value.trim();
-    let patch   = _qdDrawer.querySelector('#qad-patch').value.trim();
-
-    const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
-    const sizeSurcharge   = SIZE_SURCHARGES[size] || 0;
-    let totalPrice        = _qdProduct.price + sizeSurcharge;
+    
+    const sizeSurcharge = SIZE_SURCHARGES_QAD[size] || 0;
+    let totalPrice = _qdProduct.price + sizeSurcharge;
     if (version === 'jugador') totalPrice += 5;
     if (name || number) totalPrice += 3;
 
-    let patchArr = [];
-    if (_qdProduct && _qdProduct.customPatches === 'espana26') {
+    let patchVal = '';
+    let patchesArr = [];
+    let patchExtraPrice = 0;
+
+    const hasDynamicPatches = Array.isArray(_qdProduct.customPatches) && _qdProduct.customPatches.length > 0;
+
+    if (hasDynamicPatches) {
+        const cbs = _qdDrawer.querySelectorAll('.qad-custom-patch-cb:checked');
+        cbs.forEach(cb => {
+            patchExtraPrice += parseFloat(cb.getAttribute('data-price')) || 0;
+            patchesArr.push(cb.value);
+        });
+        const otroCb = _qdDrawer.querySelector('#qad-custom-patch-otro-cb');
+        const otroInput = _qdDrawer.querySelector('#qad-custom-patch-otro-input');
+        if (otroCb && otroCb.checked) {
+            const txt = otroInput ? otroInput.value.trim() : '';
+            if (txt) {
+                patchesArr.push(txt);
+                patchExtraPrice += 2;
+            }
+        }
+        patchVal = patchesArr.join(', ');
+        totalPrice += patchExtraPrice;
+    } else if (_qdProduct.customPatches === 'espana26') {
         const customCbs = _qdDrawer.querySelectorAll('#qad-custom-patches-list .qad-custom-patch-cb:checked');
         if (customCbs.length > 0) {
-            totalPrice += (customCbs.length * 1.25);
-            patch = Array.from(customCbs).map(cb => cb.value).join(', ');
-            patchArr = Array.from(customCbs).map(cb => cb.value);
-        } else {
-            patch = '';
+            patchExtraPrice = (customCbs.length * 1.25);
+            patchVal = Array.from(customCbs).map(cb => cb.value).join(', ');
+            patchesArr = Array.from(customCbs).map(cb => cb.value);
+            totalPrice += patchExtraPrice;
         }
     } else {
-        if (patch) {
-            totalPrice += 2;
-            patchArr = [patch];
+        patchVal = _qdDrawer.querySelector('#qad-patch').value.trim();
+        if (patchVal) {
+            patchExtraPrice = 2;
+            totalPrice += patchExtraPrice;
+            patchesArr = [patchVal];
         }
     }
 
-    const customization = { size, version, name, number, patch, patches: patchArr, extras: [] };
+    const customization = { size, version, name, number, patch: patchVal, patches: patchesArr, patchExtraPrice, extras: [] };
     const cartItem = {
         id:        _qdProduct.id,
         name:      _qdProduct.name,
@@ -890,12 +963,10 @@ function _handleDrawerSubmit() {
         customization
     };
 
-    // button feedback
     const btn = _qdDrawer.querySelector('#qad-submit-btn');
     btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i>';
     btn.disabled  = true;
 
-    // fly animation from card image
     const card = document.querySelector(`.product-card[data-id="${_qdProduct.id}"]`);
     if (card) animateFlyToCart(card);
 
@@ -975,31 +1046,34 @@ function toggleQuickAddPanel() {}   // kept for compatibility, no-op
 function closeQuickAddPanel()  {}
 function closeAllQuickAddPanels() { _closeDrawer(); }
 
-// ── Live Products (Sync overrides from Firebase) ──────────────────────────
-function loadLiveProducts() {
-    onValue(ref(db, 'products'), (snapshot) => {
-        if (snapshot.exists()) {
-            const liveData = snapshot.val();
-            // Merge existing
-            let newAllProducts = allProducts.map(p => {
-                if (liveData[p.id]) {
-                    return { ...p, ...liveData[p.id] };
-                }
-                return p;
-            });
-            
-            // Append new ones from liveData that are not in allProducts
-            Object.values(liveData).forEach(liveProduct => {
-                if (!newAllProducts.find(p => p.id === liveProduct.id)) {
-                    newAllProducts.push(liveProduct);
-                }
-            });
-            
-            allProducts = newAllProducts;
-            if (typeof applyFilters === 'function') applyFilters(false);
-        }
-    });
-}
+    function loadLiveProducts() {
+        onValue(ref(db, 'products'), (snapshot) => {
+            if (snapshot.exists()) {
+                const liveData = snapshot.val();
+                // Merge existing
+                let newAllProducts = allProducts.map(p => {
+                    if (liveData[p.id]) {
+                        const merged = { ...p, ...liveData[p.id] };
+                        if (merged.league) merged.league = normalizeLeagueKey(merged.league);
+                        return merged;
+                    }
+                    return p;
+                });
+                
+                // Append new ones from liveData that are not in allProducts
+                Object.values(liveData).forEach(liveProduct => {
+                    if (!newAllProducts.find(p => p.id === liveProduct.id)) {
+                        const merged = { ...liveProduct };
+                        if (merged.league) merged.league = normalizeLeagueKey(merged.league);
+                        newAllProducts.push(merged);
+                    }
+                });
+                
+                allProducts = newAllProducts;
+                if (typeof applyFilters === 'function') applyFilters(false);
+            }
+        });
+    }
 
 
 async function init() {

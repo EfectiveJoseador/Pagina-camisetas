@@ -372,7 +372,7 @@ function _buildDrawer() {
             </div>
             
             <div class="qad-custom-patches-wrap" style="display:none">
-                <div class="qad-section-label"><i class="fas fa-shield-alt"></i> Parches Especiales 2026 <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€1.25 c/u)</span></div>
+                <div class="qad-section-label"><i class="fas fa-shield-alt"></i> Parches</div>
                 <div class="qad-field" id="qad-custom-patches-list" style="display: flex; flex-direction: column; gap: 0.6rem;">
                     <!-- JS injected -->
                 </div>

@@ -184,7 +184,9 @@ const Cart = {
                 const product = products.find(p => p.id === item.id);
                 const patch = custom.patch || '';
                 let patchSurcharge = 0;
-                if (patch && patch !== 'none') {
+                if (custom.patchExtraPrice !== undefined) {
+                    patchSurcharge = custom.patchExtraPrice;
+                } else if (patch && patch !== 'none') {
                     if (product && product.customPatches === 'espana26') {
                         const count = patch.split(',').map(s => s.trim()).filter(Boolean).length;
                         patchSurcharge = count * 1.25;
@@ -395,8 +397,8 @@ const Cart = {
                 const version = custom.version || item.version || 'aficionado';
                 const versionSurcharge = version === 'jugador' ? 5 : 0;
                 const patch = custom.patch || '';
-                let patchSurcharge = 0;
-                if (patch && patch !== 'none') {
+                let patchSurcharge = custom.patchExtraPrice !== undefined ? custom.patchExtraPrice : 0;
+                if (custom.patchExtraPrice === undefined && patch && patch !== 'none') {
                     if (product && product.customPatches === 'espana26') {
                         const count = patch.split(',').map(s => s.trim()).filter(Boolean).length;
                         patchSurcharge = count * 1.25;
@@ -525,8 +527,8 @@ const Cart = {
                 const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
                 const versionSurcharge = version === 'jugador' ? 5 : 0;
                 const patch = custom.patch || '';
-                let patchSurcharge = 0;
-                if (patch && patch !== 'none') {
+                let patchSurcharge = custom.patchExtraPrice !== undefined ? custom.patchExtraPrice : 0;
+                if (custom.patchExtraPrice === undefined && patch && patch !== 'none') {
                     if (product && product.customPatches === 'espana26') {
                         const count = patch.split(',').map(s => s.trim()).filter(Boolean).length;
                         patchSurcharge = count * 1.25;
@@ -647,11 +649,14 @@ const CART_SIZE_CONFIGS = {
 
 const CART_SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
 
-function calcEditPrice(basePrice, custom, isEspana26 = false) {
+function calcEditPrice(basePrice, custom, isEspana26 = false, hasDynamicPatches = false) {
     let total = basePrice;
     total += CART_SIZE_SURCHARGES[custom.size] || 0;
     if (custom.version === 'jugador') total += 5;
-    if (custom.patch) {
+    
+    if (custom.patchExtraPrice !== undefined) {
+        total += custom.patchExtraPrice;
+    } else if (custom.patch) {
         if (isEspana26) {
             const count = custom.patch.split(',').map(s => s.trim()).filter(Boolean).length;
             total += count * 1.25;
@@ -690,6 +695,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
     const currentVersion = custom.version || 'aficionado';
 
     const isEspana26 = productData?.customPatches === 'espana26';
+    const hasDynamicPatches = Array.isArray(productData?.customPatches) && productData.customPatches.length > 0;
 
     // Size options — 3XL/4XL will be hidden dynamically when Jugador
     const sizeOptions = sizes.map(sz => {
@@ -708,7 +714,37 @@ function openCartItemEditModal(cartIndex, cartRef) {
         </div>` : '';
 
     let patchBlock = '';
-    if (isEspana26) {
+    if (hasDynamicPatches) {
+        const activePatches = custom.patches || (custom.patch ? custom.patch.split(',').map(s => s.trim()) : []);
+        const otroPatchName = activePatches.find(pName => !productData.customPatches.some(cp => cp.name === pName));
+        const hasOtro = !!otroPatchName;
+
+        patchBlock = `
+            <div class="upsell-edit-field" id="ce-patch-group">
+                <label>Parches</label>
+                <div id="ce-custom-patches-list" style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
+                    ${productData.customPatches.map((p, idx) => {
+                        const checked = activePatches.includes(p.name) ? 'checked' : '';
+                        return `
+                            <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                                <input type="checkbox" class="ce-custom-patch-cb" data-price="${p.price}" value="${p.name}" ${checked} style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
+                                <img src="${p.image || '/assets/placeholder.webp'}" style="width: 30px; height: 30px; object-fit: contain; border-radius: 4px; background: #f8f9fa;">
+                                <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">${p.name} (+€${p.price.toFixed(2)})</span>
+                            </label>
+                        `;
+                    }).join('')}
+                    <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                        <input type="checkbox" id="ce-custom-patch-otro-cb" ${hasOtro ? 'checked' : ''} style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
+                        <div style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px; font-weight: bold; font-size: 1.1rem; color: var(--text-muted);">?</div>
+                        <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">Otro (+€2.00)</span>
+                    </label>
+                    <div id="ce-custom-patch-otro-input-container" style="display: ${hasOtro ? 'block' : 'none'}; padding-left: 0.5rem; margin-top: -0.25rem;">
+                        <input type="text" id="ce-custom-patch-otro-input" placeholder="Ej: Champions, Liga, etc." maxlength="30" autocomplete="off" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px;" value="${hasOtro ? otroPatchName : ''}">
+                    </div>
+                </div>
+            </div>
+        `;
+    } else if (isEspana26) {
         const patches = [
             { label: 'Parche dorado central (Campeones de mundo 2026)', short: 'Campeones', img: '/assets/images/patches/dorado-central.webp' },
             { label: 'Parche manga derecha mundial 2026 dorado', short: '26 dorado', img: '/assets/images/patches/manga-derecha.webp' },
@@ -721,7 +757,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
         
         patchBlock = `
             <div class="upsell-edit-field" id="ce-patch-group">
-                <label>Parches Especiales 2026 <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€1.25 c/u)</span></label>
+                <label>Parches</label>
                 <div id="ce-custom-patches-list" style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
                     ${patches.map(p => {
                         const checked = activePatches.includes(p.short) ? 'checked' : '';
@@ -784,7 +820,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
 
             <div class="upsell-edit-price-summary">
                 <span>Total por unidad</span>
-                <span class="upsell-edit-price-total" id="ce-total">€${calcEditPrice(basePrice, custom, isEspana26).toFixed(2)}</span>
+                <span class="upsell-edit-price-total" id="ce-total">€${calcEditPrice(basePrice, { ...custom, patchExtraPrice: custom.patchExtraPrice }, isEspana26, hasDynamicPatches).toFixed(2)}</span>
             </div>
 
             <div class="upsell-edit-actions">
@@ -802,28 +838,49 @@ function openCartItemEditModal(cartIndex, cartRef) {
     const getVersion = () => overlay.querySelector('#ce-version')?.value || 'aficionado';
     const getName    = () => overlay.querySelector('#ce-name')?.value    || '';
     const getNumber  = () => overlay.querySelector('#ce-number')?.value  || '';
-    const getPatch   = () => {
-        if (isEspana26) {
+    const getPatchState = () => {
+        let patchExtraPrice = 0;
+        let finalPatches = [];
+        let finalPatchStr = '';
+
+        if (hasDynamicPatches) {
             const cbs = overlay.querySelectorAll('.ce-custom-patch-cb:checked');
-            return Array.from(cbs).map(cb => cb.value).join(', ');
-        }
-        return overlay.querySelector('#ce-patch')?.value.trim() || '';
-    };
-    const getPatchesArray = () => {
-        if (isEspana26) {
+            cbs.forEach(cb => {
+                patchExtraPrice += parseFloat(cb.getAttribute('data-price')) || 0;
+                finalPatches.push(cb.value);
+            });
+            const otroCb = overlay.querySelector('#ce-custom-patch-otro-cb');
+            const otroInput = overlay.querySelector('#ce-custom-patch-otro-input');
+            if (otroCb && otroCb.checked) {
+                const txt = otroInput ? otroInput.value.trim() : '';
+                if (txt) {
+                    finalPatches.push(txt);
+                    patchExtraPrice += 2;
+                }
+            }
+            finalPatchStr = finalPatches.join(', ');
+        } else if (isEspana26) {
             const cbs = overlay.querySelectorAll('.ce-custom-patch-cb:checked');
-            return Array.from(cbs).map(cb => cb.value);
+            finalPatches = Array.from(cbs).map(cb => cb.value);
+            finalPatchStr = finalPatches.join(', ');
+            patchExtraPrice = finalPatches.length * 1.25;
+        } else {
+            finalPatchStr = overlay.querySelector('#ce-patch')?.value.trim() || '';
+            if (finalPatchStr) {
+                finalPatches = [finalPatchStr];
+                patchExtraPrice = 2;
+            }
         }
-        const val = overlay.querySelector('#ce-patch')?.value.trim() || '';
-        return val ? [val] : [];
+        return { patch: finalPatchStr, patches: finalPatches, patchExtraPrice };
     };
 
     // ── Live price — mirrors updatePreview() in producto.js ─────────────────
     function updatePrice() {
         const el = overlay.querySelector('#ce-total');
         if (!el) return;
-        const c = { size: getSize(), version: getVersion(), name: getName().trim(), number: getNumber().trim(), patch: getPatch() };
-        el.textContent = `€${calcEditPrice(basePrice, c, isEspana26).toFixed(2)}`;
+        const pState = getPatchState();
+        const c = { size: getSize(), version: getVersion(), name: getName().trim(), number: getNumber().trim(), patch: pState.patch, patchExtraPrice: pState.patchExtraPrice };
+        el.textContent = `€${calcEditPrice(basePrice, c, isEspana26, hasDynamicPatches).toFixed(2)}`;
     }
 
     // ── Version → disable 3XL/4XL (mirrors applyPlayerVersionSizeRestriction) ──
@@ -873,12 +930,28 @@ function openCartItemEditModal(cartIndex, cartRef) {
 
     // ── Size / patch change ──────────────────────────────────────────────────
     overlay.querySelector('#ce-size')?.addEventListener('change', updatePrice);
-    if (isEspana26) {
+    if (hasDynamicPatches) {
+        overlay.querySelectorAll('.ce-custom-patch-cb').forEach(cb => {
+            cb.addEventListener('change', updatePrice);
+        });
+        const otroCb = overlay.querySelector('#ce-custom-patch-otro-cb');
+        const otroInput = overlay.querySelector('#ce-custom-patch-otro-input');
+        const otroContainer = overlay.querySelector('#ce-custom-patch-otro-input-container');
+        if (otroCb && otroInput && otroContainer) {
+            otroCb.addEventListener('change', () => {
+                otroContainer.style.display = otroCb.checked ? 'block' : 'none';
+                if (!otroCb.checked) otroInput.value = '';
+                updatePrice();
+            });
+            otroInput.addEventListener('input', updatePrice);
+        }
+    } else if (isEspana26) {
         overlay.querySelectorAll('.ce-custom-patch-cb').forEach(cb => {
             cb.addEventListener('change', updatePrice);
         });
     } else {
-        overlay.querySelector('#ce-patch')?.addEventListener('input',  updatePrice);
+        const patchInput = overlay.querySelector('#ce-patch');
+        if (patchInput) patchInput.addEventListener('input', updatePrice);
     }
 
     // Apply initial restriction (in case item was saved as jugador with 3XL/4XL)
@@ -902,10 +975,6 @@ function openCartItemEditModal(cartIndex, cartRef) {
     overlay.querySelector('#ce-save-btn').addEventListener('click', () => {
         const nameVal    = getName().trim();
         const numberVal  = getNumber().trim();
-        const sizeVal    = getSize();
-        const patchVal   = getPatch();
-        const versionVal = getVersion();
-
         const hasName   = nameVal.length > 0;
         const hasNumber = numberVal.length > 0;
 
@@ -926,17 +995,20 @@ function openCartItemEditModal(cartIndex, cartRef) {
             }
         }
 
-        const newCustom = {
-            ...custom,
-            size:          sizeVal,
-            sizeSurcharge: CART_SIZE_SURCHARGES[sizeVal] || 0,
-            version:       versionVal,
-            name:          hasName   ? nameVal.toUpperCase() : '',
-            number:        hasNumber ? numberVal             : '',
-            patch:         patchVal,
-            patches:       getPatchesArray(),
+        const pState = getPatchState();
+        
+        let newCustom = {
+            size:    getSize(),
+            version: getVersion(),
+            name:    hasName ? nameVal.toUpperCase() : '',
+            number:  numberVal,
+            patch:   pState.patch,
+            patches: pState.patches,
+            patchExtraPrice: pState.patchExtraPrice,
+            extras:  []
         };
-        const newPrice = calcEditPrice(basePrice, newCustom, isEspana26);
+
+        const newPrice = calcEditPrice(basePrice, newCustom, isEspana26, hasDynamicPatches);
 
         const updatedCart = JSON.parse(localStorage.getItem('cart') || '[]');
         if (updatedCart[cartIndex]) {

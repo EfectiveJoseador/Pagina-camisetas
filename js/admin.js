@@ -2618,12 +2618,65 @@ async function assignPatchesToLeague() {
         // 2. Obtener todos los productos
         const catalog = await loadProductsCache();
 
-        // 3. Filtrar por la liga exacta
+        // Helper para extraer el año de la temporada
+        const extractSeasonYears = (text) => {
+            if (!text) return null;
+            const match = text.match(/\b((?:20)?\d{2})[\/-]((?:20)?\d{2})\b/);
+            if (!match) return null;
+            let start = parseInt(match[1], 10);
+            let end   = parseInt(match[2], 10);
+            if (start < 100) start += (start >= 90 ? 1900 : 2000);
+            if (end   < 100) end   += (end   >= 90 ? 1900 : 2000);
+            return [start, end];
+        };
+
+        const MAX_SEASON_YEAR = new Date().getFullYear() + 10;
+        const getMaxYearForProduct = (p) => {
+            let y = 0;
+            const season = extractSeasonYears(p.name);
+            if (season) {
+                if (season[0] <= MAX_SEASON_YEAR && season[0] > y) y = season[0];
+                if (season[1] <= MAX_SEASON_YEAR && season[1] > y) y = season[1];
+            }
+            if (p.temporada) {
+                const tSeason = extractSeasonYears(String(p.temporada));
+                if (tSeason) {
+                    if (tSeason[0] <= MAX_SEASON_YEAR && tSeason[0] > y) y = tSeason[0];
+                    if (tSeason[1] <= MAX_SEASON_YEAR && tSeason[1] > y) y = tSeason[1];
+                } else {
+                    const plain = parseInt(p.temporada, 10);
+                    if (!isNaN(plain) && plain > 2000 && plain <= MAX_SEASON_YEAR && plain > y) y = plain;
+                }
+            }
+            return y;
+        };
+
+        // Encontrar el año máximo dentro de la liga
+        let maxYear = 0;
+        catalog.forEach(p => {
+            if (p.league && formatLeagueName(p.league).toLowerCase() === finalLeague.toLowerCase()) {
+                const isRetro = p.retro === true || (p.name && p.name.toLowerCase().includes('retro'));
+                if (!isRetro) {
+                    const y = getMaxYearForProduct(p);
+                    if (y > maxYear) maxYear = y;
+                }
+            }
+        });
+
+        // Filtrar por la liga exacta, excluyendo retro, y que pertenezcan a la última temporada
         const targetProducts = catalog.filter(p => {
-            if (!p.league || p.league.toLowerCase() !== finalLeague.toLowerCase()) return false;
+            if (!p.league || formatLeagueName(p.league).toLowerCase() !== finalLeague.toLowerCase()) return false;
+            
             // Excluir camisetas retro de la asignación masiva
             const isRetro = p.retro === true || (p.name && p.name.toLowerCase().includes('retro'));
-            return !isRetro;
+            if (isRetro) return false;
+            
+            // Si encontramos un año máximo para la liga, aplicar el filtro de "nueva temporada"
+            if (maxYear > 0) {
+                if (getMaxYearForProduct(p) !== maxYear) return false;
+            }
+            
+            return true;
         });
 
         if (targetProducts.length === 0) {

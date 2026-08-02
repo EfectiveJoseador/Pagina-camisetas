@@ -624,7 +624,33 @@ function applyProductRestrictions() {
                     <img src="${p.image || '/assets/placeholder.webp'}" alt="${p.name}" style="width: 40px; height: 40px; object-fit: contain; border-radius: 4px; background: #f8f9fa;">
                     <span style="font-size: 0.9rem; color: var(--text-main); flex: 1;">${p.name} (+€${p.price.toFixed(2)})</span>
                 </label>
-            `).join('');
+            `).join('') + `
+                <label class="custom-patch-checkbox" style="display: flex; align-items: center; gap: 1rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
+                    <input type="checkbox" id="custom-patch-otro-checkbox" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
+                    <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px; font-weight: bold; font-size: 1.2rem; color: var(--text-muted);">?</div>
+                    <span style="font-size: 0.9rem; color: var(--text-main); flex: 1;">Otro</span>
+                </label>
+                <div id="custom-patch-otro-input-container" style="display: none; padding-left: 0.5rem; margin-top: -0.25rem;">
+                    <input type="text" id="custom-patch-otro-input" class="text-input" placeholder="Ej: Champions, Liga, etc." maxlength="30" autocomplete="off" style="width: 100%;">
+                </div>
+            `;
+
+            // Escuchar cambios para actualizar el precio
+            customPatchesList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
+                cb.addEventListener('change', updatePreview);
+            });
+            
+            const otroCb = document.getElementById('custom-patch-otro-checkbox');
+            const otroContainer = document.getElementById('custom-patch-otro-input-container');
+            const otroInput = document.getElementById('custom-patch-otro-input');
+            if (otroCb && otroContainer && otroInput) {
+                otroCb.addEventListener('change', () => {
+                    otroContainer.style.display = otroCb.checked ? 'block' : 'none';
+                    if (!otroCb.checked) otroInput.value = '';
+                    updatePreview();
+                });
+                otroInput.addEventListener('input', updatePreview);
+            }
 
             // Escuchar cambios para actualizar el precio
             customPatchesList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
@@ -742,6 +768,13 @@ function updatePreview() {
             totalPrice += patchCost;
             details.push(`Parche ${cb.value}: +€${patchCost.toFixed(2)}`);
         });
+        
+        const otroCb = document.getElementById('custom-patch-otro-checkbox');
+        const otroInput = document.getElementById('custom-patch-otro-input');
+        if (otroCb && otroCb.checked && otroInput && otroInput.value.trim().length > 0) {
+            totalPrice += 2;
+            details.push(`Parche ${otroInput.value.trim()}: +€2.00`);
+        }
     } else if (product && product.customPatches === 'espana26') {
         const customCheckboxes = document.querySelectorAll('#custom-patches-list input[name="custom_patch"]:checked');
         customCheckboxes.forEach(cb => {
@@ -920,13 +953,22 @@ function addToCart() {
     
     if (product && Array.isArray(product.customPatches) && product.customPatches.length > 0) {
         const checked = document.querySelectorAll('#custom-patches-list input[name="dynamic_patch"]:checked');
-        if (checked.length > 0) {
-            const labels = [];
-            let dynPrice = 0;
-            checked.forEach(cb => {
-                labels.push(cb.value);
-                dynPrice += parseFloat(cb.dataset.price) || 0;
-            });
+        const labels = [];
+        let dynPrice = 0;
+        
+        checked.forEach(cb => {
+            labels.push(cb.value);
+            dynPrice += parseFloat(cb.dataset.price) || 0;
+        });
+
+        const otroCb = document.getElementById('custom-patch-otro-checkbox');
+        const otroInput = document.getElementById('custom-patch-otro-input');
+        if (otroCb && otroCb.checked && otroInput && otroInput.value.trim().length > 0) {
+            labels.push(otroInput.value.trim());
+            dynPrice += 2;
+        }
+
+        if (labels.length > 0) {
             patchStr = labels.join(', ');
             selectedPatchesArray = labels;
             patchExtraPrice = dynPrice;
@@ -957,7 +999,8 @@ function addToCart() {
         name: name ? name.toUpperCase() : '',
         number: number || '',
         patch: patchStr,
-        patches: selectedPatchesArray
+        patches: selectedPatchesArray,
+        patchExtraPrice: patchExtraPrice
     };
     let totalPrice = product.price;
     totalPrice += sizeSurcharge;
