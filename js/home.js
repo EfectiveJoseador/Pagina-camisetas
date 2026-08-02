@@ -69,26 +69,16 @@ function applySpecialPricing() {
         const imageLower = (product.image || '').toLowerCase();
         const isKids = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
         const isRetro = product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro';
-        const isNBA = product.category === 'nba' || product.league === 'nba';
 
-        let oldPrice = 25.00;
-        let newPrice = 19.90;
+        let oldPrice = 30.00;
+        let newPrice = 22.90;
 
-        if (isNBA) {
-            oldPrice = 30.00;
-            newPrice = 24.90;
-        } else if (isRetro) {
-            oldPrice = 30.00;
-            newPrice = 24.90;
-        } else if (product.customPatches === 'espana26' && isKids) {
-            oldPrice = 29.00;
-            newPrice = 23.90;
+        if (isRetro) {
+            oldPrice = 35.00;
+            newPrice = 27.90;
         } else if (isKids) {
-            oldPrice = 27.00;
-            newPrice = 21.90;
-        } else if (product.customPatches === 'espana26') {
-            oldPrice = 27.00;
-            newPrice = 21.90;
+            oldPrice = 33.00;
+            newPrice = 25.90;
         }
 
         product.oldPrice = oldPrice;
