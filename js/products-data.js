@@ -13859,6 +13859,22 @@ const products = [
         "price": 22.9,
         "oldPrice": 30,
         "sku": "8461"
+    },
+    {
+        "id": 498237,
+        "name": "Real Madrid 2026/27 Visitante",
+        "slug": "real-madrid-202627-visitante",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/498237/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/498237/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "3702"
     }
 ];
 
