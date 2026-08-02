@@ -69,40 +69,36 @@ if (!Array.isArray(products)) {
 
 console.log(`✅ Leídos ${products.length} productos de products-data.js`);
 
-// ── Helper para calcular el precio oficial del producto según el frontend ────
-function getProductOfficialPrice(product) {
-    // 1. Si el producto tiene 'price', 'precio' o 'priceEur' explícito, usa ese valor
-    let rawPrice = product.price ?? product.precio ?? product.priceEur;
-    if (rawPrice !== undefined && rawPrice !== null && rawPrice !== '') {
-        const parsed = typeof rawPrice === 'number' ? rawPrice : parseFloat(rawPrice);
-        if (!isNaN(parsed) && parsed > 0) {
-            return parsed;
-        }
-    }
-
-    // 2. Si no tiene precio explícito, aplica el PRECIO BASE OFICIAL del frontend
-    const nameLower = (product.name || '').toLowerCase();
+// ── Helpers de categoría ─────────────────────────────────────────────────────
+function classifyProduct(product) {
+    const nameLower  = (product.name  || '').toLowerCase();
     const imageLower = (product.image || '').toLowerCase();
 
-    const isKids = product.kids === true || 
-                   nameLower.includes('kids') || 
-                   nameLower.includes('niño') || 
-                   nameLower.includes('niños') || 
+    const isKids = product.kids === true ||
+                   nameLower.includes('kids') ||
+                   nameLower.includes('niño') ||
+                   nameLower.includes('niños') ||
                    imageLower.includes('kids');
 
-    const isRetro = product.retro === true || 
-                    nameLower.includes('retro') || 
+    const isRetro = product.retro === true ||
+                    nameLower.includes('retro') ||
                     product.league === 'retro';
 
-    const isNBA = product.category === 'nba' || product.league === 'nba';
+    return { isKids, isRetro };
+}
 
-    if (isRetro) {
-        return 27.90;
-    } else if (isKids) {
-        return 25.90;
-    }
-
+function getProductOfficialPrice(product) {
+    const { isKids, isRetro } = classifyProduct(product);
+    if (isRetro) return 27.90;
+    if (isKids)  return 25.90;
     return 22.90;
+}
+
+function getOldPrice(product) {
+    const { isKids, isRetro } = classifyProduct(product);
+    if (isRetro) return 35.00;
+    if (isKids)  return 33.00;
+    return 30.00;
 }
 
 // ── Construir el objeto para RTDB ────────────────────────────────────────────
@@ -112,15 +108,17 @@ const rtdbProducts = {};
 
 for (let i = 0; i < products.length; i++) {
     const product = products[i];
-    const productId = product.id !== undefined && product.id !== null 
-        ? String(product.id) 
+    const productId = product.id !== undefined && product.id !== null
+        ? String(product.id)
         : (product.sku || product.code || `prod_${i + 1}`);
 
-    const price = getProductOfficialPrice(product);
+    const price    = getProductOfficialPrice(product);
+    const oldPrice = getOldPrice(product);
 
     rtdbProducts[productId] = {
         id:          productId,
         price:       price,
+        oldPrice:    oldPrice,
         name:        product.name || product.title || String(productId),
         sku:         product.sku  || '',
         image:       product.image || (Array.isArray(product.images) && product.images[0]) || '',

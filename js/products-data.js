@@ -13794,6 +13794,39 @@ const products = [
         "price": 22.9,
         "oldPrice": 29,
         "sku": "2485"
+    },
+    {
+        "id": 386694,
+        "name": "Deportivo Alavés 2002/03 Tercera Retro",
+        "slug": "deportivo-alaves-200203-tercera-retro",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/386694/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/386694/2.webp"
+        ],
+        "temporada": "2002/03",
+        "tipo": "tercera",
+        "retro": true,
+        "price": 27.9,
+        "oldPrice": 33,
+        "sku": "4446"
+    },
+    {
+        "id": 498382,
+        "name": "FC Barcelona 2026/27 Visitante",
+        "slug": "fc-barcelona-202627-visitante",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/498382/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/498382/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "price": 22.9,
+        "oldPrice": 29,
+        "sku": "9078"
     }
 ];
 

@@ -2584,15 +2584,15 @@ async function importFromYupoo(albumUrl, options = {}) {
 
     const isRetroProduct = product.retro || (product.name && product.name.includes('Retro'));
 
-    if (isRetroProduct || product.category === 'nba' || product.league === 'nba') {
-        product.price = 24.90;
-        product.oldPrice = 30.00;
+    if (isRetroProduct) {
+        product.price = 27.90;
+        product.oldPrice = 35.00;
     } else if (product.kids) {
-        product.price = 21.90;
-        product.oldPrice = 27.00;
+        product.price = 25.90;
+        product.oldPrice = 33.00;
     } else {
-        product.price = 19.90;
-        product.oldPrice = 25.00;
+        product.price = 22.90;
+        product.oldPrice = 30.00;
     }
 
     product.sku = generateUniqueSku();
