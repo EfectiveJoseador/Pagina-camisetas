@@ -429,8 +429,18 @@ function renderOrders() {
 
     tableBody.innerHTML = filtered.map(order => {
         const date = order.dateFormatted || new Date(order.date).toLocaleString('es-ES');
-        const products = order.items?.map(i => `${i.name} x${i.quantity}`).join(', ') || '-';
-        const truncatedProducts = products.length > 50 ? products.substring(0, 50) + '...' : products;
+        const productsHTML = order.items?.map(i => {
+            const img = i.image || i.img || '../assets/placeholder.webp';
+            return `
+                <div class="order-product-item">
+                    <img src="${img}" alt="${sanitizeHTML(i.name)}">
+                    <div class="product-info">
+                        <span class="product-name">${sanitizeHTML(i.name)}</span>
+                        <span class="product-qty">x${i.quantity}</span>
+                    </div>
+                </div>
+            `;
+        }).join('') || '-';
         const isPaid = order.payment?.paid === true;
         const paymentMethod = order.paymentMethod || 'N/A';
         const needsConfirmation = (['bizum', 'revtag', 'revolut', 'transferencia'].includes(paymentMethod)) && !isPaid;
@@ -450,7 +460,7 @@ function renderOrders() {
                         <span class="customer-email">${sUserEmail}</span>
                     </div>
                 </td>
-                <td data-label="Productos" class="order-products" title="${sanitizeHTML(products)}">${sanitizeHTML(truncatedProducts)}</td>
+                <td data-label="Productos" class="order-products"><div class="order-products-grid">${productsHTML}</div></td>
                 <td data-label="Total" class="order-total">€${order.total?.toFixed(2) || '0.00'}</td>
                 <td data-label="Pago" class="order-payment">
                     <span class="payment-method ${paymentMethod.toLowerCase()}">${paymentMethod}</span>
