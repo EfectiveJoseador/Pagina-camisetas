@@ -170,6 +170,10 @@
             ".read": true,
             ".write": "auth.token.admin === true"
         },
+        "globalPatches": {
+            ".read": true,
+            ".write": "auth.token.admin === true"
+        },
 
         "promoCodes": {
             ".read": "auth.token.admin === true",

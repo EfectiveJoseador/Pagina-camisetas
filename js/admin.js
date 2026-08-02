@@ -2132,6 +2132,15 @@ function initProductEditor() {
             saveProductToFirebase();
         });
     }
+
+    // Asignar Parches a Toda la Liga
+    const btnAssignLeaguePatches = document.getElementById('btn-assign-league-patches');
+    if (btnAssignLeaguePatches) {
+        btnAssignLeaguePatches.addEventListener('click', (e) => {
+            if (e) e.preventDefault();
+            assignPatchesToLeague();
+        });
+    }
 }
 
 function renderPESuggestions(results) {
@@ -2558,6 +2567,91 @@ async function saveProductToFirebase() {
         if (btnSave) {
             btnSave.disabled = false;
             btnSave.innerHTML = '<i class="fas fa-save"></i> Guardar en Firebase';
+        }
+    }
+}
+
+async function assignPatchesToLeague() {
+    const leagueSelectVal = document.getElementById('pe-league-select') ? document.getElementById('pe-league-select').value : '';
+    const leagueCustomVal = document.getElementById('pe-league-custom') ? document.getElementById('pe-league-custom').value.trim() : '';
+    const finalLeague = leagueSelectVal === '__new__' ? leagueCustomVal : leagueSelectVal;
+
+    if (!finalLeague) {
+        alert('Por favor, selecciona o escribe una liga antes de asignar los parches.');
+        return;
+    }
+
+    const confirmMsg = `¿Estás completamente seguro de que deseas aplicar los parches seleccionados actualmente (tanto globales como exclusivos) a TODOS los productos de la liga "${finalLeague}"?\n\nEsta acción modificará la base de datos de manera masiva y no se puede deshacer fácilmente.`;
+    if (!confirm(confirmMsg)) {
+        return;
+    }
+
+    const btn = document.getElementById('btn-assign-league-patches');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Aplicando a toda la liga...';
+    }
+
+    try {
+        // 1. Obtener los parches actuales seleccionados en el editor
+        const activeGlobalPatches = globalPatchesList
+            .filter(gp => selectedGlobalPatchKeys.has(gp.key))
+            .map(gp => ({
+                key: gp.key,
+                name: gp.name,
+                price: parseFloat(gp.price) || 0,
+                image: gp.image || '',
+                isGlobal: true
+            }));
+
+        const validExclusivePatches = exclusivePatches
+            .filter(p => p.name && p.name.trim() !== '')
+            .map(p => ({
+                name: p.name.trim(),
+                price: parseFloat(p.price) || 0,
+                image: p.image || '',
+                isGlobal: false
+            }));
+
+        const finalPatchesArray = [...activeGlobalPatches, ...validExclusivePatches];
+
+        // 2. Obtener todos los productos
+        const catalog = await loadProductsCache();
+
+        // 3. Filtrar por la liga exacta
+        const targetProducts = catalog.filter(p => {
+            if (!p.league || p.league.toLowerCase() !== finalLeague.toLowerCase()) return false;
+            // Excluir camisetas retro de la asignación masiva
+            const isRetro = p.retro === true || (p.name && p.name.toLowerCase().includes('retro'));
+            return !isRetro;
+        });
+
+        if (targetProducts.length === 0) {
+            alert(`No se encontraron productos para la liga "${finalLeague}".`);
+            return;
+        }
+
+        // 4. Actualizar todos los productos en Firebase concurrentemente
+        const updates = targetProducts.map(p => {
+            return update(ref(db, `products/${p.id}`), {
+                patches: finalPatchesArray,
+                customPatches: finalPatchesArray,
+                allowPatches: true, // Forzamos a true porque le estamos añadiendo parches
+                updatedAt: new Date().toISOString()
+            });
+        });
+
+        await Promise.all(updates);
+
+        alert(`¡Éxito! Se han asignado los parches a ${targetProducts.length} producto(s) de la liga "${finalLeague}".`);
+
+    } catch (err) {
+        console.error('Error en asignación masiva de parches:', err);
+        alert('Ocurrió un error al asignar los parches: ' + err.message);
+    } finally {
+        if (btn) {
+            btn.disabled = false;
+            btn.innerHTML = '<i class="fas fa-copy"></i> Aplicar Parches a TODA la Liga';
         }
     }
 }
