@@ -33,7 +33,7 @@
 
     <link rel="stylesheet" href="../css/variables.css?v=3">
     <link rel="stylesheet" href="../css/reset.css?v=3">
-    <link rel="stylesheet" href="../css/admin.css?v=20">
+    <link rel="stylesheet" href="../css/admin.css?v=31">
 
     <style>
         .auth-loading {
@@ -85,8 +85,10 @@
     <div class="admin-panel hidden" id="admin-panel">
         <nav class="admin-nav" id="admin-nav">
             <div class="nav-logo">
-                <img src="../assets/logo/logo.png" alt="Camisetazo" class="logo-img">
-                <span class="logo-text">CAMISETAZO</span>
+                <a href="../index.html" class="logo-btn" title="Volver a la Tienda (Inicio)" style="display: flex; align-items: center; gap: 0.65rem; text-decoration: none; transition: transform 0.2s ease, opacity 0.2s ease;">
+                    <img src="../assets/logo/logo.png" alt="Camisetazo" class="logo-img">
+                    <span class="logo-text">CAMISETAZO</span>
+                </a>
                 <span class="admin-badge">ADMIN</span>
             </div>
             <ul class="nav-links">
@@ -130,6 +132,20 @@
                                 <span class="stat-label">Pendientes</span>
                             </div>
                         </div>
+                        <div class="stat-card stat-confirmed">
+                            <div class="stat-icon"><i class="fas fa-check"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-confirmed">0</span>
+                                <span class="stat-label">Confirmados</span>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-images">
+                            <div class="stat-icon"><i class="fas fa-camera"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-images">0</span>
+                                <span class="stat-label">Imágenes Cliente</span>
+                            </div>
+                        </div>
                         <div class="stat-card stat-shipped">
                             <div class="stat-icon"><i class="fas fa-truck"></i></div>
                             <div class="stat-info">
@@ -142,6 +158,13 @@
                             <div class="stat-info">
                                 <span class="stat-value" id="stat-delivered">0</span>
                                 <span class="stat-label">Entregados</span>
+                            </div>
+                        </div>
+                        <div class="stat-card stat-cancelled">
+                            <div class="stat-icon"><i class="fas fa-times-circle"></i></div>
+                            <div class="stat-info">
+                                <span class="stat-value" id="stat-cancelled">0</span>
+                                <span class="stat-label">Cancelados</span>
                             </div>
                         </div>
                     </section>
@@ -583,12 +606,207 @@
                                     <div id="pe-new-gp-teams-pills" class="gp-teams-pills-container">
                                         <!-- Pills de equipos agregados dinámicamente -->
                                     </div>
-                                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem;">
-                                        <select id="pe-new-gp-team-select" class="pe-input" style="flex: 1;">
-                                            <option value="">+ Añadir equipo a la competición...</option>
+                                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                                        <select id="pe-new-gp-team-select" class="pe-input" style="flex: 1; min-width: 180px;" onchange="addTeamToNewGp()">
+                                            <option value="">+ Selecciona o añade un equipo...</option>
                                         </select>
-                                        <button type="button" class="btn-gp-add-team" onclick="addTeamToNewGp()">
-                                            <i class="fas fa-plus"></i> Añadir
+                                        <button type="button" class="btn-gp-add-team" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4);" onclick="openMultiTeamModalForNewGp()">
+                                            <i class="fas fa-tasks"></i> Selección Múltiple
+                                        </button>
+                                    </div>
+                                    <p class="pe-help-text" style="font-size: 0.78rem; color: #a1a1aa; margin-top: 0.35rem;">
+                                        <i class="fas fa-info-circle" style="color: #818cf8;"></i> Se aplicará automáticamente a todas las camisetas de la última temporada de cada uno de los equipos seleccionados.
+                                    </p>
+                                </div>
+                                <button type="button" id="btn-save-global-patch" style="width: 100%; margin-top: 0.75rem; background: linear-gradient(135deg, #10b981, #059669); border: none; padding: 0.75rem; border-radius: 8px; font-weight: 600; cursor: pointer; color: white; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: inherit;">
+                                    <i class="fas fa-save"></i> Guardar en Biblioteca y Asignar
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- SECCIÓN 3: PARCHES EXCLUSIVOS A MEDIDA -->
+                        <div class="pe-patch-section-box" style="margin-top: 1.25rem;">
+                            <h4 class="pe-patch-section-title">
+                                <i class="fas fa-tshirt" style="color: #f59e0b;"></i> 3. Parches Exclusivos (Solo esta camiseta)
+                            </h4>
+                            <p class="pe-help-text">Añade parches a medida que solo pertenezcan a este producto específico.</p>
+                            <div id="pe-exclusive-patches-list" class="pe-patches-list">
+                                <!-- Parches exclusivos inyectados dinámicamente -->
+                            </div>
+                            <button type="button" id="btn-add-exclusive-patch" style="margin-top: 0.75rem; width: 100%; padding: 0.75rem; border-radius: 8px; background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.12); color: #fff; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: inherit;">
+                                <i class="fas fa-plus"></i> Añadir Parche Exclusivo
+                            </button>
+                        </div>
+
+                        <!-- SECCIÓN 4: ASIGNACIÓN MASIVA POR LIGA -->
+                        <div class="pe-patch-section-box" style="margin-top: 1.25rem; border: 1px solid rgba(99, 102, 241, 0.3); background: rgba(99, 102, 241, 0.05);">
+                            <h4 class="pe-patch-section-title" style="color: #818cf8;">
+                                <i class="fas fa-magic"></i> 4. Asignación Masiva a Toda la Liga
+                            </h4>
+                            <p class="pe-help-text" style="color: #a5b4fc;">Aplica todos los parches seleccionados arriba (globales y exclusivos) a <strong>todos los productos</strong> de la misma liga actual de un solo clic.</p>
+                            <button type="button" id="btn-assign-league-patches" style="margin-top: 0.75rem; width: 100%; padding: 0.75rem; border-radius: 8px; background: rgba(99, 102, 241, 0.15); border: 1px solid rgba(99, 102, 241, 0.4); color: #818cf8; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 0.5rem; font-family: inherit; transition: all 0.2s;">
+                                <i class="fas fa-copy"></i> Aplicar Parches a TODA la Liga
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="pe-tab-content hidden" id="pe-tab-images">
+                        <div class="form-group">
+                            <label>Imagen Principal</label>
+        </div>
+    </div>
+    <div class="modal-overlay" id="product-editor-modal">
+        <div class="modal-content wide-modal product-editor-content">
+            <div class="modal-header">
+                <h2><i class="fas fa-edit"></i> Editar Producto</h2>
+                <button class="modal-close" id="product-editor-close">&times;</button>
+            </div>
+            <div class="modal-body" id="product-editor-body" style="padding: 1rem;">
+                <!-- Buscador rápido de productos -->
+                <div class="pe-search-section">
+                    <label>Buscar Producto para Editar:</label>
+                    <div class="pe-search-box">
+                        <i class="fas fa-search"></i>
+                        <input type="text" id="pe-search-input" placeholder="Nombre, SKU o liga..." autocomplete="off">
+                        <button class="pe-search-clear" id="pe-search-clear" title="Limpiar"><i class="fas fa-times"></i></button>
+                    </div>
+                    <div class="pe-suggestions" id="pe-suggestions"></div>
+                </div>
+
+                <div id="pe-editor-form" class="hidden">
+                    <input type="hidden" id="pe-id">
+                    
+                    <!-- Pestañas (simuladas en móvil como scroll continuo o accordions) -->
+                    <div class="pe-tabs">
+                        <button class="pe-tab active" data-tab="basic">Datos Básicos</button>
+                        <button class="pe-tab" data-tab="config">Configuración</button>
+                        <button class="pe-tab" data-tab="patches">Parches</button>
+                        <button class="pe-tab" data-tab="images">Imagen</button>
+                    </div>
+
+                    <div class="pe-tab-content active" id="pe-tab-basic">
+                        <div class="form-group">
+                            <label>Nombre del Producto</label>
+                            <input type="text" id="pe-name" class="pe-input" placeholder="Ej: Real Madrid 23/24 Local">
+                        </div>
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label>Precio (€)</label>
+                                <input type="number" id="pe-price" class="pe-input" step="0.01">
+                            </div>
+                            <div class="form-group">
+                                <label>Precio Anterior (Tachado €)</label>
+                                <input type="number" id="pe-oldPrice" class="pe-input" step="0.01">
+                            </div>
+                        </div>
+                        <div class="form-row-2">
+                            <div class="form-group">
+                                <label>SKU</label>
+                                <input type="text" id="pe-sku" class="pe-input" placeholder="Ej: 1001">
+                            </div>
+                            <div class="form-group">
+                                <label>Liga / Competición</label>
+                                <select id="pe-league-select" class="pe-input">
+                                    <option value="">-- Seleccionar Liga --</option>
+                                    <option value="__new__">+ Añadir nueva liga...</option>
+                                </select>
+                                <input type="text" id="pe-league-custom" class="pe-input hidden" style="margin-top: 0.5rem;" placeholder="Nombre de la nueva liga...">
+                                <input type="hidden" id="pe-league">
+                            </div>
+                        </div>
+                        <div class="form-row-2" style="margin-top: 0.75rem;">
+                            <div class="form-group">
+                                <label>Equipo / Club</label>
+                                <select id="pe-team-select" class="pe-input">
+                                    <option value="">-- Seleccionar Equipo --</option>
+                                    <option value="__new__">+ Añadir nuevo equipo...</option>
+                                </select>
+                                <input type="text" id="pe-team-custom" class="pe-input hidden" style="margin-top: 0.5rem;" placeholder="Nombre del nuevo equipo...">
+                                <input type="hidden" id="pe-team">
+                            </div>
+                            <div class="form-group checkbox-group" style="align-self: flex-end; margin-bottom: 0;">
+                                <input type="checkbox" id="pe-isActive" checked>
+                                <label for="pe-isActive">Producto Activo (Visible en tienda)</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="pe-tab-content hidden" id="pe-tab-config">
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="pe-allowCustomization">
+                            <label for="pe-allowCustomization">Permitir Personalización (Nombre y Número)</label>
+                        </div>
+                        <div class="form-group" id="pe-customizationPrice-group">
+                            <label>Precio de Sobrecoste por Personalización (€)</label>
+                            <input type="number" id="pe-customizationPrice" class="pe-input" step="0.01" value="0.00">
+                        </div>
+                        <div class="form-group checkbox-group">
+                            <input type="checkbox" id="pe-allowPatches">
+                            <label for="pe-allowPatches">Permitir Parches</label>
+                        </div>
+                    </div>
+
+                    <div class="pe-tab-content hidden" id="pe-tab-patches">
+                        <!-- SECCIÓN 1: BIBLIOTECA GLOBAL DE PARCHES -->
+                        <div class="pe-patch-section-box">
+                            <h4 class="pe-patch-section-title">
+                                <i class="fas fa-globe" style="color: #6366f1;"></i> 1. Seleccionar de la Biblioteca Global
+                            </h4>
+                            <p class="pe-help-text">Marca los parches globales que quieras asignar a este producto:</p>
+                            <div id="pe-global-patches-list" class="pe-global-patches-grid">
+                                <!-- Parches globales inyectados dinámicamente -->
+                            </div>
+                        </div>
+
+                        <!-- SECCIÓN 2: CREAR NUEVO PARCHE GLOBAL -->
+                        <div class="pe-patch-section-box" style="margin-top: 1.25rem;">
+                            <h4 class="pe-patch-section-title">
+                                <i class="fas fa-plus-circle" style="color: #10b981;"></i> 2. Crear Nuevo Parche Global
+                            </h4>
+                            <p class="pe-help-text">Guarda un parche en la biblioteca compartida para usarlo en cualquier camiseta.</p>
+                            <div class="pe-new-global-patch-form">
+                                <div class="form-group">
+                                    <label>Nombre del Parche</label>
+                                    <input type="text" id="pe-new-gp-name" class="pe-input" placeholder="Ej: Champions League 2026">
+                                </div>
+                                <div class="form-row-2">
+                                    <div class="form-group">
+                                        <label>Precio Adicional (€)</label>
+                                        <input type="number" id="pe-new-gp-price" class="pe-input" step="0.01" value="2.00">
+                                    </div>
+                                    <div class="form-group">
+                                        <label>Imagen del Parche</label>
+                                        <div style="display: flex; align-items: center; gap: 0.75rem;">
+                                            <img id="pe-new-gp-preview" src="../assets/placeholder.webp" style="width: 42px; height: 42px; object-fit: contain; border-radius: 6px; background: #1a1a2e; border: 1px solid rgba(255,255,255,0.1);">
+                                            <label for="pe-new-gp-file" class="pe-image-upload-btn" style="padding: 0.6rem 0.9rem; font-size: 0.8rem; margin: 0; cursor: pointer;">
+                                                <i class="fas fa-upload"></i> Subir
+                                            </label>
+                                            <input type="file" id="pe-new-gp-file" accept="image/*" class="hidden">
+                                            <input type="hidden" id="pe-new-gp-b64">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="form-row-2" style="margin-top: 0.75rem;">
+                                    <div class="form-group checkbox-group">
+                                        <input type="checkbox" id="pe-new-gp-hidden">
+                                        <label for="pe-new-gp-hidden"><i class="fas fa-eye-slash" style="color: #ef4444;"></i> Ocultar en la tienda</label>
+                                    </div>
+                                    <div class="form-group checkbox-group">
+                                        <input type="checkbox" id="pe-new-gp-is-temporal">
+                                        <label for="pe-new-gp-is-temporal"><i class="fas fa-trophy" style="color: #f59e0b;"></i> ¿Competición Temporal?</label>
+                                    </div>
+                                </div>
+                                <div class="form-group hidden" id="pe-new-gp-team-container" style="margin-top: 0.75rem;">
+                                    <label style="color: #818cf8; font-weight: 700;"><i class="fas fa-shield-alt"></i> Equipos asignados a la Competición Temporal:</label>
+                                    <div id="pe-new-gp-teams-pills" class="gp-teams-pills-container">
+                                        <!-- Pills de equipos agregados dinámicamente -->
+                                    </div>
+                                    <div style="display: flex; gap: 0.5rem; margin-top: 0.5rem; flex-wrap: wrap;">
+                                        <select id="pe-new-gp-team-select" class="pe-input" style="flex: 1; min-width: 180px;" onchange="addTeamToNewGp()">
+                                            <option value="">+ Selecciona o añade un equipo...</option>
+                                        </select>
+                                        <button type="button" class="btn-gp-add-team" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4);" onclick="openMultiTeamModalForNewGp()">
+                                            <i class="fas fa-tasks"></i> Selección Múltiple
                                         </button>
                                     </div>
                                     <p class="pe-help-text" style="font-size: 0.78rem; color: #a1a1aa; margin-top: 0.35rem;">
@@ -652,7 +870,39 @@
     </div>
 
 
+    <!-- Modal de Selección Múltiple de Equipos -->
+    <div id="pe-multi-team-modal" class="modal-overlay hidden" style="z-index: 100010;">
+        <div class="modal-content" style="max-width: 540px; width: 92%; max-height: 85vh; display: flex; flex-direction: column; z-index: 100020;">
+            <div class="modal-header" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem 1.25rem; border-bottom: 1px solid var(--border-light);">
+                <h3 style="margin: 0; font-size: 1.1rem; color: #fff; display: flex; align-items: center; gap: 0.5rem;">
+                    <i class="fas fa-shield-alt" style="color: #818cf8;"></i> Seleccionar Múltiples Equipos
+                </h3>
+                <button type="button" onclick="closeMultiTeamModal()" style="background: none; border: none; color: #aaa; font-size: 1.2rem; cursor: pointer;">✕</button>
+            </div>
+            <div style="padding: 0.75rem 1.25rem; border-bottom: 1px solid var(--border-light); display: flex; flex-direction: column; gap: 0.5rem;">
+                <input type="text" id="pe-multi-team-search" class="pe-input" placeholder="🔍 Filtrar equipos..." oninput="filterMultiTeamModalList(this.value)">
+                <div style="display: flex; align-items: center; gap: 0.35rem; flex-wrap: wrap;">
+                    <span style="font-size: 0.75rem; font-weight: 700; color: #818cf8;">🏆 Marcar Liga:</span>
+                    <button type="button" class="btn-gp-add-team" style="padding: 0.2rem 0.5rem; font-size: 0.72rem;" onclick="checkLeagueInModal('laliga')">La Liga</button>
+                    <button type="button" class="btn-gp-add-team" style="padding: 0.2rem 0.5rem; font-size: 0.72rem;" onclick="checkLeagueInModal('premier')">Premier</button>
+                    <button type="button" class="btn-gp-add-team" style="padding: 0.2rem 0.5rem; font-size: 0.72rem;" onclick="checkLeagueInModal('seriea')">Serie A</button>
+                    <button type="button" class="btn-gp-add-team" style="padding: 0.2rem 0.5rem; font-size: 0.72rem;" onclick="checkLeagueInModal('bundesliga')">Bundesliga</button>
+                    <button type="button" class="btn-gp-add-team" style="padding: 0.2rem 0.5rem; font-size: 0.72rem;" onclick="checkLeagueInModal('ligue1')">Ligue 1</button>
+                    <button type="button" class="btn-gp-add-team" style="padding: 0.2rem 0.5rem; font-size: 0.72rem;" onclick="checkLeagueInModal('selecciones')">Selecciones</button>
+                </div>
+            </div>
+            <div id="pe-multi-team-checklist" style="flex: 1; overflow-y: auto; padding: 1rem 1.25rem; display: grid; grid-template-columns: repeat(auto-fill, minmax(180px, 1fr)); gap: 0.5rem;">
+                <!-- Checkboxes de equipos -->
+            </div>
+            <div class="modal-footer" style="padding: 1rem 1.25rem; border-top: 1px solid var(--border-light); display: flex; gap: 0.5rem; justify-content: flex-end;">
+                <button type="button" class="btn-secondary" onclick="closeMultiTeamModal()" style="padding: 0.55rem 1rem; border-radius: 6px; cursor: pointer; background: rgba(255,255,255,0.08); color: #ccc; border: none;">Cancelar</button>
+                <button type="button" class="btn-primary" onclick="confirmMultiTeamModalSelection()" style="padding: 0.55rem 1.1rem; border-radius: 6px; cursor: pointer; background: linear-gradient(135deg, #10b981, #059669); color: white; border: none; font-weight: 600;">
+                    <i class="fas fa-check"></i> Añadir Equipos Seleccionados
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script type="module" src="../js/admin.js"></script>
 </body>
-
 </html>

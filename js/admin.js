@@ -200,9 +200,12 @@ function updateStats() {
     }
 
     const total = filteredOrders.length;
-    const pending = filteredOrders.filter(o => o.status === 'pendiente' || o.status === 'confirmado').length;
+    const pending = filteredOrders.filter(o => o.status === 'pendiente').length;
+    const confirmed = filteredOrders.filter(o => o.status === 'confirmado').length;
+    const images = filteredOrders.filter(o => o.status === 'imagenes_cliente').length;
     const shipped = filteredOrders.filter(o => o.status === 'enviado').length;
     const delivered = filteredOrders.filter(o => o.status === 'entregado').length;
+    const cancelled = filteredOrders.filter(o => o.status === 'cancelado').length;
 
     // Calcular ingresos netos (confirmado, imagenes_cliente, enviado, entregado)
     const validStatuses = ['confirmado', 'imagenes_cliente', 'enviado', 'entregado'];
@@ -210,10 +213,21 @@ function updateStats() {
         .filter(o => validStatuses.includes(o.status))
         .reduce((sum, o) => sum + (parseFloat(o.total) || 0), 0);
 
-    document.getElementById('stat-total').textContent = total;
-    document.getElementById('stat-pending').textContent = pending;
-    document.getElementById('stat-shipped').textContent = shipped;
-    document.getElementById('stat-delivered').textContent = delivered;
+    const elTotal = document.getElementById('stat-total');
+    const elPending = document.getElementById('stat-pending');
+    const elConfirmed = document.getElementById('stat-confirmed');
+    const elImages = document.getElementById('stat-images');
+    const elShipped = document.getElementById('stat-shipped');
+    const elDelivered = document.getElementById('stat-delivered');
+    const elCancelled = document.getElementById('stat-cancelled');
+
+    if (elTotal) elTotal.textContent = total;
+    if (elPending) elPending.textContent = pending;
+    if (elConfirmed) elConfirmed.textContent = confirmed;
+    if (elImages) elImages.textContent = images;
+    if (elShipped) elShipped.textContent = shipped;
+    if (elDelivered) elDelivered.textContent = delivered;
+    if (elCancelled) elCancelled.textContent = cancelled;
 
     const revenueEl = document.getElementById('dash-revenue-total');
     if (revenueEl) {
@@ -234,7 +248,7 @@ function updateDashboardChart(filteredOrders, startStr, endStr) {
         const end = new Date(endStr);
         while(curr <= end) {
             const dStr = curr.toISOString().split('T')[0];
-            grouped[dStr] = { pending: 0, shipped: 0, delivered: 0, total: 0 };
+            grouped[dStr] = { pending: 0, confirmed: 0, images: 0, shipped: 0, delivered: 0, cancelled: 0, total: 0 };
             curr.setDate(curr.getDate() + 1);
         }
     }
@@ -244,20 +258,26 @@ function updateDashboardChart(filteredOrders, startStr, endStr) {
         const dStr = dateObj.toISOString().split('T')[0];
         
         if (!grouped[dStr]) {
-            grouped[dStr] = { pending: 0, shipped: 0, delivered: 0, total: 0 };
+            grouped[dStr] = { pending: 0, confirmed: 0, images: 0, shipped: 0, delivered: 0, cancelled: 0, total: 0 };
         }
         
         grouped[dStr].total++;
-        if (o.status === 'pendiente' || o.status === 'confirmado') grouped[dStr].pending++;
+        if (o.status === 'pendiente') grouped[dStr].pending++;
+        else if (o.status === 'confirmado') grouped[dStr].confirmed++;
+        else if (o.status === 'imagenes_cliente') grouped[dStr].images++;
         else if (o.status === 'enviado') grouped[dStr].shipped++;
         else if (o.status === 'entregado') grouped[dStr].delivered++;
+        else if (o.status === 'cancelado') grouped[dStr].cancelled++;
     });
 
     const labels = Object.keys(grouped).sort();
     const dataTotal = labels.map(l => grouped[l].total);
     const dataPending = labels.map(l => grouped[l].pending);
+    const dataConfirmed = labels.map(l => grouped[l].confirmed);
+    const dataImages = labels.map(l => grouped[l].images);
     const dataShipped = labels.map(l => grouped[l].shipped);
     const dataDelivered = labels.map(l => grouped[l].delivered);
+    const dataCancelled = labels.map(l => grouped[l].cancelled);
 
     if (dashboardChart) {
         dashboardChart.destroy();
@@ -297,6 +317,26 @@ function updateDashboardChart(filteredOrders, startStr, endStr) {
                     pointHoverRadius: 5
                 },
                 {
+                    label: 'Confirmados',
+                    data: dataConfirmed,
+                    borderColor: '#06b6d4',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
+                },
+                {
+                    label: 'Imágenes Cliente',
+                    data: dataImages,
+                    borderColor: '#ec4899',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
+                },
+                {
                     label: 'Enviados',
                     data: dataShipped,
                     borderColor: '#3b82f6',
@@ -312,6 +352,17 @@ function updateDashboardChart(filteredOrders, startStr, endStr) {
                     borderColor: '#10b981',
                     backgroundColor: 'transparent',
                     borderWidth: 2,
+                    tension: 0.4,
+                    pointRadius: 0,
+                    pointHoverRadius: 5
+                },
+                {
+                    label: 'Cancelados',
+                    data: dataCancelled,
+                    borderColor: '#ef4444',
+                    backgroundColor: 'transparent',
+                    borderWidth: 2,
+                    borderDash: [3, 3],
                     tension: 0.4,
                     pointRadius: 0,
                     pointHoverRadius: 5
@@ -2562,9 +2613,103 @@ async function loadProductIntoEditor(productId) {
     document.getElementById('pe-editor-form').classList.remove('hidden');
 }
 
+let catalogAvailableTeamsCache = [];
+
+const LEAGUE_NORMALIZATION_MAP = {
+    'la liga': 'laliga',
+    'laliga': 'laliga',
+    'premier league': 'premier',
+    'premier': 'premier',
+    'serie a': 'seriea',
+    'seriea': 'seriea',
+    'bundesliga': 'bundesliga',
+    'ligue 1': 'ligue1',
+    'ligue1': 'ligue1',
+    'selecciones nacionales': 'selecciones',
+    'selecciones': 'selecciones',
+    'brasileirao': 'brasileirao',
+    'liga arabe': 'ligaarabe',
+    'ligaarabe': 'ligaarabe',
+    'saf (argentina)': 'saf',
+    'saf': 'saf',
+    'nba': 'nba',
+    'eredivisie': 'eredivisie',
+    'liga portugal': 'ligaportugal',
+    'ligaportugal': 'ligaportugal',
+    'mls': 'mls',
+    'liga mx': 'ligamx',
+    'ligamx': 'ligamx',
+    'ediciones retro': 'retro',
+    'retro': 'retro'
+};
+
+function normalizeLeagueKey(league) {
+    if (!league) return '';
+    const raw = String(league).trim().toLowerCase().replace(/[_-]+/g, ' ').replace(/\s+/g, ' ').trim();
+    return LEAGUE_NORMALIZATION_MAP[raw] || raw.replace(/\s+/g, '');
+}
+
+async function getAllTeamsForLeague(leagueVal) {
+    const liveProducts = await getAllLiveProducts();
+    const rawTargetLeague = (leagueVal || '').replace('LIGA:', '').trim();
+    const targetLeagueKey = normalizeLeagueKey(rawTargetLeague);
+
+    const leagueProducts = liveProducts.filter(p => {
+        if (!p.league) return false;
+        return normalizeLeagueKey(p.league) === targetLeagueKey;
+    });
+
+    const teamMap = new Map();
+
+    leagueProducts.forEach(p => {
+        const rawT = p.team || extractTeamFromProductName(p.name);
+        if (rawT) {
+            const normT = normalizeTeamName(rawT);
+            if (normT && normT.length > 1) {
+                teamMap.set(normT.toLowerCase(), normT);
+            }
+        }
+    });
+
+    return [...teamMap.values()].sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
+}
+
+function buildTeamAndLeagueSelectHTML(availableTeams, activeTeamsSet = new Set()) {
+    const available = availableTeams.filter(t => !activeTeamsSet.has(t));
+    
+    return `
+        <option value="">+ Selecciona una Liga o Equipos...</option>
+        <optgroup label="🏆 LIGAS COMPLETAS (Añadir todos sus equipos)">
+            <option value="LIGA:laliga">🏆 Toda La Liga</option>
+            <option value="LIGA:premier">🏆 Toda la Premier League</option>
+            <option value="LIGA:seriea">🏆 Toda la Serie A</option>
+            <option value="LIGA:bundesliga">🏆 Toda la Bundesliga</option>
+            <option value="LIGA:ligue1">🏆 Toda la Ligue 1</option>
+            <option value="LIGA:selecciones">🏆 Todas las Selecciones</option>
+            <option value="LIGA:brasileirao">🏆 Todo el Brasileirao</option>
+            <option value="LIGA:ligaarabe">🏆 Toda la Liga Árabe</option>
+            <option value="LIGA:eredivisie">🏆 Toda la Eredivisie</option>
+            <option value="LIGA:ligaportugal">🏆 Toda la Liga Portugal</option>
+            <option value="LIGA:mls">🏆 Toda la MLS</option>
+            <option value="LIGA:ligamx">🏆 Toda la Liga MX</option>
+        </optgroup>
+        <optgroup label="🛡️ EQUIPOS INDIVIDUALES (${available.length} disponibles)">
+            ${available.map(t => `<option value="${sanitizeHTML(t)}">${sanitizeHTML(t)}</option>`).join('')}
+        </optgroup>
+    `;
+}
+
+async function populateNewGpTeamSelect() {
+    const select = document.getElementById('pe-new-gp-team-select');
+    if (!select) return;
+    const teams = catalogAvailableTeamsCache.length > 0 ? catalogAvailableTeamsCache : await getAllTeamsFromCatalog();
+    select.innerHTML = buildTeamAndLeagueSelectHTML(teams, newGpTemporalTeams);
+}
+
 function renderPatchesTab() {
     renderGlobalPatchesList();
     renderExclusivePatchesList();
+    populateNewGpTeamSelect();
 }
 
 function getCurrentEditingProductTeam() {
@@ -2598,34 +2743,241 @@ async function getAllLiveProducts() {
     });
 }
 
+const STORE_CANONICAL_NAMES = {
+    'ac milan': 'AC Milan',
+    'ajax': 'Ajax',
+    'al ahli': 'Al Ahli',
+    'al-hilal': 'Al-Hilal',
+    'al-nassr': 'Al-Nassr',
+    'alaves': 'Alavés',
+    'albacete': 'Albacete',
+    'alemania': 'Alemania',
+    'argelia': 'Argelia',
+    'argentina': 'Argentina',
+    'arsenal': 'Arsenal',
+    'as roma': 'AS Roma',
+    'aston villa': 'Aston Villa',
+    'athletic club': 'Athletic Club',
+    'atletico madrid': 'Atlético Madrid',
+    'atletico mineiro': 'Atlético Mineiro',
+    'bayern munich': 'Bayern Múnich',
+    'belgica': 'Bélgica',
+    'benfica': 'Benfica',
+    'boca juniors': 'Boca Juniors',
+    'brasil': 'Brasil',
+    'burgos': 'Burgos',
+    'cadiz': 'Cádiz',
+    'celta de vigo': 'Celta de Vigo',
+    'chelsea': 'Chelsea',
+    'chile': 'Chile',
+    'chivas': 'Chivas',
+    'colombia': 'Colombia',
+    'cordoba': 'Córdoba',
+    'corea del sur': 'Corea del Sur',
+    'costa rica': 'Costa Rica',
+    'croacia': 'Croacia',
+    'deportivo la coruna': 'Deportivo La Coruña',
+    'dortmund': 'Dortmund',
+    'ecuador': 'Ecuador',
+    'elche': 'Elche',
+    'escocia': 'Escocia',
+    'espana': 'España',
+    'espanyol': 'Espanyol',
+    'estados unidos': 'Estados Unidos',
+    'everton': 'Everton',
+    'fc barcelona': 'FC Barcelona',
+    'feyenoord': 'Feyenoord',
+    'finlandia': 'Finlandia',
+    'fiorentina': 'Fiorentina',
+    'flamengo': 'Flamengo',
+    'fluminense': 'Fluminense',
+    'francia': 'Francia',
+    'gales': 'Gales',
+    'getafe': 'Getafe',
+    'girona': 'Girona',
+    'granada': 'Granada',
+    'holanda': 'Holanda',
+    'inglaterra': 'Inglaterra',
+    'inter miami': 'Inter Miami',
+    'inter milan': 'Inter de Milán',
+    'internacional': 'Internacional',
+    'italia': 'Italia',
+    'jamaica': 'Jamaica',
+    'japon': 'Japón',
+    'las palmas': 'Las Palmas',
+    'lazio': 'Lazio',
+    'leeds united': 'Leeds United',
+    'leganes': 'Leganés',
+    'leicester city': 'Leicester City',
+    'levante': 'Levante',
+    'malaga cf': 'Málaga CF',
+    'mallorca': 'Mallorca',
+    'manchester city': 'Manchester City',
+    'manchester united': 'Manchester United',
+    'marruecos': 'Marruecos',
+    'marseille': 'Marseille',
+    'mexico': 'México',
+    'monaco': 'Monaco',
+    'monterrey': 'Monterrey',
+    'napoli': 'Napoli',
+    'newcastle united': 'Newcastle United',
+    'nigeria': 'Nigeria',
+    'noruega': 'Noruega',
+    'osasuna': 'Osasuna',
+    'palmeiras': 'Palmeiras',
+    'peru': 'Perú',
+    'polonia': 'Polonia',
+    'porto': 'Porto',
+    'portugal': 'Portugal',
+    'psg': 'PSG',
+    'real betis': 'Real Betis',
+    'real madrid': 'Real Madrid',
+    'real sociedad': 'Real Sociedad',
+    'river plate': 'River Plate',
+    'rumania': 'Rumania',
+    'santos': 'Santos',
+    'sao paulo': 'São Paulo',
+    'sevilla': 'Sevilla',
+    'sporting de lisboa': 'Sporting de Lisboa',
+    'sporting gijon': 'Sporting de Gijón',
+    'valencia': 'Valencia',
+    'valladolid': 'Valladolid',
+    'venezuela': 'Venezuela',
+    'villarreal': 'Villarreal'
+};
+
+const STORE_CANONICAL_KEYS = {
+    'barcelona': 'fc barcelona',
+    'milan': 'ac milan',
+    'ac milan': 'ac milan',
+    'newcastle': 'newcastle united',
+    'sporting lisboa': 'sporting de lisboa',
+    'sporting lisbon': 'sporting de lisboa',
+    'miami': 'inter miami',
+    'mexico': 'mexico',
+    'man utd': 'manchester united',
+    'man united': 'manchester united',
+    'boca juniors stadium': 'boca juniors',
+    'celta': 'celta de vigo',
+    'celta de vigo': 'celta de vigo',
+    'deportivo alaves': 'alaves',
+    'alaves': 'alaves',
+    'athletic': 'athletic club',
+    'athletic bilbao': 'athletic club',
+    'athletic club': 'athletic club',
+    'brazil': 'brasil',
+    'deportivo la coruna': 'deportivo la coruna',
+    'depor': 'deportivo la coruna',
+    'deportivo': 'deportivo la coruna',
+    'portugal': 'portugal',
+    'norway': 'noruega',
+    'sweden': 'suecia',
+    'brazil juese': 'brasil',
+    'finland': 'finlandia',
+    'vicenza': 'victoria',
+    'vitoria': 'victoria',
+    'espana \'somos campeones\'': 'espana',
+    'espana mundial 2 estrellas': 'espana'
+};
+
+function normalizeTeamName(rawName) {
+    if (!rawName) return '';
+    let name = String(rawName).trim();
+    name = name.replace(/&amp;/g, '&').replace(/&[a-z]+;/gi, ' ');
+    name = name.replace(/\b\d{2,4}\/\d{2,4}\b/g, '');
+    name = name.replace(/\/\d{2,4}\b/g, '');
+    name = name.replace(/\b(19|20)\d{2}\b/g, '');
+    name = name.replace(/(?<!Schalke|Mainz|Pumas|CA)\s+\b(19|20|21|22|23|24|25|26|7\d|8\d|9\d)\b/gi, '');
+    name = name.replace(/\(.*\)/g, '');
+
+    const variants = [
+        'Local', 'Visitante', 'Tercera', 'Cuarta', 'Fourth', 'Home', 'Away', 'Third',
+        'Portero', 'Goalkeeper', 'GK', 'Niño', 'Niños',
+        'Retro', 'Icon', 'Classic', 'Vintage',
+        'Especial', 'Special', 'Edici[oó]n.*', 'Limited', 'Commemorative', 'Conmemorativ[ao]',
+        'estilo', 'Style', 'Casual', 'Manga Larga', 'Long Sleeve',
+        'Black', 'Gold', 'Golden', 'White', 'Pink', 'Blue', 'Red', 'Green', 'Golde', 'cyan', 'Negra',
+        'Training', 'Entrenamiento', 'Pre-match', 'Pre-partido', 'Warm-up',
+        'Anniversary', 'Aniversario', 'Centemary', 'Centenario', '100 Años', '125',
+        'Player', 'Fan', 'Vapor', 'Authentic',
+        'Stadium', 'Women', 'Edition', 'Polo', 'Dorada', 'Juese', 'Campeones'
+    ];
+    const variantRegex = new RegExp(`\\b(${variants.join('|')})\\b`, 'gi');
+    name = name.replace(variantRegex, '');
+    name = name.replace(/\bS-[X\d]+L?\b/gi, '');
+    name = name.replace(/\s+/g, ' ').trim();
+
+    if (!name) return '';
+
+    function normStr(str) {
+        return str.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").trim();
+    }
+
+    let key = normStr(name);
+    key = STORE_CANONICAL_KEYS[key] || key;
+
+    const displayName = STORE_CANONICAL_NAMES[key] || STORE_CANONICAL_NAMES[normStr(name)] || name;
+    return displayName.trim();
+}
+
 async function getAllTeamsFromCatalog() {
     const liveProducts = await getAllLiveProducts();
-    const teamsSet = new Set();
+    const teamMap = new Map();
 
     const currentEditingTeam = getCurrentEditingProductTeam();
     if (currentEditingTeam) {
-        teamsSet.add(currentEditingTeam);
+        const normCurrent = normalizeTeamName(currentEditingTeam);
+        if (normCurrent) teamMap.set(normCurrent.toLowerCase(), normCurrent);
     }
 
     liveProducts.forEach(p => {
-        const tName = p.team || extractTeamFromProductName(p.name);
-        if (tName) teamsSet.add(tName.trim());
+        const rawT = p.team || extractTeamFromProductName(p.name);
+        if (rawT) {
+            const normT = normalizeTeamName(rawT);
+            if (normT && normT.length > 1) {
+                teamMap.set(normT.toLowerCase(), normT);
+            }
+        }
     });
-    return [...teamsSet].sort();
+
+    return [...teamMap.values()].sort((a, b) => a.localeCompare(b, 'es', { sensitivity: 'base' }));
 }
 
 // --- MULTI-TEAM SELECTION STATE FOR GLOBAL PATCHES ---
 let newGpTemporalTeams = new Set();
 let editGpTemporalTeamsMap = {}; // key -> Set of team names
 
-window.addTeamToNewGp = function() {
+window.addTeamToNewGp = async function() {
     const select = document.getElementById('pe-new-gp-team-select');
     if (!select || !select.value) return;
-    const teamName = select.value.trim();
+    const val = select.value.trim();
+
+    if (val.startsWith('LIGA:')) {
+        const leagueTeams = await getAllTeamsForLeague(val);
+        leagueTeams.forEach(t => newGpTemporalTeams.add(t));
+        select.value = '';
+        renderNewGpTeamsPills();
+        showToast(`Añadidos ${leagueTeams.length} equipos de la liga seleccionada.`);
+        return;
+    }
+
+    const teamName = normalizeTeamName(val);
     if (teamName) {
         newGpTemporalTeams.add(teamName);
         select.value = '';
         renderNewGpTeamsPills();
+    }
+};
+
+window.addTeamToGpEdit = function(key) {
+    const select = document.getElementById(`gp-edit-team-select-${key}`);
+    if (!select || !select.value) return;
+    const teamName = normalizeTeamName(select.value.trim());
+    if (teamName) {
+        if (!editGpTemporalTeamsMap[key]) editGpTemporalTeamsMap[key] = new Set();
+        editGpTemporalTeamsMap[key].add(teamName);
+        select.value = '';
+        renderGpEditTeamsPills(key);
     }
 };
 
@@ -2639,21 +2991,34 @@ function renderNewGpTeamsPills() {
     if (!container) return;
     if (newGpTemporalTeams.size === 0) {
         container.innerHTML = '<span style="color:#64748b; font-size:0.8rem; font-style:italic;">No hay equipos seleccionados aún. Elige uno abajo y pulsa Añadir.</span>';
+    } else {
+        container.innerHTML = [...newGpTemporalTeams].map(team => `
+            <span class="gp-team-pill">
+                <i class="fas fa-shield-alt"></i> ${sanitizeHTML(team)}
+                <span class="gp-team-pill-remove" onclick="removeTeamFromNewGp('${sanitizeHTML(team).replace(/'/g, "\\'")}')" title="Quitar equipo">✕</span>
+            </span>
+        `).join('');
+    }
+
+    populateNewGpTeamSelect();
+}
+
+window.addTeamToGpEdit = async function(key) {
+    const select = document.getElementById(`gp-edit-team-select-${key}`);
+    if (!select || !select.value) return;
+    const val = select.value.trim();
+
+    if (val.startsWith('LIGA:')) {
+        const leagueTeams = await getAllTeamsForLeague(val);
+        if (!editGpTemporalTeamsMap[key]) editGpTemporalTeamsMap[key] = new Set();
+        leagueTeams.forEach(t => editGpTemporalTeamsMap[key].add(t));
+        select.value = '';
+        renderGpEditTeamsPills(key);
+        showToast(`Añadidos ${leagueTeams.length} equipos de la liga seleccionada.`);
         return;
     }
 
-    container.innerHTML = [...newGpTemporalTeams].map(team => `
-        <span class="gp-team-pill">
-            <i class="fas fa-shield-alt"></i> ${sanitizeHTML(team)}
-            <span class="gp-team-pill-remove" onclick="removeTeamFromNewGp('${sanitizeHTML(team).replace(/'/g, "\\'")}')" title="Quitar equipo">✕</span>
-        </span>
-    `).join('');
-}
-
-window.addTeamToGpEdit = function(key) {
-    const select = document.getElementById(`gp-edit-team-select-${key}`);
-    if (!select || !select.value) return;
-    const teamName = select.value.trim();
+    const teamName = normalizeTeamName(val);
     if (teamName) {
         if (!editGpTemporalTeamsMap[key]) editGpTemporalTeamsMap[key] = new Set();
         editGpTemporalTeamsMap[key].add(teamName);
@@ -2676,15 +3041,28 @@ function renderGpEditTeamsPills(key) {
     
     if (teamsSet.size === 0) {
         container.innerHTML = '<span style="color:#64748b; font-size:0.8rem; font-style:italic;">No hay equipos asignados a esta competición aún.</span>';
-        return;
+    } else {
+        container.innerHTML = [...teamsSet].map(team => `
+            <span class="gp-team-pill">
+                <i class="fas fa-shield-alt"></i> ${sanitizeHTML(team)}
+                <span class="gp-team-pill-remove" onclick="removeTeamFromGpEdit('${key}', '${sanitizeHTML(team).replace(/'/g, "\\'")}')" title="Quitar equipo">✕</span>
+            </span>
+        `).join('');
     }
 
-    container.innerHTML = [...teamsSet].map(team => `
-        <span class="gp-team-pill">
-            <i class="fas fa-shield-alt"></i> ${sanitizeHTML(team)}
-            <span class="gp-team-pill-remove" onclick="removeTeamFromGpEdit('${key}', '${sanitizeHTML(team).replace(/'/g, "\\'")}')" title="Quitar equipo">✕</span>
-        </span>
-    `).join('');
+    const card = document.getElementById(`gp-card-${key}`);
+    if (card) {
+        const badge = card.querySelector('.badge-patch-temporal');
+        if (badge) {
+            const str = [...teamsSet].join(', ');
+            badge.innerHTML = `<i class="fas fa-trophy"></i> ${sanitizeHTML(str || 'Temporal')}`;
+        }
+    }
+
+    const select = document.getElementById(`gp-edit-team-select-${key}`);
+    if (select && catalogAvailableTeamsCache.length > 0) {
+        select.innerHTML = buildTeamAndLeagueSelectHTML(catalogAvailableTeamsCache, teamsSet);
+    }
 }
 
 async function renderGlobalPatchesList() {
@@ -2698,6 +3076,7 @@ async function renderGlobalPatchesList() {
     }
 
     const availableTeams = await getAllTeamsFromCatalog();
+    catalogAvailableTeamsCache = availableTeams;
 
     globalPatchesList.forEach(gp => {
         const card = document.createElement('div');
@@ -2714,9 +3093,12 @@ async function renderGlobalPatchesList() {
         }
         editGpTemporalTeamsMap[gp.key] = new Set(initialTeams);
 
-        const teamOptionsHTML = availableTeams.map(t => 
-            `<option value="${sanitizeHTML(t)}">${sanitizeHTML(t)}</option>`
-        ).join('');
+        const currentEditingTeam = normalizeTeamName(getCurrentEditingProductTeam());
+        if (!quickApplyTeamsMap[gp.key]) {
+            quickApplyTeamsMap[gp.key] = new Set(currentEditingTeam ? [currentEditingTeam] : []);
+        }
+
+        const teamOptionsHTML = buildTeamAndLeagueSelectHTML(availableTeams, editGpTemporalTeamsMap[gp.key]);
         
         const teamsDisplayStr = [...editGpTemporalTeamsMap[gp.key]].join(', ');
 
@@ -2788,13 +3170,13 @@ async function renderGlobalPatchesList() {
                     <div id="gp-edit-teams-pills-${gp.key}" class="gp-teams-pills-container">
                         <!-- Pills de equipos -->
                     </div>
-                    <div style="display:flex; gap:0.5rem; margin-top:0.4rem;">
-                        <select id="gp-edit-team-select-${gp.key}" class="pe-input" style="flex:1;">
-                            <option value="">+ Añadir equipo a la competición...</option>
+                    <div style="display:flex; gap:0.5rem; margin-top:0.4rem; flex-wrap:wrap;">
+                        <select id="gp-edit-team-select-${gp.key}" class="pe-input" style="flex:1; min-width:180px;" onchange="addTeamToGpEdit('${gp.key}')">
+                            <option value="">+ Selecciona o añade un equipo...</option>
                             ${teamOptionsHTML}
                         </select>
-                        <button type="button" class="btn-gp-add-team" onclick="addTeamToGpEdit('${gp.key}')">
-                            <i class="fas fa-plus"></i> Añadir
+                        <button type="button" class="btn-gp-add-team" style="background: rgba(16, 185, 129, 0.2); color: #10b981; border: 1px solid rgba(16, 185, 129, 0.4);" onclick="openMultiTeamModalForEditGp('${gp.key}')">
+                            <i class="fas fa-tasks"></i> Selección Múltiple
                         </button>
                     </div>
                 </div>
@@ -2811,6 +3193,32 @@ async function renderGlobalPatchesList() {
                     <button type="button" style="background:rgba(255,255,255,0.08); color:#ccc; border:none; padding:0.6rem 0.85rem; border-radius:6px; font-weight:600; cursor:pointer; font-size:0.85rem;" onclick="toggleGlobalPatchEditPanel('${gp.key}')">
                         Cancelar
                     </button>
+                </div>
+
+                <!-- Sección para Asignación Rápida a Cualquier Equipo (Última Temporada) -->
+                <div style="margin-top:0.75rem; padding-top:0.75rem; border-top:1px dashed rgba(255,255,255,0.1);">
+                    <div style="display:flex; align-items:center; justify-content:space-between; gap:0.5rem; flex-wrap:wrap; margin-bottom:0.4rem;">
+                        <span style="font-size:0.8rem; font-weight:700; color:#38bdf8; display:flex; align-items:center; gap:0.35rem;">
+                            <i class="fas fa-bolt"></i> Aplicar parche a equipos (Última Temporada):
+                        </span>
+                        <button type="button" class="btn-gp-add-team" style="background: rgba(56, 189, 248, 0.15); color: #38bdf8; border: 1px solid rgba(56, 189, 248, 0.4); padding: 0.3rem 0.65rem; font-size: 0.78rem;" onclick="openMultiTeamModalForQuickApply('${gp.key}')">
+                            <i class="fas fa-tasks"></i> Selección Múltiple
+                        </button>
+                    </div>
+
+                    <div id="gp-quick-teams-pills-${gp.key}" class="gp-teams-pills-container" style="margin-bottom:0.4rem;">
+                        <!-- Pills de equipos agregados dinámicamente -->
+                    </div>
+
+                    <div style="display:flex; gap:0.5rem; align-items:center; flex-wrap:wrap;">
+                        <select id="gp-quick-team-select-${gp.key}" class="pe-input" style="flex:1; min-width:180px; padding:0.4rem 0.6rem; font-size:0.82rem;" onchange="addTeamToQuickApply('${gp.key}')">
+                            <option value="">+ Selecciona o añade un equipo...</option>
+                            ${teamOptionsHTML}
+                        </select>
+                        <button type="button" class="btn-gp-quick-apply" style="background:linear-gradient(135deg, #0284c7, #0369a1); color:#fff; border:none; padding:0.45rem 0.95rem; border-radius:6px; font-weight:600; font-size:0.82rem; cursor:pointer; display:inline-flex; align-items:center; gap:0.4rem; white-space:nowrap;" onclick="quickApplyPatchToTeams('${gp.key}')">
+                            <i class="fas fa-bolt"></i> Aplicar a Última Temporada
+                        </button>
+                    </div>
                 </div>
             </div>
         `;
@@ -2846,6 +3254,7 @@ async function renderGlobalPatchesList() {
         list.appendChild(card);
 
         renderGpEditTeamsPills(gp.key);
+        renderQuickApplyTeamsPills(gp.key);
     });
 
     populateNewGpTeamDropdown(availableTeams);
@@ -3005,6 +3414,107 @@ window.triggerApplyPatchToTeam = async function(key) {
         }
         await renderPatchesTab();
         alert(`¡Éxito! Parche "${gp.name}" asignado y aplicado a ${count} camiseta(s) de la última temporada de: ${teamsStr}.`);
+    } catch (err) {
+        console.error('Error applying patch to teams:', err);
+        alert('Error al aplicar parche a los equipos: ' + err.message);
+    }
+};
+
+let quickApplyTeamsMap = {}; // key -> Set of team names
+
+window.addTeamToQuickApply = async function(key) {
+    const select = document.getElementById(`gp-quick-team-select-${key}`);
+    if (!select || !select.value) return;
+    const val = select.value.trim();
+
+    if (val.startsWith('LIGA:')) {
+        const leagueTeams = await getAllTeamsForLeague(val);
+        if (!quickApplyTeamsMap[key]) quickApplyTeamsMap[key] = new Set();
+        leagueTeams.forEach(t => quickApplyTeamsMap[key].add(t));
+        select.value = '';
+        renderQuickApplyTeamsPills(key);
+        showToast(`Añadidos ${leagueTeams.length} equipos de la liga seleccionada.`);
+        return;
+    }
+
+    const teamName = normalizeTeamName(val);
+    if (teamName) {
+        if (!quickApplyTeamsMap[key]) quickApplyTeamsMap[key] = new Set();
+        quickApplyTeamsMap[key].add(teamName);
+        select.value = '';
+        renderQuickApplyTeamsPills(key);
+    }
+};
+
+window.removeTeamFromQuickApply = function(key, teamName) {
+    if (quickApplyTeamsMap[key]) {
+        quickApplyTeamsMap[key].delete(teamName);
+        renderQuickApplyTeamsPills(key);
+    }
+};
+
+function renderQuickApplyTeamsPills(key) {
+    const container = document.getElementById(`gp-quick-teams-pills-${key}`);
+    if (!container) return;
+    const teamsSet = quickApplyTeamsMap[key] || new Set();
+    
+    if (teamsSet.size === 0) {
+        container.innerHTML = '<span style="color:#64748b; font-size:0.8rem; font-style:italic;">No hay equipos elegidos. Selecciona abajo o usa Selección Múltiple.</span>';
+    } else {
+        container.innerHTML = [...teamsSet].map(team => `
+            <span class="gp-team-pill" style="background: rgba(56, 189, 248, 0.18); border-color: rgba(56, 189, 248, 0.4); color: #38bdf8;">
+                <i class="fas fa-shield-alt"></i> ${sanitizeHTML(team)}
+                <span class="gp-team-pill-remove" onclick="removeTeamFromQuickApply('${key}', '${sanitizeHTML(team).replace(/'/g, "\\'")}')" title="Quitar equipo">✕</span>
+            </span>
+        `).join('');
+    }
+
+    const select = document.getElementById(`gp-quick-team-select-${key}`);
+    if (select && catalogAvailableTeamsCache.length > 0) {
+        select.innerHTML = buildTeamAndLeagueSelectHTML(catalogAvailableTeamsCache, teamsSet);
+    }
+}
+
+window.openMultiTeamModalForQuickApply = async function(key) {
+    currentMultiTeamTargetKey = 'quick_' + key;
+    const existingTeams = quickApplyTeamsMap[key] || new Set();
+    await renderMultiTeamChecklist(existingTeams);
+    const modal = document.getElementById('pe-multi-team-modal');
+    if (modal) modal.classList.remove('hidden');
+};
+
+window.quickApplyPatchToTeams = async function(key) {
+    const gp = globalPatchesList.find(p => p.key === key);
+    if (!gp) return;
+
+    const teamsSet = quickApplyTeamsMap[key] || new Set();
+    const targetTeams = [...teamsSet];
+
+    if (targetTeams.length === 0) {
+        alert('Por favor, selecciona al menos un equipo al que quieras aplicar este parche.');
+        return;
+    }
+
+    const teamsStr = targetTeams.join(', ');
+
+    if (!confirm(`¿Aplicar el parche "${gp.name}" a TODAS las camisetas de la última temporada de: ${teamsStr}?`)) {
+        return;
+    }
+
+    try {
+        const count = await applyPatchToTeamLatestSeason(gp, targetTeams);
+        
+        const currentTeam = normalizeTeamName(getCurrentEditingProductTeam());
+        if (targetTeams.includes(currentTeam) && gp.key) {
+            selectedGlobalPatchKeys.add(gp.key);
+            const card = document.getElementById(`gp-card-${gp.key}`);
+            if (card) {
+                const cb = card.querySelector('.pe-gp-assign-checkbox input[type="checkbox"]');
+                if (cb) cb.checked = true;
+            }
+        }
+
+        showToast(`¡Éxito! Parche "${gp.name}" aplicado a ${count} camiseta(s) de la última temporada de: ${teamsStr}.`);
     } catch (err) {
         console.error('Error applying patch to teams:', err);
         alert('Error al aplicar parche a los equipos: ' + err.message);
@@ -3526,4 +4036,104 @@ async function assignPatchesToLeague() {
 document.addEventListener('DOMContentLoaded', () => {
     initProductEditor();
 });
+
+// Ocultar dropdowns de autocompletado al hacer clic fuera
+document.addEventListener('click', (e) => {
+    if (!e.target.closest('.pe-team-suggestions-list') && !e.target.closest('.pe-input')) {
+        document.querySelectorAll('.pe-team-suggestions-list').forEach(el => el.classList.add('hidden'));
+    }
+});
+
+// --- MULTI-TEAM CHECKBOX MODAL CONTROLLERS ---
+let currentMultiTeamTargetKey = null; // null for new GP, string for edit GP
+
+window.openMultiTeamModalForNewGp = async function() {
+    currentMultiTeamTargetKey = null;
+    await renderMultiTeamChecklist(newGpTemporalTeams);
+    const modal = document.getElementById('pe-multi-team-modal');
+    if (modal) modal.classList.remove('hidden');
+};
+
+window.openMultiTeamModalForEditGp = async function(key) {
+    currentMultiTeamTargetKey = key;
+    const existingTeams = editGpTemporalTeamsMap[key] || new Set();
+    await renderMultiTeamChecklist(existingTeams);
+    const modal = document.getElementById('pe-multi-team-modal');
+    if (modal) modal.classList.remove('hidden');
+};
+
+window.closeMultiTeamModal = function() {
+    const modal = document.getElementById('pe-multi-team-modal');
+    if (modal) modal.classList.add('hidden');
+};
+
+async function renderMultiTeamChecklist(activeTeamsSet) {
+    const checklist = document.getElementById('pe-multi-team-checklist');
+    if (!checklist) return;
+
+    const allTeams = await getAllTeamsFromCatalog();
+    checklist.innerHTML = allTeams.map(t => {
+        const isChecked = activeTeamsSet.has(t);
+        return `
+            <label style="display: flex; align-items: center; gap: 0.5rem; padding: 0.4rem 0.6rem; border: 1px solid rgba(255,255,255,0.08); border-radius: 6px; background: rgba(255,255,255,0.03); cursor: pointer; font-size: 0.85rem; color: #e2e8f0;">
+                <input type="checkbox" class="pe-team-modal-cb" value="${sanitizeHTML(t)}" ${isChecked ? 'checked' : ''} style="accent-color: #10b981; width: 16px; height: 16px; cursor: pointer;">
+                <span>${sanitizeHTML(t)}</span>
+            </label>
+        `;
+    }).join('');
+
+    const searchInput = document.getElementById('pe-multi-team-search');
+    if (searchInput) searchInput.value = '';
+}
+
+window.filterMultiTeamModalList = function(query) {
+    const q = (query || '').toLowerCase().trim();
+    const labels = document.querySelectorAll('#pe-multi-team-checklist label');
+    labels.forEach(lbl => {
+        const text = lbl.textContent.toLowerCase();
+        if (text.includes(q)) {
+            lbl.style.display = 'flex';
+        } else {
+            lbl.style.display = 'none';
+        }
+    });
+};
+
+window.checkLeagueInModal = async function(leagueKey) {
+    const leagueTeams = await getAllTeamsForLeague(leagueKey);
+    const set = new Set(leagueTeams.map(t => t.toLowerCase()));
+    
+    const checkboxes = document.querySelectorAll('.pe-team-modal-cb');
+    let count = 0;
+    checkboxes.forEach(cb => {
+        const teamName = cb.value.trim().toLowerCase();
+        if (set.has(teamName)) {
+            cb.checked = true;
+            count++;
+        }
+    });
+
+    if (typeof showToast === 'function') {
+        showToast(`Marcados ${count} equipos de la liga seleccionada.`);
+    }
+};
+
+window.confirmMultiTeamModalSelection = function() {
+    const checkboxes = document.querySelectorAll('.pe-team-modal-cb:checked');
+    const selectedTeams = Array.from(checkboxes).map(cb => cb.value.trim());
+
+    if (currentMultiTeamTargetKey === null) {
+        newGpTemporalTeams = new Set(selectedTeams);
+        renderNewGpTeamsPills();
+    } else if (currentMultiTeamTargetKey.startsWith('quick_')) {
+        const key = currentMultiTeamTargetKey.replace('quick_', '');
+        quickApplyTeamsMap[key] = new Set(selectedTeams);
+        renderQuickApplyTeamsPills(key);
+    } else {
+        editGpTemporalTeamsMap[currentMultiTeamTargetKey] = new Set(selectedTeams);
+        renderGpEditTeamsPills(currentMultiTeamTargetKey);
+    }
+
+    closeMultiTeamModal();
+};
 
