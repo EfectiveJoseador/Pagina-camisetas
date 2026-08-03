@@ -3110,36 +3110,196 @@ select.pe-input option {
 .pe-global-patches-grid {
     display: flex;
     flex-direction: column;
-    gap: 0.6rem;
+    gap: 0.75rem;
     margin-top: 0.75rem;
-    max-height: 220px;
+    max-height: 480px;
     overflow-y: auto;
     padding-right: 0.25rem;
 }
 
-.pe-global-patch-item {
+.pe-global-patch-card {
+    background: #18182c;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 0.85rem 1rem;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+}
+
+.pe-global-patch-card.is-hidden-patch {
+    border-color: rgba(239, 68, 68, 0.3);
+    background: rgba(239, 68, 68, 0.05);
+}
+
+.pe-gp-card-header {
     display: flex;
     align-items: center;
     gap: 0.85rem;
-    background: #1c1c34;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    padding: 0.65rem 0.85rem;
-    border-radius: 10px;
+    flex-wrap: wrap;
+}
+
+.pe-gp-assign-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
     cursor: pointer;
+    background: rgba(255, 255, 255, 0.05);
+    padding: 0.35rem 0.65rem;
+    border-radius: 6px;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #e2e8f0;
+}
+
+.pe-gp-assign-checkbox input[type="checkbox"] {
+    accent-color: #6366f1;
+    width: 16px;
+    height: 16px;
+    cursor: pointer;
+}
+
+.pe-gp-card-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+    margin-left: auto;
+}
+
+.btn-gp-toggle-edit {
+    background: rgba(99, 102, 241, 0.15);
+    color: #818cf8;
+    border: 1px solid rgba(99, 102, 241, 0.3);
+    padding: 0.35rem 0.7rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.15s;
+}
+
+.btn-gp-toggle-edit:hover {
+    background: rgba(99, 102, 241, 0.3);
+    color: #fff;
+}
+
+.btn-gp-delete {
+    background: rgba(239, 68, 68, 0.15);
+    color: #ef4444;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+    padding: 0.35rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.78rem;
+    cursor: pointer;
+    transition: all 0.15s;
+}
+
+.btn-gp-delete:hover {
+    background: #ef4444;
+    color: #fff;
+}
+
+.badge-patch-hidden {
+    font-size: 0.7rem;
+    background: rgba(239, 68, 68, 0.2);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.badge-patch-temporal {
+    font-size: 0.7rem;
+    background: rgba(245, 158, 11, 0.2);
+    color: #fbbf24;
+    border: 1px solid rgba(245, 158, 11, 0.35);
+    padding: 0.15rem 0.5rem;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+/* Multi-Team Selection Pills for Competición Temporal */
+.gp-teams-pills-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+    margin-top: 0.35rem;
+    min-height: 38px;
+    background: #101020;
+    border: 1px dashed rgba(99, 102, 241, 0.3);
+    padding: 0.4rem 0.6rem;
+    border-radius: 8px;
+    align-items: center;
+}
+
+.gp-team-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    background: rgba(99, 102, 241, 0.2);
+    color: #a5b4fc;
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    padding: 0.25rem 0.6rem;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
+}
+
+.gp-team-pill-remove {
+    cursor: pointer;
+    color: #f87171;
+    font-size: 0.75rem;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    background: rgba(239, 68, 68, 0.15);
     transition: all 0.15s ease;
 }
 
-.pe-global-patch-item:hover {
-    border-color: rgba(99, 102, 241, 0.4);
-    background: #222240;
+.gp-team-pill-remove:hover {
+    background: #ef4444;
+    color: #fff;
 }
 
-.pe-global-patch-item input[type="checkbox"] {
-    width: 20px;
-    height: 20px;
-    accent-color: #6366f1;
+.btn-gp-add-team {
+    background: rgba(99, 102, 241, 0.2);
+    color: #818cf8;
+    border: 1px solid rgba(99, 102, 241, 0.4);
+    padding: 0.4rem 0.85rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
     cursor: pointer;
-    flex-shrink: 0;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    transition: all 0.15s ease;
+    white-space: nowrap;
+}
+
+.btn-gp-add-team:hover {
+    background: #6366f1;
+    color: #fff;
+}
+
+.pe-gp-edit-panel {
+    background: #111122;
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 10px;
+    padding: 1rem;
+    margin-top: 0.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
 }
 
 .pe-global-patch-img {

@@ -13180,13 +13180,15 @@ const products = [
         "category": "futbol",
         "league": "laliga",
         "image": "/assets/productos/Yupoo/875609/1.webp",
-        "images": [],
+        "images": [
+            "/assets/productos/Yupoo/875609/2.webp"
+        ],
         "temporada": "2015/16",
         "tipo": "visitante",
         "retro": true,
         "price": 27.9,
-        "oldPrice": 33,
-        "sku": "9745"
+        "oldPrice": 35,
+        "sku": "7850"
     },
     {
         "id": 591340,

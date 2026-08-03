@@ -607,8 +607,59 @@ function applyProductRestrictions() {
         }
     }
 
+    // Helper para detectar la última temporada de un equipo
+    function isLatestSeasonForTeam(prod) {
+        if (!prod || !prod.name) return true;
+        if (prod.retro === true || prod.name.toLowerCase().includes('retro')) return false;
+
+        function extractTeam(name) {
+            if (!name) return '';
+            return name
+                .replace(/\s*\d{2}\/?\d{2}.*$/i, '')
+                .replace(/\s*\(Niño\).*$/i, '')
+                .replace(/\s*(Local|Visitante|Tercera|Cuarta|Especial|Retro|Entrenamiento|Portero|Edición Especial|Campeones|Manga Larga).*$/i, '')
+                .trim();
+        }
+
+        const team = (prod.team || extractTeam(prod.name) || '').trim().toLowerCase();
+        if (!team) return true;
+
+        function getSeasonRank(name) {
+            if (!name) return 0;
+            const matchFullDoubleYear = name.match(/\b20(\d{2})\/(\d{2})\b/);
+            if (matchFullDoubleYear) return parseInt(matchFullDoubleYear[1] + matchFullDoubleYear[2]);
+            const matchDoubleYear = name.match(/\b(\d{2})\/(\d{2})\b/);
+            if (matchDoubleYear) return parseInt(matchDoubleYear[1] + matchDoubleYear[2]);
+            const matchSingleYear = name.match(/\b(20\d{2})\b/);
+            if (matchSingleYear) return parseInt(matchSingleYear[1].slice(2) + '00');
+            return 0;
+        }
+
+        const currentRank = getSeasonRank(prod.name);
+        if (currentRank === 0) return true;
+
+        let highestRank = -1;
+        const catalog = window.productsCache || window.allProductsCache || [];
+        catalog.forEach(p => {
+            const pTeam = (p.team || extractTeam(p.name) || '').trim().toLowerCase();
+            const pRetro = p.retro === true || (p.name && p.name.toLowerCase().includes('retro'));
+            if (pTeam === team && !pRetro) {
+                const rank = getSeasonRank(p.name);
+                if (rank > highestRank) highestRank = rank;
+            }
+        });
+
+        return highestRank <= 0 || currentRank >= highestRank;
+    }
+
     // Lógica para parches personalizados en checkbox
-    if (product && Array.isArray(product.customPatches) && product.customPatches.length > 0) {
+    const isLatestSeason = isLatestSeasonForTeam(product);
+    const visiblePatches = Array.isArray(product.customPatches) ? product.customPatches.filter(p => {
+        if (p.hidden) return false;
+        if (p.isTemporal && !isLatestSeason) return false;
+        return true;
+    }) : [];
+    if (product && visiblePatches.length > 0) {
         const normalPatchGroup = document.getElementById('normal-patch-group');
         const customPatchesContainer = document.getElementById('custom-patches-container');
         const customPatchesList = document.getElementById('custom-patches-list');
@@ -618,7 +669,7 @@ function applyProductRestrictions() {
         if (customPatchesContainer && customPatchesList) {
             customPatchesContainer.style.display = 'block';
             
-            customPatchesList.innerHTML = product.customPatches.map((p, idx) => `
+            customPatchesList.innerHTML = visiblePatches.map((p, idx) => `
                 <label class="custom-patch-checkbox" style="display: flex; align-items: center; gap: 1rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
                     <input type="checkbox" name="dynamic_patch" data-idx="${idx}" data-price="${p.price}" value="${p.name}" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
                     <img src="${p.image || '/assets/placeholder.webp'}" alt="${p.name}" style="width: 40px; height: 40px; object-fit: contain; border-radius: 4px; background: #f8f9fa;">

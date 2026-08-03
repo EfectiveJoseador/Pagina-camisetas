@@ -713,14 +713,64 @@ function _openDrawer(product) {
     const customPatchesWrap = _qdDrawer.querySelector('.qad-custom-patches-wrap');
     const customPatchesList = _qdDrawer.querySelector('#qad-custom-patches-list');
 
-    const hasDynamicPatches = Array.isArray(product.customPatches) && product.customPatches.length > 0;
+    function isLatestSeasonForTeam(prod) {
+        if (!prod || !prod.name) return true;
+        if (prod.retro === true || prod.name.toLowerCase().includes('retro')) return false;
+
+        function extractTeam(name) {
+            if (!name) return '';
+            return name
+                .replace(/\s*\d{2}\/?\d{2}.*$/i, '')
+                .replace(/\s*\(Niño\).*$/i, '')
+                .replace(/\s*(Local|Visitante|Tercera|Cuarta|Especial|Retro|Entrenamiento|Portero|Edición Especial|Campeones|Manga Larga).*$/i, '')
+                .trim();
+        }
+
+        const team = (prod.team || extractTeam(prod.name) || '').trim().toLowerCase();
+        if (!team) return true;
+
+        function getSeasonRank(name) {
+            if (!name) return 0;
+            const matchFullDoubleYear = name.match(/\b20(\d{2})\/(\d{2})\b/);
+            if (matchFullDoubleYear) return parseInt(matchFullDoubleYear[1] + matchFullDoubleYear[2]);
+            const matchDoubleYear = name.match(/\b(\d{2})\/(\d{2})\b/);
+            if (matchDoubleYear) return parseInt(matchDoubleYear[1] + matchDoubleYear[2]);
+            const matchSingleYear = name.match(/\b(20\d{2})\b/);
+            if (matchSingleYear) return parseInt(matchSingleYear[1].slice(2) + '00');
+            return 0;
+        }
+
+        const currentRank = getSeasonRank(prod.name);
+        if (currentRank === 0) return true;
+
+        let highestRank = -1;
+        const catalog = window.productsCache || window.allProductsCache || [];
+        catalog.forEach(p => {
+            const pTeam = (p.team || extractTeam(p.name) || '').trim().toLowerCase();
+            const pRetro = p.retro === true || (p.name && p.name.toLowerCase().includes('retro'));
+            if (pTeam === team && !pRetro) {
+                const rank = getSeasonRank(p.name);
+                if (rank > highestRank) highestRank = rank;
+            }
+        });
+
+        return highestRank <= 0 || currentRank >= highestRank;
+    }
+
+    const isLatestSeason = isLatestSeasonForTeam(product);
+    const visiblePatches = Array.isArray(product.customPatches) ? product.customPatches.filter(p => {
+        if (p.hidden) return false;
+        if (p.isTemporal && !isLatestSeason) return false;
+        return true;
+    }) : [];
+    const hasDynamicPatches = visiblePatches.length > 0;
 
     if (hasDynamicPatches) {
         patchWrap.style.display = 'none';
         if (customPatchesWrap && customPatchesList) {
             customPatchesWrap.style.display = '';
             
-            customPatchesList.innerHTML = product.customPatches.map((p, idx) => `
+            customPatchesList.innerHTML = visiblePatches.map((p, idx) => `
                 <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
                     <input type="checkbox" class="qad-custom-patch-cb" data-price="${p.price}" value="${p.name}" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
                     <img src="${p.image || '/assets/placeholder.webp'}" style="width: 30px; height: 30px; object-fit: contain; border-radius: 4px; background: #f8f9fa;">

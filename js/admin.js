@@ -2567,7 +2567,127 @@ function renderPatchesTab() {
     renderExclusivePatchesList();
 }
 
-function renderGlobalPatchesList() {
+function getCurrentEditingProductTeam() {
+    const teamSelectVal = document.getElementById('pe-team-select') ? document.getElementById('pe-team-select').value : '';
+    const teamCustomVal = document.getElementById('pe-team-custom') ? document.getElementById('pe-team-custom').value.trim() : '';
+    let currentTeam = teamSelectVal === '__new__' ? teamCustomVal : teamSelectVal;
+    if (!currentTeam && typeof editingProduct !== 'undefined' && editingProduct) {
+        currentTeam = editingProduct.team || extractTeamFromProductName(editingProduct.name) || '';
+    }
+    return (currentTeam || '').trim();
+}
+
+async function getAllLiveProducts() {
+    const catalog = await loadProductsCache();
+    let firebaseProducts = {};
+    try {
+        const snap = await get(ref(db, 'products'));
+        if (snap.exists()) {
+            firebaseProducts = snap.val() || {};
+        }
+    } catch (e) {
+        console.error('[GlobalPatches] Error fetching live products from Firebase:', e);
+    }
+
+    return catalog.map(p => {
+        const fbData = firebaseProducts[p.id] || {};
+        return {
+            ...p,
+            ...fbData
+        };
+    });
+}
+
+async function getAllTeamsFromCatalog() {
+    const liveProducts = await getAllLiveProducts();
+    const teamsSet = new Set();
+
+    const currentEditingTeam = getCurrentEditingProductTeam();
+    if (currentEditingTeam) {
+        teamsSet.add(currentEditingTeam);
+    }
+
+    liveProducts.forEach(p => {
+        const tName = p.team || extractTeamFromProductName(p.name);
+        if (tName) teamsSet.add(tName.trim());
+    });
+    return [...teamsSet].sort();
+}
+
+// --- MULTI-TEAM SELECTION STATE FOR GLOBAL PATCHES ---
+let newGpTemporalTeams = new Set();
+let editGpTemporalTeamsMap = {}; // key -> Set of team names
+
+window.addTeamToNewGp = function() {
+    const select = document.getElementById('pe-new-gp-team-select');
+    if (!select || !select.value) return;
+    const teamName = select.value.trim();
+    if (teamName) {
+        newGpTemporalTeams.add(teamName);
+        select.value = '';
+        renderNewGpTeamsPills();
+    }
+};
+
+window.removeTeamFromNewGp = function(teamName) {
+    newGpTemporalTeams.delete(teamName);
+    renderNewGpTeamsPills();
+};
+
+function renderNewGpTeamsPills() {
+    const container = document.getElementById('pe-new-gp-teams-pills');
+    if (!container) return;
+    if (newGpTemporalTeams.size === 0) {
+        container.innerHTML = '<span style="color:#64748b; font-size:0.8rem; font-style:italic;">No hay equipos seleccionados aún. Elige uno abajo y pulsa Añadir.</span>';
+        return;
+    }
+
+    container.innerHTML = [...newGpTemporalTeams].map(team => `
+        <span class="gp-team-pill">
+            <i class="fas fa-shield-alt"></i> ${sanitizeHTML(team)}
+            <span class="gp-team-pill-remove" onclick="removeTeamFromNewGp('${sanitizeHTML(team).replace(/'/g, "\\'")}')" title="Quitar equipo">✕</span>
+        </span>
+    `).join('');
+}
+
+window.addTeamToGpEdit = function(key) {
+    const select = document.getElementById(`gp-edit-team-select-${key}`);
+    if (!select || !select.value) return;
+    const teamName = select.value.trim();
+    if (teamName) {
+        if (!editGpTemporalTeamsMap[key]) editGpTemporalTeamsMap[key] = new Set();
+        editGpTemporalTeamsMap[key].add(teamName);
+        select.value = '';
+        renderGpEditTeamsPills(key);
+    }
+};
+
+window.removeTeamFromGpEdit = function(key, teamName) {
+    if (editGpTemporalTeamsMap[key]) {
+        editGpTemporalTeamsMap[key].delete(teamName);
+        renderGpEditTeamsPills(key);
+    }
+};
+
+function renderGpEditTeamsPills(key) {
+    const container = document.getElementById(`gp-edit-teams-pills-${key}`);
+    if (!container) return;
+    const teamsSet = editGpTemporalTeamsMap[key] || new Set();
+    
+    if (teamsSet.size === 0) {
+        container.innerHTML = '<span style="color:#64748b; font-size:0.8rem; font-style:italic;">No hay equipos asignados a esta competición aún.</span>';
+        return;
+    }
+
+    container.innerHTML = [...teamsSet].map(team => `
+        <span class="gp-team-pill">
+            <i class="fas fa-shield-alt"></i> ${sanitizeHTML(team)}
+            <span class="gp-team-pill-remove" onclick="removeTeamFromGpEdit('${key}', '${sanitizeHTML(team).replace(/'/g, "\\'")}')" title="Quitar equipo">✕</span>
+        </span>
+    `).join('');
+}
+
+async function renderGlobalPatchesList() {
     const list = document.getElementById('pe-global-patches-list');
     if (!list) return;
     list.innerHTML = '';
@@ -2577,33 +2697,452 @@ function renderGlobalPatchesList() {
         return;
     }
 
+    const availableTeams = await getAllTeamsFromCatalog();
+
     globalPatchesList.forEach(gp => {
-        const item = document.createElement('label');
-        item.className = 'pe-global-patch-item';
+        const card = document.createElement('div');
+        card.className = `pe-global-patch-card ${gp.hidden ? 'is-hidden-patch' : ''}`;
+        card.id = `gp-card-${gp.key}`;
         
         const isChecked = selectedGlobalPatchKeys.has(gp.key);
+
+        let initialTeams = [];
+        if (Array.isArray(gp.temporalTeams) && gp.temporalTeams.length > 0) {
+            initialTeams = gp.temporalTeams;
+        } else if (gp.temporalTeam) {
+            initialTeams = gp.temporalTeam.split(',').map(t => t.trim()).filter(Boolean);
+        }
+        editGpTemporalTeamsMap[gp.key] = new Set(initialTeams);
+
+        const teamOptionsHTML = availableTeams.map(t => 
+            `<option value="${sanitizeHTML(t)}">${sanitizeHTML(t)}</option>`
+        ).join('');
         
-        item.innerHTML = `
-            <input type="checkbox" value="${gp.key}" ${isChecked ? 'checked' : ''}>
-            <img src="${gp.image || '../assets/placeholder.webp'}" class="pe-global-patch-img" alt="${gp.name}">
-            <div class="pe-global-patch-info">
-                <span class="pe-global-patch-name">${gp.name}</span>
-                <span class="pe-global-patch-price">+€${(parseFloat(gp.price) || 0).toFixed(2)}</span>
+        const teamsDisplayStr = [...editGpTemporalTeamsMap[gp.key]].join(', ');
+
+        card.innerHTML = `
+            <div class="pe-gp-card-header">
+                <label class="pe-gp-assign-checkbox" title="Asignar o desasignar a esta camiseta">
+                    <input type="checkbox" value="${gp.key}" ${isChecked ? 'checked' : ''}>
+                    <span>Asignar</span>
+                </label>
+                
+                <img src="${gp.image || '../assets/placeholder.webp'}" class="pe-global-patch-img" id="gp-img-view-${gp.key}" alt="${sanitizeHTML(gp.name)}">
+                
+                <div class="pe-global-patch-info">
+                    <div style="display:flex; align-items:center; gap:0.35rem; flex-wrap:wrap;">
+                        <span class="pe-global-patch-name">${sanitizeHTML(gp.name)}</span>
+                        ${gp.hidden ? '<span class="badge-patch-hidden"><i class="fas fa-eye-slash"></i> Oculto</span>' : ''}
+                        ${gp.isTemporal ? `<span class="badge-patch-temporal"><i class="fas fa-trophy"></i> ${sanitizeHTML(teamsDisplayStr || 'Temporal')}</span>` : ''}
+                    </div>
+                    <span class="pe-global-patch-price">+€${(parseFloat(gp.price) || 0).toFixed(2)}</span>
+                </div>
+
+                <div class="pe-gp-card-actions">
+                    <button type="button" class="btn-gp-toggle-edit" onclick="toggleGlobalPatchEditPanel('${gp.key}')">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button type="button" class="btn-gp-delete" onclick="deleteGlobalPatchFromFirebase('${gp.key}', '${sanitizeHTML(gp.name)}')" title="Eliminar por completo">
+                        <i class="fas fa-trash-alt"></i>
+                    </button>
+                </div>
             </div>
-            <span style="font-size:0.75rem; background:rgba(99,102,241,0.15); color:#818cf8; padding:0.2rem 0.5rem; border-radius:4px; font-weight:600;">Global</span>
+
+            <!-- Panel de Edición Completa -->
+            <div class="pe-gp-edit-panel hidden" id="gp-edit-panel-${gp.key}">
+                <div class="form-group">
+                    <label style="font-size:0.8rem; font-weight:700; color:#a1a1aa;">Nombre / Título del Parche:</label>
+                    <input type="text" class="pe-input" id="gp-edit-name-${gp.key}" value="${sanitizeHTML(gp.name || '')}">
+                </div>
+                <div class="form-row-2">
+                    <div class="form-group">
+                        <label style="font-size:0.8rem; font-weight:700; color:#a1a1aa;">Precio Adicional (€):</label>
+                        <input type="number" step="0.01" class="pe-input" id="gp-edit-price-${gp.key}" value="${(parseFloat(gp.price) || 0).toFixed(2)}">
+                    </div>
+                    <div class="form-group">
+                        <label style="font-size:0.8rem; font-weight:700; color:#a1a1aa;">Imagen del Parche:</label>
+                        <div style="display:flex; align-items:center; gap:0.5rem;">
+                            <img id="gp-edit-preview-${gp.key}" src="${gp.image || '../assets/placeholder.webp'}" style="width:36px; height:36px; object-fit:contain; border-radius:4px; background:#111; border:1px solid rgba(255,255,255,0.1);">
+                            <label for="gp-edit-file-${gp.key}" class="pe-image-upload-btn" style="padding:0.4rem 0.65rem; font-size:0.75rem; margin:0; cursor:pointer;">
+                                <i class="fas fa-upload"></i> Subir
+                            </label>
+                            <input type="file" id="gp-edit-file-${gp.key}" accept="image/*" class="hidden">
+                            <input type="hidden" id="gp-edit-b64-${gp.key}" value="${gp.image || ''}">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-row-2" style="margin-top:0.4rem;">
+                    <div class="form-group checkbox-group" style="padding:0.6rem 0.75rem;">
+                        <input type="checkbox" id="gp-edit-hidden-${gp.key}" ${gp.hidden ? 'checked' : ''}>
+                        <label for="gp-edit-hidden-${gp.key}" style="font-size:0.82rem;"><i class="fas fa-eye-slash" style="color:#ef4444;"></i> Ocultar en la tienda</label>
+                    </div>
+                    <div class="form-group checkbox-group" style="padding:0.6rem 0.75rem;">
+                        <input type="checkbox" id="gp-edit-temporal-${gp.key}" ${gp.isTemporal ? 'checked' : ''} onchange="toggleGpEditTemporalTeam('${gp.key}', this.checked)">
+                        <label for="gp-edit-temporal-${gp.key}" style="font-size:0.82rem;"><i class="fas fa-trophy" style="color:#f59e0b;"></i> ¿Competición Temporal?</label>
+                    </div>
+                </div>
+
+                <div class="form-group ${gp.isTemporal ? '' : 'hidden'}" id="gp-edit-team-container-${gp.key}" style="margin-top:0.4rem;">
+                    <label style="color:#818cf8; font-size:0.8rem; font-weight:700;"><i class="fas fa-shield-alt"></i> Equipos asignados a la Competición Temporal:</label>
+                    <div id="gp-edit-teams-pills-${gp.key}" class="gp-teams-pills-container">
+                        <!-- Pills de equipos -->
+                    </div>
+                    <div style="display:flex; gap:0.5rem; margin-top:0.4rem;">
+                        <select id="gp-edit-team-select-${gp.key}" class="pe-input" style="flex:1;">
+                            <option value="">+ Añadir equipo a la competición...</option>
+                            ${teamOptionsHTML}
+                        </select>
+                        <button type="button" class="btn-gp-add-team" onclick="addTeamToGpEdit('${gp.key}')">
+                            <i class="fas fa-plus"></i> Añadir
+                        </button>
+                    </div>
+                </div>
+
+                <div style="display:flex; gap:0.5rem; margin-top:0.6rem; flex-wrap:wrap;">
+                    <button type="button" class="btn-gp-save-changes" style="flex:1; background:linear-gradient(135deg, #6366f1, #4f46e5); color:#fff; border:none; padding:0.6rem; border-radius:6px; font-weight:600; cursor:pointer; font-size:0.85rem;" onclick="saveGlobalPatchEdit('${gp.key}')">
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                    ${gp.isTemporal ? `
+                        <button type="button" class="btn-gp-apply-team" style="background:rgba(245,158,11,0.2); color:#fbbf24; border:1px solid rgba(245,158,11,0.4); padding:0.6rem 0.75rem; border-radius:6px; font-weight:600; cursor:pointer; font-size:0.85rem;" onclick="triggerApplyPatchToTeam('${gp.key}')">
+                            <i class="fas fa-magic"></i> Aplicar a Camisetas de los Equipos
+                        </button>
+                    ` : ''}
+                    <button type="button" style="background:rgba(255,255,255,0.08); color:#ccc; border:none; padding:0.6rem 0.85rem; border-radius:6px; font-weight:600; cursor:pointer; font-size:0.85rem;" onclick="toggleGlobalPatchEditPanel('${gp.key}')">
+                        Cancelar
+                    </button>
+                </div>
+            </div>
         `;
 
-        const checkbox = item.querySelector('input[type="checkbox"]');
-        checkbox.addEventListener('change', (e) => {
-            if (e.target.checked) {
-                selectedGlobalPatchKeys.add(gp.key);
-            } else {
-                selectedGlobalPatchKeys.delete(gp.key);
+        const checkbox = card.querySelector('.pe-gp-assign-checkbox input[type="checkbox"]');
+        if (checkbox) {
+            checkbox.addEventListener('change', (e) => {
+                if (e.target.checked) {
+                    selectedGlobalPatchKeys.add(gp.key);
+                } else {
+                    selectedGlobalPatchKeys.delete(gp.key);
+                }
+            });
+        }
+
+        const uploader = card.querySelector(`#gp-edit-file-${gp.key}`);
+        if (uploader) {
+            uploader.addEventListener('change', (e) => {
+                const file = e.target.files[0];
+                if (!file) return;
+                const reader = new FileReader();
+                reader.onload = (event) => {
+                    const b64 = event.target.result;
+                    const preview = card.querySelector(`#gp-edit-preview-${gp.key}`);
+                    const b64Input = card.querySelector(`#gp-edit-b64-${gp.key}`);
+                    if (preview) preview.src = b64;
+                    if (b64Input) b64Input.value = b64;
+                };
+                reader.readAsDataURL(file);
+            });
+        }
+
+        list.appendChild(card);
+
+        renderGpEditTeamsPills(gp.key);
+    });
+
+    populateNewGpTeamDropdown(availableTeams);
+}
+
+window.toggleGlobalPatchEditPanel = function(key) {
+    const panel = document.getElementById(`gp-edit-panel-${key}`);
+    if (panel) panel.classList.toggle('hidden');
+};
+
+window.toggleGpEditTemporalTeam = function(key, checked) {
+    const container = document.getElementById(`gp-edit-team-container-${key}`);
+    if (container) {
+        if (checked) {
+            container.classList.remove('hidden');
+            if (!editGpTemporalTeamsMap[key] || editGpTemporalTeamsMap[key].size === 0) {
+                const currentEditingTeam = getCurrentEditingProductTeam();
+                if (currentEditingTeam) {
+                    if (!editGpTemporalTeamsMap[key]) editGpTemporalTeamsMap[key] = new Set();
+                    editGpTemporalTeamsMap[key].add(currentEditingTeam);
+                }
+            }
+            renderGpEditTeamsPills(key);
+        } else {
+            container.classList.add('hidden');
+        }
+    }
+};
+
+window.toggleNewGpTemporalTeam = function(checked) {
+    const container = document.getElementById('pe-new-gp-team-container');
+    if (container) {
+        if (checked) {
+            container.classList.remove('hidden');
+            if (newGpTemporalTeams.size === 0) {
+                const currentEditingTeam = getCurrentEditingProductTeam();
+                if (currentEditingTeam) {
+                    newGpTemporalTeams.add(currentEditingTeam);
+                }
+            }
+            renderNewGpTeamsPills();
+        } else {
+            container.classList.add('hidden');
+        }
+    }
+};
+
+function populateNewGpTeamDropdown(teams) {
+    const select = document.getElementById('pe-new-gp-team-select');
+    if (!select) return;
+    select.innerHTML = '<option value="">+ Añadir equipo a la competición...</option>' + 
+        teams.map(t => `<option value="${sanitizeHTML(t)}">${sanitizeHTML(t)}</option>`).join('');
+}
+
+window.saveGlobalPatchEdit = async function(key) {
+    const nameInput = document.getElementById(`gp-edit-name-${key}`);
+    const priceInput = document.getElementById(`gp-edit-price-${key}`);
+    const b64Input = document.getElementById(`gp-edit-b64-${key}`);
+    const hiddenCb = document.getElementById(`gp-edit-hidden-${key}`);
+    const temporalCb = document.getElementById(`gp-edit-temporal-${key}`);
+
+    const name = nameInput ? nameInput.value.trim() : '';
+    const price = priceInput ? (parseFloat(priceInput.value) || 0) : 0;
+    const image = b64Input ? b64Input.value : '';
+    const hidden = hiddenCb ? hiddenCb.checked : false;
+    const isTemporal = temporalCb ? temporalCb.checked : false;
+    
+    const temporalTeamsSet = editGpTemporalTeamsMap[key] || new Set();
+    const temporalTeams = [...temporalTeamsSet];
+    const temporalTeam = temporalTeams.join(', ');
+
+    if (!name) {
+        alert('El título del parche global no puede estar vacío.');
+        return;
+    }
+
+    if (isTemporal && temporalTeams.length === 0) {
+        alert('Por favor, añade al menos un equipo a la Competición Temporal.');
+        return;
+    }
+
+    try {
+        const patchData = {
+            name,
+            price,
+            image,
+            hidden,
+            isTemporal,
+            temporalTeams,
+            temporalTeam,
+            updatedAt: new Date().toISOString()
+        };
+
+        await update(ref(db, `globalPatches/${key}`), patchData);
+
+        const idx = globalPatchesList.findIndex(gp => gp.key === key);
+        if (idx !== -1) {
+            globalPatchesList[idx] = { ...globalPatchesList[idx], ...patchData };
+        }
+
+        let appliedMsg = '';
+        if (isTemporal && temporalTeams.length > 0) {
+            const count = await applyPatchToTeamLatestSeason({ key, ...patchData }, temporalTeams);
+            if (count > 0) {
+                appliedMsg = `\n\n¡Además se ha aplicado automáticamente a ${count} camiseta(s) de la última temporada de: ${temporalTeam}!`;
+            }
+        }
+
+        renderPatchesTab();
+        showToast(`Parche "${name}" actualizado correctamente.${appliedMsg}`);
+    } catch (err) {
+        console.error('Error updating global patch:', err);
+        alert('Error al actualizar el parche global: ' + err.message);
+    }
+};
+
+window.deleteGlobalPatchFromFirebase = async function(key, patchName) {
+    if (!confirm(`¿Eliminar por completo el parche global "${patchName}" de la biblioteca? Esta acción no se puede deshacer.`)) {
+        return;
+    }
+
+    try {
+        await remove(ref(db, `globalPatches/${key}`));
+        globalPatchesList = globalPatchesList.filter(gp => gp.key !== key);
+        selectedGlobalPatchKeys.delete(key);
+        renderPatchesTab();
+        showToast(`Parche "${patchName}" eliminado de la biblioteca global.`);
+    } catch (err) {
+        console.error('Error deleting global patch:', err);
+        alert('Error al eliminar el parche global: ' + err.message);
+    }
+};
+
+window.triggerApplyPatchToTeam = async function(key) {
+    const gp = globalPatchesList.find(p => p.key === key);
+    if (!gp) return;
+
+    const temporalTeams = (Array.isArray(gp.temporalTeams) && gp.temporalTeams.length > 0) 
+        ? gp.temporalTeams 
+        : (gp.temporalTeam ? gp.temporalTeam.split(',').map(t => t.trim()).filter(Boolean) : []);
+
+    if (!gp.isTemporal || temporalTeams.length === 0) {
+        alert('Este parche no está configurado como Competición Temporal o no tiene equipos asignados.');
+        return;
+    }
+
+    const teamsStr = temporalTeams.join(', ');
+
+    if (!confirm(`¿Aplicar el parche "${gp.name}" a TODAS las camisetas de la última temporada de: ${teamsStr}?`)) {
+        return;
+    }
+
+    try {
+        const count = await applyPatchToTeamLatestSeason(gp, temporalTeams);
+        if (gp.key) {
+            selectedGlobalPatchKeys.add(gp.key);
+        }
+        await renderPatchesTab();
+        alert(`¡Éxito! Parche "${gp.name}" asignado y aplicado a ${count} camiseta(s) de la última temporada de: ${teamsStr}.`);
+    } catch (err) {
+        console.error('Error applying patch to teams:', err);
+        alert('Error al aplicar parche a los equipos: ' + err.message);
+    }
+};
+
+async function applyPatchToTeamLatestSeason(patchData, targetTeams) {
+    const teamsArray = Array.isArray(targetTeams) ? targetTeams : (targetTeams ? [targetTeams] : []);
+    if (teamsArray.length === 0) return 0;
+
+    const liveProducts = await getAllLiveProducts();
+    const cleanTeams = teamsArray.map(t => t.trim().toLowerCase());
+
+    let totalUpdatedCount = 0;
+
+    for (const cleanTeam of cleanTeams) {
+        const teamProducts = liveProducts.filter(p => {
+            const pTeam = (p.team || extractTeamFromProductName(p.name) || '').trim().toLowerCase();
+            const isRetro = p.retro === true || (p.name && p.name.toLowerCase().includes('retro'));
+            return pTeam === cleanTeam && !isRetro;
+        });
+
+        if (teamProducts.length === 0) continue;
+
+        let highestSeasonRank = -1;
+
+        function getSeasonRank(name) {
+            if (!name) return 0;
+            const matchFullDoubleYear = name.match(/\b20(\d{2})\/(\d{2})\b/);
+            if (matchFullDoubleYear) {
+                return parseInt(matchFullDoubleYear[1] + matchFullDoubleYear[2]);
+            }
+            const matchDoubleYear = name.match(/\b(\d{2})\/(\d{2})\b/);
+            if (matchDoubleYear) {
+                return parseInt(matchDoubleYear[1] + matchDoubleYear[2]);
+            }
+            const matchSingleYear = name.match(/\b(20\d{2})\b/);
+            if (matchSingleYear) {
+                return parseInt(matchSingleYear[1].slice(2) + '00');
+            }
+            return 0;
+        }
+
+        teamProducts.forEach(p => {
+            const rank = getSeasonRank(p.name);
+            if (rank > highestSeasonRank) {
+                highestSeasonRank = rank;
             }
         });
 
-        list.appendChild(item);
-    });
+        const latestSeasonProducts = teamProducts.filter(p => {
+            if (highestSeasonRank > 0) {
+                return getSeasonRank(p.name) === highestSeasonRank;
+            }
+            return true;
+        });
+
+        const olderSeasonProducts = teamProducts.filter(p => {
+            if (highestSeasonRank > 0) {
+                return getSeasonRank(p.name) < highestSeasonRank;
+            }
+            return false;
+        });
+
+        // 4a. Limpiar este parche temporal de las camisetas de temporadas anteriores del equipo
+        for (const olderProd of olderSeasonProducts) {
+            let currentPatches = Array.isArray(olderProd.patches) ? [...olderProd.patches] : (Array.isArray(olderProd.customPatches) ? [...olderProd.customPatches] : []);
+            const hasTemporal = currentPatches.some(p => (patchData.key && p.key === patchData.key) || (p.name && p.name.trim().toLowerCase() === patchData.name.trim().toLowerCase()));
+            if (hasTemporal) {
+                const cleanedPatches = currentPatches.filter(p => {
+                    const matchKey = patchData.key && p.key === patchData.key;
+                    const matchName = p.name && p.name.trim().toLowerCase() === patchData.name.trim().toLowerCase();
+                    return !(matchKey || matchName);
+                });
+                await update(ref(db, `products/${olderProd.id}`), {
+                    patches: cleanedPatches,
+                    customPatches: cleanedPatches,
+                    updatedAt: new Date().toISOString()
+                });
+            }
+        }
+
+        if (latestSeasonProducts.length === 0) continue;
+
+        const patchObj = {
+            key: patchData.key || '',
+            name: patchData.name,
+            price: parseFloat(patchData.price) || 0,
+            image: patchData.image || '',
+            isGlobal: true,
+            isTemporal: !!patchData.isTemporal,
+            temporalTeams: teamsArray,
+            temporalTeam: teamsArray.join(', ')
+        };
+
+        for (const prod of latestSeasonProducts) {
+            let currentPatches = Array.isArray(prod.patches) ? [...prod.patches] : (Array.isArray(prod.customPatches) ? [...prod.customPatches] : []);
+            
+            if (typeof editingProduct !== 'undefined' && editingProduct && prod.id === editingProduct.id) {
+                selectedGlobalPatchKeys.forEach(k => {
+                    const gp = globalPatchesList.find(p => p.key === k);
+                    if (gp) {
+                        const already = currentPatches.some(p => (p.key && p.key === gp.key) || (p.name && p.name.trim().toLowerCase() === gp.name.trim().toLowerCase()));
+                        if (!already) {
+                            currentPatches.push({
+                                key: gp.key,
+                                name: gp.name,
+                                price: parseFloat(gp.price) || 0,
+                                image: gp.image || '',
+                                isGlobal: true
+                            });
+                        }
+                    }
+                });
+            }
+
+            const exists = currentPatches.some(p => (patchData.key && p.key === patchData.key) || (p.name && p.name.trim().toLowerCase() === patchData.name.trim().toLowerCase()));
+            if (!exists) {
+                currentPatches.push(patchObj);
+            }
+
+            await update(ref(db, `products/${prod.id}`), {
+                patches: currentPatches,
+                customPatches: currentPatches,
+                updatedAt: new Date().toISOString()
+            });
+            totalUpdatedCount++;
+        }
+
+        if (typeof editingProduct !== 'undefined' && editingProduct && editingProduct.id) {
+            const currentEditingTeam = (editingProduct.team || extractTeamFromProductName(editingProduct.name) || '').trim().toLowerCase();
+            if (cleanTeams.includes(currentEditingTeam) && patchData.key) {
+                selectedGlobalPatchKeys.add(patchData.key);
+            }
+        }
+    }
+
+    return totalUpdatedCount;
 }
 
 async function saveNewGlobalPatch(e) {
@@ -2611,15 +3150,27 @@ async function saveNewGlobalPatch(e) {
     const nameInput = document.getElementById('pe-new-gp-name');
     const priceInput = document.getElementById('pe-new-gp-price');
     const b64Input = document.getElementById('pe-new-gp-b64');
+    const hiddenInput = document.getElementById('pe-new-gp-hidden');
+    const isTemporalInput = document.getElementById('pe-new-gp-is-temporal');
     const previewImg = document.getElementById('pe-new-gp-preview');
     const btn = document.getElementById('btn-save-global-patch');
 
     const name = nameInput ? nameInput.value.trim() : '';
     const price = priceInput ? (parseFloat(priceInput.value) || 0) : 2.00;
     const image = b64Input ? b64Input.value : '';
+    const hidden = hiddenInput ? hiddenInput.checked : false;
+    const isTemporal = isTemporalInput ? isTemporalInput.checked : false;
+    
+    const temporalTeams = [...newGpTemporalTeams];
+    const temporalTeam = temporalTeams.join(', ');
 
     if (!name) {
         alert('Ingresa el nombre del nuevo parche global.');
+        return;
+    }
+
+    if (isTemporal && temporalTeams.length === 0) {
+        alert('Por favor, añade al menos un equipo a la Competición Temporal.');
         return;
     }
 
@@ -2635,23 +3186,37 @@ async function saveNewGlobalPatch(e) {
             name,
             price,
             image,
+            hidden,
+            isTemporal,
+            temporalTeams,
+            temporalTeam,
             createdAt: new Date().toISOString()
         };
 
         await set(newRef, patchData);
 
-        // Añadir localmente y auto-seleccionar
         globalPatchesList.push(patchData);
         selectedGlobalPatchKeys.add(patchData.key);
 
-        // Resetear campos del formulario
+        let appliedMsg = '';
+        if (isTemporal && temporalTeams.length > 0) {
+            const count = await applyPatchToTeamLatestSeason(patchData, temporalTeams);
+            if (count > 0) {
+                appliedMsg = `\n\n¡Además se ha aplicado automáticamente a ${count} camiseta(s) de la última temporada de: ${temporalTeam}!`;
+            }
+        }
+
         if (nameInput) nameInput.value = '';
         if (priceInput) priceInput.value = '2.00';
         if (b64Input) b64Input.value = '';
+        if (hiddenInput) hiddenInput.checked = false;
+        if (isTemporalInput) isTemporalInput.checked = false;
+        newGpTemporalTeams.clear();
         if (previewImg) previewImg.src = '../assets/placeholder.webp';
+        toggleNewGpTemporalTeam(false);
 
         renderPatchesTab();
-        alert(`¡Parche "${name}" guardado en la Biblioteca Global y asignado a esta camiseta!`);
+        alert(`¡Parche "${name}" guardado en la Biblioteca Global y asignado a esta camiseta!${appliedMsg}`);
     } catch (err) {
         console.error('Error saving global patch:', err);
         alert('Error al guardar en la biblioteca global: ' + err.message);
