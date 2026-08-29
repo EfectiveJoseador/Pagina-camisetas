@@ -254,7 +254,7 @@ function generatePatchOptionsHTML(product) {
 
     return `
         <div class="form-group">
-            <label>Parche (+€2.00)</label>
+            <label>Parche (+€3.00)</label>
             <input type="text" class="quick-patch-input" placeholder="Ej: Champions League" maxlength="30">
         </div>
     `;
@@ -417,7 +417,7 @@ function renderProducts() {
         const productType = getProductType(product);
         const sizes = SIZE_CONFIGS[productType];
         const sizeOptions = sizes.map(size => {
-            const sizeLabel = (size === '2XL') ? `${size} (+€1)` : (size === '3XL' || size === '4XL') ? `${size} (+€2)` : size;
+            const sizeLabel = (size === '2XL') ? `${size} (+€2)` : (size === '3XL' || size === '4XL') ? `${size} (+€4)` : size;
             return `<option value="${size}">${sizeLabel}</option>`;
         }).join('');
         return `
@@ -503,7 +503,7 @@ let _qdBackdrop  = null;
 let _qdDrawer    = null;
 let _qdInited    = false;
 
-const SIZE_SURCHARGES_QAD = { '2XL': 1, '3XL': 2, '4XL': 2 };
+const SIZE_SURCHARGES_QAD = { '2XL': 2, '3XL': 4, '4XL': 4 };
 
 function _buildDrawer() {
     if (_qdInited) return;
@@ -546,7 +546,7 @@ function _buildDrawer() {
                 </div>
             </div>
 
-            <div class="qad-section-label"><i class="fas fa-tshirt"></i> Personalización <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€3 si rellenas algún campo)</span></div>
+            <div class="qad-section-label"><i class="fas fa-tshirt"></i> Personalización <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€4 si rellenas algún campo)</span></div>
             <div class="qad-custom-grid">
                 <div class="qad-field">
                     <label>Nombre</label>
@@ -559,7 +559,7 @@ function _buildDrawer() {
             </div>
 
             <div class="qad-patch-wrap" style="display:none">
-                <div class="qad-section-label"><i class="fas fa-shield-alt"></i> Parche <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€2 si rellenas)</span></div>
+                <div class="qad-section-label"><i class="fas fa-shield-alt"></i> Parche <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€3 si rellenas)</span></div>
                 <div class="qad-field">
                     <input id="qad-patch" type="text" placeholder="Ej: Champions League" maxlength="30" autocomplete="off">
                 </div>
@@ -759,7 +759,7 @@ function _openDrawer(product) {
                 <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
                     <input type="checkbox" id="qad-custom-patch-otro-cb" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
                     <div style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px; font-weight: bold; font-size: 1.1rem; color: var(--text-muted);">?</div>
-                    <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">Otro (+€2.00)</span>
+                    <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">Otro (+€3.00)</span>
                 </label>
                 <div id="qad-custom-patch-otro-input-container" style="display: none; padding-left: 0.5rem; margin-top: -0.25rem;">
                     <input type="text" id="qad-custom-patch-otro-input" placeholder="Ej: Champions, Liga, etc." maxlength="30" autocomplete="off" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px;">
@@ -887,7 +887,7 @@ function _updateTotal() {
     
     let totalPrice = _qdProduct.price + sizeSurcharge;
     if (version === 'jugador') totalPrice += 5;
-    if (name || number) totalPrice += 3;
+    if (name || number) totalPrice += 4;
 
     const hasDynamicPatches = Array.isArray(_qdProduct.customPatches) && _qdProduct.customPatches.length > 0;
     let patchExtraPrice = 0;
@@ -900,7 +900,7 @@ function _updateTotal() {
         const otroCb = _qdDrawer.querySelector('#qad-custom-patch-otro-cb');
         const otroInput = _qdDrawer.querySelector('#qad-custom-patch-otro-input');
         if (otroCb && otroCb.checked && otroInput && otroInput.value.trim()) {
-            patchExtraPrice += 2;
+            patchExtraPrice += 3;
         }
         totalPrice += patchExtraPrice;
     } else if (_qdProduct.customPatches === 'espana26') {
@@ -910,7 +910,7 @@ function _updateTotal() {
         }
     } else {
         const patch = _qdDrawer.querySelector('#qad-patch').value.trim();
-        if (patch) totalPrice += 2;
+        if (patch) totalPrice += 3;
     }
 
     _qdDrawer.querySelector('.qad-total-price').textContent = `€${totalPrice.toFixed(2)}`;
@@ -939,7 +939,7 @@ function _handleDrawerSubmit() {
     const sizeSurcharge = SIZE_SURCHARGES_QAD[size] || 0;
     let totalPrice = _qdProduct.price + sizeSurcharge;
     if (version === 'jugador') totalPrice += 5;
-    if (name || number) totalPrice += 3;
+    if (name || number) totalPrice += 4;
 
     let patchVal = '';
     let patchesArr = [];
@@ -959,7 +959,7 @@ function _handleDrawerSubmit() {
             const txt = otroInput ? otroInput.value.trim() : '';
             if (txt) {
                 patchesArr.push(txt);
-                patchExtraPrice += 2;
+                patchExtraPrice += 3;
             }
         }
         patchVal = patchesArr.join(', ');
@@ -975,7 +975,7 @@ function _handleDrawerSubmit() {
     } else {
         patchVal = _qdDrawer.querySelector('#qad-patch').value.trim();
         if (patchVal) {
-            patchExtraPrice = 2;
+            patchExtraPrice = 3;
             totalPrice += patchExtraPrice;
             patchesArr = [patchVal];
         }
@@ -1939,7 +1939,7 @@ function populateSizeOptions() {
     sizes.forEach(size => {
         const option = document.createElement('option');
         option.value = size;
-        const sizeLabel = (size === '2XL') ? `${size} (+€1)` : (size === '3XL' || size === '4XL') ? `${size} (+€2)` : size;
+        const sizeLabel = (size === '2XL') ? `${size} (+€2)` : (size === '3XL' || size === '4XL') ? `${size} (+€4)` : size;
         option.textContent = sizeLabel;
         sizeSelect.appendChild(option);
     });
@@ -1970,7 +1970,7 @@ function updatePreview() {
     let total = basePrice;
 
     // Recargos
-    const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+    const SIZE_SURCHARGES = { '2XL': 2, '3XL': 4, '4XL': 4 };
     const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
     total += sizeSurcharge;
 
@@ -1985,12 +1985,12 @@ function updatePreview() {
         }
     } else {
         if (patch && patch !== 'none') {
-            total += 2;
+            total += 3;
             patchStr = PATCH_DEFINITIONS[patch] || patch;
         }
     }
 
-    if (name || number) total += 3;
+    if (name || number) total += 4;
 
     // Actualizar elementos HTML en el modal
     const basePriceEl = document.getElementById('preview-base-price');
@@ -2043,7 +2043,7 @@ function handleFormSubmit(e) {
         return;
     }
 
-    const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+    const SIZE_SURCHARGES = { '2XL': 2, '3XL': 4, '4XL': 4 };
     const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
     let totalPrice = currentProduct.price + sizeSurcharge;
     if (version === 'jugador') totalPrice += 5;
@@ -2059,13 +2059,13 @@ function handleFormSubmit(e) {
         }
     } else {
         if (patch && patch !== 'none') {
-            totalPrice += 2;
+            totalPrice += 3;
             finalPatchStr = patch;
             finalPatchesArr = [patch];
         }
     }
     
-    if (name || number) totalPrice += 3;
+    if (name || number) totalPrice += 4;
 
     const customization = {
         size: size,

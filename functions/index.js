@@ -295,9 +295,9 @@ exports.processCheckoutTotal = functions.https.onCall(async (data, context) => {
             // 1. Recargo por Talla
             const size = (cust.size || '').toUpperCase();
             if (size === '3XL' || size === '4XL') {
-                itemSurcharges += 2;
+                itemSurcharges += 4;
             } else if (size === '2XL') {
-                itemSurcharges += 1;
+                itemSurcharges += 2;
             }
 
             // 2. Recargo por Versión
@@ -307,7 +307,7 @@ exports.processCheckoutTotal = functions.https.onCall(async (data, context) => {
 
             // 3. Recargo por Personalización (Nombre o Dorsal)
             if ((cust.name && cust.name.trim() !== '') || (cust.number && cust.number.trim() !== '')) {
-                itemSurcharges += 3;
+                itemSurcharges += 4;
             }
 
             // 4. Recargo por Parches
@@ -321,7 +321,7 @@ exports.processCheckoutTotal = functions.https.onCall(async (data, context) => {
                 if (isEspana26) {
                     itemSurcharges += validPatches.length * 1.25;
                 } else {
-                    itemSurcharges += 2;
+                    itemSurcharges += 3;
                 }
             }
 

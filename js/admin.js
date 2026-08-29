@@ -2418,7 +2418,7 @@ function initProductEditor() {
     if (btnAddExclusivePatch) {
         btnAddExclusivePatch.addEventListener('click', (e) => {
             if (e) e.preventDefault();
-            exclusivePatches.push({ name: '', price: 2.00, image: '' });
+            exclusivePatches.push({ name: '', price: 3.00, image: '' });
             renderExclusivePatchesList();
         });
     }
@@ -3666,7 +3666,7 @@ async function saveNewGlobalPatch(e) {
     const btn = document.getElementById('btn-save-global-patch');
 
     const name = nameInput ? nameInput.value.trim() : '';
-    const price = priceInput ? (parseFloat(priceInput.value) || 0) : 2.00;
+    const price = priceInput ? (parseFloat(priceInput.value) || 0) : 3.00;
     const image = b64Input ? b64Input.value : '';
     const hidden = hiddenInput ? hiddenInput.checked : false;
     const isTemporal = isTemporalInput ? isTemporalInput.checked : false;
@@ -3717,7 +3717,7 @@ async function saveNewGlobalPatch(e) {
         }
 
         if (nameInput) nameInput.value = '';
-        if (priceInput) priceInput.value = '2.00';
+        if (priceInput) priceInput.value = '3.00';
         if (b64Input) b64Input.value = '';
         if (hiddenInput) hiddenInput.checked = false;
         if (isTemporalInput) isTemporalInput.checked = false;

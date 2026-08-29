@@ -299,7 +299,7 @@ let _qdBackdrop  = null;
 let _qdDrawer    = null;
 let _qdInited    = false;
 
-const SIZE_SURCHARGES_QAD = { '2XL': 1, '3XL': 2, '4XL': 2 };
+const SIZE_SURCHARGES_QAD = { '2XL': 2, '3XL': 4, '4XL': 4 };
 
 const SIZE_CONFIGS = {
     kids: ['16', '18', '20', '22', '24', '26', '28'],
@@ -369,7 +369,7 @@ function _buildDrawer() {
                 </select>
             </div>
 
-            <div class="qad-section-label"><i class="fas fa-tshirt"></i> Personalización <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€3 si rellenas algún campo)</span></div>
+            <div class="qad-section-label"><i class="fas fa-tshirt"></i> Personalización <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€4 si rellenas algún campo)</span></div>
             <div class="qad-custom-grid">
                 <div class="qad-field">
                     <label>Nombre</label>
@@ -382,7 +382,7 @@ function _buildDrawer() {
             </div>
 
             <div class="qad-patch-wrap" style="display:none">
-                <div class="qad-section-label"><i class="fas fa-shield-alt"></i> Parche <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€2 si rellenas)</span></div>
+                <div class="qad-section-label"><i class="fas fa-shield-alt"></i> Parche <span style="color:var(--text-muted);font-weight:400;text-transform:none;font-size:0.6rem;margin-left:4px">(+€3 si rellenas)</span></div>
                 <div class="qad-field">
                     <input id="qad-patch" type="text" placeholder="Ej: Champions League" maxlength="30" autocomplete="off">
                 </div>
@@ -550,7 +550,7 @@ function _updateTotal() {
     const patch  = _qdDrawer.querySelector('#qad-patch').value.trim();
 
     let totalPrice      = _qdProduct.price + sizeSurcharge;
-    if (name || number) totalPrice += 3;
+    if (name || number) totalPrice += 4;
     
     if (_qdProduct && _qdProduct.customPatches === 'espana26') {
         const customCbs = _qdDrawer.querySelectorAll('#qad-custom-patches-list .qad-custom-patch-cb:checked');
@@ -558,7 +558,7 @@ function _updateTotal() {
             totalPrice += (customCbs.length * 1.25);
         }
     } else {
-        if (patch) totalPrice += 2;
+        if (patch) totalPrice += 3;
     }
 
     _qdDrawer.querySelector('.qad-total-price').textContent = `€${totalPrice.toFixed(2)}`;
@@ -586,7 +586,7 @@ function _handleDrawerSubmit() {
 
     const sizeSurcharge = SIZE_SURCHARGES_QAD[size] || 0;
     let totalPrice      = _qdProduct.price + sizeSurcharge;
-    if (name || number) totalPrice += 3;
+    if (name || number) totalPrice += 4;
     
     if (_qdProduct && _qdProduct.customPatches === 'espana26') {
         const customCbs = _qdDrawer.querySelectorAll('#qad-custom-patches-list .qad-custom-patch-cb:checked');
@@ -597,7 +597,7 @@ function _handleDrawerSubmit() {
             patch = '';
         }
     } else {
-        if (patch) totalPrice += 2;
+        if (patch) totalPrice += 3;
     }
 
     const customization = { size, version: 'aficionado', name, number, patch, extras: [] };

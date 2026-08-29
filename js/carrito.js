@@ -32,29 +32,20 @@ onValue(ref(db, 'products'), (snapshot) => {
 function applySpecialPricing() {
     products.forEach(product => {
         if (product.fixedPrice === true) return;
-        const nameLower = product.name.toLowerCase();
+        const nameLower = (product.name || '').toLowerCase();
         const imageLower = (product.image || '').toLowerCase();
         const isKids = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
         const isRetro = product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro';
-        const isNBA = product.category === 'nba' || product.league === 'nba';
-        let oldPrice = 25.00;
-        let newPrice = 19.90;
 
-        if (isNBA) {
-            oldPrice = 30.00;
-            newPrice = 24.90;
-        } else if (isRetro) {
-            oldPrice = 30.00;
-            newPrice = 24.90;
-        } else if (product.customPatches === 'espana26' && isKids) {
-            oldPrice = 29.00;
-            newPrice = 23.90;
+        let oldPrice = 30.00;
+        let newPrice = 22.90;
+
+        if (isRetro) {
+            oldPrice = 35.00;
+            newPrice = 27.90;
         } else if (isKids) {
-            oldPrice = 27.00;
-            newPrice = 21.90;
-        } else if (product.customPatches === 'espana26') {
-            oldPrice = 27.00;
-            newPrice = 21.90;
+            oldPrice = 33.00;
+            newPrice = 25.90;
         }
         product.oldPrice = oldPrice;
         product.price = newPrice;
@@ -100,7 +91,7 @@ const Cart = {
 
     add(id, qty = 1, size = 'M', version = 'aficionado', customizations = {}) {
         const product = products.find(p => p.id === id);
-        const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+        const SIZE_SURCHARGES = { '2XL': 2, '3XL': 4, '4XL': 4 };
         const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
         const basePrice = product ? product.price : 0;
         const itemPrice = basePrice + sizeSurcharge + (version === 'jugador' ? 5 : 0);
@@ -164,7 +155,7 @@ const Cart = {
         let totalShirtQty = 0;
         let surcharges = 0;
         let accessorySubtotal = 0;
-        const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 1, '3XL': 2, '4XL': 2 };
+        const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 2, '3XL': 4, '4XL': 4 };
         const NORMAL_PRICE = 19.90;
 
         this.items.forEach(item => {
@@ -191,12 +182,12 @@ const Cart = {
                         const count = patch.split(',').map(s => s.trim()).filter(Boolean).length;
                         patchSurcharge = count * 1.25;
                     } else {
-                        patchSurcharge = 2;
+                        patchSurcharge = 3;
                     }
                 }
                 const hasName = !!(custom.name || '');
                 const hasNumber = !!(custom.number || '');
-                const personSurcharge = (hasName || hasNumber) ? 3 : 0;
+                const personSurcharge = (hasName || hasNumber) ? 4 : 0;
                 const surcharge = sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
                 surcharges += surcharge * qty;
             }
@@ -370,7 +361,7 @@ const Cart = {
         if (emptyMsg) emptyMsg.classList.add('hidden');
         if (checkoutBtn) checkoutBtn.classList.remove('hidden');
 
-        const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 1, '3XL': 2, '4XL': 2 };
+        const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 2, '3XL': 4, '4XL': 4 };
 
         this.items.forEach((item, index) => {
             const product = products.find(p => p.id === item.id);
@@ -403,12 +394,12 @@ const Cart = {
                         const count = patch.split(',').map(s => s.trim()).filter(Boolean).length;
                         patchSurcharge = count * 1.25;
                     } else {
-                        patchSurcharge = 2;
+                        patchSurcharge = 3;
                     }
                 }
                 const hasName = !!(custom.name || '');
                 const hasNumber = !!(custom.number || '');
-                const personSurcharge = (hasName || hasNumber) ? 3 : 0;
+                const personSurcharge = (hasName || hasNumber) ? 4 : 0;
                 const baseProductPrice = item.basePrice || product.price;
                 displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
                 displayOldPrice = getItemOldPrice(item, product, sizeSurcharge, versionSurcharge, patchSurcharge, personSurcharge);
@@ -503,7 +494,7 @@ const Cart = {
 
     renderCheckoutPage(container) {
         container.innerHTML = '';
-        const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 1, '3XL': 2, '4XL': 2 };
+        const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 2, '3XL': 4, '4XL': 4 };
         this.items.forEach((item, index) => {
             const product = products.find(p => p.id === item.id);
             if (!product && !item.isAccessory) return;
@@ -533,12 +524,12 @@ const Cart = {
                         const count = patch.split(',').map(s => s.trim()).filter(Boolean).length;
                         patchSurcharge = count * 1.25;
                     } else {
-                        patchSurcharge = 2;
+                        patchSurcharge = 3;
                     }
                 }
                 const hasName = !!(custom.name || '');
                 const hasNumber = !!(custom.number || '');
-                const personSurcharge = (hasName || hasNumber) ? 3 : 0;
+                const personSurcharge = (hasName || hasNumber) ? 4 : 0;
                 const baseProductPrice = item.basePrice || product.price;
                 displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
                 
@@ -647,7 +638,7 @@ const CART_SIZE_CONFIGS = {
     champions: ['S', 'M', 'L', 'XL', '2XL', '3XL']
 };
 
-const CART_SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+const CART_SIZE_SURCHARGES = { '2XL': 2, '3XL': 4, '4XL': 4 };
 
 function calcEditPrice(basePrice, custom, isEspana26 = false, hasDynamicPatches = false) {
     let total = basePrice;
@@ -661,11 +652,11 @@ function calcEditPrice(basePrice, custom, isEspana26 = false, hasDynamicPatches 
             const count = custom.patch.split(',').map(s => s.trim()).filter(Boolean).length;
             total += count * 1.25;
         } else {
-            total += 2;
+            total += 3;
         }
     }
-    // Nombre O dorsal = +€3 (no hace falta tener los dos)
-    if (custom.name || custom.number) total += 3;
+    // Nombre O dorsal = +€4 (no hace falta tener los dos)
+    if (custom.name || custom.number) total += 4;
     return total;
 }
 
@@ -736,7 +727,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
                     <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
                         <input type="checkbox" id="ce-custom-patch-otro-cb" ${hasOtro ? 'checked' : ''} style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
                         <div style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px; font-weight: bold; font-size: 1.1rem; color: var(--text-muted);">?</div>
-                        <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">Otro (+€2.00)</span>
+                        <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">Otro (+€3.00)</span>
                     </label>
                     <div id="ce-custom-patch-otro-input-container" style="display: ${hasOtro ? 'block' : 'none'}; padding-left: 0.5rem; margin-top: -0.25rem;">
                         <input type="text" id="ce-custom-patch-otro-input" placeholder="Ej: Champions, Liga, etc." maxlength="30" autocomplete="off" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px;" value="${hasOtro ? otroPatchName : ''}">
@@ -775,7 +766,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
     } else {
         patchBlock = showPatch ? `
             <div class="upsell-edit-field" id="ce-patch-group">
-                <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€2.00 si rellenas)</span></label>
+                <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€3.00 si rellenas)</span></label>
                 <input type="text" id="ce-patch" placeholder="Ej. Champions League" maxlength="30" autocomplete="off" value="${custom.patch || ''}">
             </div>` : (isNoPatches ? `
             <div style="display:flex;align-items:flex-start;gap:0.6rem;background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(16,185,129,.08));border:1.5px solid rgba(34,197,94,.35);border-radius:10px;padding:0.8rem 0.9rem;margin-top:0.5rem;font-size:0.87rem;line-height:1.5;color:inherit;">
@@ -807,7 +798,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
             ${versionBlock}
             ${showCustomization ? `
             <div class="upsell-edit-field">
-                <label>Nombre <span style="color:#6b7280;text-transform:none;font-weight:400;">(solo letras · máx 15 · +€3 con nombre o dorsal)</span></label>
+                <label>Nombre <span style="color:#6b7280;text-transform:none;font-weight:400;">(solo letras · máx 15 · +€4 con nombre o dorsal)</span></label>
                 <input type="text" id="ce-name" placeholder="Ej. PEDRI" maxlength="15" autocomplete="off" value="${custom.name || ''}">
             </div>
 
@@ -855,7 +846,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
                 const txt = otroInput ? otroInput.value.trim() : '';
                 if (txt) {
                     finalPatches.push(txt);
-                    patchExtraPrice += 2;
+                    patchExtraPrice += 3;
                 }
             }
             finalPatchStr = finalPatches.join(', ');
@@ -868,7 +859,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
             finalPatchStr = overlay.querySelector('#ce-patch')?.value.trim() || '';
             if (finalPatchStr) {
                 finalPatches = [finalPatchStr];
-                patchExtraPrice = 2;
+                patchExtraPrice = 3;
             }
         }
         return { patch: finalPatchStr, patches: finalPatches, patchExtraPrice };

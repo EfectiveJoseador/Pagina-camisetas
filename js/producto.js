@@ -71,9 +71,9 @@ const SIZE_SURCHARGES = {
     'M':   0,
     'L':   0,
     'XL':  0,
-    '2XL': 1,
-    '3XL': 2,
-    '4XL': 2
+    '2XL': 2,
+    '3XL': 4,
+    '4XL': 4
 };
 
 /** Devuelve el suplemento (€) para la talla indicada */
@@ -683,7 +683,7 @@ function applyProductRestrictions() {
                 <label class="custom-patch-checkbox" style="display: flex; align-items: center; gap: 1rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
                     <input type="checkbox" id="custom-patch-otro-checkbox" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
                     <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px; font-weight: bold; font-size: 1.2rem; color: var(--text-muted);">?</div>
-                    <span style="font-size: 0.9rem; color: var(--text-main); flex: 1;">Otro</span>
+                    <span style="font-size: 0.9rem; color: var(--text-main); flex: 1;">Otro (+€3.00)</span>
                 </label>
                 <div id="custom-patch-otro-input-container" style="display: none; padding-left: 0.5rem; margin-top: -0.25rem;">
                     <input type="text" id="custom-patch-otro-input" class="text-input" placeholder="Ej: Champions, Liga, etc." maxlength="30" autocomplete="off" style="width: 100%;">
@@ -827,8 +827,8 @@ function updatePreview() {
         const otroCb = document.getElementById('custom-patch-otro-checkbox');
         const otroInput = document.getElementById('custom-patch-otro-input');
         if (otroCb && otroCb.checked && otroInput && otroInput.value.trim().length > 0) {
-            totalPrice += 2;
-            details.push(`Parche ${otroInput.value.trim()}: +€2.00`);
+            totalPrice += 3;
+            details.push(`Parche ${otroInput.value.trim()}: +€3.00`);
         }
     } else if (product && product.customPatches === 'espana26') {
         const customCheckboxes = document.querySelectorAll('#custom-patches-list input[name="custom_patch"]:checked');
@@ -840,7 +840,7 @@ function updatePreview() {
     } else {
         const patch = document.getElementById('patch-input').value.trim();
         if (patch) {
-            const patchCost = 2;
+            const patchCost = 3;
             totalPrice += patchCost;
             details.push(`Parche ${patch}: +€${patchCost.toFixed(2)}`);
         }
@@ -850,7 +850,7 @@ function updatePreview() {
     const name = document.getElementById('name-input').value.trim();
     const number = document.getElementById('number-input').value;
     if ((name || number) && product.allowCustomization !== false) {
-        let custPrice = product.customizationPrice !== undefined ? product.customizationPrice : 3;
+        let custPrice = product.customizationPrice !== undefined ? product.customizationPrice : 4;
         totalPrice += custPrice;
         if (name) details.push(`Nombre: ${name.toUpperCase()}`);
         if (number) details.push(`Dorsal: ${number}`);
@@ -1020,7 +1020,7 @@ function addToCart() {
         const otroInput = document.getElementById('custom-patch-otro-input');
         if (otroCb && otroCb.checked && otroInput && otroInput.value.trim().length > 0) {
             labels.push(otroInput.value.trim());
-            dynPrice += 2;
+            dynPrice += 3;
         }
 
         if (labels.length > 0) {
@@ -1043,7 +1043,7 @@ function addToCart() {
         }
         if (patchStr) {
             selectedPatchesArray = [patchStr];
-            patchExtraPrice = 2;
+            patchExtraPrice = 3;
         }
     }
 
@@ -1064,7 +1064,7 @@ function addToCart() {
     totalPrice += patchExtraPrice;
     
     if ((customization.name || customization.number) && product.allowCustomization !== false) {
-        let custPrice = product.customizationPrice !== undefined ? product.customizationPrice : 3;
+        let custPrice = product.customizationPrice !== undefined ? product.customizationPrice : 4;
         totalPrice += custPrice;
     }
     const quantity = parseInt(document.getElementById('qty-input').value) || 1;

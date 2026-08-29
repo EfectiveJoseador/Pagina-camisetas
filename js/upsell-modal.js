@@ -50,36 +50,27 @@ const SIZE_CONFIGS = {
     champions: ['S', 'M', 'L', 'XL', '2XL', '3XL']
 };
 
-const SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+const SIZE_SURCHARGES = { '2XL': 2, '3XL': 4, '4XL': 4 };
 
 function getProductPrices(product) {
-    // Productos con precio fijo (noPatches: true) — no sobrescribir
+    // Productos con precio fijo (fixedPrice: true) — no sobrescribir
     if (product.fixedPrice === true) {
         return { price: product.price, oldPrice: product.oldPrice || product.price };
     }
-    const nameLower = product.name.toLowerCase();
+    const nameLower = (product.name || '').toLowerCase();
     const imageLower = (product.image || '').toLowerCase();
     const isKids = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
     const isRetro = product.retro === true || nameLower.includes('retro') || product.league === 'retro';
-    const isNBA = product.category === 'nba' || product.league === 'nba';
-    let oldPrice = 25.00;
-    let price = 19.90;
 
-    if (isNBA) {
-        oldPrice = 30.00;
-        price = 24.90;
-    } else if (isRetro) {
-        oldPrice = 30.00;
-        price = 24.90;
-    } else if (product.customPatches === 'espana26' && isKids) {
-        oldPrice = 29.00;
-        price = 23.90;
+    let oldPrice = 30.00;
+    let price = 22.90;
+
+    if (isRetro) {
+        oldPrice = 35.00;
+        price = 27.90;
     } else if (isKids) {
-        oldPrice = 27.00;
-        price = 21.90;
-    } else if (product.customPatches === 'espana26') {
-        oldPrice = 27.00;
-        price = 21.90;
+        oldPrice = 33.00;
+        price = 25.90;
     }
     return { price, oldPrice };
 }
@@ -125,8 +116,8 @@ function getPackPromoHTML() {
     const currentDiff = cart.reduce((sum, item) => {
         if (item.isAccessory) return sum;
         const qty = item.quantity || item.qty || 1;
-        const basePrice = item.basePrice || 19.90;
-        return sum + (basePrice - 19.90) * qty;
+        const basePrice = item.basePrice || 22.90;
+        return sum + (basePrice - 22.90) * qty;
     }, 0);
 
     // 1. Envío Gratis (Prioridad Máxima)
@@ -217,10 +208,10 @@ function addToCartDirectly(product, size, btnElement, pendingCustom = null) {
             const count = customization.patch.split(',').map(s => s.trim()).filter(Boolean).length;
             totalPrice += count * 1.25;
         } else {
-            totalPrice += 2;
+            totalPrice += 3;
         }
     }
-    if (customization.name || customization.number) totalPrice += 3;
+    if (customization.name || customization.number) totalPrice += 4;
 
     const cartItem = {
         id: product.id,
@@ -286,7 +277,7 @@ function addToCartDirectly(product, size, btnElement, pendingCustom = null) {
 // ---------------------------------------------------------------------------
 // Inline customization panel for upsell items (pencil button)
 // ---------------------------------------------------------------------------
-const UPSELL_SIZE_SURCHARGES = { '2XL': 1, '3XL': 2, '4XL': 2 };
+const UPSELL_SIZE_SURCHARGES = { '2XL': 2, '3XL': 4, '4XL': 4 };
 
 function calcUpsellEditPrice(basePrice, custom, isEspana26 = false, hasDynamicPatches = false) {
     let total = basePrice;
@@ -300,10 +291,10 @@ function calcUpsellEditPrice(basePrice, custom, isEspana26 = false, hasDynamicPa
             const count = custom.patch.split(',').map(s => s.trim()).filter(Boolean).length;
             total += count * 1.25;
         } else {
-            total += 2;
+            total += 3;
         }
     }
-    if (custom.name || custom.number) total += 3;
+    if (custom.name || custom.number) total += 4;
     return total;
 }
 
@@ -365,7 +356,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
                     <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
                         <input type="checkbox" id="ue-custom-patch-otro-cb" ${hasOtro ? 'checked' : ''} style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
                         <div style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px; font-weight: bold; font-size: 1.1rem; color: var(--text-muted);">?</div>
-                        <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">Otro (+€2.00)</span>
+                        <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">Otro (+€3.00)</span>
                     </label>
                     <div id="ue-custom-patch-otro-input-container" style="display: ${hasOtro ? 'block' : 'none'}; padding-left: 0.5rem; margin-top: -0.25rem;">
                         <input type="text" id="ue-custom-patch-otro-input" placeholder="Ej: Champions, Liga, etc." maxlength="30" autocomplete="off" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px;" value="${hasOtro ? otroPatchName : ''}">
@@ -404,7 +395,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
     } else {
         patchBlock = showPatch ? `
             <div class="upsell-edit-field">
-                <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€2.00)</span></label>
+                <label>Parche <span style="color:#6b7280;text-transform:none;font-weight:400;">(+€3.00)</span></label>
                 <input type="text" id="ue-patch" placeholder="Ej. Champions League" maxlength="30" autocomplete="off" value="${current.patch || ''}">
             </div>` : (prod.noPatches ? `
             <div style="display:flex;align-items:flex-start;gap:0.6rem;background:linear-gradient(135deg,rgba(34,197,94,.12),rgba(16,185,129,.08));border:1.5px solid rgba(34,197,94,.35);border-radius:10px;padding:0.8rem 0.9rem;margin-top:0.5rem;font-size:0.87rem;line-height:1.5;color:inherit;">
@@ -432,7 +423,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
             ${versionBlock}
             ${showCustomization ? `
             <div class="upsell-edit-field">
-                <label>Nombre <span style="color:#6b7280;text-transform:none;font-weight:400;">(solo letras · máx 15 · +€3 con nombre o dorsal)</span></label>
+                <label>Nombre <span style="color:#6b7280;text-transform:none;font-weight:400;">(solo letras · máx 15 · +€4 con nombre o dorsal)</span></label>
                 <input type="text" id="ue-name" placeholder="Ej. PEDRI" maxlength="15" autocomplete="off" value="${current.name || ''}">
             </div>
             <div class="upsell-edit-field">
@@ -474,7 +465,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
                 const txt = otroInput ? otroInput.value.trim() : '';
                 if (txt) {
                     finalPatches.push(txt);
-                    patchExtraPrice += 2;
+                    patchExtraPrice += 3;
                 }
             }
             finalPatchStr = finalPatches.join(', ');
@@ -487,7 +478,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
             finalPatchStr = overlay.querySelector('#ue-patch')?.value.trim() || '';
             if (finalPatchStr) {
                 finalPatches = [finalPatchStr];
-                patchExtraPrice = 2;
+                patchExtraPrice = 3;
             }
         }
         return { patch: finalPatchStr, patches: finalPatches, patchExtraPrice };
@@ -625,7 +616,8 @@ function renderProductItemHTML(prod) {
 
     const sizeOptionsHTML = sizes.map(sz => {
         const isSel = sz === defaultRecSize ? 'selected' : '';
-        return `<option value="${sz}" ${isSel}>${sz}</option>`;
+        const extra = UPSELL_SIZE_SURCHARGES[sz] ? ` (+€${UPSELL_SIZE_SURCHARGES[sz]})` : '';
+        return `<option value="${sz}" ${isSel}>${sz}${extra}</option>`;
     }).join('');
 
     return `
