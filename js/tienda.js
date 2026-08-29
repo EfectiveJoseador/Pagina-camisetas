@@ -1079,10 +1079,16 @@ function closeAllQuickAddPanels() { _closeDrawer(); }
         onValue(ref(db, 'products'), (snapshot) => {
             if (snapshot.exists()) {
                 const liveData = snapshot.val();
+                let hasChanges = false;
+
                 // Merge existing
                 let newAllProducts = allProducts.map(p => {
                     if (liveData[p.id]) {
-                        const merged = { ...p, ...liveData[p.id] };
+                        const live = liveData[p.id];
+                        if (p.price !== live.price || p.name !== live.name || p.image !== live.image || p.hidden !== live.hidden) {
+                            hasChanges = true;
+                        }
+                        const merged = { ...p, ...live };
                         if (merged.league) merged.league = normalizeLeagueKey(merged.league);
                         return merged;
                     }
@@ -1092,6 +1098,7 @@ function closeAllQuickAddPanels() { _closeDrawer(); }
                 // Append new ones from liveData that are not in allProducts
                 Object.values(liveData).forEach(liveProduct => {
                     if (!newAllProducts.find(p => p.id === liveProduct.id)) {
+                        hasChanges = true;
                         const merged = { ...liveProduct };
                         if (merged.league) merged.league = normalizeLeagueKey(merged.league);
                         newAllProducts.push(merged);
@@ -1099,7 +1106,9 @@ function closeAllQuickAddPanels() { _closeDrawer(); }
                 });
                 
                 allProducts = newAllProducts;
-                if (typeof applyFilters === 'function') applyFilters(false);
+                if (hasChanges && typeof applyFilters === 'function') {
+                    applyFilters(false);
+                }
             }
         });
     }
@@ -1131,8 +1140,7 @@ function init() {
     attachEventListeners();
     setupModal();
 
-    loadLiveProducts(); // Iniciar sync de productos
-    loadPinnedProducts(); // Iniciar sync de productos fijados en background
+    loadLiveProducts(); // Iniciar sync de productos en tiempo real
 
     applyURLFilters();
     applyFilters(false);

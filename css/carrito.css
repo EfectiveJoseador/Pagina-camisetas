@@ -204,13 +204,17 @@
 .cart-item-price-current {
     font-weight: 800;
     font-size: 1.15rem;
-    color: var(--text-main);
+    color: #10b981;
     line-height: 1.2;
 }
 
-/* Cuando hay precio tachado, el precio actual se colorea en verde para enfatizar el ahorro */
-.cart-item-price-wrapper:has(.cart-item-price-old) .cart-item-price-current {
-    color: #10b981;
+.cart-item-price-current.is-accessory {
+    color: var(--text-main);
+}
+
+.cart-item-price-wrapper:has(.cart-item-price-old) .cart-item-price-current,
+.cart-item-price-current.is-sale {
+    color: #10b981 !important;
 }
 
 /* Animación sutil al aparecer el precio tachado */

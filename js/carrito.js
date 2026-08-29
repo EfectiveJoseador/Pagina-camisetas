@@ -8,23 +8,31 @@ let products = [...productsData];
 onValue(ref(db, 'products'), (snapshot) => {
     if (snapshot.exists()) {
         const liveData = snapshot.val();
+        let hasChanges = false;
+
         let newAllProducts = productsData.map(p => {
             if (liveData[p.id]) {
-                return { ...p, ...liveData[p.id] };
+                const live = liveData[p.id];
+                if (p.price !== live.price || p.name !== live.name || p.image !== live.image || p.hidden !== live.hidden) {
+                    hasChanges = true;
+                }
+                return { ...p, ...live };
             }
             return p;
         });
         
         Object.values(liveData).forEach(liveProduct => {
             if (!newAllProducts.find(p => p.id === liveProduct.id)) {
+                hasChanges = true;
                 newAllProducts.push(liveProduct);
             }
         });
         
         products = newAllProducts;
+        applySpecialPricing();
         
-        // Re-renderizar carrito si está abierto y renderCart existe globalmente
-        if (typeof Cart !== 'undefined' && Cart.items && Cart.items.length > 0) {
+        // Re-renderizar carrito solo si hay cambios reales en los productos del catálogo
+        if (hasChanges && typeof Cart !== 'undefined' && Cart.items && Cart.items.length > 0) {
             Cart.render();
         }
     }
@@ -54,15 +62,28 @@ function applySpecialPricing() {
 }
 applySpecialPricing();
 
-// ---------------------------------------------------------------------------
-// Helper: calcula el precio original (sin oferta) de un ítem del carrito.
-// Usa product.oldPrice como base y añade los mismos extras fijos.
-// Los extras (parche, dorsal) se mantienen idénticos en ambos precios.
-// ---------------------------------------------------------------------------
-function getItemOldPrice(item, product, sizeSurcharge, versionSurcharge, patchSurcharge, personSurcharge) {
+function getMiniImagePath(imagePath) {
+    if (!imagePath) return '';
+    return imagePath.replace(/\/(\d+)\.(webp|jpg|png|jpeg)$/i, '/$1_mini.$2');
+}
+
+function getItemOldPrice(item, product, sizeSurcharge = 0, versionSurcharge = 0, patchSurcharge = 0, personSurcharge = 0) {
     if (item.isAccessory) return null;     // Accesorios: sin precio tachado
-    const oldBasePrice = product?.oldPrice || null;
-    if (!oldBasePrice) return null;        // Si no hay oldPrice definido, no mostrar
+    let oldBasePrice = product?.oldPrice || item.oldPrice;
+    if (!oldBasePrice) {
+        const nameLower = (item.name || product?.name || '').toLowerCase();
+        const imageLower = (item.image || product?.image || '').toLowerCase();
+        const isKids = item.kids === true || product?.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
+        const isRetro = item.retro === true || product?.retro === true || nameLower.includes('retro') || product?.league === 'retro';
+
+        if (isRetro) {
+            oldBasePrice = 35.00;
+        } else if (isKids) {
+            oldBasePrice = 33.00;
+        } else {
+            oldBasePrice = 30.00;
+        }
+    }
     return oldBasePrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
 }
 const Cart = {
@@ -365,23 +386,23 @@ const Cart = {
 
         this.items.forEach((item, index) => {
             const product = products.find(p => p.id === item.id);
-            if (!product && !item.isAccessory) return;
+            if (!product && !item.isAccessory && !item.name) return;
 
             const qty = item.quantity || item.qty || 1;
             let displayName = '';
             let displayPrice = 0;
             let displayOldPrice = null;
             let displayDetails = '';
-            let imgUrl = '';
+            let rawImgUrl = '';
 
             if (item.isAccessory) {
-                displayName = item.name;
-                displayPrice = item.price;
+                displayName = item.name || 'Accesorio';
+                displayPrice = item.price || 0;
                 displayOldPrice = null;
                 displayDetails = 'Accesorio adicional';
-                imgUrl = '/assets/logo/logo.png';
+                rawImgUrl = item.image || '/assets/logo/logo.png';
             } else {
-                displayName = product.name;
+                displayName = item.name || product?.name || 'Camiseta';
                 const custom = item.customization || {};
                 const size = custom.size || item.size || '';
                 const sizeSurcharge = SIZE_SURCHARGES[size] || 0;
@@ -400,7 +421,7 @@ const Cart = {
                 const hasName = !!(custom.name || '');
                 const hasNumber = !!(custom.number || '');
                 const personSurcharge = (hasName || hasNumber) ? 4 : 0;
-                const baseProductPrice = item.basePrice || product.price;
+                const baseProductPrice = item.basePrice || product?.price || 22.90;
                 displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
                 displayOldPrice = getItemOldPrice(item, product, sizeSurcharge, versionSurcharge, patchSurcharge, personSurcharge);
                 
@@ -408,8 +429,10 @@ const Cart = {
                 if (custom.name) displayDetails += ` | Nombre: ${sanitizeHTML(custom.name)}`;
                 if (custom.number) displayDetails += ` | Dorsal: ${sanitizeHTML(custom.number)}`;
                 if (patch && patch !== 'none') displayDetails += ` | Parche: ${sanitizeHTML(patch)}`;
-                imgUrl = product.image;
+                rawImgUrl = item.image || product?.image || '';
             }
+
+            const miniImgUrl = getMiniImagePath(rawImgUrl) || rawImgUrl;
 
             const el = document.createElement('div');
             el.className = 'cart-item';
@@ -417,12 +440,12 @@ const Cart = {
                 <div class="cart-item-top">
                     ${item.isAccessory ? `
                         <div class="cart-item-img-wrapper">
-                            <img src="${imgUrl}" alt="${sanitizeHTML(displayName)}" class="cart-item-img">
+                            <img src="${miniImgUrl}" alt="${sanitizeHTML(displayName)}" class="cart-item-img" loading="eager" decoding="async" onerror="this.onerror=null;this.src='${rawImgUrl}';">
                         </div>
                     ` : `
-                        <a href="/pages/producto.html?id=${product.id}" class="cart-item-img-link">
+                        <a href="/pages/producto.html?id=${item.id || product?.id}" class="cart-item-img-link">
                             <div class="cart-item-img-wrapper">
-                                <img src="${imgUrl}" alt="${sanitizeHTML(displayName)}" class="cart-item-img">
+                                <img src="${miniImgUrl}" alt="${sanitizeHTML(displayName)}" class="cart-item-img" loading="eager" decoding="async" onerror="this.onerror=null;this.src='${rawImgUrl}';">
                             </div>
                         </a>
                     `}
@@ -430,7 +453,7 @@ const Cart = {
                         ${item.isAccessory ? `
                             <h3 class="cart-item-title">${sanitizeHTML(displayName)}</h3>
                         ` : `
-                            <a href="/pages/producto.html?id=${product.id}" class="cart-item-title-link">
+                            <a href="/pages/producto.html?id=${item.id || product?.id}" class="cart-item-title-link">
                                 <h3 class="cart-item-title">${sanitizeHTML(displayName)}</h3>
                             </a>
                         `}
@@ -451,7 +474,7 @@ const Cart = {
                         ${displayOldPrice && (displayOldPrice * qty) > (displayPrice * qty) ? `
                             <span class="cart-item-price-old">€${(displayOldPrice * qty).toFixed(2)}</span>
                         ` : ''}
-                        <span class="cart-item-price-current">€${(displayPrice * qty).toFixed(2)}</span>
+                        <span class="cart-item-price-current ${item.isAccessory ? 'is-accessory' : 'is-sale'}">€${(displayPrice * qty).toFixed(2)}</span>
                     </div>
                 </div>
             `;
@@ -497,21 +520,21 @@ const Cart = {
         const SIZE_SURCHARGES = { 'S': 0, 'M': 0, 'L': 0, 'XL': 0, '2XL': 2, '3XL': 4, '4XL': 4 };
         this.items.forEach((item, index) => {
             const product = products.find(p => p.id === item.id);
-            if (!product && !item.isAccessory) return;
+            if (!product && !item.isAccessory && !item.name) return;
 
             const qty = item.quantity || item.qty || 1;
             let displayName = '';
             let displayPrice = 0;
             let displayDetails = '';
-            let imgUrl = '';
+            let rawImgUrl = '';
 
             if (item.isAccessory) {
-                displayName = item.name;
-                displayPrice = item.price;
+                displayName = item.name || 'Accesorio';
+                displayPrice = item.price || 0;
                 displayDetails = 'Accesorio adicional';
-                imgUrl = '/assets/logo/logo.png';
+                rawImgUrl = item.image || '/assets/logo/logo.png';
             } else {
-                displayName = product.name;
+                displayName = item.name || product?.name || 'Camiseta';
                 const custom = item.customization || {};
                 const size = custom.size || item.size || 'N/A';
                 const version = custom.version || item.version || 'aficionado';
@@ -530,22 +553,24 @@ const Cart = {
                 const hasName = !!(custom.name || '');
                 const hasNumber = !!(custom.number || '');
                 const personSurcharge = (hasName || hasNumber) ? 4 : 0;
-                const baseProductPrice = item.basePrice || product.price;
+                const baseProductPrice = item.basePrice || product?.price || 22.90;
                 displayPrice = baseProductPrice + sizeSurcharge + versionSurcharge + patchSurcharge + personSurcharge;
                 
                 displayDetails = `Talla: ${size} / ${version === 'jugador' ? 'Jugador' : 'Aficionado'}`;
                 if (custom.name) displayDetails += ` | Nombre: ${sanitizeHTML(custom.name)}`;
                 if (custom.number) displayDetails += ` | Dorsal: ${sanitizeHTML(custom.number)}`;
                 if (patch && patch !== 'none') displayDetails += ` | Parche: ${sanitizeHTML(patch)}`;
-                imgUrl = product.image;
+                rawImgUrl = item.image || product?.image || '';
             }
+
+            const miniImgUrl = getMiniImagePath(rawImgUrl) || rawImgUrl;
 
             const el = document.createElement('div');
             el.className = 'checkout-item-mini';
             const isLast = index === this.items.length - 1;
             el.style.cssText = `display:flex; gap:0.75rem; align-items:flex-start; ${isLast ? 'margin-bottom:0.5rem;' : 'margin-bottom:1rem; padding-bottom:1rem; border-bottom:1px solid var(--border);'}`;
             el.innerHTML = `
-                <img src="${imgUrl}" alt="${sanitizeHTML(displayName)}" style="width:50px; height:50px; object-fit:contain; border:1px solid var(--border); border-radius:8px; padding:2px; background:#fff; flex-shrink:0;">
+                <img src="${miniImgUrl}" alt="${sanitizeHTML(displayName)}" loading="eager" decoding="async" onerror="this.onerror=null;this.src='${rawImgUrl}';" style="width:50px; height:50px; object-fit:contain; border:1px solid var(--border); border-radius:8px; padding:2px; background:#fff; flex-shrink:0;">
                 <div style="flex:1; min-width:0; display:flex; flex-direction:column; gap:0.25rem;">
                     <h4 style="font-size:0.9rem; font-weight:700; margin:0; color:var(--text-main); line-height:1.3; overflow-wrap:break-word; text-align:left;">${sanitizeHTML(displayName)}</h4>
                     <p style="font-size:0.75rem; color:var(--text-muted); margin:0; line-height:1.3; overflow-wrap:break-word; text-align:left;">${displayDetails}</p>
@@ -1078,7 +1103,13 @@ function showShareModal(shareUrl) {
     }
 }
 
-document.addEventListener('DOMContentLoaded', () => {
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCartPage);
+} else {
+    initCartPage();
+}
+
+function initCartPage() {
     Cart.init();
     window.addEventListener('components:ready', () => {
         Cart.updateHeaderCount();
@@ -1115,7 +1146,7 @@ document.addEventListener('DOMContentLoaded', () => {
             showShareModal(shareUrl);
         });
     }
-});
+}
 
 export default Cart;
 
