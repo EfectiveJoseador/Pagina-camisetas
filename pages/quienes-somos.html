@@ -439,8 +439,6 @@
             </p>
         </section>
 
-        <div class="tp-section" id="tp-section-qs"></div>
-
 
         <section class="gallery-section clients-carousel">
             <h2>Pedidos Enviados</h2>
@@ -497,10 +495,12 @@
                 <span class="stat-number">600+</span>
                 <span class="stat-label">Camisetas Enviadas</span>
             </div>
-            <div class="stat-card">
-                <i class="fas fa-star"></i>
-                <span class="stat-number">4.9</span>
-                <span class="stat-label">Valoración Media</span>
+            <div id="tp-stat-slot" style="display:flex;width:100%;">
+                <div class="stat-card" style="width:100%;">
+                    <i class="fas fa-star"></i>
+                    <span class="stat-number">4.9</span>
+                    <span class="stat-label">Valoración Media</span>
+                </div>
             </div>
             <div class="stat-card">
                 <i class="fas fa-calendar-check"></i>
@@ -550,11 +550,10 @@
     <script src="../js/image-protection.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function () {
-            var sec = document.getElementById('tp-section-qs');
-            if (sec && window.TrustpilotConfig) {
+            var slot = document.getElementById('tp-stat-slot');
+            if (slot && window.TrustpilotConfig) {
                 var card = window.TrustpilotConfig.renderBadgeCard();
-                if (card) sec.innerHTML = card;
-                else sec.style.display = 'none';
+                if (card) slot.outerHTML = card;
             }
         });
     </script>
