@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="es" data-theme="dark">
 
 <head>
@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="../css/variables.css?v=3">
     <link rel="stylesheet" href="../css/reset.css?v=3">
     <link rel="stylesheet" href="../css/admin.css?v=31">
-    <link rel="stylesheet" href="../css/trustpilot.css">
+    <link rel="stylesheet" href="../css/trustpilot.css?v=6">
 
     <style>
         .auth-loading {
@@ -952,7 +952,7 @@
         </div>
     </div>
 
-    <script src="../js/trustpilot.js"></script>
+    <script src="../js/trustpilot.js?v=6"></script>
     <script type="module" src="../js/admin.js"></script>
     <script>
         function tpUpdatePreview() {
@@ -966,12 +966,16 @@
             if (!visibleVal) { prev.innerHTML = '<span style="color:#52525b;font-size:0.85rem;">Badge desactivado</span>'; return; }
             var stars = window.TrustpilotConfig.renderStars(ratingVal, 20);
             prev.innerHTML = '<a href="' + urlVal + '" target="_blank" rel="noopener noreferrer" class="tp-bar" style="background:rgba(0,182,122,0.12);border-color:rgba(0,182,122,0.3);">' +
-                '<span class="tp-bar-head">' +
+                '<div class="tp-bar-inner">' +
+                '<div class="tp-bar-top">' +
                 '<span class="tp-bar-logo" style="color:#00b67a;">Trustpilot</span>' +
                 '<span class="tp-bar-stars">' + stars + '</span>' +
-                '</span>' +
-                '<span class="tp-bar-divider">&middot;</span>' +
+                '</div>' +
+                '<span class="tp-bar-sep">&middot;</span>' +
+                '<div class="tp-bar-bottom">' +
                 '<span class="tp-bar-text" style="color:#d4d4d8;"><strong>' + ratingVal.toFixed(1) + '</strong>/5 &middot; ' + reviewsVal + ' opiniones</span>' +
+                '</div>' +
+                '</div>' +
                 '</a>';
         }
 
