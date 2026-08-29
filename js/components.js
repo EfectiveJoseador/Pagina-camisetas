@@ -116,21 +116,21 @@ const Components = {
             ? "Haz tu pedido hoy antes de las 13:30" 
             : "Haz tu pedido ahora";
             
+        const tpBadge = (typeof window.TrustpilotConfig !== 'undefined') ? window.TrustpilotConfig.renderBadgeAnnouncement() : '';
+        const hasTp = tpBadge !== '';
+
+        const shippingSlide = `<div class="ann-slide ann-active" id="ann-slide-0"><i class="fas fa-truck-fast" style="font-size:1.05rem;flex-shrink:0;"></i><span>${callToAction} y recíbelo entre el <strong style="white-space:nowrap;">${minDateStr} y el ${maxDateStr}</strong></span></div>`;
+        const tpSlide = hasTp ? `<div class="ann-slide" id="ann-slide-1"><i class="fas fa-star" style="font-size:0.85rem;color:#00e08e;flex-shrink:0;"></i>${tpBadge}</div>` : '';
+
         const bannerHtml = `
-            <div class="global-announcement-bar" style="background: linear-gradient(90deg, #6366f1, #a855f7); color: white; text-align: center; padding: 0.5rem 1rem; font-size: 0.85rem; font-weight: 500; display: flex; justify-content: center; align-items: center; gap: 0.5rem; z-index: 1000; position: relative; line-height: 1.3;">
-                <i class="fas fa-truck-fast" style="font-size: 1.1rem; flex-shrink: 0;"></i>
-                <span style="text-align: center;">${callToAction} y recíbelo entre el <strong style="white-space: nowrap;">${minDateStr} y el ${maxDateStr}</strong></span>
+            <div class="global-announcement-bar" style="background:linear-gradient(90deg,#6366f1,#a855f7);color:white;text-align:center;font-size:0.85rem;font-weight:500;display:flex;justify-content:center;align-items:center;gap:0.5rem;z-index:1000;position:relative;line-height:1.3;height:38px;overflow:hidden;">
+                ${shippingSlide}
+                ${tpSlide}
             </div>
             <style>
                 @media (max-width: 480px) {
-                    .global-announcement-bar {
-                        font-size: 0.75rem !important;
-                        padding: 0.4rem 0.5rem !important;
-                        gap: 0.4rem !important;
-                    }
-                    .global-announcement-bar i {
-                        font-size: 1rem !important;
-                    }
+                    .global-announcement-bar { font-size:0.75rem !important; height:36px !important; }
+                    .global-announcement-bar i { font-size:0.9rem !important; }
                 }
             </style>
         `;
@@ -142,6 +142,25 @@ const Components = {
         } else {
             document.body.insertAdjacentHTML('afterbegin', finalHeader);
         }
+
+        if (hasTp) {
+            let annCur = 0;
+            setInterval(function () {
+                const s0 = document.getElementById('ann-slide-0');
+                const s1 = document.getElementById('ann-slide-1');
+                if (!s0 || !s1) return;
+                if (annCur === 0) {
+                    s0.classList.remove('ann-active');
+                    s1.classList.add('ann-active');
+                    annCur = 1;
+                } else {
+                    s1.classList.remove('ann-active');
+                    s0.classList.add('ann-active');
+                    annCur = 0;
+                }
+            }, 3000);
+        }
+
         const footerPlaceholder = document.getElementById('footer-placeholder');
         if (footerPlaceholder) {
             footerPlaceholder.outerHTML = this.footer;

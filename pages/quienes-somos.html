@@ -58,6 +58,7 @@
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/producto.css">
     <link rel="stylesheet" href="../css/ux-feedback.css">
+    <link rel="stylesheet" href="../css/trustpilot.css">
 
 
     <script type="application/ld+json">
@@ -438,6 +439,8 @@
             </p>
         </section>
 
+        <div class="tp-section" id="tp-section-qs"></div>
+
 
         <section class="gallery-section clients-carousel">
             <h2>Pedidos Enviados</h2>
@@ -538,11 +541,23 @@
     <div id="footer-placeholder"></div>
 
 
-    <script src="../js/theme.js?v=4"></script>    <script src="../js/components.js?v=4"></script>
+    <script src="../js/theme.js?v=4"></script>
+    <script src="../js/trustpilot.js"></script>
+    <script src="../js/components.js?v=4"></script>
     <script src="../js/ux-feedback.js"></script>
     <script type="module" src="../js/firebase-global.js"></script>
     <script type="module" src="../js/carrito.js?v=5"></script>
     <script src="../js/image-protection.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var sec = document.getElementById('tp-section-qs');
+            if (sec && window.TrustpilotConfig) {
+                var card = window.TrustpilotConfig.renderBadgeCard();
+                if (card) sec.innerHTML = card;
+                else sec.style.display = 'none';
+            }
+        });
+    </script>
 
     <script>
 
