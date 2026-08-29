@@ -760,7 +760,7 @@ export function showUpsellModal(addedProduct, selectedSize = 'M', addedProductPr
     sentinel.style.cssText = 'height:1px;width:100%;flex-shrink:0;';
     recsGrid.appendChild(sentinel); // always last
 
-    const BATCH_SIZE = 6;
+    const BATCH_SIZE = 5;
     let loadedCount = 0;
     let isLoading = false;
     let loadTimeout = null;

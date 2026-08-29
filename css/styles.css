@@ -801,19 +801,22 @@ html {
 }
 
 .upsell-modal-container {
-    background-color: #0b0b0f;
+    background-color: #0d0d14;
     color: #f3f4f6;
-    width: 90%;
-    max-width: 500px;
-    border-radius: 16px;
-    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5), 0 0 40px rgba(99, 102, 241, 0.05);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-    padding: 24px;
+    width: 92%;
+    max-width: 480px;
+    border-radius: 20px;
+    box-shadow: 0 25px 60px -12px rgba(0, 0, 0, 0.7), 0 0 50px rgba(99, 102, 241, 0.08);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 18px 18px 16px 18px;
     position: relative;
     transform: translateY(20px);
-    transition: transform 0.3s ease;
-    max-height: 90vh;
-    overflow-y: auto;
+    transition: transform 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    max-height: min(92vh, 670px);
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    box-sizing: border-box;
 }
 
 .upsell-modal-overlay.active .upsell-modal-container {
@@ -822,95 +825,120 @@ html {
 
 .upsell-modal-close {
     position: absolute;
-    top: 16px;
-    right: 16px;
-    background: none;
+    top: 14px;
+    right: 14px;
+    background: rgba(255, 255, 255, 0.05);
     border: none;
-    font-size: 24px;
+    font-size: 20px;
+    line-height: 1;
     color: #9ca3af;
     cursor: pointer;
-    transition: color 0.2s ease;
+    transition: all 0.2s ease;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10;
 }
 
 .upsell-modal-close:hover {
     color: #ffffff;
+    background: rgba(255, 255, 255, 0.15);
 }
 
 .upsell-header {
     display: flex;
     align-items: center;
-    gap: 12px;
-    margin-bottom: 20px;
+    gap: 10px;
+    margin-bottom: 12px;
+    flex-shrink: 0;
 }
 
 .upsell-success-icon {
     background-color: rgba(16, 185, 129, 0.15);
     color: #10b981;
-    width: 36px;
-    height: 36px;
+    width: 30px;
+    height: 30px;
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    font-size: 0.85rem;
+    flex-shrink: 0;
 }
 
 .upsell-header h3 {
     margin: 0;
-    font-size: 1.25rem;
-    font-weight: 600;
+    font-size: 1.15rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
 }
 
 .upsell-added-product {
     display: flex;
-    gap: 16px;
-    background-color: #121218;
-    padding: 12px;
-    border-radius: 12px;
-    margin-bottom: 20px;
+    align-items: center;
+    gap: 14px;
+    background: rgba(255, 255, 255, 0.04);
+    padding: 10px 14px;
+    border-radius: 14px;
+    margin-bottom: 10px;
     border: 1px solid rgba(255, 255, 255, 0.06);
+    flex-shrink: 0;
 }
 
 .upsell-added-img {
-    width: 60px;
-    height: 60px;
+    width: 52px;
+    height: 52px;
     object-fit: cover;
-    border-radius: 8px;
+    border-radius: 10px;
+    flex-shrink: 0;
+    background: #14141d;
 }
 
 .upsell-added-info {
     display: flex;
     flex-direction: column;
     justify-content: center;
+    min-width: 0;
+    flex: 1;
 }
 
 .upsell-added-title {
-    font-weight: 500;
-    font-size: 0.95rem;
+    font-weight: 600;
+    font-size: 0.88rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    color: #f3f4f6;
 }
 
 .upsell-added-details {
-    font-size: 0.85rem;
-    color: #9ca3af;
-    margin-top: 2px;
+    font-size: 0.78rem;
+    color: #a1a1aa;
+    margin-top: 1px;
 }
 
 .upsell-added-price {
-    font-size: 0.95rem;
-    font-weight: 600;
-    color: #60a5fa;
-    margin-top: 4px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    color: #38bdf8;
+    margin-top: 2px;
 }
 
 /* Packs Promo styles */
 .upsell-pack-promo {
-    margin-bottom: 20px;
+    margin-bottom: 10px;
+    flex-shrink: 0;
 }
 
 .pack-promo-card {
     display: flex;
-    gap: 12px;
-    padding: 14px;
-    border-radius: 12px;
+    gap: 10px;
+    padding: 10px 12px;
+    border-radius: 10px;
     background: linear-gradient(135deg, rgba(59, 130, 246, 0.15) 0%, rgba(59, 130, 246, 0.05) 100%);
     border: 1px dashed rgba(59, 130, 246, 0.3);
     align-items: center;
@@ -927,18 +955,20 @@ html {
 }
 
 .pack-promo-icon {
-    font-size: 24px;
+    font-size: 20px;
+    flex-shrink: 0;
 }
 
 .pack-promo-text {
     display: flex;
     flex-direction: column;
-    gap: 2px;
+    gap: 1px;
+    min-width: 0;
 }
 
 .pack-promo-title {
-    font-weight: 600;
-    font-size: 0.9rem;
+    font-weight: 700;
+    font-size: 0.82rem;
     color: #93c5fd;
 }
 
@@ -951,33 +981,45 @@ html {
 }
 
 .pack-promo-desc {
-    font-size: 0.85rem;
-    color: #d1d5db;
+    font-size: 0.78rem;
+    color: #e2e8f0;
+    line-height: 1.25;
 }
 
 /* Recommendations Section */
+.upsell-recommendations {
+    display: flex;
+    flex-direction: column;
+    flex: 1 1 auto;
+    min-height: 0;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
 .upsell-recommendations h4 {
-    margin: 0 0 12px 0;
-    font-size: 0.95rem;
-    font-weight: 600;
+    margin: 0 0 8px 0;
+    font-size: 0.78rem;
+    font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.06em;
     color: #9ca3af;
+    flex-shrink: 0;
 }
 
 .upsell-recommendations-grid {
     display: flex;
     flex-direction: column;
-    gap: 12px;
-    margin-bottom: 24px;
-    max-height: 280px;
+    gap: 10px;
+    flex: 1 1 auto;
+    min-height: 0;
     overflow-y: auto;
-    padding-right: 6px;
+    padding-right: 4px;
+    overscroll-behavior: contain;
 }
 
 /* Custom scrollbar for recommendations grid */
 .upsell-recommendations-grid::-webkit-scrollbar {
-    width: 6px;
+    width: 5px;
 }
 
 .upsell-recommendations-grid::-webkit-scrollbar-track {
@@ -999,9 +1041,9 @@ html {
     justify-content: center;
     align-items: center;
     gap: 8px;
-    padding: 12px 0;
+    padding: 10px 0;
     color: #9ca3af;
-    font-size: 0.85rem;
+    font-size: 0.8rem;
     font-weight: 500;
 }
 
@@ -1025,105 +1067,125 @@ html {
 .upsell-rec-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 8px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.06);
-    background-color: #121218;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 9px 12px;
+    border-radius: 12px;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    background-color: rgba(255, 255, 255, 0.03);
     transition: all 0.2s ease;
+    box-sizing: border-box;
+    min-width: 0;
+    flex-shrink: 0;
 }
 
 .upsell-rec-item:hover {
-    background-color: #1a1a24;
-    border-color: rgba(255, 255, 255, 0.12);
+    background-color: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.14);
+}
+
+.upsell-rec-card-link {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex: 1 1 0;
+    min-width: 0;
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+    overflow: hidden;
 }
 
 .upsell-rec-img {
-    width: 50px;
-    height: 50px;
+    width: 54px;
+    height: 54px;
     object-fit: cover;
-    border-radius: 6px;
+    border-radius: 9px;
+    flex-shrink: 0;
+    background: #14141d;
 }
 
 .upsell-rec-info {
-    flex-grow: 1;
+    flex: 1 1 0;
+    min-width: 0;
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    overflow: hidden;
 }
 
 .upsell-rec-title {
     font-size: 0.85rem;
-    font-weight: 500;
-    line-height: 1.2;
+    font-weight: 600;
+    line-height: 1.25;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+    color: #f3f4f6;
+}
+
+.upsell-rec-card-link:hover .upsell-rec-title {
+    color: #93c5fd;
 }
 
 .upsell-rec-prices {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     gap: 6px;
-    margin-top: 2px;
+    margin-top: 3px;
 }
 
 .upsell-rec-price {
-    font-size: 0.85rem;
-    font-weight: 600;
-    color: #60a5fa;
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #38bdf8;
 }
 
 .upsell-rec-old-price {
-    font-size: 0.75rem;
+    font-size: 0.74rem;
     text-decoration: line-through;
-    color: #6b7280;
+    color: #71717a;
 }
 
 .upsell-rec-actions {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 6px;
+    flex-shrink: 0;
+    margin-left: 4px;
 }
 
 .upsell-rec-size-select {
-    padding: 4px 8px;
-    font-size: 0.75rem;
-    border-radius: 6px;
+    padding: 4px 6px;
+    font-size: 0.76rem;
+    font-weight: 600;
+    border-radius: 8px;
     border: 1px solid rgba(255, 255, 255, 0.15);
-    background-color: #0b0b0f;
+    background-color: #161622;
     color: #f3f4f6;
     cursor: pointer;
+    height: 30px;
+    box-sizing: border-box;
+    outline: none;
+    transition: border-color 0.2s;
+    min-width: 46px;
+    text-align: center;
 }
 
-.btn-upsell-rec-add {
-    background-color: #2563eb;
-    color: #ffffff;
-    border: none;
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    font-size: 16px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    cursor: pointer;
-    transition: background-color 0.2s ease, transform 0.1s ease;
-}
-
-.btn-upsell-rec-add:hover {
-    background-color: #1d4ed8;
-}
-
-.btn-upsell-rec-add:active {
-    transform: scale(0.95);
+.upsell-rec-size-select:focus {
+    border-color: #6366f1;
 }
 
 /* Botón lápiz de personalización en tarjeta upsell */
 .btn-upsell-rec-customize {
-    background: rgba(255, 255, 255, 0.07);
+    background: rgba(255, 255, 255, 0.06);
     border: 1px solid rgba(255, 255, 255, 0.12);
-    color: #9ca3af;
-    width: 28px;
-    height: 28px;
-    border-radius: 6px;
-    font-size: 11px;
+    color: #a1a1aa;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    font-size: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -1135,49 +1197,57 @@ html {
 .btn-upsell-rec-customize:hover {
     background: rgba(168, 85, 247, 0.2);
     border-color: rgba(168, 85, 247, 0.4);
-    color: #a855f7;
+    color: #c084fc;
 }
 
-/* Enlace clickable que cubre imagen + info de la tarjeta upsell */
-.upsell-rec-card-link {
+.btn-upsell-rec-add {
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    color: #ffffff;
+    border: none;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    font-size: 14px;
     display: flex;
     align-items: center;
-    gap: 12px;
-    flex: 1;
-    min-width: 0;
-    text-decoration: none;
-    color: inherit;
+    justify-content: center;
     cursor: pointer;
-    border-radius: 6px;
-    transition: opacity 0.15s ease;
+    flex-shrink: 0;
+    box-shadow: 0 2px 8px rgba(37, 99, 235, 0.35);
+    transition: transform 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
 }
 
-.upsell-rec-card-link:hover {
-    opacity: 0.85;
+.btn-upsell-rec-add:hover {
+    background: linear-gradient(135deg, #2563eb 0%, #1d4ed8 100%);
+    transform: scale(1.05);
+    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.5);
 }
 
-.upsell-rec-card-link:hover .upsell-rec-title {
-    color: #93c5fd;
+.btn-upsell-rec-add:active {
+    transform: scale(0.95);
 }
 
-/* Actions */
+/* Actions at the bottom (Pinned and always visible) */
 .upsell-actions {
     display: flex;
     gap: 10px;
-    flex-wrap: wrap;
+    margin-top: 12px;
+    padding-top: 12px;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    flex-shrink: 0;
 }
 
 .btn-upsell-primary,
 .btn-upsell-secondary {
-    flex: 1 1 120px;
+    flex: 1 1 0;
     min-width: 0;
-    padding: 12px 10px;
-    border-radius: 8px;
-    font-size: 0.9rem;
-    font-weight: 500;
+    padding: 11px 14px;
+    border-radius: 11px;
+    font-size: 0.88rem;
+    font-weight: 700;
     text-align: center;
     cursor: pointer;
-    transition: all 0.2s ease;
+    transition: all 0.2s cubic-bezier(0.16, 1, 0.3, 1);
     border: none;
     text-decoration: none;
     white-space: nowrap;
@@ -1187,36 +1257,110 @@ html {
     align-items: center;
     justify-content: center;
     line-height: 1.2;
+    box-sizing: border-box;
 }
 
 .btn-upsell-primary {
-    background-color: #2563eb;
+    background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
     color: #ffffff;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
 }
 
 .btn-upsell-primary:hover {
-    background-color: #1d4ed8;
+    background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
 }
 
 .btn-upsell-secondary {
-    background-color: #1e1e28;
-    color: #f3f4f6;
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(255, 255, 255, 0.06);
+    color: #e4e4e7;
+    border: 1px solid rgba(255, 255, 255, 0.12);
 }
 
 .btn-upsell-secondary:hover {
-    background-color: #2a2a38;
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.2);
 }
 
-/* En pantallas muy estrechas (<340px), apilar los botones verticalmente */
-@media (max-width: 340px) {
+@media (max-width: 480px) {
+    .upsell-modal-container {
+        width: 95%;
+        max-height: 92vh;
+        padding: 14px 12px 12px 12px;
+        border-radius: 16px;
+    }
+    .upsell-header {
+        margin-bottom: 8px;
+    }
+    .upsell-header h3 {
+        font-size: 1.02rem;
+    }
+    .upsell-added-product {
+        padding: 8px 10px;
+        margin-bottom: 8px;
+        gap: 10px;
+    }
+    .upsell-added-img {
+        width: 44px;
+        height: 44px;
+        border-radius: 8px;
+    }
+    .upsell-added-title {
+        font-size: 0.82rem;
+    }
+    .upsell-pack-promo {
+        margin-bottom: 8px;
+    }
+    .pack-promo-card {
+        padding: 8px 10px;
+        gap: 8px;
+    }
+    .pack-promo-icon {
+        font-size: 18px;
+    }
+    .pack-promo-title {
+        font-size: 0.76rem;
+    }
+    .pack-promo-desc {
+        font-size: 0.72rem;
+    }
+    .upsell-recommendations h4 {
+        font-size: 0.72rem;
+        margin-bottom: 6px;
+    }
+    .upsell-rec-item {
+        padding: 8px 10px;
+        gap: 8px;
+    }
+    .upsell-rec-img {
+        width: 48px;
+        height: 48px;
+        border-radius: 8px;
+    }
+    .upsell-rec-title {
+        font-size: 0.8rem;
+    }
+    .upsell-rec-size-select {
+        height: 28px;
+        padding: 2px 5px;
+        font-size: 0.74rem;
+        min-width: 42px;
+    }
+    .btn-upsell-rec-customize,
+    .btn-upsell-rec-add {
+        width: 28px;
+        height: 28px;
+    }
     .upsell-actions {
-        flex-direction: column;
+        margin-top: 10px;
+        padding-top: 8px;
+        gap: 8px;
     }
     .btn-upsell-primary,
     .btn-upsell-secondary {
-        flex: 1 1 auto;
-        width: 100%;
+        padding: 10px 8px;
+        font-size: 0.82rem;
     }
 }
 
