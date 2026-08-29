@@ -62,8 +62,11 @@
         if (!cfg.visible) return '';
         var stars = renderStars(cfg.rating, 16);
         return '<a href="' + cfg.url + '" target="_blank" rel="noopener noreferrer" class="tp-bar" aria-label="Ver rese\u00f1as en Trustpilot">' +
+            '<span class="tp-bar-head">' +
             '<span class="tp-bar-logo">Trustpilot</span>' +
             '<span class="tp-bar-stars">' + stars + '</span>' +
+            '</span>' +
+            '<span class="tp-bar-divider">&middot;</span>' +
             '<span class="tp-bar-text"><strong>Excelente</strong> &middot; ' + cfg.rating.toFixed(1) + '/5 &middot; ' + cfg.reviewCount + ' opiniones</span>' +
             '</a>';
     }

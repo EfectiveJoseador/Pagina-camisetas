@@ -966,8 +966,11 @@
             if (!visibleVal) { prev.innerHTML = '<span style="color:#52525b;font-size:0.85rem;">Badge desactivado</span>'; return; }
             var stars = window.TrustpilotConfig.renderStars(ratingVal, 20);
             prev.innerHTML = '<a href="' + urlVal + '" target="_blank" rel="noopener noreferrer" class="tp-bar" style="background:rgba(0,182,122,0.12);border-color:rgba(0,182,122,0.3);">' +
+                '<span class="tp-bar-head">' +
                 '<span class="tp-bar-logo" style="color:#00b67a;">Trustpilot</span>' +
                 '<span class="tp-bar-stars">' + stars + '</span>' +
+                '</span>' +
+                '<span class="tp-bar-divider">&middot;</span>' +
                 '<span class="tp-bar-text" style="color:#d4d4d8;"><strong>' + ratingVal.toFixed(1) + '</strong>/5 &middot; ' + reviewsVal + ' opiniones</span>' +
                 '</a>';
         }
