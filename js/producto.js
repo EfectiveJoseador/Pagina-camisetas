@@ -83,7 +83,7 @@ function getSizeSurcharge(size) {
 
 import { db, ref, get } from './firebase-config.js';
 
-document.addEventListener('DOMContentLoaded', async () => {
+document.addEventListener('DOMContentLoaded', () => {
     const urlParams = new URLSearchParams(window.location.search);
     const productId = parseInt(urlParams.get('id'));
     let staticProduct = products.find(p => p.id === productId);
@@ -95,18 +95,22 @@ document.addEventListener('DOMContentLoaded', async () => {
     
     product = { ...staticProduct };
 
-    // Intentar obtener de Firebase antes de renderizar
-    try {
-        const snap = await get(ref(db, `products/${productId}`));
-        if (snap.exists()) {
-            product = { ...product, ...snap.val() };
-        }
-    } catch(e) {
-        console.error("Error cargando de Firebase", e);
-    }
-
     applySpecialPricing(product);
     products.forEach(p => applySpecialPricing(p));
+
+    // Sincronizar en segundo plano con Firebase sin retrasar la carga visual
+    get(ref(db, `products/${productId}`)).then(snap => {
+        if (snap.exists()) {
+            const liveData = snap.val();
+            Object.assign(product, liveData);
+            applySpecialPricing(product);
+            const pEl = document.getElementById('product-price');
+            if (pEl) pEl.textContent = `€${product.price.toFixed(2)}`;
+            if (typeof updateSummary === 'function') updateSummary();
+        }
+    }).catch(e => {
+        console.warn("Background Firebase product sync error:", e);
+    });
     document.title = 'Camiseta ' + product.name + ' barata de buena calidad - Camisetazo';
     let metaDesc = document.querySelector('meta[name="description"]');
     if (!metaDesc) {

@@ -29,9 +29,6 @@ let imageObserver = null;
 import { db, ref, onValue, get } from './firebase-config.js';
 
 // ── Pinned products (Sync from Firebase) ──────────────────────────────────
-let globalPinnedIds = [];
-let initialPinnedLoaded = false;
-
 function processPinnedIds(rawIds) {
     let ids = Array.isArray(rawIds) ? rawIds.map(Number) : [];
     // Mantener sincronizados los productos destacados obligatorios al principio
@@ -41,45 +38,44 @@ function processPinnedIds(rawIds) {
     return [...mandatoryTop, ...restPinned];
 }
 
+let globalPinnedIds = (() => {
+    try {
+        const raw = localStorage.getItem('camisetazo_pinned_products');
+        if (raw) {
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) return processPinnedIds(parsed);
+        }
+    } catch (e) {}
+    return processPinnedIds([]);
+})();
+
 function getPinnedProductIds() {
     return globalPinnedIds;
 }
 
-async function loadPinnedProducts() {
-    let fetchedIds = [];
-    try {
-        const snapshot = await get(ref(db, 'pinnedProducts'));
+function loadPinnedProducts() {
+    get(ref(db, 'pinnedProducts')).then(snapshot => {
+        let fetchedIds = [];
         if (snapshot.exists()) {
             const data = snapshot.val();
             if (data && typeof data.ids === 'string') {
-                fetchedIds = JSON.parse(data.ids).map(Number);
+                try { fetchedIds = JSON.parse(data.ids).map(Number); } catch (e) {}
             } else if (Array.isArray(data)) {
                 fetchedIds = data.map(Number);
             }
             localStorage.setItem('camisetazo_pinned_products', JSON.stringify(fetchedIds));
-        } else {
-            const raw = localStorage.getItem('camisetazo_pinned_products');
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed)) fetchedIds = parsed.map(Number);
+            const newPinned = processPinnedIds(fetchedIds);
+            if (JSON.stringify(newPinned) !== JSON.stringify(globalPinnedIds)) {
+                globalPinnedIds = newPinned;
+                if (typeof applyFilters === 'function') applyFilters(false);
             }
         }
-    } catch (e) {
+    }).catch(e => {
         console.warn('Error fetching pinned ids from Firebase, using cache:', e);
-        const raw = localStorage.getItem('camisetazo_pinned_products');
-        if (raw) {
-            try {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed)) fetchedIds = parsed.map(Number);
-            } catch (err) {}
-        }
-    }
-    globalPinnedIds = processPinnedIds(fetchedIds);
-    initialPinnedLoaded = true;
+    });
 }
 
 onValue(ref(db, 'pinnedProducts'), (snapshot) => {
-    if (!initialPinnedLoaded) return; // Ignore first trigger, handled by get() in init()
     let fetchedIds = [];
     if (snapshot.exists()) {
         const data = snapshot.val();
@@ -412,23 +408,6 @@ function renderProducts() {
     }
 
     noResults.classList.add('hidden');
-
-    // Muestra tarjetas esqueleto para simular la carga (Mejora 4)
-    if (grid && grid.dataset.loadingSkeletons !== 'loaded' && grid.dataset.loadingSkeletons !== 'loading') {
-        grid.dataset.loadingSkeletons = 'loading';
-        grid.innerHTML = Array(8).fill(0).map(() => `
-            <div class="skeleton-card">
-                <div class="skeleton-image"></div>
-                <div class="skeleton-text skeleton-title"></div>
-                <div class="skeleton-text skeleton-price"></div>
-            </div>
-        `).join('');
-        setTimeout(() => {
-            grid.dataset.loadingSkeletons = 'loaded';
-            renderProducts();
-        }, 300);
-        return;
-    }
 
     const productsToShow = getProductsForCurrentPage();
     const fragment = document.createDocumentFragment();
@@ -1126,16 +1105,13 @@ function closeAllQuickAddPanels() { _closeDrawer(); }
     }
 
 
-async function init() {
-    
+function init() {
     const cachedOrder = getProductOrderFromSession();
 
     if (cachedOrder && cachedOrder.length === products.length) {
-        
         allProducts = cachedOrder.map(id => products.find(p => p.id === id)).filter(Boolean);
         console.log('Using session-cached product order');
     } else {
-        
         allProducts = shuffleArray([...products]);
         saveProductOrderToSession(allProducts.map(p => p.id));
         console.log('Generated and cached new product order');
@@ -1156,25 +1132,9 @@ async function init() {
     setupModal();
 
     loadLiveProducts(); // Iniciar sync de productos
-
-    const grid = document.getElementById('product-grid');
-    if (grid) {
-        grid.dataset.loadingSkeletons = 'loading';
-        grid.innerHTML = Array(8).fill(0).map(() => `
-            <div class="skeleton-card">
-                <div class="skeleton-image"></div>
-                <div class="skeleton-text skeleton-title"></div>
-                <div class="skeleton-text skeleton-price"></div>
-            </div>
-        `).join('');
-    }
+    loadPinnedProducts(); // Iniciar sync de productos fijados en background
 
     applyURLFilters();
-    await loadPinnedProducts();
-
-    if (grid) {
-        grid.dataset.loadingSkeletons = 'loaded';
-    }
     applyFilters(false);
 }
 

@@ -42,7 +42,7 @@ function detectLowPerformance() {
     }
     return false;
 }
-document.addEventListener('DOMContentLoaded', () => {
+function onHomeReady() {
     if (detectLowPerformance()) {
         document.body.classList.add('low-performance');
     }
@@ -55,20 +55,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     initHome();
-});
+}
 
-async function initHome() {
+if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', onHomeReady);
+} else {
+    onHomeReady();
+}
+
+function initHome() {
     applySpecialPricing();
-    await renderBestSellers();
+    renderBestSellers();
+    syncGlobalFeaturedProducts();
 }
 
 function applySpecialPricing() {
     products.forEach(product => {
         if (product.fixedPrice === true) return;
-        const nameLower = product.name.toLowerCase();
+        const nameLower = (product.name || '').toLowerCase();
         const imageLower = (product.image || '').toLowerCase();
         const isKids = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
-        const isRetro = product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro';
+        const isRetro = product.retro === true || nameLower.includes('retro') || product.league === 'retro';
 
         let oldPrice = 30.00;
         let newPrice = 22.90;
@@ -88,6 +95,7 @@ function applySpecialPricing() {
 }
 
 function getMiniImagePath(imagePath) {
+    if (!imagePath) return '';
     return imagePath.replace(/\/(\d+)\.(webp|jpg|png|jpeg)$/i, '/$1_mini.$2');
 }
 
@@ -106,22 +114,28 @@ function getSecondaryMiniImage(product) {
     return null;
 }
 
-async function renderBestSellers() {
+function renderBestSellers() {
     const grid = document.querySelector('.products-grid');
     if (!grid) return;
-    grid.innerHTML = '<div class="loading-placeholder" style="grid-column: 1/-1; text-align: center; padding: 2rem; color: var(--text-muted);">Cargando productos...</div>';
 
     try {
-        const bestSellerIds = await getGlobalFeaturedProducts();
-        const bestSellers = bestSellerIds.map(id => products.find(p => p.id === id)).filter(Boolean);
+        const bestSellerIds = getFeaturedProductIdsSync();
+        let bestSellers = bestSellerIds.map(id => products.find(p => String(p.id) === String(id))).filter(Boolean);
+
+        if (bestSellers.length === 0) {
+            bestSellers = products.slice(0, FEATURED_CONFIG.PRODUCT_COUNT);
+        }
 
         if (bestSellers.length === 0) {
             grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center;">No hay productos destacados disponibles.</p>';
             return;
         }
 
-        grid.innerHTML = bestSellers.map((product, index) => {
+        grid.innerHTML = bestSellers.map((product) => {
             const secondaryImg = getSecondaryMiniImage(product);
+            const oldPriceVal = typeof product.oldPrice === 'number' ? product.oldPrice.toFixed(2) : ((product.price || 22.9) + 7).toFixed(2);
+            const priceVal = typeof product.price === 'number' ? product.price.toFixed(2) : '22.90';
+
             return `
             <article class="product-card">
                 <div class="product-image">
@@ -133,11 +147,11 @@ async function renderBestSellers() {
                     <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
                 </div>
                 <div class="product-info">
-                    <span class="product-category">${product.category}</span>
+                    <span class="product-category">${product.category || 'futbol'}</span>
                     <h3 class="product-title">${product.name}</h3>
                     <div class="product-price">
-                        <span class="price-old">€${product.oldPrice.toFixed(2)}</span>
-                        <span class="price">€${product.price.toFixed(2)}</span>
+                        <span class="price-old">€${oldPriceVal}</span>
+                        <span class="price">€${priceVal}</span>
                     </div>
                 </div>
             </article>
@@ -146,8 +160,10 @@ async function renderBestSellers() {
     } catch (error) {
         console.error('Error loading featured products:', error);
         const fallbackProducts = products.slice(0, FEATURED_CONFIG.PRODUCT_COUNT);
-        grid.innerHTML = fallbackProducts.map((product, index) => {
+        grid.innerHTML = fallbackProducts.map((product) => {
             const secondaryImg = getSecondaryMiniImage(product);
+            const oldPriceVal = typeof product.oldPrice === 'number' ? product.oldPrice.toFixed(2) : ((product.price || 22.9) + 7).toFixed(2);
+            const priceVal = typeof product.price === 'number' ? product.price.toFixed(2) : '22.90';
             return `
             <article class="product-card">
                 <div class="product-image">
@@ -159,11 +175,11 @@ async function renderBestSellers() {
                     <button class="btn-quick-view"><i class="fas fa-eye"></i></button>
                 </div>
                 <div class="product-info">
-                    <span class="product-category">${product.category}</span>
+                    <span class="product-category">${product.category || 'futbol'}</span>
                     <h3 class="product-title">${product.name}</h3>
                     <div class="product-price">
-                        <span class="price-old">€${product.oldPrice.toFixed(2)}</span>
-                        <span class="price">€${product.price.toFixed(2)}</span>
+                        <span class="price-old">€${oldPriceVal}</span>
+                        <span class="price">€${priceVal}</span>
                     </div>
                 </div>
             </article>
@@ -171,44 +187,45 @@ async function renderBestSellers() {
     }
 
     // Attach delegated event listener for the quick-add buttons
-    grid.addEventListener('click', e => {
-        const btn = e.target.closest('.btn-quick-add');
-        if (!btn) return;
-        const productId = parseInt(btn.dataset.id, 10);
-        const product = products.find(p => p.id === productId);
-        if (product) _openDrawer(product);
-    });
+    if (!grid.dataset.listenerAttached) {
+        grid.dataset.listenerAttached = 'true';
+        grid.addEventListener('click', e => {
+            const btn = e.target.closest('.btn-quick-add');
+            if (!btn) return;
+            const productId = parseInt(btn.dataset.id, 10);
+            const product = products.find(p => String(p.id) === String(productId));
+            if (product) _openDrawer(product);
+        });
+    }
 }
-async function getGlobalFeaturedProducts() {
-    let pinnedIds = [];
-    try {
-        const snap = await get(ref(db, 'pinnedProducts'));
+
+function syncGlobalFeaturedProducts() {
+    get(ref(db, 'pinnedProducts')).then(snap => {
+        let pinnedIds = [];
         if (snap.exists()) {
             const data = snap.val();
             if (data && typeof data.ids === 'string') {
-                pinnedIds = JSON.parse(data.ids).map(Number);
+                try { pinnedIds = JSON.parse(data.ids).map(Number); } catch (e) {}
             } else if (Array.isArray(data)) {
                 pinnedIds = data.map(Number);
             }
             localStorage.setItem('camisetazo_pinned_products', JSON.stringify(pinnedIds));
-        } else {
-            // Fallback to local storage if not in Firebase yet
-            const raw = localStorage.getItem('camisetazo_pinned_products');
-            if (raw) {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed)) pinnedIds = parsed.map(Number);
-            }
+            renderBestSellers();
         }
-    } catch (e) {
+    }).catch(e => {
         console.warn("Failed to fetch pinned products from Firebase, using cache.", e);
+    });
+}
+
+function getFeaturedProductIdsSync() {
+    let pinnedIds = [];
+    try {
         const raw = localStorage.getItem('camisetazo_pinned_products');
         if (raw) {
-            try {
-                const parsed = JSON.parse(raw);
-                if (Array.isArray(parsed)) pinnedIds = parsed.map(Number);
-            } catch (err) {}
+            const parsed = JSON.parse(raw);
+            if (Array.isArray(parsed)) pinnedIds = parsed.map(Number);
         }
-    }
+    } catch (e) {}
 
     // Filter to ensure pinned IDs actually exist in products data
     const mandatoryTop = [500002, 500001];
@@ -216,7 +233,7 @@ async function getGlobalFeaturedProducts() {
     const restPinned = pinnedIds.filter(id => !mandatorySet.has(id));
     pinnedIds = [...mandatoryTop, ...restPinned];
 
-    const validPinned = pinnedIds.filter(id => products.some(p => p.id === id));
+    const validPinned = pinnedIds.filter(id => products.some(p => String(p.id) === String(id)));
     
     // If we have enough pinned products to fill the section, return them
     if (validPinned.length >= FEATURED_CONFIG.PRODUCT_COUNT) {
@@ -229,7 +246,7 @@ async function getGlobalFeaturedProducts() {
     if (sessionCached) {
         try {
             const cached = JSON.parse(sessionCached);
-            if (cached.products) randoms = cached.products;
+            if (Array.isArray(cached.products)) randoms = cached.products;
         } catch (e) { }
     }
 
@@ -242,7 +259,7 @@ async function getGlobalFeaturedProducts() {
     // Combine pinned and randoms, ensuring no duplicates, up to the count limit
     const combined = [...validPinned];
     for (const id of randoms) {
-        if (!combined.includes(id)) {
+        if (!combined.some(cId => String(cId) === String(id))) {
             combined.push(id);
         }
         if (combined.length >= FEATURED_CONFIG.PRODUCT_COUNT) break;
@@ -251,7 +268,7 @@ async function getGlobalFeaturedProducts() {
     // If we still don't have enough, grab any remaining from the main product list
     if (combined.length < FEATURED_CONFIG.PRODUCT_COUNT) {
         for (const p of products) {
-            if (!combined.includes(p.id)) {
+            if (!combined.some(cId => String(cId) === String(p.id))) {
                 combined.push(p.id);
             }
             if (combined.length >= FEATURED_CONFIG.PRODUCT_COUNT) break;
