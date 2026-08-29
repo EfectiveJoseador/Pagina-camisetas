@@ -13665,8 +13665,7 @@ const products = [
         "customPatches": "espana26",
         "price": 22.9,
         "oldPrice": 29,
-        "sku": "1260",
-        "description": "De momento los dorsales SI NO SON DE JUGADORES DE LA SELECCIÓN van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
+        "sku": "1260"
     },
     {
         "id": 500001,
@@ -13683,8 +13682,7 @@ const products = [
         "customPatches": "espana26",
         "price": 22.9,
         "oldPrice": 29,
-        "sku": "8151",
-        "description": "De momento los dorsales SI NO SON DE JUGADORES DE LA SELECCIÓN van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
+        "sku": "8151"
     },
     {
         "id": 763152,
@@ -13702,8 +13700,7 @@ const products = [
         "customPatches": "espana26",
         "price": 25.9,
         "oldPrice": 31,
-        "sku": "3992",
-        "description": "De momento los dorsales SI NO SON DE JUGADORES DE LA SELECCIÓN van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
+        "sku": "3992"
     },
     {
         "id": 240028,
@@ -13722,8 +13719,7 @@ const products = [
         "customPatches": "espana26",
         "price": 25.9,
         "oldPrice": 31,
-        "sku": "5104",
-        "description": "De momento los dorsales SI NO SON DE JUGADORES DE LA SELECCIÓN van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella."
+        "sku": "5104"
     },
     {
         "id": 797521,

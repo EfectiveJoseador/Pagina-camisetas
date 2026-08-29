@@ -175,7 +175,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const descEl = document.getElementById('product-description');
     if (descEl) {
         const baseDesc = 'Descripción detallada del producto. Calidad premium, tejido transpirable.';
-        const noteText = product.description || (product.customPatches === 'espana26' ? 'De momento los dorsales van a tener el escudo (debajo del todo del número muy en pequeño) con 1 estrella.' : null);
+        const noteText = product.description || null;
         if (noteText) {
             descEl.innerHTML = `${baseDesc}<br><br><span style="display: inline-block; background: rgba(239, 68, 68, 0.08); color: #dc2626; border: 1px solid rgba(239, 68, 68, 0.2); padding: 0.5rem 0.75rem; border-radius: 8px; font-size: 0.88rem; line-height: 1.4;">📌 <strong>Nota sobre los dorsales:</strong> ${noteText}</span>`;
         } else {
