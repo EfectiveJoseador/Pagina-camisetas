@@ -555,7 +555,7 @@ function _updateTotal() {
     if (_qdProduct && _qdProduct.customPatches === 'espana26') {
         const customCbs = _qdDrawer.querySelectorAll('#qad-custom-patches-list .qad-custom-patch-cb:checked');
         if (customCbs.length > 0) {
-            totalPrice += (customCbs.length * 1.25);
+            totalPrice += (customCbs.length * 1.90);
         }
     } else {
         if (patch) totalPrice += 3;
@@ -591,7 +591,7 @@ function _handleDrawerSubmit() {
     if (_qdProduct && _qdProduct.customPatches === 'espana26') {
         const customCbs = _qdDrawer.querySelectorAll('#qad-custom-patches-list .qad-custom-patch-cb:checked');
         if (customCbs.length > 0) {
-            totalPrice += (customCbs.length * 1.25);
+            totalPrice += (customCbs.length * 1.90);
             patch = Array.from(customCbs).map(cb => cb.value).join(', ');
         } else {
             patch = '';

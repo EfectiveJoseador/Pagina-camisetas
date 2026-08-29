@@ -319,7 +319,7 @@ exports.processCheckoutTotal = functions.https.onCall(async (data, context) => {
                 const isEspana26 = validPatches.length > 1 || validPatches.some(p => espana26Keywords.includes(p)) || productData.customPatches === 'espana26';
                 
                 if (isEspana26) {
-                    itemSurcharges += validPatches.length * 1.25;
+                    itemSurcharges += validPatches.length * 1.90;
                 } else {
                     itemSurcharges += 3;
                 }

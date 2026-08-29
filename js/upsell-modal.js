@@ -206,7 +206,7 @@ function addToCartDirectly(product, size, btnElement, pendingCustom = null) {
     if (customization.patch) {
         if (product.customPatches === 'espana26') {
             const count = customization.patch.split(',').map(s => s.trim()).filter(Boolean).length;
-            totalPrice += count * 1.25;
+            totalPrice += count * 1.90;
         } else {
             totalPrice += 3;
         }
@@ -289,7 +289,7 @@ function calcUpsellEditPrice(basePrice, custom, isEspana26 = false, hasDynamicPa
     } else if (custom.patch) {
         if (isEspana26) {
             const count = custom.patch.split(',').map(s => s.trim()).filter(Boolean).length;
-            total += count * 1.25;
+            total += count * 1.90;
         } else {
             total += 3;
         }
@@ -473,7 +473,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
             const cbs = overlay.querySelectorAll('.ue-custom-patch-cb:checked');
             finalPatches = Array.from(cbs).map(cb => cb.value);
             finalPatchStr = finalPatches.join(', ');
-            patchExtraPrice = finalPatches.length * 1.25;
+            patchExtraPrice = finalPatches.length * 1.90;
         } else {
             finalPatchStr = overlay.querySelector('#ue-patch')?.value.trim() || '';
             if (finalPatchStr) {

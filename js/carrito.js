@@ -201,7 +201,7 @@ const Cart = {
                 } else if (patch && patch !== 'none') {
                     if (product && product.customPatches === 'espana26') {
                         const count = patch.split(',').map(s => s.trim()).filter(Boolean).length;
-                        patchSurcharge = count * 1.25;
+                        patchSurcharge = count * 1.90;
                     } else {
                         patchSurcharge = 3;
                     }
@@ -413,7 +413,7 @@ const Cart = {
                 if (custom.patchExtraPrice === undefined && patch && patch !== 'none') {
                     if (product && product.customPatches === 'espana26') {
                         const count = patch.split(',').map(s => s.trim()).filter(Boolean).length;
-                        patchSurcharge = count * 1.25;
+                        patchSurcharge = count * 1.90;
                     } else {
                         patchSurcharge = 3;
                     }
@@ -545,7 +545,7 @@ const Cart = {
                 if (custom.patchExtraPrice === undefined && patch && patch !== 'none') {
                     if (product && product.customPatches === 'espana26') {
                         const count = patch.split(',').map(s => s.trim()).filter(Boolean).length;
-                        patchSurcharge = count * 1.25;
+                        patchSurcharge = count * 1.90;
                     } else {
                         patchSurcharge = 3;
                     }
@@ -675,7 +675,7 @@ function calcEditPrice(basePrice, custom, isEspana26 = false, hasDynamicPatches 
     } else if (custom.patch) {
         if (isEspana26) {
             const count = custom.patch.split(',').map(s => s.trim()).filter(Boolean).length;
-            total += count * 1.25;
+            total += count * 1.90;
         } else {
             total += 3;
         }
@@ -879,7 +879,7 @@ function openCartItemEditModal(cartIndex, cartRef) {
             const cbs = overlay.querySelectorAll('.ce-custom-patch-cb:checked');
             finalPatches = Array.from(cbs).map(cb => cb.value);
             finalPatchStr = finalPatches.join(', ');
-            patchExtraPrice = finalPatches.length * 1.25;
+            patchExtraPrice = finalPatches.length * 1.90;
         } else {
             finalPatchStr = overlay.querySelector('#ce-patch')?.value.trim() || '';
             if (finalPatchStr) {

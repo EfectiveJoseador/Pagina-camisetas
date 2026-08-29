@@ -219,7 +219,7 @@ export default async function handler(req, res) {
                 const isEspana26 = validPatches.length > 1 || validPatches.some(p => espana26Keywords.includes(p)) || catalogProduct.customPatches === 'espana26';
                 
                 if (isEspana26) {
-                    itemSurcharges += validPatches.length * 1.25;
+                    itemSurcharges += validPatches.length * 1.90;
                 } else {
                     itemSurcharges += 3;
                 }
