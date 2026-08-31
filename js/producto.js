@@ -611,108 +611,8 @@ function applyProductRestrictions() {
         }
     }
 
-    // Helper para detectar la última temporada de un equipo
-    function isLatestSeasonForTeam(prod) {
-        if (!prod || !prod.name) return true;
-        if (prod.retro === true || prod.name.toLowerCase().includes('retro')) return false;
-
-        function extractTeam(name) {
-            if (!name) return '';
-            return name
-                .replace(/\s*\d{2}\/?\d{2}.*$/i, '')
-                .replace(/\s*\(Niño\).*$/i, '')
-                .replace(/\s*(Local|Visitante|Tercera|Cuarta|Especial|Retro|Entrenamiento|Portero|Edición Especial|Campeones|Manga Larga).*$/i, '')
-                .trim();
-        }
-
-        const team = (prod.team || extractTeam(prod.name) || '').trim().toLowerCase();
-        if (!team) return true;
-
-        function getSeasonRank(name) {
-            if (!name) return 0;
-            const matchFullDoubleYear = name.match(/\b20(\d{2})\/(\d{2})\b/);
-            if (matchFullDoubleYear) return parseInt(matchFullDoubleYear[1] + matchFullDoubleYear[2]);
-            const matchDoubleYear = name.match(/\b(\d{2})\/(\d{2})\b/);
-            if (matchDoubleYear) return parseInt(matchDoubleYear[1] + matchDoubleYear[2]);
-            const matchSingleYear = name.match(/\b(20\d{2})\b/);
-            if (matchSingleYear) return parseInt(matchSingleYear[1].slice(2) + '00');
-            return 0;
-        }
-
-        const currentRank = getSeasonRank(prod.name);
-        if (currentRank === 0) return true;
-
-        let highestRank = -1;
-        const catalog = window.productsCache || window.allProductsCache || [];
-        catalog.forEach(p => {
-            const pTeam = (p.team || extractTeam(p.name) || '').trim().toLowerCase();
-            const pRetro = p.retro === true || (p.name && p.name.toLowerCase().includes('retro'));
-            if (pTeam === team && !pRetro) {
-                const rank = getSeasonRank(p.name);
-                if (rank > highestRank) highestRank = rank;
-            }
-        });
-
-        return highestRank <= 0 || currentRank >= highestRank;
-    }
-
-    // Lógica para parches personalizados en checkbox
-    const isLatestSeason = isLatestSeasonForTeam(product);
-    const visiblePatches = Array.isArray(product.customPatches) ? product.customPatches.filter(p => {
-        if (p.hidden) return false;
-        if (p.isTemporal && !isLatestSeason) return false;
-        return true;
-    }) : [];
-    if (product && visiblePatches.length > 0) {
-        const normalPatchGroup = document.getElementById('normal-patch-group');
-        const customPatchesContainer = document.getElementById('custom-patches-container');
-        const customPatchesList = document.getElementById('custom-patches-list');
-
-        if (normalPatchGroup) normalPatchGroup.style.display = 'none';
-
-        if (customPatchesContainer && customPatchesList) {
-            customPatchesContainer.style.display = 'block';
-
-            customPatchesList.innerHTML = visiblePatches.map((p, idx) => `
-                <label class="custom-patch-checkbox" style="display: flex; align-items: center; gap: 1rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
-                    <input type="checkbox" name="dynamic_patch" data-idx="${idx}" data-price="${p.price}" value="${p.name}" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
-                    <img src="${p.image || '/assets/placeholder.webp'}" alt="${p.name}" style="width: 40px; height: 40px; object-fit: contain; border-radius: 4px; background: #f8f9fa;">
-                    <span style="font-size: 0.9rem; color: var(--text-main); flex: 1;">${p.name} (+€${p.price.toFixed(2)})</span>
-                </label>
-            `).join('') + `
-                <label class="custom-patch-checkbox" style="display: flex; align-items: center; gap: 1rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
-                    <input type="checkbox" id="custom-patch-otro-checkbox" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
-                    <div style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px; font-weight: bold; font-size: 1.2rem; color: var(--text-muted);">?</div>
-                    <span style="font-size: 0.9rem; color: var(--text-main); flex: 1;">Otro (+€3.00)</span>
-                </label>
-                <div id="custom-patch-otro-input-container" style="display: none; padding-left: 0.5rem; margin-top: -0.25rem;">
-                    <input type="text" id="custom-patch-otro-input" class="text-input" placeholder="Ej: Champions, Liga, etc." maxlength="30" autocomplete="off" style="width: 100%;">
-                </div>
-            `;
-
-            // Escuchar cambios para actualizar el precio
-            customPatchesList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                cb.addEventListener('change', updatePreview);
-            });
-
-            const otroCb = document.getElementById('custom-patch-otro-checkbox');
-            const otroContainer = document.getElementById('custom-patch-otro-input-container');
-            const otroInput = document.getElementById('custom-patch-otro-input');
-            if (otroCb && otroContainer && otroInput) {
-                otroCb.addEventListener('change', () => {
-                    otroContainer.style.display = otroCb.checked ? 'block' : 'none';
-                    if (!otroCb.checked) otroInput.value = '';
-                    updatePreview();
-                });
-                otroInput.addEventListener('input', updatePreview);
-            }
-
-            // Escuchar cambios para actualizar el precio
-            customPatchesList.querySelectorAll('input[type="checkbox"]').forEach(cb => {
-                cb.addEventListener('change', updatePreview);
-            });
-        }
-    } else if (product && product.customPatches === 'espana26') {
+    // Lógica para parches: solo España 2026 usa checkboxes, el resto usa input text estándar
+    if (product && product.customPatches === 'espana26') {
         const normalPatchGroup = document.getElementById('normal-patch-group');
         const customPatchesContainer = document.getElementById('custom-patches-container');
         const customPatchesList = document.getElementById('custom-patches-list');
@@ -816,21 +716,7 @@ function updatePreview() {
     }
 
     // --- Parche ---
-    if (product && Array.isArray(product.customPatches) && product.customPatches.length > 0) {
-        const customCheckboxes = document.querySelectorAll('#custom-patches-list input[name="dynamic_patch"]:checked');
-        customCheckboxes.forEach(cb => {
-            const patchCost = parseFloat(cb.dataset.price) || 0;
-            totalPrice += patchCost;
-            details.push(`Parche ${cb.value}: +€${patchCost.toFixed(2)}`);
-        });
-
-        const otroCb = document.getElementById('custom-patch-otro-checkbox');
-        const otroInput = document.getElementById('custom-patch-otro-input');
-        if (otroCb && otroCb.checked && otroInput && otroInput.value.trim().length > 0) {
-            totalPrice += 3;
-            details.push(`Parche ${otroInput.value.trim()}: +€3.00`);
-        }
-    } else if (product && product.customPatches === 'espana26') {
+    if (product && product.customPatches === 'espana26') {
         const customCheckboxes = document.querySelectorAll('#custom-patches-list input[name="custom_patch"]:checked');
         customCheckboxes.forEach(cb => {
             const patchCost = 1.90;
@@ -838,7 +724,7 @@ function updatePreview() {
             details.push(`Parche especial: +€${patchCost.toFixed(2)}`);
         });
     } else {
-        const patch = document.getElementById('patch-input').value.trim();
+        const patch = document.getElementById('patch-input')?.value.trim() || '';
         if (patch) {
             const patchCost = 3;
             totalPrice += patchCost;
@@ -1006,29 +892,7 @@ function addToCart() {
     let patchExtraPrice = 0;
     let selectedPatchesArray = [];
 
-    if (product && Array.isArray(product.customPatches) && product.customPatches.length > 0) {
-        const checked = document.querySelectorAll('#custom-patches-list input[name="dynamic_patch"]:checked');
-        const labels = [];
-        let dynPrice = 0;
-
-        checked.forEach(cb => {
-            labels.push(cb.value);
-            dynPrice += parseFloat(cb.dataset.price) || 0;
-        });
-
-        const otroCb = document.getElementById('custom-patch-otro-checkbox');
-        const otroInput = document.getElementById('custom-patch-otro-input');
-        if (otroCb && otroCb.checked && otroInput && otroInput.value.trim().length > 0) {
-            labels.push(otroInput.value.trim());
-            dynPrice += 3;
-        }
-
-        if (labels.length > 0) {
-            patchStr = labels.join(', ');
-            selectedPatchesArray = labels;
-            patchExtraPrice = dynPrice;
-        }
-    } else if (product && product.customPatches === 'espana26') {
+    if (product && product.customPatches === 'espana26') {
         const checked = document.querySelectorAll('#custom-patches-list input[name="custom_patch"]:checked');
         if (checked.length > 0) {
             const labels = Array.from(checked).map(cb => cb.value);

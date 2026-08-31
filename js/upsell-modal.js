@@ -279,7 +279,7 @@ function addToCartDirectly(product, size, btnElement, pendingCustom = null) {
 // ---------------------------------------------------------------------------
 const UPSELL_SIZE_SURCHARGES = { '2XL': 2, '3XL': 4, '4XL': 4 };
 
-function calcUpsellEditPrice(basePrice, custom, isEspana26 = false, hasDynamicPatches = false) {
+function calcUpsellEditPrice(basePrice, custom, isEspana26 = false) {
     let total = basePrice;
     total += UPSELL_SIZE_SURCHARGES[custom.size] || 0;
     if (custom.version === 'jugador') total += 5;
@@ -316,7 +316,6 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
     const showCustomization = !isChampions;
 
     const isEspana26 = prod.customPatches === 'espana26';
-    const hasDynamicPatches = Array.isArray(prod.customPatches) && prod.customPatches.length > 0;
 
     const sizeOptions = sizes.map(sz => {
         const sel   = sz === currentSize ? 'selected' : '';
@@ -334,37 +333,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
         </div>` : '';
 
     let patchBlock = '';
-    if (hasDynamicPatches) {
-        const activePatches = current.patches || (current.patch ? current.patch.split(',').map(s => s.trim()) : []);
-        const otroPatchName = activePatches.find(pName => !prod.customPatches.some(cp => cp.name === pName));
-        const hasOtro = !!otroPatchName;
-
-        patchBlock = `
-            <div class="upsell-edit-field">
-                <label>Parches</label>
-                <div id="ue-custom-patches-list" style="display: flex; flex-direction: column; gap: 0.6rem; margin-top: 0.5rem;">
-                    ${prod.customPatches.map((p, idx) => {
-                        const checked = activePatches.includes(p.name) ? 'checked' : '';
-                        return `
-                            <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
-                                <input type="checkbox" class="ue-custom-patch-cb" data-price="${p.price}" value="${p.name}" ${checked} style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
-                                <img src="${p.image || '/assets/placeholder.webp'}" style="width: 30px; height: 30px; object-fit: contain; border-radius: 4px; background: #f8f9fa;">
-                                <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">${p.name} (+€${p.price.toFixed(2)})</span>
-                            </label>
-                        `;
-                    }).join('')}
-                    <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
-                        <input type="checkbox" id="ue-custom-patch-otro-cb" ${hasOtro ? 'checked' : ''} style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
-                        <div style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px; font-weight: bold; font-size: 1.1rem; color: var(--text-muted);">?</div>
-                        <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">Otro (+€3.00)</span>
-                    </label>
-                    <div id="ue-custom-patch-otro-input-container" style="display: ${hasOtro ? 'block' : 'none'}; padding-left: 0.5rem; margin-top: -0.25rem;">
-                        <input type="text" id="ue-custom-patch-otro-input" placeholder="Ej: Champions, Liga, etc." maxlength="30" autocomplete="off" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px;" value="${hasOtro ? otroPatchName : ''}">
-                    </div>
-                </div>
-            </div>
-        `;
-    } else if (isEspana26) {
+    if (isEspana26) {
         const patches = [
             { label: 'Parche dorado central (Campeones de mundo 2026)', short: 'Campeones', img: '/assets/images/patches/dorado-central.webp' },
             { label: 'Parche manga derecha mundial 2026 dorado', short: '26 dorado', img: '/assets/images/patches/manga-derecha.webp' },
@@ -433,7 +402,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
             ${patchBlock}
             <div class="upsell-edit-price-summary">
                 <span>Total por unidad</span>
-                <span class="upsell-edit-price-total" id="ue-total">€${calcUpsellEditPrice(basePrice, { size: currentSize, ...current, patchExtraPrice: current.patchExtraPrice }, isEspana26, hasDynamicPatches).toFixed(2)}</span>
+                <span class="upsell-edit-price-total" id="ue-total">€${calcUpsellEditPrice(basePrice, { size: currentSize, ...current, patchExtraPrice: current.patchExtraPrice }, isEspana26).toFixed(2)}</span>
             </div>
             <div class="upsell-edit-actions">
                 <button class="btn-upsell-edit-cancel">Cancelar</button>
@@ -453,23 +422,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
         let finalPatches = [];
         let finalPatchStr = '';
 
-        if (hasDynamicPatches) {
-            const cbs = overlay.querySelectorAll('.ue-custom-patch-cb:checked');
-            cbs.forEach(cb => {
-                patchExtraPrice += parseFloat(cb.getAttribute('data-price')) || 0;
-                finalPatches.push(cb.value);
-            });
-            const otroCb = overlay.querySelector('#ue-custom-patch-otro-cb');
-            const otroInput = overlay.querySelector('#ue-custom-patch-otro-input');
-            if (otroCb && otroCb.checked) {
-                const txt = otroInput ? otroInput.value.trim() : '';
-                if (txt) {
-                    finalPatches.push(txt);
-                    patchExtraPrice += 3;
-                }
-            }
-            finalPatchStr = finalPatches.join(', ');
-        } else if (isEspana26) {
+        if (isEspana26) {
             const cbs = overlay.querySelectorAll('.ue-custom-patch-cb:checked');
             finalPatches = Array.from(cbs).map(cb => cb.value);
             finalPatchStr = finalPatches.join(', ');
@@ -488,7 +441,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
         const el = overlay.querySelector('#ue-total');
         if (!el) return;
         const pState = getPatchState();
-        el.textContent = `€${calcUpsellEditPrice(basePrice, { size: getSize(), version: getVersion(), name: getName().trim(), number: getNumber().trim(), patch: pState.patch, patchExtraPrice: pState.patchExtraPrice }, isEspana26, hasDynamicPatches).toFixed(2)}`;
+        el.textContent = `€${calcUpsellEditPrice(basePrice, { size: getSize(), version: getVersion(), name: getName().trim(), number: getNumber().trim(), patch: pState.patch, patchExtraPrice: pState.patchExtraPrice }, isEspana26).toFixed(2)}`;
     }
 
     // Version → deshabilitar 3XL/4XL para Jugador (mismo comportamiento que producto.js)
@@ -529,22 +482,7 @@ function openUpsellItemEditPanel(prod, sizeSelect, pendingCustomRef) {
     });
     overlay.querySelector('#ue-version')?.addEventListener('change', applyVersionSizeRestriction);
     overlay.querySelector('#ue-size')?.addEventListener('change', updatePrice);
-    if (hasDynamicPatches) {
-        overlay.querySelectorAll('.ue-custom-patch-cb').forEach(cb => {
-            cb.addEventListener('change', updatePrice);
-        });
-        const otroCb = overlay.querySelector('#ue-custom-patch-otro-cb');
-        const otroInput = overlay.querySelector('#ue-custom-patch-otro-input');
-        const otroContainer = overlay.querySelector('#ue-custom-patch-otro-input-container');
-        if (otroCb && otroInput && otroContainer) {
-            otroCb.addEventListener('change', () => {
-                otroContainer.style.display = otroCb.checked ? 'block' : 'none';
-                if (!otroCb.checked) otroInput.value = '';
-                updatePrice();
-            });
-            otroInput.addEventListener('input', updatePrice);
-        }
-    } else if (isEspana26) {
+    if (isEspana26) {
         overlay.querySelectorAll('.ue-custom-patch-cb').forEach(cb => {
             cb.addEventListener('change', updatePrice);
         });

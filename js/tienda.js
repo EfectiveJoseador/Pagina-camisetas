@@ -692,96 +692,7 @@ function _openDrawer(product) {
     const customPatchesWrap = _qdDrawer.querySelector('.qad-custom-patches-wrap');
     const customPatchesList = _qdDrawer.querySelector('#qad-custom-patches-list');
 
-    function isLatestSeasonForTeam(prod) {
-        if (!prod || !prod.name) return true;
-        if (prod.retro === true || prod.name.toLowerCase().includes('retro')) return false;
-
-        function extractTeam(name) {
-            if (!name) return '';
-            return name
-                .replace(/\s*\d{2}\/?\d{2}.*$/i, '')
-                .replace(/\s*\(Niño\).*$/i, '')
-                .replace(/\s*(Local|Visitante|Tercera|Cuarta|Especial|Retro|Entrenamiento|Portero|Edición Especial|Campeones|Manga Larga).*$/i, '')
-                .trim();
-        }
-
-        const team = (prod.team || extractTeam(prod.name) || '').trim().toLowerCase();
-        if (!team) return true;
-
-        function getSeasonRank(name) {
-            if (!name) return 0;
-            const matchFullDoubleYear = name.match(/\b20(\d{2})\/(\d{2})\b/);
-            if (matchFullDoubleYear) return parseInt(matchFullDoubleYear[1] + matchFullDoubleYear[2]);
-            const matchDoubleYear = name.match(/\b(\d{2})\/(\d{2})\b/);
-            if (matchDoubleYear) return parseInt(matchDoubleYear[1] + matchDoubleYear[2]);
-            const matchSingleYear = name.match(/\b(20\d{2})\b/);
-            if (matchSingleYear) return parseInt(matchSingleYear[1].slice(2) + '00');
-            return 0;
-        }
-
-        const currentRank = getSeasonRank(prod.name);
-        if (currentRank === 0) return true;
-
-        let highestRank = -1;
-        const catalog = window.productsCache || window.allProductsCache || [];
-        catalog.forEach(p => {
-            const pTeam = (p.team || extractTeam(p.name) || '').trim().toLowerCase();
-            const pRetro = p.retro === true || (p.name && p.name.toLowerCase().includes('retro'));
-            if (pTeam === team && !pRetro) {
-                const rank = getSeasonRank(p.name);
-                if (rank > highestRank) highestRank = rank;
-            }
-        });
-
-        return highestRank <= 0 || currentRank >= highestRank;
-    }
-
-    const isLatestSeason = isLatestSeasonForTeam(product);
-    const visiblePatches = Array.isArray(product.customPatches) ? product.customPatches.filter(p => {
-        if (p.hidden) return false;
-        if (p.isTemporal && !isLatestSeason) return false;
-        return true;
-    }) : [];
-    const hasDynamicPatches = visiblePatches.length > 0;
-
-    if (hasDynamicPatches) {
-        patchWrap.style.display = 'none';
-        if (customPatchesWrap && customPatchesList) {
-            customPatchesWrap.style.display = '';
-            
-            customPatchesList.innerHTML = visiblePatches.map((p, idx) => `
-                <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
-                    <input type="checkbox" class="qad-custom-patch-cb" data-price="${p.price}" value="${p.name}" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
-                    <img src="${p.image || '/assets/placeholder.webp'}" style="width: 30px; height: 30px; object-fit: contain; border-radius: 4px; background: #f8f9fa;">
-                    <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">${p.name} (+€${p.price.toFixed(2)})</span>
-                </label>
-            `).join('') + `
-                <label class="custom-patch-item" style="display: flex; align-items: center; gap: 0.75rem; cursor: pointer; padding: 0.6rem 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card);">
-                    <input type="checkbox" id="qad-custom-patch-otro-cb" style="width: 18px; height: 18px; cursor: pointer; accent-color: var(--accent, #6366f1);">
-                    <div style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; background: #f8f9fa; border-radius: 4px; font-weight: bold; font-size: 1.1rem; color: var(--text-muted);">?</div>
-                    <span style="font-size: 0.85rem; color: var(--text-main); flex: 1;">Otro (+€3.00)</span>
-                </label>
-                <div id="qad-custom-patch-otro-input-container" style="display: none; padding-left: 0.5rem; margin-top: -0.25rem;">
-                    <input type="text" id="qad-custom-patch-otro-input" placeholder="Ej: Champions, Liga, etc." maxlength="30" autocomplete="off" style="width: 100%; padding: 0.6rem; border: 1px solid var(--border); border-radius: 8px;">
-                </div>
-            `;
-            
-            _qdDrawer.querySelectorAll('.qad-custom-patch-cb').forEach(cb => {
-                cb.addEventListener('change', _updateTotal);
-            });
-            const otroCb = _qdDrawer.querySelector('#qad-custom-patch-otro-cb');
-            const otroInput = _qdDrawer.querySelector('#qad-custom-patch-otro-input');
-            const otroContainer = _qdDrawer.querySelector('#qad-custom-patch-otro-input-container');
-            if (otroCb && otroInput && otroContainer) {
-                otroCb.addEventListener('change', () => {
-                    otroContainer.style.display = otroCb.checked ? 'block' : 'none';
-                    if (!otroCb.checked) otroInput.value = '';
-                    _updateTotal();
-                });
-                otroInput.addEventListener('input', _updateTotal);
-            }
-        }
-    } else if (product.customPatches === 'espana26') {
+    if (product.customPatches === 'espana26') {
         patchWrap.style.display = 'none';
         if (customPatchesWrap && customPatchesList) {
             customPatchesWrap.style.display = '';
@@ -889,27 +800,13 @@ function _updateTotal() {
     if (version === 'jugador') totalPrice += 5;
     if (name || number) totalPrice += 4;
 
-    const hasDynamicPatches = Array.isArray(_qdProduct.customPatches) && _qdProduct.customPatches.length > 0;
-    let patchExtraPrice = 0;
-
-    if (hasDynamicPatches) {
-        const cbs = _qdDrawer.querySelectorAll('.qad-custom-patch-cb:checked');
-        cbs.forEach(cb => {
-            patchExtraPrice += parseFloat(cb.getAttribute('data-price')) || 0;
-        });
-        const otroCb = _qdDrawer.querySelector('#qad-custom-patch-otro-cb');
-        const otroInput = _qdDrawer.querySelector('#qad-custom-patch-otro-input');
-        if (otroCb && otroCb.checked && otroInput && otroInput.value.trim()) {
-            patchExtraPrice += 3;
-        }
-        totalPrice += patchExtraPrice;
-    } else if (_qdProduct.customPatches === 'espana26') {
+    if (_qdProduct.customPatches === 'espana26') {
         const customCbs = _qdDrawer.querySelectorAll('#qad-custom-patches-list .qad-custom-patch-cb:checked');
         if (customCbs.length > 0) {
             totalPrice += (customCbs.length * 1.90);
         }
     } else {
-        const patch = _qdDrawer.querySelector('#qad-patch').value.trim();
+        const patch = _qdDrawer.querySelector('#qad-patch')?.value.trim() || '';
         if (patch) totalPrice += 3;
     }
 
@@ -945,26 +842,7 @@ function _handleDrawerSubmit() {
     let patchesArr = [];
     let patchExtraPrice = 0;
 
-    const hasDynamicPatches = Array.isArray(_qdProduct.customPatches) && _qdProduct.customPatches.length > 0;
-
-    if (hasDynamicPatches) {
-        const cbs = _qdDrawer.querySelectorAll('.qad-custom-patch-cb:checked');
-        cbs.forEach(cb => {
-            patchExtraPrice += parseFloat(cb.getAttribute('data-price')) || 0;
-            patchesArr.push(cb.value);
-        });
-        const otroCb = _qdDrawer.querySelector('#qad-custom-patch-otro-cb');
-        const otroInput = _qdDrawer.querySelector('#qad-custom-patch-otro-input');
-        if (otroCb && otroCb.checked) {
-            const txt = otroInput ? otroInput.value.trim() : '';
-            if (txt) {
-                patchesArr.push(txt);
-                patchExtraPrice += 3;
-            }
-        }
-        patchVal = patchesArr.join(', ');
-        totalPrice += patchExtraPrice;
-    } else if (_qdProduct.customPatches === 'espana26') {
+    if (_qdProduct.customPatches === 'espana26') {
         const customCbs = _qdDrawer.querySelectorAll('#qad-custom-patches-list .qad-custom-patch-cb:checked');
         if (customCbs.length > 0) {
             patchExtraPrice = (customCbs.length * 1.90);
@@ -973,7 +851,7 @@ function _handleDrawerSubmit() {
             totalPrice += patchExtraPrice;
         }
     } else {
-        patchVal = _qdDrawer.querySelector('#qad-patch').value.trim();
+        patchVal = _qdDrawer.querySelector('#qad-patch')?.value.trim() || '';
         if (patchVal) {
             patchExtraPrice = 3;
             totalPrice += patchExtraPrice;
