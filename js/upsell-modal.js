@@ -138,8 +138,8 @@ function getPackPromoHTML() {
         const m = Math.floor((totalShirtQty + 2) / 5);
         const faltan = 5 - (totalShirtQty % 5);
         const textoCamisetas = faltan === 1 ? "1 camiseta más" : "2 camisetas más";
-        const precioTotal = formatPrice(m * 85.90 + currentDiff);
-        const ahorro = formatPrice(m * 13.60);
+        const precioTotal = formatPrice(m * 92.70 + currentDiff);
+        const ahorro = formatPrice(m * 6.80);
         
         return `
             <div class="pack-promo-card mega promo-entering">

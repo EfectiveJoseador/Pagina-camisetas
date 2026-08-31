@@ -242,10 +242,10 @@ const Cart = {
         });
         originalSubtotal += surcharges;
 
-        // Calcular precio de pack para las camisetas: 5 camisetas por 85.90, 3 por 56.90, resto a 19.90
+        // Calcular precio de pack para las camisetas: 5 camisetas por 92.70, 3 por 56.90, resto a 19.90
         const fullCycles = Math.floor(totalShirtQty / 5);
         const remainder = totalShirtQty % 5;
-        let packBasePrice = fullCycles * 85.90;
+        let packBasePrice = fullCycles * 92.70;
         if (remainder === 1) {
             packBasePrice += 19.90;
         } else if (remainder === 2) {

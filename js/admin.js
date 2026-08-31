@@ -1235,7 +1235,7 @@ window.recalculateModalOrderTotals = function () {
 
     const fullCycles = Math.floor(totalShirtQty / 5);
     const remainder = totalShirtQty % 5;
-    let packBasePrice = fullCycles * 85.90;
+    let packBasePrice = fullCycles * 92.70;
     if (remainder === 1) packBasePrice += 19.90;
     else if (remainder === 2) packBasePrice += 19.90 * 2;
     else if (remainder === 3) packBasePrice += 56.90;
