@@ -70,6 +70,8 @@ function initPanel() {
     setupUsersListeners();
     loadAllUsers();
     initPinnedProducts();
+    setupTrustpilotListeners();
+    loadTrustpilotConfig();
 }
 
 function setupEventListeners() {
@@ -4136,4 +4138,156 @@ window.confirmMultiTeamModalSelection = function() {
 
     closeMultiTeamModal();
 };
+
+// ══════════════════════════════════════════════════════════════
+// ════ TRUSTPILOT CONFIGURATION (GLOBAL SYNC VIA FIREBASE) ═════
+// ══════════════════════════════════════════════════════════════
+
+function setupTrustpilotListeners() {
+    const tpInputs = ['tp-rating', 'tp-reviews', 'tp-url', 'tp-visible'];
+    tpInputs.forEach(id => {
+        const el = document.getElementById(id);
+        if (el) el.addEventListener(id === 'tp-visible' ? 'change' : 'input', tpUpdateAdminPreview);
+    });
+
+    const saveBtn = document.getElementById('btn-tp-save');
+    if (saveBtn) {
+        saveBtn.addEventListener('click', saveTrustpilotConfig);
+    }
+}
+
+function tpUpdateAdminPreview() {
+    const ratingVal = parseFloat(document.getElementById('tp-rating')?.value) || 4.5;
+    const reviewsVal = parseInt(document.getElementById('tp-reviews')?.value) || 15;
+    const urlVal = document.getElementById('tp-url')?.value.trim() || 'https://es.trustpilot.com/review/camisetazo.shop';
+    const visibleVal = document.getElementById('tp-visible')?.checked;
+    const prev = document.getElementById('tp-preview-inner');
+    if (!prev || !window.TrustpilotConfig) return;
+    
+    if (!visibleVal) {
+        prev.innerHTML = '<span style="color:#52525b;font-size:0.85rem;">Badge desactivado</span>';
+        return;
+    }
+    const stars = window.TrustpilotConfig.renderStars(ratingVal, 20);
+    prev.innerHTML = '<a href="' + urlVal + '" target="_blank" rel="noopener noreferrer" class="tp-bar" style="background:rgba(0,182,122,0.12);border-color:rgba(0,182,122,0.3);">' +
+        '<div class="tp-bar-inner">' +
+        '<div class="tp-bar-top">' +
+        '<span class="tp-bar-logo" style="color:#00b67a;">Trustpilot</span>' +
+        '<span class="tp-bar-stars">' + stars + '</span>' +
+        '</div>' +
+        '<span class="tp-bar-sep">&middot;</span>' +
+        '<div class="tp-bar-bottom">' +
+        '<span class="tp-bar-text" style="color:#d4d4d8;"><strong>' + ratingVal.toFixed(1) + '</strong>/5 &middot; ' + reviewsVal + ' opiniones</span>' +
+        '</div>' +
+        '</div>' +
+        '</a>';
+}
+
+function loadTrustpilotConfig() {
+    try {
+        const tpRef = ref(db, 'trustpilotConfig');
+        onValue(tpRef, (snapshot) => {
+            if (snapshot.exists()) {
+                const cfg = snapshot.val();
+                if (window.TrustpilotConfig) {
+                    window.TrustpilotConfig.set(cfg);
+                }
+                const ratingEl = document.getElementById('tp-rating');
+                const reviewsEl = document.getElementById('tp-reviews');
+                const urlEl = document.getElementById('tp-url');
+                const visibleEl = document.getElementById('tp-visible');
+                
+                if (ratingEl) ratingEl.value = cfg.rating !== undefined ? cfg.rating : 4.5;
+                if (reviewsEl) reviewsEl.value = cfg.reviewCount !== undefined ? cfg.reviewCount : 15;
+                if (urlEl) urlEl.value = cfg.url || 'https://es.trustpilot.com/review/camisetazo.shop';
+                if (visibleEl) visibleEl.checked = cfg.visible !== undefined ? cfg.visible : true;
+                
+                tpUpdateAdminPreview();
+            } else {
+                if (window.TrustpilotConfig) {
+                    const localCfg = window.TrustpilotConfig.get();
+                    const ratingEl = document.getElementById('tp-rating');
+                    const reviewsEl = document.getElementById('tp-reviews');
+                    const urlEl = document.getElementById('tp-url');
+                    const visibleEl = document.getElementById('tp-visible');
+                    
+                    if (ratingEl) ratingEl.value = localCfg.rating;
+                    if (reviewsEl) reviewsEl.value = localCfg.reviewCount;
+                    if (urlEl) urlEl.value = localCfg.url;
+                    if (visibleEl) visibleEl.checked = localCfg.visible;
+                    tpUpdateAdminPreview();
+                }
+            }
+        });
+    } catch (err) {
+        console.error('Error loading Trustpilot config from Firebase:', err);
+    }
+}
+
+async function saveTrustpilotConfig() {
+    const ratingEl = document.getElementById('tp-rating');
+    const reviewsEl = document.getElementById('tp-reviews');
+    const urlEl = document.getElementById('tp-url');
+    const visibleEl = document.getElementById('tp-visible');
+    const saveBtn = document.getElementById('btn-tp-save');
+    const fb = document.getElementById('tp-save-feedback');
+
+    const rating = parseFloat(ratingEl?.value);
+    const reviews = parseInt(reviewsEl?.value);
+    const url = urlEl?.value.trim();
+    const visible = visibleEl ? visibleEl.checked : true;
+
+    if (isNaN(rating) || rating < 0 || rating > 5) {
+        alert('La puntuación debe estar entre 0 y 5.');
+        return;
+    }
+    if (isNaN(reviews) || reviews < 0) {
+        alert('El número de opiniones debe ser positivo.');
+        return;
+    }
+    if (!url) {
+        alert('La URL no puede estar vacía.');
+        return;
+    }
+
+    const newConfig = {
+        rating: rating,
+        reviewCount: reviews,
+        url: url,
+        visible: visible,
+        updatedAt: new Date().toISOString()
+    };
+
+    if (saveBtn) {
+        saveBtn.disabled = true;
+        saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+    }
+
+    try {
+        const tpRef = ref(db, 'trustpilotConfig');
+        await set(tpRef, newConfig);
+
+        if (window.TrustpilotConfig) {
+            window.TrustpilotConfig.set(newConfig);
+        }
+
+        if (fb) {
+            fb.textContent = '✓ Configuración guardada globalmente para todos los usuarios';
+            fb.style.color = '#10b981';
+            setTimeout(() => { fb.textContent = ''; }, 4000);
+        }
+    } catch (error) {
+        console.error('Error saving Trustpilot config:', error);
+        if (fb) {
+            fb.textContent = '✗ Error al guardar en Firebase: ' + error.message;
+            fb.style.color = '#ef4444';
+        }
+    } finally {
+        if (saveBtn) {
+            saveBtn.disabled = false;
+            saveBtn.innerHTML = '<i class="fas fa-save"></i> Guardar configuración';
+        }
+    }
+}
+
 

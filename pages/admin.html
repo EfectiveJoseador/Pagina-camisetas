@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-theme="dark">
 
 <head>
@@ -952,77 +952,7 @@
         </div>
     </div>
 
-    <script src="../js/trustpilot.js?v=6"></script>
-    <script type="module" src="../js/admin.js"></script>
-    <script>
-        function tpUpdatePreview() {
-            var ratingVal = parseFloat(document.getElementById('tp-rating').value) || 4.5;
-            var reviewsVal = parseInt(document.getElementById('tp-reviews').value) || 15;
-            var urlVal = document.getElementById('tp-url').value.trim() || 'https://es.trustpilot.com/review/camisetazo.shop';
-            var visibleVal = document.getElementById('tp-visible').checked;
-            var prev = document.getElementById('tp-preview-inner');
-            if (!prev || !window.TrustpilotConfig) return;
-            var tempCfg = { rating: ratingVal, reviewCount: reviewsVal, url: urlVal, visible: visibleVal };
-            if (!visibleVal) { prev.innerHTML = '<span style="color:#52525b;font-size:0.85rem;">Badge desactivado</span>'; return; }
-            var stars = window.TrustpilotConfig.renderStars(ratingVal, 20);
-            prev.innerHTML = '<a href="' + urlVal + '" target="_blank" rel="noopener noreferrer" class="tp-bar" style="background:rgba(0,182,122,0.12);border-color:rgba(0,182,122,0.3);">' +
-                '<div class="tp-bar-inner">' +
-                '<div class="tp-bar-top">' +
-                '<span class="tp-bar-logo" style="color:#00b67a;">Trustpilot</span>' +
-                '<span class="tp-bar-stars">' + stars + '</span>' +
-                '</div>' +
-                '<span class="tp-bar-sep">&middot;</span>' +
-                '<div class="tp-bar-bottom">' +
-                '<span class="tp-bar-text" style="color:#d4d4d8;"><strong>' + ratingVal.toFixed(1) + '</strong>/5 &middot; ' + reviewsVal + ' opiniones</span>' +
-                '</div>' +
-                '</div>' +
-                '</a>';
-        }
-
-        function tpInitAdminSection() {
-            if (!window.TrustpilotConfig) return;
-            var cfg = window.TrustpilotConfig.get();
-            document.getElementById('tp-rating').value = cfg.rating;
-            document.getElementById('tp-reviews').value = cfg.reviewCount;
-            document.getElementById('tp-url').value = cfg.url;
-            document.getElementById('tp-visible').checked = cfg.visible;
-            tpUpdatePreview();
-        }
-
-        document.addEventListener('DOMContentLoaded', function () {
-            var tpInputs = ['tp-rating', 'tp-reviews', 'tp-url', 'tp-visible'];
-            tpInputs.forEach(function (id) {
-                var el = document.getElementById(id);
-                if (el) el.addEventListener(id === 'tp-visible' ? 'change' : 'input', tpUpdatePreview);
-            });
-
-            var saveBtn = document.getElementById('btn-tp-save');
-            if (saveBtn) {
-                saveBtn.addEventListener('click', function () {
-                    var rating = parseFloat(document.getElementById('tp-rating').value);
-                    var reviews = parseInt(document.getElementById('tp-reviews').value);
-                    var url = document.getElementById('tp-url').value.trim();
-                    var visible = document.getElementById('tp-visible').checked;
-                    if (isNaN(rating) || rating < 0 || rating > 5) { alert('La puntuaci\u00f3n debe estar entre 0 y 5.'); return; }
-                    if (isNaN(reviews) || reviews < 0) { alert('El n\u00famero de opiniones debe ser positivo.'); return; }
-                    if (!url) { alert('La URL no puede estar vac\u00eda.'); return; }
-                    window.TrustpilotConfig.set({ rating: rating, reviewCount: reviews, url: url, visible: visible });
-                    var fb = document.getElementById('tp-save-feedback');
-                    if (fb) {
-                        fb.textContent = '\u2713 Configuraci\u00f3n guardada correctamente';
-                        setTimeout(function () { fb.textContent = ''; }, 3000);
-                    }
-                });
-            }
-
-            document.querySelectorAll('.nav-link').forEach(function (btn) {
-                btn.addEventListener('click', function () {
-                    if (btn.dataset.target === 'section-trustpilot') {
-                        setTimeout(tpInitAdminSection, 50);
-                    }
-                });
-            });
-        });
-    </script>
+    <script src="../js/trustpilot.js?v=7"></script>
+    <script type="module" src="../js/admin.js?v=32"></script>
 </body>
 </html>
