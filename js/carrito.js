@@ -22,7 +22,7 @@ onValue(ref(db, 'products'), (snapshot) => {
         });
         
         Object.values(liveData).forEach(liveProduct => {
-            if (!newAllProducts.find(p => p.id === liveProduct.id)) {
+            if (liveProduct && liveProduct.id && liveProduct.name && !newAllProducts.find(p => p.id === liveProduct.id)) {
                 hasChanges = true;
                 newAllProducts.push(liveProduct);
             }
@@ -39,11 +39,12 @@ onValue(ref(db, 'products'), (snapshot) => {
 });
 function applySpecialPricing() {
     products.forEach(product => {
+        if (!product || typeof product !== 'object') return;
         if (product.fixedPrice === true) return;
         const nameLower = (product.name || '').toLowerCase();
         const imageLower = (product.image || '').toLowerCase();
         const isKids = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
-        const isRetro = product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro';
+        const isRetro = product.retro === true || nameLower.includes('retro') || product.league === 'retro';
 
         let oldPrice = 30.00;
         let newPrice = 22.90;

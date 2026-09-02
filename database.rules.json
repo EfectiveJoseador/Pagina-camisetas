@@ -176,7 +176,7 @@
         },
         "trustpilotConfig": {
             ".read": true,
-            ".write": "auth.token.admin === true"
+            ".write": "auth.token.admin === true || auth.token.email === 'camisetazocontacto@gmail.com'"
         },
 
         "promoCodes": {

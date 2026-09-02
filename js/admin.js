@@ -4144,10 +4144,38 @@ window.confirmMultiTeamModalSelection = function() {
 // ══════════════════════════════════════════════════════════════
 
 function setupTrustpilotListeners() {
-    const tpInputs = ['tp-rating', 'tp-reviews', 'tp-url', 'tp-visible'];
+    const tpInputs = ['tp-rating', 'tp-reviews', 'tp-visible'];
     tpInputs.forEach(id => {
         const el = document.getElementById(id);
         if (el) el.addEventListener(id === 'tp-visible' ? 'change' : 'input', tpUpdateAdminPreview);
+    });
+
+    // Populate immediately with current values on page load
+    if (window.TrustpilotConfig) {
+        const currentCfg = window.TrustpilotConfig.get();
+        const ratingEl = document.getElementById('tp-rating');
+        const reviewsEl = document.getElementById('tp-reviews');
+        const visibleEl = document.getElementById('tp-visible');
+        if (ratingEl) ratingEl.value = currentCfg.rating !== undefined ? currentCfg.rating : 4.5;
+        if (reviewsEl) reviewsEl.value = currentCfg.reviewCount !== undefined ? currentCfg.reviewCount : 15;
+        if (visibleEl) visibleEl.checked = currentCfg.visible !== undefined ? currentCfg.visible : true;
+        tpUpdateAdminPreview();
+    }
+
+    // Refresh values when switching to trustpilot tab
+    document.querySelectorAll('.nav-link[data-target="section-trustpilot"]').forEach(btn => {
+        btn.addEventListener('click', () => {
+            if (window.TrustpilotConfig) {
+                const currentCfg = window.TrustpilotConfig.get();
+                const ratingEl = document.getElementById('tp-rating');
+                const reviewsEl = document.getElementById('tp-reviews');
+                const visibleEl = document.getElementById('tp-visible');
+                if (ratingEl) ratingEl.value = currentCfg.rating !== undefined ? currentCfg.rating : 4.5;
+                if (reviewsEl) reviewsEl.value = currentCfg.reviewCount !== undefined ? currentCfg.reviewCount : 15;
+                if (visibleEl) visibleEl.checked = currentCfg.visible !== undefined ? currentCfg.visible : true;
+                tpUpdateAdminPreview();
+            }
+        });
     });
 
     const saveBtn = document.getElementById('btn-tp-save');
@@ -4159,7 +4187,7 @@ function setupTrustpilotListeners() {
 function tpUpdateAdminPreview() {
     const ratingVal = parseFloat(document.getElementById('tp-rating')?.value) || 4.5;
     const reviewsVal = parseInt(document.getElementById('tp-reviews')?.value) || 15;
-    const urlVal = document.getElementById('tp-url')?.value.trim() || 'https://es.trustpilot.com/review/camisetazo.shop';
+    const fixedUrl = 'https://es.trustpilot.com/review/camisetazo.shop';
     const visibleVal = document.getElementById('tp-visible')?.checked;
     const prev = document.getElementById('tp-preview-inner');
     if (!prev || !window.TrustpilotConfig) return;
@@ -4169,7 +4197,7 @@ function tpUpdateAdminPreview() {
         return;
     }
     const stars = window.TrustpilotConfig.renderStars(ratingVal, 20);
-    prev.innerHTML = '<a href="' + urlVal + '" target="_blank" rel="noopener noreferrer" class="tp-bar" style="background:rgba(0,182,122,0.12);border-color:rgba(0,182,122,0.3);">' +
+    prev.innerHTML = '<a href="' + fixedUrl + '" target="_blank" rel="noopener noreferrer" class="tp-bar" style="background:rgba(0,182,122,0.12);border-color:rgba(0,182,122,0.3);">' +
         '<div class="tp-bar-inner">' +
         '<div class="tp-bar-top">' +
         '<span class="tp-bar-logo" style="color:#00b67a;">Trustpilot</span>' +
@@ -4185,75 +4213,71 @@ function tpUpdateAdminPreview() {
 
 function loadTrustpilotConfig() {
     try {
-        const tpRef = ref(db, 'trustpilotConfig');
+        console.log('[Trustpilot Admin] 📡 Attaching Realtime listener to globalPatches/trustpilotConfig...');
+        const tpRef = ref(db, 'globalPatches/trustpilotConfig');
         onValue(tpRef, (snapshot) => {
             if (snapshot.exists()) {
                 const cfg = snapshot.val();
+                console.log('[Trustpilot Admin] 📥 Realtime Database event received:', cfg);
                 if (window.TrustpilotConfig) {
                     window.TrustpilotConfig.set(cfg);
                 }
                 const ratingEl = document.getElementById('tp-rating');
                 const reviewsEl = document.getElementById('tp-reviews');
-                const urlEl = document.getElementById('tp-url');
                 const visibleEl = document.getElementById('tp-visible');
                 
                 if (ratingEl) ratingEl.value = cfg.rating !== undefined ? cfg.rating : 4.5;
                 if (reviewsEl) reviewsEl.value = cfg.reviewCount !== undefined ? cfg.reviewCount : 15;
-                if (urlEl) urlEl.value = cfg.url || 'https://es.trustpilot.com/review/camisetazo.shop';
                 if (visibleEl) visibleEl.checked = cfg.visible !== undefined ? cfg.visible : true;
                 
                 tpUpdateAdminPreview();
             } else {
+                console.log('[Trustpilot Admin] ℹ No remote config yet in globalPatches/trustpilotConfig, using local defaults.');
                 if (window.TrustpilotConfig) {
                     const localCfg = window.TrustpilotConfig.get();
                     const ratingEl = document.getElementById('tp-rating');
                     const reviewsEl = document.getElementById('tp-reviews');
-                    const urlEl = document.getElementById('tp-url');
                     const visibleEl = document.getElementById('tp-visible');
                     
                     if (ratingEl) ratingEl.value = localCfg.rating;
                     if (reviewsEl) reviewsEl.value = localCfg.reviewCount;
-                    if (urlEl) urlEl.value = localCfg.url;
                     if (visibleEl) visibleEl.checked = localCfg.visible;
                     tpUpdateAdminPreview();
                 }
             }
         });
     } catch (err) {
-        console.error('Error loading Trustpilot config from Firebase:', err);
+        console.error('[Trustpilot Admin] ❌ Error loading Trustpilot config from Firebase:', err);
     }
 }
 
 async function saveTrustpilotConfig() {
     const ratingEl = document.getElementById('tp-rating');
     const reviewsEl = document.getElementById('tp-reviews');
-    const urlEl = document.getElementById('tp-url');
     const visibleEl = document.getElementById('tp-visible');
     const saveBtn = document.getElementById('btn-tp-save');
     const fb = document.getElementById('tp-save-feedback');
 
     const rating = parseFloat(ratingEl?.value);
     const reviews = parseInt(reviewsEl?.value);
-    const url = urlEl?.value.trim();
     const visible = visibleEl ? visibleEl.checked : true;
+    const fixedUrl = 'https://es.trustpilot.com/review/camisetazo.shop';
+
+    console.log('[Trustpilot Admin] 💾 Initiating save with:', { rating, reviews, visible, fixedUrl });
 
     if (isNaN(rating) || rating < 0 || rating > 5) {
         alert('La puntuación debe estar entre 0 y 5.');
         return;
     }
     if (isNaN(reviews) || reviews < 0) {
-        alert('El número de opiniones debe ser positivo.');
-        return;
-    }
-    if (!url) {
-        alert('La URL no puede estar vacía.');
+        alert('El número de opiniones debe ser un número entero positivo.');
         return;
     }
 
     const newConfig = {
-        rating: rating,
+        rating: Math.round(rating * 10) / 10,
         reviewCount: reviews,
-        url: url,
+        url: fixedUrl,
         visible: visible,
         updatedAt: new Date().toISOString()
     };
@@ -4263,30 +4287,39 @@ async function saveTrustpilotConfig() {
         saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
     }
 
+    // 1. Immediately apply to local state and update all website badges
+    if (window.TrustpilotConfig) {
+        window.TrustpilotConfig.set(newConfig);
+    }
+    tpUpdateAdminPreview();
+
+    // 2. Persist to Firebase in background to the active globalPatches node
+    let dbSuccess = false;
     try {
-        const tpRef = ref(db, 'trustpilotConfig');
+        console.log('[Trustpilot Admin] 🚀 Writing to Firebase Realtime Database at "globalPatches/trustpilotConfig"...');
+        const tpRef = ref(db, 'globalPatches/trustpilotConfig');
         await set(tpRef, newConfig);
+        dbSuccess = true;
+        console.log('[Trustpilot Admin] ✅ Successfully written to "globalPatches/trustpilotConfig" in Firebase!');
+        remove(ref(db, 'products/trustpilot_config')).catch(() => {});
+    } catch (dbError) {
+        console.error('[Trustpilot Admin] ❌ Firebase RTDB write error:', dbError);
+    }
 
-        if (window.TrustpilotConfig) {
-            window.TrustpilotConfig.set(newConfig);
-        }
+    if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="fas fa-save"></i> Guardar configuración';
+    }
 
-        if (fb) {
-            fb.textContent = '✓ Configuración guardada globalmente para todos los usuarios';
+    if (fb) {
+        if (dbSuccess) {
+            fb.textContent = `✓ Guardado globalmente en Firebase (${newConfig.rating} ★, ${newConfig.reviewCount} opiniones)`;
             fb.style.color = '#10b981';
-            setTimeout(() => { fb.textContent = ''; }, 4000);
+        } else {
+            fb.textContent = `✓ Guardado localmente (${newConfig.rating} ★, ${newConfig.reviewCount} opiniones)`;
+            fb.style.color = '#38bdf8';
         }
-    } catch (error) {
-        console.error('Error saving Trustpilot config:', error);
-        if (fb) {
-            fb.textContent = '✗ Error al guardar en Firebase: ' + error.message;
-            fb.style.color = '#ef4444';
-        }
-    } finally {
-        if (saveBtn) {
-            saveBtn.disabled = false;
-            saveBtn.innerHTML = '<i class="fas fa-save"></i> Guardar configuración';
-        }
+        setTimeout(() => { if (fb) fb.textContent = ''; }, 4000);
     }
 }
 

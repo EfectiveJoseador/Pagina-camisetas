@@ -878,3 +878,31 @@ exports.logAuditEvent = functions.https.onCall(async (data, context) => {
 
     return { logged: true };
 });
+
+exports.updateTrustpilotConfig = functions.https.onCall(async (data, context) => {
+    requireAdmin(context);
+
+    const rating = parseFloat(data.rating);
+    const reviewCount = parseInt(data.reviewCount);
+
+    if (isNaN(rating) || rating < 0 || rating > 5) {
+        throw new functions.https.HttpsError('invalid-argument', 'La puntuación debe estar entre 0 y 5.');
+    }
+    if (isNaN(reviewCount) || reviewCount < 0) {
+        throw new functions.https.HttpsError('invalid-argument', 'El número de opiniones debe ser un número positivo.');
+    }
+
+    const newConfig = {
+        rating: Math.round(rating * 10) / 10,
+        reviewCount: reviewCount,
+        url: 'https://es.trustpilot.com/review/camisetazo.shop',
+        visible: data.visible !== undefined ? Boolean(data.visible) : true,
+        updatedAt: new Date().toISOString()
+    };
+
+    const db = admin.database();
+    await db.ref('trustpilotConfig').set(newConfig);
+    await writeAuditLog(context.auth.uid, 'trustpilot_config_updated', newConfig);
+
+    return { success: true, config: newConfig };
+});
