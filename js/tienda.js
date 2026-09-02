@@ -1505,6 +1505,22 @@ function attachEventListeners() {
         document.getElementById('sort-select').value = 'default';
         applyFilters();
     });
+
+    // ── Toggle Información del Catálogo ────────────────────────────────────
+    const toggleStoreIntroBtn = document.getElementById('toggle-store-intro');
+    const storeIntroSection = document.getElementById('store-intro-section');
+    if (toggleStoreIntroBtn && storeIntroSection) {
+        toggleStoreIntroBtn.addEventListener('click', () => {
+            const isExpanded = storeIntroSection.classList.toggle('is-expanded');
+            toggleStoreIntroBtn.classList.toggle('is-active', isExpanded);
+            toggleStoreIntroBtn.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+            storeIntroSection.setAttribute('aria-hidden', isExpanded ? 'false' : 'true');
+            const actionText = toggleStoreIntroBtn.querySelector('.store-btn-text');
+            if (actionText) {
+                actionText.textContent = isExpanded ? 'Ocultar' : 'Ver info';
+            }
+        });
+    }
 }
 
 function normalizeString(str) {

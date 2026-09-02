@@ -6,15 +6,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="../assets/logo/logo.png">
 
-
     <title>Comprar Camisetas de Fútbol | Tienda Camisetazo</title>
     <meta name="description"
-        content="?? Comprar camisetas de Fútbol en Camisetazo. Equipaciones del Real Madrid, Barcelona, Atlético y más equipos. Temporada 2025-2026, retro y personalizadas. Envo rpido!">
+        content="Comprar camisetas de Fútbol en Camisetazo. Equipaciones del Real Madrid, Barcelona, Atlético y más equipos. Temporada 2025-2026, retro y personalizadas. ¡Envío rápido!">
     <meta name="keywords"
         content="comprar camisetas de Fútbol, tienda camisetas Fútbol, camisetazo, camisetas Fútbol buen precio, equipaciones Fútbol">
     <meta name="robots" content="index, follow">
     <link rel="canonical" href="https://camisetazo.shop/tienda">
-
 
     <meta property="og:type" content="website">
     <meta property="og:url" content="https://camisetazo.shop/tienda">
@@ -24,13 +22,11 @@
     <meta property="og:image" content="https://camisetazo.shop/assets/colecciones/futbol.png">
     <meta property="og:locale" content="es_ES">
 
-
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
         
-        // Estado de consentimiento por defecto (Modo Avanzado)
         gtag('consent', 'default', {
             'ad_storage': 'denied',
             'ad_user_data': 'denied',
@@ -41,26 +37,24 @@
 
         gtag('js', new Date());
         gtag('config', 'G-GS53GWE2Z0');
-      gtag('config', 'AW-18306839146');
+        gtag('config', 'AW-18306839146');
     </script>
-
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link
-        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800;900&display=swap"
         rel="stylesheet">
     <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
 
-
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/styles.css?v=6">
-    <link rel="stylesheet" href="../css/catalogo.css">
+    <link rel="stylesheet" href="../css/styles.css?v=7">
+    <link rel="stylesheet" href="../css/catalogo.css?v=3">
     <link rel="stylesheet" href="../css/badges.css">
     <link rel="stylesheet" href="../css/pagination.css">
     <link rel="stylesheet" href="../css/ux-feedback.css?v=2">
-
+    <link rel="stylesheet" href="../css/trustpilot.css?v=12">
 
     <script type="application/ld+json">
     {
@@ -218,7 +212,6 @@
             transform: translateY(-2px);
         }
 
-
         @media (max-width: 768px) {
             .modal-content {
                 padding: 1.5rem;
@@ -236,7 +229,6 @@
             .form-group input {
                 padding: 0.875rem;
                 font-size: 16px;
-
             }
 
             .btn-submit {
@@ -253,35 +245,47 @@
 
 <body class="page-tienda">
 
-
     <div id="header-placeholder"></div>
 
+    <!-- Barra Toggle de Información del Catálogo -->
+    <div class="store-intro-toggle-bar">
+        <button type="button" id="toggle-store-intro" class="store-intro-toggle-btn" aria-expanded="false" aria-controls="store-intro-section" title="Ver información del catálogo">
+            <span class="store-badge-dot"></span>
+            <i class="fas fa-shield-halved store-btn-icon"></i>
+            <span class="store-btn-title">Catálogo Oficial de Equipaciones</span>
+            <span class="store-btn-action">
+                <span class="store-btn-text">Ver info</span>
+                <i class="fas fa-chevron-down store-btn-chevron"></i>
+            </span>
+        </button>
+    </div>
 
-    <section class="store-intro"
-        style="background: var(--bg-card); padding: 2.5rem 2rem 2rem; text-align: center; border-bottom: 1px solid var(--border);">
-        <div style="max-width: 900px; margin: 0 auto;">
-            <h1 style="font-family: var(--font-heading); font-size: 2.2rem; margin-bottom: 0.75rem;">Tienda de Camisetas
-                de Fútbol</h1>
-            <p style="color: var(--text-muted); font-size: 1.05rem; line-height: 1.6;">
-                Explora nuestra colección de <strong>camisetas de Fútbol a buen precio</strong>.
-                Encuentra equipaciones del Real Madrid, Barcelona, Atlético, Athletic, Sevilla, Valencia y más equipos
-                de La Liga,
-                Bundesliga, Serie A y muchas más ligas. Todas las equipaciones se pueden <strong>personalizar a tu
-                    gusto</strong>.
-                <br>
-                <br>
-                ¡No encuentras lo que buscas? <strong>Escríbenos en
-                    <a href="https://www.tiktok.com/@camisetazo" target="_blank"
-                        style="color: #a855f7; font-weight: 700; text-decoration: none; transition: color 0.3s;">TikTok</a>
-                    y te responderemos rápidamente.</strong>
-            </p>
+    <!-- Sección de Información (Oculta al inicio) -->
+    <section id="store-intro-section" class="store-intro-collapsible" aria-hidden="true">
+        <div class="store-intro-collapsible-inner">
+            <div class="store-intro">
+                <div class="store-intro-container">
+                    <div class="store-badge">
+                        <span class="store-badge-dot"></span>
+                        <i class="fas fa-shield-halved"></i> Catálogo Oficial de Equipaciones
+                    </div>
+                    <h1 class="store-title">Tienda de <span class="text-gradient">Camisetas de Fútbol</span></h1>
+                    <p class="store-subtitle">
+                        Descubre nuestra selección de equipaciones oficiales: versiones Aficionado, Jugador Pro y Ediciones Retro. Personalízalas con nombre, dorsal y parches oficiales de cada competición.
+                    </p>
+                    <div class="store-trust-pills">
+                        <div class="store-pill"><i class="fas fa-truck-fast"></i> Envío Rápido</div>
+                        <div class="store-pill"><i class="fas fa-wand-magic-sparkles"></i> Personalización Completa</div>
+                        <div class="store-pill"><i class="fas fa-award"></i> Calidad Garantizada</div>
+                    </div>
+                </div>
+            </div>
         </div>
     </section>
 
     <main class="catalog-container">
 
         <div class="filters-backdrop"></div>
-
 
         <aside class="filters-sidebar">
             <div class="filters-header">
@@ -291,34 +295,26 @@
                 </button>
             </div>
 
-
             <div class="cascading-filter-container">
-
-
                 <div class="filter-step">
                     <label class="filter-label">1. Selecciona Liga</label>
                     <div class="custom-select-wrapper">
                         <select id="filter-league" class="custom-select">
                             <option value="">Todas las Ligas</option>
-
                         </select>
                         <i class="fas fa-chevron-down select-arrow"></i>
                     </div>
                 </div>
-
 
                 <div class="filter-step hidden" id="team-step">
                     <label class="filter-label">2. Selecciona Equipo</label>
                     <div class="custom-select-wrapper">
                         <select id="filter-team" class="custom-select">
                             <option value="">Todos los Equipos</option>
-
                         </select>
                         <i class="fas fa-chevron-down select-arrow"></i>
                     </div>
                 </div>
-
-
 
                 <div class="filter-step">
                     <label class="filter-checkbox" for="filter-kids">
@@ -328,15 +324,13 @@
                     </label>
                 </div>
 
-
                 <div class="filter-step">
-                    <label class="filter-checkbox">
+                    <label class="filter-checkbox" for="filter-retro">
                         <input type="checkbox" id="filter-retro">
                         <span class="checkbox-custom"></span>
                         <span class="checkbox-label">Solo Retro</span>
                     </label>
                 </div>
-
 
                 <div class="filter-step">
                     <label class="filter-checkbox" for="filter-new-season">
@@ -351,7 +345,6 @@
             <button id="clear-filters" class="btn-text">Limpiar Filtros</button>
         </aside>
 
-
         <section class="catalog-content">
             <div class="catalog-toolbar">
 
@@ -359,7 +352,6 @@
                     <i class="fas fa-filter"></i>
                     <span>Filtros</span>
                 </button>
-
 
                 <div class="search-bar expanded">
                     <i class="fas fa-search"></i>
@@ -377,7 +369,6 @@
 
             </div>
 
-
             <div id="pagination-container" class="pagination-container"></div>
 
             <div id="no-results" class="no-results hidden">
@@ -386,7 +377,6 @@
             </div>
         </section>
     </main>
-
 
     <div class="modal-overlay" id="customization-modal">
         <div class="modal-content">
@@ -462,17 +452,14 @@
         </div>
     </div>
 
-
     <div id="footer-placeholder"></div>
 
-
     <script src="../js/theme.js?v=4"></script>
-    <link rel="stylesheet" href="../css/trustpilot.css?v=6">
     <script src="../js/trustpilot.js?v=7"></script>
     <script src="../js/components.js?v=4"></script>
     <script src="../js/ux-feedback.js"></script>
     <script type="module" src="../js/analytics.js"></script>
-    <script type="module" src="../js/tienda.js?v=9"></script>
+    <script type="module" src="../js/tienda.js?v=10"></script>
     <script type="module" src="../js/firebase-global.js"></script>
     <script type="module" src="../js/carrito.js?v=11"></script>
     <script src="../js/mobile-filters.js"></script>
