@@ -240,12 +240,6 @@ function renderOrders(orders) {
                                 <span>${sanitizeHTML(shipping.phone)}</span>
                             </div>
                         ` : ''}
-                        ${shipping.instagram ? `
-                            <div style="display: flex; align-items: center; gap: 0.4rem; margin-top: 0.3rem; color: #00c951; font-weight: 600;">
-                                <i class="fab fa-tiktok" style="font-size: 0.85rem;"></i>
-                                <span>@${sanitizeHTML(shipping.instagram.replace(/^@/, ''))}</span>
-                            </div>
-                        ` : ''}
                     </div>
                 </div>
             ` : ''}
@@ -625,7 +619,6 @@ function renderAddresses(addresses) {
             <p>${sanitizeHTML(addr.street)}</p>
             <p>${sanitizeHTML(addr.zip)}, ${sanitizeHTML(addr.city)}${addr.province ? ' (' + sanitizeHTML(addr.province) + ')' : ''}</p>
             <p><i class="fas fa-phone"></i> ${sanitizeHTML(addr.phone)}</p>
-            <p><i class="fab fa-tiktok" style="color: #00c951;"></i> @${sanitizeHTML((addr.instagram || '').replace(/^@/, ''))}</p>
             <div style="margin-top: 1rem; display: flex; gap: 0.5rem;">
                 <button class="btn-text edit-address" data-id="${sanitizeHTML(addr.id)}">
                     <i class="fas fa-edit"></i> Editar
@@ -686,7 +679,8 @@ async function loadAddressData(addressId) {
             document.getElementById('address-zip').value = addr.zip || '';
             document.getElementById('address-province').value = addr.province || '';
             document.getElementById('address-phone').value = addr.phone || '';
-            document.getElementById('address-instagram').value = addr.instagram || '';
+            const instaInput = document.getElementById('address-instagram');
+            if (instaInput) instaInput.value = addr.instagram || '';
         }
     } catch (error) {
         console.error('Error loading address data:', error);
@@ -698,6 +692,7 @@ async function saveAddress(e) {
     e.preventDefault();
     if (!currentUser) return;
 
+    const instaInput = document.getElementById('address-instagram');
     const addressData = {
         name: document.getElementById('address-name').value.trim(),
         street: document.getElementById('address-street').value.trim(),
@@ -705,7 +700,7 @@ async function saveAddress(e) {
         zip: document.getElementById('address-zip').value.trim(),
         province: document.getElementById('address-province').value,
         phone: document.getElementById('address-phone').value.trim(),
-        instagram: document.getElementById('address-instagram').value.trim()
+        instagram: instaInput ? instaInput.value.trim() : ''
     };
 
     try {
@@ -1130,7 +1125,8 @@ async function openEditOrderAddressModal(orderId) {
         document.getElementById('order-address-zip').value = addr.zip || addr.postalCode || '';
         document.getElementById('order-address-province').value = addr.province || '';
         document.getElementById('order-address-phone').value = addr.phone || '';
-        document.getElementById('order-address-instagram').value = addr.instagram || '';
+        const orderInsta = document.getElementById('order-address-instagram');
+        if (orderInsta) orderInsta.value = addr.instagram || '';
 
         if (modal) {
             modal.style.display = 'block';
@@ -1152,6 +1148,7 @@ async function handleOrderAddressSubmit(e) {
 
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
+    const orderInsta = document.getElementById('order-address-instagram');
     const newAddress = {
         name: document.getElementById('order-address-name').value.trim(),
         street: document.getElementById('order-address-street').value.trim(),
@@ -1159,7 +1156,7 @@ async function handleOrderAddressSubmit(e) {
         zip: document.getElementById('order-address-zip').value.trim(),
         province: document.getElementById('order-address-province').value,
         phone: document.getElementById('order-address-phone').value.trim(),
-        instagram: document.getElementById('order-address-instagram').value.trim()
+        instagram: orderInsta ? orderInsta.value.trim() : ''
     };
 
     try {
@@ -1208,8 +1205,7 @@ City: ${sa.city || ''}
 Province: ${sa.province || ''}
 Country: España
 Postal Code: ${sa.zip || ''}
-Phone Number: ${sa.phone || ''}
-Instagram: @${(sa.instagram || '').replace(/^@/, '')}`;
+Phone Number: ${sa.phone || ''}`;
     let productsText = '';
     const items = orderData.items || orderData.products || [];
     items.forEach((item) => {

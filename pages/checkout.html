@@ -7,23 +7,12 @@
     <link rel="icon" type="image/x-icon" href="../assets/logo/logo.png">
     <title>Checkout - Camisetazo</title>
 
-
-    <!-- Google Analytics con Consent Mode v2 (estado por defecto: denegado) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
-        gtag('consent', 'default', {
-            'analytics_storage': 'denied',
-            'ad_storage': 'denied',
-            'ad_user_data': 'denied',
-            'ad_personalization': 'denied',
-            'wait_for_update': 500
-        });
-    </script>
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
-    <script>
         gtag('js', new Date());
-        gtag('config', 'G-GS53GWE2Z0');
+        gtag('config', 'G-GS53GWE2Z0', { 'send_page_view': false });
         gtag('config', 'AW-18306839146');
     </script>
 
@@ -33,20 +22,20 @@
     <link
         href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@700;800&display=swap"
         rel="stylesheet">
+
+
     <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
 
 
     <link rel="stylesheet" href="../css/variables.css">
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/carrito.css">
-    <link rel="stylesheet" href="../css/auth.css">
+    <link rel="stylesheet" href="../css/badges.css">
+    <link rel="stylesheet" href="../css/carrito.css?v=10">
     <link rel="stylesheet" href="../css/ux-feedback.css?v=2">
 </head>
 
 <body>
-
-
     <div id="header-placeholder"></div>
 
 
@@ -188,13 +177,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label>Teléfono</label>
+                            <label>Teléfono <span style="color: #ef4444;">*</span></label>
                             <input type="tel" id="new-address-phone" required placeholder="+34 600 000 000">
-                        </div>
-
-                        <div class="form-group">
-                            <label>TikTok <span style="color: #ef4444;">*</span></label>
-                            <input type="text" id="new-address-instagram" placeholder="@tu_usuario_tiktok" required>
                         </div>
 
                         <div style="display: flex; gap: 1rem; margin-top: 1rem;">
@@ -336,31 +320,12 @@
                         <div style="background: rgba(0, 150, 136, 0.05); border: 1px solid var(--border); border-radius: 12px; padding: 1.25rem;">
                             <p style="color: var(--text-main); margin: 0; font-size: 0.9rem;">
                                 <i class="fas fa-info-circle" style="color: #00bfa5; margin-right: 0.4rem;"></i>
-                                Te contactaremos por WhatsApp o TikTok para enviarte los datos de Revolut y confirmar el pago. (Mediante este método, puedes pagar con tarjeta también).
+                                Te contactaremos por WhatsApp para enviarte los datos de Revolut y confirmar el pago. (Mediante este método, puedes pagar con tarjeta también).
                             </p>
                         </div>
                     </div>
 
                     <div class="checkout-action-wrapper" style="margin-top: 1.5rem;">
-
-                        <!-- Casilla legal obligatoria (RGPD + LGDCU) -->
-                        <div id="legal-acceptance-box" style="margin-bottom: 1.25rem; padding: 1rem; background: var(--bg-body); border: 1px solid var(--border); border-radius: 10px;">
-                            <label style="display: flex; align-items: flex-start; gap: 0.6rem; cursor: pointer; font-size: 0.85rem; color: var(--text-secondary);">
-                                <input type="checkbox" id="accept-legal-checkout" style="margin-top: 0.2rem; flex-shrink: 0; width: 16px; height: 16px; cursor: pointer;" required>
-                                <span>He leído y acepto los <a href="/pages/terminos.html" target="_blank" style="color: var(--primary);">Términos y Condiciones</a> y la <a href="/pages/privacidad.html" target="_blank" style="color: var(--primary);">Política de Privacidad</a>. *</span>
-                            </label>
-                            <!-- Primera capa informativa RGPD (Art. 11 LOPDGDD / Art. 13 RGPD) -->
-                            <div style="margin-top: 0.75rem; font-size: 0.75rem; color: var(--text-muted); line-height: 1.6; background: rgba(99,102,241,0.04); padding: 0.75rem; border-radius: 6px; border: 1px solid var(--border);">
-                                <strong style="color: var(--text-main);">Información básica sobre protección de datos</strong><br>
-                                • <strong>Responsable:</strong> [Nombre del Titular] — camisetazocontacto@gmail.com<br>
-                                • <strong>Finalidad:</strong> Gestión, tramitación y envío de tu pedido.<br>
-                                • <strong>Legitimación:</strong> Ejecución de la relación contractual de compraventa (Art. 6.1.b RGPD).<br>
-                                • <strong>Destinatarios:</strong> Empresas logísticas y pasarelas de pago necesarias para el servicio.<br>
-                                • <strong>Derechos:</strong> Acceso, rectificación, supresión y demás derechos en <a href="/pages/privacidad.html" style="color: var(--primary);">Pol. de Privacidad</a>.
-                            </div>
-                            <p id="legal-accept-error" style="display:none; color: #ef4444; font-size: 0.8rem; margin-top: 0.5rem; margin-bottom: 0;"><i class="fas fa-exclamation-circle"></i> Debes aceptar los Términos y la Política de Privacidad para continuar.</p>
-                        </div>
-
                         <button type="button" id="confirm-order-btn" class="btn btn-block btn-primary btn-sticky-mobile">
                             <i class="fas fa-check-circle"></i> Confirmar Pedido
                         </button>
@@ -379,7 +344,7 @@
     <script type="module" src="../js/firebase-global.js?v=5"></script>
     <script type="module" src="../js/analytics.js?v=5"></script>
     <script type="module" src="../js/carrito.js?v=10"></script>
-    <script type="module" src="../js/checkout.js?v=8"></script>
+    <script type="module" src="../js/checkout.js?v=9"></script>
 
 
 </body>

@@ -127,17 +127,12 @@
 
                 <div id="recaptcha-container" style="margin-bottom: 1rem;"></div>
 
-                <!-- Casilla legal obligatoria (RGPD) para registro -->
-                <div style="margin-bottom: 1rem; padding: 0.85rem; background: var(--bg-body); border: 1px solid var(--border); border-radius: 8px;">
-                    <label style="display: flex; align-items: flex-start; gap: 0.6rem; cursor: pointer; font-size: 0.85rem; color: var(--text-secondary);">
-                        <input type="checkbox" id="accept-privacy-register" required style="margin-top: 0.2rem; flex-shrink: 0; width: 15px; height: 15px; cursor: pointer;">
-                        <span>He leído y acepto los <a href="/pages/terminos.html" target="_blank" style="color: var(--primary);">Términos y Condiciones</a> y la <a href="/pages/privacidad.html" target="_blank" style="color: var(--primary);">Política de Privacidad</a>. *</span>
+                <!-- Casilla legal de aceptación -->
+                <div style="margin-bottom: 1.25rem;">
+                    <label style="display: flex; align-items: flex-start; gap: 0.65rem; cursor: pointer; font-size: 0.85rem; line-height: 1.45; color: var(--text-secondary); user-select: none;">
+                        <input type="checkbox" id="accept-privacy-register" required style="margin-top: 0.15rem; width: 17px; height: 17px; border-radius: 4px; accent-color: var(--primary); cursor: pointer; flex-shrink: 0;">
+                        <span>Acepto los <a href="/pages/terminos.html" target="_blank" style="color: var(--primary); font-weight: 600; text-decoration: underline; text-underline-offset: 2px;">Términos y Condiciones</a> y la <a href="/pages/privacidad.html" target="_blank" style="color: var(--primary); font-weight: 600; text-decoration: underline; text-underline-offset: 2px;">Política de Privacidad</a></span>
                     </label>
-                    <div style="margin-top: 0.6rem; font-size: 0.73rem; color: var(--text-muted); line-height: 1.55;">
-                        <strong style="color: var(--text-main);">Información básica sobre protección de datos:</strong>
-                        Responsable: [Nombre del Titular]. Finalidad: Creación y gestión de tu cuenta de usuario. Legitimación: Consentimiento del interesado (Art. 6.1.a RGPD). Derechos en
-                        <a href="/pages/privacidad.html" style="color: var(--primary);">Pol. de Privacidad</a>.
-                    </div>
                 </div>
 
                 <div id="register-error" class="error-message"
