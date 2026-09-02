@@ -831,7 +831,6 @@ document.addEventListener('DOMContentLoaded', () => {
             try {
                 const idTokenResult = await user.getIdTokenResult(true);
                 if (idTokenResult.claims.admin === true) {
-                    console.log('✅ Usuario es admin - redirigiendo a panel de administración');
                     window.location.href = '/pages/admin.html';
                     return;
                 }
@@ -1278,16 +1277,6 @@ window.diagnoseMobileOverflow = function() {
             el.style.outlineOffset = '-3px';
         }
     });
-
-    console.group('🔍 [DIAGNÓSTICO OVERFLOW MÓVIL]');
-    console.log('Ancho Viewport Móvil:', viewportWidth + 'px');
-    if (culprits.length === 0) {
-        console.log('✅ Ningún elemento sobrepasa el marco de la pantalla.');
-    } else {
-        console.warn(`🚨 Se han detectado ${culprits.length} elementos desbordando la pantalla:`);
-        console.table(culprits);
-    }
-    console.groupEnd();
 };
 
 

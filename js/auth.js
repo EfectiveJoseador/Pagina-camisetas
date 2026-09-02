@@ -395,8 +395,6 @@ async function handleGoogleSignIn() {
         const result = await signInWithPopup(auth, googleProvider);
         const user   = result.user;
 
-        console.log(`[Google Sign-In] Autenticado: ${user.email}`);
-
         // 2. Crear/actualizar perfil en Realtime Database
         const userRef  = ref(db, 'users/' + user.uid);
         const snapshot = await get(userRef);

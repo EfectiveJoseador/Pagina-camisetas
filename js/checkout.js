@@ -793,7 +793,6 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     onAuthStateChanged(auth, async (user) => {
-        console.log('[CHECKOUT-DEBUG] 1. Estado de Auth:', user ? user.uid : 'No hay usuario autenticado (se mostrará modal de inicio de sesión)');
         if (user) {
             currentUser = user;
             await loadUserAddresses();

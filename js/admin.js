@@ -4213,12 +4213,10 @@ function tpUpdateAdminPreview() {
 
 function loadTrustpilotConfig() {
     try {
-        console.log('[Trustpilot Admin] 📡 Attaching Realtime listener to globalPatches/trustpilotConfig...');
         const tpRef = ref(db, 'globalPatches/trustpilotConfig');
         onValue(tpRef, (snapshot) => {
             if (snapshot.exists()) {
                 const cfg = snapshot.val();
-                console.log('[Trustpilot Admin] 📥 Realtime Database event received:', cfg);
                 if (window.TrustpilotConfig) {
                     window.TrustpilotConfig.set(cfg);
                 }
@@ -4232,7 +4230,6 @@ function loadTrustpilotConfig() {
                 
                 tpUpdateAdminPreview();
             } else {
-                console.log('[Trustpilot Admin] ℹ No remote config yet in globalPatches/trustpilotConfig, using local defaults.');
                 if (window.TrustpilotConfig) {
                     const localCfg = window.TrustpilotConfig.get();
                     const ratingEl = document.getElementById('tp-rating');
@@ -4247,7 +4244,7 @@ function loadTrustpilotConfig() {
             }
         });
     } catch (err) {
-        console.error('[Trustpilot Admin] ❌ Error loading Trustpilot config from Firebase:', err);
+        // silent fail fallback
     }
 }
 
@@ -4262,8 +4259,6 @@ async function saveTrustpilotConfig() {
     const reviews = parseInt(reviewsEl?.value);
     const visible = visibleEl ? visibleEl.checked : true;
     const fixedUrl = 'https://es.trustpilot.com/review/camisetazo.shop';
-
-    console.log('[Trustpilot Admin] 💾 Initiating save with:', { rating, reviews, visible, fixedUrl });
 
     if (isNaN(rating) || rating < 0 || rating > 5) {
         alert('La puntuación debe estar entre 0 y 5.');
@@ -4296,14 +4291,12 @@ async function saveTrustpilotConfig() {
     // 2. Persist to Firebase in background to the active globalPatches node
     let dbSuccess = false;
     try {
-        console.log('[Trustpilot Admin] 🚀 Writing to Firebase Realtime Database at "globalPatches/trustpilotConfig"...');
         const tpRef = ref(db, 'globalPatches/trustpilotConfig');
         await set(tpRef, newConfig);
         dbSuccess = true;
-        console.log('[Trustpilot Admin] ✅ Successfully written to "globalPatches/trustpilotConfig" in Firebase!');
         remove(ref(db, 'products/trustpilot_config')).catch(() => {});
     } catch (dbError) {
-        console.error('[Trustpilot Admin] ❌ Firebase RTDB write error:', dbError);
+        // silent fallback
     }
 
     if (saveBtn) {

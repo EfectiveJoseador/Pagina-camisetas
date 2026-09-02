@@ -997,11 +997,9 @@ function init() {
 
     if (cachedOrder && cachedOrder.length === products.length) {
         allProducts = cachedOrder.map(id => products.find(p => p.id === id)).filter(Boolean);
-        console.log('Using session-cached product order');
     } else {
         allProducts = shuffleArray([...products]);
         saveProductOrderToSession(allProducts.map(p => p.id));
-        console.log('Generated and cached new product order');
     }
 
     allProducts = allProducts.map(product => ({

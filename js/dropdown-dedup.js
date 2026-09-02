@@ -264,12 +264,7 @@ const DropdownDedup = (function () {
 
         
         debug: function (names) {
-            const result = buildCanonicalMap(names);
-            console.log('=== Dropdown Dedup Debug ===');
-            console.log('Input:', names);
-            console.log('Canonicals:', result.canonicals);
-            console.log('Map:', result.canonMap);
-            return result;
+            return buildCanonicalMap(names);
         }
     };
 })();

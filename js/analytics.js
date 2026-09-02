@@ -15,13 +15,9 @@ class AnalyticsManager {
      */
     trackEvent(eventName, params = {}) {
         if (!this.initialized) {
-            console.warn(`[Analytics] gtag not defined. Event dropped: ${eventName}`, params);
             return;
         }
         gtag('event', eventName, params);
-        if (window.DEBUG_ANALYTICS) {
-            console.log(`[Analytics] Track Event: ${eventName}`, params);
-        }
     }
 
     /**
@@ -133,10 +129,6 @@ class AnalyticsManager {
         };
 
         this.trackEvent('purchase', purchaseData);
-        
-        if (window.DEBUG_ANALYTICS || true) {
-            console.log(`%c[Analytics] PURCHASE TRACKED: ${purchaseData.transaction_id}`, 'color: #10b981; font-weight: bold;', purchaseData);
-        }
     }
 
     /**
@@ -177,9 +169,6 @@ class AnalyticsManager {
             search_term: searchTerm,
             results_count: resultsCount
         });
-        if (window.DEBUG_ANALYTICS) {
-            console.log(`[Analytics] Track Search: "${searchTerm}" (${resultsCount} results)`);
-        }
     }
 }
 

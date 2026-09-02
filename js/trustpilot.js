@@ -101,7 +101,6 @@
 
     function updateDOMBadges(cfg) {
         cfg = cfg || getConfig();
-        console.log('[Trustpilot] 🎨 Updating DOM badges with config:', cfg);
 
         // 1. Hero badge on index.html
         var heroWrap = document.getElementById('hero-tp-bar-wrap');
@@ -109,11 +108,9 @@
             if (cfg.visible) {
                 heroWrap.innerHTML = renderBadgeHero(cfg);
                 heroWrap.style.display = '';
-                console.log('[Trustpilot] ✓ Hero badge updated successfully.');
             } else {
                 heroWrap.innerHTML = '';
                 heroWrap.style.display = 'none';
-                console.log('[Trustpilot] ✗ Hero badge hidden.');
             }
         }
 
@@ -124,7 +121,6 @@
                 var tpBadge = renderBadgeAnnouncement(cfg);
                 slide1.innerHTML = '<i class="fas fa-star" style="font-size:0.85rem;color:#00e08e;flex-shrink:0;"></i>' + tpBadge;
                 slide1.style.display = '';
-                console.log('[Trustpilot] ✓ Announcement bar badge updated.');
             } else {
                 slide1.innerHTML = '';
                 slide1.style.display = 'none';
@@ -142,7 +138,6 @@
                     var newElem = temp.firstElementChild;
                     if (newElem && cardElem.parentNode) {
                         cardElem.parentNode.replaceChild(newElem, cardElem);
-                        console.log('[Trustpilot] ✓ Card badge updated.');
                     }
                 }
             } else {
@@ -157,11 +152,9 @@
 
     function fetchRemoteConfig() {
         if (typeof fetch === 'undefined') return;
-        console.log('[Trustpilot] 🔄 Fetching remote global config from Firebase...');
         
-        function applyData(data, source) {
+        function applyData(data) {
             if (data && typeof data === 'object') {
-                console.log('[Trustpilot] 📥 Received remote config from ' + source + ':', data);
                 var current = getConfig();
                 var changed = false;
                 ['rating', 'reviewCount', 'visible', 'url'].forEach(function (k) {
@@ -170,10 +163,8 @@
                     }
                 });
                 if (changed) {
-                    console.log('[Trustpilot] 🔄 Config changed from local, updating local state...');
                     setConfig(data);
                 } else {
-                    console.log('[Trustpilot] ℹ Config matches current local state.');
                     updateDOMBadges(current);
                 }
             }
@@ -186,22 +177,16 @@
             })
             .then(function (data) {
                 if (data && typeof data === 'object') {
-                    applyData(data, 'DB_URL (globalPatches)');
+                    applyData(data);
                 } else {
-                    console.warn('[Trustpilot] DB_URL returned empty data, trying fallback...');
-                    return fetch(DB_FALLBACK_URL + '?t=' + Date.now())
-                        .then(function(r){ return r.json(); })
-                        .then(function(d){ applyData(d, 'DB_FALLBACK_URL'); });
+                    return fetch(DB_FALLBACK_URL + '?t=' + Date.now()).then(function(r){ return r.json(); }).then(applyData);
                 }
             })
-            .catch(function (err) {
-                console.warn('[Trustpilot] DB_URL fetch failed:', err.message, '- Trying fallback URL...');
+            .catch(function () {
                 fetch(DB_FALLBACK_URL + '?t=' + Date.now())
                     .then(function (res) { return res.json(); })
-                    .then(function(d){ applyData(d, 'DB_FALLBACK_URL'); })
-                    .catch(function (e) {
-                        console.warn('[Trustpilot] Both remote fetches failed, using cached config:', e.message);
-                    });
+                    .then(applyData)
+                    .catch(function () {});
             });
     }
 
