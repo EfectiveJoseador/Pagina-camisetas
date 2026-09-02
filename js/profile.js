@@ -171,7 +171,6 @@ function renderOrders(orders) {
 
     ordersList.innerHTML = ordersArray.map(order => {
         const normalizedStatus = normalizeStatus(order.status);
-        const statusInfo = getStatusInfo(normalizedStatus);
         const products = order.products || order.items || [];
         const shipping = order.shippingInfo || order.shippingAddress || {};
         const orderDateTime = order.createdAt
@@ -183,14 +182,6 @@ function renderOrders(orders) {
                 minute: '2-digit'
             })
             : formatDate(order.date);
-        const statusConfig = {
-            'pendiente': { icon: 'fa-clock', bg: 'rgba(126, 126, 126, 0.15)', color: '#9ca3af' },
-            'confirmado': { icon: 'fa-check-circle', bg: 'rgba(59, 130, 246, 0.15)', color: '#3b82f6' },
-            'imagenes_cliente': { icon: 'fa-camera', bg: 'rgba(192, 38, 211, 0.15)', color: '#c026d3' },
-            'enviado': { icon: 'fa-shipping-fast', bg: 'rgba(245, 158, 11, 0.15)', color: '#f59e0b' },
-            'entregado': { icon: 'fa-box-open', bg: 'rgba(34, 197, 94, 0.15)', color: '#22c55e' }
-        };
-        const currentStatusConfig = statusConfig[normalizedStatus] || statusConfig['pendiente'];
 
         return `
         <div class="order-card" style="
@@ -213,36 +204,6 @@ function renderOrders(orders) {
                     <span style="color: var(--text-muted); font-size: 0.85rem; display: flex; align-items: center; gap: 0.4rem;">
                         <i class="far fa-calendar-alt"></i>${orderDateTime}
                     </span>
-                    ${normalizedStatus === 'pendiente' ? `
-                        <span style="
-                            margin-top: 0.4rem;
-                            font-size: 0.72rem;
-                            color: #9ca3af;
-                            display: flex;
-                            align-items: center;
-                            gap: 0.35rem;
-                        ">
-                            <i class="fas fa-circle-notch fa-spin" style="font-size: 0.6rem; color: #f59e0b;"></i>
-                            Verificando que el pago se haya realizado correctamente (Manualmente así que tardará entre 0-8h, sentimos la espera)
-                        </span>
-                    ` : ''}
-                </div>
-                
-                <!-- Status Badge - Premium Style -->
-                <div class="order-status-badge" style="
-                    display: inline-flex;
-                    align-items: center;
-                    gap: 0.5rem;
-                    padding: 0.5rem 1rem;
-                    border-radius: 50px;
-                    background: ${currentStatusConfig.bg};
-                    border: 1px solid ${currentStatusConfig.color}30;
-                    font-weight: 600;
-                    font-size: 0.85rem;
-                    color: ${currentStatusConfig.color};
-                ">
-                    <i class="fas ${currentStatusConfig.icon}"></i>
-                    <span>${statusInfo.text}</span>
                 </div>
             </div>
             
