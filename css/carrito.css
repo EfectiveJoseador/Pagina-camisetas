@@ -934,4 +934,73 @@
 
 .btn-cart-edit:active {
     transform: scale(0.95);
-}
+}
+
+/* ===== BOTONES MODALES Y AUTENTICACIÓN EN CHECKOUT ===== */
+.btn-modal-primary,
+.btn-modal-secondary {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    padding: 0.85rem 1.75rem;
+    font-size: 0.95rem;
+    font-weight: 600;
+    border-radius: 12px;
+    cursor: pointer;
+    text-decoration: none;
+    transition: all 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+    white-space: nowrap;
+    line-height: 1.2;
+}
+
+.btn-modal-primary {
+    background: var(--gradient-primary, linear-gradient(135deg, #6366f1 0%, #4f46e5 100%));
+    color: #ffffff !important;
+    border: none;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+}
+
+.btn-modal-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+    color: #ffffff !important;
+}
+
+.btn-modal-primary:active {
+    transform: translateY(0);
+}
+
+.btn-modal-secondary {
+    background: var(--bg-body, #f8fafc);
+    color: var(--text-main, #334155) !important;
+    border: 1px solid var(--border, #e2e8f0);
+}
+
+.btn-modal-secondary:hover {
+    background: var(--border, #e2e8f0);
+    color: var(--text-main, #0f172a) !important;
+    transform: translateY(-2px);
+}
+
+.btn-modal-secondary:active {
+    transform: translateY(0);
+}
+
+[data-theme="dark"] .btn-modal-primary {
+    background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%);
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.3);
+}
+
+[data-theme="dark"] .btn-modal-secondary {
+    background: rgba(255, 255, 255, 0.06);
+    border-color: rgba(255, 255, 255, 0.15);
+    color: var(--text-main, #f8fafc) !important;
+}
+
+[data-theme="dark"] .btn-modal-secondary:hover {
+    background: rgba(255, 255, 255, 0.12);
+    border-color: rgba(255, 255, 255, 0.25);
+    color: #ffffff !important;
+}
+

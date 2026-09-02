@@ -728,18 +728,25 @@ function showLoginPrompt() {
                 flex-direction: column;
                 align-items: center;
                 justify-content: center;
-                padding: 4rem 2rem;
+                padding: 4.5rem 2rem;
                 text-align: center;
                 background: var(--bg-card);
-                border-radius: 16px;
+                border-radius: 20px;
                 border: 1px solid var(--border);
+                box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+                max-width: 580px;
+                margin: 1.5rem auto;
+                width: 100%;
+                box-sizing: border-box;
             ">
-                <i class="fas fa-user-lock" style="font-size: 4rem; color: var(--primary); margin-bottom: 1.5rem; opacity: 0.8;"></i>
-                <h2 style="color: var(--text-main); margin-bottom: 0.5rem; font-size: 1.5rem;">Inicia sesión para continuar</h2>
-                <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 400px;">
-                    Para realizar un pedido necesitas tener una cuenta. Así podrás guardar tus direcciones y ver el historial de tus pedidos.
+                <div style="width: 80px; height: 80px; border-radius: 50%; background: linear-gradient(135deg, rgba(99, 102, 241, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%); display: flex; align-items: center; justify-content: center; margin-bottom: 1.5rem; border: 1px solid rgba(99, 102, 241, 0.25);">
+                    <i class="fas fa-user-lock" style="font-size: 2.25rem; color: var(--primary);"></i>
+                </div>
+                <h2 style="color: var(--text-main); margin-bottom: 0.75rem; font-size: 1.65rem; font-weight: 700; letter-spacing: -0.02em;">Inicia sesión para continuar</h2>
+                <p style="color: var(--text-muted); margin-bottom: 2rem; max-width: 420px; line-height: 1.6; font-size: 0.95rem;">
+                    Para realizar tu pedido necesitas tener una cuenta. Así podrás guardar tus direcciones y seguir el estado de tus envíos.
                 </p>
-                <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center;">
+                <div style="display: flex; gap: 1rem; flex-wrap: wrap; justify-content: center; width: 100%;">
                     <a href="/pages/login.html?redirect=checkout" class="btn-modal-primary" style="text-decoration: none;">
                         <i class="fas fa-sign-in-alt"></i> Iniciar Sesión
                     </a>
