@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-theme="light">
 
 <head>
@@ -9,16 +9,24 @@
     <meta name="description"
         content="Términos y Condiciones de uso de Camisetazo. Conoce las condiciones de compra, envío y devoluciones.">
 
-
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
+    <!-- Google Analytics con Consent Mode v2 (estado por defecto: denegado) -->
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
+        gtag('consent', 'default', {
+            'analytics_storage': 'denied',
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'wait_for_update': 500
+        });
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
+    <script>
         gtag('js', new Date());
         gtag('config', 'G-GS53GWE2Z0');
-      gtag('config', 'AW-18306839146');
+        gtag('config', 'AW-18306839146');
     </script>
-
 
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -99,6 +107,25 @@
         .contact-box p {
             margin-bottom: 0.5rem;
         }
+
+        .callout-legal {
+            background: rgba(245, 158, 11, 0.08);
+            border: 1px solid rgba(245, 158, 11, 0.35);
+            border-left: 4px solid #f59e0b;
+            border-radius: var(--radius-sm);
+            padding: 1rem 1.25rem;
+            margin: 1.25rem 0;
+        }
+
+        .callout-legal p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: var(--text-secondary);
+        }
+
+        .callout-legal strong {
+            color: var(--text-main);
+        }
     </style>
 </head>
 
@@ -107,7 +134,7 @@
 
     <main class="legal-page">
         <h1>Términos y Condiciones</h1>
-        <p class="last-updated">Última actualización: 10 de diciembre de 2026</p>
+        <p class="last-updated">Última actualización: 1 de septiembre de 2026</p>
 
         <p>Bienvenido a Camisetazo. Al acceder o utilizar nuestro sitio web camisetazo.shop, aceptas cumplir con estos
             Términos y Condiciones. Si no estás de acuerdo con alguna parte de estos términos, no debes utilizar
@@ -139,9 +166,8 @@
         <h2>4. Métodos de Pago</h2>
         <p>Aceptamos los siguientes métodos de pago:</p>
         <ul>
-            <li>Transferencia bancaria</li>
-            <li>Bizum</li>
             <li>PayPal</li>
+            <li>Revolut (tarjeta incluida)</li>
         </ul>
         <p>Todos los pagos son procesados de forma segura. No almacenamos datos de tarjetas de crédito.</p>
 
@@ -155,13 +181,42 @@
             <li>Es responsabilidad del cliente proporcionar una dirección de envío correcta.</li>
         </ul>
 
-        <h2>6. Política de Devoluciones</h2>
-        <p><strong>No se admiten devoluciones, cambios ni reembolsos.</strong></p>
-        <p>Todas las ventas son finales. Antes de realizar tu compra, asegúrate de revisar correctamente la talla,
-            el producto y todos los detalles del pedido. Una vez confirmada la compra, no será posible realizar
-            cambios ni devoluciones.</p>
-        <p>En caso de recibir un producto defectuoso o dañado durante el transporte, contáctanos en un plazo máximo
-            de 48 horas desde la recepción con fotografías del producto para valorar cada caso individualmente.</p>
+        <h2>6. Derecho de Desistimiento y Política de Devoluciones</h2>
+
+        <h3 style="margin-top: 1.2rem; margin-bottom: 0.5rem; color: var(--text-main); font-size: 1.1rem;">
+            6.1 Productos Estándar de Catálogo
+        </h3>
+        <p>De conformidad con el artículo 102 del Real Decreto Legislativo 1/2007 (LGDCU), el consumidor dispone de
+            un plazo de <strong>14 días naturales</strong> para ejercer el derecho de desistimiento sin necesidad de
+            justificación y sin penalización alguna. Este plazo se computa desde la recepción del pedido. Para
+            ejercer este derecho, deberás notificárnoslo a través de nuestro formulario de contacto o por email
+            antes de que expire el plazo.</p>
+
+        <h3 style="margin-top: 1.2rem; margin-bottom: 0.5rem; color: var(--text-main); font-size: 1.1rem;">
+            6.2 Excepción: Productos Personalizados (Art. 103.c LGDCU)
+        </h3>
+        <div class="callout-legal">
+            <p><strong>⚠️ Importante:</strong> De conformidad con el artículo 103, letra c) de la LGDCU, el derecho
+                de desistimiento <strong>no aplica</strong> a camisetas confeccionadas conforme a las especificaciones
+                del consumidor, es decir, a camisetas que incluyan personalización expresa solicitada por el usuario:
+                serigrafía de nombre propio, dorsal numérico personalizado o parches específicos a medida. Esta
+                excepción no se aplica a la mera elección de talla, color o modelo estándar del catálogo.</p>
+        </div>
+        <p>En el momento de confirmar un pedido con personalización, se te informará expresamente de la pérdida del
+            derecho de desistimiento y se te solicitará aceptación específica de dicha condición antes de finalizar
+            la compra.</p>
+
+        <h3 style="margin-top: 1.2rem; margin-bottom: 0.5rem; color: var(--text-main); font-size: 1.1rem;">
+            6.3 Defectos y Garantía Legal
+        </h3>
+        <p>Conforme al artículo 120 de la LGDCU (modificado por el Real Decreto-ley 7/2021), el vendedor responde de
+            las faltas de conformidad del producto durante <strong>3 años</strong> desde la fecha de entrega. Durante
+            los primeros dos años se presume que el defecto existía en el momento de la entrega, salvo prueba en
+            contrario.</p>
+        <p>Si recibes un producto con defecto de fabricación o error de impresión, contáctanos en
+            <a href="mailto:camisetazocontacto@gmail.com">camisetazocontacto@gmail.com</a> con fotografías del defecto.
+            Consulta nuestra <a href="/pages/devoluciones.html">Política de Devoluciones y Garantías</a> para el
+            proceso detallado.</p>
 
         <h2>7. Propiedad Intelectual</h2>
         <p>Todo el contenido del sitio web (textos, imágenes, logos, diseños) es propiedad de Camisetazo o de sus
@@ -187,10 +242,11 @@
             <a href="/pages/cookies.html">Política de Cookies</a>.
         </p>
 
-        <h2>11. Legislación Aplicable</h2>
-        <p>Estos Términos y Condiciones se rigen por la legislación española. Para cualquier controversia que pudiera
-            derivarse, las partes se someten a los Juzgados y Tribunales de la ciudad donde tiene su domicilio social
-            Camisetazo.</p>
+        <h2>11. Legislación Aplicable y Fuero</h2>
+        <p>Estos Términos y Condiciones se rigen por la legislación española. Para la resolución de cualquier
+            controversia, de conformidad con el artículo 90.2 de la LGDCU, la competencia territorial en contratos
+            celebrados con consumidores corresponde, de manera inderogable, a los Juzgados y Tribunales del
+            <strong>domicilio del consumidor</strong>.</p>
 
         <h2>12. Modificaciones</h2>
         <p>Nos reservamos el derecho de modificar estos Términos y Condiciones en cualquier momento.

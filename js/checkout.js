@@ -425,6 +425,16 @@ async function confirmOrder() {
         return;
     }
 
+    // ── Validación de aceptación legal (RGPD + LGDCU) ──────────────────────
+    const legalCheckbox = document.getElementById('accept-legal-checkout');
+    const legalError = document.getElementById('legal-accept-error');
+    if (legalCheckbox && !legalCheckbox.checked) {
+        if (legalError) legalError.style.display = 'block';
+        legalCheckbox.closest('#legal-acceptance-box').scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+    }
+    if (legalError) legalError.style.display = 'none';
+
     if (!confirmBtn) return;
 
     const originalHTML = confirmBtn.innerHTML;
@@ -462,7 +472,14 @@ async function confirmOrder() {
                 addressId: selectedAddressId,
                 paymentMethod,
                 couponId: selectedCoupon ? selectedCoupon.id : null,
-                promoCode: appliedPromoCode ? (appliedPromoCode.code || appliedPromoCode.id || null) : null
+                promoCode: appliedPromoCode ? (appliedPromoCode.code || appliedPromoCode.id || null) : null,
+                // ── Trazabilidad del consentimiento legal (Art. 5.2 RGPD) ──────────────
+                legalConsent: {
+                    termsAccepted: true,
+                    privacyAccepted: true,
+                    acceptedAt: new Date().toISOString(),
+                    legalVersion: '2026.09.01'
+                }
             })
         });
 

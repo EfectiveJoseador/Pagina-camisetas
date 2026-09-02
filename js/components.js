@@ -461,6 +461,7 @@ const CookieConsent = {
                 </p>
                 <div class="cookie-actions">
                     <button id="cookie-show-settings" class="cookie-btn cookie-btn-secondary">CONFIGURAR</button>
+                    <button id="cookie-reject-all" class="cookie-btn cookie-btn-secondary">RECHAZAR TODAS</button>
                     <button id="cookie-accept-all" class="cookie-btn cookie-btn-primary">ACEPTAR TODAS</button>
                 </div>
             </div>
@@ -761,6 +762,14 @@ const CookieConsent = {
             mainView.style.display = 'none';
             settingsView.style.display = 'flex';
         });
+
+        // Botón "Rechazar todas" (primera capa)
+        const rejectAll = () => {
+            this.setConsent('rejected');
+            this.updateGoogleConsent(false);
+            this.hideBanner();
+        };
+        document.getElementById('cookie-reject-all').addEventListener('click', rejectAll);
 
         // Botones de "Aceptar Todo" (El camino fácil)
         const acceptAll = () => {

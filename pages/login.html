@@ -1,4 +1,4 @@
-﻿<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="es" data-theme="light">
 
 <head>
@@ -9,13 +9,23 @@
     <title>Iniciar Sesión - Camisetazo</title>
 
 
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
+    <!-- Google Analytics con Consent Mode v2 (estado por defecto: denegado) -->
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag() { dataLayer.push(arguments); }
+        gtag('consent', 'default', {
+            'analytics_storage': 'denied',
+            'ad_storage': 'denied',
+            'ad_user_data': 'denied',
+            'ad_personalization': 'denied',
+            'wait_for_update': 500
+        });
+    </script>
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-GS53GWE2Z0"></script>
+    <script>
         gtag('js', new Date());
         gtag('config', 'G-GS53GWE2Z0');
-      gtag('config', 'AW-18306839146');
+        gtag('config', 'AW-18306839146');
     </script>
 
 
@@ -116,6 +126,19 @@
 
 
                 <div id="recaptcha-container" style="margin-bottom: 1rem;"></div>
+
+                <!-- Casilla legal obligatoria (RGPD) para registro -->
+                <div style="margin-bottom: 1rem; padding: 0.85rem; background: var(--bg-body); border: 1px solid var(--border); border-radius: 8px;">
+                    <label style="display: flex; align-items: flex-start; gap: 0.6rem; cursor: pointer; font-size: 0.85rem; color: var(--text-secondary);">
+                        <input type="checkbox" id="accept-privacy-register" required style="margin-top: 0.2rem; flex-shrink: 0; width: 15px; height: 15px; cursor: pointer;">
+                        <span>He leído y acepto los <a href="/pages/terminos.html" target="_blank" style="color: var(--primary);">Términos y Condiciones</a> y la <a href="/pages/privacidad.html" target="_blank" style="color: var(--primary);">Política de Privacidad</a>. *</span>
+                    </label>
+                    <div style="margin-top: 0.6rem; font-size: 0.73rem; color: var(--text-muted); line-height: 1.55;">
+                        <strong style="color: var(--text-main);">Información básica sobre protección de datos:</strong>
+                        Responsable: [Nombre del Titular]. Finalidad: Creación y gestión de tu cuenta de usuario. Legitimación: Consentimiento del interesado (Art. 6.1.a RGPD). Derechos en
+                        <a href="/pages/privacidad.html" style="color: var(--primary);">Pol. de Privacidad</a>.
+                    </div>
+                </div>
 
                 <div id="register-error" class="error-message"
                     style="color: #ef4444; margin-bottom: 1rem; font-size: 0.9rem; display: none;"></div>
