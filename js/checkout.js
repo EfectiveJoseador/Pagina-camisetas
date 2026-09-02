@@ -460,38 +460,78 @@ async function confirmOrder() {
         // Fetch Firebase JWT Token for authentication
         const token = await auth.currentUser.getIdToken();
 
-        const response = await fetch('/api/checkout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': `Bearer ${token}`
-            },
-            body: JSON.stringify({
-                cartItems: cartPayload,
-                addressId: selectedAddressId,
-                paymentMethod,
-                couponId: selectedCoupon ? selectedCoupon.id : null,
-                promoCode: appliedPromoCode ? (appliedPromoCode.code || appliedPromoCode.id || null) : null,
-                // ── Trazabilidad del consentimiento legal (Art. 5.2 RGPD) ──────────────
-                legalConsent: {
-                    termsAccepted: true,
-                    privacyAccepted: true,
-                    acceptedAt: new Date().toISOString(),
-                    legalVersion: '2026.09.01'
-                }
-            })
-        });
+        const checkoutBody = {
+            cartItems: cartPayload,
+            addressId: selectedAddressId,
+            paymentMethod,
+            couponId: selectedCoupon ? selectedCoupon.id : null,
+            promoCode: appliedPromoCode ? (appliedPromoCode.code || appliedPromoCode.id || null) : null,
+            // ── Trazabilidad del consentimiento legal (Art. 5.2 RGPD) ──────────────
+            legalConsent: {
+                termsAccepted: true,
+                privacyAccepted: true,
+                acceptedAt: new Date().toISOString(),
+                legalVersion: '2026.09.01'
+            }
+        };
 
-        const result = await response.json();
+        const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1';
+        const apiEndpoint = isLocal ? 'https://camisetazo.shop/api/checkout' : '/api/checkout';
 
-        if (!response.ok) {
-            // Re-throw in a format the catch block understands
-            const err = new Error(result.message || 'Error interno');
-            err.code = result.code || 'functions/internal';
-            throw err;
+        let orderDataResult = null;
+        let apiError = null;
+
+        try {
+            const response = await fetch(apiEndpoint, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${token}`
+                },
+                body: JSON.stringify(checkoutBody)
+            });
+
+            const text = await response.text();
+            let result = null;
+            try {
+                result = text ? JSON.parse(text) : null;
+            } catch (_) {}
+
+            if (response.ok && result && result.data) {
+                orderDataResult = result.data;
+            } else if (result && result.message) {
+                const err = new Error(result.message);
+                err.code = result.code || 'functions/internal';
+                throw err;
+            } else {
+                throw new Error(result?.message || `Error del servidor (${response.status})`);
+            }
+        } catch (fetchErr) {
+            if (fetchErr.code && fetchErr.code.startsWith('functions/')) {
+                throw fetchErr;
+            }
+            apiError = fetchErr;
         }
 
-        const { orderId, total, paypalLink, orderRecord } = result.data;
+        // Fallback: Si el endpoint REST falló (ej. entorno local sin servidor backend), intentar directamente vía Firebase Cloud Functions
+        if (!orderDataResult) {
+            try {
+                const functions = getFunctions(undefined, 'europe-west1');
+                const processCheckoutTotal = httpsCallable(functions, 'processCheckoutTotal');
+                const callableRes = await processCheckoutTotal(checkoutBody);
+                if (callableRes && callableRes.data) {
+                    orderDataResult = callableRes.data;
+                }
+            } catch (callableErr) {
+                throw apiError || callableErr;
+            }
+        }
+
+        if (!orderDataResult) {
+            throw apiError || new Error('No se pudo procesar el pedido. Por favor, inténtalo de nuevo.');
+        }
+
+        const { orderId, total, paypalLink, orderRecord } = orderDataResult;
 
         // ── Analytics (uses server-returned total, not client-calculated) ──
         if (window.Analytics) {
