@@ -5,7 +5,14 @@
     "bayern munich": "Bayern Munich",
     "aston villa": "Aston Villa",
     "montreal impact": "Montreal Impact",
-    "real betis": "Real Betis"
+    "real betis": "Real Betis",
+    "riyadh victory": "Riyadh Victory",
+    "manchester city": "Manchester City",
+    "al-nassr": "Al-Nassr",
+    "deportivo la coruña": "Deportivo La Coruña",
+    "valencia": "Valencia",
+    "sevilla": "Sevilla",
+    "real sociedad": "Real Sociedad"
   },
   "styles": {
     "kids kit jersey": "[Pendiente traducción: kids kit jersey]",
@@ -18,7 +25,8 @@
     "home player version": "[Pendiente traducción: home player version]",
     "player version jersey": "[Pendiente traducción: player version jersey]",
     "third kids kit": "[Pendiente traducción: third kids kit]",
-    "edition kids kit": "[Pendiente traducción: edition kids kit]"
+    "edition kids kit": "[Pendiente traducción: edition kids kit]",
+    "training kit": "[Pendiente traducción: training kit]"
   },
-  "lastUpdated": "2026-07-20T13:14:10.502Z"
+  "lastUpdated": "2026-09-03T16:56:01.676Z"
 }
