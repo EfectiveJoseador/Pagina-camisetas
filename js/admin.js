@@ -1826,7 +1826,7 @@ async function modifyUserPoints(uid, newValue, type = 'available') {
             points: newValue,
             timestamp: new Date().toISOString(),
             description: `Puntos modificados por admin a ${newValue}`,
-            modifiedBy: auth.currentUser.email
+            modifiedBy: auth.currentUser?.email || 'admin'
         });
 
         showToast('Puntos actualizados correctamente');
@@ -1836,7 +1836,7 @@ async function modifyUserPoints(uid, newValue, type = 'available') {
         }
     } catch (error) {
         console.error('Error modifying points:', error);
-        alert('Error al modificar puntos: ' + error.message);
+        alert('Error al modificar puntos: ' + (error.message || error));
     }
 }
 

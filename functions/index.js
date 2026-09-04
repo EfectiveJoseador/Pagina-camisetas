@@ -432,7 +432,7 @@ exports.processCheckoutTotal = functions.https.onCall(async (data, context) => {
 
                 if (coupon && coupon.used !== true) {
                     const totalQty    = resolvedItems.reduce((s, i) => s + i.quantity, 0);
-                    const isFreeShirt = coupon.type === 'fixed' && Number(coupon.value) === 19.90;
+                    const isFreeShirt = coupon.type === 'fixed' && (Number(coupon.value) === 22.90 || Number(coupon.value) === 19.90);
 
                     if (isFreeShirt && totalQty < 2) {
                         console.log(`[${reqId}] Free shirt coupon skipped: only ${totalQty} item(s)`);
@@ -905,4 +905,67 @@ exports.updateTrustpilotConfig = functions.https.onCall(async (data, context) =>
     await writeAuditLog(context.auth.uid, 'trustpilot_config_updated', newConfig);
 
     return { success: true, config: newConfig };
+});
+
+
+/**
+ * adminModifyPoints — Modifica los puntos de un usuario desde el panel de admin
+ * ────────────────────────────────────────────────────────────────────────────────
+ * Usa el Admin SDK para bypassar las reglas de seguridad del RTDB.
+ * Solo accesible por administradores.
+ */
+exports.adminModifyPoints = functions.https.onCall(async (data, context) => {
+    requireAdmin(context);
+
+    const { targetUid, newValue, type } = data;
+
+    if (!targetUid || typeof targetUid !== 'string') {
+        throw new functions.https.HttpsError('invalid-argument', 'UID de usuario requerido.');
+    }
+
+    const points = parseInt(newValue, 10);
+    if (isNaN(points) || points < 0 || points > 10000) {
+        throw new functions.https.HttpsError('invalid-argument', 'El valor de puntos debe ser un número entre 0 y 10000.');
+    }
+
+    const field = (type === 'pending') ? 'pendingPoints' : 'availablePoints';
+    const db = admin.database();
+
+    try {
+        // Verificar que el usuario existe
+        const userSnap = await db.ref(`users/${targetUid}`).once('value');
+        if (!userSnap.exists()) {
+            throw new functions.https.HttpsError('not-found', 'Usuario no encontrado.');
+        }
+
+        const previousValue = userSnap.val()[field] || 0;
+
+        // Actualizar puntos usando Admin SDK (bypassa reglas de seguridad)
+        await db.ref(`users/${targetUid}/${field}`).set(points);
+
+        // Registrar en el historial del usuario
+        await db.ref(`users/${targetUid}/pointsHistory`).push({
+            type: 'admin_modification',
+            points: points,
+            timestamp: new Date().toISOString(),
+            description: `Puntos modificados por admin a ${points} (antes: ${previousValue})`,
+            modifiedBy: context.auth.token.email || context.auth.uid
+        });
+
+        // Registrar en el audit log
+        await writeAuditLog(context.auth.uid, 'admin_points_modified', {
+            targetUid,
+            field,
+            previousValue,
+            newValue: points,
+            modifiedBy: context.auth.token.email
+        });
+
+        return { success: true, field, newValue: points };
+
+    } catch (error) {
+        if (error instanceof functions.https.HttpsError) throw error;
+        console.error('[adminModifyPoints]', error.message);
+        throw new functions.https.HttpsError('internal', 'Error al modificar los puntos: ' + error.message);
+    }
 });

@@ -18,12 +18,15 @@
                     ".validate": "newData.isString()"
                 },
                 "pendingPoints": {
+                    ".write": "auth.token.admin === true || $uid === auth.uid",
                     ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000"
                 },
                 "availablePoints": {
+                    ".write": "auth.token.admin === true || $uid === auth.uid",
                     ".validate": "newData.isNumber() && newData.val() >= 0 && newData.val() <= 10000"
                 },
                 "pointsHistory": {
+                    ".write": "auth.token.admin === true || $uid === auth.uid",
                     "$historyId": {
                         ".validate": "newData.hasChildren(['type', 'points', 'timestamp'])",
                         "type": {
