@@ -6,7 +6,7 @@ const MAX_POINTS_PER_TRANSACTION = 1000;
 const REWARDS = [
     { id: 'discount_10', name: '10% Descuento',    type: 'percentage', value: 10,    cost: 30,  description: '10% de descuento en tu próxima compra' },
     { id: 'discount_15', name: '15% Descuento',    type: 'percentage', value: 15,    cost: 60,  description: '15% de descuento en tu próxima compra' },
-    { id: 'free_shirt',  name: 'Camiseta Gratis',  type: 'fixed',      value: 22.90, cost: 100, description: 'Camiseta gratis (22,90€). Debe ir con otro pedido de pago. Extras aparte.' }
+    { id: 'free_shirt',  name: 'Camiseta Gratis',  type: 'fixed',      value: 22.90, cost: 120, description: 'Camiseta gratis (22,90€). Debe ir con otro pedido de pago. Extras aparte.' }
 ];
 
 
