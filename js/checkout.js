@@ -989,7 +989,7 @@ function applyCouponDiscount() {
             }
 
             // ── RESTRICCIÓN: Camiseta Gratis solo con 2+ artículos ──────
-            const isFreeShirtCoupon = coupon.type === 'fixed' && Number(coupon.value) === 19.90;
+            const isFreeShirtCoupon = (coupon.type === 'fixed' && (Number(coupon.value) === 22.90 || Number(coupon.value) === 19.90)) || coupon.rewardName === 'Camiseta Gratis';
             if (isFreeShirtCoupon && getTotalCartItems() <= 1) {
                 setCouponError('Este cupón solo es válido para pedidos de 2 o más camisetas');
                 if (couponSelect) couponSelect.value = '';
@@ -1022,7 +1022,7 @@ function applyCouponDiscount() {
 // Se llama cada vez que se actualice la cantidad de artículos.
 export function revalidateCouponAfterCartChange() {
     if (!selectedCoupon) return;
-    const isFreeShirtCoupon = selectedCoupon.type === 'fixed' && Number(selectedCoupon.value) === 19.90;
+    const isFreeShirtCoupon = (selectedCoupon.type === 'fixed' && (Number(selectedCoupon.value) === 22.90 || Number(selectedCoupon.value) === 19.90)) || selectedCoupon.rewardName === 'Camiseta Gratis';
     if (isFreeShirtCoupon && getTotalCartItems() <= 1) {
         // Eliminar el cupón aplicado silenciosamente y avisar
         selectedCoupon = null;
