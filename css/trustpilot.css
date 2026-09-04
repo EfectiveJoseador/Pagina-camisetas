@@ -428,7 +428,11 @@
         text-align: center;
         line-height: 1.2;
     }
-    .tp-card { padding: 1.5rem 1.25rem; }
-    .tp-card-score { font-size: 2rem; }
+    .tp-card { 
+        padding: 1.1rem 0.75rem 1rem; 
+        min-height: auto; 
+    }
+    .tp-card-score { font-size: 1.7rem; }
+    .tp-card-stars svg { width: 15px; height: 15px; }
     .ann-slide { font-size: 0.76rem; padding: 0 0.5rem; text-align: center; justify-content: center; }
 }
