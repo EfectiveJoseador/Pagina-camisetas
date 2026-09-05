@@ -15014,7 +15014,7 @@ const products = [
     },
     {
         "id": 937801,
-        "name": "Córdoba 2026/27 Visitante",
+        "name": "Córdoba CF 2026/27 Visitante",
         "slug": "cordoba-cf-202627-visitante",
         "category": "futbol",
         "league": "laliga",
@@ -15026,7 +15026,7 @@ const products = [
         "tipo": "visitante",
         "price": 22.9,
         "oldPrice": 30,
-        "sku": "5256"
+        "sku": "1807"
     },
     {
         "id": 330717,
@@ -15091,6 +15091,423 @@ const products = [
         "price": 22.9,
         "oldPrice": 30,
         "sku": "2198"
+    },
+    {
+        "id": 411722,
+        "name": "Dortmund 2026/27 Local (Niño)",
+        "slug": "dortmund-202627-local-nino",
+        "category": "futbol",
+        "league": "bundesliga",
+        "image": "/assets/productos/Yupoo/411722/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/411722/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "6671"
+    },
+    {
+        "id": 446949,
+        "name": "Tottenham 2026/27 Visitante (Niño)",
+        "slug": "tottenham-202627-visitante-nino",
+        "category": "futbol",
+        "league": "premier",
+        "image": "/assets/productos/Yupoo/446949/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/446949/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "7867"
+    },
+    {
+        "id": 949518,
+        "name": "Manchester United 2026/27 Visitante",
+        "slug": "manchester-united-202627-visitante",
+        "category": "futbol",
+        "league": "premier",
+        "image": "/assets/productos/Yupoo/949518/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/949518/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "7808"
+    },
+    {
+        "id": 110105,
+        "name": "Al-Nassr 2026/27 Visitante",
+        "slug": "al-nassr-202627-visitante",
+        "category": "futbol",
+        "league": "ligaarabe",
+        "image": "/assets/productos/Yupoo/110105/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/110105/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "8598"
+    },
+    {
+        "id": 992383,
+        "name": "Boca Juniors 2026/27 Local",
+        "slug": "boca-juniors-202627-local",
+        "category": "futbol",
+        "league": "saf",
+        "image": "/assets/productos/Yupoo/992383/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/992383/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "2731"
+    },
+    {
+        "id": 433198,
+        "name": "PSG 2021 BALMAIN Retro",
+        "slug": "psg-2021-entrenamiento-retro",
+        "category": "futbol",
+        "league": "ligue1",
+        "image": "/assets/productos/Yupoo/433198/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/433198/2.webp"
+        ],
+        "temporada": "2021",
+        "tipo": "entrenamiento",
+        "retro": true,
+        "price": 27.9,
+        "oldPrice": 35,
+        "sku": "8146"
+    },
+    {
+        "id": 625651,
+        "name": "PSG 2021 BALMAIN Retro",
+        "slug": "psg-2021-entrenamiento-retro",
+        "category": "futbol",
+        "league": "ligue1",
+        "image": "/assets/productos/Yupoo/625651/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/625651/2.webp"
+        ],
+        "temporada": "2021",
+        "tipo": "entrenamiento",
+        "retro": true,
+        "price": 27.9,
+        "oldPrice": 35,
+        "sku": "6616"
+    },
+    {
+        "id": 914524,
+        "name": "Monaco 2026/27 Local",
+        "slug": "monaco-202627-local",
+        "category": "futbol",
+        "league": "ligue1",
+        "image": "/assets/productos/Yupoo/914524/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/914524/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "5475"
+    },
+    {
+        "id": 727097,
+        "name": "Monaco 2026/27 Visitante",
+        "slug": "monaco-202627-visitante",
+        "category": "futbol",
+        "league": "ligue1",
+        "image": "/assets/productos/Yupoo/727097/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/727097/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "5335"
+    },
+    {
+        "id": 730521,
+        "name": "Málaga CF 2026/27 Tercera",
+        "slug": "malaga-cf-202627-tercera",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/730521/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/730521/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "tercera",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "7333"
+    },
+    {
+        "id": 662627,
+        "name": "Granada 2026/27 Local (Niño)",
+        "slug": "granada-202627-local-nino",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/662627/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/662627/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "5156"
+    },
+    {
+        "id": 652545,
+        "name": "Girona 2026/27 Local (Niño)",
+        "slug": "girona-202627-local-nino",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/652545/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/652545/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "2392"
+    },
+    {
+        "id": 491441,
+        "name": "Leicester City 2026/27 Local (Niño)",
+        "slug": "leicester-city-202627-local-nino",
+        "category": "futbol",
+        "league": "premier",
+        "image": "/assets/productos/Yupoo/491441/2.webp",
+        "images": [
+            "/assets/productos/Yupoo/491441/1.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "1758"
+    },
+    {
+        "id": 653025,
+        "name": "Miami 2026/27 Tercera (Niño)",
+        "slug": "miami-202627-tercera-nino",
+        "category": "futbol",
+        "league": "seriea",
+        "image": "/assets/productos/Yupoo/653025/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/653025/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "tercera",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "7100"
+    },
+    {
+        "id": 975622,
+        "name": "Benfica 2026/27 Tercera (Niño)",
+        "slug": "benfica-202627-tercera-nino",
+        "category": "futbol",
+        "league": "ligaportugal",
+        "image": "/assets/productos/Yupoo/975622/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/975622/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "tercera",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "8304"
+    },
+    {
+        "id": 342158,
+        "name": "Benfica 2026/27 Visitante (Niño)",
+        "slug": "benfica-202627-visitante-nino",
+        "category": "futbol",
+        "league": "ligaportugal",
+        "image": "/assets/productos/Yupoo/342158/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/342158/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "5040"
+    },
+    {
+        "id": 837663,
+        "name": "FC Barcelona 2026/27 (Niño)",
+        "slug": "fc-barcelona-202627-nino",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/837663/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/837663/2.webp"
+        ],
+        "temporada": "2026/27",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "6497"
+    },
+    {
+        "id": 617537,
+        "name": "España 2026 Especial (Niño)",
+        "slug": "espana-2026-especial-nino",
+        "category": "futbol",
+        "league": "selecciones",
+        "image": "/assets/productos/Yupoo/617537/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/617537/2.webp"
+        ],
+        "temporada": "2026",
+        "tipo": "especial",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "8473"
+    },
+    {
+        "id": 385083,
+        "name": "Bayern Munich 2026/27 Visitante (Niño)",
+        "slug": "bayern-munich-202627-visitante-nino",
+        "category": "futbol",
+        "league": "bundesliga",
+        "image": "/assets/productos/Yupoo/385083/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/385083/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "8593"
+    },
+    {
+        "id": 532582,
+        "name": "Manchester City 2026/27 Visitante (Niño)",
+        "slug": "manchester-city-202627-visitante-nino",
+        "category": "futbol",
+        "league": "premier",
+        "image": "/assets/productos/Yupoo/532582/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/532582/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "4196"
+    },
+    {
+        "id": 902716,
+        "name": "Arsenal 2026/27 Tercera",
+        "slug": "arsenal-202627-tercera",
+        "category": "futbol",
+        "league": "premier",
+        "image": "/assets/productos/Yupoo/902716/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/902716/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "tercera",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "7944"
+    },
+    {
+        "id": 709398,
+        "name": "Osasuna 2026/27 Visitante (Niño)",
+        "slug": "osasuna-202627-visitante-nino",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/709398/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/709398/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "2933"
+    },
+    {
+        "id": 440110,
+        "name": "Celta de Vigo 2026/27 Visitante (Niño)",
+        "slug": "celta-de-vigo-202627-visitante-nino",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/440110/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/440110/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "8878"
+    },
+    {
+        "id": 753500,
+        "name": "Mallorca 2026/27 Local (Niño)",
+        "slug": "mallorca-202627-local-nino",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/753500/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/753500/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "local",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "6765"
+    },
+    {
+        "id": 555011,
+        "name": "Mallorca 2026/27 Visitante (Niño)",
+        "slug": "mallorca-202627-visitante-nino",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/555011/2.webp",
+        "images": [
+            "/assets/productos/Yupoo/555011/1.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "3924"
     }
 ];
 

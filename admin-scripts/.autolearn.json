@@ -12,7 +12,9 @@
     "deportivo la coruña": "Deportivo La Coruña",
     "valencia": "Valencia",
     "sevilla": "Sevilla",
-    "real sociedad": "Real Sociedad"
+    "real sociedad": "Real Sociedad",
+    "tottenham": "Tottenham",
+    "al nassr": "Al Nassr"
   },
   "styles": {
     "kids kit jersey": "[Pendiente traducción: kids kit jersey]",
@@ -26,7 +28,8 @@
     "player version jersey": "[Pendiente traducción: player version jersey]",
     "third kids kit": "[Pendiente traducción: third kids kit]",
     "edition kids kit": "[Pendiente traducción: edition kids kit]",
-    "training kit": "[Pendiente traducción: training kit]"
+    "training kit": "[Pendiente traducción: training kit]",
+    "third player version": "[Pendiente traducción: third player version]"
   },
-  "lastUpdated": "2026-09-03T16:56:01.676Z"
+  "lastUpdated": "2026-09-05T22:08:45.978Z"
 }
