@@ -294,6 +294,13 @@ exports.processCheckoutTotal = functions.https.onCall(async (data, context) => {
             
             // 1. Recargo por Talla
             const size = (cust.size || '').toUpperCase();
+            const isRetro = productData.retro === true || (productData.name || '').toLowerCase().includes('retro') || productData.league === 'retro' || productData.category === 'retro';
+            if (isRetro && (size === '3XL' || size === '4XL')) {
+                throw new functions.https.HttpsError(
+                    'invalid-argument',
+                    `Las tallas 3XL y 4XL no están disponibles para camisetas retro (${productData.name}).`
+                );
+            }
             if (size === '3XL' || size === '4XL') {
                 itemSurcharges += 4;
             } else if (size === '2XL') {

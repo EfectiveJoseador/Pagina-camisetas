@@ -13722,22 +13722,6 @@ const products = [
         "sku": "5104"
     },
     {
-        "id": 797521,
-        "name": "Espanyol 26/27 Local",
-        "slug": "espanyol-2627-local",
-        "category": "futbol",
-        "league": "laliga",
-        "image": "/assets/productos/Yupoo/797521/1.webp",
-        "images": [
-            "/assets/productos/Yupoo/797521/2.webp"
-        ],
-        "temporada": "26/27",
-        "tipo": "local",
-        "price": 22.9,
-        "oldPrice": 29,
-        "sku": "1652"
-    },
-    {
         "id": 521788,
         "name": "España 'Somos Campeones' (Blanca 1)",
         "slug": "espana-somos-campeones-blanca-1",

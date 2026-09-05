@@ -763,18 +763,21 @@ function _qdApplyVersionSize() {
     if (!_qdDrawer) return;
     const versionSel = _qdDrawer.querySelector('#qad-version');
     const sizeSel    = _qdDrawer.querySelector('#qad-size');
-    if (!versionSel || !sizeSel) return;
+    if (!sizeSel) return;
 
-    const isJugador = versionSel.value === 'jugador';
+    const isRetro = _qdProduct && getProductType(_qdProduct) === 'retro';
+    const isJugador = versionSel && versionSel.value === 'jugador';
     ['3XL', '4XL'].forEach(sz => {
         const opt = sizeSel.querySelector(`option[value="${sz}"]`);
         if (!opt) return;
-        opt.disabled = isJugador;
-        opt.hidden   = isJugador;
+        opt.disabled = isJugador || isRetro;
+        opt.hidden   = isJugador || isRetro;
     });
-    if (isJugador && ['3XL', '4XL'].includes(sizeSel.value)) {
+    if ((isJugador || isRetro) && ['3XL', '4XL'].includes(sizeSel.value)) {
         sizeSel.value = 'XL';
-        if (window.Toast) window.Toast.error('La talla 3XL/4XL no está disponible en Versión Jugador');
+        if (window.Toast) {
+            window.Toast.error(isRetro ? 'Las tallas 3XL y 4XL no están disponibles para camisetas retro' : 'La talla 3XL/4XL no está disponible en Versión Jugador');
+        }
     }
     _updateTotal();
 }
@@ -826,6 +829,11 @@ function _handleDrawerSubmit() {
             sizeField.style.boxShadow   = '';
         }, 1200);
         if (window.Toast) window.Toast.error('Por favor, selecciona una talla');
+        return;
+    }
+
+    if (getProductType(_qdProduct) === 'retro' && ['3XL', '4XL'].includes(size)) {
+        if (window.Toast) window.Toast.error('Las tallas 3XL y 4XL no están disponibles para camisetas retro');
         return;
     }
 
@@ -1821,12 +1829,13 @@ function openCustomizationModal(productId) {
     document.body.style.overflow = 'hidden';
 }
 function getProductType(product) {
-    const nameLower = product.name.toLowerCase();
+    if (!product) return 'normal';
+    const nameLower = (product.name || '').toLowerCase();
     const imageLower = (product.image || '').toLowerCase();
     if (nameLower.includes('campeones')) return 'champions';
     if (product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids')) return 'kids';
     if (product.category === 'nba' || product.league === 'nba') return 'nba';
-    if (product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro') return 'retro';
+    if (product.retro === true || nameLower.includes('retro') || product.league === 'retro' || product.category === 'retro') return 'retro';
     return 'normal';
 }
 function populateSizeOptions() {

@@ -424,6 +424,16 @@ async function confirmOrder() {
         return;
     }
 
+    const invalidRetroItem = Cart.items.find(item => {
+        const size = (item.customization?.size || item.size || '').toUpperCase();
+        const isRetro = item.retro === true || (item.name || '').toLowerCase().includes('retro') || item.league === 'retro' || item.category === 'retro';
+        return isRetro && (size === '3XL' || size === '4XL');
+    });
+    if (invalidRetroItem) {
+        alert(`La camiseta retro "${invalidRetroItem.name}" no está disponible en talla 3XL o 4XL. Por favor, edita o elimina este producto del carrito antes de continuar.`);
+        return;
+    }
+
     // ── Validación de aceptación legal (RGPD + LGDCU) ──────────────────────
     const legalCheckbox = document.getElementById('accept-legal-checkout');
     const legalError = document.getElementById('legal-accept-error');

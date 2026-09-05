@@ -337,6 +337,11 @@ document.addEventListener('DOMContentLoaded', () => {
             || _nameLower.includes('kids')
             || _imgLower.includes('kids');
 
+        const _isRetro = product.retro === true
+            || _nameLower.includes('retro')
+            || product.league === 'retro'
+            || product.category === 'retro';
+
         if (_isKids) {
             sizeSelect.innerHTML = '<option value="" disabled selected>— Elige la talla —</option>';
             for (let t = 16; t <= 28; t += 2) {
@@ -345,6 +350,11 @@ document.addEventListener('DOMContentLoaded', () => {
                 opt.textContent = String(t);
                 sizeSelect.appendChild(opt);
             }
+        } else if (_isRetro) {
+            ['3XL', '4XL'].forEach(sz => {
+                const opt = sizeSelect.querySelector(`option[value="${sz}"]`);
+                if (opt) opt.remove();
+            });
         } else if (_nameLower.includes('campeones')) {
             const option4xl = sizeSelect.querySelector('option[value="4XL"]');
             if (option4xl) option4xl.remove();
@@ -470,7 +480,7 @@ function isRestrictedCategory() {
     const nameLower = product.name.toLowerCase();
     const imageLower = (product.image || '').toLowerCase();
     const isKids = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
-    const isRetro = product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro';
+    const isRetro = product.retro === true || product.name.toLowerCase().includes('retro') || product.league === 'retro' || product.category === 'retro';
     const isNBA = product.category === 'nba' || product.league === 'nba';
 
     return {
@@ -533,7 +543,7 @@ function applyProductRestrictions() {
     const nameInput = document.getElementById('name-input');
     const nameLabel = nameInput?.previousElementSibling;
 
-    // Tallas infantiles: sustituir el desplegable cuando el producto es de niño
+    // Tallas infantiles / retro: sustituir o restringir tallas
     const sizeSelect = document.getElementById('size-select');
     if (isKids && sizeSelect) {
         sizeSelect.innerHTML = '<option value="" disabled selected>— Elige la talla —</option>';
@@ -542,6 +552,15 @@ function applyProductRestrictions() {
             opt.value = String(t);
             opt.textContent = String(t);
             sizeSelect.appendChild(opt);
+        }
+    } else if (isRetro && sizeSelect) {
+        ['3XL', '4XL'].forEach(sz => {
+            const opt = sizeSelect.querySelector(`option[value="${sz}"]`);
+            if (opt) opt.remove();
+        });
+        if (['3XL', '4XL'].includes(sizeSelect.value) || ['3XL', '4XL'].includes(selectedSize)) {
+            sizeSelect.value = '';
+            selectedSize = '';
         }
     }
 
@@ -784,13 +803,14 @@ function applyPlayerVersionSizeRestriction() {
     const sizeSelect = document.getElementById('size-select');
     if (!versionSelect || !sizeSelect) return;
 
+    const { isRetro } = isRestrictedCategory();
     const isJugador = versionSelect.value === 'jugador';
     const RESTRICTED = ['3XL', '4XL'];
 
     RESTRICTED.forEach(size => {
         const opt = sizeSelect.querySelector(`option[value="${size}"]`);
         if (!opt) return;
-        if (isJugador) {
+        if (isJugador || isRetro) {
             opt.disabled = true;
             opt.hidden = true;
         } else {
@@ -800,11 +820,15 @@ function applyPlayerVersionSizeRestriction() {
     });
 
     // Si la talla actualmente seleccionada ya no está disponible, resetear
-    if (isJugador && RESTRICTED.includes(sizeSelect.value)) {
+    if ((isJugador || isRetro) && RESTRICTED.includes(sizeSelect.value)) {
         sizeSelect.value = '';
         selectedSize = '';
         if (window.Toast) {
-            window.Toast.error('La talla 3XL/4XL no está disponible en Versión Jugador');
+            if (isRetro) {
+                window.Toast.error('Las tallas 3XL y 4XL no están disponibles para camisetas retro');
+            } else {
+                window.Toast.error('La talla 3XL/4XL no está disponible en Versión Jugador');
+            }
         }
     }
 }
@@ -878,6 +902,16 @@ function addToCart() {
             window.Toast.error('Por favor, selecciona una talla antes de continuar');
         } else {
             alert('Por favor, selecciona una talla antes de continuar');
+        }
+        return;
+    }
+
+    const { isRetro } = isRestrictedCategory();
+    if (isRetro && (selectedSize === '3XL' || selectedSize === '4XL')) {
+        if (window.Toast) {
+            window.Toast.error('Las tallas 3XL y 4XL no están disponibles para camisetas retro');
+        } else {
+            alert('Las tallas 3XL y 4XL no están disponibles para camisetas retro');
         }
         return;
     }
@@ -1547,11 +1581,12 @@ const SIZE_GUIDE_IMAGES = {
 
 function getProductType() {
     if (!product) return 'normal';
-    const nameLower = product.name.toLowerCase();
+    const nameLower = (product.name || '').toLowerCase();
     const imageLower = (product.image || '').toLowerCase();
+    if (nameLower.includes('campeones')) return 'champions';
     if (product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids')) return 'kids';
     if (product.category === 'nba' || product.league === 'nba') return 'nba';
-    if (nameLower.includes('campeones')) return 'champions';
+    if (product.retro === true || nameLower.includes('retro') || product.league === 'retro' || product.category === 'retro') return 'retro';
     return 'normal';
 }
 

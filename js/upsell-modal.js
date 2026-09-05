@@ -28,10 +28,11 @@ function getMiniImagePath(imagePath) {
 }
 
 function getProductType(product) {
-    const nameLower = product.name.toLowerCase();
+    if (!product) return 'normal';
+    const nameLower = (product.name || '').toLowerCase();
     const imageLower = (product.image || '').toLowerCase();
     const isKids = product.kids === true || nameLower.includes('kids') || nameLower.includes('niño') || nameLower.includes('niños') || imageLower.includes('kids');
-    const isRetro = product.retro === true || nameLower.includes('retro') || product.league === 'retro';
+    const isRetro = product.retro === true || nameLower.includes('retro') || product.league === 'retro' || product.category === 'retro';
     const isNBA = product.category === 'nba' || product.league === 'nba';
 
     if (nameLower.includes('campeones')) return 'champions';
@@ -187,6 +188,12 @@ export function updatePackPromoMessage() {
 // addToCartDirectly — adds a recommended product and refreshes the modal
 // ---------------------------------------------------------------------------
 function addToCartDirectly(product, size, btnElement, pendingCustom = null) {
+    const isRetro = getProductType(product) === 'retro';
+    if (isRetro && (size === '3XL' || size === '4XL')) {
+        if (window.Toast) window.Toast.error('Las tallas 3XL y 4XL no están disponibles para camisetas retro');
+        return;
+    }
+
     const prices = getProductPrices(product);
     const sizeSurcharge = UPSELL_SIZE_SURCHARGES[size] || 0;
 

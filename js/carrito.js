@@ -647,12 +647,14 @@ const Cart = {
 // Mirrors the validation and pricing logic from producto.js exactly.
 // ---------------------------------------------------------------------------
 function getCartItemTypeName(item) {
+    if (!item) return 'normal';
     const n   = (item.name  || '').toLowerCase();
     const img = (item.image || '').toLowerCase();
+    const productData = (typeof products !== 'undefined' && Array.isArray(products)) ? products.find(p => p.id === item.id) : null;
     if (n.includes('campeones')) return 'champions';
-    if (n.includes('kids') || n.includes('niño') || n.includes('niños') || img.includes('kids')) return 'kids';
-    if (n.includes('retro')) return 'retro';
-    if (n.includes('nba')   || img.includes('nba')) return 'nba';
+    if (item.kids === true || productData?.kids === true || n.includes('kids') || n.includes('niño') || n.includes('niños') || img.includes('kids')) return 'kids';
+    if (item.retro === true || productData?.retro === true || n.includes('retro') || item.league === 'retro' || productData?.league === 'retro' || item.category === 'retro' || productData?.category === 'retro') return 'retro';
+    if (item.category === 'nba' || productData?.category === 'nba' || item.league === 'nba' || productData?.league === 'nba' || n.includes('nba') || img.includes('nba')) return 'nba';
     return 'normal';
 }
 
@@ -962,6 +964,11 @@ function openCartItemEditModal(cartIndex, cartRef) {
             patchExtraPrice: pState.patchExtraPrice,
             extras:  []
         };
+
+        if (isRetro && ['3XL', '4XL'].includes(newCustom.size)) {
+            if (window.Toast) window.Toast.error('Las tallas 3XL y 4XL no están disponibles para camisetas retro');
+            return;
+        }
 
         const newPrice = calcEditPrice(basePrice, newCustom, isEspana26);
 
