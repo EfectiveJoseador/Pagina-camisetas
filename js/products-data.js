@@ -15059,6 +15059,38 @@ const products = [
         "price": 22.9,
         "oldPrice": 30,
         "sku": "3400"
+    },
+    {
+        "id": 885859,
+        "name": "Espanyol 2026/27 Tercera",
+        "slug": "espanyol-202627-tercera",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/885859/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/885859/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "tercera",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "4603"
+    },
+    {
+        "id": 378049,
+        "name": "Espanyol 2026/27 Visitante",
+        "slug": "espanyol-202627-visitante",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/378049/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/378049/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "2198"
     }
 ];
 
