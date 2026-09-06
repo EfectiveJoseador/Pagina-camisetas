@@ -242,6 +242,9 @@ exports.processCheckoutTotal = functions.https.onCall(async (data, context) => {
             throw new functions.https.HttpsError('not-found', 'Dirección no encontrada. Por favor, selecciona una dirección válida.');
         }
         const shippingAddress = addrSnap.val();
+        if (!shippingAddress || !shippingAddress.city || !shippingAddress.province || !shippingAddress.street || !shippingAddress.zip) {
+            throw new functions.https.HttpsError('invalid-argument', 'La dirección de envío seleccionada está incompleta (falta calle, código postal, ciudad o provincia).');
+        }
         console.log(`[${reqId}] Address OK`);
 
         // ── 3. Fetch REAL prices from database ────────────────────────────────

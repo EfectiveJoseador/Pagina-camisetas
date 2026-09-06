@@ -93,32 +93,32 @@
                 <div id="new-address-form-container" style="display: none;" class="checkout-section">
                     <h3 style="margin-bottom: 1rem;">Nueva Dirección</h3>
 
-                    <form id="new-address-form">
+                    <form id="new-address-form" autocomplete="on">
                         <div class="form-group">
                             <label>Nombre Completo</label>
-                            <input type="text" id="new-address-name" required placeholder="Juan Pérez">
+                            <input type="text" id="new-address-name" name="name" autocomplete="shipping name" required placeholder="Juan Pérez">
                         </div>
 
                         <div class="form-group">
                             <label>Dirección</label>
-                            <input type="text" id="new-address-street" required placeholder="Calle Principal 123, 4ºA">
+                            <input type="text" id="new-address-street" name="address" autocomplete="shipping address-line1" required placeholder="Calle Principal 123, 4ºA">
                         </div>
 
                         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                             <div class="form-group">
                                 <label>Ciudad</label>
-                                <input type="text" id="new-address-city" required placeholder="Madrid">
+                                <input type="text" id="new-address-city" name="city" autocomplete="shipping address-level2" required placeholder="Ej: Alcalá de Henares, Marbella...">
                             </div>
                             <div class="form-group" style="position: relative;">
                                 <label>Código Postal</label>
-                                <input type="text" id="new-address-zip" required placeholder="28001">
+                                <input type="text" id="new-address-zip" name="postal-code" autocomplete="shipping postal-code" maxlength="5" required placeholder="28001">
                                 <div id="zip-spinner" class="zip-loader hidden"><i class="fas fa-spinner fa-spin"></i></div>
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label>Provincia <span style="color: #ef4444;">*</span></label>
-                            <select id="new-address-province" required
+                            <select id="new-address-province" name="province" autocomplete="shipping address-level1" required
                                 style="width: 100%; padding: 0.8rem; border: 1px solid var(--border); border-radius: var(--radius-sm); background: var(--bg-body); color: var(--text-main); font-size: 1rem;">
                                 <option value="">Selecciona una provincia</option>
                                 <option value="A Coruña">A Coruña</option>
@@ -178,7 +178,7 @@
 
                         <div class="form-group">
                             <label>Teléfono <span style="color: #ef4444;">*</span></label>
-                            <input type="tel" id="new-address-phone" required placeholder="+34 600 000 000">
+                            <input type="tel" id="new-address-phone" name="tel" autocomplete="shipping tel" required placeholder="+34 600 000 000">
                         </div>
 
                         <div style="display: flex; gap: 1rem; margin-top: 1rem;">

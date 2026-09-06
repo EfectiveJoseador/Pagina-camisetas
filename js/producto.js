@@ -107,6 +107,8 @@ document.addEventListener('DOMContentLoaded', () => {
             const pEl = document.getElementById('product-price');
             if (pEl) pEl.textContent = `€${product.price.toFixed(2)}`;
             if (typeof updateSummary === 'function') updateSummary();
+            applyProductRestrictions();
+            updatePreview();
         }
     }).catch(e => {
         console.warn("Background Firebase product sync error:", e);
@@ -390,7 +392,10 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.getElementById('name-input').addEventListener('input', handleNameInput);
     document.getElementById('number-input').addEventListener('input', handleDorsalInput);
-    document.getElementById('patch-input').addEventListener('input', updatePreview);
+    if (!(product && product.customPatches === 'espana26')) {
+        const patchInputEl = document.getElementById('patch-input');
+        if (patchInputEl) patchInputEl.addEventListener('input', updatePreview);
+    }
     document.getElementById('add-to-cart-btn').addEventListener('click', addToCart);
     loadRelatedProducts();
     applyProductRestrictions();
@@ -678,8 +683,10 @@ function applyProductRestrictions() {
     if (product && product.allowPatches === false) {
         const patchGroup = document.getElementById('normal-patch-group');
         if (patchGroup) patchGroup.style.display = 'none';
-        const customPatchGroup = document.getElementById('custom-patches-container');
-        if (customPatchGroup) customPatchGroup.style.display = 'none';
+        if (product.customPatches !== 'espana26') {
+            const customPatchGroup = document.getElementById('custom-patches-container');
+            if (customPatchGroup) customPatchGroup.style.display = 'none';
+        }
     }
 }
 function handleNameInput(e) {

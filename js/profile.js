@@ -693,13 +693,25 @@ async function saveAddress(e) {
     if (!currentUser) return;
 
     const instaInput = document.getElementById('address-instagram');
+    const name = document.getElementById('address-name').value.trim();
+    const street = document.getElementById('address-street').value.trim();
+    const city = document.getElementById('address-city').value.trim();
+    const zip = document.getElementById('address-zip').value.trim();
+    const province = document.getElementById('address-province').value.trim();
+    const phone = document.getElementById('address-phone').value.trim();
+
+    if (!name || !street || !city || !zip || !province || !phone) {
+        alert('Por favor, completa todos los campos requeridos de la dirección (calle, código postal, ciudad y provincia).');
+        return;
+    }
+
     const addressData = {
-        name: document.getElementById('address-name').value.trim(),
-        street: document.getElementById('address-street').value.trim(),
-        city: document.getElementById('address-city').value.trim(),
-        zip: document.getElementById('address-zip').value.trim(),
-        province: document.getElementById('address-province').value,
-        phone: document.getElementById('address-phone').value.trim(),
+        name,
+        street,
+        city,
+        zip,
+        province,
+        phone,
         instagram: instaInput ? instaInput.value.trim() : ''
     };
 
@@ -1148,13 +1160,32 @@ async function handleOrderAddressSubmit(e) {
     submitBtn.disabled = true;
     submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Guardando...';
     const orderInsta = document.getElementById('order-address-instagram');
+    const name = document.getElementById('order-address-name').value.trim();
+    const street = document.getElementById('order-address-street').value.trim();
+    const city = document.getElementById('order-address-city').value.trim();
+    const zip = document.getElementById('order-address-zip').value.trim();
+    const province = document.getElementById('order-address-province').value.trim();
+    const phone = document.getElementById('order-address-phone').value.trim();
+
+    if (!name || !street || !city || !zip || !province || !phone) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+        if (errorEl) {
+            errorEl.textContent = 'Por favor, completa todos los campos de la dirección (calle, código postal, ciudad y provincia).';
+            errorEl.style.display = 'block';
+        } else {
+            alert('Por favor, completa todos los campos de la dirección.');
+        }
+        return;
+    }
+
     const newAddress = {
-        name: document.getElementById('order-address-name').value.trim(),
-        street: document.getElementById('order-address-street').value.trim(),
-        city: document.getElementById('order-address-city').value.trim(),
-        zip: document.getElementById('order-address-zip').value.trim(),
-        province: document.getElementById('order-address-province').value,
-        phone: document.getElementById('order-address-phone').value.trim(),
+        name,
+        street,
+        city,
+        zip,
+        province,
+        phone,
         instagram: orderInsta ? orderInsta.value.trim() : ''
     };
 

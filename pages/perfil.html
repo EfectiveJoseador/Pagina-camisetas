@@ -243,33 +243,33 @@
                 <i class="fas fa-times"></i>
             </button>
             <h2 id="address-modal-title" style="margin-bottom: 1.5rem;">Añadir Dirección</h2>
-            <form id="address-form">
+            <form id="address-form" autocomplete="on">
                 <input type="hidden" id="address-id">
                 <div class="form-group" style="margin-bottom: 1rem;">
                     <label>Nombre Completo</label>
-                    <input type="text" id="address-name" required placeholder="Ej: Juan Pérez"
+                    <input type="text" id="address-name" name="name" autocomplete="shipping name" required placeholder="Ej: Juan Pérez"
                         style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-input, #f9fafb); color: var(--text-main);">
                 </div>
                 <div class="form-group" style="margin-bottom: 1rem;">
                     <label>Dirección</label>
-                    <input type="text" id="address-street" required placeholder="Ej: Calle Principal 123, 4ºA"
+                    <input type="text" id="address-street" name="address" autocomplete="shipping address-line1" required placeholder="Ej: Calle Principal 123, 4ºA"
                         style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-input, #f9fafb); color: var(--text-main);">
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                     <div class="form-group">
                         <label>Ciudad</label>
-                        <input type="text" id="address-city" required placeholder="Ej: Madrid"
+                        <input type="text" id="address-city" name="city" autocomplete="shipping address-level2" required placeholder="Ej: Alcalá de Henares, Marbella..."
                             style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-input, #f9fafb); color: var(--text-main);">
                     </div>
                     <div class="form-group">
                         <label>Código Postal</label>
-                        <input type="text" id="address-zip" required placeholder="Ej: 28001"
+                        <input type="text" id="address-zip" name="postal-code" autocomplete="shipping postal-code" maxlength="5" required placeholder="Ej: 28001"
                             style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-input, #f9fafb); color: var(--text-main);">
                     </div>
                 </div>
                 <div class="form-group" style="margin-bottom: 1rem;">
                     <label>Provincia <span style="color: #ef4444;">*</span></label>
-                    <select id="address-province" required
+                    <select id="address-province" name="province" autocomplete="shipping address-level1" required
                         style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-input, #f9fafb); color: var(--text-main);">
                         <option value="">Selecciona una provincia</option>
                         <option value="A Coruña">A Coruña</option>
@@ -328,7 +328,7 @@
                 </div>
                 <div class="form-group" style="margin-bottom: 1.5rem;">
                     <label>Teléfono <span style="color: #ef4444;">*</span></label>
-                    <input type="tel" id="address-phone" required placeholder="Ej: +34 600 000 000"
+                    <input type="tel" id="address-phone" name="tel" autocomplete="shipping tel" required placeholder="Ej: +34 600 000 000"
                         style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-input, #f9fafb); color: var(--text-main);">
                 </div>
                 <div style="display: flex; gap: 1rem; margin-top: 0.5rem;">
@@ -418,33 +418,33 @@
             <p style="color: var(--text-muted); margin-bottom: 1rem; font-size: 0.9rem;">
                 Solo puedes editar la dirección 1 vez por pedido y máximo 1 vez por semana.
             </p>
-            <form id="order-address-form">
+            <form id="order-address-form" autocomplete="on">
                 <input type="hidden" id="order-address-order-id">
                 <div class="form-group" style="margin-bottom: 1rem;">
                     <label>Nombre Completo</label>
-                    <input type="text" id="order-address-name" required placeholder="Ej: Juan Pérez"
+                    <input type="text" id="order-address-name" name="name" autocomplete="shipping name" required placeholder="Ej: Juan Pérez"
                         style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-input, #f9fafb); color: var(--text-main);">
                 </div>
                 <div class="form-group" style="margin-bottom: 1rem;">
                     <label>Dirección</label>
-                    <input type="text" id="order-address-street" required placeholder="Ej: Calle Principal 123, 4ºA"
+                    <input type="text" id="order-address-street" name="address" autocomplete="shipping address-line1" required placeholder="Ej: Calle Principal 123, 4ºA"
                         style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-input, #f9fafb); color: var(--text-main);">
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem;">
                     <div class="form-group">
                         <label>Ciudad</label>
-                        <input type="text" id="order-address-city" required placeholder="Ej: Madrid"
+                        <input type="text" id="order-address-city" name="city" autocomplete="shipping address-level2" required placeholder="Ej: Alcalá de Henares, Marbella..."
                             style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-input, #f9fafb); color: var(--text-main);">
                     </div>
                     <div class="form-group">
                         <label>Código Postal</label>
-                        <input type="text" id="order-address-zip" required placeholder="Ej: 28001"
+                        <input type="text" id="order-address-zip" name="postal-code" autocomplete="shipping postal-code" maxlength="5" required placeholder="Ej: 28001"
                             style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-input, #f9fafb); color: var(--text-main);">
                     </div>
                 </div>
                 <div class="form-group" style="margin-bottom: 1rem;">
                     <label>Provincia <span style="color: #ef4444;">*</span></label>
-                    <select id="order-address-province" required
+                    <select id="order-address-province" name="province" autocomplete="shipping address-level1" required
                         style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-input, #f9fafb); color: var(--text-main);">
                         <option value="">Selecciona una provincia</option>
                         <option value="A Coruña">A Coruña</option>
@@ -503,7 +503,7 @@
                 </div>
                 <div class="form-group" style="margin-bottom: 1.5rem;">
                     <label>Teléfono <span style="color: #ef4444;">*</span></label>
-                    <input type="tel" id="order-address-phone" required placeholder="Ej: +34 600 000 000"
+                    <input type="tel" id="order-address-phone" name="tel" autocomplete="shipping tel" required placeholder="Ej: +34 600 000 000"
                         style="width: 100%; padding: 0.75rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-input, #f9fafb); color: var(--text-main);">
                 </div>
                 <div id="order-address-error"

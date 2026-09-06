@@ -240,13 +240,31 @@ async function saveNewAddress(e) {
 
     const instagramInput = document.getElementById('new-address-instagram');
     const provinceInput = document.getElementById('new-address-province');
+    const nameInput = document.getElementById('new-address-name');
+    const streetInput = document.getElementById('new-address-street');
+    const cityInput = document.getElementById('new-address-city');
+    const zipInput = document.getElementById('new-address-zip');
+    const phoneInput = document.getElementById('new-address-phone');
+
+    const name = nameInput ? nameInput.value.trim() : '';
+    const street = streetInput ? streetInput.value.trim() : '';
+    const city = cityInput ? cityInput.value.trim() : '';
+    const zip = zipInput ? zipInput.value.trim() : '';
+    const province = provinceInput ? provinceInput.value.trim() : '';
+    const phone = phoneInput ? phoneInput.value.trim() : '';
+
+    if (!name || !street || !city || !zip || !province || !phone) {
+        alert('Por favor, completa todos los campos requeridos de la dirección (calle, código postal, ciudad y provincia).');
+        return;
+    }
+
     const addressData = {
-        name: document.getElementById('new-address-name').value.trim(),
-        street: document.getElementById('new-address-street').value.trim(),
-        city: document.getElementById('new-address-city').value.trim(),
-        zip: document.getElementById('new-address-zip').value.trim(),
-        province: provinceInput ? provinceInput.value : '',
-        phone: document.getElementById('new-address-phone').value.trim(),
+        name,
+        street,
+        city,
+        zip,
+        province,
+        phone,
         instagram: instagramInput ? instagramInput.value.trim() : ''
     };
 
@@ -319,80 +337,88 @@ function initPaymentMethods() {
 // ── 2. Validación de Código Postal (Mejora 3 - mock AJAX) ──
 function setupZipCodeLookup() {
     const zipInput = document.getElementById('new-address-zip');
-    const cityInput = document.getElementById('new-address-city');
     const provinceInput = document.getElementById('new-address-province');
     const zipSpinner = document.getElementById('zip-spinner');
 
     if (!zipInput) return;
 
+    let zipLookupTimer = null;
+
     zipInput.addEventListener('input', (e) => {
         let value = e.target.value.replace(/\D/g, '');
         e.target.value = value;
 
-        if (value.length === 5) {
+        if (zipLookupTimer) {
+            clearTimeout(zipLookupTimer);
+        }
+
+        if (value.length >= 2) {
             zipSpinner?.classList.remove('hidden');
-            setTimeout(() => {
+            zipLookupTimer = setTimeout(() => {
                 zipSpinner?.classList.add('hidden');
 
                 const provCode = value.substring(0, 2);
                 const provinces = {
-                    '01': { city: 'Vitoria-Gasteiz', province: 'Álava' },
-                    '02': { city: 'Albacete', province: 'Albacete' },
-                    '03': { city: 'Alicante', province: 'Alicante' },
-                    '04': { city: 'Almería', province: 'Almería' },
-                    '05': { city: 'Ávila', province: 'Ávila' },
-                    '06': { city: 'Badajoz', province: 'Badajoz' },
-                    '07': { city: 'Palma de Mallorca', province: 'Illes Balears' },
-                    '08': { city: 'Barcelona', province: 'Barcelona' },
-                    '09': { city: 'Burgos', province: 'Burgos' },
-                    '10': { city: 'Cáceres', province: 'Cáceres' },
-                    '11': { city: 'Cádiz', province: 'Cádiz' },
-                    '12': { city: 'Castellón de la Plana', province: 'Castellón' },
-                    '13': { city: 'Ciudad Real', province: 'Ciudad Real' },
-                    '14': { city: 'Córdoba', province: 'Córdoba' },
-                    '15': { city: 'Santiago de Compostela', province: 'A Coruña' },
-                    '16': { city: 'Cuenca', province: 'Cuenca' },
-                    '17': { city: 'Girona', province: 'Girona' },
-                    '18': { city: 'Granada', province: 'Granada' },
-                    '19': { city: 'Guadalajara', province: 'Guadalajara' },
-                    '20': { city: 'San Sebastián', province: 'Guipúzcoa' },
-                    '21': { city: 'Huelva', province: 'Huelva' },
-                    '22': { city: 'Huesca', province: 'Huesca' },
-                    '23': { city: 'Jaén', province: 'Jaén' },
-                    '24': { city: 'León', province: 'León' },
-                    '25': { city: 'Lleida', province: 'Lleida' },
-                    '26': { city: 'Logroño', province: 'La Rioja' },
-                    '27': { city: 'Lugo', province: 'Lugo' },
-                    '28': { city: 'Madrid', province: 'Madrid' },
-                    '29': { city: 'Málaga', province: 'Málaga' },
-                    '30': { city: 'Murcia', province: 'Murcia' },
-                    '31': { city: 'Pamplona', province: 'Navarra' },
-                    '32': { city: 'Ourense', province: 'Ourense' },
-                    '33': { city: 'Oviedo', province: 'Asturias' },
-                    '34': { city: 'Palencia', province: 'Palencia' },
-                    '35': { city: 'Las Palmas de Gran Canaria', province: 'Las Palmas' },
-                    '36': { city: 'Pontevedra', province: 'Pontevedra' },
-                    '37': { city: 'Salamanca', province: 'Salamanca' },
-                    '38': { city: 'Santa Cruz de Tenerife', province: 'Santa Cruz de Tenerife' },
-                    '39': { city: 'Santander', province: 'Cantabria' },
-                    '40': { city: 'Segovia', province: 'Segovia' },
-                    '41': { city: 'Sevilla', province: 'Sevilla' },
-                    '42': { city: 'Soria', province: 'Soria' },
-                    '43': { city: 'Tarragona', province: 'Tarragona' },
-                    '44': { city: 'Teruel', province: 'Teruel' },
-                    '45': { city: 'Toledo', province: 'Toledo' },
-                    '46': { city: 'Valencia', province: 'Valencia' },
-                    '47': { city: 'Valladolid', province: 'Valladolid' },
-                    '48': { city: 'Bilbao', province: 'Vizcaya' },
-                    '49': { city: 'Zamora', province: 'Zamora' },
-                    '50': { city: 'Zaragoza', province: 'Zaragoza' },
-                    '51': { city: 'Ceuta', province: 'Ceuta' },
-                    '52': { city: 'Melilla', province: 'Melilla' }
+                    '01': 'Álava',
+                    '02': 'Albacete',
+                    '03': 'Alicante',
+                    '04': 'Almería',
+                    '05': 'Ávila',
+                    '06': 'Badajoz',
+                    '07': 'Illes Balears',
+                    '08': 'Barcelona',
+                    '09': 'Burgos',
+                    '10': 'Cáceres',
+                    '11': 'Cádiz',
+                    '12': 'Castellón',
+                    '13': 'Ciudad Real',
+                    '14': 'Córdoba',
+                    '15': 'A Coruña',
+                    '16': 'Cuenca',
+                    '17': 'Girona',
+                    '18': 'Granada',
+                    '19': 'Guadalajara',
+                    '20': 'Guipúzcoa',
+                    '21': 'Huelva',
+                    '22': 'Huesca',
+                    '23': 'Jaén',
+                    '24': 'León',
+                    '25': 'Lleida',
+                    '26': 'La Rioja',
+                    '27': 'Lugo',
+                    '28': 'Madrid',
+                    '29': 'Málaga',
+                    '30': 'Murcia',
+                    '31': 'Navarra',
+                    '32': 'Ourense',
+                    '33': 'Asturias',
+                    '34': 'Palencia',
+                    '35': 'Las Palmas',
+                    '36': 'Pontevedra',
+                    '37': 'Salamanca',
+                    '38': 'Santa Cruz de Tenerife',
+                    '39': 'Cantabria',
+                    '40': 'Segovia',
+                    '41': 'Sevilla',
+                    '42': 'Soria',
+                    '43': 'Tarragona',
+                    '44': 'Teruel',
+                    '45': 'Toledo',
+                    '46': 'Valencia',
+                    '47': 'Valladolid',
+                    '48': 'Vizcaya',
+                    '49': 'Zamora',
+                    '50': 'Zaragoza',
+                    '51': 'Ceuta',
+                    '52': 'Melilla'
                 };
-                const match = provinces[provCode] || { city: 'Valencia', province: 'Valencia' };
-                if (cityInput) cityInput.value = match.city;
-                if (provinceInput) provinceInput.value = match.province;
-            }, 400);
+                const matchedProvince = provinces[provCode];
+                if (matchedProvince && provinceInput) {
+                    provinceInput.value = matchedProvince;
+                }
+            }, 150);
+        } else {
+            zipSpinner?.classList.add('hidden');
         }
     });
 }

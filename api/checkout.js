@@ -132,6 +132,9 @@ export default async function handler(req, res) {
             return res.status(404).json({ code: 'functions/not-found', message: 'Dirección no encontrada. Por favor, selecciona una dirección válida.' });
         }
         const shippingAddress = addrSnap.val();
+        if (!shippingAddress || !shippingAddress.city || !shippingAddress.province || !shippingAddress.street || !shippingAddress.zip) {
+            return res.status(400).json({ code: 'functions/invalid-argument', message: 'La dirección de envío seleccionada está incompleta (falta calle, código postal, ciudad o provincia).' });
+        }
 
         // ── 3. Fetch REAL prices from database ────────────────────────────────
         // Fetch ROOT of DB to see all available root nodes
