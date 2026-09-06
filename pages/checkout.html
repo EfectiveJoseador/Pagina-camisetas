@@ -113,6 +113,7 @@
                                 <label>Código Postal</label>
                                 <input type="text" id="new-address-zip" name="postal-code" autocomplete="shipping postal-code" maxlength="5" required placeholder="28001">
                                 <div id="zip-spinner" class="zip-loader hidden"><i class="fas fa-spinner fa-spin"></i></div>
+                                <div id="new-address-zip-error" style="display: none; color: #ef4444; font-size: 0.85rem; margin-top: 0.4rem; font-weight: 500;">Actualmente no realizamos envíos a Baleares, Canarias, Ceuta ni Melilla.</div>
                             </div>
                         </div>
 
@@ -135,7 +136,6 @@
                                 <option value="Cádiz">Cádiz</option>
                                 <option value="Cantabria">Cantabria</option>
                                 <option value="Castellón">Castellón</option>
-                                <option value="Ceuta">Ceuta</option>
                                 <option value="Ciudad Real">Ciudad Real</option>
                                 <option value="Córdoba">Córdoba</option>
                                 <option value="Cuenca">Cuenca</option>
@@ -145,23 +145,19 @@
                                 <option value="Guipúzcoa">Guipúzcoa</option>
                                 <option value="Huelva">Huelva</option>
                                 <option value="Huesca">Huesca</option>
-                                <option value="Illes Balears">Illes Balears</option>
                                 <option value="Jaén">Jaén</option>
                                 <option value="La Rioja">La Rioja</option>
-                                <option value="Las Palmas">Las Palmas</option>
                                 <option value="León">León</option>
                                 <option value="Lleida">Lleida</option>
                                 <option value="Lugo">Lugo</option>
                                 <option value="Madrid">Madrid</option>
                                 <option value="Málaga">Málaga</option>
-                                <option value="Melilla">Melilla</option>
                                 <option value="Murcia">Murcia</option>
                                 <option value="Navarra">Navarra</option>
                                 <option value="Ourense">Ourense</option>
                                 <option value="Palencia">Palencia</option>
                                 <option value="Pontevedra">Pontevedra</option>
                                 <option value="Salamanca">Salamanca</option>
-                                <option value="Santa Cruz de Tenerife">Santa Cruz de Tenerife</option>
                                 <option value="Segovia">Segovia</option>
                                 <option value="Sevilla">Sevilla</option>
                                 <option value="Soria">Soria</option>
@@ -182,7 +178,7 @@
                         </div>
 
                         <div style="display: flex; gap: 1rem; margin-top: 1rem;">
-                            <button type="submit" class="btn-modal-primary">
+                            <button type="submit" id="save-new-address-btn" class="btn-modal-primary">
                                 <i class="fas fa-save"></i> Guardar y Usar
                             </button>
 

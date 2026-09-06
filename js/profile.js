@@ -705,6 +705,11 @@ async function saveAddress(e) {
         return;
     }
 
+    if (isRestrictedAddress(zip, province)) {
+        alert('Actualmente no realizamos envíos a Baleares, Canarias, Ceuta ni Melilla. Solo realizamos envíos dentro de la Península Ibérica.');
+        return;
+    }
+
     const addressData = {
         name,
         street,
@@ -1041,7 +1046,48 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     });
     setupOrderAddressModalListeners();
+    setupProfileZipRestrictions();
 });
+
+const RESTRICTED_ZIP_PREFIXES = ['07', '35', '38', '51', '52'];
+const RESTRICTED_PROVINCES = ['illes balears', 'baleares', 'las palmas', 'santa cruz de tenerife', 'ceuta', 'melilla'];
+
+function isRestrictedAddress(zip, province) {
+    const cleanZip = (zip || '').toString().replace(/\D/g, '');
+    const cleanProv = (province || '').toString().toLowerCase().trim();
+    return RESTRICTED_ZIP_PREFIXES.some(prefix => cleanZip.startsWith(prefix)) ||
+           RESTRICTED_PROVINCES.includes(cleanProv);
+}
+
+function setupProfileZipRestrictions() {
+    const pairs = [
+        { zipId: 'address-zip', errorId: 'address-zip-error', formId: 'address-form' },
+        { zipId: 'order-address-zip', errorId: 'order-address-zip-error', formId: 'order-address-form' }
+    ];
+
+    pairs.forEach(({ zipId, errorId, formId }) => {
+        const input = document.getElementById(zipId);
+        const error = document.getElementById(errorId);
+        const form = document.getElementById(formId);
+        if (!input) return;
+
+        input.addEventListener('input', (e) => {
+            const clean = e.target.value.replace(/\D/g, '');
+            e.target.value = clean;
+            const submitBtn = form ? form.querySelector('button[type="submit"]') : null;
+
+            if (RESTRICTED_ZIP_PREFIXES.some(prefix => clean.startsWith(prefix))) {
+                if (error) error.style.display = 'block';
+                input.style.borderColor = '#ef4444';
+                if (submitBtn) submitBtn.disabled = true;
+            } else {
+                if (error) error.style.display = 'none';
+                input.style.borderColor = '';
+                if (submitBtn) submitBtn.disabled = false;
+            }
+        });
+    });
+}
 
 const WEB3FORMS_KEY = "8e920ab3-b0f7-4768-a83a-ed3ef8cd58a8";
 let currentEditingOrderId = null;
@@ -1175,6 +1221,18 @@ async function handleOrderAddressSubmit(e) {
             errorEl.style.display = 'block';
         } else {
             alert('Por favor, completa todos los campos de la dirección.');
+        }
+        return;
+    }
+
+    if (isRestrictedAddress(zip, province)) {
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = originalBtnText;
+        if (errorEl) {
+            errorEl.textContent = 'Actualmente no realizamos envíos a Baleares, Canarias, Ceuta ni Melilla. Solo realizamos envíos dentro de la Península Ibérica.';
+            errorEl.style.display = 'block';
+        } else {
+            alert('Actualmente no realizamos envíos a Baleares, Canarias, Ceuta ni Melilla.');
         }
         return;
     }

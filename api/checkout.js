@@ -136,6 +136,18 @@ export default async function handler(req, res) {
             return res.status(400).json({ code: 'functions/invalid-argument', message: 'La dirección de envío seleccionada está incompleta (falta calle, código postal, ciudad o provincia).' });
         }
 
+        const RESTRICTED_ZIP_PREFIXES = ['07', '35', '38', '51', '52'];
+        const RESTRICTED_PROVINCES = ['illes balears', 'baleares', 'las palmas', 'santa cruz de tenerife', 'ceuta', 'melilla'];
+        const cleanZip = (shippingAddress.zip || '').toString().replace(/\D/g, '');
+        const cleanProvince = (shippingAddress.province || '').toLowerCase().trim();
+
+        if (RESTRICTED_ZIP_PREFIXES.some(p => cleanZip.startsWith(p)) || RESTRICTED_PROVINCES.includes(cleanProvince)) {
+            return res.status(400).json({
+                code: 'functions/invalid-argument',
+                message: 'Actualmente no realizamos envíos a Baleares, Canarias, Ceuta ni Melilla. Solo se permiten envíos a la Península Ibérica.'
+            });
+        }
+
         // ── 3. Fetch REAL prices from database ────────────────────────────────
         // Fetch ROOT of DB to see all available root nodes
         const rootSnap = await db.ref('/').once('value');

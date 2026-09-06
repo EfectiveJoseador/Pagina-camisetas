@@ -245,6 +245,18 @@ exports.processCheckoutTotal = functions.https.onCall(async (data, context) => {
         if (!shippingAddress || !shippingAddress.city || !shippingAddress.province || !shippingAddress.street || !shippingAddress.zip) {
             throw new functions.https.HttpsError('invalid-argument', 'La dirección de envío seleccionada está incompleta (falta calle, código postal, ciudad o provincia).');
         }
+
+        const RESTRICTED_ZIP_PREFIXES = ['07', '35', '38', '51', '52'];
+        const RESTRICTED_PROVINCES = ['illes balears', 'baleares', 'las palmas', 'santa cruz de tenerife', 'ceuta', 'melilla'];
+        const cleanZip = (shippingAddress.zip || '').toString().replace(/\D/g, '');
+        const cleanProvince = (shippingAddress.province || '').toLowerCase().trim();
+
+        if (RESTRICTED_ZIP_PREFIXES.some(p => cleanZip.startsWith(p)) || RESTRICTED_PROVINCES.includes(cleanProvince)) {
+            throw new functions.https.HttpsError(
+                'invalid-argument',
+                'Actualmente no realizamos envíos a Baleares, Canarias, Ceuta ni Melilla. Solo se permiten envíos a la Península Ibérica.'
+            );
+        }
         console.log(`[${reqId}] Address OK`);
 
         // ── 3. Fetch REAL prices from database ────────────────────────────────

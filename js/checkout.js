@@ -101,7 +101,10 @@ function renderAddresses(addressArray) {
             <input type="radio" name="shipping-address" value="${sanitizeHTML(addr.id)}" ${selectedAddressId === addr.id ? 'checked' : ''}>
             <div class="address-content">
                 <div class="address-header" style="width: 100%; display: flex; justify-content: space-between; align-items: center; gap: 0.5rem; flex-wrap: wrap;">
-                    <strong>${sanitizeHTML(addr.name)}</strong>
+                    <div>
+                        <strong>${sanitizeHTML(addr.name)}</strong>
+                        ${isRestrictedAddress(addr.zip, addr.province) ? '<span style="display: inline-block; background: #fef2f2; color: #ef4444; font-size: 0.75rem; padding: 0.15rem 0.4rem; border-radius: 4px; font-weight: 600; border: 1px solid #fecaca; margin-left: 0.5rem;">Envío no disponible</span>' : ''}
+                    </div>
                     <div style="display: flex; align-items: center; gap: 0.5rem;">
                         ${selectedAddressId === addr.id ? '<span class="selected-badge"><i class="fas fa-check-circle"></i> Seleccionada</span>' : ''}
                         <button type="button" class="btn-edit-address-card" data-id="${sanitizeHTML(addr.id)}" title="Editar dirección" style="background: rgba(99, 102, 241, 0.1); border: none; color: var(--primary); cursor: pointer; font-size: 0.8rem; padding: 0.3rem 0.6rem; border-radius: 6px; display: flex; align-items: center; gap: 0.25rem;">
@@ -258,6 +261,11 @@ async function saveNewAddress(e) {
         return;
     }
 
+    if (isRestrictedAddress(zip, province)) {
+        alert('Actualmente no realizamos envíos a Baleares, Canarias, Ceuta ni Melilla. Solo realizamos envíos dentro de la Península Ibérica.');
+        return;
+    }
+
     const addressData = {
         name,
         street,
@@ -334,7 +342,16 @@ function initPaymentMethods() {
     });
 }
 
-// ── 2. Validación de Código Postal (Mejora 3 - mock AJAX) ──
+const RESTRICTED_ZIP_PREFIXES = ['07', '35', '38', '51', '52'];
+const RESTRICTED_PROVINCES = ['illes balears', 'baleares', 'las palmas', 'santa cruz de tenerife', 'ceuta', 'melilla'];
+
+function isRestrictedAddress(zip, province) {
+    const cleanZip = (zip || '').toString().replace(/\D/g, '');
+    const cleanProv = (province || '').toString().toLowerCase().trim();
+    return RESTRICTED_ZIP_PREFIXES.some(prefix => cleanZip.startsWith(prefix)) ||
+           RESTRICTED_PROVINCES.includes(cleanProv);
+}
+
 function setupZipCodeLookup() {
     const zipInput = document.getElementById('new-address-zip');
     const provinceInput = document.getElementById('new-address-province');
@@ -348,9 +365,25 @@ function setupZipCodeLookup() {
         let value = e.target.value.replace(/\D/g, '');
         e.target.value = value;
 
+        const errorEl = document.getElementById('new-address-zip-error');
+        const submitBtn = document.getElementById('save-new-address-btn') || document.querySelector('#new-address-form button[type="submit"]');
+
         if (zipLookupTimer) {
             clearTimeout(zipLookupTimer);
         }
+
+        if (RESTRICTED_ZIP_PREFIXES.some(prefix => value.startsWith(prefix))) {
+            if (errorEl) errorEl.style.display = 'block';
+            zipInput.style.borderColor = '#ef4444';
+            if (submitBtn) submitBtn.disabled = true;
+            if (provinceInput) provinceInput.value = '';
+            zipSpinner?.classList.add('hidden');
+            return;
+        }
+
+        if (errorEl) errorEl.style.display = 'none';
+        zipInput.style.borderColor = '';
+        if (submitBtn) submitBtn.disabled = false;
 
         if (value.length >= 2) {
             zipSpinner?.classList.remove('hidden');
@@ -365,7 +398,6 @@ function setupZipCodeLookup() {
                     '04': 'Almería',
                     '05': 'Ávila',
                     '06': 'Badajoz',
-                    '07': 'Illes Balears',
                     '08': 'Barcelona',
                     '09': 'Burgos',
                     '10': 'Cáceres',
@@ -393,10 +425,8 @@ function setupZipCodeLookup() {
                     '32': 'Ourense',
                     '33': 'Asturias',
                     '34': 'Palencia',
-                    '35': 'Las Palmas',
                     '36': 'Pontevedra',
                     '37': 'Salamanca',
-                    '38': 'Santa Cruz de Tenerife',
                     '39': 'Cantabria',
                     '40': 'Segovia',
                     '41': 'Sevilla',
@@ -408,9 +438,7 @@ function setupZipCodeLookup() {
                     '47': 'Valladolid',
                     '48': 'Vizcaya',
                     '49': 'Zamora',
-                    '50': 'Zaragoza',
-                    '51': 'Ceuta',
-                    '52': 'Melilla'
+                    '50': 'Zaragoza'
                 };
                 const matchedProvince = provinces[provCode];
                 if (matchedProvince && provinceInput) {
@@ -434,6 +462,12 @@ async function confirmOrder() {
 
     if (!selectedAddressId) {
         showAddressWarning();
+        return;
+    }
+
+    const chosenAddr = addresses.find(a => a.id === selectedAddressId);
+    if (chosenAddr && isRestrictedAddress(chosenAddr.zip, chosenAddr.province)) {
+        alert('La dirección seleccionada corresponde a una zona fuera de la Península Ibérica. Actualmente no realizamos envíos a Baleares, Canarias, Ceuta ni Melilla. Por favor, selecciona o añade una dirección peninsular.');
         return;
     }
 
