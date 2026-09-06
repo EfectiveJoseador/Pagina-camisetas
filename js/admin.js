@@ -1244,7 +1244,7 @@ window.recalculateModalOrderTotals = function () {
     else if (remainder === 4) packBasePrice += 56.90 + 19.90;
 
     const calculatedSubtotal = Math.round((packBasePrice + surcharges) * 100) / 100;
-    const shipping = totalShirtQty === 1 ? 1.90 : 0;
+    const shipping = totalShirtQty === 1 ? 3.50 : 0;
     const protectionFee = currentEditingOrder.protectionFee || 0;
     const discount = currentEditingOrder.discount || 0;
     const calculatedTotal = Math.max(0, Math.round((calculatedSubtotal + shipping + protectionFee - discount) * 100) / 100);

@@ -272,15 +272,19 @@ const Cart = {
 
         let shipping = 0;
         if (totalShirtQty === 1) {
-            shipping = 1.90;
+            shipping = 3.50;
         }
         
         const protectionFee = 3.00;
         const total = subtotal + shipping + protectionFee;
 
         const shippingEl = document.getElementById('shipping-price');
+        const shippingHint = document.getElementById('shipping-free-hint');
         if (shippingEl) {
             shippingEl.textContent = shipping === 0 ? 'Gratis' : `€${shipping.toFixed(2)}`;
+        }
+        if (shippingHint) {
+            shippingHint.style.display = shipping > 0 ? 'block' : 'none';
         }
         
         const protectionFeeEl = document.getElementById('checkout-protection-fee');
@@ -376,6 +380,8 @@ const Cart = {
             document.getElementById('subtotal-price').textContent = '€0.00';
             document.getElementById('total-price').textContent = '€0.00';
             document.getElementById('shipping-price').textContent = 'Gratis';
+            const emptyShippingHint = document.getElementById('shipping-free-hint');
+            if (emptyShippingHint) emptyShippingHint.style.display = 'none';
             this.renderPackIndicators(0);
             return;
         }

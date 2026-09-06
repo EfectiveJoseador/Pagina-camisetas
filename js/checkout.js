@@ -923,11 +923,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     const calculations = Cart.calculateTotal();
     const shippingEl = document.getElementById('checkout-shipping');
+    const shippingHint = document.getElementById('checkout-shipping-free-hint');
     const subtotalEl = document.getElementById('checkout-subtotal');
     const totalEl = document.getElementById('checkout-total');
 
     if (shippingEl) {
         shippingEl.textContent = calculations.shipping === 0 ? 'Gratis' : `€${calculations.shipping.toFixed(2)}`;
+    }
+    if (shippingHint) {
+        shippingHint.style.display = calculations.shipping > 0 ? 'block' : 'none';
     }
     if (subtotalEl) {
         if (calculations.packSaving > 0) {
@@ -1198,6 +1202,8 @@ async function applyPromoCode() {
             }
             promoDiscount = calculations.shipping;
             showPromoResult('¡Envío gratis aplicado!', 'success');
+            const freeShippingHint = document.getElementById('checkout-shipping-free-hint');
+            if (freeShippingHint) freeShippingHint.style.display = 'none';
         } else if (promo.type === 'percentage') {
             promoDiscount = promo.discountAmount;
             showPromoResult(`¡${promo.value}% de descuento aplicado! (-€${promoDiscount.toFixed(2)})`, 'success');
@@ -1291,6 +1297,8 @@ function removePromoCode() {
     const calculations = Cart.calculateTotal();
     const finalTotal = Math.max(0, calculations.total - appliedDiscount);
     setTotalDisplay(calculations.total, finalTotal);
+    const freeShippingHint = document.getElementById('checkout-shipping-free-hint');
+    if (freeShippingHint) freeShippingHint.style.display = calculations.shipping > 0 ? 'block' : 'none';
 }
 
 function showPromoResult(message, type) {

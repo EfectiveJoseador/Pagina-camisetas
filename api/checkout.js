@@ -298,9 +298,9 @@ export default async function handler(req, res) {
         if (totalShirtQty === 0) subtotal = originalSubtotal; // Fallback para carritos que solo tienen accesorios
 
         // ── 5. Shipping calculation ───────────────────────────────────────────
-        const SINGLE_ITEM_SHIPPING_COST = 1.90;
+        const SINGLE_ITEM_SHIPPING_COST = 3.50;
         const totalQtyShipping = resolvedItems.reduce((s, i) => s + i.quantity, 0);
-        const shipping = totalQtyShipping === 1 ? SINGLE_ITEM_SHIPPING_COST : 0;
+        const shipping = (totalShirtQty === 1 || totalQtyShipping === 1) ? SINGLE_ITEM_SHIPPING_COST : 0;
 
         // ── 6. Apply promo code ──────────────────────
         let promoDiscount   = 0;
