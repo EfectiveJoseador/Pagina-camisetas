@@ -532,7 +532,7 @@ function getAllowedPatches(product) {
 // Removido renderPatchOptions ya que ahora se usa un input de texto libre
 
 function applyProductRestrictions() {
-    const { isRestricted, isNBA, isKids } = isRestrictedCategory();
+    const { isRestricted, isNBA, isKids, isRetro } = isRestrictedCategory();
 
     const versionSelect = document.getElementById('version-select');
     const versionGroup = versionSelect?.closest('.option-group');
