@@ -55,7 +55,7 @@ body.animation-seen .hero-section {
 }
 
 body.animation-seen .hero-content {
-    transform: translate3d(0, -20px, 0) !important;
+    transform: none !important;
 }
 
 
@@ -89,12 +89,14 @@ body.low-performance * {
     display: flex;
     align-items: center;
     justify-content: center;
-    height: calc(100vh - var(--header-height) - var(--announcement-bar-height, 38px));
-    height: calc(100dvh - var(--header-height) - var(--announcement-bar-height, 38px));
-    padding: 0;
+    min-height: calc(100vh - var(--header-height) - var(--announcement-bar-height, 38px));
+    min-height: calc(100dvh - var(--header-height) - var(--announcement-bar-height, 38px));
+    height: auto;
+    padding: clamp(1.5rem, 3vh, 3.5rem) 1.5rem;
     margin: 0;
     overflow: hidden;
     clip-path: inset(0);
+    box-sizing: border-box;
     animation: heroReveal 1.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
 }
 
@@ -351,8 +353,11 @@ body.low-performance * {
     z-index: 2;
     text-align: center;
     max-width: 950px;
-    padding: 0 2rem;
-    transform: translate3d(0, -20px, 0);
+    width: 100%;
+    padding: 0 1.5rem;
+    margin: 0 auto;
+    transform: none;
+    box-sizing: border-box;
 }
 
 .hero-badge {
@@ -404,8 +409,8 @@ body.low-performance * {
 
 .hero-title {
     font-family: var(--font-heading);
-    font-size: 5.5rem;
-    line-height: 1.15;
+    font-size: clamp(3rem, 5vw, 5.2rem);
+    line-height: 1.12;
     margin-bottom: 1rem;
     font-weight: 900;
     color: white;
@@ -1618,6 +1623,101 @@ a.catalogo-btn:hover,
     background: var(--primary-dark);
     transform: translateY(-2px);
     box-shadow: 0 8px 20px rgba(99, 102, 241, 0.3);
+}
+
+/* ==========================================================================
+   BREAKPOINT INTERMEDIO: PORTÁTILES (1024px - 1440px) Y VIEWPORTS CORTOS
+   ========================================================================== */
+
+@media screen and (max-width: 1440px), screen and (max-height: 850px) and (min-width: 769px) {
+    .hero-section {
+        padding: clamp(1.25rem, 3vh, 2.5rem) 1.5rem;
+    }
+
+    .hero-content {
+        max-width: 1050px;
+        transform: none !important;
+    }
+
+    .hero-title {
+        font-size: clamp(3rem, 4.4vw, 4.3rem);
+        line-height: 1.12;
+        margin-bottom: 0.9rem;
+        letter-spacing: -0.025em;
+    }
+
+    .hero-brand {
+        font-size: clamp(1.65rem, 2.4vw, 2.3rem);
+        margin-bottom: 1.1rem;
+        letter-spacing: 2px;
+    }
+
+    .hero-subtitle {
+        font-size: clamp(1.05rem, 1.35vw, 1.25rem);
+        line-height: 1.6;
+        max-width: 760px;
+        margin-bottom: 1.6rem;
+    }
+
+    .hero-features-strip {
+        gap: 0.75rem;
+        margin-bottom: 1.75rem;
+    }
+
+    .hero-feat-item {
+        font-size: 0.86rem;
+        padding: 0.38rem 0.95rem;
+    }
+
+    .hero-buttons {
+        margin-bottom: 1.5rem;
+    }
+
+    .btn-hero-cta {
+        padding: 1.05rem 2.6rem;
+        font-size: 1rem;
+        letter-spacing: 1.5px;
+    }
+
+    .hero-tp-bar-wrap {
+        margin-top: 0.75rem;
+    }
+}
+
+/* Ajuste adicional para portátiles con pantallas compactas o alturas de ventana muy reducidas */
+@media screen and (max-height: 720px) and (min-width: 769px) {
+    .hero-section {
+        padding: clamp(0.75rem, 2vh, 1.5rem) 1.25rem;
+    }
+
+    .hero-title {
+        font-size: clamp(2.4rem, 3.5vw, 3.2rem);
+        margin-bottom: 0.5rem;
+    }
+
+    .hero-brand {
+        font-size: 1.4rem;
+        margin-bottom: 0.6rem;
+    }
+
+    .hero-subtitle {
+        font-size: 0.95rem;
+        line-height: 1.45;
+        margin-bottom: 1rem;
+    }
+
+    .hero-features-strip {
+        margin-bottom: 1rem;
+    }
+
+    .hero-buttons {
+        margin-bottom: 1rem;
+    }
+
+    .btn-hero-cta {
+        padding: 0.85rem 2rem;
+        font-size: 0.92rem;
+    }
 }
 
 
