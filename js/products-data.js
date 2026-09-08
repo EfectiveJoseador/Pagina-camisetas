@@ -15508,6 +15508,37 @@ const products = [
         "price": 25.9,
         "oldPrice": 33,
         "sku": "3924"
+    },
+    {
+        "id": 652182,
+        "name": "Real Sociedad 2026/27 Local",
+        "slug": "real-sociedad-202627-local",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/652182/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/652182/2.webp"
+        ],
+        "tipo": "local",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "1276"
+    },
+    {
+        "id": 186547,
+        "name": "Real Sociedad 2026/27 Visitante",
+        "slug": "real-sociedad-202627-visitante",
+        "category": "futbol",
+        "league": "laliga",
+        "image": "/assets/productos/Yupoo/186547/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/186547/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "3999"
     }
 ];
 
