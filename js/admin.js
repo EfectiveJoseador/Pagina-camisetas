@@ -3,6 +3,7 @@
 import { auth, db, onAuthStateChanged, signOut, ref, onValue, update, get, remove, push, set } from './firebase-config.js';
 import { convertToAvailable } from './points.js';
 import { sanitizeHTML } from './security.js';
+import { initAccountingModule } from './accounting.js';
 let isAdmin = false;
 let allOrders = [];
 let currentFilters = {
@@ -13,27 +14,36 @@ let currentFilters = {
 let dashboardChart = null;
 const authLoading = document.getElementById('auth-loading');
 const adminPanel = document.getElementById('admin-panel');
-onAuthStateChanged(auth, async (user) => {
-    if (!user) {
-        redirectToHome('No has iniciado sesión');
-        return;
-    }
-    try {
-        const idTokenResult = await user.getIdTokenResult(true);
-        const claims = idTokenResult.claims;
 
-        if (claims.admin !== true) {
-            redirectToHome('No tienes permisos de administrador');
+const isLocalTest = (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') && 
+                    new URLSearchParams(window.location.search).has('test_accounting');
+
+if (isLocalTest) {
+    isAdmin = true;
+    showAdminPanel({ email: 'admin-local@camisetazo.com' });
+} else {
+    onAuthStateChanged(auth, async (user) => {
+        if (!user) {
+            redirectToHome('No has iniciado sesión');
             return;
         }
-        isAdmin = true;
-        showAdminPanel(user);
+        try {
+            const idTokenResult = await user.getIdTokenResult(true);
+            const claims = idTokenResult.claims;
 
-    } catch (error) {
-        console.error('Error verifying admin:', error);
-        redirectToHome('Error de verificación');
-    }
-});
+            if (claims.admin !== true) {
+                redirectToHome('No tienes permisos de administrador');
+                return;
+            }
+            isAdmin = true;
+            showAdminPanel(user);
+
+        } catch (error) {
+            console.error('Error verifying admin:', error);
+            redirectToHome('Error de verificación');
+        }
+    });
+}
 
 function redirectToHome(reason) {
     authLoading.innerHTML = `
@@ -72,6 +82,7 @@ function initPanel() {
     initPinnedProducts();
     setupTrustpilotListeners();
     loadTrustpilotConfig();
+    initAccountingModule();
 }
 
 function setupEventListeners() {

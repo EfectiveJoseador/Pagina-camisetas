@@ -1,0 +1,1178 @@
+/* ═════════════════════════════════════════════════════════════════════
+   MÓDULO DE CONTABILIDAD DIARIA & REPARTO DE SALDOS (IGOR & JUNTOS)
+   Estilos optimizados para escritorio y dispositivos móviles (< 640px)
+   ═════════════════════════════════════════════════════════════════════ */
+
+/* ── CONTENEDOR GENERAL ────────────────────────────────────────────── */
+.accounting-module {
+    display: flex;
+    flex-direction: column;
+    gap: 1.75rem;
+    width: 100%;
+    max-width: 1400px;
+    margin: 0 auto;
+}
+
+/* ── CABECERA DE SALDOS GLOBALES (FLUJO NORMAL / NO STICKY) ────────── */
+.acc-balances-header {
+    background: rgba(9, 9, 11, 0.88);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 16px;
+    padding: 1.25rem 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+    transition: all 0.3s ease;
+}
+
+.acc-balances-title-wrap {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 1rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+}
+
+.acc-balances-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text-muted);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.acc-balances-title i {
+    color: var(--accent-primary);
+}
+
+.acc-last-sync {
+    font-size: 0.78rem;
+    color: #71717a;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.acc-sync-dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: var(--success);
+    box-shadow: 0 0 8px rgba(16, 185, 129, 0.6);
+    display: inline-block;
+}
+
+.acc-balances-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.25rem;
+}
+
+/* Tarjetas individuales de saldo */
+.acc-balance-card {
+    background: #141424;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 14px;
+    padding: 1.15rem 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    position: relative;
+    overflow: hidden;
+    transition: transform 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.acc-balance-card:hover {
+    transform: translateY(-2px);
+    border-color: rgba(255, 255, 255, 0.15);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+}
+
+.acc-balance-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+}
+
+.acc-balance-igor::before {
+    background: linear-gradient(90deg, #6366f1, #8b5cf6);
+}
+
+.acc-balance-juntos::before {
+    background: linear-gradient(90deg, #06b6d4, #3b82f6);
+}
+
+.acc-balance-total::before {
+    background: linear-gradient(90deg, #10b981, #059669);
+}
+
+.acc-balance-card-top {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.acc-balance-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.acc-balance-name i {
+    font-size: 0.95rem;
+}
+
+.acc-balance-igor .acc-balance-name i { color: #818cf8; }
+.acc-balance-juntos .acc-balance-name i { color: #38bdf8; }
+.acc-balance-total .acc-balance-name i { color: #34d399; }
+
+/* Botón de edición rápida (Lápiz) con touch target accesible */
+.acc-btn-edit-balance {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    transition: all 0.2s ease;
+}
+
+.acc-btn-edit-balance:hover {
+    background: rgba(99, 102, 241, 0.25);
+    border-color: #6366f1;
+    color: #fff;
+    transform: scale(1.05);
+}
+
+.acc-balance-value-wrap {
+    display: flex;
+    align-items: baseline;
+    gap: 0.35rem;
+}
+
+.acc-balance-value {
+    font-family: 'Outfit', 'Inter', sans-serif;
+    font-size: 1.85rem;
+    font-weight: 800;
+    color: #f8fafc;
+    letter-spacing: -0.02em;
+    line-height: 1.1;
+}
+
+.acc-balance-igor .acc-balance-value {
+    color: #c7d2fe;
+}
+
+.acc-balance-juntos .acc-balance-value {
+    color: #bae6fd;
+}
+
+.acc-balance-total .acc-balance-value {
+    color: #a7f3d0;
+    text-shadow: 0 0 20px rgba(16, 185, 129, 0.25);
+}
+
+.acc-balance-subtext {
+    font-size: 0.76rem;
+    color: #71717a;
+}
+
+/* ── SECCIÓN CENTRAL: FORMULARIO + PREVIEW ─────────────────────────── */
+.acc-main-grid {
+    display: grid;
+    grid-template-columns: 1fr 380px;
+    gap: 1.5rem;
+    align-items: start;
+}
+
+/* Formulario Card */
+.acc-card {
+    background: #12121f;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.acc-card-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding-bottom: 1rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    margin-bottom: 1.25rem;
+}
+
+.acc-card-header h2,
+.acc-card-header h3 {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin: 0;
+}
+
+.acc-card-header h2 i,
+.acc-card-header h3 i {
+    color: var(--accent-primary);
+}
+
+/* Bloques dentro del formulario */
+.acc-form-block {
+    background: rgba(255, 255, 255, 0.02);
+    border: 1px solid rgba(255, 255, 255, 0.05);
+    border-radius: 12px;
+    padding: 1.15rem;
+    margin-bottom: 1.25rem;
+    transition: border-color 0.2s ease;
+}
+
+.acc-form-block:hover {
+    border-color: rgba(255, 255, 255, 0.09);
+}
+
+.acc-block-title {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #e2e8f0;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    margin-bottom: 0.85rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.acc-block-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.15rem 0.5rem;
+    border-radius: 6px;
+    background: rgba(99, 102, 241, 0.15);
+    color: #a5b4fc;
+    text-transform: none;
+    letter-spacing: 0;
+}
+
+/* Selector de fecha */
+.acc-date-row {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1.25rem;
+}
+
+.acc-date-row label {
+    font-size: 0.9rem;
+    font-weight: 600;
+    color: #cbd5e1;
+    white-space: nowrap;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.acc-date-input {
+    background: #181829;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #fff;
+    padding: 0.65rem 1rem;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    outline: none;
+    color-scheme: dark;
+    transition: all 0.2s ease;
+}
+
+.acc-date-input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* Inputs con Icono o Prefijo (€ / $) */
+.acc-inputs-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 1rem;
+}
+
+.acc-field-group {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+}
+
+.acc-field-label {
+    font-size: 0.82rem;
+    font-weight: 600;
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.acc-field-pill {
+    font-size: 0.68rem;
+    padding: 0.1rem 0.4rem;
+    border-radius: 4px;
+    font-weight: 700;
+}
+
+.acc-pill-igor {
+    background: rgba(99, 102, 241, 0.2);
+    color: #a5b4fc;
+}
+
+.acc-pill-conjunto {
+    background: rgba(6, 182, 212, 0.2);
+    color: #67e8f9;
+}
+
+.acc-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.acc-input-prefix {
+    position: absolute;
+    left: 0.85rem;
+    color: #64748b;
+    font-weight: 700;
+    font-size: 0.95rem;
+    pointer-events: none;
+}
+
+.acc-input {
+    width: 100%;
+    background: #181829;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+    padding: 0.65rem 0.85rem 0.65rem 2rem;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.95rem;
+    font-weight: 600;
+    outline: none;
+    transition: all 0.2s ease;
+    min-height: 44px; /* Touch target accesible */
+}
+
+.acc-input:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+    background: #1c1c30;
+}
+
+.acc-input::placeholder {
+    color: #475569;
+    font-weight: 400;
+}
+
+.acc-input-help {
+    font-size: 0.72rem;
+    color: #64748b;
+    margin-top: 0.15rem;
+}
+
+/* ── BLOQUE PROVEEDOR & DIVISAS ────────────────────────────────────── */
+.acc-currency-toggle-wrap {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.85rem;
+    background: #181829;
+    padding: 0.3rem;
+    border-radius: 8px;
+    width: fit-content;
+    border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.acc-curr-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    font-size: 0.82rem;
+    font-weight: 700;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    min-height: 36px;
+}
+
+.acc-curr-btn.active {
+    background: var(--accent-primary);
+    color: #fff;
+    box-shadow: 0 2px 8px rgba(99, 102, 241, 0.4);
+}
+
+.acc-usd-conversion-box {
+    background: rgba(99, 102, 241, 0.08);
+    border: 1px dashed rgba(99, 102, 241, 0.3);
+    border-radius: 10px;
+    padding: 0.85rem;
+    margin-top: 0.75rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    flex-wrap: wrap;
+}
+
+.acc-usd-converted-text {
+    font-size: 0.88rem;
+    color: #cbd5e1;
+}
+
+.acc-usd-converted-val {
+    font-size: 1.1rem;
+    font-weight: 800;
+    color: #34d399;
+    font-family: 'Outfit', sans-serif;
+}
+
+.acc-select {
+    width: 100%;
+    background: #181829;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #f8fafc;
+    padding: 0.65rem 0.85rem;
+    border-radius: 8px;
+    font-family: inherit;
+    font-size: 0.9rem;
+    font-weight: 500;
+    outline: none;
+    cursor: pointer;
+    min-height: 44px;
+    transition: all 0.2s ease;
+}
+
+.acc-select:focus {
+    border-color: var(--accent-primary);
+    box-shadow: 0 0 0 3px rgba(99, 102, 241, 0.2);
+}
+
+/* ── ACORDEÓN DE GASTOS OPERATIVOS (COLAPSABLE) ────────────────────── */
+.acc-accordion-header {
+    width: 100%;
+    background: transparent;
+    border: none;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0.25rem 0;
+    cursor: pointer;
+    color: #cbd5e1;
+    font-weight: 700;
+    font-size: 0.88rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    min-height: 44px;
+}
+
+.acc-accordion-header:hover {
+    color: #fff;
+}
+
+.acc-accordion-header i.acc-chevron {
+    transition: transform 0.25s ease;
+    color: var(--text-muted);
+}
+
+.acc-accordion-header.active i.acc-chevron {
+    transform: rotate(180deg);
+    color: var(--accent-primary);
+}
+
+.acc-accordion-body {
+    display: none;
+    padding-top: 1rem;
+    border-top: 1px dashed rgba(255, 255, 255, 0.08);
+    margin-top: 0.5rem;
+    animation: fadeIn 0.2s ease;
+}
+
+.acc-accordion-body.open {
+    display: block;
+}
+
+/* ── PREVIEW EN TIEMPO REAL (STICKY LATERAL EN ESCRITORIO) ─────────── */
+.acc-preview-card {
+    background: linear-gradient(145deg, #131326, #0e0e1a);
+    border: 1px solid rgba(99, 102, 241, 0.25);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 12px 36px rgba(0, 0, 0, 0.4);
+    position: sticky;
+    top: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.acc-preview-badge {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+    padding: 0.25rem 0.6rem;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+}
+
+.acc-metric-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0.6rem 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    font-size: 0.85rem;
+}
+
+.acc-metric-row:last-child {
+    border-bottom: none;
+}
+
+.acc-metric-label {
+    color: #94a3b8;
+    display: flex;
+    align-items: center;
+    gap: 0.4rem;
+}
+
+.acc-metric-value {
+    font-weight: 700;
+    color: #f8fafc;
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Barra de progreso de margen comercial */
+.acc-margin-bar-wrap {
+    margin: 0.5rem 0 0.85rem 0;
+}
+
+.acc-margin-bar-labels {
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.78rem;
+    margin-bottom: 0.35rem;
+    color: #94a3b8;
+}
+
+.acc-margin-bar-bg {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.08);
+    border-radius: 999px;
+    overflow: hidden;
+}
+
+.acc-margin-bar-fill {
+    height: 100%;
+    border-radius: 999px;
+    background: linear-gradient(90deg, #f59e0b, #10b981);
+    transition: width 0.4s ease;
+}
+
+/* Desglose de incremento proyectado para los dos titulares */
+.acc-preview-deltas-box {
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 12px;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.acc-preview-delta-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+.acc-preview-delta-name {
+    font-size: 0.88rem;
+    font-weight: 700;
+    color: #cbd5e1;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.acc-preview-delta-val {
+    font-family: 'Outfit', sans-serif;
+    font-size: 1.25rem;
+    font-weight: 800;
+}
+
+.acc-preview-delta-val.positive {
+    color: #34d399;
+}
+
+.acc-preview-delta-val.negative {
+    color: #f87171;
+}
+
+.acc-preview-delta-val.zero {
+    color: #94a3b8;
+}
+
+/* Botón Principal: Liquidar y Guardar Día */
+.acc-btn-submit-day {
+    width: 100%;
+    min-height: 48px;
+    background: linear-gradient(135deg, #10b981, #059669);
+    color: #fff;
+    border: none;
+    border-radius: 12px;
+    font-family: inherit;
+    font-size: 1rem;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0.6rem;
+    box-shadow: 0 8px 24px rgba(16, 185, 129, 0.35);
+    transition: all 0.25s ease;
+    margin-top: 0.5rem;
+}
+
+.acc-btn-submit-day:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 30px rgba(16, 185, 129, 0.5);
+    background: linear-gradient(135deg, #34d399, #10b981);
+}
+
+.acc-btn-submit-day:active {
+    transform: translateY(0);
+}
+
+.acc-btn-submit-day:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+    transform: none;
+    box-shadow: none;
+}
+
+/* ── SECCIÓN HISTORIAL DE CIERRES DIARIOS ──────────────────────────── */
+.acc-history-section {
+    background: #12121f;
+    border: 1px solid rgba(255, 255, 255, 0.06);
+    border-radius: 16px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
+}
+
+.acc-history-toolbar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 1.25rem;
+}
+
+.acc-history-count {
+    font-size: 0.85rem;
+    color: #94a3b8;
+}
+
+.acc-history-actions {
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
+}
+
+.acc-btn-export-csv {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    color: #cbd5e1;
+    padding: 0.55rem 1rem;
+    border-radius: 8px;
+    font-size: 0.82rem;
+    font-weight: 600;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 40px;
+    transition: all 0.2s ease;
+}
+
+.acc-btn-export-csv:hover {
+    background: rgba(255, 255, 255, 0.1);
+    color: #fff;
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+/* Tabla Desktop */
+.acc-table-container {
+    overflow-x: auto;
+    border-radius: 10px;
+    border: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.acc-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.88rem;
+    text-align: left;
+}
+
+.acc-table thead th {
+    background: #16162a;
+    color: #94a3b8;
+    padding: 0.85rem 1rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    font-size: 0.75rem;
+    letter-spacing: 0.05em;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    white-space: nowrap;
+}
+
+.acc-table tbody tr {
+    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    transition: background 0.15s ease;
+}
+
+.acc-table tbody tr:hover {
+    background: rgba(255, 255, 255, 0.02);
+}
+
+.acc-table tbody td {
+    padding: 0.85rem 1rem;
+    vertical-align: middle;
+    color: #e2e8f0;
+}
+
+.acc-delta-badge {
+    display: inline-block;
+    padding: 0.2rem 0.55rem;
+    border-radius: 6px;
+    font-weight: 700;
+    font-family: 'Outfit', sans-serif;
+    font-size: 0.9rem;
+}
+
+.acc-delta-badge.positive {
+    background: rgba(16, 185, 129, 0.15);
+    color: #34d399;
+    border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.acc-delta-badge.negative {
+    background: rgba(239, 68, 68, 0.15);
+    color: #f87171;
+    border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.acc-delta-badge.zero {
+    background: rgba(255, 255, 255, 0.05);
+    color: #94a3b8;
+}
+
+.acc-account-badge {
+    font-size: 0.72rem;
+    font-weight: 600;
+    padding: 0.15rem 0.45rem;
+    border-radius: 4px;
+    display: inline-block;
+    margin-top: 0.2rem;
+}
+
+.acc-account-paypal {
+    background: rgba(0, 112, 186, 0.2);
+    color: #38bdf8;
+}
+
+.acc-account-revolut_igor {
+    background: rgba(99, 102, 241, 0.2);
+    color: #a5b4fc;
+}
+
+.acc-account-revolut_conjunto {
+    background: rgba(16, 185, 129, 0.2);
+    color: #34d399;
+}
+
+/* Botones de acción en tabla */
+.acc-btn-action {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    width: 34px;
+    height: 34px;
+    border-radius: 6px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.acc-btn-action:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.acc-btn-delete-record:hover {
+    color: #f87171;
+    background: rgba(239, 68, 68, 0.15);
+}
+
+/* ── VISTA MÓVIL DEL HISTORIAL: LISTA DE TARJETAS (< 640px) ────────── */
+.acc-mobile-history-list {
+    display: none; /* Por defecto oculto en escritorio */
+    flex-direction: column;
+    gap: 0.85rem;
+}
+
+.acc-mobile-card {
+    background: #16162a;
+    border: 1px solid rgba(255, 255, 255, 0.07);
+    border-radius: 12px;
+    overflow: hidden;
+    transition: border-color 0.2s ease;
+}
+
+.acc-mobile-card-header {
+    width: 100%;
+    background: transparent;
+    border: none;
+    padding: 1rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+    text-align: left;
+    min-height: 48px; /* Touch target > 44px */
+}
+
+.acc-mobile-card-date {
+    font-size: 0.92rem;
+    font-weight: 700;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.45rem;
+}
+
+.acc-mobile-card-deltas {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.acc-mobile-card-chevron {
+    color: #64748b;
+    font-size: 0.85rem;
+    transition: transform 0.2s ease;
+    margin-left: 0.4rem;
+}
+
+.acc-mobile-card.open .acc-mobile-card-chevron {
+    transform: rotate(180deg);
+    color: var(--accent-primary);
+}
+
+.acc-mobile-card-body {
+    display: none;
+    padding: 0.85rem 1rem 1rem 1rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+    background: rgba(0, 0, 0, 0.2);
+    font-size: 0.85rem;
+}
+
+.acc-mobile-card.open .acc-mobile-card-body {
+    display: block;
+}
+
+.acc-mobile-detail-row {
+    display: flex;
+    justify-content: space-between;
+    padding: 0.4rem 0;
+    color: #94a3b8;
+    border-bottom: 1px dashed rgba(255, 255, 255, 0.04);
+}
+
+.acc-mobile-detail-row:last-child {
+    border-bottom: none;
+}
+
+.acc-mobile-card-footer {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.5rem;
+    padding-top: 0.75rem;
+    margin-top: 0.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+/* Empty state */
+.acc-empty-state {
+    text-align: center;
+    padding: 3rem 1.5rem;
+    color: #64748b;
+}
+
+.acc-empty-state i {
+    font-size: 2.5rem;
+    margin-bottom: 0.75rem;
+    opacity: 0.5;
+}
+
+/* ── MODAL DE EDICIÓN RÁPIDA DE SALDO GLOBAL ──────────────────────── */
+.acc-modal-overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.75);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    animation: fadeIn 0.2s ease;
+}
+
+.acc-modal-overlay.hidden {
+    display: none !important;
+}
+
+.acc-modal-content {
+    background: #141424;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 16px;
+    width: 100%;
+    max-width: 440px;
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.6);
+    overflow: hidden;
+    animation: scaleIn 0.25s ease;
+}
+
+@keyframes scaleIn {
+    from { transform: scale(0.95); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+}
+
+.acc-modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.acc-modal-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+    color: #fff;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.acc-modal-close-btn {
+    background: transparent;
+    border: none;
+    color: #94a3b8;
+    font-size: 1.2rem;
+    cursor: pointer;
+    width: 36px;
+    height: 36px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.2s ease;
+}
+
+.acc-modal-close-btn:hover {
+    color: #fff;
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.acc-modal-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.25rem;
+}
+
+.acc-modal-alert {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 10px;
+    padding: 0.85rem;
+    font-size: 0.8rem;
+    color: #fbbf24;
+    line-height: 1.4;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+.acc-modal-alert i {
+    font-size: 1rem;
+    margin-top: 0.1rem;
+}
+
+.acc-modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(0, 0, 0, 0.2);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+.acc-btn-modal-cancel {
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    color: #cbd5e1;
+    padding: 0.65rem 1.15rem;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    min-height: 44px;
+    transition: all 0.2s ease;
+}
+
+.acc-btn-modal-cancel:hover {
+    background: rgba(255, 255, 255, 0.12);
+    color: #fff;
+}
+
+.acc-btn-modal-confirm {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    border: none;
+    color: #fff;
+    padding: 0.65rem 1.35rem;
+    border-radius: 8px;
+    font-weight: 700;
+    font-size: 0.9rem;
+    cursor: pointer;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    box-shadow: 0 4px 14px rgba(99, 102, 241, 0.35);
+    transition: all 0.2s ease;
+}
+
+.acc-btn-modal-confirm:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(99, 102, 241, 0.45);
+}
+
+/* ═════════════════════════════════════════════════════════════════════
+   RESPONSIVIDAD MÓVIL (< 640px)
+   Garantizar 0 scroll horizontal y touch targets > 44px
+   ═════════════════════════════════════════════════════════════════════ */
+@media (max-width: 980px) {
+    .acc-main-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .acc-preview-card {
+        position: static;
+        top: auto;
+    }
+}
+
+@media (max-width: 768px) {
+    .acc-balances-header {
+        border-radius: 12px;
+        padding: 1rem;
+    }
+    
+    .acc-balances-grid {
+        grid-template-columns: 1fr;
+        gap: 0.75rem;
+    }
+
+    .acc-balance-card {
+        padding: 1rem;
+    }
+
+    .acc-balance-value {
+        font-size: 1.5rem;
+    }
+}
+
+@media (max-width: 640px) {
+    .accounting-module {
+        gap: 1.25rem;
+        overflow-x: hidden;
+    }
+
+    .acc-card {
+        padding: 1rem;
+        border-radius: 12px;
+    }
+
+    .acc-inputs-grid {
+        grid-template-columns: 1fr; /* Columna única estricta en móvil */
+        gap: 0.85rem;
+    }
+
+    .acc-date-row {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .acc-date-input {
+        width: 100%;
+    }
+
+    /* Ocultar tabla desktop y mostrar vista de tarjetas compactas */
+    .acc-table-container {
+        display: none !important;
+    }
+
+    .acc-mobile-history-list {
+        display: flex !important;
+    }
+
+    .acc-history-toolbar {
+        flex-direction: column;
+        align-items: stretch;
+    }
+
+    .acc-btn-export-csv {
+        justify-content: center;
+        width: 100%;
+    }
+
+    .acc-btn-submit-day {
+        min-height: 52px;
+        font-size: 1.05rem;
+    }
+}

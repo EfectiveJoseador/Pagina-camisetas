@@ -35,6 +35,7 @@
     <link rel="stylesheet" href="../css/reset.css?v=3">
     <link rel="stylesheet" href="../css/admin.css?v=31">
     <link rel="stylesheet" href="../css/trustpilot.css?v=6">
+    <link rel="stylesheet" href="../css/accounting.css?v=2">
 
     <style>
         .auth-loading {
@@ -99,6 +100,7 @@
                 <li><button class="nav-link" data-target="section-promos"><i class="fas fa-tags"></i> <span>Promociones</span></button></li>
                 <li><button class="nav-link" data-target="section-users"><i class="fas fa-users"></i> <span>Usuarios</span></button></li>
                 <li><button class="nav-link" data-target="section-trustpilot"><i class="fas fa-star" style="color:#00b67a"></i> <span>Trustpilot</span></button></li>
+                <li><button class="nav-link" data-target="section-accounting"><i class="fas fa-calculator" style="color:#818cf8"></i> <span>Contabilidad</span></button></li>
             </ul>
         </nav>
 
@@ -469,6 +471,307 @@
                             </button>
                             <div class="tp-save-feedback" id="tp-save-feedback"></div>
                         </div>
+                    </div>
+                </div>
+
+                <!-- ════ CONTABILIDAD & SALDOS (IGOR & JUNTOS) ════ -->
+                <div id="section-accounting" class="admin-section hidden">
+                    <div class="accounting-module">
+                        <!-- A. CABECERA DE SALDOS GLOBALES -->
+                        <section class="acc-balances-header">
+                            <div class="acc-balances-title-wrap">
+                                <div class="acc-balances-title">
+                                    <i class="fas fa-wallet"></i> Saldos Acumulados Globales
+                                </div>
+                                <div class="acc-last-sync">
+                                    <span class="acc-sync-dot"></span>
+                                    <span id="acc-last-sync-text">Sincronizado en tiempo real</span>
+                                </div>
+                            </div>
+                            <div class="acc-balances-grid">
+                                <!-- Saldo Igor -->
+                                <div class="acc-balance-card acc-balance-igor">
+                                    <div class="acc-balance-card-top">
+                                        <span class="acc-balance-name"><i class="fas fa-user"></i> Saldo Igor</span>
+                                        <button type="button" class="acc-btn-edit-balance" id="btn-acc-edit-igor" title="Editar saldo manualmente para corregir descuadres">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                    </div>
+                                    <div class="acc-balance-value-wrap">
+                                        <span class="acc-balance-value" id="acc-val-igor">0,00 €</span>
+                                    </div>
+                                    <span class="acc-balance-subtext">PayPal + Revolut Igor + 50% Conjunto - Gastos</span>
+                                </div>
+
+                                <!-- Saldo Juntos -->
+                                <div class="acc-balance-card acc-balance-juntos">
+                                    <div class="acc-balance-card-top">
+                                        <span class="acc-balance-name"><i class="fas fa-users"></i> Saldo Juntos</span>
+                                        <button type="button" class="acc-btn-edit-balance" id="btn-acc-edit-juntos" title="Editar saldo manualmente para corregir descuadres">
+                                            <i class="fas fa-pencil-alt"></i>
+                                        </button>
+                                    </div>
+                                    <div class="acc-balance-value-wrap">
+                                        <span class="acc-balance-value" id="acc-val-juntos">0,00 €</span>
+                                    </div>
+                                    <span class="acc-balance-subtext">50% Beneficio Neto Canal Conjunto</span>
+                                </div>
+
+                                <!-- Total Combinado -->
+                                <div class="acc-balance-card acc-balance-total">
+                                    <div class="acc-balance-card-top">
+                                        <span class="acc-balance-name"><i class="fas fa-chart-pie"></i> Total Combinado</span>
+                                        <span class="acc-block-badge" style="background: rgba(16,185,129,0.2); color:#34d399;">Patrimonio</span>
+                                    </div>
+                                    <div class="acc-balance-value-wrap">
+                                        <span class="acc-balance-value" id="acc-val-total">0,00 €</span>
+                                    </div>
+                                    <span class="acc-balance-subtext">Suma de saldos Igor + Juntos</span>
+                                </div>
+                            </div>
+                        </section>
+
+                        <!-- B. GRID PRINCIPAL: FORMULARIO DIARIO + PREVIEW -->
+                        <div class="acc-main-grid">
+                            <!-- Formulario de Registro Diario -->
+                            <section class="acc-card">
+                                <div class="acc-card-header">
+                                    <h2><i class="fas fa-file-invoice-dollar"></i> Registro Diario de Ventas y Costes</h2>
+                                </div>
+
+                                <!-- Selector de Fecha -->
+                                <div class="acc-date-row">
+                                    <label for="acc-date"><i class="far fa-calendar-alt"></i> Fecha de Cierre:</label>
+                                    <input type="date" id="acc-date" class="acc-date-input">
+                                </div>
+
+                                <!-- Bloque 1: Ingresos (€) -->
+                                <div class="acc-form-block">
+                                    <div class="acc-block-title">
+                                        <span><i class="fas fa-coins" style="color: #fbbf24;"></i> 1. Ingresos por Canal (€)</span>
+                                        <span class="acc-block-badge">Bruto Recibido</span>
+                                    </div>
+                                    <div class="acc-inputs-grid">
+                                        <div class="acc-field-group">
+                                            <label class="acc-field-label" for="acc-in-paypal">
+                                                <span>PayPal</span>
+                                                <span class="acc-field-pill acc-pill-igor">100% Igor</span>
+                                            </label>
+                                            <div class="acc-input-wrap">
+                                                <span class="acc-input-prefix">€</span>
+                                                <input type="number" id="acc-in-paypal" class="acc-input" placeholder="0.00" step="0.01" min="0">
+                                            </div>
+                                        </div>
+                                        <div class="acc-field-group">
+                                            <label class="acc-field-label" for="acc-in-revolut-igor">
+                                                <span>Revolut Igor</span>
+                                                <span class="acc-field-pill acc-pill-igor">100% Igor</span>
+                                            </label>
+                                            <div class="acc-input-wrap">
+                                                <span class="acc-input-prefix">€</span>
+                                                <input type="number" id="acc-in-revolut-igor" class="acc-input" placeholder="0.00" step="0.01" min="0">
+                                            </div>
+                                        </div>
+                                        <div class="acc-field-group">
+                                            <label class="acc-field-label" for="acc-in-revolut-conjunto">
+                                                <span>Revolut Conjunto</span>
+                                                <span class="acc-field-pill acc-pill-conjunto">50% / 50%</span>
+                                            </label>
+                                            <div class="acc-input-wrap">
+                                                <span class="acc-input-prefix">€</span>
+                                                <input type="number" id="acc-in-revolut-conjunto" class="acc-input" placeholder="0.00" step="0.01" min="0">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Bloque 2: Proveedor -->
+                                <div class="acc-form-block">
+                                    <div class="acc-block-title">
+                                        <span><i class="fas fa-dolly" style="color: #60a5fa;"></i> 2. Coste de Proveedor</span>
+                                        <div class="acc-currency-toggle-wrap">
+                                            <button type="button" class="acc-curr-btn active" id="acc-curr-eur">EUR (€)</button>
+                                            <button type="button" class="acc-curr-btn" id="acc-curr-usd">USD ($)</button>
+                                        </div>
+                                    </div>
+
+                                    <div class="acc-inputs-grid">
+                                        <div class="acc-field-group">
+                                            <label class="acc-field-label" for="acc-supplier-amount">
+                                                <span>Importe Pagado</span>
+                                            </label>
+                                            <div class="acc-input-wrap">
+                                                <span class="acc-input-prefix" id="acc-supplier-prefix">€</span>
+                                                <input type="number" id="acc-supplier-amount" class="acc-input" placeholder="0.00" step="0.01" min="0">
+                                            </div>
+                                        </div>
+
+                                        <div class="acc-field-group hidden" id="acc-usd-rate-group">
+                                            <label class="acc-field-label" for="acc-supplier-rate">
+                                                <span>Tasa Cambio EUR/USD</span>
+                                            </label>
+                                            <div class="acc-input-wrap">
+                                                <input type="number" id="acc-supplier-rate" class="acc-input" style="padding-left: 0.85rem;" value="1.08" step="0.001" min="0.1">
+                                            </div>
+                                            <div class="acc-input-help">Equivalente: <strong id="acc-usd-converted-val" style="color:#34d399;">0,00 €</strong></div>
+                                        </div>
+
+                                        <div class="acc-field-group">
+                                            <label class="acc-field-label" for="acc-supplier-account">
+                                                <span>¿Desde qué cuenta se pagó?</span>
+                                            </label>
+                                            <select id="acc-supplier-account" class="acc-select">
+                                                <option value="revolut_conjunto">Revolut Conjunto</option>
+                                                <option value="paypal">PayPal</option>
+                                                <option value="revolut_igor">Revolut Igor</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="acc-input-help" style="margin-top: 0.5rem; color: #94a3b8;">
+                                        <i class="fas fa-info-circle" style="color: #818cf8;"></i> El coste se prorratea automáticamente según el volumen de ventas de cada cuenta.
+                                    </div>
+                                </div>
+
+                                <!-- Bloque 3: Gastos Operativos (Colapsable) -->
+                                <div class="acc-form-block" style="margin-bottom: 0;">
+                                    <button type="button" class="acc-accordion-header" id="acc-accordion-header-expenses">
+                                        <span><i class="fas fa-receipt" style="color: #ec4899;"></i> 3. Gastos Operativos Opcionales</span>
+                                        <i class="fas fa-chevron-down acc-chevron"></i>
+                                    </button>
+                                    <div class="acc-accordion-body" id="acc-accordion-body-expenses">
+                                        <div class="acc-inputs-grid">
+                                            <div class="acc-field-group">
+                                                <label class="acc-field-label" for="acc-exp-ads">
+                                                    <span>Publicidad / Google Ads (€)</span>
+                                                    <span class="acc-field-pill acc-pill-conjunto">Reparto 50/50</span>
+                                                </label>
+                                                <div class="acc-input-wrap">
+                                                    <span class="acc-input-prefix">€</span>
+                                                    <input type="number" id="acc-exp-ads" class="acc-input" placeholder="0.00" step="0.01" min="0">
+                                                </div>
+                                                <div class="acc-input-help">Se divide al 50% entre Igor y Juntos</div>
+                                            </div>
+                                            <div class="acc-field-group">
+                                                <label class="acc-field-label" for="acc-exp-personal-igor">
+                                                    <span>Gastos personales en cta. conjunta (€)</span>
+                                                    <span class="acc-field-pill acc-pill-igor">Resta a Igor</span>
+                                                </label>
+                                                <div class="acc-input-wrap">
+                                                    <span class="acc-input-prefix">€</span>
+                                                    <input type="number" id="acc-exp-personal-igor" class="acc-input" placeholder="0.00" step="0.01" min="0">
+                                                </div>
+                                                <div class="acc-input-help">Resta directamente del saldo de Igor</div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </section>
+
+                            <!-- Previsualización en Tiempo Real -->
+                            <aside class="acc-preview-card">
+                                <div class="acc-card-header" style="padding-bottom: 0.75rem; margin-bottom: 0.75rem;">
+                                    <h3><i class="fas fa-bolt" style="color: #fbbf24;"></i> Resumen en Vivo</h3>
+                                    <span class="acc-preview-badge">Reactivo</span>
+                                </div>
+
+                                <div>
+                                    <div class="acc-metric-row">
+                                        <span class="acc-metric-label">Ventas Totales:</span>
+                                        <span class="acc-metric-value" id="acc-prev-total-ventas">0,00 €</span>
+                                    </div>
+                                    <div class="acc-metric-row">
+                                        <span class="acc-metric-label">Coste Proveedor:</span>
+                                        <span class="acc-metric-value" style="color:#fbbf24;" id="acc-prev-total-coste">0,00 €</span>
+                                    </div>
+
+                                    <!-- Barra Margen Comercial -->
+                                    <div class="acc-margin-bar-wrap">
+                                        <div class="acc-margin-bar-labels">
+                                            <span>Margen Comercial:</span>
+                                            <strong id="acc-prev-margen-pct" style="color:#34d399;">0.0%</strong>
+                                        </div>
+                                        <div class="acc-margin-bar-bg">
+                                            <div class="acc-margin-bar-fill" id="acc-prev-margen-bar" style="width: 0%;"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="acc-metric-row">
+                                        <span class="acc-metric-label">Cuota Proveedor Igor:</span>
+                                        <span class="acc-metric-value" id="acc-prev-cuota-igor">0,00 €</span>
+                                    </div>
+                                    <div class="acc-metric-row">
+                                        <span class="acc-metric-label">Cuota Proveedor Conjunto:</span>
+                                        <span class="acc-metric-value" id="acc-prev-cuota-conjunto">0,00 €</span>
+                                    </div>
+                                </div>
+
+                                <!-- Incrementos proyectados a cada saldo -->
+                                <div class="acc-preview-deltas-box">
+                                    <div class="acc-preview-delta-item">
+                                        <span class="acc-preview-delta-name">
+                                            <i class="fas fa-user" style="color:#818cf8;"></i> Incremento Saldo Igor:
+                                        </span>
+                                        <span class="acc-preview-delta-val zero" id="acc-prev-delta-igor">+0,00 €</span>
+                                    </div>
+                                    <div class="acc-preview-delta-item">
+                                        <span class="acc-preview-delta-name">
+                                            <i class="fas fa-users" style="color:#38bdf8;"></i> Incremento Saldo Juntos:
+                                        </span>
+                                        <span class="acc-preview-delta-val zero" id="acc-prev-delta-juntos">+0,00 €</span>
+                                    </div>
+                                </div>
+
+                                <!-- Botón Principal -->
+                                <button type="button" class="acc-btn-submit-day" id="btn-acc-submit-day">
+                                    <i class="fas fa-check-circle"></i> Liquidar y Guardar Día
+                                </button>
+                            </aside>
+                        </div>
+
+                        <!-- C. HISTORIAL DE CIERRES DIARIOS -->
+                        <section class="acc-history-section">
+                            <div class="acc-history-toolbar">
+                                <div class="acc-card-header" style="margin-bottom: 0; padding-bottom: 0; border-bottom: none;">
+                                    <h3><i class="fas fa-history" style="color: #818cf8;"></i> Historial de Cierres Diarios</h3>
+                                </div>
+                                <div class="acc-history-actions">
+                                    <span class="acc-history-count" id="acc-history-count">0 cierres registrados</span>
+                                    <button type="button" class="acc-btn-export-csv" id="btn-acc-export-csv" title="Exportar historial a archivo CSV">
+                                        <i class="fas fa-file-csv"></i> Exportar CSV
+                                    </button>
+                                </div>
+                            </div>
+
+                            <!-- Tabla de Escritorio -->
+                            <div class="acc-table-container">
+                                <table class="acc-table" id="acc-history-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Fecha</th>
+                                            <th>Total Ventas</th>
+                                            <th>Coste Proveedor</th>
+                                            <th>Beneficio Igor</th>
+                                            <th>Beneficio Juntos</th>
+                                            <th>Acciones</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="acc-history-tbody">
+                                        <!-- Inyectado dinámicamente por JS -->
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Lista de Tarjetas Compactas para Móvil (< 640px) -->
+                            <div class="acc-mobile-history-list" id="acc-mobile-history-list">
+                                <!-- Inyectado dinámicamente por JS -->
+                            </div>
+
+                            <!-- Empty State -->
+                            <div class="acc-empty-state hidden" id="acc-history-empty">
+                                <i class="fas fa-folder-open"></i>
+                                <p>No hay cierres registrados todavía.<br>Completa el formulario de arriba y pulsa en <strong>Liquidar y Guardar Día</strong>.</p>
+                            </div>
+                        </section>
                     </div>
                 </div>
 
@@ -947,7 +1250,40 @@
         </div>
     </div>
 
+    <!-- Modal de Edición Rápida de Saldo Global (Contabilidad) -->
+    <div class="acc-modal-overlay hidden" id="acc-edit-balance-modal">
+        <div class="acc-modal-content">
+            <div class="acc-modal-header">
+                <h3><i class="fas fa-edit" style="color: var(--accent-primary);"></i> Ajustar Saldo de <span id="acc-modal-titular-name">Igor</span></h3>
+                <button type="button" class="acc-modal-close-btn" id="acc-modal-close">&times;</button>
+            </div>
+            <div class="acc-modal-body">
+                <div class="acc-modal-alert">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <div>Esta acción sobrescribe directamente el saldo acumulado en la base de datos para corregir descuadres o registrar el saldo inicial.</div>
+                </div>
+                <div class="acc-field-group">
+                    <label class="acc-field-label" for="acc-modal-balance-input">Nuevo Saldo (€)</label>
+                    <div class="acc-input-wrap">
+                        <span class="acc-input-prefix">€</span>
+                        <input type="number" id="acc-modal-balance-input" class="acc-input" step="0.01" placeholder="0.00">
+                    </div>
+                </div>
+                <div class="acc-field-group">
+                    <label class="acc-field-label" for="acc-modal-reason-input">Motivo del Ajuste (Opcional)</label>
+                    <input type="text" id="acc-modal-reason-input" class="acc-input" style="padding-left: 0.85rem;" placeholder="Ej: Corrección descuadre / Saldo inicial">
+                </div>
+            </div>
+            <div class="acc-modal-footer">
+                <button type="button" class="acc-btn-modal-cancel" id="acc-modal-cancel">Cancelar</button>
+                <button type="button" class="acc-btn-modal-confirm" id="acc-modal-confirm">
+                    <i class="fas fa-check"></i> Guardar Nuevo Saldo
+                </button>
+            </div>
+        </div>
+    </div>
+
     <script src="../js/trustpilot.js?v=11"></script>
-    <script type="module" src="../js/admin.js?v=36"></script>
+    <script type="module" src="../js/admin.js?v=37"></script>
 </body>
 </html>
