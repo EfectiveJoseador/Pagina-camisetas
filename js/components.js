@@ -48,6 +48,7 @@ const Components = {
                         <li><a href="/pages/catalogo.html">Catálogo</a></li>
                         <li><a href="/pages/quienes-somos.html">Sobre Nosotros</a></li>
                         <li><a href="/pages/contacto.html">Contacto</a></li>
+                        <li><a href="/pages/cuidado-camisetas.html">Cuidado de Camisetas</a></li>
                         <li><a href="/pages/faq.html">Preguntas Frecuentes</a></li>
                     </ul>
                 </div>

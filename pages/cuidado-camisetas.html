@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="dark">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../assets/logo/logo.png">
+
+    <!-- SEO -->
+    <title>Cuidado de Camisetas | CAMISETAZO</title>
+    <meta name="description"
+        content="Guía de cuidado y lavado de camisetas de fútbol en Camisetazo. Pasos esenciales para proteger dorsales, serigrafías y parches.">
+    <meta name="robots" content="index, follow">
+    <link rel="canonical" href="https://camisetazo.shop/pages/cuidado-camisetas.html">
+
+    <!-- Google Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Outfit:wght@600;700;800&display=swap" rel="stylesheet">
+
+    <!-- CSS Base -->
+    <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
+    <link rel="stylesheet" href="../css/variables.css?v=10">
+    <link rel="stylesheet" href="../css/reset.css?v=10">
+    <link rel="stylesheet" href="../css/styles.css?v=10">
+    <link rel="stylesheet" href="../css/ux-feedback.css?v=10">
+
+    <style>
+        :root {
+            --care-bg: #0a1128;
+            --care-card-bg: rgba(16, 26, 60, 0.75);
+            --care-card-hover: rgba(22, 36, 82, 0.9);
+            --care-border-gold: rgba(212, 175, 55, 0.28);
+            --care-border-gold-hover: rgba(245, 208, 97, 0.65);
+            --care-gold-bright: #f6e27a;
+            --care-gold-pure: #d4af37;
+            --care-gold-champagne: #c5a059;
+            --care-text-main: #f8f9fa;
+            --care-text-muted: #cbd5e1;
+            --care-gradient-gold: linear-gradient(135deg, #fff7d6 0%, #f6e27a 35%, #d4af37 75%, #aa771c 100%);
+        }
+
+        body.cuidado-page-body {
+            background-color: var(--care-bg) !important;
+            color: var(--care-text-main) !important;
+            font-family: var(--font-main, 'Inter', sans-serif);
+            min-height: 100vh;
+        }
+
+        .cuidado-container {
+            max-width: 980px;
+            margin: 0 auto;
+            padding: 3rem 1.5rem 5rem;
+        }
+
+        /* ===== ENCABEZADO SIMPLE ===== */
+        .cuidado-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .cuidado-header h1 {
+            font-family: var(--font-heading, 'Outfit', sans-serif);
+            font-size: clamp(2rem, 5vw, 2.75rem);
+            font-weight: 800;
+            margin: 0 0 0.85rem;
+            text-transform: uppercase;
+            letter-spacing: 0.02em;
+            background: var(--care-gradient-gold);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .cuidado-header p {
+            font-size: clamp(1rem, 2vw, 1.15rem);
+            color: var(--care-text-muted);
+            max-width: 680px;
+            margin: 0 auto;
+            line-height: 1.6;
+        }
+
+        /* ===== BANNER INFORMATIVO (RECOMENDACIÓN SERIGRAFÍAS) ===== */
+        .care-banner {
+            background: linear-gradient(135deg, rgba(246, 226, 122, 0.12) 0%, rgba(212, 175, 55, 0.06) 50%, rgba(10, 17, 40, 0.8) 100%);
+            border: 1px solid rgba(246, 226, 122, 0.35);
+            border-radius: 14px;
+            padding: 1.25rem 1.75rem;
+            margin-bottom: 3rem;
+            display: flex;
+            align-items: center;
+            gap: 1.25rem;
+            box-shadow: 0 8px 24px rgba(0, 0, 0, 0.4), 0 0 20px rgba(212, 175, 55, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+        }
+
+        .care-banner-icon {
+            width: 44px;
+            height: 44px;
+            border-radius: 10px;
+            background: linear-gradient(135deg, #f6e27a 0%, #d4af37 100%);
+            color: #0a1128;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.35rem;
+            flex-shrink: 0;
+            box-shadow: 0 4px 12px rgba(212, 175, 55, 0.35);
+        }
+
+        .care-banner-text {
+            font-size: 1.05rem;
+            font-weight: 600;
+            color: #ffffff;
+            line-height: 1.5;
+            margin: 0;
+        }
+
+        /* ===== GRID DE TARJETAS DE CUIDADO ===== */
+        .care-cards-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 1.5rem;
+        }
+
+        .care-card {
+            background: var(--care-card-bg);
+            border: 1px solid var(--care-border-gold);
+            border-radius: 16px;
+            padding: 1.85rem 1.65rem;
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            box-shadow: 0 10px 28px rgba(0, 0, 0, 0.5);
+            transition: transform 0.28s ease, border-color 0.28s ease, box-shadow 0.28s ease, background 0.28s ease;
+            display: flex;
+            flex-direction: column;
+            opacity: 0;
+            transform: translateY(18px);
+            animation: cardFadeIn 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+        }
+
+        .care-card:nth-child(1) { animation-delay: 0.05s; }
+        .care-card:nth-child(2) { animation-delay: 0.12s; }
+        .care-card:nth-child(3) { animation-delay: 0.19s; }
+        .care-card:nth-child(4) { animation-delay: 0.26s; }
+        .care-card:nth-child(5) { animation-delay: 0.33s; }
+        .care-card:nth-child(6) { animation-delay: 0.40s; }
+
+        @keyframes cardFadeIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .care-card:hover {
+            transform: translateY(-5px);
+            background: var(--care-card-hover);
+            border-color: var(--care-border-gold-hover);
+            box-shadow: 0 16px 36px rgba(0, 0, 0, 0.65), 0 0 22px rgba(212, 175, 55, 0.2);
+        }
+
+        .card-header-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 1.25rem;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.45rem;
+            color: var(--care-gold-bright);
+            transition: all 0.25s ease;
+        }
+
+        .care-card:hover .card-icon {
+            background: linear-gradient(135deg, #f6e27a 0%, #d4af37 100%);
+            color: #0a1128;
+            transform: scale(1.06);
+        }
+
+        .card-badge {
+            font-family: var(--font-heading, 'Outfit', sans-serif);
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            padding: 0.3rem 0.75rem;
+            border-radius: 999px;
+            background: rgba(212, 175, 55, 0.12);
+            border: 1px solid rgba(212, 175, 55, 0.3);
+            color: var(--care-gold-bright);
+        }
+
+        .care-card h2 {
+            font-family: var(--font-heading, 'Outfit', sans-serif);
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin: 0 0 0.75rem;
+            line-height: 1.25;
+        }
+
+        .care-card p {
+            color: var(--care-text-muted);
+            font-size: 0.95rem;
+            line-height: 1.6;
+            margin: 0;
+            flex-grow: 1;
+        }
+
+        .care-card p strong {
+            color: #ffffff;
+            font-weight: 600;
+        }
+
+        /* ===== RESPONSIVE ===== */
+        @media (max-width: 680px) {
+            .cuidado-container {
+                padding: 2rem 1rem 3.5rem;
+            }
+
+            .care-banner {
+                flex-direction: column;
+                text-align: center;
+                padding: 1.25rem 1rem;
+                gap: 0.85rem;
+            }
+
+            .care-cards-grid {
+                grid-template-columns: 1fr;
+                gap: 1.15rem;
+            }
+
+            .care-card {
+                padding: 1.5rem 1.25rem;
+            }
+        }
+    </style>
+</head>
+
+<body class="cuidado-page-body">
+
+    <!-- Encabezado global de la tienda -->
+    <div id="header-placeholder"></div>
+
+    <main class="cuidado-container">
+
+        <!-- ENCABEZADO SIMPLE -->
+        <header class="cuidado-header">
+            <h1>Guía de Cuidado de Camisetas</h1>
+            <p>Sigue estos pasos esenciales para proteger los estampados, parches y serigrafías de tu camiseta como el primer día.</p>
+        </header>
+
+        <!-- BANNER INFORMATIVO DESTACADO -->
+        <aside class="care-banner" role="alert">
+            <div class="care-banner-icon">
+                <i class="fas fa-exclamation-triangle"></i>
+            </div>
+            <p class="care-banner-text">
+                Recomendamos seguir estos pasos para evitar dañar las serigrafías de la camiseta.
+            </p>
+        </aside>
+
+        <!-- GRID DE TARJETAS DE CUIDADO -->
+        <section class="care-cards-grid" aria-label="Consejos de cuidado">
+
+            <!-- TARJETA 1: SIEMPRE AGUA FRÍA -->
+            <article class="care-card">
+                <div class="card-header-row">
+                    <div class="card-icon">
+                        <i class="fas fa-snowflake"></i>
+                    </div>
+                    <span class="card-badge">Fundamental</span>
+                </div>
+                <h2>Siempre Agua Fría</h2>
+                <p>
+                    Lavar a mano o a máquina a <strong>máximo 30°C</strong> en ciclo delicado para preservar la elasticidad y los dorsales.
+                </p>
+            </article>
+
+            <!-- TARJETA 2: SIN SUAVIZANTE -->
+            <article class="care-card">
+                <div class="card-header-row">
+                    <div class="card-icon">
+                        <i class="fas fa-ban"></i>
+                    </div>
+                    <span class="card-badge">Cuidado de Vinilos</span>
+                </div>
+                <h2>Sin Suavizante</h2>
+                <p>
+                    Usar <strong>detergente neutro</strong> y prescindir de suavizantes o blanqueadores agresivos que debilitan el vinilo y las serigrafías.
+                </p>
+            </article>
+
+            <!-- TARJETA 3: SECADO AL AIRE LIBRE -->
+            <article class="care-card">
+                <div class="card-header-row">
+                    <div class="card-icon">
+                        <i class="fas fa-wind"></i>
+                    </div>
+                    <span class="card-badge">Prohibida Secadora</span>
+                </div>
+                <h2>Secado al Aire Libre</h2>
+                <p>
+                    <strong>Prohibido el uso de secadora.</strong> Secar colgada a la sombra y evitar el sol directo prolongado.
+                </p>
+            </article>
+
+            <!-- TARJETA 4: MEJOR A MANO -->
+            <article class="care-card">
+                <div class="card-header-row">
+                    <div class="card-icon">
+                        <i class="fas fa-hands-wash"></i>
+                    </div>
+                    <span class="card-badge">Opcional</span>
+                </div>
+                <h2>Mejor a Mano</h2>
+                <p>
+                    Para piezas de colección o personalizaciones delicadas, el <strong>lavado manual</strong> maximiza su vida útil.
+                </p>
+            </article>
+
+            <!-- TARJETA 5: PLANCHADO -->
+            <article class="care-card">
+                <div class="card-header-row">
+                    <div class="card-icon">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <span class="card-badge">Recomendación Extra</span>
+                </div>
+                <h2>Planchado</h2>
+                <p>
+                    <strong>Nunca planchar directamente sobre estampados</strong>, escudos o dorsales; planchar siempre del revés y a baja temperatura.
+                </p>
+            </article>
+
+            <!-- TARJETA 6: LAVAR DEL REVÉS -->
+            <article class="care-card">
+                <div class="card-header-row">
+                    <div class="card-icon">
+                        <i class="fas fa-undo"></i>
+                    </div>
+                    <span class="card-badge">Antifricción</span>
+                </div>
+                <h2>Lavar del Revés</h2>
+                <p>
+                    <strong>Dar la vuelta a la prenda</strong> siempre antes de introducirla al lavado para proteger los vinilos y parches del roce directo con el tambor o cremalleras.
+                </p>
+            </article>
+
+        </section>
+
+    </main>
+
+    <!-- Pie de página global de la tienda -->
+    <div id="footer-placeholder"></div>
+
+    <!-- Scripts de la web existente -->
+    <script src="../js/theme.js?v=4"></script>
+    <link rel="stylesheet" href="../css/trustpilot.css?v=6">
+    <script src="../js/trustpilot.js?v=7"></script>
+    <script src="../js/components.js?v=4"></script>
+    <script src="../js/ux-feedback.js"></script>
+    <script type="module" src="../js/firebase-global.js"></script>
+
+</body>
+
+</html>

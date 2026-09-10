@@ -57,6 +57,14 @@
       "destination": "/pages/devoluciones.html"
     },
     {
+      "source": "/cuidado-camisetas",
+      "destination": "/pages/cuidado-camisetas.html"
+    },
+    {
+      "source": "/cuidado-de-camisetas",
+      "destination": "/pages/cuidado-camisetas.html"
+    },
+    {
       "source": "/seleccion/brasil",
       "destination": "/pages/tienda.html"
     },
