@@ -2,6 +2,32 @@
 @import 'variables.css';
 @import 'animations.css';
 
+/* Prevenir absolutamente cualquier separación silábica con guiones en toda la web */
+*,
+*::before,
+*::after,
+html,
+body,
+p,
+span,
+li,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+a,
+button,
+label,
+div {
+    -webkit-hyphens: none !important;
+    -moz-hyphens: none !important;
+    -ms-hyphens: none !important;
+    hyphens: none !important;
+    word-break: normal !important;
+    overflow-wrap: break-word !important;
+}
 
 body {
     display: flex;
@@ -746,24 +772,35 @@ html {
 }
 
 /* =========================================================================
-   MOBILE-FIRST GLOBAL OVERRIDES (Critical screens <=420px)
+   MOBILE-FIRST GLOBAL OVERRIDES (Versiones móviles <=768px y <=420px)
    ========================================================================= */
-@media (max-width: 420px) {
+@media (max-width: 768px) {
 
-    /* Prevención de desbordamientos y cortes de palabras */
+    /* En móviles: si una palabra no cabe, pasa completa a la siguiente línea sin usar guiones */
+    *,
+    *::before,
+    *::after,
     h1,
     h2,
     h3,
     h4,
+    h5,
+    h6,
     p,
     span,
     a,
+    li,
+    button,
     div {
+        -webkit-hyphens: none !important;
+        -ms-hyphens: none !important;
+        hyphens: none !important;
+        word-break: normal;
         overflow-wrap: break-word;
-        word-wrap: break-word;
-        -webkit-hyphens: auto;
-        hyphens: auto;
     }
+}
+
+@media (max-width: 420px) {
 
     /* Forzar botones a ancho completo para simetría táctil */
     .btn,

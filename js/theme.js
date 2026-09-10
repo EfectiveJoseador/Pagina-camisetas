@@ -19,7 +19,7 @@
     }
 
     // ── Registrar el nuevo SW ────────────────────────────────────────────────
-    navigator.serviceWorker.register('/service-worker.js?v=4').then(function (registration) {
+    navigator.serviceWorker.register('/service-worker.js?v=5').then(function (registration) {
         // Si ya hay un SW esperando, activarlo de inmediato
         if (registration.waiting) {
             registration.waiting.postMessage({ type: 'SKIP_WAITING' });

@@ -35,12 +35,34 @@
     </script>
 
     <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
-    <link rel="stylesheet" href="../css/variables.css">
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/ux-feedback.css">
+    <link rel="stylesheet" href="../css/variables.css?v=10">
+    <link rel="stylesheet" href="../css/reset.css?v=10">
+    <link rel="stylesheet" href="../css/styles.css?v=10">
+    <link rel="stylesheet" href="../css/ux-feedback.css?v=10">
 
     <style>
+        /* Desactivar cualquier separación con guiones: la palabra pasa íntegra a la siguiente línea */
+        *,
+        *::before,
+        *::after,
+        html,
+        body,
+        p,
+        span,
+        li,
+        h1,
+        h2,
+        h3,
+        a,
+        div {
+            -webkit-hyphens: none !important;
+            -moz-hyphens: none !important;
+            -ms-hyphens: none !important;
+            hyphens: none !important;
+            word-break: normal !important;
+            overflow-wrap: break-word !important;
+        }
+
         .faq-page {
             padding: 4rem 1.5rem;
             max-width: 800px;
@@ -244,9 +266,14 @@
                 </button>
                 <div class="faq-answer">
                     <div class="faq-answer-content">
-                        Debido a la naturaleza personalizada de nuestros productos y los costes de importación, <strong>todas las ventas son finales</strong>. No admitimos cambios por error de talla o arrepentimiento.
+                        <strong>Únicamente aceptamos devoluciones o cambios en dos supuestos:</strong>
+                        <ul>
+                            <li><strong>1. Equivocación con lo que pediste:</strong> Si por error nuestro te enviamos una talla, modelo o personalización (nombre, número o parches) distinta a la especificada en tu pedido confirmado.</li>
+                            <li><strong>2. Producto con defecto o tara:</strong> Si la camiseta llega con roturas en el tejido, costuras deshechas o errores en la impresión/estampado.</li>
+                        </ul>
+                        En cualquiera de estos dos casos, te enviamos una camiseta nueva y correcta de forma totalmente gratuita.
                         <br><br>
-                        <strong>Excepciones:</strong> Solo aceptamos reclamaciones si el producto llega defectuoso o dañado. En ese caso, debes contactarnos en un plazo de 48 horas tras la recepción con fotos del daño.
+                        <strong>Exclusiones:</strong> Todas las demás ventas son finales. No se admiten cambios ni devoluciones por arrepentimiento, cambio de opinión o si elegiste una talla incorrecta (te recomendamos revisar siempre nuestra Guía de Tallas antes de comprar). Para tramitar una reclamación válida, contáctanos dentro de las 48–72 horas tras recibir el paquete con fotos claras de la prenda.
                     </div>
                 </div>
             </div>

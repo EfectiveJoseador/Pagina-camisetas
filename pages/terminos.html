@@ -35,12 +35,34 @@
         rel="stylesheet">
     <link rel="stylesheet" href="../assets/fonts/fontawesome/css/all.min.css">
 
-    <link rel="stylesheet" href="../css/variables.css">
-    <link rel="stylesheet" href="../css/reset.css">
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/ux-feedback.css">
+    <link rel="stylesheet" href="../css/variables.css?v=10">
+    <link rel="stylesheet" href="../css/reset.css?v=10">
+    <link rel="stylesheet" href="../css/styles.css?v=10">
+    <link rel="stylesheet" href="../css/ux-feedback.css?v=10">
 
     <style>
+        /* Desactivar cualquier separación con guiones: la palabra pasa íntegra a la siguiente línea */
+        *,
+        *::before,
+        *::after,
+        html,
+        body,
+        p,
+        span,
+        li,
+        h1,
+        h2,
+        h3,
+        a,
+        div {
+            -webkit-hyphens: none !important;
+            -moz-hyphens: none !important;
+            -ms-hyphens: none !important;
+            hyphens: none !important;
+            word-break: normal !important;
+            overflow-wrap: break-word !important;
+        }
+
         .legal-page {
             padding: 4rem 1.5rem;
             max-width: 800px;
@@ -181,42 +203,37 @@
             <li>Es responsabilidad del cliente proporcionar una dirección de envío correcta.</li>
         </ul>
 
-        <h2>6. Derecho de Desistimiento y Política de Devoluciones</h2>
+        <h2>6. Política de Devoluciones y Garantías</h2>
+
+        <p>En Camisetazo trabajamos bajo un modelo de catálogo y personalización con altos estándares de calidad. Con el fin de garantizar un servicio transparente y eficiente, <strong>únicamente se admiten devoluciones, cambios o reposiciones en los siguientes dos supuestos:</strong></p>
 
         <h3 style="margin-top: 1.2rem; margin-bottom: 0.5rem; color: var(--text-main); font-size: 1.1rem;">
-            6.1 Productos Estándar de Catálogo
+            6.1 Supuestos Admitidos para Devolución o Sustitución
         </h3>
-        <p>De conformidad con el artículo 102 del Real Decreto Legislativo 1/2007 (LGDCU), el consumidor dispone de
-            un plazo de <strong>14 días naturales</strong> para ejercer el derecho de desistimiento sin necesidad de
-            justificación y sin penalización alguna. Este plazo se computa desde la recepción del pedido. Para
-            ejercer este derecho, deberás notificárnoslo a través de nuestro formulario de contacto o por email
-            antes de que expire el plazo.</p>
+        <ul>
+            <li><strong>1. Equivocación con lo que pidió el cliente:</strong> Si por error atribuible a Camisetazo recibes un producto, modelo, talla, versión o personalización (nombre, dorsal o parches) diferente al especificado en el pedido confirmado.</li>
+            <li><strong>2. Producto con defecto de fábrica o tara:</strong> Si el artículo recibido presenta roturas en el tejido, fallos graves de costura, desperfectos físicos o errores de impresión y estampación imputables a la confección o transporte.</li>
+        </ul>
+        <p>En cualquiera de estos dos casos, Camisetazo se compromete a solucionar la incidencia sin ningún coste para el cliente, enviando una nueva unidad correcta de forma gratuita o realizando el reembolso correspondiente tras la verificación.</p>
 
         <h3 style="margin-top: 1.2rem; margin-bottom: 0.5rem; color: var(--text-main); font-size: 1.1rem;">
-            6.2 Excepción: Productos Personalizados (Art. 103.c LGDCU)
+            6.2 Supuestos No Admitidos (Ventas Finales)
         </h3>
         <div class="callout-legal">
-            <p><strong>⚠️ Importante:</strong> De conformidad con el artículo 103, letra c) de la LGDCU, el derecho
-                de desistimiento <strong>no aplica</strong> a camisetas confeccionadas conforme a las especificaciones
-                del consumidor, es decir, a camisetas que incluyan personalización expresa solicitada por el usuario:
-                serigrafía de nombre propio, dorsal numérico personalizado o parches específicos a medida. Esta
-                excepción no se aplica a la mera elección de talla, color o modelo estándar del catálogo.</p>
+            <p><strong>⚠️ Importante:</strong> No se admiten devoluciones, cancelaciones ni cambios en los siguientes casos:</p>
+            <ul style="margin-top: 0.5rem; margin-bottom: 0;">
+                <li><strong>Error de talla por parte del cliente:</strong> Si la camiseta enviada coincide con la talla solicitada por el usuario en su orden de compra, no procederá la devolución. Se insta al cliente a consultar atentamente nuestra Guía de Tallas antes de realizar el pedido.</li>
+                <li><strong>Cambio de opinión o arrepentimiento:</strong> No se aceptan devoluciones motivadas por preferencias estéticas posteriores a la compra, cambios de parecer o ajuste subjetivo de la prenda una vez el pedido ha sido procesado o entregado.</li>
+                <li><strong>Productos personalizados sin defecto ni error:</strong> Prendas con nombres, números o parches solicitados expresamente que correspondan con fidelidad a lo ordenado por el comprador.</li>
+            </ul>
         </div>
-        <p>En el momento de confirmar un pedido con personalización, se te informará expresamente de la pérdida del
-            derecho de desistimiento y se te solicitará aceptación específica de dicha condición antes de finalizar
-            la compra.</p>
 
         <h3 style="margin-top: 1.2rem; margin-bottom: 0.5rem; color: var(--text-main); font-size: 1.1rem;">
-            6.3 Defectos y Garantía Legal
+            6.3 Procedimiento de Reclamación y Garantía Legal
         </h3>
-        <p>Conforme al artículo 120 de la LGDCU (modificado por el Real Decreto-ley 7/2021), el vendedor responde de
-            las faltas de conformidad del producto durante <strong>3 años</strong> desde la fecha de entrega. Durante
-            los primeros dos años se presume que el defecto existía en el momento de la entrega, salvo prueba en
-            contrario.</p>
-        <p>Si recibes un producto con defecto de fabricación o error de impresión, contáctanos en
-            <a href="mailto:camisetazocontacto@gmail.com">camisetazocontacto@gmail.com</a> con fotografías del defecto.
-            Consulta nuestra <a href="/pages/devoluciones.html">Política de Devoluciones y Garantías</a> para el
-            proceso detallado.</p>
+        <p>Para activar una reclamación válida por equivocación en el pedido o defecto, el cliente deberá ponerse en contacto con nuestro equipo dentro de un plazo de <strong>48 a 72 horas</strong> tras la recepción del paquete a través de
+            <a href="mailto:camisetazocontacto@gmail.com">camisetazocontacto@gmail.com</a> o de nuestro formulario de soporte, adjuntando el número de pedido y fotografías nítidas que evidencien el defecto o la discrepancia con el pedido original.</p>
+        <p>Conforme a la normativa aplicable, el cliente mantiene la cobertura de garantía legal frente a faltas de conformidad del producto de origen durante el plazo legalmente establecido. Para el proceso detallado, consulta nuestra <a href="/pages/devoluciones.html">Política de Devoluciones y Garantías</a>.</p>
 
         <h2>7. Propiedad Intelectual</h2>
         <p>Todo el contenido del sitio web (textos, imágenes, logos, diseños) es propiedad de Camisetazo o de sus
