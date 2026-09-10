@@ -241,7 +241,7 @@
 
         .callout-body { flex: 1; }
 
-        .callout-body strong {
+        .callout-title {
             display: block;
             font-size: 0.875rem;
             font-weight: 700;
@@ -250,14 +250,26 @@
             margin-bottom: 0.4rem;
         }
 
-        .callout-body p { margin: 0 !important; font-size: 0.9rem !important; }
+        .callout-body p {
+            margin: 0 !important;
+            font-size: 0.9rem !important;
+            line-height: 1.6 !important;
+            color: var(--text-muted) !important;
+        }
+
+        .callout-body p strong {
+            display: inline !important;
+            font-weight: 700 !important;
+            text-transform: none !important;
+            color: var(--text-main) !important;
+        }
 
         .callout-success {
             background: rgba(16, 185, 129, 0.08);
             border: 1px solid rgba(16, 185, 129, 0.25);
         }
         .callout-success .callout-icon,
-        .callout-success .callout-body strong { color: #10b981; }
+        .callout-success .callout-title { color: #10b981; }
 
         [data-theme="dark"] .callout-success { background: rgba(16, 185, 129, 0.1); }
 
@@ -266,7 +278,7 @@
             border: 1px solid rgba(245, 158, 11, 0.25);
         }
         .callout-warning .callout-icon,
-        .callout-warning .callout-body strong { color: #d97706; }
+        .callout-warning .callout-title { color: #d97706; }
 
         [data-theme="dark"] .callout-warning { background: rgba(245, 158, 11, 0.1); }
 
@@ -275,7 +287,7 @@
             border: 1px solid rgba(99, 102, 241, 0.25);
         }
         .callout-info .callout-icon,
-        .callout-info .callout-body strong { color: #6366f1; }
+        .callout-info .callout-title { color: #6366f1; }
 
         [data-theme="dark"] .callout-info {
             background: rgba(99, 102, 241, 0.12);
@@ -391,9 +403,10 @@
         }
 
         .contact-channel .ch-text .ch-value {
-            font-size: 0.9rem;
+            font-size: clamp(0.78rem, 2.8vw, 0.9rem);
             font-weight: 600;
             color: var(--text-main);
+            word-break: normal;
         }
 
         .page-divider {
@@ -478,7 +491,7 @@
             <div class="callout callout-info">
                 <span class="callout-icon"><i class="fas fa-info-circle"></i></span>
                 <div class="callout-body">
-                    <strong>📷 Cómo reportar la incidencia</strong>
+                    <span class="callout-title">📷 Cómo reportar la incidencia</span>
                     <p>Contáctanos en las primeras <strong>48 a 72 horas</strong> desde la entrega del pedido adjuntando <strong>fotos claras</strong> donde se aprecie la equivocación o el defecto, junto con tu número de pedido para tramitar la solución de inmediato.</p>
                 </div>
             </div>
@@ -518,7 +531,7 @@
             <div class="callout callout-success">
                 <span class="callout-icon"><i class="fas fa-lightbulb"></i></span>
                 <div class="callout-body">
-                    <strong>💡 Consejo: Revisa la Guía de Tallas antes de comprar</strong>
+                    <span class="callout-title">💡 Consejo: Revisa la Guía de Tallas antes de comprar</span>
                     <p>Para asegurarte de pedir la talla adecuada, consulta siempre las tablas de medidas que encontrarás en la página de cada camiseta. Si tienes dudas entre dos tallas, escríbenos antes de realizar el pedido y te orientamos.</p>
                 </div>
             </div>
@@ -564,7 +577,7 @@
                     </div>
                     <div class="ch-text">
                         <div class="ch-label">Email</div>
-                        <div class="ch-value">camisetazocontacto<br>@gmail.com</div>
+                        <div class="ch-value">camisetazocontacto@gmail.com</div>
                     </div>
                 </a>
 
@@ -582,7 +595,7 @@
             <div class="callout callout-info" style="margin-top: 1.5rem;">
                 <span class="callout-icon"><i class="fas fa-clock"></i></span>
                 <div class="callout-body">
-                    <strong>⏱️ Tiempo de respuesta</strong>
+                    <span class="callout-title">⏱️ Tiempo de respuesta</span>
                     <p>Nuestro objetivo es responderte en un plazo máximo de <strong>24–48 horas laborables</strong>. Tu tranquilidad es nuestra prioridad.</p>
                 </div>
             </div>
