@@ -1758,6 +1758,22 @@ function loadExistingProducts(productsFilePath) {
     }
 }
 
+function findProductsByTitle(products, title, excludeId = null) {
+    if (!title || !products || !Array.isArray(products)) return [];
+    const normTarget = normalizeForComparison(title);
+    const targetClean = title.trim().toLowerCase();
+
+    return products.filter(p => {
+        if (!p || !p.name) return false;
+        if (excludeId !== null && excludeId !== undefined && String(p.id) === String(excludeId)) return false;
+
+        const pClean = p.name.trim().toLowerCase();
+        const pNorm = normalizeForComparison(p.name);
+
+        return pClean === targetClean || pNorm === normTarget;
+    });
+}
+
 function generateStableId(albumUrl) {
     const albumIdMatch = albumUrl.match(/\/albums\/(\d+)/);
     const albumId = albumIdMatch ? albumIdMatch[1] : albumUrl.split('?')[0];
@@ -2924,6 +2940,7 @@ module.exports = {
     downloadAndConvertToWebP,
     TeamMatcher,
     loadExistingProducts,
+    findProductsByTitle,
     extractTeamTokens,
     calculateWeightedSimilarity,
     normalizeForComparison,
