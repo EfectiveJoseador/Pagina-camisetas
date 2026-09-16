@@ -12,7 +12,9 @@ const {
     fetchYupooAlbum,
     toHighResUrl,
     TeamMatcher,
-    loadExistingProducts
+    loadExistingProducts,
+    findProductsByTitle,
+    parseProductTitle
 } = require('./yupoo-importer.js');
 
 const PRODUCTS_FILE = path.join(__dirname, '..', 'js', 'products-data.js');
@@ -293,11 +295,10 @@ async function main() {
         const existingById = findProductById(products, generatedId);
         const existingByUrl = findProductBySourceUrl(products, options.url);
 
-        const isExisting = !!(existingById.product || existingByUrl.product);
-        let existing = isExisting ? (existingById.product || existingByUrl.product) : null;
+        let existing = (existingById.product || existingByUrl.product) || null;
+        let isExisting = !!existing;
 
         if (isExisting) {
-            warn(`⚠ Producto ya existe con ID ${existing.id}: "${existing.name}"`);
             options.update = true;
         }
 
@@ -497,19 +498,40 @@ async function main() {
                 warn('⚠️  No se encontró match, liga asignada: otros');
                 warn('   Considera revisar manualmente la liga después de importar');
             }
-        } else {
-            // Reutilizar metadatos del producto existente si no necesitamos matching
-            info(`ℹ Reutilizando metadatos de liga/categoría de ID ${existing.id}`);
-            product.league = existing.league;
-            product.category = existing.category;
         }
 
+        // Detección de duplicado por TÍTULO (además de por ID y URL)
+        if (!isExisting) {
+            const duplicatesByTitle = findProductsByTitle(products, product.name, null);
+            if (duplicatesByTitle.length > 0) {
+                existing = duplicatesByTitle[0];
+                isExisting = true;
+                options.update = true;
+            }
+        }
+
+        if (isExisting && existing) {
+            product.id = existing.id;
+            if (existing.sku) {
+                product.sku = existing.sku;
+            }
+            if (existing.league) {
+                product.league = existing.league;
+            }
+            if (existing.category) {
+                product.category = existing.category;
+            }
+        }
 
         displayProductPreview(product);
 
 
         if (!options.write) {
             separator();
+            if (isExisting && existing) {
+                const skuInfo = existing.sku ? `, SKU: ${existing.sku}` : '';
+                console.log(`${COLORS.yellow}⚠ AVISO: Producto repetido ("${existing.name}" - ID: ${existing.id}${skuInfo}).${COLORS.reset}`);
+            }
             warn('Modo DRY-RUN: No se guardaron cambios');
             info('Usa --write para guardar el producto');
             separator();
@@ -535,20 +557,21 @@ async function main() {
 
         info('Guardando producto...');
 
-        if (existingById.product && options.update) {
+        const targetIndex = products.findIndex(p => p.id === product.id);
 
-            products[existingById.index] = { ...products[existingById.index], ...productWithLocalImages };
+        if (targetIndex !== -1 && options.update) {
+            // Sustituir imágenes y actualizar producto existente
+            products[targetIndex] = {
+                ...products[targetIndex],
+                ...productWithLocalImages,
+                image: productWithLocalImages.image,
+                images: productWithLocalImages.images
+            };
             success(`Producto actualizado: ID ${productWithLocalImages.id}`);
-        } else if (existingByUrl.product && options.update) {
-
-            products[existingByUrl.index] = { ...products[existingByUrl.index], ...productWithLocalImages };
-            success(`Producto actualizado: ID ${productWithLocalImages.id}`);
-        } else if (existingById.product || existingByUrl.product) {
-
+        } else if (targetIndex !== -1) {
             error('Producto ya existe. Usa --update para sobrescribir');
             process.exit(1);
         } else {
-
             products.push(productWithLocalImages);
             success(`Producto añadido: ID ${productWithLocalImages.id}`);
         }
@@ -556,6 +579,11 @@ async function main() {
         writeProductsFile(products);
         success(`Archivo actualizado: ${PRODUCTS_FILE}`);
         separator();
+
+        if (isExisting && existing) {
+            const skuInfo = existing.sku ? `, SKU: ${existing.sku}` : '';
+            console.log(`${COLORS.yellow}⚠ AVISO: Producto repetido ("${existing.name}" - ID: ${existing.id}${skuInfo}). Se han sustituido sus imágenes por las nuevas.${COLORS.reset}`);
+        }
 
         console.log(`\n${COLORS.green}${COLORS.bright}¡Importación completada!${COLORS.reset}\n`);
 

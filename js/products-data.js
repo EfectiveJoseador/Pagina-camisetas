@@ -15539,6 +15539,56 @@ const products = [
         "price": 22.9,
         "oldPrice": 30,
         "sku": "3999"
+    },
+    {
+        "id": 536899,
+        "name": "Sporting Lisboa 2026/27 Visitante (Niño)",
+        "slug": "sporting-lisboa-202627-visitante-nino",
+        "category": "futbol",
+        "league": "ligaportugal",
+        "image": "/assets/productos/Yupoo/536899/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/536899/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "1430"
+    },
+    {
+        "id": 450106,
+        "name": "Manchester United 2026/27 Visitante (Niño)",
+        "slug": "manchester-united-202627-visitante-nino",
+        "category": "futbol",
+        "league": "premier",
+        "image": "/assets/productos/Yupoo/450106/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/450106/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "kids": true,
+        "price": 25.9,
+        "oldPrice": 33,
+        "sku": "6457"
+    },
+    {
+        "id": 786990,
+        "name": "Sporting Lisboa 2026/27 Visitante",
+        "slug": "sporting-lisboa-202627-visitante",
+        "category": "futbol",
+        "league": "ligaportugal",
+        "image": "/assets/productos/Yupoo/786990/1.webp",
+        "images": [
+            "/assets/productos/Yupoo/786990/2.webp"
+        ],
+        "temporada": "2026/27",
+        "tipo": "visitante",
+        "price": 22.9,
+        "oldPrice": 30,
+        "sku": "1509"
     }
 ];
 
