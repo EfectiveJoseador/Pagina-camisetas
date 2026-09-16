@@ -1176,3 +1176,319 @@
         font-size: 1.05rem;
     }
 }
+
+/* ══ NUEVOS MODALES: AJUSTE DE SALDO & GASTO PERSONAL ══════════════════ */
+
+/* El panel interior del modal (sustituye a .acc-modal-content en los nuevos modales) */
+.acc-modal {
+    background: #141424;
+    border: 1px solid rgba(255, 255, 255, 0.12);
+    border-radius: 18px;
+    width: 100%;
+    max-width: 480px;
+    box-shadow: 0 24px 60px rgba(0, 0, 0, 0.65);
+    overflow: hidden;
+    animation: scaleIn 0.22s ease;
+}
+
+/* Header: ícono + texto + botón X */
+.acc-modal-header {
+    padding: 1.25rem 1.5rem;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+}
+
+.acc-modal-header-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    background: rgba(99, 102, 241, 0.18);
+    color: #818cf8;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+}
+
+.acc-modal-header-icon--expense {
+    background: rgba(251, 113, 133, 0.15);
+    color: #fb7185;
+}
+
+.acc-modal-header > div:nth-child(2) {
+    flex: 1;
+    min-width: 0;
+}
+
+.acc-modal-title {
+    margin: 0 0 0.2rem;
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #f1f5f9;
+}
+
+.acc-modal-subtitle {
+    margin: 0;
+    font-size: 0.8rem;
+    color: #94a3b8;
+}
+
+.acc-modal-x {
+    background: transparent;
+    border: none;
+    color: #64748b;
+    font-size: 1.35rem;
+    cursor: pointer;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background 0.2s, color 0.2s;
+    flex-shrink: 0;
+    margin-left: auto;
+}
+.acc-modal-x:hover {
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+}
+
+/* Body */
+.acc-modal-body {
+    padding: 1.5rem;
+    display: flex;
+    flex-direction: column;
+    gap: 1.1rem;
+}
+
+/* Fila de dos campos lado a lado */
+.acc-modal-fields-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0.9rem;
+}
+
+/* Campo individual */
+.acc-modal-field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+}
+
+.acc-modal-field label {
+    font-size: 0.8rem;
+    font-weight: 600;
+    color: #94a3b8;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* Input con prefijo € */
+.acc-modal-input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+}
+
+.acc-modal-prefix {
+    position: absolute;
+    left: 0.85rem;
+    color: #64748b;
+    font-weight: 700;
+    font-size: 0.95rem;
+    pointer-events: none;
+}
+
+.acc-modal-input {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 0.65rem 0.85rem 0.65rem 2rem;
+    color: #f1f5f9;
+    font-size: 0.95rem;
+    font-family: inherit;
+    transition: border-color 0.2s, box-shadow 0.2s;
+    -webkit-appearance: none;
+}
+
+/* Input sin prefijo (texto) */
+input.acc-modal-input:not(.acc-modal-input-wrap input) {
+    padding-left: 0.85rem;
+}
+
+.acc-modal-input:focus {
+    outline: none;
+    border-color: rgba(99,102,241,0.6);
+    box-shadow: 0 0 0 3px rgba(99,102,241,0.15);
+}
+
+/* Select */
+.acc-modal-select {
+    width: 100%;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 10px;
+    padding: 0.65rem 0.85rem;
+    color: #f1f5f9;
+    font-size: 0.9rem;
+    font-family: inherit;
+    cursor: pointer;
+    transition: border-color 0.2s;
+    -webkit-appearance: none;
+    appearance: none;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath fill='%2364748b' d='M1 1l5 5 5-5'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 0.85rem center;
+    padding-right: 2.2rem;
+}
+
+.acc-modal-select:focus {
+    outline: none;
+    border-color: rgba(99,102,241,0.6);
+}
+
+/* Alerta de impacto */
+.acc-modal-alert {
+    background: rgba(245, 158, 11, 0.1);
+    border: 1px solid rgba(245, 158, 11, 0.25);
+    border-radius: 10px;
+    padding: 0.85rem;
+    font-size: 0.8rem;
+    color: #fbbf24;
+    line-height: 1.5;
+    display: flex;
+    align-items: flex-start;
+    gap: 0.6rem;
+}
+
+.acc-modal-alert--expense {
+    background: rgba(251, 113, 133, 0.08);
+    border-color: rgba(251, 113, 133, 0.2);
+    color: #fda4af;
+}
+
+/* Footer */
+.acc-modal-footer {
+    padding: 1rem 1.5rem;
+    border-top: 1px solid rgba(255,255,255,0.07);
+    background: rgba(0,0,0,0.15);
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+}
+
+/* Botones del modal */
+.acc-modal-btn {
+    padding: 0.65rem 1.25rem;
+    border-radius: 9px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    min-height: 42px;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.45rem;
+    transition: all 0.2s ease;
+    border: none;
+}
+
+.acc-modal-btn-cancel {
+    background: rgba(255,255,255,0.06);
+    border: 1px solid rgba(255,255,255,0.1);
+    color: #94a3b8;
+}
+.acc-modal-btn-cancel:hover {
+    background: rgba(255,255,255,0.12);
+    color: #f1f5f9;
+}
+
+.acc-modal-btn-confirm {
+    background: linear-gradient(135deg, #6366f1, #4f46e5);
+    color: #fff;
+    box-shadow: 0 4px 14px rgba(99,102,241,0.3);
+}
+.acc-modal-btn-confirm:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 6px 20px rgba(99,102,241,0.45);
+}
+
+.acc-modal-btn-expense {
+    background: linear-gradient(135deg, #f43f5e, #e11d48);
+    box-shadow: 0 4px 14px rgba(244,63,94,0.3);
+}
+.acc-modal-btn-expense:hover {
+    box-shadow: 0 6px 20px rgba(244,63,94,0.45);
+}
+
+/* ── FILA DE ACCIONES RÁPIDAS DEBAJO DE LAS TARJETAS DE SALDO ─────── */
+.acc-balances-actions {
+    display: flex;
+    justify-content: flex-end;
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid rgba(255,255,255,0.06);
+}
+
+.acc-btn-personal-expense {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    padding: 0.6rem 1.1rem;
+    border-radius: 10px;
+    border: 1px solid rgba(251,113,133,0.3);
+    background: rgba(251,113,133,0.08);
+    color: #fda4af;
+    font-size: 0.85rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-family: inherit;
+}
+
+.acc-btn-personal-expense:hover {
+    background: rgba(251,113,133,0.18);
+    border-color: rgba(251,113,133,0.55);
+    color: #fff;
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(244,63,94,0.25);
+}
+
+/* Botón lápiz en las tarjetas de saldo — asegura que sea visible y clickable */
+.acc-btn-edit-balance {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    border: 1px solid rgba(255,255,255,0.1);
+    background: rgba(255,255,255,0.05);
+    color: #94a3b8;
+    font-size: 0.8rem;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    flex-shrink: 0;
+}
+
+.acc-btn-edit-balance:hover {
+    background: rgba(99,102,241,0.2);
+    border-color: rgba(99,102,241,0.5);
+    color: #818cf8;
+    transform: scale(1.08);
+}
+
+@media (max-width: 480px) {
+    .acc-modal-fields-row {
+        grid-template-columns: 1fr;
+    }
+
+    .acc-modal {
+        max-width: 100%;
+        border-radius: 14px;
+    }
+}

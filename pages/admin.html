@@ -35,7 +35,7 @@
     <link rel="stylesheet" href="../css/reset.css?v=3">
     <link rel="stylesheet" href="../css/admin.css?v=31">
     <link rel="stylesheet" href="../css/trustpilot.css?v=6">
-    <link rel="stylesheet" href="../css/accounting.css?v=2">
+    <link rel="stylesheet" href="../css/accounting.css?v=3">
 
     <style>
         .auth-loading {
@@ -529,6 +529,12 @@
                                     <span class="acc-balance-subtext">Suma de saldos Igor + Juntos</span>
                                 </div>
                             </div>
+                            <!-- Fila de acciones rápidas -->
+                            <div class="acc-balances-actions">
+                                <button type="button" class="acc-btn-personal-expense" id="btn-acc-personal-expense">
+                                    <i class="fas fa-minus-circle"></i> Añadir Gasto Personal
+                                </button>
+                            </div>
                         </section>
 
                         <!-- B. GRID PRINCIPAL: FORMULARIO DIARIO + PREVIEW -->
@@ -772,6 +778,99 @@
                                 <p>No hay cierres registrados todavía.<br>Completa el formulario de arriba y pulsa en <strong>Liquidar y Guardar Día</strong>.</p>
                             </div>
                         </section>
+                    </div>
+                </div>
+
+                <!-- ── MODAL: AJUSTE MANUAL DE SALDO ────────────────── -->
+                <div class="acc-modal-overlay hidden" id="acc-edit-balance-modal">
+                    <div class="acc-modal">
+                        <div class="acc-modal-header">
+                            <div class="acc-modal-header-icon">
+                                <i class="fas fa-pencil-alt"></i>
+                            </div>
+                            <div>
+                                <h3 class="acc-modal-title">Ajuste Manual de Saldo</h3>
+                                <p class="acc-modal-subtitle">Editando: <strong id="acc-modal-titular-name">—</strong></p>
+                            </div>
+                            <button class="acc-modal-x" id="acc-modal-close" title="Cerrar">&times;</button>
+                        </div>
+                        <div class="acc-modal-body">
+                            <div class="acc-modal-field">
+                                <label for="acc-modal-balance-input">Nuevo saldo (€)</label>
+                                <div class="acc-modal-input-wrap">
+                                    <span class="acc-modal-prefix">€</span>
+                                    <input type="number" id="acc-modal-balance-input" class="acc-modal-input" step="0.01" placeholder="0.00">
+                                </div>
+                            </div>
+                            <div class="acc-modal-field">
+                                <label for="acc-modal-reason-input">Motivo del ajuste <span style="opacity:0.5;font-size:0.8em">(opcional)</span></label>
+                                <input type="text" id="acc-modal-reason-input" class="acc-modal-input" placeholder="Ej: corrección descuadre">
+                            </div>
+                            <div class="acc-modal-alert">
+                                <i class="fas fa-info-circle"></i> Este ajuste sobreescribe el saldo directamente. Se registrará el motivo en Firebase.
+                            </div>
+                        </div>
+                        <div class="acc-modal-footer">
+                            <button type="button" class="acc-modal-btn acc-modal-btn-cancel" id="acc-modal-cancel">Cancelar</button>
+                            <button type="button" class="acc-modal-btn acc-modal-btn-confirm" id="acc-modal-confirm">
+                                <i class="fas fa-check"></i> Confirmar Ajuste
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ── MODAL: GASTO PERSONAL ─────────────────────────── -->
+                <div class="acc-modal-overlay hidden" id="acc-personal-expense-modal">
+                    <div class="acc-modal">
+                        <div class="acc-modal-header">
+                            <div class="acc-modal-header-icon acc-modal-header-icon--expense">
+                                <i class="fas fa-receipt"></i>
+                            </div>
+                            <div>
+                                <h3 class="acc-modal-title">Registrar Gasto Personal</h3>
+                                <p class="acc-modal-subtitle">Descuenta el importe del saldo correspondiente</p>
+                            </div>
+                            <button class="acc-modal-x" id="acc-pe-close" title="Cerrar">&times;</button>
+                        </div>
+                        <div class="acc-modal-body">
+                            <div class="acc-modal-fields-row">
+                                <div class="acc-modal-field">
+                                    <label for="acc-pe-titular">¿Gasto de quién?</label>
+                                    <select id="acc-pe-titular" class="acc-modal-select">
+                                        <option value="igor">Igor</option>
+                                        <option value="juntos">Juntos (ambos)</option>
+                                    </select>
+                                </div>
+                                <div class="acc-modal-field">
+                                    <label for="acc-pe-account">Pagado con</label>
+                                    <select id="acc-pe-account" class="acc-modal-select">
+                                        <option value="paypal">PayPal (Igor)</option>
+                                        <option value="revolut_igor">Revolut Igor</option>
+                                        <option value="revolut_conjunto">Revolut Conjunto</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="acc-modal-field">
+                                <label for="acc-pe-amount">Importe del gasto (€)</label>
+                                <div class="acc-modal-input-wrap">
+                                    <span class="acc-modal-prefix">€</span>
+                                    <input type="number" id="acc-pe-amount" class="acc-modal-input" step="0.01" min="0.01" placeholder="0.00">
+                                </div>
+                            </div>
+                            <div class="acc-modal-field">
+                                <label for="acc-pe-desc">Descripción <span style="opacity:0.5;font-size:0.8em">(opcional)</span></label>
+                                <input type="text" id="acc-pe-desc" class="acc-modal-input" placeholder="Ej: compra material oficina">
+                            </div>
+                            <div class="acc-modal-alert acc-modal-alert--expense" id="acc-pe-impact-msg">
+                                <i class="fas fa-info-circle"></i> Selecciona titular y cuenta para ver el impacto.
+                            </div>
+                        </div>
+                        <div class="acc-modal-footer">
+                            <button type="button" class="acc-modal-btn acc-modal-btn-cancel" id="acc-pe-cancel">Cancelar</button>
+                            <button type="button" class="acc-modal-btn acc-modal-btn-confirm acc-modal-btn-expense" id="acc-pe-confirm">
+                                <i class="fas fa-minus-circle"></i> Registrar Gasto
+                            </button>
+                        </div>
                     </div>
                 </div>
 
@@ -1250,40 +1349,7 @@
         </div>
     </div>
 
-    <!-- Modal de Edición Rápida de Saldo Global (Contabilidad) -->
-    <div class="acc-modal-overlay hidden" id="acc-edit-balance-modal">
-        <div class="acc-modal-content">
-            <div class="acc-modal-header">
-                <h3><i class="fas fa-edit" style="color: var(--accent-primary);"></i> Ajustar Saldo de <span id="acc-modal-titular-name">Igor</span></h3>
-                <button type="button" class="acc-modal-close-btn" id="acc-modal-close">&times;</button>
-            </div>
-            <div class="acc-modal-body">
-                <div class="acc-modal-alert">
-                    <i class="fas fa-exclamation-triangle"></i>
-                    <div>Esta acción sobrescribe directamente el saldo acumulado en la base de datos para corregir descuadres o registrar el saldo inicial.</div>
-                </div>
-                <div class="acc-field-group">
-                    <label class="acc-field-label" for="acc-modal-balance-input">Nuevo Saldo (€)</label>
-                    <div class="acc-input-wrap">
-                        <span class="acc-input-prefix">€</span>
-                        <input type="number" id="acc-modal-balance-input" class="acc-input" step="0.01" placeholder="0.00">
-                    </div>
-                </div>
-                <div class="acc-field-group">
-                    <label class="acc-field-label" for="acc-modal-reason-input">Motivo del Ajuste (Opcional)</label>
-                    <input type="text" id="acc-modal-reason-input" class="acc-input" style="padding-left: 0.85rem;" placeholder="Ej: Corrección descuadre / Saldo inicial">
-                </div>
-            </div>
-            <div class="acc-modal-footer">
-                <button type="button" class="acc-btn-modal-cancel" id="acc-modal-cancel">Cancelar</button>
-                <button type="button" class="acc-btn-modal-confirm" id="acc-modal-confirm">
-                    <i class="fas fa-check"></i> Guardar Nuevo Saldo
-                </button>
-            </div>
-        </div>
-    </div>
-
     <script src="../js/trustpilot.js?v=11"></script>
-    <script type="module" src="../js/admin.js?v=37"></script>
+    <script type="module" src="../js/admin.js?v=38"></script>
 </body>
 </html>

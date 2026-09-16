@@ -43,6 +43,7 @@ export function initAccountingModule() {
     setupCurrencyToggleListeners();
     setupAccordionListeners();
     setupQuickEditModalListeners();
+    setupPersonalExpenseModalListeners();
     setupExportCsvListener();
 
     // Primer cálculo reactivo en base a inputs iniciales
@@ -892,4 +893,102 @@ function showAccountingToast(message) {
         toast.classList.remove('show');
         setTimeout(() => toast.remove(), 300);
     }, 3200);
+}
+
+/**
+ * Modal de Gasto Personal
+ * - Gasto de Igor (cualquier cuenta) → solo baja saldo_igor
+ * - Gasto de Juntos → baja 50% de saldo_igor y 50% de saldo_juntos
+ */
+function setupPersonalExpenseModalListeners() {
+    const btnOpen    = document.getElementById('btn-acc-personal-expense');
+    const modal      = document.getElementById('acc-personal-expense-modal');
+    const btnClose   = document.getElementById('acc-pe-close');
+    const btnCancel  = document.getElementById('acc-pe-cancel');
+    const btnConfirm = document.getElementById('acc-pe-confirm');
+    const selTitular = document.getElementById('acc-pe-titular');
+    const selAccount = document.getElementById('acc-pe-account');
+    const inputAmt   = document.getElementById('acc-pe-amount');
+    const inputDesc  = document.getElementById('acc-pe-desc');
+    const impactMsg  = document.getElementById('acc-pe-impact-msg');
+
+    if (!modal) return;
+
+    const accountLabels = {
+        paypal:           'PayPal (Igor)',
+        revolut_igor:     'Revolut Igor',
+        revolut_conjunto: 'Revolut Conjunto'
+    };
+
+    const updateImpactMessage = () => {
+        if (!impactMsg) return;
+        const titular  = selTitular ? selTitular.value : 'igor';
+        const account  = selAccount ? selAccount.value : 'paypal';
+        const accLabel = accountLabels[account] || account;
+
+        if (titular === 'igor') {
+            impactMsg.innerHTML = `<i class="fas fa-user"></i> Gasto de <strong>Igor</strong> pagado con <strong>${accLabel}</strong>. Se descontará solo de <strong>Saldo Igor</strong>.`;
+        } else {
+            impactMsg.innerHTML = `<i class="fas fa-users"></i> Gasto <strong>compartido (Juntos)</strong> pagado con <strong>${accLabel}</strong>. Se descontará el 50% de <strong>Saldo Igor</strong> y el 50% de <strong>Saldo Juntos</strong>.`;
+        }
+    };
+
+    const openModal = () => {
+        if (inputAmt)   inputAmt.value  = '';
+        if (inputDesc)  inputDesc.value = '';
+        if (selTitular) selTitular.value = 'igor';
+        if (selAccount) selAccount.value = 'paypal';
+        updateImpactMessage();
+        modal.classList.remove('hidden');
+        if (inputAmt) setTimeout(() => inputAmt.focus(), 50);
+    };
+
+    const closeModal = () => modal.classList.add('hidden');
+
+    if (btnOpen)    btnOpen.addEventListener('click', openModal);
+    if (btnClose)   btnClose.addEventListener('click', closeModal);
+    if (btnCancel)  btnCancel.addEventListener('click', closeModal);
+    if (selTitular) selTitular.addEventListener('change', updateImpactMessage);
+    if (selAccount) selAccount.addEventListener('change', updateImpactMessage);
+
+    // Cerrar al hacer clic en el fondo
+    modal.addEventListener('click', (e) => { if (e.target === modal) closeModal(); });
+
+    if (btnConfirm) {
+        btnConfirm.addEventListener('click', async () => {
+            const amount = parseFloat(inputAmt ? inputAmt.value : '');
+            if (isNaN(amount) || amount <= 0) {
+                alert('Introduce un importe válido mayor que 0.');
+                return;
+            }
+
+            const titular      = selTitular ? selTitular.value : 'igor';
+            const account      = selAccount ? selAccount.value : 'paypal';
+            const desc         = inputDesc  ? inputDesc.value.trim() : '';
+            const accLabel     = accountLabels[account] || account;
+            const titularLabel = titular === 'igor' ? 'Igor' : 'Juntos';
+
+            if (!confirm(`¿Registrar gasto personal de ${titularLabel} por ${formatEUR(amount)} pagado con ${accLabel}?`)) return;
+
+            let newIgor   = state.saldo_igor;
+            let newJuntos = state.saldo_juntos;
+
+            if (titular === 'igor') {
+                newIgor = state.saldo_igor - amount;
+            } else {
+                const half = Math.round((amount / 2) * 100) / 100;
+                newIgor   = state.saldo_igor   - half;
+                newJuntos = state.saldo_juntos - half;
+            }
+
+            const reason = desc
+                ? `Gasto personal ${titularLabel} (${accLabel}): ${desc}`
+                : `Gasto personal ${titularLabel} (${accLabel}): ${formatEUR(amount)}`;
+
+            await syncBalancesToFirebase(newIgor, newJuntos, reason);
+
+            closeModal();
+            showAccountingToast(`Gasto de ${formatEUR(amount)} registrado. Saldo actualizado.`);
+        });
+    }
 }
